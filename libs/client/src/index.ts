@@ -1,9 +1,10 @@
+import { EndpointType, InputType } from "@fal-ai/types";
 import { createFalClient, type FalClient } from "./client";
 import { Config } from "./config";
 import { StreamOptions } from "./streaming";
-import { EndpointType, InputType } from "./types/client";
 import { RunOptions } from "./types/common";
 
+export type { EndpointType, InputType, OutputType } from "@fal-ai/types";
 export { createFalClient, type FalClient } from "./client";
 export { withMiddleware, withProxy } from "./middleware";
 export type { RequestMiddleware } from "./middleware";
@@ -15,7 +16,6 @@ export { isRetryableError } from "./retry";
 export type { RetryOptions } from "./retry";
 export type { StorageClient, StorageSettings } from "./storage";
 export type { FalStream, StreamingClient } from "./streaming";
-export type { OutputType } from "./types/client";
 export * from "./types/common";
 export type {
   QueueStatus,

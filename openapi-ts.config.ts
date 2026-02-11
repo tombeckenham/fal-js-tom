@@ -490,7 +490,7 @@ export default [
     return {
       input: mergedSpec, // Single merged spec instead of array
       output: {
-        path: `./libs/client/src/types/${category}`,
+        path: `./libs/types/src/${category}`,
         indexFile: false,
         postProcess: ["prettier"],
       },
