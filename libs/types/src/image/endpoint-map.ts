@@ -263,6 +263,8 @@ import type {
   Flux2Klein9bEditOutput,
   Flux2Klein9bInput,
   Flux2Klein9bOutput,
+  Flux2KleinRealtimeInput,
+  Flux2KleinRealtimeOutput,
   Flux2LoraEditInput,
   Flux2LoraEditOutput,
   Flux2LoraGalleryAddBackgroundInput,
@@ -660,6 +662,14 @@ import type {
   JuggernautFluxProOutput,
   KlingImageO1Input,
   KlingImageO1Output,
+  KlingImageO3ImageToImageInput,
+  KlingImageO3ImageToImageOutput,
+  KlingImageO3TextToImageInput,
+  KlingImageO3TextToImageOutput,
+  KlingImageV3ImageToImageInput,
+  KlingImageV3ImageToImageOutput,
+  KlingImageV3TextToImageInput,
+  KlingImageV3TextToImageOutput,
   KlingV15KolorsVirtualTryOnInput,
   KlingV15KolorsVirtualTryOnOutput,
   KolorsImageToImageInput,
@@ -990,6 +1000,8 @@ import type {
   WanV22A14bTextToImageLoraInput,
   WanV22A14bTextToImageLoraOutput,
   WanV22A14bTextToImageOutput,
+  WorkflowUtilitiesExtractNthFrameInput,
+  WorkflowUtilitiesExtractNthFrameOutput,
   ZImageBaseInput,
   ZImageBaseLoraInput,
   ZImageBaseLoraOutput,
@@ -1040,6 +1052,22 @@ export type ImageEndpointMap = {
   "fal-ai/clarity-upscaler": {
     input: ClarityUpscalerInput;
     output: ClarityUpscalerOutput;
+  };
+  "fal-ai/flux-2/klein/realtime": {
+    input: Flux2KleinRealtimeInput;
+    output: Flux2KleinRealtimeOutput;
+  };
+  "fal-ai/workflow-utilities/extract-nth-frame": {
+    input: WorkflowUtilitiesExtractNthFrameInput;
+    output: WorkflowUtilitiesExtractNthFrameOutput;
+  };
+  "fal-ai/kling-image/v3/image-to-image": {
+    input: KlingImageV3ImageToImageInput;
+    output: KlingImageV3ImageToImageOutput;
+  };
+  "fal-ai/kling-image/o3/image-to-image": {
+    input: KlingImageO3ImageToImageInput;
+    output: KlingImageO3ImageToImageOutput;
   };
   "xai/grok-imagine-image/edit": {
     input: GrokImagineImageEditInput;
@@ -2476,6 +2504,14 @@ export type ImageEndpointMap = {
   "fal-ai/flux-lora": {
     input: FluxLoraInput;
     output: FluxLoraOutput;
+  };
+  "fal-ai/kling-image/v3/text-to-image": {
+    input: KlingImageV3TextToImageInput;
+    output: KlingImageV3TextToImageOutput;
+  };
+  "fal-ai/kling-image/o3/text-to-image": {
+    input: KlingImageO3TextToImageInput;
+    output: KlingImageO3TextToImageOutput;
   };
   "xai/grok-imagine-image": {
     input: GrokImagineImageInput;

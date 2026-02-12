@@ -52,11 +52,11 @@ export type FileType2 = {
  */
 export type ElevenlabsTtsTurboV25Input = {
   /**
-   * Text
+   * Stability
    *
-   * The text to convert to speech
+   * Voice stability (0-1)
    */
-  text: string;
+  stability?: number;
   /**
    * Next Text
    *
@@ -76,11 +76,11 @@ export type ElevenlabsTtsTurboV25Input = {
    */
   style?: number;
   /**
-   * Stability
+   * Text
    *
-   * Voice stability (0-1)
+   * The text to convert to speech
    */
-  stability?: number;
+  text: string;
   /**
    * Timestamps
    *
@@ -524,12 +524,6 @@ export type MinimaxVoiceCloneOutput = {
  */
 export type MinimaxVoiceCloneInput = {
   /**
-   * Text
-   *
-   * Text to generate a TTS preview with the cloned voice (optional)
-   */
-  text?: string;
-  /**
    * Model
    *
    * TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo
@@ -540,11 +534,11 @@ export type MinimaxVoiceCloneInput = {
     | "speech-01-hd"
     | "speech-01-turbo";
   /**
-   * Accuracy
+   * Text
    *
-   * Text validation accuracy threshold (0-1)
+   * Text to generate a TTS preview with the cloned voice (optional)
    */
-  accuracy?: number;
+  text?: string;
   /**
    * Audio Url
    *
@@ -556,6 +550,12 @@ export type MinimaxVoiceCloneInput = {
    *
    */
   audio_url: string;
+  /**
+   * Accuracy
+   *
+   * Text validation accuracy threshold (0-1)
+   */
+  accuracy?: number;
   /**
    * Noise Reduction
    *
@@ -1519,11 +1519,11 @@ export type MinimaxSpeech26HdInput = {
  */
 export type LoudnessNormalizationSetting = {
   /**
-   * Target Range
+   * Enabled
    *
-   * Target loudness range in LU (default 8.0)
+   * Enable loudness normalization for the audio
    */
-  target_range?: number;
+  enabled?: boolean;
   /**
    * Target Loudness
    *
@@ -1531,11 +1531,11 @@ export type LoudnessNormalizationSetting = {
    */
   target_loudness?: number;
   /**
-   * Enabled
+   * Target Range
    *
-   * Enable loudness normalization for the audio
+   * Target loudness range in LU (default 8.0)
    */
-  enabled?: boolean;
+  target_range?: number;
   /**
    * Target Peak
    *
@@ -1994,11 +1994,11 @@ export type AudioFile = {
    */
   file_data?: Blob | File;
   /**
-   * Channels
+   * Bitrate
    *
-   * The number of channels in the audio
+   * The bitrate of the audio (e.g., '192k' or 192000)
    */
-  channels?: number;
+  bitrate?: string | number;
   /**
    * Url
    *
@@ -2024,11 +2024,11 @@ export type AudioFile = {
    */
   content_type?: string;
   /**
-   * Bitrate
+   * Channels
    *
-   * The bitrate of the audio (e.g., '192k' or 192000)
+   * The number of channels in the audio
    */
-  bitrate?: string | number;
+  channels?: number;
 };
 
 /**
@@ -2060,17 +2060,17 @@ export type Qwen3TtsTextToSpeech06bInput = {
    */
   repetition_penalty?: number;
   /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number;
-  /**
    * Top K
    *
    * Top-k sampling parameter.
    */
   top_k?: number;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number;
   /**
    * Voice
    *
@@ -2099,6 +2099,18 @@ export type Qwen3TtsTextToSpeech06bInput = {
    */
   temperature?: number;
   /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number;
+  /**
    * Language
    *
    * The language of the voice.
@@ -2115,18 +2127,6 @@ export type Qwen3TtsTextToSpeech06bInput = {
     | "Korean"
     | "Portuguese"
     | "Russian";
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
   /**
    * Max New Tokens
    *
@@ -2188,17 +2188,17 @@ export type Qwen3TtsTextToSpeech17bInput = {
    */
   repetition_penalty?: number;
   /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number;
-  /**
    * Top K
    *
    * Top-k sampling parameter.
    */
   top_k?: number;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number;
   /**
    * Voice
    *
@@ -2227,6 +2227,18 @@ export type Qwen3TtsTextToSpeech17bInput = {
    */
   temperature?: number;
   /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number;
+  /**
    * Language
    *
    * The language of the voice.
@@ -2243,18 +2255,6 @@ export type Qwen3TtsTextToSpeech17bInput = {
     | "Korean"
     | "Portuguese"
     | "Russian";
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
   /**
    * Max New Tokens
    *
@@ -2292,11 +2292,11 @@ export type Qwen3TtsVoiceDesign17bOutput = {
  */
 export type Qwen3TtsVoiceDesign17bInput = {
   /**
-   * Repetition Penalty
+   * Text
    *
-   * Penalty to reduce repeated tokens/codes.
+   * The text to be converted to speech.
    */
-  repetition_penalty?: number;
+  text: string;
   /**
    * Subtalker Top K
    *
@@ -2322,12 +2322,6 @@ export type Qwen3TtsVoiceDesign17bInput = {
    */
   max_new_tokens?: number;
   /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
    * Language
    *
    * The language of the voice to be designed.
@@ -2344,6 +2338,12 @@ export type Qwen3TtsVoiceDesign17bInput = {
     | "Korean"
     | "Portuguese"
     | "Russian";
+  /**
+   * Repetition Penalty
+   *
+   * Penalty to reduce repeated tokens/codes.
+   */
+  repetition_penalty?: number;
   /**
    * Top K
    *
@@ -2374,6 +2374,260 @@ export type Qwen3TtsVoiceDesign17bInput = {
    * Sampling temperature; higher => more random.
    */
   temperature?: number;
+};
+
+/**
+ * TextToSpeechTurbo28Output
+ *
+ * Output model for Speech 2.8 Turbo.
+ */
+export type MinimaxSpeech28TurboOutput = {
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+  /**
+   * Audio
+   *
+   * The generated audio file
+   */
+  audio: File;
+};
+
+/**
+ * TextToSpeechTurbo28Request
+ *
+ * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
+ */
+export type MinimaxSpeech28TurboInput = {
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
+   */
+  prompt: string;
+  /**
+   * Voice Modify
+   *
+   * Voice modification settings to adjust pitch, intensity, and timbre.
+   */
+  voice_modify?: VoiceModify;
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto";
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  /**
+   * Pronunciation Dict
+   *
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict;
+  /**
+   * Voice Setting
+   *
+   * Voice configuration settings
+   */
+  voice_setting?: VoiceSetting;
+  /**
+   * Normalization Setting
+   *
+   * Loudness normalization settings for the audio
+   */
+  normalization_setting?: LoudnessNormalizationSetting;
+  /**
+   * Audio Setting
+   *
+   * Audio configuration settings
+   */
+  audio_setting?: AudioSetting;
+};
+
+/**
+ * VoiceModify
+ *
+ * Voice modification settings for Speech 2.8 models.
+ */
+export type VoiceModify = {
+  /**
+   * Intensity
+   *
+   * Intensity/energy of the voice. Range: -100 to 100. Higher values create more energetic speech.
+   */
+  intensity?: number;
+  /**
+   * Timbre
+   *
+   * Timbre adjustment. Range: -100 to 100. Affects the tonal quality of the voice.
+   */
+  timbre?: number;
+  /**
+   * Pitch
+   *
+   * Pitch adjustment in semitones. Range: -100 to 100. Positive values raise pitch, negative values lower it.
+   */
+  pitch?: number;
+};
+
+/**
+ * TextToSpeechHD28Output
+ *
+ * Output model for Speech 2.8 HD.
+ */
+export type MinimaxSpeech28HdOutput = {
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+  /**
+   * Audio
+   *
+   * The generated audio file
+   */
+  audio: File;
+};
+
+/**
+ * TextToSpeechHD28Request
+ *
+ * Request model for Speech 2.8 HD - highest quality speech synthesis.
+ */
+export type MinimaxSpeech28HdInput = {
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
+   */
+  prompt: string;
+  /**
+   * Voice Modify
+   *
+   * Voice modification settings to adjust pitch, intensity, and timbre.
+   */
+  voice_modify?: VoiceModify;
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto";
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  /**
+   * Pronunciation Dict
+   *
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict;
+  /**
+   * Voice Setting
+   *
+   * Voice configuration settings
+   */
+  voice_setting?: VoiceSetting;
+  /**
+   * Normalization Setting
+   *
+   * Loudness normalization settings for the audio
+   */
+  normalization_setting?: LoudnessNormalizationSetting;
+  /**
+   * Audio Setting
+   *
+   * Audio configuration settings
+   */
+  audio_setting?: AudioSetting;
 };
 
 /**
@@ -2687,6 +2941,192 @@ export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses = {
 
 export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponse =
   GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses[keyof GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses];
+
+export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/minimax/speech-2.8-hd/requests/{request_id}/status";
+};
+
+export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxSpeech28HdRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech28HdRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMinimaxSpeech28HdRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.8-hd/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMinimaxSpeech28HdRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMinimaxSpeech28HdRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxSpeech28HdRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech28HdRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMinimaxSpeech28HdData = {
+  body: MinimaxSpeech28HdInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.8-hd";
+};
+
+export type PostFalAiMinimaxSpeech28HdResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMinimaxSpeech28HdResponse =
+  PostFalAiMinimaxSpeech28HdResponses[keyof PostFalAiMinimaxSpeech28HdResponses];
+
+export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.8-hd/requests/{request_id}";
+};
+
+export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MinimaxSpeech28HdOutput;
+};
+
+export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponse =
+  GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponses];
+
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}/status";
+};
+
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMinimaxSpeech28TurboData = {
+  body: MinimaxSpeech28TurboInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.8-turbo";
+};
+
+export type PostFalAiMinimaxSpeech28TurboResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMinimaxSpeech28TurboResponse =
+  PostFalAiMinimaxSpeech28TurboResponses[keyof PostFalAiMinimaxSpeech28TurboResponses];
+
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}";
+};
+
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MinimaxSpeech28TurboOutput;
+};
+
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponse =
+  GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses];
 
 export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusData = {
   body?: never;

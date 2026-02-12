@@ -87,17 +87,17 @@ export type SfxV1VideoToAudioInput = {
  */
 export type KlingVideoVideoToAudioOutput = {
   /**
-   * Video
-   *
-   * The original video with dubbed audio applied
-   */
-  video: File;
-  /**
    * Audio
    *
    * The extracted/generated audio from the video in MP3 format
    */
   audio: File;
+  /**
+   * Video
+   *
+   * The original video with dubbed audio applied
+   */
+  video: File;
 };
 
 /**
@@ -397,13 +397,13 @@ export type StableAudioInput = {
  * TTSOutput
  */
 export type F5TtsOutput = {
-  audio_url: AudioFileType2;
+  audio_url: AudioFileType3;
 };
 
 /**
  * AudioFile
  */
-export type AudioFileType2 = {
+export type AudioFileType3 = {
   /**
    * File Size
    *
@@ -970,11 +970,11 @@ export type ElevenlabsTtsMultilingualV2Output = {
  */
 export type ElevenlabsTtsMultilingualV2Input = {
   /**
-   * Text
+   * Stability
    *
-   * The text to convert to speech
+   * Voice stability (0-1)
    */
-  text: string;
+  stability?: number;
   /**
    * Next Text
    *
@@ -994,11 +994,11 @@ export type ElevenlabsTtsMultilingualV2Input = {
    */
   style?: number;
   /**
-   * Stability
+   * Text
    *
-   * Voice stability (0-1)
+   * The text to convert to speech
    */
-  stability?: number;
+  text: string;
   /**
    * Timestamps
    *
@@ -1509,12 +1509,6 @@ export type ElevenlabsTtsElevenV3Output = {
  */
 export type ElevenlabsTtsElevenV3Input = {
   /**
-   * Text
-   *
-   * The text to convert to speech
-   */
-  text: string;
-  /**
    * Stability
    *
    * Voice stability (0-1)
@@ -1526,6 +1520,12 @@ export type ElevenlabsTtsElevenV3Input = {
    * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
    */
   speed?: number;
+  /**
+   * Text
+   *
+   * The text to convert to speech
+   */
+  text: string;
   /**
    * Style
    *
@@ -1888,17 +1888,17 @@ export type ElevenlabsTextToDialogueElevenV3Input = {
    */
   stability?: number | unknown;
   /**
-   * Inputs
-   *
-   * A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.
-   */
-  inputs: Array<DialogueBlock>;
-  /**
    * Language Code
    *
    * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
    */
   language_code?: string | unknown;
+  /**
+   * Inputs
+   *
+   * A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.
+   */
+  inputs: Array<DialogueBlock>;
   /**
    * Seed
    *
@@ -3510,13 +3510,13 @@ export type Deepfilternet3Output = {
    *
    * The audio file that was enhanced.
    */
-  audio_file: AudioFile;
+  audio_file: AudioFileType2;
 };
 
 /**
  * AudioFile
  */
-export type AudioFile = {
+export type AudioFileType2 = {
   /**
    * File Size
    *
@@ -3530,17 +3530,17 @@ export type AudioFile = {
    */
   duration?: number;
   /**
-   * Channels
-   *
-   * The number of channels in the audio
-   */
-  channels?: number;
-  /**
    * Bitrate
    *
    * The bitrate of the audio (e.g., '192k' or 192000)
    */
   bitrate?: string | number;
+  /**
+   * File Data
+   *
+   * File data
+   */
+  file_data?: Blob | File;
   /**
    * Url
    *
@@ -3566,11 +3566,11 @@ export type AudioFile = {
    */
   content_type?: string;
   /**
-   * File Data
+   * Channels
    *
-   * File data
+   * The number of channels in the audio
    */
-  file_data?: Blob | File;
+  channels?: number;
 };
 
 /**
@@ -3642,7 +3642,7 @@ export type NovaSrOutput = {
    *
    * The enhanced audio file.
    */
-  audio: AudioFile;
+  audio: AudioFileType2;
 };
 
 /**
@@ -3656,11 +3656,11 @@ export type NovaSrInput = {
    */
   sync_mode?: boolean;
   /**
-   * Bitrate
+   * Audio Format
    *
-   * The bitrate of the output audio.
+   * The format for the output audio.
    */
-  bitrate?: string;
+  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
   /**
    * Audio URL
    *
@@ -3668,11 +3668,11 @@ export type NovaSrInput = {
    */
   audio_url: string;
   /**
-   * Audio Format
+   * Bitrate
    *
-   * The format for the output audio.
+   * The bitrate of the output audio.
    */
-  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
+  bitrate?: string;
 };
 
 /**
@@ -3743,6 +3743,178 @@ export type ElevenlabsVoiceChangerInput = {
   remove_background_noise?: boolean;
 };
 
+/**
+ * AudioCompressorOutput
+ *
+ * Output model for compressed audio
+ */
+export type WorkflowUtilitiesAudioCompressorOutput = {
+  /**
+   * Audio
+   *
+   * The compressed audio file
+   */
+  audio: AudioFile;
+};
+
+/**
+ * AudioFile
+ *
+ * Audio file with url field
+ */
+export type AudioFile = {
+  /**
+   * File Size
+   *
+   * Size of the audio file in bytes
+   */
+  file_size: number;
+  /**
+   * File Name
+   *
+   * Name of the audio file
+   */
+  file_name: string;
+  /**
+   * Content Type
+   *
+   * Content type of the audio file
+   */
+  content_type: string;
+  /**
+   * Url
+   *
+   * URL of the audio file
+   */
+  url: string;
+};
+
+/**
+ * AudioCompressorInput
+ *
+ * Input model for audio dynamic range compression
+ */
+export type WorkflowUtilitiesAudioCompressorInput = {
+  /**
+   * Threshold
+   *
+   * Threshold level in dB above which compression is applied (-60 to 0)
+   */
+  threshold?: number;
+  /**
+   * Ratio
+   *
+   * Compression ratio (1 = no compression, higher = more compression)
+   */
+  ratio?: number;
+  /**
+   * Attack
+   *
+   * Attack time in milliseconds (how fast compression starts)
+   */
+  attack?: number;
+  /**
+   * Makeup
+   *
+   * Makeup gain in dB to compensate for volume reduction
+   */
+  makeup?: number;
+  /**
+   * Release
+   *
+   * Release time in milliseconds (how fast compression stops)
+   */
+  release?: number;
+  /**
+   * Knee
+   *
+   * Knee width in dB for soft knee compression (0 = hard knee)
+   */
+  knee?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to compress
+   */
+  audio_url: string;
+  /**
+   * Output Bitrate
+   *
+   * Output audio bitrate
+   */
+  output_bitrate?: "128k" | "192k" | "256k" | "320k";
+};
+
+/**
+ * ImpulseResponseOutput
+ *
+ * Output model for impulse response processed audio
+ */
+export type WorkflowUtilitiesImpulseResponseOutput = {
+  /**
+   * Audio
+   *
+   * The processed audio file with reverb applied
+   */
+  audio: AudioFile;
+};
+
+/**
+ * ImpulseResponseInput
+ *
+ * Input model for applying impulse response (IR) convolution reverb to audio
+ */
+export type WorkflowUtilitiesImpulseResponseInput = {
+  /**
+   * Impulse Response Url
+   *
+   * URL of the impulse response WAV file (reverb/effect profile)
+   */
+  impulse_response_url: string;
+  /**
+   * Loudness Lra
+   *
+   * Loudness Range target in LU (typically 5-15)
+   */
+  loudness_lra?: number;
+  /**
+   * Loudness Tp
+   *
+   * Maximum true peak in dBTP (typically -2 to -1)
+   */
+  loudness_tp?: number;
+  /**
+   * Wet Level
+   *
+   * Level of the processed (wet) signal in the mix (0.0-1.0)
+   */
+  wet_level?: number;
+  /**
+   * Loudness I
+   *
+   * Target integrated loudness in LUFS (typically -24 to -14)
+   */
+  loudness_i?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the main audio file to process
+   */
+  audio_url: string;
+  /**
+   * Dry Level
+   *
+   * Level of the original (dry) signal in the mix (0.0-1.0)
+   */
+  dry_level?: number;
+  /**
+   * Output Bitrate
+   *
+   * Output audio bitrate
+   */
+  output_bitrate?: "128k" | "192k" | "256k" | "320k";
+};
+
 export type QueueStatus = {
   status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
   /**
@@ -3778,6 +3950,202 @@ export type QueueStatus = {
    */
   queue_position?: number;
 };
+
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}/status";
+  };
+
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWorkflowUtilitiesImpulseResponseData = {
+  body: WorkflowUtilitiesImpulseResponseInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/workflow-utilities/impulse-response";
+};
+
+export type PostFalAiWorkflowUtilitiesImpulseResponseResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWorkflowUtilitiesImpulseResponseResponse =
+  PostFalAiWorkflowUtilitiesImpulseResponseResponses[keyof PostFalAiWorkflowUtilitiesImpulseResponseResponses];
+
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}";
+};
+
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: WorkflowUtilitiesImpulseResponseOutput;
+  };
+
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponse =
+  GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses];
+
+export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/workflow-utilities/audio-compressor/requests/{request_id}/status";
+  };
+
+export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/workflow-utilities/audio-compressor/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWorkflowUtilitiesAudioCompressorData = {
+  body: WorkflowUtilitiesAudioCompressorInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/workflow-utilities/audio-compressor";
+};
+
+export type PostFalAiWorkflowUtilitiesAudioCompressorResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWorkflowUtilitiesAudioCompressorResponse =
+  PostFalAiWorkflowUtilitiesAudioCompressorResponses[keyof PostFalAiWorkflowUtilitiesAudioCompressorResponses];
+
+export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/audio-compressor/requests/{request_id}";
+};
+
+export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: WorkflowUtilitiesAudioCompressorOutput;
+  };
+
+export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponse =
+  GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponses];
 
 export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusData = {
   body?: never;

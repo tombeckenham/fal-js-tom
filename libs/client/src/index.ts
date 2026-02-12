@@ -5,6 +5,7 @@ import { StreamOptions } from "./streaming";
 import { RunOptions } from "./types/common";
 
 export type { EndpointType, InputType, OutputType } from "@fal-ai/types";
+export type { TokenProvider } from "./auth";
 export { createFalClient, type FalClient } from "./client";
 export { withMiddleware, withProxy } from "./middleware";
 export type { RequestMiddleware } from "./middleware";

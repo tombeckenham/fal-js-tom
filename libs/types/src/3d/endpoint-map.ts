@@ -18,6 +18,8 @@ import type {
   Hunyuan3dV2Output,
   Hunyuan3dV2TurboInput,
   Hunyuan3dV2TurboOutput,
+  Hunyuan3dV31PartInput,
+  Hunyuan3dV31PartOutput,
   Hunyuan3dV31ProImageTo3dInput,
   Hunyuan3dV31ProImageTo3dOutput,
   Hunyuan3dV31ProTextTo3dInput,
@@ -38,6 +40,8 @@ import type {
   HunyuanMotionFastOutput,
   HunyuanMotionInput,
   HunyuanMotionOutput,
+  HunyuanPartInput,
+  HunyuanPartOutput,
   HunyuanWorldImageToWorldInput,
   HunyuanWorldImageToWorldOutput,
   Hyper3dRodinInput,
@@ -46,14 +50,24 @@ import type {
   Hyper3dRodinV2Output,
   MeshyV5MultiImageTo3dInput,
   MeshyV5MultiImageTo3dOutput,
+  MeshyV5RemeshInput,
+  MeshyV5RemeshOutput,
+  MeshyV5RetextureInput,
+  MeshyV5RetextureOutput,
+  MeshyV6ImageTo3dInput,
+  MeshyV6ImageTo3dOutput,
   MeshyV6PreviewImageTo3dInput,
   MeshyV6PreviewImageTo3dOutput,
   MeshyV6PreviewTextTo3dInput,
   MeshyV6PreviewTextTo3dOutput,
+  MeshyV6TextTo3dInput,
+  MeshyV6TextTo3dOutput,
   OmnipartInput,
   OmnipartOutput,
   PshumanInput,
   PshumanOutput,
+  Sam33dAlignInput,
+  Sam33dAlignOutput,
   Sam33dBodyInput,
   Sam33dBodyOutput,
   Sam33dObjectsInput,
@@ -70,12 +84,42 @@ import type {
   TripoV25MultiviewTo3dOutput,
   TriposrInput,
   TriposrOutput,
+  UltrashapeInput,
+  UltrashapeOutput,
 } from "./types.gen";
 
 export type Gen3dEndpointMap = {
   "fal-ai/hunyuan-3d/v3.1/smart-topology": {
     input: Hunyuan3dV31SmartTopologyInput;
     output: Hunyuan3dV31SmartTopologyOutput;
+  };
+  "fal-ai/hunyuan-3d/v3.1/part": {
+    input: Hunyuan3dV31PartInput;
+    output: Hunyuan3dV31PartOutput;
+  };
+  "fal-ai/ultrashape": {
+    input: UltrashapeInput;
+    output: UltrashapeOutput;
+  };
+  "fal-ai/sam-3/3d-align": {
+    input: Sam33dAlignInput;
+    output: Sam33dAlignOutput;
+  };
+  "fal-ai/meshy/v5/retexture": {
+    input: MeshyV5RetextureInput;
+    output: MeshyV5RetextureOutput;
+  };
+  "fal-ai/meshy/v5/remesh": {
+    input: MeshyV5RemeshInput;
+    output: MeshyV5RemeshOutput;
+  };
+  "fal-ai/hunyuan-part": {
+    input: HunyuanPartInput;
+    output: HunyuanPartOutput;
+  };
+  "fal-ai/meshy/v6/image-to-3d": {
+    input: MeshyV6ImageTo3dInput;
+    output: MeshyV6ImageTo3dOutput;
   };
   "fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d": {
     input: Hunyuan3dV31RapidImageTo3dInput;
@@ -184,6 +228,10 @@ export type Gen3dEndpointMap = {
   "fal-ai/triposr": {
     input: TriposrInput;
     output: TriposrOutput;
+  };
+  "fal-ai/meshy/v6/text-to-3d": {
+    input: MeshyV6TextTo3dInput;
+    output: MeshyV6TextTo3dOutput;
   };
   "fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d": {
     input: Hunyuan3dV31RapidTextTo3dInput;

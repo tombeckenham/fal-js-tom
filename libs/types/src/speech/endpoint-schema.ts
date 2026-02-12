@@ -40,6 +40,10 @@ import {
   zMinimaxSpeech26HdOutput,
   zMinimaxSpeech26TurboInput,
   zMinimaxSpeech26TurboOutput,
+  zMinimaxSpeech28HdInput,
+  zMinimaxSpeech28HdOutput,
+  zMinimaxSpeech28TurboInput,
+  zMinimaxSpeech28TurboOutput,
   zMinimaxVoiceCloneInput,
   zMinimaxVoiceCloneOutput,
   zMinimaxVoiceDesignInput,
@@ -71,6 +75,16 @@ export const SpeechEndpointSchema = z.discriminatedUnion("endpoint", [
     endpoint: z.literal("fal-ai/chatterbox/speech-to-speech"),
     input: zChatterboxSpeechToSpeechInput,
     output: zChatterboxSpeechToSpeechOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax/speech-2.8-hd"),
+    input: zMinimaxSpeech28HdInput,
+    output: zMinimaxSpeech28HdOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax/speech-2.8-turbo"),
+    input: zMinimaxSpeech28TurboInput,
+    output: zMinimaxSpeech28TurboOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/qwen-3-tts/voice-design/1.7b"),

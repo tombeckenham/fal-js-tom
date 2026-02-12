@@ -239,17 +239,17 @@ export type RouterOpenaiV1ChatCompletionsOutput = unknown;
  */
 export type UsageInfo = {
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number | unknown;
+  prompt_tokens?: number;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number | unknown;
+  completion_tokens?: number;
   /**
    * Cost
    */
@@ -261,15 +261,17 @@ export type UsageInfo = {
  */
 export type RouterOutput = {
   /**
+   * Usage
+   *
    * Token usage information
    */
-  usage?: UsageInfo | unknown;
+  usage?: UsageInfo;
   /**
    * Error
    *
    * Error message if an error occurred
    */
-  error?: string | unknown;
+  error?: string;
   /**
    * Partial
    *
@@ -281,7 +283,7 @@ export type RouterOutput = {
    *
    * Generated reasoning for the final answer
    */
-  reasoning?: string | unknown;
+  reasoning?: string;
   /**
    * Output
    *
@@ -295,23 +297,23 @@ export type RouterOutput = {
  */
 export type RouterInput = {
   /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
    * Prompt
    *
    * Prompt to be used for the chat completion
    */
   prompt: string;
   /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
    * Max Tokens
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number | unknown;
+  max_tokens?: number;
   /**
    * Temperature
    *
@@ -319,17 +321,17 @@ export type RouterInput = {
    */
   temperature?: number;
   /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string;
+  /**
    * Reasoning
    *
    * Should reasoning be the part of the final answer.
    */
   reasoning?: boolean;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
 };
 
 /**

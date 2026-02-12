@@ -19,219 +19,6 @@ export type FastAnimatediffVideoToVideoOutput = {
    *
    * Generated video file.
    */
-  video: FileType2;
-};
-
-/**
- * File
- */
-export type FileType2 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-};
-
-/**
- * AnimateDiffV2VInput
- */
-export type FastAnimatediffVideoToVideoInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to use for generating the image. Be as descriptive as possible for best results.
-   */
-  prompt: string;
-  /**
-   * Video Url
-   *
-   * URL of the video.
-   */
-  video_url: string;
-  /**
-   * First N Seconds
-   *
-   * The first N number of seconds of video to animate.
-   */
-  first_n_seconds?: number;
-  /**
-   * Fps
-   *
-   * Number of frames per second to extract from the video.
-   */
-  fps?: number;
-  /**
-   * Strength
-   *
-   * The strength of the input video in the final output.
-   */
-  strength?: number;
-  /**
-   * Guidance scale (CFG)
-   *
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
-   * the model to stick to your prompt when looking for a related image to show you.
-   *
-   */
-  guidance_scale?: number;
-  /**
-   * Num Inference Steps
-   *
-   * The number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of Stable Diffusion
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
-  /**
-   * Negative Prompt
-   *
-   *
-   * The negative prompt to use. Use it to address details that you don't want
-   * in the image. This could be colors, objects, scenery and even the small details
-   * (e.g. moustache, blurry, low resolution).
-   *
-   */
-  negative_prompt?: string;
-  /**
-   * Motions
-   *
-   * The motions to apply to the video.
-   */
-  motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
-  >;
-};
-
-/**
- * AnimateDiffV2VOutput
- */
-export type FastAnimatediffTurboVideoToVideoOutput = {
-  /**
-   * Seed
-   *
-   * Seed used for generating the video.
-   */
-  seed: number;
-  /**
-   * Video
-   *
-   * Generated video file.
-   */
-  video: FileType2;
-};
-
-/**
- * AnimateDiffV2VTurboInput
- */
-export type FastAnimatediffTurboVideoToVideoInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to use for generating the image. Be as descriptive as possible for best results.
-   */
-  prompt: string;
-  /**
-   * Video Url
-   *
-   * URL of the video.
-   */
-  video_url: string;
-  /**
-   * First N Seconds
-   *
-   * The first N number of seconds of video to animate.
-   */
-  first_n_seconds?: number;
-  /**
-   * Fps
-   *
-   * Number of frames per second to extract from the video.
-   */
-  fps?: number;
-  /**
-   * Strength
-   *
-   * The strength of the input video in the final output.
-   */
-  strength?: number;
-  /**
-   * Guidance Scale
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
-   */
-  guidance_scale?: number;
-  /**
-   * Num Inference Steps
-   *
-   * The number of inference steps to perform. 4-12 is recommended for turbo mode.
-   */
-  num_inference_steps?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of Stable Diffusion
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
-  /**
-   * Negative Prompt
-   *
-   *
-   * The negative prompt to use. Use it to address details that you don't want
-   * in the image. This could be colors, objects, scenery and even the small details
-   * (e.g. moustache, blurry, low resolution).
-   *
-   */
-  negative_prompt?: string;
-  /**
-   * Motions
-   *
-   * The motions to apply to the video.
-   */
-  motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
-  >;
-};
-
-/**
- * AMTInterpolationOutput
- */
-export type AmtInterpolationOutput = {
-  /**
-   * Video
-   *
-   * Generated video
-   */
   video: File;
 };
 
@@ -269,6 +56,181 @@ export type File = {
    * File data
    */
   file_data?: Blob | File;
+};
+
+/**
+ * AnimateDiffV2VInput
+ */
+export type FastAnimatediffVideoToVideoInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to use for generating the image. Be as descriptive as possible for best results.
+   */
+  prompt: string;
+  /**
+   * First N Seconds
+   *
+   * The first N number of seconds of video to animate.
+   */
+  first_n_seconds?: number;
+  /**
+   * Video Url
+   *
+   * URL of the video.
+   */
+  video_url: string;
+  /**
+   * Fps
+   *
+   * Number of frames per second to extract from the video.
+   */
+  fps?: number;
+  /**
+   * Strength
+   *
+   * The strength of the input video in the final output.
+   */
+  strength?: number;
+  /**
+   * Guidance scale (CFG)
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt when looking for a related image to show you.
+   *
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of Stable Diffusion
+   * will output the same image every time.
+   *
+   */
+  seed?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Negative Prompt
+   *
+   *
+   * The negative prompt to use. Use it to address details that you don't want
+   * in the image. This could be colors, objects, scenery and even the small details
+   * (e.g. moustache, blurry, low resolution).
+   *
+   */
+  negative_prompt?: string;
+  /**
+   * Motions
+   *
+   * The motions to apply to the video.
+   */
+  motions?: Array<
+    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
+  >;
+};
+
+/**
+ * AnimateDiffV2VOutput
+ */
+export type FastAnimatediffTurboVideoToVideoOutput = {
+  /**
+   * Seed
+   *
+   * Seed used for generating the video.
+   */
+  seed: number;
+  /**
+   * Video
+   *
+   * Generated video file.
+   */
+  video: File;
+};
+
+/**
+ * AnimateDiffV2VTurboInput
+ */
+export type FastAnimatediffTurboVideoToVideoInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to use for generating the image. Be as descriptive as possible for best results.
+   */
+  prompt: string;
+  /**
+   * First N Seconds
+   *
+   * The first N number of seconds of video to animate.
+   */
+  first_n_seconds?: number;
+  /**
+   * Video Url
+   *
+   * URL of the video.
+   */
+  video_url: string;
+  /**
+   * Fps
+   *
+   * Number of frames per second to extract from the video.
+   */
+  fps?: number;
+  /**
+   * Strength
+   *
+   * The strength of the input video in the final output.
+   */
+  strength?: number;
+  /**
+   * Guidance Scale
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of Stable Diffusion
+   * will output the same image every time.
+   *
+   */
+  seed?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform. 4-12 is recommended for turbo mode.
+   */
+  num_inference_steps?: number;
+  /**
+   * Negative Prompt
+   *
+   *
+   * The negative prompt to use. Use it to address details that you don't want
+   * in the image. This could be colors, objects, scenery and even the small details
+   * (e.g. moustache, blurry, low resolution).
+   *
+   */
+  negative_prompt?: string;
+};
+
+/**
+ * AMTInterpolationOutput
+ */
+export type AmtInterpolationOutput = {
+  /**
+   * Video
+   *
+   * Generated video
+   */
+  video: File;
 };
 
 /**
@@ -318,11 +280,11 @@ export type Sam2VideoOutput = {
  */
 export type Sam2VideoInput = {
   /**
-   * Boundingbox Zip
+   * Video Url
    *
-   * Return per-frame bounding box overlays as a zip archive.
+   * The URL of the video to be segmented.
    */
-  boundingbox_zip?: boolean;
+  video_url: string;
   /**
    * Prompts
    *
@@ -330,11 +292,11 @@ export type Sam2VideoInput = {
    */
   prompts?: Array<PointPromptType2>;
   /**
-   * Video Url
+   * Boundingbox Zip
    *
-   * The URL of the video to be segmented.
+   * Return per-frame bounding box overlays as a zip archive.
    */
-  video_url: string;
+  boundingbox_zip?: boolean;
   /**
    * Box Prompts
    *
@@ -402,11 +364,11 @@ export type PointPromptType2 = {
    */
   y?: number;
   /**
-   * Label
+   * X
    *
-   * Label of the prompt. 1 for foreground, 0 for background
+   * X Coordinate of the prompt
    */
-  label?: 0 | 1;
+  x?: number;
   /**
    * Frame Index
    *
@@ -414,11 +376,11 @@ export type PointPromptType2 = {
    */
   frame_index?: number;
   /**
-   * X
+   * Label
    *
-   * X Coordinate of the prompt
+   * Label of the prompt. 1 for foreground, 0 for background
    */
-  x?: number;
+  label?: 0 | 1;
 };
 
 /**
@@ -429,6 +391,36 @@ export type ControlnextOutput = {
    * The generated video.
    */
   video: FileType2;
+};
+
+/**
+ * File
+ */
+export type FileType2 = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
 };
 
 /**
@@ -829,11 +821,11 @@ export type SyncLipsyncOutput = {
  */
 export type SyncLipsyncInput = {
   /**
-   * Model
+   * Sync Mode
    *
-   * The model to use for lipsyncing
+   * Lipsync mode when audio and video durations are out of sync.
    */
-  model?: "lipsync-1.8.0" | "lipsync-1.7.1" | "lipsync-1.9.0-beta";
+  sync_mode?: "cut_off" | "loop" | "bounce" | "silence" | "remap";
   /**
    * Video Url
    *
@@ -841,11 +833,11 @@ export type SyncLipsyncInput = {
    */
   video_url: string;
   /**
-   * Sync Mode
+   * Model
    *
-   * Lipsync mode when audio and video durations are out of sync.
+   * The model to use for lipsyncing
    */
-  sync_mode?: "cut_off" | "loop" | "bounce" | "silence" | "remap";
+  model?: "lipsync-1.8.0" | "lipsync-1.7.1" | "lipsync-1.9.0-beta";
   /**
    * Audio Url
    *
@@ -1148,12 +1140,7 @@ export type BenV2VideoInput = {
  * VideoUpscaleOutput
  */
 export type TopazUpscaleVideoOutput = {
-  /**
-   * Video
-   *
-   * The upscaled video file
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -1183,7 +1170,7 @@ export type TopazUpscaleVideoInput = {
    *
    * Target FPS for frame interpolation. If set, frame interpolation will be enabled.
    */
-  target_fps?: number;
+  target_fps?: number | unknown;
 };
 
 /**
@@ -1378,12 +1365,7 @@ export type LtxVideoV095ExtendInput = {
  * Output from Pikadditions generation
  */
 export type PikaV2PikadditionsOutput = {
-  /**
-   * Video
-   *
-   * The generated video with added objects/images
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -1397,7 +1379,7 @@ export type PikaV2PikadditionsInput = {
    *
    * Text prompt describing what to add
    */
-  prompt?: string;
+  prompt?: string | unknown;
   /**
    * Video Url
    *
@@ -1409,13 +1391,13 @@ export type PikaV2PikadditionsInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
    * Negative prompt to guide the model
    */
-  negative_prompt?: string;
+  negative_prompt?: string | unknown;
   /**
    * Image Url
    *
@@ -1489,11 +1471,11 @@ export type SyncLipsyncV2Output = {
  */
 export type SyncLipsyncV2Input = {
   /**
-   * Model
+   * Sync Mode
    *
-   * The model to use for lipsyncing. `lipsync-2-pro` will cost roughly 1.67 times as much as `lipsync-2` for the same duration.
+   * Lipsync mode when audio and video durations are out of sync.
    */
-  model?: "lipsync-2" | "lipsync-2-pro";
+  sync_mode?: "cut_off" | "loop" | "bounce" | "silence" | "remap";
   /**
    * Video Url
    *
@@ -1501,11 +1483,11 @@ export type SyncLipsyncV2Input = {
    */
   video_url: string;
   /**
-   * Sync Mode
+   * Model
    *
-   * Lipsync mode when audio and video durations are out of sync.
+   * The model to use for lipsyncing. `lipsync-2-pro` will cost roughly 1.67 times as much as `lipsync-2` for the same duration.
    */
-  sync_mode?: "cut_off" | "loop" | "bounce" | "silence" | "remap";
+  model?: "lipsync-2" | "lipsync-2-pro";
   /**
    * Audio Url
    *
@@ -2724,13 +2706,13 @@ export type WanVace14bOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
  * VideoFile
  */
-export type VideoFile = {
+export type VideoFileType2 = {
   /**
    * File Size
    *
@@ -2756,17 +2738,17 @@ export type VideoFile = {
    */
   url: string;
   /**
-   * Fps
-   *
-   * The FPS of the video
-   */
-  fps?: number | unknown;
-  /**
    * Width
    *
    * The width of the video
    */
   width?: number | unknown;
+  /**
+   * Fps
+   *
+   * The FPS of the video
+   */
+  fps?: number | unknown;
   /**
    * File Name
    *
@@ -3312,17 +3294,17 @@ export type FfmpegApiMergeAudioVideoOutput = {
  */
 export type FfmpegApiMergeAudioVideoInput = {
   /**
-   * Video Url
-   *
-   * URL of the video file to use as the video track
-   */
-  video_url: string;
-  /**
    * Start Offset
    *
    * Offset in seconds for when the audio should start relative to the video
    */
   start_offset?: number;
+  /**
+   * Video Url
+   *
+   * URL of the video file to use as the video track
+   */
+  video_url: string;
   /**
    * Audio Url
    *
@@ -3388,7 +3370,7 @@ export type WanVace14bDepthOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -3603,7 +3585,7 @@ export type WanVace14bPoseOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -3818,7 +3800,7 @@ export type WanVace14bInpaintingOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -4045,7 +4027,7 @@ export type WanVace14bOutpaintingOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -4284,7 +4266,7 @@ export type WanVace14bReframeOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -4610,11 +4592,11 @@ export type PixverseExtendInput = {
    */
   prompt: string;
   /**
-   * Resolution
+   * Video Url
    *
-   * The resolution of the generated video
+   * URL of the input video to extend
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  video_url: string;
   /**
    * Duration
    *
@@ -4628,11 +4610,11 @@ export type PixverseExtendInput = {
    */
   style?: "anime" | "3d_animation" | "clay" | "comic" | "cyberpunk";
   /**
-   * Video Url
+   * Resolution
    *
-   * URL of the input video to extend
+   * The resolution of the generated video
    */
-  video_url: string;
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Model
    *
@@ -4676,17 +4658,17 @@ export type PixverseExtendFastInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * The resolution of the generated video. Fast mode doesn't support 1080p
-   */
-  resolution?: "360p" | "540p" | "720p";
-  /**
    * Video Url
    *
    * URL of the input video to extend
    */
   video_url: string;
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video. Fast mode doesn't support 1080p
+   */
+  resolution?: "360p" | "540p" | "720p";
   /**
    * Style
    *
@@ -5069,19 +5051,19 @@ export type FilmVideoOutput = {
    *
    * The generated video file with interpolated frames.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
  * VideoFile
  */
-export type VideoFileType2 = {
+export type VideoFile = {
   /**
-   * Height
+   * File Size
    *
-   * The height of the video
+   * The size of the file in bytes.
    */
-  height?: number;
+  file_size?: number;
   /**
    * Duration
    *
@@ -5089,11 +5071,11 @@ export type VideoFileType2 = {
    */
   duration?: number;
   /**
-   * File Size
+   * Height
    *
-   * The size of the file in bytes.
+   * The height of the video
    */
-  file_size?: number;
+  height?: number;
   /**
    * Url
    *
@@ -5119,17 +5101,17 @@ export type VideoFileType2 = {
    */
   file_name?: string;
   /**
-   * Num Frames
-   *
-   * The number of frames in the video
-   */
-  num_frames?: number;
-  /**
    * Content Type
    *
    * The mime type of the file.
    */
   content_type?: string;
+  /**
+   * Num Frames
+   *
+   * The number of frames in the video
+   */
+  num_frames?: number;
   /**
    * File Data
    *
@@ -5499,17 +5481,17 @@ export type WanV22A14bVideoToVideoInput = {
    */
   acceleration?: "none" | "regular";
   /**
-   * Number of Interpolated Frames
-   *
-   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
-   */
-  num_interpolated_frames?: number;
-  /**
    * Prompt
    *
    * The text prompt to guide video generation.
    */
   prompt: string;
+  /**
+   * Number of Interpolated Frames
+   *
+   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
+   */
+  num_interpolated_frames?: number;
   /**
    * Resample Video Frame Rate
    *
@@ -5553,17 +5535,17 @@ export type WanV22A14bVideoToVideoInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (480p, 580p, or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input video.
    */
   aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (480p, 580p, or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -5577,17 +5559,35 @@ export type WanV22A14bVideoToVideoInput = {
    */
   guidance_scale_2?: number;
   /**
+   * Video Quality
+   *
+   * The quality of the output video. Higher quality means better visual quality but larger file size.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
+  /**
    * Strength
    *
    * Strength of the video transformation. A value of 1.0 means the output will be completely based on the prompt, while a value of 0.0 means the output will be identical to the input video.
    */
   strength?: number;
   /**
-   * Video Quality
+   * Adjust FPS for Interpolation
    *
-   * The quality of the output video. Higher quality means better visual quality but larger file size.
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
    */
-  video_quality?: "low" | "medium" | "high" | "maximum";
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
   /**
    * Enable Prompt Expansion
    *
@@ -5600,24 +5600,6 @@ export type WanV22A14bVideoToVideoInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -6166,7 +6148,7 @@ export type Wan22VaceFunA14bPoseOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -6381,7 +6363,7 @@ export type Wan22VaceFunA14bDepthOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -6596,7 +6578,7 @@ export type Wan22VaceFunA14bInpaintingOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -6823,7 +6805,7 @@ export type Wan22VaceFunA14bOutpaintingOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -7062,7 +7044,7 @@ export type Wan22VaceFunA14bReframeOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -7392,18 +7374,6 @@ export type WanV2214bAnimateMoveOutput = {
  */
 export type WanV2214bAnimateMoveInput = {
   /**
-   * Video Write Mode
-   *
-   * The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-   */
-  video_write_mode?: "fast" | "balanced" | "small";
-  /**
-   * Video URL
-   *
-   * URL of the input video.
-   */
-  video_url: string;
-  /**
    * Shift
    *
    * Shift value for the video. Must be between 1.0 and 10.0.
@@ -7416,11 +7386,23 @@ export type WanV2214bAnimateMoveInput = {
    */
   resolution?: "480p" | "580p" | "720p";
   /**
+   * Video URL
+   *
+   * URL of the input video.
+   */
+  video_url: string;
+  /**
    * Return Frames ZIP
    *
    * If true, also return a ZIP archive containing per-frame images generated on GPU (lossless).
    */
   return_frames_zip?: boolean;
+  /**
+   * Video Write Mode
+   *
+   * The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+   */
+  video_write_mode?: "fast" | "balanced" | "small";
   /**
    * Enable Output Safety Checker
    *
@@ -7440,6 +7422,24 @@ export type WanV2214bAnimateMoveInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Guidance Scale
+   *
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Use Turbo
+   *
+   * If true, applies quality enhancement for faster generation with improved quality. When enabled, parameters are automatically optimized for best results.
+   */
+  use_turbo?: boolean;
+  /**
    * Enable Safety Checker
    *
    * If set to true, input data will be checked for safety before processing.
@@ -7451,24 +7451,6 @@ export type WanV2214bAnimateMoveInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Use Turbo
-   *
-   * If true, applies quality enhancement for faster generation with improved quality. When enabled, parameters are automatically optimized for best results.
-   */
-  use_turbo?: boolean;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Guidance Scale
-   *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
-   */
-  guidance_scale?: number;
 };
 
 /**
@@ -7506,18 +7488,6 @@ export type WanV2214bAnimateReplaceOutput = {
  */
 export type WanV2214bAnimateReplaceInput = {
   /**
-   * Video Write Mode
-   *
-   * The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
-   */
-  video_write_mode?: "fast" | "balanced" | "small";
-  /**
-   * Video URL
-   *
-   * URL of the input video.
-   */
-  video_url: string;
-  /**
    * Shift
    *
    * Shift value for the video. Must be between 1.0 and 10.0.
@@ -7530,11 +7500,23 @@ export type WanV2214bAnimateReplaceInput = {
    */
   resolution?: "480p" | "580p" | "720p";
   /**
+   * Video URL
+   *
+   * URL of the input video.
+   */
+  video_url: string;
+  /**
    * Return Frames ZIP
    *
    * If true, also return a ZIP archive containing per-frame images generated on GPU (lossless).
    */
   return_frames_zip?: boolean;
+  /**
+   * Video Write Mode
+   *
+   * The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
+   */
+  video_write_mode?: "fast" | "balanced" | "small";
   /**
    * Enable Output Safety Checker
    *
@@ -7554,6 +7536,24 @@ export type WanV2214bAnimateReplaceInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Guidance Scale
+   *
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Use Turbo
+   *
+   * If true, applies quality enhancement for faster generation with improved quality. When enabled, parameters are automatically optimized for best results.
+   */
+  use_turbo?: boolean;
+  /**
    * Enable Safety Checker
    *
    * If set to true, input data will be checked for safety before processing.
@@ -7565,24 +7565,6 @@ export type WanV2214bAnimateReplaceInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Use Turbo
-   *
-   * If true, applies quality enhancement for faster generation with improved quality. When enabled, parameters are automatically optimized for best results.
-   */
-  use_turbo?: boolean;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Guidance Scale
-   *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
-   */
-  guidance_scale?: number;
 };
 
 /**
@@ -7600,7 +7582,7 @@ export type WanVaceAppsVideoEditOutput = {
    *
    * The edited video.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -7614,11 +7596,11 @@ export type WanVaceAppsVideoEditInput = {
    */
   prompt: string;
   /**
-   * Video URL
+   * Resolution
    *
-   * URL of the input video.
+   * Resolution of the edited video.
    */
-  video_url: string;
+  resolution?: "auto" | "240p" | "360p" | "480p" | "580p" | "720p";
   /**
    * Acceleration
    *
@@ -7626,17 +7608,17 @@ export type WanVaceAppsVideoEditInput = {
    */
   acceleration?: "none" | "low" | "regular";
   /**
-   * Resolution
-   *
-   * Resolution of the edited video.
-   */
-  resolution?: "auto" | "240p" | "360p" | "480p" | "580p" | "720p";
-  /**
    * Return Frames ZIP
    *
    * Whether to include a ZIP archive containing all generated frames.
    */
   return_frames_zip?: boolean;
+  /**
+   * Video URL
+   *
+   * URL of the input video.
+   */
+  video_url: string;
   /**
    * Aspect Ratio
    *
@@ -7733,17 +7715,17 @@ export type SeedvrUpscaleVideoInput = {
    */
   target_resolution?: "720p" | "1080p" | "1440p" | "2160p";
   /**
-   * Output Quality
-   *
-   * The quality of the output video.
-   */
-  output_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Output Quality
+   *
+   * The quality of the output video.
+   */
+  output_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Upscale Factor
    *
@@ -7833,7 +7815,7 @@ export type WanVaceAppsLongReframeOutput = {
    *
    * The output video file.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -7853,11 +7835,11 @@ export type WanVaceAppsLongReframeInput = {
    */
   video_url: string;
   /**
-   * Zoom Factor
+   * Acceleration
    *
-   * Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom.
+   * Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.
    */
-  zoom_factor?: number;
+  acceleration?: "none" | "low" | "regular";
   /**
    * Paste Back
    *
@@ -7865,11 +7847,11 @@ export type WanVaceAppsLongReframeInput = {
    */
   paste_back?: boolean;
   /**
-   * Acceleration
+   * Zoom Factor
    *
-   * Acceleration to use for inference. Options are 'none' or 'regular'. Accelerated inference will very slightly affect output, but will be significantly faster.
+   * Zoom factor for the video. When this value is greater than 0, the video will be zoomed in by this factor (in relation to the canvas size,) cutting off the edges of the video. A value of 0 means no zoom.
    */
-  acceleration?: "none" | "low" | "regular";
+  zoom_factor?: number;
   /**
    * Prompt
    *
@@ -7883,17 +7865,17 @@ export type WanVaceAppsLongReframeInput = {
    */
   scene_threshold?: number;
   /**
-   * Guidance Scale
-   *
-   * Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt.
-   */
-  guidance_scale?: number;
-  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for classifier-free guidance. Higher values encourage the model to generate images closely related to the text prompt.
+   */
+  guidance_scale?: number;
   /**
    * Auto Downsample Min Fps
    *
@@ -7919,12 +7901,6 @@ export type WanVaceAppsLongReframeInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Return Frames Zip
-   *
-   * If true, also return a ZIP file containing all generated frames.
-   */
-  return_frames_zip?: boolean;
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video.
@@ -7942,6 +7918,12 @@ export type WanVaceAppsLongReframeInput = {
    * The transparency mode to apply to the first and last frames. This controls how the transparent areas of the first and last frames are filled.
    */
   transparency_mode?: "content_aware" | "white" | "black";
+  /**
+   * Return Frames Zip
+   *
+   * If true, also return a ZIP file containing all generated frames.
+   */
+  return_frames_zip?: boolean;
   /**
    * Trim Borders
    *
@@ -7961,11 +7943,11 @@ export type WanVaceAppsLongReframeInput = {
    */
   sync_mode?: boolean;
   /**
-   * Seed
+   * Number of Inference Steps
    *
-   * Random seed for reproducibility. If None, a random seed is chosen.
+   * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
-  seed?: number;
+  num_inference_steps?: number;
   /**
    * Interpolator Model
    *
@@ -7979,11 +7961,11 @@ export type WanVaceAppsLongReframeInput = {
    */
   enable_auto_downsample?: boolean;
   /**
-   * Number of Inference Steps
+   * Seed
    *
-   * Number of inference steps for sampling. Higher values give better quality but take longer.
+   * Random seed for reproducibility. If None, a random seed is chosen.
    */
-  num_inference_steps?: number;
+  seed?: number;
 };
 
 /**
@@ -7991,11 +7973,11 @@ export type WanVaceAppsLongReframeInput = {
  */
 export type Sora2VideoToVideoRemixOutput = {
   /**
-   * Spritesheet
+   * Video ID
    *
-   * Spritesheet image for the video
+   * The ID of the generated video
    */
-  spritesheet?: ImageFile;
+  video_id: string;
   /**
    * Thumbnail
    *
@@ -8003,17 +7985,17 @@ export type Sora2VideoToVideoRemixOutput = {
    */
   thumbnail?: ImageFile;
   /**
-   * Video ID
+   * Spritesheet
    *
-   * The ID of the generated video
+   * Spritesheet image for the video
    */
-  video_id: string;
+  spritesheet?: ImageFile;
   /**
    * Video
    *
    * The generated video
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -8238,12 +8220,6 @@ export type ViduQ2VideoExtensionProInput = {
    */
   prompt?: string;
   /**
-   * Duration
-   *
-   * Duration of the extension in seconds
-   */
-  duration?: 2 | 3 | 4 | 5 | 6 | 7;
-  /**
    * Resolution
    *
    * Output video resolution
@@ -8255,6 +8231,12 @@ export type ViduQ2VideoExtensionProInput = {
    * URL of the video to extend
    */
   video_url: string;
+  /**
+   * Duration
+   *
+   * Duration of the extension in seconds
+   */
+  duration?: 2 | 3 | 4 | 5 | 6 | 7;
   /**
    * Seed
    *
@@ -8272,13 +8254,13 @@ export type BirefnetV2VideoOutput = {
    *
    * Video with background removed
    */
-  video: VideoFileType2;
+  video: VideoFile;
   /**
    * Mask Video
    *
    * Mask used to remove the background
    */
-  mask_video?: VideoFileType2;
+  mask_video?: VideoFile;
 };
 
 /**
@@ -8292,16 +8274,6 @@ export type BirefnetV2VideoInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Video Output Type
-   *
-   * The output type of the generated video.
-   */
-  video_output_type?:
-    | "X264 (.mp4)"
-    | "VP9 (.webm)"
-    | "PRORES4444 (.mov)"
-    | "GIF (.gif)";
-  /**
    * Operating Resolution
    *
    * The resolution to operate on. The higher the resolution, the more accurate the output will be for high res input images. The '2304x2304' option is only available for the 'General Use (Dynamic)' model.
@@ -8313,6 +8285,28 @@ export type BirefnetV2VideoInput = {
    * URL of the video to remove background from
    */
   video_url: string;
+  /**
+   * Video Output Type
+   *
+   * The output type of the generated video.
+   */
+  video_output_type?:
+    | "X264 (.mp4)"
+    | "VP9 (.webm)"
+    | "PRORES4444 (.mov)"
+    | "GIF (.gif)";
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Model
    *
@@ -8342,18 +8336,6 @@ export type BirefnetV2VideoInput = {
     | "Matting"
     | "Portrait"
     | "General Use (Dynamic)";
-  /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
   /**
    * Output Mask
    *
@@ -8470,17 +8452,17 @@ export type BytedanceUpscalerUpscaleVideoOutput = {
  */
 export type BytedanceUpscalerUpscaleVideoInput = {
   /**
-   * Target Fps
-   *
-   * The target FPS of the video to upscale.
-   */
-  target_fps?: "30fps" | "60fps";
-  /**
    * Video Url
    *
    * The URL of the video to upscale.
    */
   video_url: string;
+  /**
+   * Target Fps
+   *
+   * The target FPS of the video to upscale.
+   */
+  target_fps?: "30fps" | "60fps";
   /**
    * Target Resolution
    *
@@ -8538,12 +8520,6 @@ export type WorkflowUtilitiesAutoSubtitleOutput = {
  */
 export type WorkflowUtilitiesAutoSubtitleInput = {
   /**
-   * Font Weight
-   *
-   * Font weight (TikTok style typically uses bold or black)
-   */
-  font_weight?: "normal" | "bold" | "black";
-  /**
    * Video Url
    *
    * URL of the video file to add automatic subtitles to
@@ -8551,6 +8527,12 @@ export type WorkflowUtilitiesAutoSubtitleInput = {
    * Max file size: 95.4MB, Timeout: 30.0s
    */
   video_url: string;
+  /**
+   * Font Weight
+   *
+   * Font weight (TikTok style typically uses bold or black)
+   */
+  font_weight?: "normal" | "bold" | "black";
   /**
    * Stroke Width
    *
@@ -8589,11 +8571,24 @@ export type WorkflowUtilitiesAutoSubtitleInput = {
    */
   language?: string;
   /**
-   * Y Offset
+   * Highlight Color
    *
-   * Vertical offset in pixels (positive = move down, negative = move up)
+   * Color for the currently speaking word (karaoke-style highlight)
    */
-  y_offset?: number;
+  highlight_color?:
+    | "white"
+    | "black"
+    | "red"
+    | "green"
+    | "blue"
+    | "yellow"
+    | "orange"
+    | "purple"
+    | "pink"
+    | "brown"
+    | "gray"
+    | "cyan"
+    | "magenta";
   /**
    * Background Opacity
    *
@@ -8620,24 +8615,11 @@ export type WorkflowUtilitiesAutoSubtitleInput = {
     | "cyan"
     | "magenta";
   /**
-   * Highlight Color
+   * Y Offset
    *
-   * Color for the currently speaking word (karaoke-style highlight)
+   * Vertical offset in pixels (positive = move down, negative = move up)
    */
-  highlight_color?:
-    | "white"
-    | "black"
-    | "red"
-    | "green"
-    | "blue"
-    | "yellow"
-    | "orange"
-    | "purple"
-    | "pink"
-    | "brown"
-    | "gray"
-    | "cyan"
-    | "magenta";
+  y_offset?: number;
   /**
    * Enable Animation
    *
@@ -8728,6 +8710,12 @@ export type FlashvsrUpscaleVideoInput = {
    */
   quality?: number;
   /**
+   * Output Write Mode
+   *
+   * The write mode of the output video.
+   */
+  output_write_mode?: "fast" | "balanced" | "small";
+  /**
    * Output Format
    *
    * The format of the output video.
@@ -8744,17 +8732,11 @@ export type FlashvsrUpscaleVideoInput = {
    */
   color_fix?: boolean;
   /**
-   * Output Write Mode
+   * Preserve Audio
    *
-   * The write mode of the output video.
+   * Copy the original audio tracks into the upscaled video using FFmpeg when possible.
    */
-  output_write_mode?: "fast" | "balanced" | "small";
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned inline and not stored in history.
-   */
-  sync_mode?: boolean;
+  preserve_audio?: boolean;
   /**
    * Output Quality
    *
@@ -8768,11 +8750,11 @@ export type FlashvsrUpscaleVideoInput = {
    */
   upscale_factor?: number;
   /**
-   * Preserve Audio
+   * Sync Mode
    *
-   * Copy the original audio tracks into the upscaled video using FFmpeg when possible.
+   * If `True`, the media will be returned inline and not stored in history.
    */
-  preserve_audio?: boolean;
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -8801,7 +8783,7 @@ export type EdittoOutput = {
    * The seed used for generation.
    */
   seed: number;
-  video: VideoFile;
+  video: VideoFileType2;
 };
 
 /**
@@ -8959,11 +8941,11 @@ export type PointPromptBase = {
    */
   y?: number;
   /**
-   * X
+   * Label
    *
-   * X Coordinate of the prompt
+   * 1 for foreground, 0 for background
    */
-  x?: number;
+  label?: 0 | 1;
   /**
    * Object Id
    *
@@ -8971,11 +8953,11 @@ export type PointPromptBase = {
    */
   object_id?: number;
   /**
-   * Label
+   * X
    *
-   * 1 for foreground, 0 for background
+   * X Coordinate of the prompt
    */
-  label?: 0 | 1;
+  x?: number;
 };
 
 /**
@@ -9093,11 +9075,11 @@ export type PointPrompt = {
    */
   y?: number;
   /**
-   * X
+   * Label
    *
-   * X Coordinate of the prompt
+   * 1 for foreground, 0 for background
    */
-  x?: number;
+  label?: 0 | 1;
   /**
    * Object Id
    *
@@ -9111,11 +9093,11 @@ export type PointPrompt = {
    */
   frame_index?: number;
   /**
-   * Label
+   * X
    *
-   * 1 for foreground, 0 for background
+   * X Coordinate of the prompt
    */
-  label?: 0 | 1;
+  x?: number;
 };
 
 /**
@@ -9207,17 +9189,17 @@ export type Sam3VideoRleInput = {
    */
   box_prompts?: Array<BoxPrompt>;
   /**
-   * Boundingbox Zip
-   *
-   * Return per-frame bounding box overlays as a zip archive.
-   */
-  boundingbox_zip?: boolean;
-  /**
    * Point Prompts
    *
    * List of point prompts with frame indices.
    */
   point_prompts?: Array<PointPrompt>;
+  /**
+   * Boundingbox Zip
+   *
+   * Return per-frame bounding box overlays as a zip archive.
+   */
+  boundingbox_zip?: boolean;
   /**
    * Frame Index
    *
@@ -9294,7 +9276,7 @@ export type Ltx2RetakeVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -9548,7 +9530,7 @@ export type SyncLipsyncReact1Output = {
    *
    * The generated video with synchronized lip and facial movements.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -9556,11 +9538,14 @@ export type SyncLipsyncReact1Output = {
  */
 export type SyncLipsyncReact1Input = {
   /**
-   * Emotion
+   * Model Mode
    *
-   * Emotion prompt for the generation. Currently supports single-word emotions only.
+   * Controls the edit region and movement scope for the model. Available options:
+   * - `lips`: Only lipsync using react-1 (minimal facial changes).
+   * - `face`: Lipsync + facial expressions without head movements.
+   * - `head`: Lipsync + facial expressions + natural talking head movements.
    */
-  emotion: "happy" | "angry" | "sad" | "neutral" | "disgusted" | "surprised";
+  model_mode?: "lips" | "face" | "head";
   /**
    * Video Url
    *
@@ -9586,14 +9571,11 @@ export type SyncLipsyncReact1Input = {
    */
   temperature?: number;
   /**
-   * Model Mode
+   * Emotion
    *
-   * Controls the edit region and movement scope for the model. Available options:
-   * - `lips`: Only lipsync using react-1 (minimal facial changes).
-   * - `face`: Lipsync + facial expressions without head movements.
-   * - `head`: Lipsync + facial expressions + natural talking head movements.
+   * Emotion prompt for the generation. Currently supports single-word emotions only.
    */
-  model_mode?: "lips" | "face" | "head";
+  emotion: "happy" | "angry" | "sad" | "neutral" | "disgusted" | "surprised";
 };
 
 /**
@@ -10233,7 +10215,7 @@ export type V26ReferenceToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -10249,11 +10231,11 @@ export type V26ReferenceToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
+   * Duration
    *
-   * Video resolution tier. R2V only supports 720p and 1080p (no 480p).
+   * Duration of the generated video in seconds. R2V supports only 5 or 10 seconds (no 15s).
    */
-  resolution?: "720p" | "1080p";
+  duration?: "5" | "10";
   /**
    * Video Urls
    *
@@ -10261,17 +10243,17 @@ export type V26ReferenceToVideoInput = {
    */
   video_urls: Array<string>;
   /**
+   * Resolution
+   *
+   * Video resolution tier. R2V only supports 720p and 1080p (no 480p).
+   */
+  resolution?: "720p" | "1080p";
+  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated video.
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:3" | "3:4";
-  /**
-   * Duration
-   *
-   * Duration of the generated video in seconds. R2V supports only 5 or 10 seconds (no 15s).
-   */
-  duration?: "5" | "10";
   /**
    * Enable Prompt Expansion
    *
@@ -10490,7 +10472,7 @@ export type CrystalVideoUpscalerOutput = {
    *
    * URL to the upscaled video
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -11142,6 +11124,11 @@ export type Ltx219bExtendVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -11150,11 +11137,11 @@ export type Ltx219bExtendVideoOutput = {
  */
 export type Ltx219bExtendVideoInput = {
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * Video URL
    *
@@ -11174,17 +11161,17 @@ export type Ltx219bExtendVideoInput = {
    */
   generate_audio?: boolean;
   /**
-   * Prompt
+   * Audio Strength
    *
-   * The prompt to generate the video from.
+   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
    */
-  prompt: string;
+  audio_strength?: number;
   /**
-   * Number of Inference Steps
+   * Use Multi-Scale
    *
-   * The number of inference steps to use.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  num_inference_steps?: number;
+  use_multiscale?: boolean;
   /**
    * FPS
    *
@@ -11236,7 +11223,7 @@ export type Ltx219bExtendVideoInput = {
    *
    * The URL of the image to use as the end of the extended video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -11244,17 +11231,17 @@ export type Ltx219bExtendVideoInput = {
    */
   negative_prompt?: string;
   /**
-   * Extend Direction
+   * Enable Safety Checker
    *
-   * Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+   * Whether to enable the safety checker.
    */
-  extend_direction?: "forward" | "backward";
+  enable_safety_checker?: boolean;
   /**
-   * Video Write Mode
+   * Video Strength
    *
-   * The write mode of the generated video.
+   * Video conditioning strength. Lower values represent more freedom given to the model to change the video content.
    */
-  video_write_mode?: "fast" | "balanced" | "small";
+  video_strength?: number;
   /**
    * Video Output Type
    *
@@ -11266,11 +11253,17 @@ export type Ltx219bExtendVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Enable Safety Checker
+   * Video Write Mode
    *
-   * Whether to enable the safety checker.
+   * The write mode of the generated video.
    */
-  enable_safety_checker?: boolean;
+  video_write_mode?: "fast" | "balanced" | "small";
+  /**
+   * Extend Direction
+   *
+   * Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+   */
+  extend_direction?: "forward" | "backward";
   /**
    * Number of Frames
    *
@@ -11278,23 +11271,11 @@ export type Ltx219bExtendVideoInput = {
    */
   num_frames?: number;
   /**
-   * Video Strength
-   *
-   * Video conditioning strength. Lower values represent more freedom given to the model to change the video content.
-   */
-  video_strength?: number;
-  /**
    * Number of Context Frames
    *
    * The number of frames to use as context for the extension.
    */
   num_context_frames?: number;
-  /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Sync Mode
    *
@@ -11302,17 +11283,23 @@ export type Ltx219bExtendVideoInput = {
    */
   sync_mode?: boolean;
   /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion.
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Match Input FPS
+   * Seed
    *
-   * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
+   * The seed for the random number generator.
    */
-  match_input_fps?: boolean;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -11320,17 +11307,17 @@ export type Ltx219bExtendVideoInput = {
    */
   end_image_strength?: number;
   /**
-   * Audio Strength
+   * Match Input FPS
    *
-   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
+   * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
    */
-  audio_strength?: number;
+  match_input_fps?: boolean;
   /**
-   * Seed
+   * Number of Inference Steps
    *
-   * The seed for the random number generator.
+   * The number of inference steps to use.
    */
-  seed?: number | unknown;
+  num_inference_steps?: number;
 };
 
 /**
@@ -11349,6 +11336,11 @@ export type Ltx219bExtendVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -11357,11 +11349,11 @@ export type Ltx219bExtendVideoLoraOutput = {
  */
 export type Ltx219bExtendVideoLoraInput = {
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * Video URL
    *
@@ -11369,11 +11361,11 @@ export type Ltx219bExtendVideoLoraInput = {
    */
   video_url: string;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * Generate Audio
    *
@@ -11417,7 +11409,7 @@ export type Ltx219bExtendVideoLoraInput = {
    *
    * The URL of the image to use as the end of the extended video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Number of Frames
    *
@@ -11441,17 +11433,17 @@ export type Ltx219bExtendVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -11463,7 +11455,7 @@ export type Ltx219bExtendVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Acceleration
    *
@@ -11491,17 +11483,17 @@ export type Ltx219bExtendVideoLoraInput = {
     | "static"
     | "none";
   /**
-   * Extend Direction
-   *
-   * Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
-   */
-  extend_direction?: "forward" | "backward";
-  /**
    * Enable Safety Checker
    *
    * Whether to enable the safety checker.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Extend Direction
+   *
+   * Direction to extend the video. 'forward' extends from the end of the video, 'backward' extends from the beginning.
+   */
+  extend_direction?: "forward" | "backward";
   /**
    * Negative Prompt
    *
@@ -11521,11 +11513,11 @@ export type Ltx219bExtendVideoLoraInput = {
    */
   num_context_frames?: number;
   /**
-   * Number of Inference Steps
+   * Audio Strength
    *
-   * The number of inference steps to use.
+   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
    */
-  num_inference_steps?: number;
+  audio_strength?: number;
   /**
    * End Image Strength
    *
@@ -11539,11 +11531,11 @@ export type Ltx219bExtendVideoLoraInput = {
    */
   match_input_fps?: boolean;
   /**
-   * Audio Strength
+   * Number of Inference Steps
    *
-   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
+   * The number of inference steps to use.
    */
-  audio_strength?: number;
+  num_inference_steps?: number;
 };
 
 /**
@@ -11569,7 +11561,7 @@ export type LoRaInput = {
    *
    * Name of the LoRA weight. Only used if `path` is a HuggingFace repository, and is only required when the repository contains multiple LoRA weights.
    */
-  weight_name?: string | unknown;
+  weight_name?: string;
 };
 
 /**
@@ -11588,6 +11580,11 @@ export type Ltx219bDistilledExtendVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -11596,11 +11593,11 @@ export type Ltx219bDistilledExtendVideoOutput = {
  */
 export type Ltx219bDistilledExtendVideoInput = {
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * Video URL
    *
@@ -11620,11 +11617,11 @@ export type Ltx219bDistilledExtendVideoInput = {
    */
   generate_audio?: boolean;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * FPS
    *
@@ -11676,7 +11673,7 @@ export type Ltx219bDistilledExtendVideoInput = {
    *
    * The URL of the image to use as the end of the extended video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -11690,11 +11687,11 @@ export type Ltx219bDistilledExtendVideoInput = {
    */
   extend_direction?: "forward" | "backward";
   /**
-   * Video Write Mode
+   * Video Strength
    *
-   * The write mode of the generated video.
+   * Video conditioning strength. Lower values represent more freedom given to the model to change the video content.
    */
-  video_write_mode?: "fast" | "balanced" | "small";
+  video_strength?: number;
   /**
    * Video Output Type
    *
@@ -11706,17 +11703,17 @@ export type Ltx219bDistilledExtendVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
+   * Video Write Mode
+   *
+   * The write mode of the generated video.
+   */
+  video_write_mode?: "fast" | "balanced" | "small";
+  /**
    * Number of Frames
    *
    * The number of frames to generate.
    */
   num_frames?: number;
-  /**
-   * Video Strength
-   *
-   * Video conditioning strength. Lower values represent more freedom given to the model to change the video content.
-   */
-  video_strength?: number;
   /**
    * Number of Context Frames
    *
@@ -11724,17 +11721,17 @@ export type Ltx219bDistilledExtendVideoInput = {
    */
   num_context_frames?: number;
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -11742,11 +11739,11 @@ export type Ltx219bDistilledExtendVideoInput = {
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Match Input FPS
+   * Seed
    *
-   * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
+   * The seed for the random number generator.
    */
-  match_input_fps?: boolean;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -11754,17 +11751,17 @@ export type Ltx219bDistilledExtendVideoInput = {
    */
   end_image_strength?: number;
   /**
+   * Match Input FPS
+   *
+   * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
+   */
+  match_input_fps?: boolean;
+  /**
    * Audio Strength
    *
    * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
    */
   audio_strength?: number;
-  /**
-   * Seed
-   *
-   * The seed for the random number generator.
-   */
-  seed?: number | unknown;
 };
 
 /**
@@ -11783,6 +11780,11 @@ export type Ltx219bDistilledExtendVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -11791,11 +11793,11 @@ export type Ltx219bDistilledExtendVideoLoraOutput = {
  */
 export type Ltx219bDistilledExtendVideoLoraInput = {
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * Video URL
    *
@@ -11815,11 +11817,11 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    */
   generate_audio?: boolean;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * FPS
    *
@@ -11877,7 +11879,7 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    *
    * The URL of the image to use as the end of the extended video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -11891,11 +11893,11 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    */
   extend_direction?: "forward" | "backward";
   /**
-   * Video Write Mode
+   * Video Strength
    *
-   * The write mode of the generated video.
+   * Video conditioning strength. Lower values represent more freedom given to the model to change the video content.
    */
-  video_write_mode?: "fast" | "balanced" | "small";
+  video_strength?: number;
   /**
    * Video Output Type
    *
@@ -11907,17 +11909,17 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
+   * Video Write Mode
+   *
+   * The write mode of the generated video.
+   */
+  video_write_mode?: "fast" | "balanced" | "small";
+  /**
    * Number of Frames
    *
    * The number of frames to generate.
    */
   num_frames?: number;
-  /**
-   * Video Strength
-   *
-   * Video conditioning strength. Lower values represent more freedom given to the model to change the video content.
-   */
-  video_strength?: number;
   /**
    * Number of Context Frames
    *
@@ -11925,17 +11927,17 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    */
   num_context_frames?: number;
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -11943,11 +11945,11 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Match Input FPS
+   * Seed
    *
-   * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
+   * The seed for the random number generator.
    */
-  match_input_fps?: boolean;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -11955,17 +11957,17 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    */
   end_image_strength?: number;
   /**
+   * Match Input FPS
+   *
+   * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
+   */
+  match_input_fps?: boolean;
+  /**
    * Audio Strength
    *
    * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
    */
   audio_strength?: number;
-  /**
-   * Seed
-   *
-   * The seed for the random number generator.
-   */
-  seed?: number | unknown;
 };
 
 /**
@@ -11984,6 +11986,11 @@ export type Ltx219bVideoToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -11992,11 +11999,11 @@ export type Ltx219bVideoToVideoOutput = {
  */
 export type Ltx219bVideoToVideoInput = {
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * Video URL
    *
@@ -12004,11 +12011,11 @@ export type Ltx219bVideoToVideoInput = {
    */
   video_url: string;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * IC-LoRA Scale
    *
@@ -12052,7 +12059,7 @@ export type Ltx219bVideoToVideoInput = {
    *
    * The URL of the image to use as the end of the video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Camera LoRA Scale
    *
@@ -12080,7 +12087,7 @@ export type Ltx219bVideoToVideoInput = {
    *
    * An optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
+  image_url?: string;
   /**
    * Sync Mode
    *
@@ -12104,7 +12111,7 @@ export type Ltx219bVideoToVideoInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Match Video Length
    *
@@ -12184,13 +12191,13 @@ export type Ltx219bVideoToVideoInput = {
    *
    * An optional URL of an audio to use as the audio for the video. If not provided, any audio present in the input video will be used.
    */
-  audio_url?: string | unknown;
+  audio_url?: string;
   /**
-   * Audio Strength
+   * Number of Inference Steps
    *
-   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
+   * The number of inference steps to use.
    */
-  audio_strength?: number;
+  num_inference_steps?: number;
   /**
    * End Image Strength
    *
@@ -12198,17 +12205,17 @@ export type Ltx219bVideoToVideoInput = {
    */
   end_image_strength?: number;
   /**
+   * Audio Strength
+   *
+   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
+   */
+  audio_strength?: number;
+  /**
    * Match Input FPS
    *
    * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
    */
   match_input_fps?: boolean;
-  /**
-   * Number of Inference Steps
-   *
-   * The number of inference steps to use.
-   */
-  num_inference_steps?: number;
 };
 
 /**
@@ -12227,6 +12234,11 @@ export type Ltx219bVideoToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -12235,11 +12247,11 @@ export type Ltx219bVideoToVideoLoraOutput = {
  */
 export type Ltx219bVideoToVideoLoraInput = {
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * Video URL
    *
@@ -12247,11 +12259,11 @@ export type Ltx219bVideoToVideoLoraInput = {
    */
   video_url: string;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * IC-LoRA Scale
    *
@@ -12301,7 +12313,7 @@ export type Ltx219bVideoToVideoLoraInput = {
    *
    * The URL of the image to use as the end of the video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Camera LoRA Scale
    *
@@ -12329,7 +12341,7 @@ export type Ltx219bVideoToVideoLoraInput = {
    *
    * An optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
+  image_url?: string;
   /**
    * Sync Mode
    *
@@ -12353,7 +12365,7 @@ export type Ltx219bVideoToVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Match Video Length
    *
@@ -12433,13 +12445,13 @@ export type Ltx219bVideoToVideoLoraInput = {
    *
    * An optional URL of an audio to use as the audio for the video. If not provided, any audio present in the input video will be used.
    */
-  audio_url?: string | unknown;
+  audio_url?: string;
   /**
-   * Audio Strength
+   * Number of Inference Steps
    *
-   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
+   * The number of inference steps to use.
    */
-  audio_strength?: number;
+  num_inference_steps?: number;
   /**
    * End Image Strength
    *
@@ -12447,17 +12459,17 @@ export type Ltx219bVideoToVideoLoraInput = {
    */
   end_image_strength?: number;
   /**
+   * Audio Strength
+   *
+   * Audio conditioning strength. Lower values represent more freedom given to the model to change the audio content.
+   */
+  audio_strength?: number;
+  /**
    * Match Input FPS
    *
    * When true, match the output FPS to the input video's FPS instead of using the default target FPS.
    */
   match_input_fps?: boolean;
-  /**
-   * Number of Inference Steps
-   *
-   * The number of inference steps to use.
-   */
-  num_inference_steps?: number;
 };
 
 /**
@@ -12476,6 +12488,11 @@ export type Ltx219bDistilledVideoToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -12538,7 +12555,7 @@ export type Ltx219bDistilledVideoToVideoInput = {
    *
    * The URL of the image to use as the end of the video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Camera LoRA Scale
    *
@@ -12566,7 +12583,7 @@ export type Ltx219bDistilledVideoToVideoInput = {
    *
    * An optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
+  image_url?: string;
   /**
    * Sync Mode
    *
@@ -12590,7 +12607,7 @@ export type Ltx219bDistilledVideoToVideoInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Match Video Length
    *
@@ -12670,7 +12687,7 @@ export type Ltx219bDistilledVideoToVideoInput = {
    *
    * An optional URL of an audio to use as the audio for the video. If not provided, any audio present in the input video will be used.
    */
-  audio_url?: string | unknown;
+  audio_url?: string;
   /**
    * Audio Strength
    *
@@ -12707,6 +12724,11 @@ export type Ltx219bDistilledVideoToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -12775,7 +12797,7 @@ export type Ltx219bDistilledVideoToVideoLoraInput = {
    *
    * The URL of the image to use as the end of the video.
    */
-  end_image_url?: string | unknown;
+  end_image_url?: string;
   /**
    * Camera LoRA Scale
    *
@@ -12803,7 +12825,7 @@ export type Ltx219bDistilledVideoToVideoLoraInput = {
    *
    * An optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
+  image_url?: string;
   /**
    * Sync Mode
    *
@@ -12827,7 +12849,7 @@ export type Ltx219bDistilledVideoToVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Match Video Length
    *
@@ -12907,7 +12929,7 @@ export type Ltx219bDistilledVideoToVideoLoraInput = {
    *
    * An optional URL of an audio to use as the audio for the video. If not provided, any audio present in the input video will be used.
    */
-  audio_url?: string | unknown;
+  audio_url?: string;
   /**
    * Audio Strength
    *
@@ -12984,7 +13006,7 @@ export type GrokImagineVideoEditVideoOutput = {
    *
    * The generated video.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -13009,6 +13031,585 @@ export type GrokImagineVideoEditVideoInput = {
    * Resolution of the output video.
    */
   resolution?: "auto" | "480p" | "720p";
+};
+
+/**
+ * O3ProReferenceV2VOutput
+ */
+export type KlingVideoO3ProVideoToVideoReferenceOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3ProReferenceVideoV2VInput
+ *
+ * Reference video input for O3 model (3-10s duration only).
+ */
+export type KlingVideoO3ProVideoToVideoReferenceInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Reference video as @Video1.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s for reference video).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Video Url
+   *
+   * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
+   */
+  video_url: string;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio.
+   */
+  aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  /**
+   * Keep Audio
+   *
+   * Whether to keep the original audio from the reference video.
+   */
+  keep_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2.
+   */
+  elements?: Array<KlingV3ImageElementInput>;
+  /**
+   * Image Urls
+   *
+   * Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.
+   */
+  image_urls?: Array<string>;
+};
+
+/**
+ * KlingV3ImageElementInput
+ */
+export type KlingV3ImageElementInput = {
+  /**
+   * Reference Image Urls
+   *
+   * Additional reference images from different angles. 1-3 images supported. At least one image is required.
+   */
+  reference_image_urls?: Array<string>;
+  /**
+   * Frontal Image Url
+   *
+   * The frontal image of the element (main view).
+   *
+   * Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s
+   */
+  frontal_image_url?: string;
+};
+
+/**
+ * O3StandardReferenceV2VOutput
+ */
+export type KlingVideoO3StandardVideoToVideoReferenceOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3StandardReferenceVideoV2VInput
+ *
+ * Reference video input for O3 model (3-10s duration only).
+ */
+export type KlingVideoO3StandardVideoToVideoReferenceInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Reference video as @Video1.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s for reference video).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Video Url
+   *
+   * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
+   */
+  video_url: string;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio.
+   */
+  aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  /**
+   * Keep Audio
+   *
+   * Whether to keep the original audio from the reference video.
+   */
+  keep_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2.
+   */
+  elements?: Array<KlingV3ImageElementInput>;
+  /**
+   * Image Urls
+   *
+   * Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.
+   */
+  image_urls?: Array<string>;
+};
+
+/**
+ * O3ProEditV2VOutput
+ */
+export type KlingVideoO3ProVideoToVideoEditOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3ProEditVideoV2VInput
+ *
+ * Reference video input for O3 model (3-10s duration only).
+ */
+export type KlingVideoO3ProVideoToVideoEditInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Reference video as @Video1.
+   */
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
+   */
+  video_url: string;
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2.
+   */
+  elements?: Array<KlingV3ImageElementInput>;
+  /**
+   * Image Urls
+   *
+   * Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.
+   */
+  image_urls?: Array<string>;
+  /**
+   * Keep Audio
+   *
+   * Whether to keep the original audio from the reference video.
+   */
+  keep_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+};
+
+/**
+ * O3StandardEditV2VOutput
+ */
+export type KlingVideoO3StandardVideoToVideoEditOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3StandardEditVideoV2VInput
+ *
+ * Reference video input for O3 model (3-10s duration only).
+ */
+export type KlingVideoO3StandardVideoToVideoEditInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Reference video as @Video1.
+   */
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
+   */
+  video_url: string;
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2.
+   */
+  elements?: Array<KlingV3ImageElementInput>;
+  /**
+   * Image Urls
+   *
+   * Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.
+   */
+  image_urls?: Array<string>;
+  /**
+   * Keep Audio
+   *
+   * Whether to keep the original audio from the reference video.
+   */
+  keep_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+};
+
+/**
+ * BlendVideoOutput
+ *
+ * Output model for blended video
+ */
+export type WorkflowUtilitiesBlendVideoOutput = {
+  /**
+   * Video
+   *
+   * The blended video output
+   */
+  video: File;
+};
+
+/**
+ * BlendVideoInput
+ *
+ * Input model for blending two video frames together
+ */
+export type WorkflowUtilitiesBlendVideoInput = {
+  /**
+   * Shortest
+   *
+   * End output when the shortest input ends
+   */
+  shortest?: boolean;
+  /**
+   * Top Video Url
+   *
+   * URL of the top layer video
+   *
+   * Max file size: 95.4MB, Timeout: 30.0s
+   */
+  top_video_url: string;
+  /**
+   * Opacity
+   *
+   * Opacity of the top layer (0.0-1.0)
+   */
+  opacity?: number;
+  /**
+   * Blend Mode
+   *
+   * Blend mode to use for combining the videos
+   */
+  blend_mode?:
+    | "addition"
+    | "average"
+    | "burn"
+    | "darken"
+    | "difference"
+    | "divide"
+    | "dodge"
+    | "exclusion"
+    | "grainextract"
+    | "grainmerge"
+    | "hardlight"
+    | "lighten"
+    | "multiply"
+    | "negation"
+    | "normal"
+    | "overlay"
+    | "phoenix"
+    | "pinlight"
+    | "reflect"
+    | "screen"
+    | "softlight"
+    | "subtract"
+    | "vividlight";
+  /**
+   * Bottom Video Url
+   *
+   * URL of the bottom layer video
+   *
+   * Max file size: 95.4MB, Timeout: 30.0s
+   */
+  bottom_video_url: string;
+};
+
+/**
+ * DreamActor2Output
+ */
+export type BytedanceDreamactorV2Output = {
+  /**
+   * Video
+   *
+   * Generated video file.
+   */
+  video: File;
+};
+
+/**
+ * DreamActor2Input
+ */
+export type BytedanceDreamactorV2Input = {
+  /**
+   * Video Url
+   *
+   * The URL of the driving template video providing motion, facial expressions, and lip movement reference. Max duration: 30 seconds. Format: mp4, mov or webm. Resolution: between 200x200 and 2048x1440. Supports full face and body driving.
+   */
+  video_url: string;
+  /**
+   * Trim First Second
+   *
+   * Whether to crop the first second of the output video. The output has a 1-second transition at the beginning; enable this to remove it.
+   */
+  trim_first_second?: boolean;
+  /**
+   * Image Url
+   *
+   * The URL of the reference image to animate. Supports real people, animation, pets, etc. Format: jpeg, jpg or png. Max size: 4.7 MB. Resolution: between 480x480 and 1920x1080 (larger images will be proportionally reduced).
+   */
+  image_url: string;
+};
+
+/**
+ * ReferenceToVideoOutput
+ *
+ * Output for reference-to-video generation
+ */
+export type V26ReferenceToVideoFlashOutput = {
+  /**
+   * Actual Prompt
+   *
+   * The actual prompt used if prompt rewriting was enabled
+   */
+  actual_prompt?: string;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed: number;
+  /**
+   * Video
+   *
+   * The generated video file
+   */
+  video: VideoFile;
+};
+
+/**
+ * ReferenceToVideoFlashInput
+ *
+ * Input for Wan 2.6 R2V Flash reference-to-video generation
+ *
+ * The flash model is 10-20 seconds faster than the standard R2V model
+ * and supports generating videos with or without audio. It also supports
+ * both images and videos as reference inputs.
+ */
+export type V26ReferenceToVideoFlashInput = {
+  /**
+   * Prompt
+   *
+   * Use Character1, Character2, etc. to reference subjects from your reference files. Works for people, animals, or objects. For multi-shot prompts: '[0-3s] Shot 1. [3-6s] Shot 2.' Max 1500 characters. Reference order: video_urls first, then image_urls.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * Duration of the generated video in seconds. R2V Flash supports only 5 or 10 seconds.
+   */
+  duration?: "5" | "10";
+  /**
+   * Video Urls
+   *
+   * Reference videos for subject consistency (0-3 videos). Videos' FPS must be at least 16 FPS. Combined with image_urls, total references cannot exceed 5. Reference order: video_urls are numbered first (Character1, Character2...), then image_urls continue the sequence.
+   */
+  video_urls?: Array<string>;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:3" | "3:4";
+  /**
+   * Resolution
+   *
+   * Video resolution tier. R2V Flash only supports 720p and 1080p.
+   */
+  resolution?: "720p" | "1080p";
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Enable Audio
+   *
+   * Whether to generate a video with audio. Set to false for silent video generation. Silent videos are faster and cost 25% of the audio version price.
+   */
+  enable_audio?: boolean;
+  /**
+   * Enable Prompt Expansion
+   *
+   * Whether to enable prompt rewriting using LLM.
+   */
+  enable_prompt_expansion?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Multi Shots
+   *
+   * When true (default), enables intelligent multi-shot segmentation for coherent narrative videos with multiple shots. When false, generates single continuous shot. Only active when enable_prompt_expansion is True.
+   */
+  multi_shots?: boolean;
+  /**
+   * Negative Prompt
+   *
+   * Negative prompt to describe content to avoid. Max 500 characters.
+   */
+  negative_prompt?: string;
+  /**
+   * Image Urls
+   *
+   * Reference images for subject consistency (0-5 images). Combined with video_urls, total references cannot exceed 5. Formats: JPEG, JPG, PNG (no alpha), BMP, WEBP. Resolution: 240-5000px. Max 10MB each. Reference order: image_urls continue numbering after video_urls.
+   */
+  image_urls?: Array<string>;
+};
+
+/**
+ * TrimVideoOutput
+ *
+ * Output model for trimmed video
+ */
+export type WorkflowUtilitiesTrimVideoOutput = {
+  /**
+   * Original Duration
+   *
+   * Duration of the original video in seconds
+   */
+  original_duration: number;
+  /**
+   * Trimmed Duration
+   *
+   * Duration of the trimmed video in seconds
+   */
+  trimmed_duration: number;
+  /**
+   * Video
+   *
+   * The trimmed video
+   */
+  video: File;
+};
+
+/**
+ * TrimVideoInput
+ *
+ * Input model for trimming a video to a specified time range
+ */
+export type WorkflowUtilitiesTrimVideoInput = {
+  /**
+   * Start Time
+   *
+   * Start time in seconds
+   */
+  start_time?: number;
+  /**
+   * Video Url
+   *
+   * URL of the video file to trim
+   *
+   * Max file size: 476.8MB, Timeout: 30.0s
+   */
+  video_url: string;
+  /**
+   * End Time
+   *
+   * End time in seconds. If not provided, uses duration instead.
+   */
+  end_time?: number;
+  /**
+   * Duration
+   *
+   * Duration in seconds from start_time. Ignored if end_time is provided.
+   */
+  duration?: number;
 };
 
 /**
@@ -13345,7 +13946,7 @@ export type FastAnimatediffTurboTextToVideoOutput = {
    *
    * Generated video file.
    */
-  video: FileType2;
+  video: File;
 };
 
 /**
@@ -13358,15 +13959,6 @@ export type FastAnimatediffTurboTextToVideoInput = {
    * The prompt to use for generating the video. Be as descriptive as possible for best results.
    */
   prompt: string;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of Stable Diffusion
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
   /**
    * Fps
    *
@@ -13393,11 +13985,14 @@ export type FastAnimatediffTurboTextToVideoInput = {
    */
   guidance_scale?: number;
   /**
-   * Num Frames
+   * Seed
    *
-   * The number of frames to generate for the video.
+   *
+   * The same seed and the same prompt given to the same version of Stable Diffusion
+   * will output the same image every time.
+   *
    */
-  num_frames?: number;
+  seed?: number;
   /**
    * Num Inference Steps
    *
@@ -13415,13 +14010,11 @@ export type FastAnimatediffTurboTextToVideoInput = {
    */
   negative_prompt?: string;
   /**
-   * Motions
+   * Num Frames
    *
-   * The motions to apply to the video.
+   * The number of frames to generate for the video.
    */
-  motions?: Array<
-    "zoom-out" | "zoom-in" | "pan-left" | "pan-right" | "tilt-up" | "tilt-down"
-  >;
+  num_frames?: number;
 };
 
 /**
@@ -13439,7 +14032,7 @@ export type FastAnimatediffTextToVideoOutput = {
    *
    * Generated video file.
    */
-  video: FileType2;
+  video: File;
 };
 
 /**
@@ -13453,14 +14046,11 @@ export type FastAnimatediffTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Seed
+   * Num Frames
    *
-   *
-   * The same seed and the same prompt given to the same version of Stable Diffusion
-   * will output the same image every time.
-   *
+   * The number of frames to generate for the video.
    */
-  seed?: number;
+  num_frames?: number;
   /**
    * Fps
    *
@@ -13490,11 +14080,14 @@ export type FastAnimatediffTextToVideoInput = {
    */
   guidance_scale?: number;
   /**
-   * Num Frames
+   * Seed
    *
-   * The number of frames to generate for the video.
+   *
+   * The same seed and the same prompt given to the same version of Stable Diffusion
+   * will output the same image every time.
+   *
    */
-  num_frames?: number;
+  seed?: number;
   /**
    * Num Inference Steps
    *
@@ -13961,17 +14554,17 @@ export type KlingVideoV15ProTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Negative Prompt
    */
@@ -14026,11 +14619,11 @@ export type KlingVideoV1StandardTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
+   * Duration
    *
-   * The aspect ratio of the generated video frame
+   * The duration of the generated video in seconds
    */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  duration?: "5" | "10";
   /**
    * Advanced Camera Control
    *
@@ -14038,11 +14631,11 @@ export type KlingVideoV1StandardTextToVideoInput = {
    */
   advanced_camera_control?: CameraControl;
   /**
-   * Duration
+   * Aspect Ratio
    *
-   * The duration of the generated video in seconds
+   * The aspect ratio of the generated video frame
    */
-  duration?: "5" | "10";
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Cfg Scale
    *
@@ -14117,17 +14710,17 @@ export type KlingVideoV16StandardTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Negative Prompt
    */
@@ -14762,17 +15355,17 @@ export type KlingVideoV16ProTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Negative Prompt
    */
@@ -14877,12 +15470,6 @@ export type KlingVideoV1StandardEffectsInput = {
    */
   duration?: "5" | "10";
   /**
-   * Input Image Urls
-   *
-   * URL of images to be used for hug, kiss or heart_gesture video.
-   */
-  input_image_urls?: Array<string>;
-  /**
    * Effect Scene
    *
    * The effect scene to use for the video generation
@@ -15085,6 +15672,12 @@ export type KlingVideoV1StandardEffectsInput = {
     | "angel_wing"
     | "dark_wing"
     | "emoji";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to be used for hug, kiss or heart_gesture video.
+   */
+  input_image_urls?: Array<string>;
 };
 
 /**
@@ -15110,12 +15703,6 @@ export type KlingVideoV15ProEffectsInput = {
    */
   duration?: "5" | "10";
   /**
-   * Input Image Urls
-   *
-   * URL of images to be used for hug, kiss or heart_gesture video.
-   */
-  input_image_urls?: Array<string>;
-  /**
    * Effect Scene
    *
    * The effect scene to use for the video generation
@@ -15318,6 +15905,12 @@ export type KlingVideoV15ProEffectsInput = {
     | "angel_wing"
     | "dark_wing"
     | "emoji";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to be used for hug, kiss or heart_gesture video.
+   */
+  input_image_urls?: Array<string>;
 };
 
 /**
@@ -15343,12 +15936,6 @@ export type KlingVideoV16StandardEffectsInput = {
    */
   duration?: "5" | "10";
   /**
-   * Input Image Urls
-   *
-   * URL of images to be used for hug, kiss or heart_gesture video.
-   */
-  input_image_urls?: Array<string>;
-  /**
    * Effect Scene
    *
    * The effect scene to use for the video generation
@@ -15551,6 +16138,12 @@ export type KlingVideoV16StandardEffectsInput = {
     | "angel_wing"
     | "dark_wing"
     | "emoji";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to be used for hug, kiss or heart_gesture video.
+   */
+  input_image_urls?: Array<string>;
 };
 
 /**
@@ -15576,12 +16169,6 @@ export type KlingVideoV16ProEffectsInput = {
    */
   duration?: "5" | "10";
   /**
-   * Input Image Urls
-   *
-   * URL of images to be used for hug, kiss or heart_gesture video.
-   */
-  input_image_urls?: Array<string>;
-  /**
    * Effect Scene
    *
    * The effect scene to use for the video generation
@@ -15784,6 +16371,12 @@ export type KlingVideoV16ProEffectsInput = {
     | "angel_wing"
     | "dark_wing"
     | "emoji";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to be used for hug, kiss or heart_gesture video.
+   */
+  input_image_urls?: Array<string>;
 };
 
 /**
@@ -15819,22 +16412,13 @@ export type WanProTextToVideoInput = {
 
 /**
  * TurboTextToVideoOutput
- *
- * Output from text-to-video generation
  */
 export type PikaV2TurboTextToVideoOutput = {
-  /**
-   * Video
-   *
-   * The generated video
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
  * TextToVideoTurboInput
- *
- * Base request for text-to-video generation
  */
 export type PikaV2TurboTextToVideoInput = {
   /**
@@ -15842,17 +16426,17 @@ export type PikaV2TurboTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * The resolution of the generated video
-   */
-  resolution?: "720p" | "1080p";
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated video
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:5" | "5:4" | "3:2" | "2:3";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "720p" | "1080p";
   /**
    * Duration
    *
@@ -15864,7 +16448,7 @@ export type PikaV2TurboTextToVideoInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
@@ -15879,12 +16463,7 @@ export type PikaV2TurboTextToVideoInput = {
  * Output model for Pika 2.2 text-to-video generation
  */
 export type PikaV22TextToVideoOutput = {
-  /**
-   * Video
-   *
-   * The generated video
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -15898,17 +16477,17 @@ export type PikaV22TextToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * The resolution of the generated video
-   */
-  resolution?: "1080p" | "720p";
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated video
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:5" | "5:4" | "3:2" | "2:3";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "1080p" | "720p";
   /**
    * Duration
    *
@@ -15920,7 +16499,7 @@ export type PikaV22TextToVideoInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
@@ -15931,22 +16510,13 @@ export type PikaV22TextToVideoInput = {
 
 /**
  * TextToVideoV21Output
- *
- * Output from text-to-video generation
  */
 export type PikaV21TextToVideoOutput = {
-  /**
-   * Video
-   *
-   * The generated video
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
  * TextToVideov21Input
- *
- * Base request for text-to-video generation
  */
 export type PikaV21TextToVideoInput = {
   /**
@@ -15954,17 +16524,17 @@ export type PikaV21TextToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * The resolution of the generated video
-   */
-  resolution?: "720p" | "1080p";
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated video
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:5" | "5:4" | "3:2" | "2:3";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "720p" | "1080p";
   /**
    * Duration
    *
@@ -15976,7 +16546,7 @@ export type PikaV21TextToVideoInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
@@ -16959,17 +17529,17 @@ export type KlingVideoV21MasterTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Negative Prompt
    */
@@ -17014,12 +17584,6 @@ export type BytedanceSeedanceV1LiteTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * Video resolution - 480p for faster generation, 720p for higher quality
-   */
-  resolution?: "480p" | "720p" | "1080p";
-  /**
    * Duration
    *
    * Duration of the video in seconds
@@ -17032,23 +17596,29 @@ export type BytedanceSeedanceV1LiteTextToVideoInput = {
    */
   aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "9:21";
   /**
+   * Resolution
+   *
+   * Video resolution - 480p for faster generation, 720p for higher quality
+   */
+  resolution?: "480p" | "720p" | "1080p";
+  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
   /**
-   * Seed
-   *
-   * Random seed to control video generation. Use -1 for random.
-   */
-  seed?: number;
-  /**
    * Camera Fixed
    *
    * Whether to fix the camera position
    */
   camera_fixed?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed to control video generation. Use -1 for random.
+   */
+  seed?: number;
 };
 
 /**
@@ -17080,12 +17650,6 @@ export type BytedanceSeedanceV1ProTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-   */
-  resolution?: "480p" | "720p" | "1080p";
-  /**
    * Duration
    *
    * Duration of the video in seconds
@@ -17098,23 +17662,29 @@ export type BytedanceSeedanceV1ProTextToVideoInput = {
    */
   aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
+   * Resolution
+   *
+   * Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+   */
+  resolution?: "480p" | "720p" | "1080p";
+  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
   /**
-   * Seed
-   *
-   * Random seed to control video generation. Use -1 for random.
-   */
-  seed?: number;
-  /**
    * Camera Fixed
    *
    * Whether to fix the camera position
    */
   camera_fixed?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed to control video generation. Use -1 for random.
+   */
+  seed?: number;
 };
 
 /**
@@ -17368,17 +17938,17 @@ export type WanV22A14bTextToVideoInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (480p, 580p, or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video (16:9 or 9:16).
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (480p, 580p, or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -17398,6 +17968,24 @@ export type WanV22A14bTextToVideoInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -17409,24 +17997,6 @@ export type WanV22A14bTextToVideoInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -17482,11 +18052,11 @@ export type WanV225bTextToVideoInput = {
    */
   frames_per_second?: number;
   /**
-   * Guidance Scale
+   * Enable Safety Checker
    *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
+   * If set to true, input data will be checked for safety before processing.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Number of Frames
    *
@@ -17494,11 +18064,11 @@ export type WanV225bTextToVideoInput = {
    */
   num_frames?: number;
   /**
-   * Enable Safety Checker
+   * Guidance Scale
    *
-   * If set to true, input data will be checked for safety before processing.
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
    */
-  enable_safety_checker?: boolean;
+  guidance_scale?: number;
   /**
    * Negative Prompt
    *
@@ -17512,17 +18082,17 @@ export type WanV225bTextToVideoInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (580p or 720p).
-   */
-  resolution?: "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video (16:9 or 9:16).
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (580p or 720p).
+   */
+  resolution?: "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -17536,6 +18106,24 @@ export type WanV225bTextToVideoInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -17547,24 +18135,6 @@ export type WanV225bTextToVideoInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -17596,24 +18166,6 @@ export type WanV22A14bTextToVideoTurboOutput = {
  */
 export type WanV22A14bTextToVideoTurboInput = {
   /**
-   * Prompt
-   *
-   * The text prompt to guide video generation.
-   */
-  prompt: string;
-  /**
-   * Resolution
-   *
-   * Resolution of the generated video (480p, 580p, or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
-   * Acceleration
-   *
-   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-   */
-  acceleration?: "none" | "regular";
-  /**
    * Video Write Mode
    *
    * The write mode of the output video. Faster write mode means faster results but larger file size, balanced write mode is a good compromise between speed and quality, and small write mode is the slowest but produces the smallest file size.
@@ -17625,6 +18177,24 @@ export type WanV22A14bTextToVideoTurboInput = {
    * Aspect ratio of the generated video (16:9 or 9:16).
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Acceleration
+   *
+   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+   */
+  acceleration?: "none" | "regular";
+  /**
+   * Prompt
+   *
+   * The text prompt to guide video generation.
+   */
+  prompt: string;
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (480p, 580p, or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -17734,17 +18304,17 @@ export type WanV225bTextToVideoFastWanInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (580p or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video (16:9 or 9:16).
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (580p or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -17836,11 +18406,11 @@ export type WanV225bTextToVideoDistillInput = {
    */
   frames_per_second?: number;
   /**
-   * Guidance Scale (1st Stage)
+   * Enable Safety Checker
    *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
+   * If set to true, input data will be checked for safety before processing.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Number of Frames
    *
@@ -17848,11 +18418,11 @@ export type WanV225bTextToVideoDistillInput = {
    */
   num_frames?: number;
   /**
-   * Enable Safety Checker
+   * Guidance Scale (1st Stage)
    *
-   * If set to true, input data will be checked for safety before processing.
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
    */
-  enable_safety_checker?: boolean;
+  guidance_scale?: number;
   /**
    * Video Write Mode
    *
@@ -17860,17 +18430,17 @@ export type WanV225bTextToVideoDistillInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (580p or 720p).
-   */
-  resolution?: "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video (16:9 or 9:16).
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (580p or 720p).
+   */
+  resolution?: "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -17884,6 +18454,24 @@ export type WanV225bTextToVideoDistillInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -17895,24 +18483,6 @@ export type WanV225bTextToVideoDistillInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -17956,12 +18526,6 @@ export type WanV22A14bTextToVideoLoraInput = {
    */
   prompt: string;
   /**
-   * Number of Interpolated Frames
-   *
-   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
-   */
-  num_interpolated_frames?: number;
-  /**
    * Acceleration
    *
    * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
@@ -17973,6 +18537,12 @@ export type WanV22A14bTextToVideoLoraInput = {
    * If true, the video will be reversed.
    */
   reverse_video?: boolean;
+  /**
+   * Number of Interpolated Frames
+   *
+   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
+   */
+  num_interpolated_frames?: number;
   /**
    * Loras
    *
@@ -18016,17 +18586,17 @@ export type WanV22A14bTextToVideoLoraInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (480p, 580p, or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video (16:9 or 9:16).
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (480p, 580p, or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -18046,6 +18616,24 @@ export type WanV22A14bTextToVideoLoraInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -18057,24 +18645,6 @@ export type WanV22A14bTextToVideoLoraInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -18477,7 +19047,7 @@ export type Wan25PreviewTextToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -18493,6 +19063,12 @@ export type Wan25PreviewTextToVideoInput = {
    */
   prompt: string;
   /**
+   * Resolution
+   *
+   * Video resolution tier
+   */
+  resolution?: "480p" | "720p" | "1080p";
+  /**
    * Duration
    *
    * Duration of the generated video in seconds. Choose between 5 or 10 seconds.
@@ -18505,11 +19081,17 @@ export type Wan25PreviewTextToVideoInput = {
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
-   * Resolution
+   * Enable Prompt Expansion
    *
-   * Video resolution tier
+   * Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time.
    */
-  resolution?: "480p" | "720p" | "1080p";
+  enable_prompt_expansion?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
   /**
    * Audio Url
    *
@@ -18526,18 +19108,6 @@ export type Wan25PreviewTextToVideoInput = {
    *
    */
   audio_url?: string;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Enable Prompt Expansion
-   *
-   * Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time.
-   */
-  enable_prompt_expansion?: boolean;
   /**
    * Negative Prompt
    *
@@ -18622,11 +19192,11 @@ export type OviInput = {
  */
 export type Sora2TextToVideoOutput = {
   /**
-   * Spritesheet
+   * Video ID
    *
-   * Spritesheet image for the video
+   * The ID of the generated video
    */
-  spritesheet?: ImageFile;
+  video_id: string;
   /**
    * Thumbnail
    *
@@ -18634,17 +19204,17 @@ export type Sora2TextToVideoOutput = {
    */
   thumbnail?: ImageFile;
   /**
-   * Video ID
+   * Spritesheet
    *
-   * The ID of the generated video
+   * Spritesheet image for the video
    */
-  video_id: string;
+  spritesheet?: ImageFile;
   /**
    * Video
    *
    * The generated video
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -18658,17 +19228,11 @@ export type Sora2TextToVideoInput = {
    */
   prompt: string;
   /**
-   * Duration
+   * Aspect Ratio
    *
-   * Duration of the generated video in seconds
+   * The aspect ratio of the generated video
    */
-  duration?: 4 | 8 | 12;
-  /**
-   * Resolution
-   *
-   * The resolution of the generated video
-   */
-  resolution?: "720p";
+  aspect_ratio?: "9:16" | "16:9";
   /**
    * Model
    *
@@ -18676,17 +19240,23 @@ export type Sora2TextToVideoInput = {
    */
   model?: "sora-2" | "sora-2-2025-12-08" | "sora-2-2025-10-06";
   /**
+   * Duration
+   *
+   * Duration of the generated video in seconds
+   */
+  duration?: 4 | 8 | 12;
+  /**
    * Delete Video
    *
    * Whether to delete the video after generation for privacy reasons. If True, the video cannot be used for remixing and will be permanently deleted.
    */
   delete_video?: boolean;
   /**
-   * Aspect Ratio
+   * Resolution
    *
-   * The aspect ratio of the generated video
+   * The resolution of the generated video
    */
-  aspect_ratio?: "9:16" | "16:9";
+  resolution?: "720p";
 };
 
 /**
@@ -18694,11 +19264,11 @@ export type Sora2TextToVideoInput = {
  */
 export type Sora2TextToVideoProOutput = {
   /**
-   * Spritesheet
+   * Video ID
    *
-   * Spritesheet image for the video
+   * The ID of the generated video
    */
-  spritesheet?: ImageFile;
+  video_id: string;
   /**
    * Thumbnail
    *
@@ -18706,17 +19276,17 @@ export type Sora2TextToVideoProOutput = {
    */
   thumbnail?: ImageFile;
   /**
-   * Video ID
+   * Spritesheet
    *
-   * The ID of the generated video
+   * Spritesheet image for the video
    */
-  video_id: string;
+  spritesheet?: ImageFile;
   /**
    * Video
    *
    * The generated video
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -18730,6 +19300,12 @@ export type Sora2TextToVideoProInput = {
    */
   prompt: string;
   /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video
+   */
+  aspect_ratio?: "9:16" | "16:9";
+  /**
    * Duration
    *
    * Duration of the generated video in seconds
@@ -18741,12 +19317,6 @@ export type Sora2TextToVideoProInput = {
    * The resolution of the generated video
    */
   resolution?: "720p" | "1080p";
-  /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "9:16" | "16:9";
   /**
    * Delete Video
    *
@@ -18992,7 +19562,7 @@ export type WanAlphaOutput = {
    *
    * The generated image file.
    */
-  image?: VideoFileType2;
+  image?: VideoFile;
   /**
    * Seed
    *
@@ -19004,13 +19574,13 @@ export type WanAlphaOutput = {
    *
    * The generated mask file.
    */
-  mask?: VideoFileType2;
+  mask?: VideoFile;
   /**
    * Video
    *
    * The generated video file.
    */
-  video?: VideoFileType2;
+  video?: VideoFile;
 };
 
 /**
@@ -19197,12 +19767,6 @@ export type ViduQ2TextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the output video
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Resolution
    *
    * Output video resolution
@@ -19214,6 +19778,12 @@ export type ViduQ2TextToVideoInput = {
    * Duration of the video in seconds
    */
   duration?: 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the output video
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Bgm
    *
@@ -19263,12 +19833,6 @@ export type BytedanceSeedanceV1ProFastTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Resolution
-   *
-   * Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
-   */
-  resolution?: "480p" | "720p" | "1080p";
-  /**
    * Duration
    *
    * Duration of the video in seconds
@@ -19281,23 +19845,29 @@ export type BytedanceSeedanceV1ProFastTextToVideoInput = {
    */
   aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
+   * Resolution
+   *
+   * Video resolution - 480p for faster generation, 720p for balance, 1080p for higher quality
+   */
+  resolution?: "480p" | "720p" | "1080p";
+  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
   /**
-   * Seed
-   *
-   * Random seed to control video generation. Use -1 for random.
-   */
-  seed?: number;
-  /**
    * Camera Fixed
    *
    * Whether to fix the camera position
    */
   camera_fixed?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed to control video generation. Use -1 for random.
+   */
+  seed?: number;
 };
 
 /**
@@ -20071,7 +20641,7 @@ export type Ltx2TextToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -20125,7 +20695,7 @@ export type Ltx2TextToVideoFastOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -20270,17 +20840,17 @@ export type KlingVideoV26ProTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Generate Audio
    *
@@ -20358,7 +20928,7 @@ export type V26TextToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -20392,27 +20962,17 @@ export type V26TextToVideoInput = {
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:3" | "3:4";
   /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt rewriting using LLM. Improves results for short prompts but increases processing time.
    */
   enable_prompt_expansion?: boolean;
-  /**
-   * Audio Url
-   *
-   *
-   * URL of the audio to use as the background music. Must be publicly accessible.
-   * Limit handling: If the audio duration exceeds the duration value (5, 10, or 15 seconds),
-   * the audio is truncated to the first N seconds, and the rest is discarded. If
-   * the audio is shorter than the video, the remaining part of the video will be silent.
-   * For example, if the audio is 3 seconds long and the video duration is 5 seconds, the
-   * first 3 seconds of the output video will have sound, and the last 2 seconds will be silent.
-   * - Format: WAV, MP3.
-   * - Duration: 3 to 30 s.
-   * - File size: Up to 15 MB.
-   *
-   */
-  audio_url?: string;
   /**
    * Seed
    *
@@ -20432,11 +20992,21 @@ export type V26TextToVideoInput = {
    */
   negative_prompt?: string;
   /**
-   * Enable Safety Checker
+   * Audio Url
    *
-   * If set to true, the safety checker will be enabled.
+   *
+   * URL of the audio to use as the background music. Must be publicly accessible.
+   * Limit handling: If the audio duration exceeds the duration value (5, 10, or 15 seconds),
+   * the audio is truncated to the first N seconds, and the rest is discarded. If
+   * the audio is shorter than the video, the remaining part of the video will be silent.
+   * For example, if the audio is 3 seconds long and the video duration is 5 seconds, the
+   * first 3 seconds of the output video will have sound, and the last 2 seconds will be silent.
+   * - Format: WAV, MP3.
+   * - Duration: 3 to 30 s.
+   * - File size: Up to 15 MB.
+   *
    */
-  enable_safety_checker?: boolean;
+  audio_url?: string;
 };
 
 /**
@@ -20474,11 +21044,11 @@ export type BytedanceSeedanceV15ProTextToVideoInput = {
    */
   resolution?: "480p" | "720p" | "1080p";
   /**
-   * Aspect Ratio
+   * Duration
    *
-   * The aspect ratio of the generated video
+   * Duration of the video in seconds
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
+  duration?: "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
   /**
    * Generate Audio
    *
@@ -20486,11 +21056,11 @@ export type BytedanceSeedanceV15ProTextToVideoInput = {
    */
   generate_audio?: boolean;
   /**
-   * Duration
+   * Aspect Ratio
    *
-   * Duration of the video in seconds
+   * The aspect ratio of the generated video
    */
-  duration?: "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
    * Enable Safety Checker
    *
@@ -20498,17 +21068,17 @@ export type BytedanceSeedanceV15ProTextToVideoInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Camera Fixed
-   *
-   * Whether to fix the camera position
-   */
-  camera_fixed?: boolean;
-  /**
    * Seed
    *
    * Random seed to control video generation. Use -1 for random.
    */
   seed?: number;
+  /**
+   * Camera Fixed
+   *
+   * Whether to fix the camera position
+   */
+  camera_fixed?: boolean;
 };
 
 /**
@@ -20581,6 +21151,11 @@ export type Ltx219bTextToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -20589,17 +21164,17 @@ export type Ltx219bTextToVideoOutput = {
  */
 export type Ltx219bTextToVideoInput = {
   /**
-   * Use Multi-Scale
-   *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
-   */
-  use_multiscale?: boolean;
-  /**
    * Prompt
    *
    * The prompt to generate the video from.
    */
   prompt: string;
+  /**
+   * Use Multi-Scale
+   *
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   */
+  use_multiscale?: boolean;
   /**
    * Acceleration
    *
@@ -20646,11 +21221,11 @@ export type Ltx219bTextToVideoInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Enable Safety Checker
+   * Guidance Scale
    *
-   * Whether to enable the safety checker.
+   * The guidance scale to use.
    */
-  enable_safety_checker?: boolean;
+  guidance_scale?: number;
   /**
    * Camera LoRA Scale
    *
@@ -20658,11 +21233,11 @@ export type Ltx219bTextToVideoInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Guidance Scale
+   * Enable Safety Checker
    *
-   * The guidance scale to use.
+   * Whether to enable the safety checker.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Negative Prompt
    *
@@ -20692,17 +21267,17 @@ export type Ltx219bTextToVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -20714,7 +21289,7 @@ export type Ltx219bTextToVideoInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Number of Inference Steps
    *
@@ -20739,6 +21314,11 @@ export type Ltx219bTextToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -20856,17 +21436,17 @@ export type Ltx219bTextToVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -20878,7 +21458,7 @@ export type Ltx219bTextToVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Number of Inference Steps
    *
@@ -20903,6 +21483,11 @@ export type Ltx219bDistilledTextToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -20911,17 +21496,17 @@ export type Ltx219bDistilledTextToVideoOutput = {
  */
 export type Ltx219bDistilledTextToVideoInput = {
   /**
-   * Use Multi-Scale
-   *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
-   */
-  use_multiscale?: boolean;
-  /**
    * Prompt
    *
    * The prompt to generate the video from.
    */
   prompt: string;
+  /**
+   * Use Multi-Scale
+   *
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   */
+  use_multiscale?: boolean;
   /**
    * Acceleration
    *
@@ -20941,6 +21526,19 @@ export type Ltx219bDistilledTextToVideoInput = {
    */
   fps?: number;
   /**
+   * Video Size
+   *
+   * The size of the generated video.
+   */
+  video_size?:
+    | ImageSize
+    | "square_hd"
+    | "square"
+    | "portrait_4_3"
+    | "portrait_16_9"
+    | "landscape_4_3"
+    | "landscape_16_9";
+  /**
    * Camera LoRA
    *
    * The camera LoRA to use. This allows you to control the camera movement of the generated video more accurately than just prompting the model to move the camera.
@@ -20954,19 +21552,6 @@ export type Ltx219bDistilledTextToVideoInput = {
     | "jib_down"
     | "static"
     | "none";
-  /**
-   * Video Size
-   *
-   * The size of the generated video.
-   */
-  video_size?:
-    | ImageSize
-    | "square_hd"
-    | "square"
-    | "portrait_4_3"
-    | "portrait_16_9"
-    | "landscape_4_3"
-    | "landscape_16_9";
   /**
    * Enable Safety Checker
    *
@@ -21008,17 +21593,17 @@ export type Ltx219bDistilledTextToVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -21030,7 +21615,7 @@ export type Ltx219bDistilledTextToVideoInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
 };
 
 /**
@@ -21049,6 +21634,11 @@ export type Ltx219bDistilledTextToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -21160,17 +21750,17 @@ export type Ltx219bDistilledTextToVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -21182,7 +21772,7 @@ export type Ltx219bDistilledTextToVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
 };
 
 /**
@@ -21267,7 +21857,7 @@ export type GrokImagineVideoTextToVideoOutput = {
    *
    * The generated video.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -21281,6 +21871,12 @@ export type GrokImagineVideoTextToVideoInput = {
    */
   prompt: string;
   /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of the generated video.
+   */
+  aspect_ratio?: "16:9" | "4:3" | "3:2" | "1:1" | "2:3" | "3:4" | "9:16";
+  /**
    * Duration
    *
    * Video duration in seconds.
@@ -21292,12 +21888,6 @@ export type GrokImagineVideoTextToVideoInput = {
    * Resolution of the output video.
    */
   resolution?: "480p" | "720p";
-  /**
-   * Aspect Ratio
-   *
-   * Aspect ratio of the generated video.
-   */
-  aspect_ratio?: "16:9" | "4:3" | "3:2" | "1:1" | "2:3" | "3:4" | "9:16";
 };
 
 /**
@@ -21323,11 +21913,11 @@ export type ViduQ3TextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
+   * Resolution
    *
-   * The aspect ratio of the output video
+   * Output video resolution
    */
-  aspect_ratio?: "16:9" | "9:16" | "4:3" | "3:4" | "1:1";
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Duration
    *
@@ -21335,11 +21925,11 @@ export type ViduQ3TextToVideoInput = {
    */
   duration?: number;
   /**
-   * Resolution
+   * Aspect Ratio
    *
-   * Output video resolution
+   * The aspect ratio of the output video
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  aspect_ratio?: "16:9" | "9:16" | "4:3" | "3:4" | "1:1";
   /**
    * Seed
    *
@@ -21352,6 +21942,363 @@ export type ViduQ3TextToVideoInput = {
    * Whether to use direct audio-video generation. When true, outputs video with sound.
    */
   audio?: boolean;
+};
+
+/**
+ * TextToVideoV3StandardOutput
+ */
+export type KlingVideoV3StandardTextToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video
+   */
+  video: File;
+};
+
+/**
+ * TextToVideoV3StandardRequest
+ */
+export type KlingVideoV3StandardTextToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots with specified prompts and durations.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.
+   */
+  generate_audio?: boolean;
+  /**
+   * Voice Ids
+   *
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
+   */
+  voice_ids?: Array<string>;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation
+   */
+  shot_type?: "customize" | "intelligent";
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
+  /**
+   * Cfg Scale
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt.
+   *
+   */
+  cfg_scale?: number;
+};
+
+/**
+ * KlingV3MultiPromptElement
+ */
+export type KlingV3MultiPromptElement = {
+  /**
+   * Prompt
+   *
+   * The prompt for this shot.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * The duration of this shot in seconds
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+};
+
+/**
+ * O3StandardTextToVideoOutput
+ *
+ * Output for O3 video generation endpoints.
+ */
+export type KlingVideoO3StandardTextToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3StandardTextToVideoInput
+ *
+ * Single-shot text-to-video input for O3 model.
+ */
+export type KlingVideoO3StandardTextToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Required unless multi_prompt is provided.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of the generated video.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Voice Ids
+   *
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
+   */
+  voice_ids?: Array<string>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video.
+   */
+  generate_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+};
+
+/**
+ * O3ProTextToVideoOutput
+ *
+ * Output for O3 video generation endpoints.
+ */
+export type KlingVideoO3ProTextToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3ProTextToVideoInput
+ *
+ * Single-shot text-to-video input for O3 model.
+ */
+export type KlingVideoO3ProTextToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Required unless multi_prompt is provided.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of the generated video.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Voice Ids
+   *
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
+   */
+  voice_ids?: Array<string>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video.
+   */
+  generate_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+};
+
+/**
+ * TextToVideoV3ProOutput
+ */
+export type KlingVideoV3ProTextToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video
+   */
+  video: File;
+};
+
+/**
+ * TextToVideoV3ProRequest
+ */
+export type KlingVideoV3ProTextToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation. If provided, overrides the single prompt and divides the video into multiple shots with specified prompts and durations.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.
+   */
+  generate_audio?: boolean;
+  /**
+   * Voice Ids
+   *
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
+   */
+  voice_ids?: Array<string>;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation
+   */
+  shot_type?: "customize" | "intelligent";
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
+  /**
+   * Cfg Scale
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt.
+   *
+   */
+  cfg_scale?: number;
 };
 
 /**
@@ -21375,17 +22322,17 @@ export type KlingVideoV2MasterTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Negative Prompt
    */
@@ -21588,17 +22535,17 @@ export type KlingVideoV25TurboProTextToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Negative Prompt
    */
@@ -21820,17 +22767,17 @@ export type LivePortraitInput = {
    */
   video_url: string;
   /**
-   * Eyebrow
-   *
-   * Amount to raise or lower eyebrows
-   */
-  eyebrow?: number;
-  /**
    * Flag Stitching
    *
    * Whether to enable stitching. Recommended to set to True.
    */
   flag_stitching?: boolean;
+  /**
+   * Eyebrow
+   *
+   * Amount to raise or lower eyebrows
+   */
+  eyebrow?: number;
   /**
    * Wink
    *
@@ -21880,11 +22827,11 @@ export type LivePortraitInput = {
    */
   rotate_yaw?: number;
   /**
-   * Flag Do Rot
+   * Image Url
    *
-   * Whether to conduct the rotation when flag_do_crop is True.
+   * URL of the image to be animated
    */
-  flag_do_rot?: boolean;
+  image_url: string;
   /**
    * Woo
    *
@@ -21898,11 +22845,11 @@ export type LivePortraitInput = {
    */
   aaa?: number;
   /**
-   * Image Url
+   * Flag Do Rot
    *
-   * URL of the image to be animated
+   * Whether to conduct the rotation when flag_do_crop is True.
    */
-  image_url: string;
+  flag_do_rot?: boolean;
   /**
    * Flag Relative
    *
@@ -21934,11 +22881,11 @@ export type LivePortraitInput = {
    */
   rotate_roll?: number;
   /**
-   * Pupil X
+   * Dsize
    *
-   * Amount to move pupils horizontally
+   * Size of the output image.
    */
-  pupil_x?: number;
+  dsize?: number;
   /**
    * Vy Ratio
    *
@@ -21946,11 +22893,11 @@ export type LivePortraitInput = {
    */
   vy_ratio?: number;
   /**
-   * Dsize
+   * Pupil X
    *
-   * Size of the output image.
+   * Amount to move pupils horizontally
    */
-  dsize?: number;
+  pupil_x?: number;
   /**
    * Enable Safety Checker
    *
@@ -22217,12 +23164,6 @@ export type KlingVideoV15ProImageToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
@@ -22232,6 +23173,12 @@ export type KlingVideoV15ProImageToVideoInput = {
    * Negative Prompt
    */
   negative_prompt?: string;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Image Url
    */
@@ -23373,17 +24320,17 @@ export type ViduStartEndToVideoInput = {
    */
   seed?: number;
   /**
-   * Movement Amplitude
-   *
-   * The movement amplitude of objects in the frame
-   */
-  movement_amplitude?: "auto" | "small" | "medium" | "large";
-  /**
    * End Image Url
    *
    * URL of the image to use as the last frame
    */
   end_image_url: string;
+  /**
+   * Movement Amplitude
+   *
+   * The movement amplitude of objects in the frame
+   */
+  movement_amplitude?: "auto" | "small" | "medium" | "large";
   /**
    * Start Image Url
    *
@@ -23484,22 +24431,13 @@ export type ViduImageToVideoInput = {
 
 /**
  * TurboImageToVideoOutput
- *
- * Output model for all video generation endpoints
  */
 export type PikaV2TurboImageToVideoOutput = {
-  /**
-   * Video
-   *
-   * The generated video
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
  * ImageToVideoTurboInput
- *
- * Base request for image-to-video generation
  */
 export type PikaV2TurboImageToVideoInput = {
   /**
@@ -23523,7 +24461,7 @@ export type PikaV2TurboImageToVideoInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
@@ -23542,12 +24480,7 @@ export type PikaV2TurboImageToVideoInput = {
  * Output model for Pika 2.2 Pikascenes generation
  */
 export type PikaV22PikascenesOutput = {
-  /**
-   * Video
-   *
-   * The generated video combining multiple images
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -23563,6 +24496,12 @@ export type PikaV22PikascenesInput = {
    */
   prompt: string;
   /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?: 5 | 10;
+  /**
    * Resolution
    *
    * The resolution of the generated video
@@ -23575,12 +24514,6 @@ export type PikaV22PikascenesInput = {
    */
   aspect_ratio?: "16:9" | "9:16" | "1:1" | "4:5" | "5:4" | "3:2" | "2:3";
   /**
-   * Duration
-   *
-   * The duration of the generated video in seconds
-   */
-  duration?: 5 | 10;
-  /**
    * Ingredients Mode
    *
    * Mode for integrating multiple images. Precise mode is more accurate, creative mode is more creative.
@@ -23591,7 +24524,7 @@ export type PikaV22PikascenesInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Image Urls
    *
@@ -23612,12 +24545,7 @@ export type PikaV22PikascenesInput = {
  * Output model for Pika 2.2 image-to-video generation
  */
 export type PikaV22ImageToVideoOutput = {
-  /**
-   * Video
-   *
-   * The generated video
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -23647,7 +24575,7 @@ export type PikaV22ImageToVideoInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
@@ -23664,22 +24592,13 @@ export type PikaV22ImageToVideoInput = {
 
 /**
  * ImageToVideoV21Output
- *
- * Output from image-to-video generation
  */
 export type PikaV21ImageToVideoOutput = {
-  /**
-   * Video
-   *
-   * The generated video
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
  * ImageToVideov21Input
- *
- * Base request for image-to-video generation
  */
 export type PikaV21ImageToVideoInput = {
   /**
@@ -23703,7 +24622,7 @@ export type PikaV21ImageToVideoInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
@@ -23722,12 +24641,7 @@ export type PikaV21ImageToVideoInput = {
  * Output from Pikaffects generation
  */
 export type PikaV15PikaffectsOutput = {
-  /**
-   * Video
-   *
-   * The generated video with applied effect
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -23763,19 +24677,19 @@ export type PikaV15PikaffectsInput = {
    *
    * Text prompt to guide the effect
    */
-  prompt?: string;
+  prompt?: string | unknown;
   /**
    * Seed
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
    * Negative prompt to guide the model
    */
-  negative_prompt?: string;
+  negative_prompt?: string | unknown;
   /**
    * Image Url
    *
@@ -23871,11 +24785,11 @@ export type PixverseV35TransitionInput = {
    */
   aspect_ratio?: "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
-   * Resolution
+   * Prompt
    *
-   * The resolution of the generated video
+   * The prompt for the transition
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  prompt: string;
   /**
    * Style
    *
@@ -23883,17 +24797,17 @@ export type PixverseV35TransitionInput = {
    */
   style?: "anime" | "3d_animation" | "clay" | "comic" | "cyberpunk";
   /**
-   * Prompt
-   *
-   * The prompt for the transition
-   */
-  prompt: string;
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "8";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Seed
    *
@@ -23940,17 +24854,17 @@ export type PixverseV35EffectsInput = {
    */
   negative_prompt?: string;
   /**
-   * Duration
-   *
-   * The duration of the generated video in seconds
-   */
-  duration?: "5" | "8";
-  /**
    * Resolution
    *
    * The resolution of the generated video.
    */
   resolution?: "360p" | "540p" | "720p" | "1080p";
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?: "5" | "8";
   /**
    * Effect
    *
@@ -24608,17 +25522,17 @@ export type PixverseV4EffectsInput = {
    */
   negative_prompt?: string;
   /**
-   * Duration
-   *
-   * The duration of the generated video in seconds
-   */
-  duration?: "5" | "8";
-  /**
    * Resolution
    *
    * The resolution of the generated video.
    */
   resolution?: "360p" | "540p" | "720p" | "1080p";
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?: "5" | "8";
   /**
    * Effect
    *
@@ -24872,17 +25786,17 @@ export type ViduQ1StartEndToVideoInput = {
    */
   seed?: number;
   /**
-   * Movement Amplitude
-   *
-   * The movement amplitude of objects in the frame
-   */
-  movement_amplitude?: "auto" | "small" | "medium" | "large";
-  /**
    * End Image Url
    *
    * URL of the image to use as the last frame
    */
   end_image_url: string;
+  /**
+   * Movement Amplitude
+   *
+   * The movement amplitude of objects in the frame
+   */
+  movement_amplitude?: "auto" | "small" | "medium" | "large";
   /**
    * Start Image Url
    *
@@ -25087,17 +26001,17 @@ export type PixverseV45EffectsInput = {
    */
   negative_prompt?: string;
   /**
-   * Duration
-   *
-   * The duration of the generated video in seconds
-   */
-  duration?: "5" | "8";
-  /**
    * Resolution
    *
    * The resolution of the generated video.
    */
   resolution?: "360p" | "540p" | "720p" | "1080p";
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?: "5" | "8";
   /**
    * Effect
    *
@@ -25318,11 +26232,11 @@ export type PixverseV45TransitionInput = {
    */
   aspect_ratio?: "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
-   * Resolution
+   * Prompt
    *
-   * The resolution of the generated video
+   * The prompt for the transition
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  prompt: string;
   /**
    * Style
    *
@@ -25330,17 +26244,17 @@ export type PixverseV45TransitionInput = {
    */
   style?: "anime" | "3d_animation" | "clay" | "comic" | "cyberpunk";
   /**
-   * Prompt
-   *
-   * The prompt for the transition
-   */
-  prompt: string;
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "8";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Seed
    *
@@ -25761,17 +26675,17 @@ export type KlingVideoV16ProElementsInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Input Image Urls
    *
@@ -25805,17 +26719,17 @@ export type KlingVideoV16StandardElementsInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Input Image Urls
    *
@@ -25897,10 +26811,6 @@ export type KlingVideoV21ProImageToVideoInput = {
    */
   duration?: "5" | "10";
   /**
-   * Negative Prompt
-   */
-  negative_prompt?: string;
-  /**
    * Cfg Scale
    *
    *
@@ -25915,6 +26825,10 @@ export type KlingVideoV21ProImageToVideoInput = {
    * URL of the image to be used for the end of the video
    */
   tail_image_url?: string;
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
   /**
    * Image Url
    *
@@ -26018,17 +26932,17 @@ export type BytedanceSeedanceV1LiteImageToVideoInput = {
    */
   resolution?: "480p" | "720p" | "1080p";
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
-  /**
    * Duration
    *
    * Duration of the video in seconds
    */
   duration?: "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video
+   */
+  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
   /**
    * Image Url
    *
@@ -26042,11 +26956,11 @@ export type BytedanceSeedanceV1LiteImageToVideoInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Camera Fixed
+   * Seed
    *
-   * Whether to fix the camera position
+   * Random seed to control video generation. Use -1 for random.
    */
-  camera_fixed?: boolean;
+  seed?: number;
   /**
    * End Image Url
    *
@@ -26054,11 +26968,11 @@ export type BytedanceSeedanceV1LiteImageToVideoInput = {
    */
   end_image_url?: string;
   /**
-   * Seed
+   * Camera Fixed
    *
-   * Random seed to control video generation. Use -1 for random.
+   * Whether to fix the camera position
    */
-  seed?: number;
+  camera_fixed?: boolean;
 };
 
 /**
@@ -26796,17 +27710,17 @@ export type WanV22A14bImageToVideoInput = {
    */
   prompt: string;
   /**
-   * Number of Interpolated Frames
-   *
-   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
-   */
-  num_interpolated_frames?: number;
-  /**
    * Acceleration
    *
    * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
    */
   acceleration?: "none" | "regular";
+  /**
+   * Number of Interpolated Frames
+   *
+   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
+   */
+  num_interpolated_frames?: number;
   /**
    * Frames per Second
    *
@@ -26850,17 +27764,17 @@ export type WanV22A14bImageToVideoInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (480p, 580p, or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
    */
   aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (480p, 580p, or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -26886,6 +27800,24 @@ export type WanV22A14bImageToVideoInput = {
    */
   guidance_scale_2?: number;
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -26897,24 +27829,6 @@ export type WanV22A14bImageToVideoInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -27000,17 +27914,17 @@ export type WanV225bImageToVideoInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (580p or 720p).
-   */
-  resolution?: "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
    */
   aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (580p or 720p).
+   */
+  resolution?: "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -27030,6 +27944,24 @@ export type WanV225bImageToVideoInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -27041,24 +27973,6 @@ export type WanV225bImageToVideoInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 /**
@@ -27096,11 +28010,11 @@ export type WanV22A14bImageToVideoTurboInput = {
    */
   prompt: string;
   /**
-   * Resolution
+   * Aspect Ratio
    *
-   * Resolution of the generated video (480p, 580p, or 720p).
+   * Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
    */
-  resolution?: "480p" | "580p" | "720p";
+  aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
   /**
    * Acceleration
    *
@@ -27114,11 +28028,11 @@ export type WanV22A14bImageToVideoTurboInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Aspect Ratio
+   * Resolution
    *
-   * Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
+   * Resolution of the generated video (480p, 580p, or 720p).
    */
-  aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -27308,17 +28222,17 @@ export type WanV22A14bImageToVideoLoraInput = {
    */
   acceleration?: "none" | "regular";
   /**
-   * Number of Interpolated Frames
-   *
-   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
-   */
-  num_interpolated_frames?: number;
-  /**
    * Reverse Video
    *
    * If true, the video will be reversed.
    */
   reverse_video?: boolean;
+  /**
+   * Number of Interpolated Frames
+   *
+   * Number of frames to interpolate between each pair of generated frames. Must be between 0 and 4.
+   */
+  num_interpolated_frames?: number;
   /**
    * Loras
    *
@@ -27368,17 +28282,17 @@ export type WanV22A14bImageToVideoLoraInput = {
    */
   video_write_mode?: "fast" | "balanced" | "small";
   /**
-   * Resolution
-   *
-   * Resolution of the generated video (480p, 580p, or 720p).
-   */
-  resolution?: "480p" | "580p" | "720p";
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image.
    */
   aspect_ratio?: "auto" | "16:9" | "9:16" | "1:1";
+  /**
+   * Resolution
+   *
+   * Resolution of the generated video (480p, 580p, or 720p).
+   */
+  resolution?: "480p" | "580p" | "720p";
   /**
    * Enable Output Safety Checker
    *
@@ -27404,6 +28318,24 @@ export type WanV22A14bImageToVideoLoraInput = {
    */
   guidance_scale_2?: number;
   /**
+   * Adjust FPS for Interpolation
+   *
+   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
+   */
+  adjust_fps_for_interpolation?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If None, a random seed is chosen.
+   */
+  seed?: number;
+  /**
+   * Interpolator Model
+   *
+   * The model to use for frame interpolation. If None, no interpolation is applied.
+   */
+  interpolator_model?: "none" | "film" | "rife";
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.
@@ -27415,24 +28347,6 @@ export type WanV22A14bImageToVideoLoraInput = {
    * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
   num_inference_steps?: number;
-  /**
-   * Interpolator Model
-   *
-   * The model to use for frame interpolation. If None, no interpolation is applied.
-   */
-  interpolator_model?: "none" | "film" | "rife";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility. If None, a random seed is chosen.
-   */
-  seed?: number;
-  /**
-   * Adjust FPS for Interpolation
-   *
-   * If true, the number of frames per second will be multiplied by the number of interpolated frames plus one. For example, if the generated frames per second is 16 and the number of interpolated frames is 1, the final frames per second will be 32. If false, the passed frames per second will be used as-is.
-   */
-  adjust_fps_for_interpolation?: boolean;
 };
 
 export type BytedanceVideoStylizeOutput = unknown;
@@ -27599,17 +28513,17 @@ export type PixverseV5EffectsInput = {
    */
   negative_prompt?: string;
   /**
-   * Duration
-   *
-   * The duration of the generated video in seconds
-   */
-  duration?: "5" | "8";
-  /**
    * Resolution
    *
    * The resolution of the generated video.
    */
   resolution?: "360p" | "540p" | "720p" | "1080p";
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?: "5" | "8";
   /**
    * Effect
    *
@@ -27749,11 +28663,11 @@ export type PixverseV5TransitionInput = {
    */
   aspect_ratio?: "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
-   * Resolution
+   * Prompt
    *
-   * The resolution of the generated video
+   * The prompt for the transition
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  prompt: string;
   /**
    * Style
    *
@@ -27761,17 +28675,17 @@ export type PixverseV5TransitionInput = {
    */
   style?: "anime" | "3d_animation" | "clay" | "comic" | "cyberpunk";
   /**
-   * Prompt
-   *
-   * The prompt for the transition
-   */
-  prompt: string;
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "8";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Seed
    *
@@ -27952,29 +28866,17 @@ export type BytedanceSeedanceV1LiteReferenceToVideoInput = {
    */
   resolution?: "480p" | "720p";
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
-  /**
    * Duration
    *
    * Duration of the video in seconds
    */
   duration?: "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
   /**
-   * Enable Safety Checker
+   * Aspect Ratio
    *
-   * If set to true, the safety checker will be enabled.
+   * The aspect ratio of the generated video
    */
-  enable_safety_checker?: boolean;
-  /**
-   * Camera Fixed
-   *
-   * Whether to fix the camera position
-   */
-  camera_fixed?: boolean;
+  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
   /**
    * Reference Image Urls
    *
@@ -27987,6 +28889,18 @@ export type BytedanceSeedanceV1LiteReferenceToVideoInput = {
    * Random seed to control video generation. Use -1 for random.
    */
   seed?: number;
+  /**
+   * Camera Fixed
+   *
+   * Whether to fix the camera position
+   */
+  camera_fixed?: boolean;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
 };
 
 /**
@@ -28176,11 +29090,11 @@ export type BytedanceOmnihumanV15Output = {
  */
 export type BytedanceOmnihumanV15Input = {
   /**
-   * Turbo Mode
+   * Prompt
    *
-   * Generate a video at a faster rate with a slight quality trade-off.
+   * The text prompt used to guide the video generation.
    */
-  turbo_mode?: boolean;
+  prompt?: string;
   /**
    * Resolution
    *
@@ -28188,11 +29102,11 @@ export type BytedanceOmnihumanV15Input = {
    */
   resolution?: "720p" | "1080p";
   /**
-   * Prompt
+   * Turbo Mode
    *
-   * The text prompt used to guide the video generation.
+   * Generate a video at a faster rate with a slight quality trade-off.
    */
-  prompt?: string;
+  turbo_mode?: boolean;
   /**
    * Audio Url
    *
@@ -28297,11 +29211,11 @@ export type OviImageToVideoInput = {
  */
 export type Sora2ImageToVideoOutput = {
   /**
-   * Spritesheet
+   * Video ID
    *
-   * Spritesheet image for the video
+   * The ID of the generated video
    */
-  spritesheet?: ImageFile;
+  video_id: string;
   /**
    * Thumbnail
    *
@@ -28309,17 +29223,17 @@ export type Sora2ImageToVideoOutput = {
    */
   thumbnail?: ImageFile;
   /**
-   * Video ID
+   * Spritesheet
    *
-   * The ID of the generated video
+   * Spritesheet image for the video
    */
-  video_id: string;
+  spritesheet?: ImageFile;
   /**
    * Video
    *
    * The generated video
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -28333,6 +29247,12 @@ export type Sora2ImageToVideoInput = {
    */
   prompt: string;
   /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video
+   */
+  aspect_ratio?: "auto" | "9:16" | "16:9";
+  /**
    * Duration
    *
    * Duration of the generated video in seconds
@@ -28344,12 +29264,6 @@ export type Sora2ImageToVideoInput = {
    * The resolution of the generated video
    */
   resolution?: "auto" | "720p";
-  /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "auto" | "9:16" | "16:9";
   /**
    * Image URL
    *
@@ -28375,11 +29289,11 @@ export type Sora2ImageToVideoInput = {
  */
 export type Sora2ImageToVideoProOutput = {
   /**
-   * Spritesheet
+   * Video ID
    *
-   * Spritesheet image for the video
+   * The ID of the generated video
    */
-  spritesheet?: ImageFile;
+  video_id: string;
   /**
    * Thumbnail
    *
@@ -28387,17 +29301,17 @@ export type Sora2ImageToVideoProOutput = {
    */
   thumbnail?: ImageFile;
   /**
-   * Video ID
+   * Spritesheet
    *
-   * The ID of the generated video
+   * Spritesheet image for the video
    */
-  video_id: string;
+  spritesheet?: ImageFile;
   /**
    * Video
    *
    * The generated video
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -28411,6 +29325,12 @@ export type Sora2ImageToVideoProInput = {
    */
   prompt: string;
   /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video
+   */
+  aspect_ratio?: "auto" | "9:16" | "16:9";
+  /**
    * Duration
    *
    * Duration of the generated video in seconds
@@ -28422,12 +29342,6 @@ export type Sora2ImageToVideoProInput = {
    * The resolution of the generated video
    */
   resolution?: "auto" | "720p" | "1080p";
-  /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "auto" | "9:16" | "16:9";
   /**
    * Delete Video
    *
@@ -29016,17 +29930,17 @@ export type BytedanceSeedanceV1ProFastImageToVideoInput = {
    */
   resolution?: "480p" | "720p" | "1080p";
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
-  /**
    * Duration
    *
    * Duration of the video in seconds
    */
   duration?: "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video
+   */
+  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
   /**
    * Image Url
    *
@@ -29040,17 +29954,17 @@ export type BytedanceSeedanceV1ProFastImageToVideoInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Camera Fixed
-   *
-   * Whether to fix the camera position
-   */
-  camera_fixed?: boolean;
-  /**
    * Seed
    *
    * Random seed to control video generation. Use -1 for random.
    */
   seed?: number;
+  /**
+   * Camera Fixed
+   *
+   * Whether to fix the camera position
+   */
+  camera_fixed?: boolean;
 };
 
 /**
@@ -29070,17 +29984,17 @@ export type MinimaxHailuo23FastProImageToVideoOutput = {
  */
 export type MinimaxHailuo23FastProImageToVideoInput = {
   /**
-   * Prompt
-   *
-   * Text prompt for video generation
-   */
-  prompt: string;
-  /**
    * Prompt Optimizer
    *
    * Whether to use the model's prompt optimizer
    */
   prompt_optimizer?: boolean;
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation
+   */
+  prompt: string;
   /**
    * Image Url
    *
@@ -29106,11 +30020,11 @@ export type MinimaxHailuo23StandardImageToVideoOutput = {
  */
 export type MinimaxHailuo23StandardImageToVideoInput = {
   /**
-   * Prompt
+   * Prompt Optimizer
    *
-   * Text prompt for video generation
+   * Whether to use the model's prompt optimizer
    */
-  prompt: string;
+  prompt_optimizer?: boolean;
   /**
    * Duration
    *
@@ -29118,11 +30032,11 @@ export type MinimaxHailuo23StandardImageToVideoInput = {
    */
   duration?: "6" | "10";
   /**
-   * Prompt Optimizer
+   * Prompt
    *
-   * Whether to use the model's prompt optimizer
+   * Text prompt for video generation
    */
-  prompt_optimizer?: boolean;
+  prompt: string;
   /**
    * Image Url
    *
@@ -29148,11 +30062,11 @@ export type MinimaxHailuo23FastStandardImageToVideoOutput = {
  */
 export type MinimaxHailuo23FastStandardImageToVideoInput = {
   /**
-   * Prompt
+   * Prompt Optimizer
    *
-   * Text prompt for video generation
+   * Whether to use the model's prompt optimizer
    */
-  prompt: string;
+  prompt_optimizer?: boolean;
   /**
    * Duration
    *
@@ -29160,11 +30074,11 @@ export type MinimaxHailuo23FastStandardImageToVideoInput = {
    */
   duration?: "6" | "10";
   /**
-   * Prompt Optimizer
+   * Prompt
    *
-   * Whether to use the model's prompt optimizer
+   * Text prompt for video generation
    */
-  prompt_optimizer?: boolean;
+  prompt: string;
   /**
    * Image Url
    *
@@ -29656,7 +30570,7 @@ export type KeyframeTransition = {
    *
    * Specific prompt for this transition. Overrides the global prompt if provided.
    */
-  prompt?: string;
+  prompt?: string | unknown;
   /**
    * Duration
    *
@@ -29671,12 +30585,7 @@ export type KeyframeTransition = {
  * Output model for Pika 2.2 keyframes-to-video generation
  */
 export type PikaV22PikaframesOutput = {
-  /**
-   * Video
-   *
-   * The generated video with transitions between keyframes
-   */
-  video: File;
+  video: FileType2;
 };
 
 /**
@@ -29688,7 +30597,7 @@ export type PikaV22PikaframesInput = {
    *
    * Default prompt for all transitions. Individual transition prompts override this.
    */
-  prompt?: string;
+  prompt?: string | unknown;
   /**
    * Resolution
    *
@@ -29706,7 +30615,7 @@ export type PikaV22PikaframesInput = {
    *
    * The seed for the random number generator
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Image Urls
    *
@@ -29738,29 +30647,11 @@ export type PixverseSwapOutput = {
  */
 export type PixverseSwapInput = {
   /**
-   * Original Sound Switch
-   *
-   * Whether to keep the original audio
-   */
-  original_sound_switch?: boolean;
-  /**
    * Video Url
    *
    * URL of the external video to swap
    */
   video_url: string;
-  /**
-   * Keyframe Id
-   *
-   * The keyframe ID (from 1 to the last frame position)
-   */
-  keyframe_id?: number;
-  /**
-   * Mode
-   *
-   * The swap mode to use
-   */
-  mode?: "person" | "object" | "background";
   /**
    * Resolution
    *
@@ -29773,6 +30664,30 @@ export type PixverseSwapInput = {
    * URL of the target image for swapping
    */
   image_url: string;
+  /**
+   * Original Sound Switch
+   *
+   * Whether to keep the original audio
+   */
+  original_sound_switch?: boolean;
+  /**
+   * Mode
+   *
+   * The swap mode to use
+   */
+  mode?: "person" | "object" | "background";
+  /**
+   * Seed
+   *
+   * Random seed for generation
+   */
+  seed?: number;
+  /**
+   * Keyframe Id
+   *
+   * The keyframe ID to use for face/object mapping. The input video is normalized to 24 FPS before processing, so keyframe 1 = first frame, keyframe 24 = 1 second in, etc. Valid range: 1 to (duration_seconds * 24).
+   */
+  keyframe_id?: number;
 };
 
 /**
@@ -29790,7 +30705,7 @@ export type LynxOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -29886,7 +30801,7 @@ export type Ltx2ImageToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -29946,7 +30861,7 @@ export type Ltx2ImageToVideoFastOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -30022,17 +30937,17 @@ export type KlingVideoO1ReferenceToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame.
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * Video duration in seconds.
    */
   duration?: "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Elements
    *
@@ -30203,11 +31118,11 @@ export type PixverseV55TransitionInput = {
    */
   aspect_ratio?: "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
-   * Resolution
+   * Prompt
    *
-   * The resolution of the generated video
+   * The prompt for the transition
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  prompt: string;
   /**
    * Style
    *
@@ -30221,17 +31136,17 @@ export type PixverseV55TransitionInput = {
    */
   thinking_type?: "enabled" | "disabled" | "auto";
   /**
-   * Prompt
-   *
-   * The prompt for the transition
-   */
-  prompt: string;
-  /**
    * Duration
    *
    * The duration of the generated video in seconds. Longer durations cost more. 1080p videos are limited to 5 or 8 seconds
    */
   duration?: "5" | "8" | "10";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Generate Audio Switch
    *
@@ -30284,17 +31199,17 @@ export type PixverseV55EffectsInput = {
    */
   negative_prompt?: string;
   /**
-   * Duration
-   *
-   * The duration of the generated video in seconds
-   */
-  duration?: "5" | "8" | "10";
-  /**
    * Resolution
    *
    * The resolution of the generated video.
    */
   resolution?: "360p" | "540p" | "720p" | "1080p";
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?: "5" | "8" | "10";
   /**
    * Thinking Type
    *
@@ -30440,7 +31355,7 @@ export type KlingVideoV26ProImageToVideoInput = {
   /**
    * Voice Ids
    *
-   * List of voice IDs to use for voice control. Reference voices in the prompt using <<<voice_1>>>, <<<voice_2>>>. Maximum 2 voices allowed. When provided and referenced in prompt, enables voice control billing.
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
    */
   voice_ids?: Array<string>;
   /**
@@ -30560,7 +31475,7 @@ export type CreatifyAuroraOutput = {
    *
    * The generated video file.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -30580,11 +31495,11 @@ export type CreatifyAuroraInput = {
    */
   resolution?: "480p" | "720p";
   /**
-   * Guidance Scale
+   * Audio Url
    *
-   * Guidance scale to be used for text prompt adherence.
+   * The URL of the audio file to be used for video generation.
    */
-  guidance_scale?: number;
+  audio_url: string;
   /**
    * Audio Guidance Scale
    *
@@ -30592,11 +31507,11 @@ export type CreatifyAuroraInput = {
    */
   audio_guidance_scale?: number;
   /**
-   * Audio Url
+   * Guidance Scale
    *
-   * The URL of the audio file to be used for video generation.
+   * Guidance scale to be used for text prompt adherence.
    */
-  audio_url: string;
+  guidance_scale?: number;
   /**
    * Image Url
    *
@@ -30678,17 +31593,17 @@ export type KlingVideoO1StandardReferenceToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame.
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * Video duration in seconds.
    */
   duration?: "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
   /**
    * Elements
    *
@@ -30726,7 +31641,7 @@ export type V26ImageToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -30900,7 +31815,7 @@ export type LiveAvatarOutput = {
    *
    * The generated avatar video file with synchronized audio.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -30998,11 +31913,11 @@ export type BytedanceSeedanceV15ProImageToVideoInput = {
    */
   resolution?: "480p" | "720p" | "1080p";
   /**
-   * Aspect Ratio
+   * Duration
    *
-   * The aspect ratio of the generated video
+   * Duration of the video in seconds
    */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
+  duration?: "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
   /**
    * Generate Audio
    *
@@ -31010,11 +31925,11 @@ export type BytedanceSeedanceV15ProImageToVideoInput = {
    */
   generate_audio?: boolean;
   /**
-   * Duration
+   * Aspect Ratio
    *
-   * Duration of the video in seconds
+   * The aspect ratio of the generated video
    */
-  duration?: "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
    * Image Url
    *
@@ -31028,11 +31943,11 @@ export type BytedanceSeedanceV15ProImageToVideoInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Camera Fixed
+   * Seed
    *
-   * Whether to fix the camera position
+   * Random seed to control video generation. Use -1 for random.
    */
-  camera_fixed?: boolean;
+  seed?: number;
   /**
    * End Image Url
    *
@@ -31040,11 +31955,11 @@ export type BytedanceSeedanceV15ProImageToVideoInput = {
    */
   end_image_url?: string;
   /**
-   * Seed
+   * Camera Fixed
    *
-   * Random seed to control video generation. Use -1 for random.
+   * Whether to fix the camera position
    */
-  seed?: number;
+  camera_fixed?: boolean;
 };
 
 /**
@@ -31121,7 +32036,7 @@ export type WanMoveOutput = {
    *
    * Generated Video File
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -31188,6 +32103,11 @@ export type Ltx219bImageToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -31196,17 +32116,17 @@ export type Ltx219bImageToVideoOutput = {
  */
 export type Ltx219bImageToVideoInput = {
   /**
-   * Prompt
-   *
-   * The prompt used for the generation.
-   */
-  prompt: string;
-  /**
    * Use Multi-Scale
    *
    * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
   use_multiscale?: boolean;
+  /**
+   * Prompt
+   *
+   * The prompt used for the generation.
+   */
+  prompt: string;
   /**
    * Acceleration
    *
@@ -31254,11 +32174,11 @@ export type Ltx219bImageToVideoInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Guidance Scale
+   * Enable Safety Checker
    *
-   * The guidance scale to use.
+   * Whether to enable the safety checker.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Camera LoRA Scale
    *
@@ -31266,11 +32186,11 @@ export type Ltx219bImageToVideoInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -31278,11 +32198,11 @@ export type Ltx219bImageToVideoInput = {
    */
   negative_prompt?: string;
   /**
-   * End Image URL
+   * Guidance Scale
    *
-   * The URL of the image to use as the end of the video.
+   * The guidance scale to use.
    */
-  end_image_url?: string | unknown;
+  guidance_scale?: number;
   /**
    * Video Write Mode
    *
@@ -31300,17 +32220,17 @@ export type Ltx219bImageToVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Enable Safety Checker
-   *
-   * Whether to enable the safety checker.
-   */
-  enable_safety_checker?: boolean;
-  /**
    * Number of Frames
    *
    * The number of frames to generate.
    */
   num_frames?: number;
+  /**
+   * Image Strength
+   *
+   * The strength of the image to use for the video generation.
+   */
+  image_strength?: number;
   /**
    * Image URL
    *
@@ -31340,7 +32260,7 @@ export type Ltx219bImageToVideoInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -31377,6 +32297,11 @@ export type Ltx219bImageToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -31385,17 +32310,17 @@ export type Ltx219bImageToVideoLoraOutput = {
  */
 export type Ltx219bImageToVideoLoraInput = {
   /**
-   * Prompt
-   *
-   * The prompt used for the generation.
-   */
-  prompt: string;
-  /**
    * Use Multi-Scale
    *
    * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
   use_multiscale?: boolean;
+  /**
+   * Prompt
+   *
+   * The prompt used for the generation.
+   */
+  prompt: string;
   /**
    * Acceleration
    *
@@ -31449,11 +32374,11 @@ export type Ltx219bImageToVideoLoraInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Guidance Scale
+   * Enable Safety Checker
    *
-   * The guidance scale to use.
+   * Whether to enable the safety checker.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Camera LoRA Scale
    *
@@ -31461,11 +32386,11 @@ export type Ltx219bImageToVideoLoraInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -31473,11 +32398,11 @@ export type Ltx219bImageToVideoLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * End Image URL
+   * Guidance Scale
    *
-   * The URL of the image to use as the end of the video.
+   * The guidance scale to use.
    */
-  end_image_url?: string | unknown;
+  guidance_scale?: number;
   /**
    * Video Write Mode
    *
@@ -31495,17 +32420,17 @@ export type Ltx219bImageToVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Enable Safety Checker
-   *
-   * Whether to enable the safety checker.
-   */
-  enable_safety_checker?: boolean;
-  /**
    * Number of Frames
    *
    * The number of frames to generate.
    */
   num_frames?: number;
+  /**
+   * Image Strength
+   *
+   * The strength of the image to use for the video generation.
+   */
+  image_strength?: number;
   /**
    * Image URL
    *
@@ -31513,17 +32438,17 @@ export type Ltx219bImageToVideoLoraInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
    * Video Quality
    *
    * The quality of the generated video.
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Enable Prompt Expansion
    *
@@ -31535,7 +32460,7 @@ export type Ltx219bImageToVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -31572,6 +32497,11 @@ export type Ltx219bDistilledImageToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -31580,17 +32510,17 @@ export type Ltx219bDistilledImageToVideoOutput = {
  */
 export type Ltx219bDistilledImageToVideoInput = {
   /**
-   * Prompt
-   *
-   * The prompt used for the generation.
-   */
-  prompt: string;
-  /**
    * Use Multi-Scale
    *
    * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
   use_multiscale?: boolean;
+  /**
+   * Prompt
+   *
+   * The prompt used for the generation.
+   */
+  prompt: string;
   /**
    * Acceleration
    *
@@ -31650,11 +32580,11 @@ export type Ltx219bDistilledImageToVideoInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -31662,11 +32592,11 @@ export type Ltx219bDistilledImageToVideoInput = {
    */
   negative_prompt?: string;
   /**
-   * End Image URL
+   * Number of Frames
    *
-   * The URL of the image to use as the end of the video.
+   * The number of frames to generate.
    */
-  end_image_url?: string | unknown;
+  num_frames?: number;
   /**
    * Video Write Mode
    *
@@ -31684,11 +32614,11 @@ export type Ltx219bDistilledImageToVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Number of Frames
+   * Image Strength
    *
-   * The number of frames to generate.
+   * The strength of the image to use for the video generation.
    */
-  num_frames?: number;
+  image_strength?: number;
   /**
    * Image URL
    *
@@ -31696,17 +32626,17 @@ export type Ltx219bDistilledImageToVideoInput = {
    */
   image_url: string;
   /**
-   * Video Quality
-   *
-   * The quality of the generated video.
-   */
-  video_quality?: "low" | "medium" | "high" | "maximum";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Video Quality
+   *
+   * The quality of the generated video.
+   */
+  video_quality?: "low" | "medium" | "high" | "maximum";
   /**
    * Enable Prompt Expansion
    *
@@ -31718,7 +32648,7 @@ export type Ltx219bDistilledImageToVideoInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -31749,6 +32679,11 @@ export type Ltx219bDistilledImageToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -31757,17 +32692,17 @@ export type Ltx219bDistilledImageToVideoLoraOutput = {
  */
 export type Ltx219bDistilledImageToVideoLoraInput = {
   /**
-   * Prompt
-   *
-   * The prompt used for the generation.
-   */
-  prompt: string;
-  /**
    * Use Multi-Scale
    *
    * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
   use_multiscale?: boolean;
+  /**
+   * Prompt
+   *
+   * The prompt used for the generation.
+   */
+  prompt: string;
   /**
    * Acceleration
    *
@@ -31833,11 +32768,11 @@ export type Ltx219bDistilledImageToVideoLoraInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
@@ -31845,11 +32780,11 @@ export type Ltx219bDistilledImageToVideoLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * End Image URL
+   * Number of Frames
    *
-   * The URL of the image to use as the end of the video.
+   * The number of frames to generate.
    */
-  end_image_url?: string | unknown;
+  num_frames?: number;
   /**
    * Video Write Mode
    *
@@ -31867,11 +32802,11 @@ export type Ltx219bDistilledImageToVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * Number of Frames
+   * Image Strength
    *
-   * The number of frames to generate.
+   * The strength of the image to use for the video generation.
    */
-  num_frames?: number;
+  image_strength?: number;
   /**
    * Image URL
    *
@@ -31901,7 +32836,7 @@ export type Ltx219bDistilledImageToVideoLoraInput = {
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -31939,7 +32874,7 @@ export type V26ImageToVideoFlashOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -32194,11 +33129,11 @@ export type PixverseV56TransitionInput = {
    */
   aspect_ratio?: "16:9" | "4:3" | "1:1" | "3:4" | "9:16";
   /**
-   * Resolution
+   * Prompt
    *
-   * The resolution of the generated video
+   * The prompt for the transition
    */
-  resolution?: "360p" | "540p" | "720p" | "1080p";
+  prompt: string;
   /**
    * Style
    *
@@ -32212,17 +33147,17 @@ export type PixverseV56TransitionInput = {
    */
   thinking_type?: "enabled" | "disabled" | "auto";
   /**
-   * Prompt
-   *
-   * The prompt for the transition
-   */
-  prompt: string;
-  /**
    * Duration
    *
    * The duration of the generated video in seconds. 1080p videos are limited to 5 or 8 seconds
    */
   duration?: "5" | "8" | "10";
+  /**
+   * Resolution
+   *
+   * The resolution of the generated video
+   */
+  resolution?: "360p" | "540p" | "720p" | "1080p";
   /**
    * Generate Audio Switch
    *
@@ -32261,7 +33196,7 @@ export type GrokImagineVideoImageToVideoOutput = {
    *
    * The generated video.
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -32274,18 +33209,6 @@ export type GrokImagineVideoImageToVideoInput = {
    * Text description of desired changes or motion in the video.
    */
   prompt: string;
-  /**
-   * Duration
-   *
-   * Video duration in seconds.
-   */
-  duration?: number;
-  /**
-   * Resolution
-   *
-   * Resolution of the output video.
-   */
-  resolution?: "480p" | "720p";
   /**
    * Aspect Ratio
    *
@@ -32300,6 +33223,18 @@ export type GrokImagineVideoImageToVideoInput = {
     | "2:3"
     | "3:4"
     | "9:16";
+  /**
+   * Duration
+   *
+   * Video duration in seconds.
+   */
+  duration?: number;
+  /**
+   * Resolution
+   *
+   * Resolution of the output video.
+   */
+  resolution?: "480p" | "720p";
   /**
    * Image URL
    *
@@ -32329,19 +33264,25 @@ export type ViduQ3ImageToVideoInput = {
    *
    * Text prompt for video generation, max 2000 characters
    */
-  prompt: string;
+  prompt?: string;
   /**
    * Duration
    *
-   * Duration of the video in seconds
+   * Duration of the video in seconds (1-16 for Q3 models)
    */
   duration?: number;
   /**
    * Resolution
    *
-   * Output video resolution
+   * Output video resolution. Note: 360p is not available when end_image_url is provided.
    */
   resolution?: "360p" | "540p" | "720p" | "1080p";
+  /**
+   * Image Url
+   *
+   * URL or base64 image to use as the starting frame
+   */
+  image_url: string;
   /**
    * Seed
    *
@@ -32349,17 +33290,589 @@ export type ViduQ3ImageToVideoInput = {
    */
   seed?: number;
   /**
+   * End Image Url
+   *
+   * URL of the image to use as the ending frame. When provided, generates a transition video between start and end frames.
+   */
+  end_image_url?: string;
+  /**
    * Audio
    *
-   * Whether to use direct audio-video generation. When true, outputs video with sound.
+   * Whether to use direct audio-video generation. When true, outputs video with sound (including dialogue and sound effects).
    */
   audio?: boolean;
+};
+
+/**
+ * ImageToVideoV3ProOutput
+ */
+export type KlingVideoV3ProImageToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video
+   */
+  video: File;
+};
+
+/**
+ * ImageToVideoV3ProRequest
+ *
+ * V3 standard image-to-video request model.
+ */
+export type KlingVideoV3ProImageToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Voice Ids
+   *
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
+   */
+  voice_ids?: Array<string>;
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.
+   */
+  generate_audio?: boolean;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc.
+   */
+  elements?: Array<KlingV3ComboElementInput>;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation. Required when multi_prompt is provided.
+   */
+  shot_type?: "customize";
+  /**
+   * Start Image Url
+   *
+   * URL of the image to be used for the video
+   */
+  start_image_url: string;
+  /**
+   * End Image Url
+   *
+   * URL of the image to be used for the end of the video
+   */
+  end_image_url?: string;
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
+  /**
+   * Cfg Scale
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt.
+   *
+   */
+  cfg_scale?: number;
+};
+
+/**
+ * KlingV3ComboElementInput
+ */
+export type KlingV3ComboElementInput = {
+  /**
+   * Video Url
+   *
+   * The video URL of the element. A request can only have one element with a video.
+   *
+   * Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s
+   */
+  video_url?: string;
+  /**
+   * Reference Image Urls
+   *
+   * Additional reference images from different angles. 1-3 images supported. At least one image is required.
+   */
+  reference_image_urls?: Array<string>;
+  /**
+   * Frontal Image Url
+   *
+   * The frontal image of the element (main view).
+   *
+   * Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s
+   */
+  frontal_image_url?: string;
+};
+
+/**
+ * ImageToVideoV3StandardOutput
+ */
+export type KlingVideoV3StandardImageToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video
+   */
+  video: File;
+};
+
+/**
+ * ImageToVideoV3StandardRequest
+ *
+ * V3 standard image-to-video request model.
+ */
+export type KlingVideoV3StandardImageToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated video in seconds
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Voice Ids
+   *
+   * Optional Voice IDs for video generation. Reference voices in your prompt with <<<voice_1>>> and <<<voice_2>>> (maximum 2 voices per task). Get voice IDs from the kling video create-voice endpoint: https://fal.ai/models/fal-ai/kling-video/create-voice
+   */
+  voice_ids?: Array<string>;
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation. If provided, divides the video into multiple shots.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video. Supports Chinese and English voice output. Other languages are automatically translated to English. For English speech, use lowercase letters; for acronyms or proper nouns, use uppercase.
+   */
+  generate_audio?: boolean;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include in the video. Each example can either be an image set (frontal + reference images) or a video. Reference in prompt as @Element1, @Element2, etc.
+   */
+  elements?: Array<KlingV3ComboElementInput>;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation. Required when multi_prompt is provided.
+   */
+  shot_type?: "customize";
+  /**
+   * Start Image Url
+   *
+   * URL of the image to be used for the video
+   */
+  start_image_url: string;
+  /**
+   * End Image Url
+   *
+   * URL of the image to be used for the end of the video
+   */
+  end_image_url?: string;
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
+  /**
+   * Cfg Scale
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt.
+   *
+   */
+  cfg_scale?: number;
+};
+
+/**
+ * O3StandardImageToVideoOutput
+ */
+export type KlingVideoO3StandardImageToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3StandardImageToVideoInput
+ *
+ * Single-shot image-to-video input for O3 model.
+ */
+export type KlingVideoO3StandardImageToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video.
+   */
+  generate_audio?: boolean;
   /**
    * Image Url
    *
-   * URL or base64 image to use as the starting frame
+   * URL of the start frame image.
    */
   image_url: string;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+  /**
+   * End Image Url
+   *
+   * URL of the end frame image (optional).
+   */
+  end_image_url?: string;
+};
+
+/**
+ * O3StandardImageR2VOutput
+ */
+export type KlingVideoO3StandardReferenceToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3StandardReferenceVideoI2VInput
+ */
+export type KlingVideoO3StandardReferenceToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video.
+   */
+  generate_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+  /**
+   * Start Image Url
+   *
+   * Image to use as the first frame of the video.
+   */
+  start_image_url?: string;
+  /**
+   * Image Urls
+   *
+   * Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.
+   */
+  image_urls?: Array<string>;
+  /**
+   * End Image Url
+   *
+   * Image to use as the last frame of the video.
+   */
+  end_image_url?: string;
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2.
+   */
+  elements?: Array<KlingV3ComboElementInput>;
+};
+
+/**
+ * O3ProImageR2VOutput
+ */
+export type KlingVideoO3ProReferenceToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3ProReferenceVideoI2VInput
+ */
+export type KlingVideoO3ProReferenceToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video frame.
+   */
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video.
+   */
+  generate_audio?: boolean;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+  /**
+   * Start Image Url
+   *
+   * Image to use as the first frame of the video.
+   */
+  start_image_url?: string;
+  /**
+   * Image Urls
+   *
+   * Reference images for style/appearance. Reference in prompt as @Image1, @Image2, etc. Maximum 4 total (elements + reference images) when using video.
+   */
+  image_urls?: Array<string>;
+  /**
+   * End Image Url
+   *
+   * Image to use as the last frame of the video.
+   */
+  end_image_url?: string;
+  /**
+   * Elements
+   *
+   * Elements (characters/objects) to include. Reference in prompt as @Element1, @Element2.
+   */
+  elements?: Array<KlingV3ComboElementInput>;
+};
+
+/**
+ * O3ProImageToVideoOutput
+ */
+export type KlingVideoO3ProImageToVideoOutput = {
+  /**
+   * Video
+   *
+   * The generated video.
+   */
+  video: File;
+};
+
+/**
+ * O3ProImageToVideoInput
+ *
+ * Single-shot image-to-video input for O3 model.
+ */
+export type KlingVideoO3ProImageToVideoInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation. Either prompt or multi_prompt must be provided, but not both.
+   */
+  prompt?: string;
+  /**
+   * Duration
+   *
+   * Video duration in seconds (3-15s).
+   */
+  duration?:
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10"
+    | "11"
+    | "12"
+    | "13"
+    | "14"
+    | "15";
+  /**
+   * Multi Prompt
+   *
+   * List of prompts for multi-shot video generation.
+   */
+  multi_prompt?: Array<KlingV3MultiPromptElement>;
+  /**
+   * Generate Audio
+   *
+   * Whether to generate native audio for the video.
+   */
+  generate_audio?: boolean;
+  /**
+   * Image Url
+   *
+   * URL of the start frame image.
+   */
+  image_url: string;
+  /**
+   * Shot Type
+   *
+   * The type of multi-shot video generation.
+   */
+  shot_type?: "customize";
+  /**
+   * End Image Url
+   *
+   * URL of the end frame image (optional).
+   */
+  end_image_url?: string;
 };
 
 /**
@@ -32733,17 +34246,17 @@ export type BytedanceSeedanceV1ProImageToVideoInput = {
    */
   resolution?: "480p" | "720p" | "1080p";
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video
-   */
-  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
-  /**
    * Duration
    *
    * Duration of the video in seconds
    */
   duration?: "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated video
+   */
+  aspect_ratio?: "21:9" | "16:9" | "4:3" | "1:1" | "3:4" | "9:16" | "auto";
   /**
    * Image Url
    *
@@ -32757,11 +34270,11 @@ export type BytedanceSeedanceV1ProImageToVideoInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Camera Fixed
+   * Seed
    *
-   * Whether to fix the camera position
+   * Random seed to control video generation. Use -1 for random.
    */
-  camera_fixed?: boolean;
+  seed?: number;
   /**
    * End Image Url
    *
@@ -32769,11 +34282,11 @@ export type BytedanceSeedanceV1ProImageToVideoInput = {
    */
   end_image_url?: string;
   /**
-   * Seed
+   * Camera Fixed
    *
-   * Random seed to control video generation. Use -1 for random.
+   * Whether to fix the camera position
    */
-  seed?: number;
+  camera_fixed?: boolean;
 };
 
 /**
@@ -32797,11 +34310,11 @@ export type MinimaxHailuo02StandardImageToVideoInput = {
    */
   prompt: string;
   /**
-   * Duration
+   * Resolution
    *
-   * The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.
+   * The resolution of the generated video.
    */
-  duration?: "6" | "10";
+  resolution?: "512P" | "768P";
   /**
    * Prompt Optimizer
    *
@@ -32809,11 +34322,11 @@ export type MinimaxHailuo02StandardImageToVideoInput = {
    */
   prompt_optimizer?: boolean;
   /**
-   * Resolution
+   * Duration
    *
-   * The resolution of the generated video.
+   * The duration of the video in seconds. 10 seconds videos are not supported for 1080p resolution.
    */
-  resolution?: "512P" | "768P";
+  duration?: "6" | "10";
   /**
    * End Image Url
    *
@@ -32853,10 +34366,6 @@ export type KlingVideoV25TurboProImageToVideoInput = {
    */
   duration?: "5" | "10";
   /**
-   * Negative Prompt
-   */
-  negative_prompt?: string;
-  /**
    * Cfg Scale
    *
    *
@@ -32871,6 +34380,10 @@ export type KlingVideoV25TurboProImageToVideoInput = {
    * URL of the image to be used for the end of the video
    */
   tail_image_url?: string;
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
   /**
    * Image Url
    *
@@ -32902,7 +34415,7 @@ export type Wan25PreviewImageToVideoOutput = {
    *
    * The generated video file
    */
-  video: VideoFileType2;
+  video: VideoFile;
 };
 
 /**
@@ -32918,17 +34431,17 @@ export type Wan25PreviewImageToVideoInput = {
    */
   prompt: string;
   /**
-   * Duration
-   *
-   * Duration of the generated video in seconds. Choose between 5 or 10 seconds.
-   */
-  duration?: "5" | "10";
-  /**
    * Resolution
    *
    * Video resolution. Valid values: 480p, 720p, 1080p
    */
   resolution?: "480p" | "720p" | "1080p";
+  /**
+   * Duration
+   *
+   * Duration of the generated video in seconds. Choose between 5 or 10 seconds.
+   */
+  duration?: "5" | "10";
   /**
    * Image URL
    *
@@ -32938,21 +34451,11 @@ export type Wan25PreviewImageToVideoInput = {
    */
   image_url: string;
   /**
-   * Audio Url
+   * Enable Safety Checker
    *
-   *
-   * URL of the audio to use as the background music. Must be publicly accessible.
-   * Limit handling: If the audio duration exceeds the duration value (5 or 10 seconds),
-   * the audio is truncated to the first 5 or 10 seconds, and the rest is discarded. If
-   * the audio is shorter than the video, the remaining part of the video will be silent.
-   * For example, if the audio is 3 seconds long and the video duration is 5 seconds, the
-   * first 3 seconds of the output video will have sound, and the last 2 seconds will be silent.
-   * - Format: WAV, MP3.
-   * - Duration: 3 to 30 s.
-   * - File size: Up to 15 MB.
-   *
+   * If set to true, the safety checker will be enabled.
    */
-  audio_url?: string;
+  enable_safety_checker?: boolean;
   /**
    * Seed
    *
@@ -32972,11 +34475,21 @@ export type Wan25PreviewImageToVideoInput = {
    */
   negative_prompt?: string;
   /**
-   * Enable Safety Checker
+   * Audio Url
    *
-   * If set to true, the safety checker will be enabled.
+   *
+   * URL of the audio to use as the background music. Must be publicly accessible.
+   * Limit handling: If the audio duration exceeds the duration value (5 or 10 seconds),
+   * the audio is truncated to the first 5 or 10 seconds, and the rest is discarded. If
+   * the audio is shorter than the video, the remaining part of the video will be silent.
+   * For example, if the audio is 3 seconds long and the video duration is 5 seconds, the
+   * first 3 seconds of the output video will have sound, and the last 2 seconds will be silent.
+   * - Format: WAV, MP3.
+   * - Duration: 3 to 30 s.
+   * - File size: Up to 15 MB.
+   *
    */
-  enable_safety_checker?: boolean;
+  audio_url?: string;
 };
 
 /**
@@ -32996,17 +34509,17 @@ export type MinimaxHailuo23ProImageToVideoOutput = {
  */
 export type MinimaxHailuo23ProImageToVideoInput = {
   /**
-   * Prompt
-   *
-   * Text prompt for video generation
-   */
-  prompt: string;
-  /**
    * Prompt Optimizer
    *
    * Whether to use the model's prompt optimizer
    */
   prompt_optimizer?: boolean;
+  /**
+   * Prompt
+   *
+   * Text prompt for video generation
+   */
+  prompt: string;
   /**
    * Image Url
    *
@@ -33070,31 +34583,31 @@ export type KlingVideoV16ProImageToVideoInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated video frame
-   */
-  aspect_ratio?: "16:9" | "9:16" | "1:1";
-  /**
    * Duration
    *
    * The duration of the generated video in seconds
    */
   duration?: "5" | "10";
   /**
-   * Tail Image Url
+   * Aspect Ratio
    *
-   * URL of the image to be used for the end of the video
+   * The aspect ratio of the generated video frame
    */
-  tail_image_url?: string;
+  aspect_ratio?: "16:9" | "9:16" | "1:1";
+  /**
+   * Negative Prompt
+   */
+  negative_prompt?: string;
   /**
    * Image Url
    */
   image_url: string;
   /**
-   * Negative Prompt
+   * Tail Image Url
+   *
+   * URL of the image to be used for the end of the video
    */
-  negative_prompt?: string;
+  tail_image_url?: string;
   /**
    * Cfg Scale
    *
@@ -33543,17 +35056,17 @@ export type WanV2214bSpeechToVideoInput = {
    */
   audio_url: string;
   /**
-   * Number of Inference Steps
-   *
-   * Number of inference steps for sampling. Higher values give better quality but take longer.
-   */
-  num_inference_steps?: number;
-  /**
    * Seed
    *
    * Random seed for reproducibility. If None, a random seed is chosen.
    */
   seed?: number;
+  /**
+   * Number of Inference Steps
+   *
+   * Number of inference steps for sampling. Higher values give better quality but take longer.
+   */
+  num_inference_steps?: number;
 };
 
 /**
@@ -34034,29 +35547,29 @@ export type ElevenlabsDubbingInput = {
    */
   video_url?: string | unknown;
   /**
-   * Highest Resolution
-   *
-   * Whether to use the highest resolution for dubbing.
-   */
-  highest_resolution?: boolean;
-  /**
    * Audio Url
    *
    * URL of the audio file to dub. Either audio_url or video_url must be provided.
    */
   audio_url?: string | unknown;
   /**
-   * Target Lang
+   * Highest Resolution
    *
-   * Target language code for dubbing (ISO 639-1)
+   * Whether to use the highest resolution for dubbing.
    */
-  target_lang: string;
+  highest_resolution?: boolean;
   /**
    * Num Speakers
    *
    * Number of speakers in the audio. If not provided, will be auto-detected.
    */
   num_speakers?: number | unknown;
+  /**
+   * Target Lang
+   *
+   * Target language code for dubbing (ISO 639-1)
+   */
+  target_lang: string;
   /**
    * Source Lang
    *
@@ -34081,6 +35594,11 @@ export type Ltx219bAudioToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -34113,11 +35631,11 @@ export type Ltx219bAudioToVideoInput = {
    */
   use_multiscale?: boolean;
   /**
-   * Number of Inference Steps
+   * Audio Strength
    *
-   * The number of inference steps to use.
+   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
    */
-  num_inference_steps?: number;
+  audio_strength?: number;
   /**
    * FPS
    *
@@ -34165,23 +35683,23 @@ export type Ltx219bAudioToVideoInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
-  /**
-   * Preprocess Audio
-   *
-   * Whether to preprocess the audio before using it as conditioning.
-   */
-  preprocess_audio?: boolean;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
    * The negative prompt to generate the video from.
    */
   negative_prompt?: string;
+  /**
+   * Image Strength
+   *
+   * The strength of the image to use for the video generation.
+   */
+  image_strength?: number;
   /**
    * Video Write Mode
    *
@@ -34199,11 +35717,11 @@ export type Ltx219bAudioToVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * End Image URL
+   * Number of Frames
    *
-   * The URL of the image to use as the end of the video.
+   * The number of frames to generate.
    */
-  end_image_url?: string | unknown;
+  num_frames?: number;
   /**
    * Enable Safety Checker
    *
@@ -34211,17 +35729,17 @@ export type Ltx219bAudioToVideoInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Number of Frames
+   * Preprocess Audio
    *
-   * The number of frames to generate.
+   * Whether to preprocess the audio before using it as conditioning.
    */
-  num_frames?: number;
+  preprocess_audio?: boolean;
   /**
    * Image URL
    *
    * Optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
+  image_url?: string;
   /**
    * Video Quality
    *
@@ -34241,11 +35759,11 @@ export type Ltx219bAudioToVideoInput = {
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Audio Strength
+   * Seed
    *
-   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
+   * The seed for the random number generator.
    */
-  audio_strength?: number;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -34259,11 +35777,11 @@ export type Ltx219bAudioToVideoInput = {
    */
   audio_url: string;
   /**
-   * Seed
+   * Number of Inference Steps
    *
-   * The seed for the random number generator.
+   * The number of inference steps to use.
    */
-  seed?: number | unknown;
+  num_inference_steps?: number;
 };
 
 /**
@@ -34282,6 +35800,11 @@ export type Ltx219bDistilledAudioToVideoOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -34296,11 +35819,11 @@ export type Ltx219bDistilledAudioToVideoInput = {
    */
   match_audio_length?: boolean;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * Acceleration
    *
@@ -34308,11 +35831,11 @@ export type Ltx219bDistilledAudioToVideoInput = {
    */
   acceleration?: "none" | "regular" | "high" | "full";
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * FPS
    *
@@ -34360,23 +35883,23 @@ export type Ltx219bDistilledAudioToVideoInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
-  /**
-   * Preprocess Audio
-   *
-   * Whether to preprocess the audio before using it as conditioning.
-   */
-  preprocess_audio?: boolean;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
    * The negative prompt to generate the video from.
    */
   negative_prompt?: string;
+  /**
+   * Image Strength
+   *
+   * The strength of the image to use for the video generation.
+   */
+  image_strength?: number;
   /**
    * Video Write Mode
    *
@@ -34394,23 +35917,23 @@ export type Ltx219bDistilledAudioToVideoInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * End Image URL
-   *
-   * The URL of the image to use as the end of the video.
-   */
-  end_image_url?: string | unknown;
-  /**
    * Number of Frames
    *
    * The number of frames to generate.
    */
   num_frames?: number;
   /**
+   * Preprocess Audio
+   *
+   * Whether to preprocess the audio before using it as conditioning.
+   */
+  preprocess_audio?: boolean;
+  /**
    * Image URL
    *
    * Optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
+  image_url?: string;
   /**
    * Video Quality
    *
@@ -34430,11 +35953,11 @@ export type Ltx219bDistilledAudioToVideoInput = {
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Audio Strength
+   * Seed
    *
-   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
+   * The seed for the random number generator.
    */
-  audio_strength?: number;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -34448,11 +35971,11 @@ export type Ltx219bDistilledAudioToVideoInput = {
    */
   audio_url: string;
   /**
-   * Seed
+   * Audio Strength
    *
-   * The seed for the random number generator.
+   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
    */
-  seed?: number | unknown;
+  audio_strength?: number;
 };
 
 /**
@@ -34471,6 +35994,11 @@ export type Ltx219bAudioToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -34503,11 +36031,11 @@ export type Ltx219bAudioToVideoLoraInput = {
    */
   use_multiscale?: boolean;
   /**
-   * Number of Inference Steps
+   * Audio Strength
    *
-   * The number of inference steps to use.
+   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
    */
-  num_inference_steps?: number;
+  audio_strength?: number;
   /**
    * FPS
    *
@@ -34561,23 +36089,23 @@ export type Ltx219bAudioToVideoLoraInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
-  /**
-   * Preprocess Audio
-   *
-   * Whether to preprocess the audio before using it as conditioning.
-   */
-  preprocess_audio?: boolean;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
    * The negative prompt to generate the video from.
    */
   negative_prompt?: string;
+  /**
+   * Image Strength
+   *
+   * The strength of the image to use for the video generation.
+   */
+  image_strength?: number;
   /**
    * Video Write Mode
    *
@@ -34595,11 +36123,11 @@ export type Ltx219bAudioToVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * End Image URL
+   * Number of Frames
    *
-   * The URL of the image to use as the end of the video.
+   * The number of frames to generate.
    */
-  end_image_url?: string | unknown;
+  num_frames?: number;
   /**
    * Enable Safety Checker
    *
@@ -34607,23 +36135,17 @@ export type Ltx219bAudioToVideoLoraInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Number of Frames
+   * Preprocess Audio
    *
-   * The number of frames to generate.
+   * Whether to preprocess the audio before using it as conditioning.
    */
-  num_frames?: number;
+  preprocess_audio?: boolean;
   /**
    * Image URL
    *
    * Optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
+  image_url?: string;
   /**
    * Video Quality
    *
@@ -34631,17 +36153,23 @@ export type Ltx219bAudioToVideoLoraInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion.
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Audio Strength
+   * Seed
    *
-   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
+   * The seed for the random number generator.
    */
-  audio_strength?: number;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -34655,11 +36183,11 @@ export type Ltx219bAudioToVideoLoraInput = {
    */
   audio_url: string;
   /**
-   * Seed
+   * Number of Inference Steps
    *
-   * The seed for the random number generator.
+   * The number of inference steps to use.
    */
-  seed?: number | unknown;
+  num_inference_steps?: number;
 };
 
 /**
@@ -34678,6 +36206,11 @@ export type Ltx219bDistilledAudioToVideoLoraOutput = {
    * The seed used for the random number generator.
    */
   seed: number;
+  /**
+   * Video
+   *
+   * The generated video.
+   */
   video: VideoFile;
 };
 
@@ -34692,11 +36225,11 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
    */
   match_audio_length?: boolean;
   /**
-   * Prompt
+   * Use Multi-Scale
    *
-   * The prompt to generate the video from.
+   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
    */
-  prompt: string;
+  use_multiscale?: boolean;
   /**
    * Acceleration
    *
@@ -34704,11 +36237,11 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
    */
   acceleration?: "none" | "regular" | "high" | "full";
   /**
-   * Use Multi-Scale
+   * Prompt
    *
-   * Whether to use multi-scale generation. If True, the model will generate the video at a smaller scale first, then use the smaller video to guide the generation of a video at or above your requested size. This results in better coherence and details.
+   * The prompt to generate the video from.
    */
-  use_multiscale?: boolean;
+  prompt: string;
   /**
    * FPS
    *
@@ -34762,23 +36295,23 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
    */
   camera_lora_scale?: number;
   /**
-   * Image Strength
+   * End Image URL
    *
-   * The strength of the image to use for the video generation.
+   * The URL of the image to use as the end of the video.
    */
-  image_strength?: number;
-  /**
-   * Preprocess Audio
-   *
-   * Whether to preprocess the audio before using it as conditioning.
-   */
-  preprocess_audio?: boolean;
+  end_image_url?: string;
   /**
    * Negative Prompt
    *
    * The negative prompt to generate the video from.
    */
   negative_prompt?: string;
+  /**
+   * Image Strength
+   *
+   * The strength of the image to use for the video generation.
+   */
+  image_strength?: number;
   /**
    * Video Write Mode
    *
@@ -34796,29 +36329,23 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
     | "PRORES4444 (.mov)"
     | "GIF (.gif)";
   /**
-   * End Image URL
-   *
-   * The URL of the image to use as the end of the video.
-   */
-  end_image_url?: string | unknown;
-  /**
    * Number of Frames
    *
    * The number of frames to generate.
    */
   num_frames?: number;
   /**
+   * Preprocess Audio
+   *
+   * Whether to preprocess the audio before using it as conditioning.
+   */
+  preprocess_audio?: boolean;
+  /**
    * Image URL
    *
    * Optional URL of an image to use as the first frame of the video.
    */
-  image_url?: string | unknown;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
+  image_url?: string;
   /**
    * Video Quality
    *
@@ -34826,17 +36353,23 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
    */
   video_quality?: "low" | "medium" | "high" | "maximum";
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
    * Enable Prompt Expansion
    *
    * Whether to enable prompt expansion.
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Audio Strength
+   * Seed
    *
-   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
+   * The seed for the random number generator.
    */
-  audio_strength?: number;
+  seed?: number;
   /**
    * End Image Strength
    *
@@ -34850,11 +36383,11 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
    */
   audio_url: string;
   /**
-   * Seed
+   * Audio Strength
    *
-   * The seed for the random number generator.
+   * Audio conditioning strength. Values below 1.0 will allow the model to change the audio, while a value of exactly 1.0 will use the input audio without modification.
    */
-  seed?: number | unknown;
+  audio_strength?: number;
 };
 
 export type QueueStatus = {
@@ -37571,6 +39104,589 @@ export type GetFalAiWanI2vRequestsByRequestIdResponses = {
 
 export type GetFalAiWanI2vRequestsByRequestIdResponse =
   GetFalAiWanI2vRequestsByRequestIdResponses[keyof GetFalAiWanI2vRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-video/o3/pro/image-to-video/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/image-to-video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3ProImageToVideoData = {
+  body: KlingVideoO3ProImageToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/image-to-video";
+};
+
+export type PostFalAiKlingVideoO3ProImageToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3ProImageToVideoResponse =
+  PostFalAiKlingVideoO3ProImageToVideoResponses[keyof PostFalAiKlingVideoO3ProImageToVideoResponses];
+
+export type GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/image-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingVideoO3ProImageToVideoOutput;
+};
+
+export type GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3ProImageToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/pro/reference-to-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/pro/reference-to-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3ProReferenceToVideoData = {
+  body: KlingVideoO3ProReferenceToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/reference-to-video";
+};
+
+export type PostFalAiKlingVideoO3ProReferenceToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3ProReferenceToVideoResponse =
+  PostFalAiKlingVideoO3ProReferenceToVideoResponses[keyof PostFalAiKlingVideoO3ProReferenceToVideoResponses];
+
+export type GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/reference-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3ProReferenceToVideoOutput;
+  };
+
+export type GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3ProReferenceToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/standard/reference-to-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/reference-to-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3StandardReferenceToVideoData = {
+  body: KlingVideoO3StandardReferenceToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/reference-to-video";
+};
+
+export type PostFalAiKlingVideoO3StandardReferenceToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3StandardReferenceToVideoResponse =
+  PostFalAiKlingVideoO3StandardReferenceToVideoResponses[keyof PostFalAiKlingVideoO3StandardReferenceToVideoResponses];
+
+export type GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/reference-to-video/requests/{request_id}";
+  };
+
+export type GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3StandardReferenceToVideoOutput;
+  };
+
+export type GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3StandardReferenceToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/standard/image-to-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/image-to-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3StandardImageToVideoData = {
+  body: KlingVideoO3StandardImageToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/image-to-video";
+};
+
+export type PostFalAiKlingVideoO3StandardImageToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3StandardImageToVideoResponse =
+  PostFalAiKlingVideoO3StandardImageToVideoResponses[keyof PostFalAiKlingVideoO3StandardImageToVideoResponses];
+
+export type GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/image-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3StandardImageToVideoOutput;
+  };
+
+export type GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3StandardImageToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/v3/standard/image-to-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/v3/standard/image-to-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoV3StandardImageToVideoData = {
+  body: KlingVideoV3StandardImageToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/v3/standard/image-to-video";
+};
+
+export type PostFalAiKlingVideoV3StandardImageToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoV3StandardImageToVideoResponse =
+  PostFalAiKlingVideoV3StandardImageToVideoResponses[keyof PostFalAiKlingVideoV3StandardImageToVideoResponses];
+
+export type GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/v3/standard/image-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoV3StandardImageToVideoOutput;
+  };
+
+export type GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoV3StandardImageToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-video/v3/pro/image-to-video/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/v3/pro/image-to-video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoV3ProImageToVideoData = {
+  body: KlingVideoV3ProImageToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/v3/pro/image-to-video";
+};
+
+export type PostFalAiKlingVideoV3ProImageToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoV3ProImageToVideoResponse =
+  PostFalAiKlingVideoV3ProImageToVideoResponses[keyof PostFalAiKlingVideoV3ProImageToVideoResponses];
+
+export type GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/v3/pro/image-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingVideoV3ProImageToVideoOutput;
+};
+
+export type GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoV3ProImageToVideoRequestsByRequestIdResponses];
 
 export type GetFalAiViduQ3ImageToVideoRequestsByRequestIdStatusData = {
   body?: never;
@@ -51126,6 +53242,392 @@ export type GetFalAiKlingVideoV2MasterTextToVideoRequestsByRequestIdResponses =
 export type GetFalAiKlingVideoV2MasterTextToVideoRequestsByRequestIdResponse =
   GetFalAiKlingVideoV2MasterTextToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoV2MasterTextToVideoRequestsByRequestIdResponses];
 
+export type GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-video/v3/pro/text-to-video/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/v3/pro/text-to-video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoV3ProTextToVideoData = {
+  body: KlingVideoV3ProTextToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/v3/pro/text-to-video";
+};
+
+export type PostFalAiKlingVideoV3ProTextToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoV3ProTextToVideoResponse =
+  PostFalAiKlingVideoV3ProTextToVideoResponses[keyof PostFalAiKlingVideoV3ProTextToVideoResponses];
+
+export type GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/v3/pro/text-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingVideoV3ProTextToVideoOutput;
+};
+
+export type GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoV3ProTextToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-video/o3/pro/text-to-video/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/text-to-video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3ProTextToVideoData = {
+  body: KlingVideoO3ProTextToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/text-to-video";
+};
+
+export type PostFalAiKlingVideoO3ProTextToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3ProTextToVideoResponse =
+  PostFalAiKlingVideoO3ProTextToVideoResponses[keyof PostFalAiKlingVideoO3ProTextToVideoResponses];
+
+export type GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/text-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingVideoO3ProTextToVideoOutput;
+};
+
+export type GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3ProTextToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/standard/text-to-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/text-to-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3StandardTextToVideoData = {
+  body: KlingVideoO3StandardTextToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/text-to-video";
+};
+
+export type PostFalAiKlingVideoO3StandardTextToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3StandardTextToVideoResponse =
+  PostFalAiKlingVideoO3StandardTextToVideoResponses[keyof PostFalAiKlingVideoO3StandardTextToVideoResponses];
+
+export type GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/text-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3StandardTextToVideoOutput;
+  };
+
+export type GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3StandardTextToVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/v3/standard/text-to-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/v3/standard/text-to-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoV3StandardTextToVideoData = {
+  body: KlingVideoV3StandardTextToVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/v3/standard/text-to-video";
+};
+
+export type PostFalAiKlingVideoV3StandardTextToVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoV3StandardTextToVideoResponse =
+  PostFalAiKlingVideoV3StandardTextToVideoResponses[keyof PostFalAiKlingVideoV3StandardTextToVideoResponses];
+
+export type GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/v3/standard/text-to-video/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoV3StandardTextToVideoOutput;
+  };
+
+export type GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdResponse =
+  GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdResponses[keyof GetFalAiKlingVideoV3StandardTextToVideoRequestsByRequestIdResponses];
+
 export type GetFalAiViduQ3TextToVideoRequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -60566,6 +63068,777 @@ export type GetFalAiMmaudioV2RequestsByRequestIdResponses = {
 
 export type GetFalAiMmaudioV2RequestsByRequestIdResponse =
   GetFalAiMmaudioV2RequestsByRequestIdResponses[keyof GetFalAiMmaudioV2RequestsByRequestIdResponses];
+
+export type GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/workflow-utilities/trim-video/requests/{request_id}/status";
+};
+
+export type GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/trim-video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWorkflowUtilitiesTrimVideoData = {
+  body: WorkflowUtilitiesTrimVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/workflow-utilities/trim-video";
+};
+
+export type PostFalAiWorkflowUtilitiesTrimVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWorkflowUtilitiesTrimVideoResponse =
+  PostFalAiWorkflowUtilitiesTrimVideoResponses[keyof PostFalAiWorkflowUtilitiesTrimVideoResponses];
+
+export type GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/trim-video/requests/{request_id}";
+};
+
+export type GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WorkflowUtilitiesTrimVideoOutput;
+};
+
+export type GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdResponse =
+  GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesTrimVideoRequestsByRequestIdResponses];
+
+export type GetWanV26ReferenceToVideoFlashRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/wan/v2.6/reference-to-video/flash/requests/{request_id}/status";
+};
+
+export type GetWanV26ReferenceToVideoFlashRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetWanV26ReferenceToVideoFlashRequestsByRequestIdStatusResponse =
+  GetWanV26ReferenceToVideoFlashRequestsByRequestIdStatusResponses[keyof GetWanV26ReferenceToVideoFlashRequestsByRequestIdStatusResponses];
+
+export type PutWanV26ReferenceToVideoFlashRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/wan/v2.6/reference-to-video/flash/requests/{request_id}/cancel";
+};
+
+export type PutWanV26ReferenceToVideoFlashRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutWanV26ReferenceToVideoFlashRequestsByRequestIdCancelResponse =
+  PutWanV26ReferenceToVideoFlashRequestsByRequestIdCancelResponses[keyof PutWanV26ReferenceToVideoFlashRequestsByRequestIdCancelResponses];
+
+export type PostWanV26ReferenceToVideoFlashData = {
+  body: V26ReferenceToVideoFlashInput;
+  path?: never;
+  query?: never;
+  url: "/wan/v2.6/reference-to-video/flash";
+};
+
+export type PostWanV26ReferenceToVideoFlashResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostWanV26ReferenceToVideoFlashResponse =
+  PostWanV26ReferenceToVideoFlashResponses[keyof PostWanV26ReferenceToVideoFlashResponses];
+
+export type GetWanV26ReferenceToVideoFlashRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/wan/v2.6/reference-to-video/flash/requests/{request_id}";
+};
+
+export type GetWanV26ReferenceToVideoFlashRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: V26ReferenceToVideoFlashOutput;
+};
+
+export type GetWanV26ReferenceToVideoFlashRequestsByRequestIdResponse =
+  GetWanV26ReferenceToVideoFlashRequestsByRequestIdResponses[keyof GetWanV26ReferenceToVideoFlashRequestsByRequestIdResponses];
+
+export type GetFalAiBytedanceDreamactorV2RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/bytedance/dreamactor/v2/requests/{request_id}/status";
+};
+
+export type GetFalAiBytedanceDreamactorV2RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiBytedanceDreamactorV2RequestsByRequestIdStatusResponse =
+  GetFalAiBytedanceDreamactorV2RequestsByRequestIdStatusResponses[keyof GetFalAiBytedanceDreamactorV2RequestsByRequestIdStatusResponses];
+
+export type PutFalAiBytedanceDreamactorV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/bytedance/dreamactor/v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiBytedanceDreamactorV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiBytedanceDreamactorV2RequestsByRequestIdCancelResponse =
+  PutFalAiBytedanceDreamactorV2RequestsByRequestIdCancelResponses[keyof PutFalAiBytedanceDreamactorV2RequestsByRequestIdCancelResponses];
+
+export type PostFalAiBytedanceDreamactorV2Data = {
+  body: BytedanceDreamactorV2Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/bytedance/dreamactor/v2";
+};
+
+export type PostFalAiBytedanceDreamactorV2Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiBytedanceDreamactorV2Response =
+  PostFalAiBytedanceDreamactorV2Responses[keyof PostFalAiBytedanceDreamactorV2Responses];
+
+export type GetFalAiBytedanceDreamactorV2RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/bytedance/dreamactor/v2/requests/{request_id}";
+};
+
+export type GetFalAiBytedanceDreamactorV2RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: BytedanceDreamactorV2Output;
+};
+
+export type GetFalAiBytedanceDreamactorV2RequestsByRequestIdResponse =
+  GetFalAiBytedanceDreamactorV2RequestsByRequestIdResponses[keyof GetFalAiBytedanceDreamactorV2RequestsByRequestIdResponses];
+
+export type GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/workflow-utilities/blend-video/requests/{request_id}/status";
+};
+
+export type GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/blend-video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWorkflowUtilitiesBlendVideoData = {
+  body: WorkflowUtilitiesBlendVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/workflow-utilities/blend-video";
+};
+
+export type PostFalAiWorkflowUtilitiesBlendVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWorkflowUtilitiesBlendVideoResponse =
+  PostFalAiWorkflowUtilitiesBlendVideoResponses[keyof PostFalAiWorkflowUtilitiesBlendVideoResponses];
+
+export type GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/blend-video/requests/{request_id}";
+};
+
+export type GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WorkflowUtilitiesBlendVideoOutput;
+};
+
+export type GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdResponse =
+  GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesBlendVideoRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/standard/video-to-video/edit/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/video-to-video/edit/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3StandardVideoToVideoEditData = {
+  body: KlingVideoO3StandardVideoToVideoEditInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/video-to-video/edit";
+};
+
+export type PostFalAiKlingVideoO3StandardVideoToVideoEditResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3StandardVideoToVideoEditResponse =
+  PostFalAiKlingVideoO3StandardVideoToVideoEditResponses[keyof PostFalAiKlingVideoO3StandardVideoToVideoEditResponses];
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/video-to-video/edit/requests/{request_id}";
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3StandardVideoToVideoEditOutput;
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3StandardVideoToVideoEditRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/pro/video-to-video/edit/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/pro/video-to-video/edit/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3ProVideoToVideoEditData = {
+  body: KlingVideoO3ProVideoToVideoEditInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/video-to-video/edit";
+};
+
+export type PostFalAiKlingVideoO3ProVideoToVideoEditResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3ProVideoToVideoEditResponse =
+  PostFalAiKlingVideoO3ProVideoToVideoEditResponses[keyof PostFalAiKlingVideoO3ProVideoToVideoEditResponses];
+
+export type GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/video-to-video/edit/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3ProVideoToVideoEditOutput;
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3ProVideoToVideoEditRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/standard/video-to-video/reference/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/video-to-video/reference/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3StandardVideoToVideoReferenceData = {
+  body: KlingVideoO3StandardVideoToVideoReferenceInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/standard/video-to-video/reference";
+};
+
+export type PostFalAiKlingVideoO3StandardVideoToVideoReferenceResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3StandardVideoToVideoReferenceResponse =
+  PostFalAiKlingVideoO3StandardVideoToVideoReferenceResponses[keyof PostFalAiKlingVideoO3StandardVideoToVideoReferenceResponses];
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/standard/video-to-video/reference/requests/{request_id}";
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3StandardVideoToVideoReferenceOutput;
+  };
+
+export type GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3StandardVideoToVideoReferenceRequestsByRequestIdResponses];
+
+export type GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/kling-video/o3/pro/video-to-video/reference/requests/{request_id}/status";
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/pro/video-to-video/reference/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoO3ProVideoToVideoReferenceData = {
+  body: KlingVideoO3ProVideoToVideoReferenceInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/o3/pro/video-to-video/reference";
+};
+
+export type PostFalAiKlingVideoO3ProVideoToVideoReferenceResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoO3ProVideoToVideoReferenceResponse =
+  PostFalAiKlingVideoO3ProVideoToVideoReferenceResponses[keyof PostFalAiKlingVideoO3ProVideoToVideoReferenceResponses];
+
+export type GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/kling-video/o3/pro/video-to-video/reference/requests/{request_id}";
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: KlingVideoO3ProVideoToVideoReferenceOutput;
+  };
+
+export type GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdResponse =
+  GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdResponses[keyof GetFalAiKlingVideoO3ProVideoToVideoReferenceRequestsByRequestIdResponses];
 
 export type GetXaiGrokImagineVideoEditVideoRequestsByRequestIdStatusData = {
   body?: never;

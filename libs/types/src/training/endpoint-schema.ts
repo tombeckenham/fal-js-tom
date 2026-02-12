@@ -52,6 +52,8 @@ import {
   zQwenImageLayeredTrainerOutput,
   zQwenImageTrainerInput,
   zQwenImageTrainerOutput,
+  zQwenImageTrainerV2Input,
+  zQwenImageTrainerV2Output,
   zRecraftV3CreateStyleInput,
   zRecraftV3CreateStyleOutput,
   zTurboFluxTrainerInput,
@@ -97,6 +99,11 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     endpoint: z.literal("fal-ai/flux-lora-portrait-trainer"),
     input: zFluxLoraPortraitTrainerInput,
     output: zFluxLoraPortraitTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-trainer-v2"),
+    input: zQwenImageTrainerV2Input,
+    output: zQwenImageTrainerV2Output,
   }),
   z.object({
     endpoint: z.literal("fal-ai/z-image-base-trainer"),

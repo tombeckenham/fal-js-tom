@@ -108,6 +108,10 @@ import type {
   V2InpaintOutput,
   V2TextToMusicInput,
   V2TextToMusicOutput,
+  WorkflowUtilitiesAudioCompressorInput,
+  WorkflowUtilitiesAudioCompressorOutput,
+  WorkflowUtilitiesImpulseResponseInput,
+  WorkflowUtilitiesImpulseResponseOutput,
   YueInput,
   YueOutput,
   ZonosInput,
@@ -115,6 +119,14 @@ import type {
 } from "./types.gen";
 
 export type AudioEndpointMap = {
+  "fal-ai/workflow-utilities/impulse-response": {
+    input: WorkflowUtilitiesImpulseResponseInput;
+    output: WorkflowUtilitiesImpulseResponseOutput;
+  };
+  "fal-ai/workflow-utilities/audio-compressor": {
+    input: WorkflowUtilitiesAudioCompressorInput;
+    output: WorkflowUtilitiesAudioCompressorOutput;
+  };
   "fal-ai/elevenlabs/voice-changer": {
     input: ElevenlabsVoiceChangerInput;
     output: ElevenlabsVoiceChangerOutput;
