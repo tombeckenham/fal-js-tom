@@ -9,17 +9,17 @@ export type ClientOptions = {
  */
 export type UsageInfo = {
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number | unknown;
+  prompt_tokens?: number;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number | unknown;
+  completion_tokens?: number;
   /**
    * Cost
    */
@@ -31,9 +31,11 @@ export type UsageInfo = {
  */
 export type RouterAudioOutput = {
   /**
+   * Usage
+   *
    * Token usage information
    */
-  usage: UsageInfo | unknown;
+  usage?: UsageInfo;
   /**
    * Output
    *
@@ -53,17 +55,17 @@ export type RouterAudioInput = {
    */
   prompt: string;
   /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string;
+  /**
    * Reasoning
    *
    * Should reasoning be the part of the final answer.
    */
   reasoning?: boolean;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
   /**
    * Model
    *
@@ -71,11 +73,11 @@ export type RouterAudioInput = {
    */
   model: string;
   /**
-   * Max Tokens
+   * Audio Url
    *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
+   * URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.
    */
-  max_tokens?: number | unknown;
+  audio_url: string;
   /**
    * Temperature
    *
@@ -83,11 +85,11 @@ export type RouterAudioInput = {
    */
   temperature?: number;
   /**
-   * Audio Url
+   * Max Tokens
    *
-   * URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  audio_url: string;
+  max_tokens?: number;
 };
 
 /**

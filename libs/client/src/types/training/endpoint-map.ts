@@ -50,6 +50,8 @@ import type {
   QwenImageLayeredTrainerOutput,
   QwenImageTrainerInput,
   QwenImageTrainerOutput,
+  QwenImageTrainerV2Input,
+  QwenImageTrainerV2Output,
   RecraftV3CreateStyleInput,
   RecraftV3CreateStyleOutput,
   TurboFluxTrainerInput,
@@ -90,6 +92,10 @@ export type TrainingEndpointMap = {
   "fal-ai/flux-lora-portrait-trainer": {
     input: FluxLoraPortraitTrainerInput;
     output: FluxLoraPortraitTrainerOutput;
+  };
+  "fal-ai/qwen-image-trainer-v2": {
+    input: QwenImageTrainerV2Input;
+    output: QwenImageTrainerV2Output;
   };
   "fal-ai/z-image-base-trainer": {
     input: ZImageBaseTrainerInput;

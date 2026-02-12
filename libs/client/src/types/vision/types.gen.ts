@@ -257,11 +257,11 @@ export type Florence2LargeRegionToCategoryInput = {
  */
 export type Region = {
   /**
-   * Y1
+   * Y2
    *
-   * Y-coordinate of the top-left corner
+   * Y-coordinate of the bottom-right corner
    */
-  y1: number;
+  y2: number;
   /**
    * X2
    *
@@ -275,11 +275,11 @@ export type Region = {
    */
   x1: number;
   /**
-   * Y2
+   * Y1
    *
-   * Y-coordinate of the bottom-right corner
+   * Y-coordinate of the top-left corner
    */
-  y2: number;
+  y1: number;
 };
 
 /**
@@ -1076,11 +1076,11 @@ export type UsageInfo = {
    */
   output_tokens: number;
   /**
-   * Decode Time Ms
+   * Prefill Time Ms
    *
-   * Time taken for decoding in milliseconds
+   * Time taken for prefill in milliseconds
    */
-  decode_time_ms: number;
+  prefill_time_ms: number;
   /**
    * Input Tokens
    *
@@ -1094,11 +1094,11 @@ export type UsageInfo = {
    */
   ttft_ms: number;
   /**
-   * Prefill Time Ms
+   * Decode Time Ms
    *
-   * Time taken for prefill in milliseconds
+   * Time taken for decoding in milliseconds
    */
-  prefill_time_ms: number;
+  decode_time_ms: number;
 };
 
 /**
@@ -1112,17 +1112,17 @@ export type Moondream3PreviewCaptionInput = {
    */
   top_p?: number;
   /**
-   * Length
-   *
-   * Length of the caption to generate
-   */
-  length?: "short" | "normal" | "long";
-  /**
    * Temperature
    *
    * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
    */
   temperature?: number;
+  /**
+   * Length
+   *
+   * Length of the caption to generate
+   */
+  length?: "short" | "normal" | "long";
   /**
    * Image URL
    *
@@ -1144,17 +1144,17 @@ export type Moondream3PreviewQueryOutput = {
    */
   finish_reason: string;
   /**
-   * Reasoning
-   *
-   * Detailed reasoning behind the answer, if enabled
-   */
-  reasoning?: string;
-  /**
    * Output
    *
    * Answer to the query about the image
    */
   output: string;
+  /**
+   * Reasoning
+   *
+   * Detailed reasoning behind the answer, if enabled
+   */
+  reasoning?: string;
   /**
    * Usage Info
    *
@@ -1254,17 +1254,17 @@ export type Moondream3PreviewPointOutput = {
  */
 export type ImageFile = {
   /**
-   * Height
-   *
-   * The height of the image
-   */
-  height?: number;
-  /**
    * File Size
    *
    * The size of the file in bytes.
    */
   file_size?: number;
+  /**
+   * Height
+   *
+   * The height of the image
+   */
+  height?: number;
   /**
    * Url
    *
@@ -1414,17 +1414,17 @@ export type Moondream3PreviewDetectInput = {
  */
 export type UsageInfoType2 = {
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number | unknown;
+  prompt_tokens?: number;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number | unknown;
+  completion_tokens?: number;
   /**
    * Cost
    */
@@ -1436,9 +1436,11 @@ export type UsageInfoType2 = {
  */
 export type RouterVisionOutput = {
   /**
+   * Usage
+   *
    * Token usage information
    */
-  usage: UsageInfoType2 | unknown;
+  usage?: UsageInfoType2;
   /**
    * Output
    *
@@ -1458,17 +1460,17 @@ export type RouterVisionInput = {
    */
   prompt: string;
   /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string;
+  /**
    * Reasoning
    *
    * Should reasoning be the part of the final answer.
    */
   reasoning?: boolean;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
   /**
    * Model
    *
@@ -1480,7 +1482,7 @@ export type RouterVisionInput = {
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number | unknown;
+  max_tokens?: number;
   /**
    * Temperature
    *

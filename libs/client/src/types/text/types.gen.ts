@@ -9,9 +9,11 @@ export type ClientOptions = {
  */
 export type RouterVideoOutput = {
   /**
+   * Usage
+   *
    * Token usage information
    */
-  usage: UsageInfo | unknown;
+  usage?: UsageInfo;
   /**
    * Output
    *
@@ -25,17 +27,17 @@ export type RouterVideoOutput = {
  */
 export type UsageInfo = {
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number | unknown;
+  prompt_tokens?: number;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number | unknown;
+  completion_tokens?: number;
   /**
    * Cost
    */
@@ -57,19 +59,19 @@ export type RouterVideoInput = {
    *
    * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
    */
-  video_urls?: Array<string> | unknown;
+  video_urls?: Array<string>;
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string;
   /**
    * Reasoning
    *
    * Should reasoning be the part of the final answer.
    */
   reasoning?: boolean;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
   /**
    * Model
    *
@@ -81,7 +83,7 @@ export type RouterVideoInput = {
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number | unknown;
+  max_tokens?: number;
   /**
    * Temperature
    *
@@ -95,9 +97,11 @@ export type RouterVideoInput = {
  */
 export type RouterVideoEnterpriseOutput = {
   /**
+   * Usage
+   *
    * Token usage information
    */
-  usage: UsageInfo | unknown;
+  usage?: UsageInfo;
   /**
    * Output
    *
@@ -121,19 +125,19 @@ export type RouterVideoEnterpriseInput = {
    *
    * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
    */
-  video_urls?: Array<string> | unknown;
+  video_urls?: Array<string>;
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string;
   /**
    * Reasoning
    *
    * Should reasoning be the part of the final answer.
    */
   reasoning?: boolean;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
   /**
    * Model
    *
@@ -145,7 +149,7 @@ export type RouterVideoEnterpriseInput = {
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number | unknown;
+  max_tokens?: number;
   /**
    * Temperature
    *
@@ -858,11 +862,11 @@ export type ElevenlabsSpeechToTextOutput = {
  */
 export type TranscriptionWord = {
   /**
-   * Text
+   * End
    *
-   * The transcribed word or audio event
+   * End time in seconds
    */
-  text: string;
+  end: number | unknown;
   /**
    * Start
    *
@@ -876,11 +880,11 @@ export type TranscriptionWord = {
    */
   type: string;
   /**
-   * End
+   * Text
    *
-   * End time in seconds
+   * The transcribed word or audio event
    */
-  end: number | unknown;
+  text: string;
   /**
    * Speaker Id
    *

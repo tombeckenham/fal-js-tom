@@ -38,6 +38,10 @@ import type {
   MinimaxSpeech26HdOutput,
   MinimaxSpeech26TurboInput,
   MinimaxSpeech26TurboOutput,
+  MinimaxSpeech28HdInput,
+  MinimaxSpeech28HdOutput,
+  MinimaxSpeech28TurboInput,
+  MinimaxSpeech28TurboOutput,
   MinimaxVoiceCloneInput,
   MinimaxVoiceCloneOutput,
   MinimaxVoiceDesignInput,
@@ -66,6 +70,14 @@ export type SpeechEndpointMap = {
   "fal-ai/chatterbox/speech-to-speech": {
     input: ChatterboxSpeechToSpeechInput;
     output: ChatterboxSpeechToSpeechOutput;
+  };
+  "fal-ai/minimax/speech-2.8-hd": {
+    input: MinimaxSpeech28HdInput;
+    output: MinimaxSpeech28HdOutput;
+  };
+  "fal-ai/minimax/speech-2.8-turbo": {
+    input: MinimaxSpeech28TurboInput;
+    output: MinimaxSpeech28TurboOutput;
   };
   "fal-ai/qwen-3-tts/voice-design/1.7b": {
     input: Qwen3TtsVoiceDesign17bInput;

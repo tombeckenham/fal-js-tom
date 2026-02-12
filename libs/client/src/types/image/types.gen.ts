@@ -6117,12 +6117,6 @@ export type StableDiffusionV3MediumInput = {
    */
   guidance_scale?: number;
   /**
-   * Num Inference Steps
-   *
-   * The number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
    * Seed
    *
    *
@@ -6131,6 +6125,12 @@ export type StableDiffusionV3MediumInput = {
    *
    */
   seed?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
   /**
    * Negative Prompt
    *
@@ -6195,11 +6195,11 @@ export type FluxLoraInpaintingInput = {
    */
   prompt: string;
   /**
-   * Num Images
+   * Acceleration
    *
-   * The number of images to generate. This is always set to 1 for streaming output.
+   * Acceleration level for image generation. 'regular' balances speed and quality.
    */
-  num_images?: number;
+  acceleration?: "none" | "regular";
   /**
    * Image Size
    *
@@ -6214,6 +6214,36 @@ export type FluxLoraInpaintingInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
+   * Loras
+   *
+   *
+   * The LoRAs to use for the image generation. You can use any number of LoRAs
+   * and they will be merged together to generate the final image.
+   *
+   */
+  loras?: Array<LoraWeight>;
+  /**
+   * Guidance scale (CFG)
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt when looking for a related image to show you.
+   *
+   */
+  guidance_scale?: number;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Num Images
+   *
+   * The number of images to generate. This is always set to 1 for streaming output.
+   */
+  num_images?: number;
+  /**
    * Output Format
    *
    * The format of the generated image.
@@ -6226,15 +6256,6 @@ export type FluxLoraInpaintingInput = {
    */
   image_url: string;
   /**
-   * Loras
-   *
-   *
-   * The LoRAs to use for the image generation. You can use any number of LoRAs
-   * and they will be merged together to generate the final image.
-   *
-   */
-  loras?: Array<LoraWeight>;
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
@@ -6246,15 +6267,6 @@ export type FluxLoraInpaintingInput = {
    * The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.
    */
   strength?: number;
-  /**
-   * Guidance scale (CFG)
-   *
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
-   * the model to stick to your prompt when looking for a related image to show you.
-   *
-   */
-  guidance_scale?: number;
   /**
    * Num Inference Steps
    *
@@ -6278,12 +6290,6 @@ export type FluxLoraInpaintingInput = {
    *
    */
   seed?: number;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
 };
 
 /**
@@ -6547,18 +6553,6 @@ export type OmnigenV1Output = {
    */
   images: Array<ImageType2>;
   /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
    * Seed
    *
    *
@@ -6567,6 +6561,18 @@ export type OmnigenV1Output = {
    *
    */
   seed: number;
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
 };
 
 /**
@@ -6622,11 +6628,7 @@ export type OmnigenV1Input = {
   /**
    * Sync Mode
    *
-   *
-   * If set to true, the function will wait for the image to be generated and uploaded
-   * before returning the response. This will increase the latency of the function but
-   * it allows you to get the image directly in the response without going through the CDN.
-   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
   /**
@@ -7697,23 +7699,17 @@ export type FluxProV11UltraFinetunedInput = {
    */
   safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
   /**
-   * Image Prompt Strength
-   *
-   * The strength of the image prompt, between 0 and 1.
-   */
-  image_prompt_strength?: number;
-  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
   /**
-   * Enhance Prompt
+   * Image Prompt Strength
    *
-   * Whether to enhance the prompt for better results.
+   * The strength of the image prompt, between 0 and 1.
    */
-  enhance_prompt?: boolean;
+  image_prompt_strength?: number;
   /**
    * Raw
    *
@@ -7721,11 +7717,11 @@ export type FluxProV11UltraFinetunedInput = {
    */
   raw?: boolean;
   /**
-   * Num Images
+   * Enhance Prompt
    *
-   * The number of images to generate.
+   * Whether to enhance the prompt for better results.
    */
-  num_images?: number;
+  enhance_prompt?: boolean;
   /**
    * Aspect Ratio
    *
@@ -7742,6 +7738,12 @@ export type FluxProV11UltraFinetunedInput = {
     | "9:16"
     | "9:21"
     | string;
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -8151,17 +8153,17 @@ export type Imagen3Input = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated image
-   */
-  aspect_ratio?: "1:1" | "16:9" | "9:16" | "3:4" | "4:3";
-  /**
    * Num Images
    *
    * Number of images to generate (1-4)
    */
   num_images?: number;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated image
+   */
+  aspect_ratio?: "1:1" | "16:9" | "9:16" | "3:4" | "4:3";
   /**
    * Seed
    *
@@ -8203,17 +8205,17 @@ export type Imagen3FastInput = {
    */
   prompt: string;
   /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated image
-   */
-  aspect_ratio?: "1:1" | "16:9" | "9:16" | "3:4" | "4:3";
-  /**
    * Num Images
    *
    * Number of images to generate (1-4)
    */
   num_images?: number;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated image
+   */
+  aspect_ratio?: "1:1" | "16:9" | "9:16" | "3:4" | "4:3";
   /**
    * Seed
    *
@@ -8245,18 +8247,6 @@ export type FluxControlLoraDepthOutput = {
    */
   images: Array<ImageType2>;
   /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
    * Seed
    *
    *
@@ -8265,6 +8255,18 @@ export type FluxControlLoraDepthOutput = {
    *
    */
   seed: number;
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
 };
 
 /**
@@ -8303,6 +8305,12 @@ export type FluxControlLoraDepthInput = {
    */
   control_lora_strength?: number;
   /**
+   * Output Format
+   *
+   * The format of the generated image.
+   */
+  output_format?: "jpeg" | "png";
+  /**
    * Preprocess Depth
    *
    *
@@ -8311,12 +8319,6 @@ export type FluxControlLoraDepthInput = {
    *
    */
   preprocess_depth?: boolean;
-  /**
-   * Output Format
-   *
-   * The format of the generated image.
-   */
-  output_format?: "jpeg" | "png";
   /**
    * Sync Mode
    *
@@ -8332,23 +8334,6 @@ export type FluxControlLoraDepthInput = {
    *
    */
   loras?: Array<LoraWeight>;
-  /**
-   * Guidance scale (CFG)
-   *
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
-   * the model to stick to your prompt when looking for a related image to show you.
-   *
-   */
-  guidance_scale?: number;
-  /**
-   * Control Lora Image Url
-   *
-   *
-   * The image to use for control lora. This is used to control the style of the generated image.
-   *
-   */
-  control_lora_image_url: string;
   /**
    * Enable Safety Checker
    *
@@ -8370,6 +8355,23 @@ export type FluxControlLoraDepthInput = {
    *
    */
   seed?: number;
+  /**
+   * Guidance scale (CFG)
+   *
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt when looking for a related image to show you.
+   *
+   */
+  guidance_scale?: number;
+  /**
+   * Control Lora Image Url
+   *
+   *
+   * The image to use for control lora. This is used to control the style of the generated image.
+   *
+   */
+  control_lora_image_url: string;
 };
 
 /**
@@ -8532,11 +8534,9 @@ export type IdeogramV2aTurboOutput = {
  */
 export type IdeogramV2aTurboInput = {
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * Prompt
    */
-  sync_mode?: boolean;
+  prompt: string;
   /**
    * Aspect Ratio
    *
@@ -8555,9 +8555,11 @@ export type IdeogramV2aTurboInput = {
     | "3:2"
     | "2:3";
   /**
-   * Prompt
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  prompt: string;
+  sync_mode?: boolean;
   /**
    * Style
    *
@@ -8599,11 +8601,9 @@ export type IdeogramV2aOutput = {
  */
 export type IdeogramV2aInput = {
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * Prompt
    */
-  sync_mode?: boolean;
+  prompt: string;
   /**
    * Aspect Ratio
    *
@@ -8622,9 +8622,11 @@ export type IdeogramV2aInput = {
     | "3:2"
     | "2:3";
   /**
-   * Prompt
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  prompt: string;
+  sync_mode?: boolean;
   /**
    * Style
    *
@@ -9777,25 +9779,37 @@ export type GptImage1TextToImageOutput = {
    *
    * The generated images.
    */
-  images: Array<ImageFile>;
+  images: Array<ImageFileType2>;
 };
 
 /**
  * ImageFile
  */
-export type ImageFile = {
+export type ImageFileType2 = {
   /**
    * File Size
    *
    * The size of the file in bytes.
    */
-  file_size?: number;
+  file_size?: number | unknown;
   /**
    * Height
    *
    * The height of the image
    */
-  height?: number;
+  height?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
   /**
    * Url
    *
@@ -9807,25 +9821,7 @@ export type ImageFile = {
    *
    * The width of the image
    */
-  width?: number;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
+  width?: number | unknown;
 };
 
 /**
@@ -10454,18 +10450,6 @@ export type MinimaxImage01Input = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * Number of images to generate (1-9)
-   */
-  num_images?: number;
-  /**
-   * Prompt Optimizer
-   *
-   * Whether to enable automatic prompt optimization
-   */
-  prompt_optimizer?: boolean;
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated image
@@ -10479,6 +10463,18 @@ export type MinimaxImage01Input = {
     | "3:4"
     | "9:16"
     | "21:9";
+  /**
+   * Prompt Optimizer
+   *
+   * Whether to enable automatic prompt optimization
+   */
+  prompt_optimizer?: boolean;
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9)
+   */
+  num_images?: number;
 };
 
 /**
@@ -10537,6 +10533,12 @@ export type FluxLoraStreamInput = {
    */
   num_images?: number;
   /**
+   * Acceleration
+   *
+   * Acceleration level for image generation. 'regular' balances speed and quality.
+   */
+  acceleration?: "none" | "regular";
+  /**
    * Image Size
    *
    * The size of the generated image.
@@ -10556,6 +10558,12 @@ export type FluxLoraStreamInput = {
    */
   output_format?: "jpeg" | "png";
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
    * Loras
    *
    *
@@ -10564,12 +10572,6 @@ export type FluxLoraStreamInput = {
    *
    */
   loras?: Array<LoraWeight>;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
   /**
    * Guidance scale (CFG)
    *
@@ -10586,6 +10588,12 @@ export type FluxLoraStreamInput = {
    */
   num_inference_steps?: number;
   /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
    * Seed
    *
    *
@@ -10594,12 +10602,6 @@ export type FluxLoraStreamInput = {
    *
    */
   seed?: number;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
 };
 
 /**
@@ -10767,6 +10769,54 @@ export type Imagen4PreviewUltraOutput = {
 };
 
 /**
+ * ImageFile
+ */
+export type ImageFile = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number;
+  /**
+   * Height
+   *
+   * The height of the image
+   */
+  height?: number;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * Width
+   *
+   * The width of the image
+   */
+  width?: number;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string;
+  /**
+   * File Data
+   *
+   * File data
+   */
+  file_data?: Blob | File;
+};
+
+/**
  * Imagen4TextToImageUltraInput
  */
 export type Imagen4PreviewUltraInput = {
@@ -10864,17 +10914,17 @@ export type BagelInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Seed
-   *
-   * The seed to use for the generation.
-   */
-  seed?: number;
-  /**
    * Use Thought
    *
    * Whether to use thought tokens for generation. If set to true, the model will "think" to potentially improve generation quality. Increases generation time and increases the cost by 20%.
    */
   use_thought?: boolean;
+  /**
+   * Seed
+   *
+   * The seed to use for the generation.
+   */
+  seed?: number;
 };
 
 /**
@@ -10927,12 +10977,6 @@ export type FluxProKontextTextToImageInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -10947,6 +10991,12 @@ export type FluxProKontextTextToImageInput = {
     | "3:4"
     | "9:16"
     | "9:21";
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -11041,12 +11091,6 @@ export type FluxProKontextMaxTextToImageInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -11061,6 +11105,12 @@ export type FluxProKontextMaxTextToImageInput = {
     | "3:4"
     | "9:16"
     | "9:21";
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -12423,6 +12473,18 @@ export type WanV22A14bTextToImageInput = {
    */
   shift?: number;
   /**
+   * Acceleration
+   *
+   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+   */
+  acceleration?: "none" | "regular";
+  /**
+   * Number of Inference Steps
+   *
+   * Number of inference steps for sampling. Higher values give better quality but take longer.
+   */
+  num_inference_steps?: number;
+  /**
    * Image Size
    *
    * The size of the generated image.
@@ -12436,18 +12498,6 @@ export type WanV22A14bTextToImageInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Acceleration
-   *
-   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-   */
-  acceleration?: "none" | "regular";
-  /**
-   * Guidance Scale (1st Stage)
-   *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
-   */
-  guidance_scale?: number;
-  /**
    * Enable Output Safety Checker
    *
    * If set to true, output video will be checked for safety after generation.
@@ -12460,23 +12510,23 @@ export type WanV22A14bTextToImageInput = {
    */
   guidance_scale_2?: number;
   /**
-   * Enable Safety Checker
+   * Guidance Scale (1st Stage)
    *
-   * If set to true, input data will be checked for safety before processing.
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
    */
-  enable_safety_checker?: boolean;
-  /**
-   * Number of Inference Steps
-   *
-   * Number of inference steps for sampling. Higher values give better quality but take longer.
-   */
-  num_inference_steps?: number;
+  guidance_scale?: number;
   /**
    * Seed
    *
    * Random seed for reproducibility. If None, a random seed is chosen.
    */
   seed?: number;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
   /**
    * Negative Prompt
    *
@@ -12539,17 +12589,17 @@ export type WanV225bTextToImageInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Negative Prompt
+   * Number of Inference Steps
    *
-   * Negative prompt for video generation.
+   * Number of inference steps for sampling. Higher values give better quality but take longer.
    */
-  negative_prompt?: string;
+  num_inference_steps?: number;
   /**
-   * Guidance Scale
+   * Image Format
    *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
+   * The format of the output image.
    */
-  guidance_scale?: number;
+  image_format?: "png" | "jpeg";
   /**
    * Enable Output Safety Checker
    *
@@ -12557,17 +12607,11 @@ export type WanV225bTextToImageInput = {
    */
   enable_output_safety_checker?: boolean;
   /**
-   * Enable Safety Checker
+   * Guidance Scale
    *
-   * If set to true, input data will be checked for safety before processing.
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
    */
-  enable_safety_checker?: boolean;
-  /**
-   * Number of Inference Steps
-   *
-   * Number of inference steps for sampling. Higher values give better quality but take longer.
-   */
-  num_inference_steps?: number;
+  guidance_scale?: number;
   /**
    * Seed
    *
@@ -12575,11 +12619,17 @@ export type WanV225bTextToImageInput = {
    */
   seed?: number;
   /**
-   * Image Format
+   * Enable Safety Checker
    *
-   * The format of the output image.
+   * If set to true, input data will be checked for safety before processing.
    */
-  image_format?: "png" | "jpeg";
+  enable_safety_checker?: boolean;
+  /**
+   * Negative Prompt
+   *
+   * Negative prompt for video generation.
+   */
+  negative_prompt?: string;
   /**
    * Enable Prompt Expansion
    *
@@ -12644,17 +12694,23 @@ export type WanV22A14bTextToImageLoraOutput = {
  */
 export type WanV22A14bTextToImageLoraInput = {
   /**
+   * Prompt
+   *
+   * The text prompt to guide image generation.
+   */
+  prompt: string;
+  /**
    * Shift
    *
    * Shift value for the image. Must be between 1.0 and 10.0.
    */
   shift?: number;
   /**
-   * Prompt
+   * Acceleration
    *
-   * The text prompt to guide image generation.
+   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
    */
-  prompt: string;
+  acceleration?: "none" | "regular";
   /**
    * Image Size
    *
@@ -12669,12 +12725,6 @@ export type WanV22A14bTextToImageLoraInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Acceleration
-   *
-   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-   */
-  acceleration?: "none" | "regular";
-  /**
    * Reverse Video
    *
    * If true, the video will be reversed.
@@ -12687,29 +12737,29 @@ export type WanV22A14bTextToImageLoraInput = {
    */
   loras?: Array<LoRaWeight>;
   /**
-   * Guidance Scale (1st Stage)
-   *
-   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
-   */
-  guidance_scale?: number;
-  /**
    * Enable Safety Checker
    *
    * If set to true, input data will be checked for safety before processing.
    */
   enable_safety_checker?: boolean;
   /**
-   * Negative Prompt
+   * Guidance Scale (1st Stage)
    *
-   * Negative prompt for video generation.
+   * Classifier-free guidance scale. Higher values give better adherence to the prompt but may decrease quality.
    */
-  negative_prompt?: string;
+  guidance_scale?: number;
   /**
    * Image Format
    *
    * The format of the output image.
    */
   image_format?: "png" | "jpeg";
+  /**
+   * Negative Prompt
+   *
+   * Negative prompt for video generation.
+   */
+  negative_prompt?: string;
   /**
    * Enable Output Safety Checker
    *
@@ -12729,17 +12779,17 @@ export type WanV22A14bTextToImageLoraInput = {
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Number of Inference Steps
-   *
-   * Number of inference steps for sampling. Higher values give better quality but take longer.
-   */
-  num_inference_steps?: number;
-  /**
    * Seed
    *
    * Random seed for reproducibility. If None, a random seed is chosen.
    */
   seed?: number;
+  /**
+   * Number of Inference Steps
+   *
+   * Number of inference steps for sampling. Higher values give better quality but take longer.
+   */
+  num_inference_steps?: number;
 };
 
 /**
@@ -12765,11 +12815,11 @@ export type BytedanceDreaminaV31TextToImageOutput = {
  */
 export type BytedanceDreaminaV31TextToImageInput = {
   /**
-   * Sync Mode
+   * Prompt
    *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * The text prompt used to generate the image
    */
-  sync_mode?: boolean;
+  prompt: string;
   /**
    * Num Images
    *
@@ -12790,11 +12840,11 @@ export type BytedanceDreaminaV31TextToImageInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Prompt
+   * Sync Mode
    *
-   * The text prompt used to generate the image
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  prompt: string;
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -13577,6 +13627,12 @@ export type ReveTextToImageInput = {
    */
   prompt: string;
   /**
+   * Number of Images
+   *
+   * Number of images to generate
+   */
+  num_images?: number;
+  /**
    * Aspect Ratio
    *
    * The desired aspect ratio of the generated image.
@@ -13588,12 +13644,6 @@ export type ReveTextToImageInput = {
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
-  /**
-   * Number of Images
-   *
-   * Number of images to generate
-   */
-  num_images?: number;
   /**
    * Output Format
    *
@@ -13611,7 +13661,7 @@ export type GptImage1MiniOutput = {
    *
    * The generated images.
    */
-  images: Array<ImageFile>;
+  images: Array<ImageFileType2>;
 };
 
 /**
@@ -13619,11 +13669,11 @@ export type GptImage1MiniOutput = {
  */
 export type GptImage1MiniInput = {
   /**
-   * Prompt
+   * Background
    *
-   * The prompt for image generation
+   * Background for the generated image
    */
-  prompt: string;
+  background?: "auto" | "transparent" | "opaque";
   /**
    * Number of Images
    *
@@ -13637,11 +13687,11 @@ export type GptImage1MiniInput = {
    */
   image_size?: "auto" | "1024x1024" | "1536x1024" | "1024x1536";
   /**
-   * Background
+   * Prompt
    *
-   * Background for the generated image
+   * The prompt for image generation
    */
-  background?: "auto" | "transparent" | "opaque";
+  prompt: string;
   /**
    * Quality
    *
@@ -13831,7 +13881,7 @@ export type FiboGenerateInput = {
   /**
    * The structured prompt to generate an image from.
    */
-  structured_prompt?: StructuredPrompt | unknown;
+  structured_prompt?: StructuredPromptType2 | unknown;
 };
 
 /**
@@ -13856,30 +13906,6 @@ export type Lighting = {
    * The direction of the lighting in the image to be generated.
    */
   direction?: string | unknown;
-};
-
-/**
- * Aesthetics
- */
-export type Aesthetics = {
-  /**
-   * Composition
-   *
-   * The composition of the image to be generated.
-   */
-  composition?: string | unknown;
-  /**
-   * Mood Atmosphere
-   *
-   * The mood and atmosphere of the image to be generated.
-   */
-  mood_atmosphere?: string | unknown;
-  /**
-   * Color Scheme
-   *
-   * The color scheme of the image to be generated.
-   */
-  color_scheme?: string | unknown;
 };
 
 /**
@@ -13910,6 +13936,30 @@ export type PhotographicCharacteristics = {
    * The depth of field in the image to be generated.
    */
   depth_of_field?: string | unknown;
+};
+
+/**
+ * Aesthetics
+ */
+export type Aesthetics = {
+  /**
+   * Composition
+   *
+   * The composition of the image to be generated.
+   */
+  composition?: string | unknown;
+  /**
+   * Mood Atmosphere
+   *
+   * The mood and atmosphere of the image to be generated.
+   */
+  mood_atmosphere?: string | unknown;
+  /**
+   * Color Scheme
+   *
+   * The color scheme of the image to be generated.
+   */
+  color_scheme?: string | unknown;
 };
 
 /**
@@ -14011,7 +14061,7 @@ export type PromptObject = {
 /**
  * StructuredPrompt
  */
-export type StructuredPrompt = {
+export type StructuredPromptType2 = {
   /**
    * Background Setting
    *
@@ -14043,19 +14093,19 @@ export type StructuredPrompt = {
    */
   objects?: Array<PromptObject> | unknown;
   /**
-   * Style Medium
-   *
-   * The style medium of the image to be generated.
+   * The aesthetics of the image to be generated.
    */
-  style_medium?: string | unknown;
+  aesthetics?: Aesthetics | unknown;
   /**
    * The photographic characteristics of the image to be generated.
    */
   photographic_characteristics?: PhotographicCharacteristics | unknown;
   /**
-   * The aesthetics of the image to be generated.
+   * Style Medium
+   *
+   * The style medium of the image to be generated.
    */
-  aesthetics?: Aesthetics | unknown;
+  style_medium?: string | unknown;
   /**
    * The lighting of the image to be generated.
    */
@@ -14241,149 +14291,19 @@ export type NanoBananaProOutput = {
    *
    * The generated images.
    */
-  images: Array<ImageFileType2>;
+  images: Array<ImageFile>;
   /**
    * Description
    *
    * The description of the generated images.
    */
   description: string;
-};
-
-/**
- * ImageFile
- */
-export type ImageFileType2 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * Height
-   *
-   * The height of the image
-   */
-  height?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * Width
-   *
-   * The width of the image
-   */
-  width?: number | unknown;
 };
 
 /**
  * NanoBananaTextToImageInput
  */
 export type NanoBananaProInput = {
-  /**
-   * Prompt
-   *
-   * The text prompt to generate an image from.
-   */
-  prompt: string;
-  /**
-   * Resolution
-   *
-   * The resolution of the image to generate.
-   */
-  resolution?: "1K" | "2K" | "4K";
-  /**
-   * Enable Web Search
-   *
-   * Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image.
-   */
-  enable_web_search?: boolean;
-  /**
-   * Aspect Ratio
-   *
-   * The aspect ratio of the generated image.
-   */
-  aspect_ratio?:
-    | "21:9"
-    | "16:9"
-    | "3:2"
-    | "4:3"
-    | "5:4"
-    | "1:1"
-    | "4:5"
-    | "3:4"
-    | "2:3"
-    | "9:16";
-  /**
-   * Number of Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
-   * Output Format
-   *
-   * The format of the generated image.
-   */
-  output_format?: "jpeg" | "png" | "webp";
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Seed
-   *
-   * The seed for the random number generator.
-   */
-  seed?: number | unknown;
-  /**
-   * Limit Generations
-   *
-   * Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.
-   */
-  limit_generations?: boolean;
-};
-
-/**
- * NanoBananaTextToImageOutput
- */
-export type Gemini3ProImagePreviewOutput = {
-  /**
-   * Images
-   *
-   * The generated images.
-   */
-  images: Array<ImageFileType2>;
-  /**
-   * Description
-   *
-   * The description of the generated images.
-   */
-  description: string;
-};
-
-/**
- * NanoBananaTextToImageInput
- */
-export type Gemini3ProImagePreviewInput = {
   /**
    * Prompt
    *
@@ -14424,6 +14344,101 @@ export type Gemini3ProImagePreviewInput = {
     | "4:5"
     | "3:4"
     | "2:3"
+    | "9:16";
+  /**
+   * Output Format
+   *
+   * The format of the generated image.
+   */
+  output_format?: "jpeg" | "png" | "webp";
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Safety Tolerance
+   *
+   * The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+   */
+  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  /**
+   * Seed
+   *
+   * The seed for the random number generator.
+   */
+  seed?: number;
+  /**
+   * Limit Generations
+   *
+   * Experimental parameter to limit the number of generations from each round of prompting to 1. Set to `True` to to disregard any instructions in the prompt regarding the number of images to generate.
+   */
+  limit_generations?: boolean;
+};
+
+/**
+ * NanoBananaTextToImageOutput
+ */
+export type Gemini3ProImagePreviewOutput = {
+  /**
+   * Description
+   *
+   * The description of the generated images.
+   */
+  description: string;
+  /**
+   * Images
+   *
+   * The generated images.
+   */
+  images: Array<ImageFileType2>;
+};
+
+/**
+ * NanoBananaTextToImageInput
+ */
+export type Gemini3ProImagePreviewInput = {
+  /**
+   * Prompt
+   *
+   * The text prompt to generate an image from.
+   */
+  prompt: string;
+  /**
+   * Resolution
+   *
+   * The resolution of the image to generate.
+   */
+  resolution?: "1K" | "2K" | "4K";
+  /**
+   * Enable Web Search
+   *
+   * Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image.
+   */
+  enable_web_search?: boolean;
+  /**
+   * Number of Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio of the generated image. Use "auto" to let the model decide based on the prompt.
+   */
+  aspect_ratio?:
+    | "auto"
+    | "21:9"
+    | "16:9"
+    | "3:2"
+    | "4:3"
+    | "5:4"
+    | "1:1"
+    | "4:5"
+    | "3:4"
+    | "2:3"
     | "9:16"
     | unknown;
   /**
@@ -14438,6 +14453,12 @@ export type Gemini3ProImagePreviewInput = {
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Safety Tolerance
+   *
+   * The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+   */
+  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
   /**
    * Seed
    *
@@ -15304,6 +15325,18 @@ export type OvisImageOutput = {
    */
   images: Array<ImageType2>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -15312,18 +15345,6 @@ export type OvisImageOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -15374,11 +15395,29 @@ export type OvisImageInput = {
    */
   sync_mode?: boolean;
   /**
+   * Guidance Scale
+   *
+   * The guidance scale to use for the image generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Negative Prompt
+   *
+   * The negative prompt to generate an image from.
+   */
+  negative_prompt?: string;
   /**
    * Seed
    *
@@ -15388,24 +15427,6 @@ export type OvisImageInput = {
    *
    */
   seed?: number;
-  /**
-   * Guidance Scale
-   *
-   * The guidance scale to use for the image generation.
-   */
-  guidance_scale?: number;
-  /**
-   * Negative Prompt
-   *
-   * The negative prompt to generate an image from.
-   */
-  negative_prompt?: string;
-  /**
-   * Num Inference Steps
-   *
-   * The number of inference steps to perform.
-   */
-  num_inference_steps?: number;
 };
 
 /**
@@ -15864,6 +15885,18 @@ export type Flux2TurboOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -15872,18 +15905,6 @@ export type Flux2TurboOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -15928,11 +15949,11 @@ export type Flux2TurboInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance Scale
+   * Enable Prompt Expansion
    *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   * If set to true, the prompt will be expanded for better results.
    */
-  guidance_scale?: number;
+  enable_prompt_expansion?: boolean;
   /**
    * Seed
    *
@@ -15940,21 +15961,319 @@ export type Flux2TurboInput = {
    */
   seed?: number;
   /**
-   * Enable Prompt Expansion
-   *
-   * If set to true, the prompt will be expanded for better results.
-   */
-  enable_prompt_expansion?: boolean;
-  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
 };
 
 /**
- * GaiaOutputModel
+ * LightingDetails
+ *
+ * Lighting information for the image.
+ */
+export type LightingDetails = {
+  /**
+   * Shadows
+   *
+   * Describe the presence of shadows.
+   */
+  shadows?: string | unknown;
+  /**
+   * Conditions
+   *
+   * E.g., 'bright daylight', 'dim indoor', 'studio lighting', 'golden hour'.
+   */
+  conditions: string;
+  /**
+   * Direction
+   *
+   * E.g., 'front-lit', 'backlit', 'side-lit from left'.
+   */
+  direction: string;
+};
+
+/**
+ * AestheticsDetails
+ *
+ * Aesthetic analysis of the image.
+ */
+export type AestheticsDetails = {
+  /**
+   * Preference Score
+   *
+   * E.g., 'very low', 'low', 'medium', 'high', 'very high'.
+   */
+  preference_score: string;
+  /**
+   * Aesthetic Score
+   *
+   * E.g., 'very low', 'low', 'medium', 'high', 'very high'.
+   */
+  aesthetic_score: string;
+  /**
+   * Mood Atmosphere
+   *
+   * E.g., 'serene', 'energetic', 'mysterious', 'joyful'.
+   */
+  mood_atmosphere: string;
+  /**
+   * Composition
+   *
+   * E.g., 'rule of thirds', 'symmetrical', 'centered', 'leading lines'.
+   */
+  composition: string;
+  /**
+   * Color Scheme
+   *
+   * E.g., 'monochromatic blue', 'warm complementary colors', 'high contrast'.
+   */
+  color_scheme: string;
+};
+
+/**
+ * PhotographicCharacteristicsDetails
+ *
+ * Photographic characteristics of the image.
+ */
+export type PhotographicCharacteristicsDetails = {
+  /**
+   * Focus
+   *
+   * E.g., 'sharp focus on subject', 'soft focus', 'motion blur'.
+   */
+  focus: string;
+  /**
+   * Lens Focal Length
+   *
+   * E.g., 'wide-angle', 'telephoto', 'macro', 'fisheye'.
+   */
+  lens_focal_length: string;
+  /**
+   * Camera Angle
+   *
+   * E.g., 'eye-level', 'low angle', 'high angle', 'dutch angle'.
+   */
+  camera_angle: string;
+  /**
+   * Depth Of Field
+   *
+   * E.g., 'shallow', 'deep', 'bokeh background'.
+   */
+  depth_of_field: string;
+};
+
+/**
+ * ObjectDescription
+ *
+ * Detailed object description with all attributes.
+ */
+export type ObjectDescription = {
+  /**
+   * Clothing
+   *
+   * Describe attire.
+   */
+  clothing?: string | unknown;
+  /**
+   * Description
+   *
+   * Short description of the object.
+   */
+  description: string;
+  /**
+   * Skin Tone And Texture
+   *
+   * Describe the skin tone and texture.
+   */
+  skin_tone_and_texture?: string | unknown;
+  /**
+   * Appearance Details
+   *
+   * Any other notable visual details.
+   */
+  appearance_details?: string | unknown;
+  /**
+   * Number Of Objects
+   *
+   * The number of objects in the cluster.
+   */
+  number_of_objects?: number | unknown;
+  /**
+   * Expression
+   *
+   * Describe facial expression.
+   */
+  expression?: string | unknown;
+  /**
+   * Pose
+   *
+   * Describe the body position.
+   */
+  pose?: string | unknown;
+  /**
+   * Shape And Color
+   *
+   * Describe the basic shape and dominant color.
+   */
+  shape_and_color?: string | unknown;
+  /**
+   * Relationship
+   *
+   * Describe the relationship between the object and the other objects in the image.
+   */
+  relationship: string;
+  /**
+   * Texture
+   *
+   * E.g., 'smooth', 'rough', 'metallic', 'furry'.
+   */
+  texture?: string | unknown;
+  /**
+   * Gender
+   *
+   * Describe the gender of the human.
+   */
+  gender?: string | unknown;
+  /**
+   * Relative Size
+   *
+   * E.g., 'small', 'medium', 'large within frame'.
+   */
+  relative_size?: string | unknown;
+  /**
+   * Location
+   *
+   * E.g., 'center', 'top-left', 'bottom-right foreground'.
+   */
+  location: string;
+  /**
+   * Orientation
+   *
+   * Describe the orientation of the human.
+   */
+  orientation?: string | unknown;
+  /**
+   * Action
+   *
+   * Describe the action of the human.
+   */
+  action?: string | unknown;
+};
+
+/**
+ * TextRender
+ *
+ * Text rendering information in the image.
+ */
+export type TextRender = {
+  /**
+   * Text
+   *
+   * The text content.
+   */
+  text: string;
+  /**
+   * Font
+   *
+   * E.g., 'realistic', 'cartoonish', 'minimalist'.
+   */
+  font: string;
+  /**
+   * Color
+   *
+   * E.g., 'red', 'blue', 'green'.
+   */
+  color: string;
+  /**
+   * Location
+   *
+   * E.g., 'center', 'top-left', 'bottom-right foreground'.
+   */
+  location: string;
+  /**
+   * Appearance Details
+   *
+   * Any other notable visual details.
+   */
+  appearance_details?: string | unknown;
+  /**
+   * Size
+   *
+   * E.g., 'small', 'medium', 'large within frame'.
+   */
+  size: string;
+};
+
+/**
+ * StructuredPrompt
+ */
+export type StructuredPrompt = {
+  /**
+   * Background Setting
+   *
+   * Describe the overall environment, setting, or background, including any notable background elements.
+   */
+  background_setting: string;
+  /**
+   * Artistic Style
+   *
+   * describe specific artistic characteristics, 3 words maximum.
+   */
+  artistic_style: string;
+  /**
+   * Style Medium
+   *
+   * Identify the artistic style or medium.
+   */
+  style_medium?: string | unknown;
+  /**
+   * Text Render
+   *
+   * List of text renders in the image.
+   */
+  text_render?: Array<TextRender> | unknown;
+  /**
+   * Objects
+   *
+   * List of prominent foreground/midground objects.
+   */
+  objects: Array<ObjectDescription>;
+  /**
+   * Subject Emotions
+   *
+   * Explicitly describe any visible emotions or expressions on subjects.
+   */
+  subject_emotions?: string | unknown;
+  /**
+   * Details about photographic characteristics.
+   */
+  photographic_characteristics?: PhotographicCharacteristicsDetails | unknown;
+  aesthetics: AestheticsDetails;
+  lighting: LightingDetails;
+  /**
+   * Context
+   *
+   * Provide any additional context that helps understand the image better.
+   */
+  context: string;
+  /**
+   * Short Description
+   *
+   * A concise summary of the image content, 200 words maximum.
+   */
+  short_description: string;
+};
+
+/**
+ * FiboFastImageGenerationOutput
  */
 export type FiboLiteGenerateOutput = {
   /**
@@ -15966,32 +16285,19 @@ export type FiboLiteGenerateOutput = {
     [key: string]: unknown;
   }>;
   image: ImageType3;
-  /**
-   * Structured Prompt
-   *
-   * Current prompt.
-   */
-  structured_prompt: {
-    [key: string]: unknown;
-  };
+  structured_prompt: StructuredPrompt;
 };
 
 /**
- * GaiaLiteInputModel
+ * FiboFastImageGenerationInput
  */
 export type FiboLiteGenerateInput = {
   /**
    * Prompt
    *
-   * Prompt for image generation.
+   * The prompt to generate.
    */
   prompt?: string | unknown;
-  /**
-   * Steps Num
-   *
-   * Number of inference steps for Fibo Lite.
-   */
-  steps_num?: number;
   /**
    * Aspect Ratio
    *
@@ -16008,9 +16314,15 @@ export type FiboLiteGenerateInput = {
     | "9:16"
     | "16:9";
   /**
+   * Steps Num
+   *
+   * Number of inference steps.
+   */
+  steps_num?: number;
+  /**
    * Image Url
    *
-   * Reference image (file or URL).
+   * Input image URL
    */
   image_url?: string | unknown;
   /**
@@ -16022,11 +16334,17 @@ export type FiboLiteGenerateInput = {
   /**
    * Seed
    *
-   * Random seed for reproducibility.
+   * Seed for the random number generator.
    */
   seed?: number;
   /**
-   * The structured prompt to generate an image from.
+   * Negative Prompt
+   *
+   * Negative prompt for image generation.
+   */
+  negative_prompt?: string;
+  /**
+   * The structured prompt to generate.
    */
   structured_prompt?: StructuredPrompt | unknown;
 };
@@ -16108,6 +16426,18 @@ export type Flux2FlashOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -16116,18 +16446,6 @@ export type Flux2FlashOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -16172,11 +16490,11 @@ export type Flux2FlashInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance Scale
+   * Enable Prompt Expansion
    *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   * If set to true, the prompt will be expanded for better results.
    */
-  guidance_scale?: number;
+  enable_prompt_expansion?: boolean;
   /**
    * Seed
    *
@@ -16184,17 +16502,17 @@ export type Flux2FlashInput = {
    */
   seed?: number;
   /**
-   * Enable Prompt Expansion
-   *
-   * If set to true, the prompt will be expanded for better results.
-   */
-  enable_prompt_expansion?: boolean;
-  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
 };
 
 /**
@@ -16991,11 +17309,11 @@ export type Flux2Klein4bBaseInput = {
    */
   num_inference_steps?: number;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
   /**
    * Negative Prompt
    *
@@ -17003,11 +17321,11 @@ export type Flux2Klein4bBaseInput = {
    */
   negative_prompt?: string;
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
 };
 
 /**
@@ -17109,11 +17427,11 @@ export type Flux2Klein9bBaseInput = {
    */
   num_inference_steps?: number;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
   /**
    * Negative Prompt
    *
@@ -17121,11 +17439,11 @@ export type Flux2Klein9bBaseInput = {
    */
   negative_prompt?: string;
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
 };
 
 /**
@@ -17209,17 +17527,17 @@ export type Flux2Klein4bBaseLoraInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
-   * Loras
-   *
-   * List of LoRA weights to apply (maximum 3).
-   */
-  loras?: Array<FalAiFlux2KleinLoRaInput>;
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI. Output is not stored when this is True.
    */
   sync_mode?: boolean;
+  /**
+   * Loras
+   *
+   * List of LoRA weights to apply (maximum 3).
+   */
+  loras?: Array<FalAiFlux2KleinLoRaInput>;
   /**
    * Enable Safety Checker
    *
@@ -17233,11 +17551,11 @@ export type Flux2Klein4bBaseLoraInput = {
    */
   num_inference_steps?: number;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
   /**
    * Negative Prompt
    *
@@ -17245,11 +17563,11 @@ export type Flux2Klein4bBaseLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
 };
 
 /**
@@ -17351,17 +17669,17 @@ export type Flux2Klein9bBaseLoraInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
-   * Loras
-   *
-   * List of LoRA weights to apply (maximum 3).
-   */
-  loras?: Array<FalAiFlux2KleinLoRaInput>;
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI. Output is not stored when this is True.
    */
   sync_mode?: boolean;
+  /**
+   * Loras
+   *
+   * List of LoRA weights to apply (maximum 3).
+   */
+  loras?: Array<FalAiFlux2KleinLoRaInput>;
   /**
    * Enable Safety Checker
    *
@@ -17375,11 +17693,11 @@ export type Flux2Klein9bBaseLoraInput = {
    */
   num_inference_steps?: number;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
   /**
    * Negative Prompt
    *
@@ -17387,11 +17705,11 @@ export type Flux2Klein9bBaseLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
 };
 
 /**
@@ -17828,18 +18146,6 @@ export type GrokImagineImageOutput = {
  */
 export type GrokImagineImageInput = {
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Number of Images
-   *
-   * Number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Prompt
    *
    * Text description of the desired image.
@@ -17865,11 +18171,208 @@ export type GrokImagineImageInput = {
     | "9:20"
     | "1:2";
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Number of Images
+   *
+   * Number of images to generate.
+   */
+  num_images?: number;
+  /**
    * Output Format
    *
    * The format of the generated image.
    */
   output_format?: "jpeg" | "png" | "webp";
+};
+
+/**
+ * T2IO3ImageOutput
+ *
+ * Output model for Kling O3 Image Generation.
+ */
+export type KlingImageO3TextToImageOutput = {
+  /**
+   * Images
+   *
+   * Generated images
+   */
+  images: Array<Image>;
+};
+
+/**
+ * O3TextToImageRequest
+ *
+ * Request model for Kling O3 Text-to-Image Generation.
+ */
+export type KlingImageO3TextToImageInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for image generation. Max 2500 characters.
+   */
+  prompt: string;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of generated images.
+   */
+  aspect_ratio?:
+    | "16:9"
+    | "9:16"
+    | "1:1"
+    | "4:3"
+    | "3:4"
+    | "3:2"
+    | "2:3"
+    | "21:9";
+  /**
+   * Resolution
+   *
+   * Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res.
+   */
+  resolution?: "1K" | "2K" | "4K";
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9). Only used when result_type is 'single'.
+   */
+  num_images?: number;
+  /**
+   * Series Amount
+   *
+   * Number of images in series (2-9). Only used when result_type is 'series'.
+   */
+  series_amount?: number;
+  /**
+   * Result Type
+   *
+   * Result type. 'single' for one image, 'series' for a series of related images.
+   */
+  result_type?: "single" | "series";
+  /**
+   * Output Format
+   *
+   * The format of the generated image.
+   */
+  output_format?: "jpeg" | "png" | "webp";
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI.
+   */
+  sync_mode?: boolean;
+  /**
+   * Elements
+   *
+   * Optional: Elements (characters/objects) for face control. Reference in prompt as @Element1, @Element2, etc.
+   */
+  elements?: Array<ElementInput>;
+};
+
+/**
+ * ElementInput
+ *
+ * Element input for image generation with face/character control.
+ *
+ * Create an element by providing frontal_image_url (and optionally reference_image_urls).
+ * All fields are optional - provide what you have available.
+ */
+export type ElementInput = {
+  /**
+   * Reference Image Urls
+   *
+   * Additional reference images from different angles. 0-3 images supported. Optional.
+   */
+  reference_image_urls?: Array<string>;
+  /**
+   * Frontal Image Url
+   *
+   * The frontal image of the element (main view). Optional.
+   */
+  frontal_image_url?: string;
+};
+
+/**
+ * T2IV3ImageOutput
+ *
+ * Output model for Kling V3 Image Generation.
+ */
+export type KlingImageV3TextToImageOutput = {
+  /**
+   * Images
+   *
+   * Generated images
+   */
+  images: Array<Image>;
+};
+
+/**
+ * V3TextToImageRequest
+ *
+ * Request model for Kling V3 Text-to-Image Generation.
+ */
+export type KlingImageV3TextToImageInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for image generation. Max 2500 characters.
+   */
+  prompt: string;
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9).
+   */
+  num_images?: number;
+  /**
+   * Resolution
+   *
+   * Image generation resolution. 1K: standard, 2K: high-res.
+   */
+  resolution?: "1K" | "2K";
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of generated images.
+   */
+  aspect_ratio?:
+    | "16:9"
+    | "9:16"
+    | "1:1"
+    | "4:3"
+    | "3:4"
+    | "3:2"
+    | "2:3"
+    | "21:9";
+  /**
+   * Output Format
+   *
+   * The format of the generated image.
+   */
+  output_format?: "jpeg" | "png" | "webp";
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI.
+   */
+  sync_mode?: boolean;
+  /**
+   * Elements
+   *
+   * Optional: Elements (characters/objects) to include in the image for face control. Each element can have a frontal image and optionally reference images.
+   */
+  elements?: Array<ElementInput>;
+  /**
+   * Negative Prompt
+   *
+   * Negative text prompt. It is recommended to supplement negative prompt information through negative sentences directly within positive prompts.
+   */
+  negative_prompt?: string;
 };
 
 /**
@@ -17928,6 +18431,12 @@ export type FluxLoraInput = {
    */
   num_images?: number;
   /**
+   * Acceleration
+   *
+   * Acceleration level for image generation. 'regular' balances speed and quality.
+   */
+  acceleration?: "none" | "regular";
+  /**
    * Image Size
    *
    * The size of the generated image.
@@ -17947,6 +18456,12 @@ export type FluxLoraInput = {
    */
   output_format?: "jpeg" | "png";
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
    * Loras
    *
    *
@@ -17955,12 +18470,6 @@ export type FluxLoraInput = {
    *
    */
   loras?: Array<LoraWeight>;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
   /**
    * Guidance scale (CFG)
    *
@@ -17977,6 +18486,12 @@ export type FluxLoraInput = {
    */
   num_inference_steps?: number;
   /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
    * Seed
    *
    *
@@ -17985,12 +18500,6 @@ export type FluxLoraInput = {
    *
    */
   seed?: number;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
 };
 
 /**
@@ -18624,6 +19133,18 @@ export type StableDiffusionV35LargeOutput = {
    */
   images: Array<ImageType2>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -18632,18 +19153,6 @@ export type StableDiffusionV35LargeOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -19552,6 +20061,18 @@ export type Flux2Output = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -19560,18 +20081,6 @@ export type Flux2Output = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -19622,18 +20131,6 @@ export type Flux2Input = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance Scale
-   *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   * The seed to use for the generation. If not provided, a random seed will be used.
-   */
-  seed?: number;
-  /**
    * Enable Prompt Expansion
    *
    * If set to true, the prompt will be expanded for better results.
@@ -19651,6 +20148,18 @@ export type Flux2Input = {
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   * The seed to use for the generation. If not provided, a random seed will be used.
+   */
+  seed?: number;
 };
 
 /**
@@ -19670,6 +20179,18 @@ export type Flux2LoraOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -19678,18 +20199,6 @@ export type Flux2LoraOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -19734,17 +20243,35 @@ export type Flux2LoraInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
    * Loras
    *
    * List of LoRA weights to apply (maximum 3). Each LoRA can be a URL, HuggingFace repo ID, or local path.
    */
   loras?: Array<LoRaInput>;
   /**
-   * Sync Mode
+   * Enable Prompt Expansion
    *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * If set to true, the prompt will be expanded for better results.
    */
-  sync_mode?: boolean;
+  enable_prompt_expansion?: boolean;
+  /**
+   * Number of Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
   /**
    * Guidance Scale
    *
@@ -19757,24 +20284,6 @@ export type Flux2LoraInput = {
    * The seed to use for the generation. If not provided, a random seed will be used.
    */
   seed?: number;
-  /**
-   * Number of Inference Steps
-   *
-   * The number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Enable Prompt Expansion
-   *
-   * If set to true, the prompt will be expanded for better results.
-   */
-  enable_prompt_expansion?: boolean;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
 };
 
 /**
@@ -19967,12 +20476,6 @@ export type FluxProV11UltraInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -19989,11 +20492,17 @@ export type FluxProV11UltraInput = {
     | "9:21"
     | string;
   /**
-   * Enhance Prompt
+   * Num Images
    *
-   * Whether to enhance the prompt for better results.
+   * The number of images to generate.
    */
-  enhance_prompt?: boolean;
+  num_images?: number;
+  /**
+   * Raw
+   *
+   * Generate less processed, more natural-looking images.
+   */
+  raw?: boolean;
   /**
    * Output Format
    *
@@ -20019,11 +20528,11 @@ export type FluxProV11UltraInput = {
    */
   safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
   /**
-   * Image Prompt Strength
+   * Enable Safety Checker
    *
-   * The strength of the image prompt, between 0 and 1.
+   * If set to true, the safety checker will be enabled.
    */
-  image_prompt_strength?: number;
+  enable_safety_checker?: boolean;
   /**
    * Seed
    *
@@ -20034,17 +20543,17 @@ export type FluxProV11UltraInput = {
    */
   seed?: number;
   /**
-   * Enable Safety Checker
+   * Image Prompt Strength
    *
-   * If set to true, the safety checker will be enabled.
+   * The strength of the image prompt, between 0 and 1.
    */
-  enable_safety_checker?: boolean;
+  image_prompt_strength?: number;
   /**
-   * Raw
+   * Enhance Prompt
    *
-   * Generate less processed, more natural-looking images.
+   * Whether to enhance the prompt for better results.
    */
-  raw?: boolean;
+  enhance_prompt?: boolean;
 };
 
 /**
@@ -23662,6 +24171,12 @@ export type IpAdapterFaceIdInput = {
    */
   height?: number;
   /**
+   * Base Sdxl Model Repo
+   *
+   * The URL to the base SDXL model. Default is SG161222/RealVisXL_V3.0
+   */
+  base_sdxl_model_repo?: string;
+  /**
    * Num Samples
    *
    *
@@ -23671,26 +24186,20 @@ export type IpAdapterFaceIdInput = {
    */
   num_samples?: number;
   /**
-   * Base Sdxl Model Repo
-   *
-   * The URL to the base SDXL model. Default is SG161222/RealVisXL_V3.0
-   */
-  base_sdxl_model_repo?: string;
-  /**
    * Base 1 5 Model Repo
    *
    * The URL to the base 1.5 model. Default is SG161222/Realistic_Vision_V4.0_noVAE
    */
   base_1_5_model_repo?: string;
   /**
-   * Num Inference Steps
+   * Seed
    *
    *
-   * The number of inference steps to use for generating the image. The more steps
-   * the better the image will be but it will also take longer to generate.
+   * The same seed and the same prompt given to the same version of Stable Diffusion
+   * will output the same image every time.
    *
    */
-  num_inference_steps?: number;
+  seed?: number;
   /**
    * Model Type
    *
@@ -23713,14 +24222,14 @@ export type IpAdapterFaceIdInput = {
    */
   face_images_data_url?: string;
   /**
-   * Seed
+   * Num Inference Steps
    *
    *
-   * The same seed and the same prompt given to the same version of Stable Diffusion
-   * will output the same image every time.
+   * The number of inference steps to use for generating the image. The more steps
+   * the better the image will be but it will also take longer to generate.
    *
    */
-  seed?: number;
+  num_inference_steps?: number;
 };
 
 /**
@@ -24265,11 +24774,11 @@ export type StableDiffusionV3MediumImageToImageInput = {
  */
 export type Region = {
   /**
-   * Y1
+   * Y2
    *
-   * Y-coordinate of the top-left corner
+   * Y-coordinate of the bottom-right corner
    */
-  y1: number;
+  y2: number;
   /**
    * X2
    *
@@ -24283,11 +24792,11 @@ export type Region = {
    */
   x1: number;
   /**
-   * Y2
+   * Y1
    *
-   * Y-coordinate of the bottom-right corner
+   * Y-coordinate of the top-left corner
    */
-  y2: number;
+  y1: number;
 };
 
 /**
@@ -25323,6 +25832,12 @@ export type FluxLoraImageToImageInput = {
    */
   num_images?: number;
   /**
+   * Acceleration
+   *
+   * Acceleration level for image generation. 'regular' balances speed and quality.
+   */
+  acceleration?: "none" | "regular";
+  /**
    * Image Size
    *
    * The size of the generated image.
@@ -25348,6 +25863,12 @@ export type FluxLoraImageToImageInput = {
    */
   image_url: string;
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
    * Loras
    *
    *
@@ -25356,12 +25877,6 @@ export type FluxLoraImageToImageInput = {
    *
    */
   loras?: Array<LoraWeight>;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
   /**
    * Strength
    *
@@ -25384,6 +25899,12 @@ export type FluxLoraImageToImageInput = {
    */
   num_inference_steps?: number;
   /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
    * Seed
    *
    *
@@ -25392,12 +25913,6 @@ export type FluxLoraImageToImageInput = {
    *
    */
   seed?: number;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
 };
 
 /**
@@ -26460,11 +26975,11 @@ export type PointPromptType2 = {
    */
   y?: number;
   /**
-   * Label
+   * X
    *
-   * Label of the prompt. 1 for foreground, 0 for background
+   * X Coordinate of the prompt
    */
-  label?: 0 | 1;
+  x?: number;
   /**
    * Frame Index
    *
@@ -26472,11 +26987,11 @@ export type PointPromptType2 = {
    */
   frame_index?: number;
   /**
-   * X
+   * Label
    *
-   * X Coordinate of the prompt
+   * Label of the prompt. 1 for foreground, 0 for background
    */
-  x?: number;
+  label?: 0 | 1;
 };
 
 /**
@@ -27112,23 +27627,17 @@ export type LivePortraitImageInput = {
    */
   blink?: number;
   /**
-   * Dsize
-   *
-   * Size of the output image.
-   */
-  dsize?: number;
-  /**
-   * Vy Ratio
-   *
-   * Vertical offset ratio for face crop. Positive values move up, negative values move down.
-   */
-  vy_ratio?: number;
-  /**
    * Scale
    *
    * Scaling factor for the face crop.
    */
   scale?: number;
+  /**
+   * Eee
+   *
+   * Amount to shape mouth in 'eee' position
+   */
+  eee?: number;
   /**
    * Pupil X
    *
@@ -27136,17 +27645,17 @@ export type LivePortraitImageInput = {
    */
   pupil_x?: number;
   /**
+   * Dsize
+   *
+   * Size of the output image.
+   */
+  dsize?: number;
+  /**
    * Flag Pasteback
    *
    * Whether to paste-back/stitch the animated face cropping from the face-cropping space to the original image space.
    */
   flag_pasteback?: boolean;
-  /**
-   * Eee
-   *
-   * Amount to shape mouth in 'eee' position
-   */
-  eee?: number;
   /**
    * Enable Safety Checker
    *
@@ -27156,6 +27665,12 @@ export type LivePortraitImageInput = {
    *
    */
   enable_safety_checker?: boolean;
+  /**
+   * Vy Ratio
+   *
+   * Vertical offset ratio for face crop. Positive values move up, negative values move down.
+   */
+  vy_ratio?: number;
   /**
    * Vx Ratio
    *
@@ -27169,23 +27684,23 @@ export type LivePortraitImageInput = {
    */
   pupil_y?: number;
   /**
-   * Output Format
-   *
-   * Output format
-   */
-  output_format?: "jpeg" | "png";
-  /**
    * Rotate Yaw
    *
    * Amount to rotate the face in yaw
    */
   rotate_yaw?: number;
   /**
-   * Flag Do Rot
+   * Output Format
    *
-   * Whether to conduct the rotation when flag_do_crop is True.
+   * Output format
    */
-  flag_do_rot?: boolean;
+  output_format?: "jpeg" | "png";
+  /**
+   * Image Url
+   *
+   * URL of the image to be animated
+   */
+  image_url: string;
   /**
    * Woo
    *
@@ -27199,11 +27714,11 @@ export type LivePortraitImageInput = {
    */
   aaa?: number;
   /**
-   * Image Url
+   * Flag Do Rot
    *
-   * URL of the image to be animated
+   * Whether to conduct the rotation when flag_do_crop is True.
    */
-  image_url: string;
+  flag_do_rot?: boolean;
   /**
    * Flag Do Crop
    *
@@ -28153,12 +28668,6 @@ export type FluxProV11UltraReduxInput = {
    */
   prompt?: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -28175,11 +28684,17 @@ export type FluxProV11UltraReduxInput = {
     | "9:21"
     | string;
   /**
-   * Enhance Prompt
+   * Num Images
    *
-   * Whether to enhance the prompt for better results.
+   * The number of images to generate.
    */
-  enhance_prompt?: boolean;
+  num_images?: number;
+  /**
+   * Raw
+   *
+   * Generate less processed, more natural-looking images.
+   */
+  raw?: boolean;
   /**
    * Output Format
    *
@@ -28205,11 +28720,11 @@ export type FluxProV11UltraReduxInput = {
    */
   safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
   /**
-   * Image Prompt Strength
+   * Enable Safety Checker
    *
-   * The strength of the image prompt, between 0 and 1.
+   * If set to true, the safety checker will be enabled.
    */
-  image_prompt_strength?: number;
+  enable_safety_checker?: boolean;
   /**
    * Seed
    *
@@ -28220,17 +28735,17 @@ export type FluxProV11UltraReduxInput = {
    */
   seed?: number;
   /**
-   * Enable Safety Checker
+   * Image Prompt Strength
    *
-   * If set to true, the safety checker will be enabled.
+   * The strength of the image prompt, between 0 and 1.
    */
-  enable_safety_checker?: boolean;
+  image_prompt_strength?: number;
   /**
-   * Raw
+   * Enhance Prompt
    *
-   * Generate less processed, more natural-looking images.
+   * Whether to enhance the prompt for better results.
    */
-  raw?: boolean;
+  enhance_prompt?: boolean;
 };
 
 /**
@@ -28250,18 +28765,6 @@ export type FluxLoraDepthOutput = {
    */
   images: Array<ImageType2>;
   /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
    * Seed
    *
    *
@@ -28270,6 +28773,18 @@ export type FluxLoraDepthOutput = {
    *
    */
   seed: number;
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
 };
 
 /**
@@ -28314,12 +28829,6 @@ export type FluxLoraDepthInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
    * Loras
    *
    *
@@ -28329,17 +28838,20 @@ export type FluxLoraDepthInput = {
    */
   loras?: Array<LoraWeight>;
   /**
-   * Enable Safety Checker
+   * Sync Mode
    *
-   * If set to true, the safety checker will be enabled.
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  enable_safety_checker?: boolean;
+  sync_mode?: boolean;
   /**
-   * Num Inference Steps
+   * Guidance scale (CFG)
    *
-   * The number of inference steps to perform.
+   *
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt when looking for a related image to show you.
+   *
    */
-  num_inference_steps?: number;
+  guidance_scale?: number;
   /**
    * Seed
    *
@@ -28350,14 +28862,17 @@ export type FluxLoraDepthInput = {
    */
   seed?: number;
   /**
-   * Guidance scale (CFG)
+   * Num Inference Steps
    *
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
-   * the model to stick to your prompt when looking for a related image to show you.
-   *
+   * The number of inference steps to perform.
    */
-  guidance_scale?: number;
+  num_inference_steps?: number;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
 };
 
 /**
@@ -28462,12 +28977,6 @@ export type FluxProV11ReduxInput = {
    */
   guidance_scale?: number;
   /**
-   * Num Inference Steps
-   *
-   * The number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
    * Seed
    *
    *
@@ -28476,6 +28985,12 @@ export type FluxProV11ReduxInput = {
    *
    */
   seed?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
   /**
    * Enhance Prompt
    *
@@ -28655,17 +29170,17 @@ export type IdeogramV2TurboRemixInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
    * Strength
    *
    * Strength of the input image in the remix
    */
   strength?: number;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -28800,17 +29315,17 @@ export type IdeogramV2RemixInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
    * Strength
    *
    * Strength of the input image in the remix
    */
   strength?: number;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -30234,18 +30749,6 @@ export type FluxControlLoraDepthImageToImageOutput = {
    */
   images: Array<ImageType2>;
   /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
    * Seed
    *
    *
@@ -30254,6 +30757,18 @@ export type FluxControlLoraDepthImageToImageOutput = {
    *
    */
   seed: number;
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
 };
 
 /**
@@ -30295,6 +30810,12 @@ export type FluxControlLoraDepthImageToImageInput = {
    */
   loras?: Array<LoraWeight>;
   /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
    * Guidance scale (CFG)
    *
    *
@@ -30303,12 +30824,6 @@ export type FluxControlLoraDepthImageToImageInput = {
    *
    */
   guidance_scale?: number;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
   /**
    * Num Images
    *
@@ -30328,25 +30843,17 @@ export type FluxControlLoraDepthImageToImageInput = {
    */
   image_url: string;
   /**
-   * Strength
-   *
-   * The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.
-   */
-  strength?: number;
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
   /**
-   * Control Lora Image Url
+   * Strength
    *
-   *
-   * The image to use for control lora. This is used to control the style of the generated image.
-   *
+   * The strength to use for inpainting/image-to-image. Only used if the image_url is provided. 1.0 is completely remakes the image while 0.0 preserves the original.
    */
-  control_lora_image_url: string;
+  strength?: number;
   /**
    * Num Inference Steps
    *
@@ -30362,6 +30869,14 @@ export type FluxControlLoraDepthImageToImageInput = {
    *
    */
   seed?: number;
+  /**
+   * Control Lora Image Url
+   *
+   *
+   * The image to use for control lora. This is used to control the style of the generated image.
+   *
+   */
+  control_lora_image_url: string;
 };
 
 /**
@@ -31347,17 +31862,17 @@ export type IdeogramV2aTurboRemixInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
    * Strength
    *
    * Strength of the input image in the remix
    */
   strength?: number;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -31428,17 +31943,17 @@ export type IdeogramV2aRemixInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
    * Strength
    *
    * Strength of the input image in the remix
    */
   strength?: number;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -32778,7 +33293,7 @@ export type GptImage1EditImageOutput = {
    *
    * The generated images.
    */
-  images: Array<ImageFile>;
+  images: Array<ImageFileType2>;
 };
 
 /**
@@ -32804,11 +33319,11 @@ export type GptImage1EditImageInput = {
    */
   image_size?: "auto" | "1024x1024" | "1536x1024" | "1024x1536";
   /**
-   * Background
+   * Input Fidelity
    *
-   * Background for the generated image
+   * Input fidelity for the generated image
    */
-  background?: "auto" | "transparent" | "opaque";
+  input_fidelity?: "low" | "high";
   /**
    * Quality
    *
@@ -32822,11 +33337,11 @@ export type GptImage1EditImageInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
-   * Input Fidelity
+   * Background
    *
-   * Input fidelity for the generated image
+   * Background for the generated image
    */
-  input_fidelity?: "low" | "high";
+  background?: "auto" | "transparent" | "opaque";
   /**
    * Sync Mode
    *
@@ -33404,27 +33919,27 @@ export type IdeogramV3RemixInput = {
    */
   image_url: string;
   /**
-   * Style Codes
-   *
-   * A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style
-   */
-  style_codes?: Array<string> | unknown;
-  /**
-   * A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)
-   */
-  color_palette?: ColorPalette | unknown;
-  /**
    * Strength
    *
    * Strength of the input image in the remix
    */
   strength?: number;
   /**
+   * A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)
+   */
+  color_palette?: ColorPalette | unknown;
+  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Style Codes
+   *
+   * A list of 8 character hexadecimal codes representing the style of the image. Cannot be used in conjunction with style_reference_images or style
+   */
+  style_codes?: Array<string> | unknown;
   /**
    * Seed
    *
@@ -33703,11 +34218,11 @@ export type IdeogramV3ReframeInput = {
     | "WOODBLOCK_PRINT"
     | unknown;
   /**
-   * Image URL
+   * Rendering Speed
    *
-   * The image URL to reframe
+   * The rendering speed to use.
    */
-  image_url: string;
+  rendering_speed?: "TURBO" | "BALANCED" | "QUALITY";
   /**
    * Style Codes
    *
@@ -33719,17 +34234,17 @@ export type IdeogramV3ReframeInput = {
    */
   color_palette?: ColorPalette | unknown;
   /**
-   * Rendering Speed
-   *
-   * The rendering speed to use.
-   */
-  rendering_speed?: "TURBO" | "BALANCED" | "QUALITY";
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Image URL
+   *
+   * The image URL to reframe
+   */
+  image_url: string;
   /**
    * Seed
    *
@@ -33907,18 +34422,6 @@ export type MinimaxImage01SubjectReferenceInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * Number of images to generate (1-9)
-   */
-  num_images?: number;
-  /**
-   * Prompt Optimizer
-   *
-   * Whether to enable automatic prompt optimization
-   */
-  prompt_optimizer?: boolean;
-  /**
    * Aspect Ratio
    *
    * Aspect ratio of the generated image
@@ -33932,6 +34435,18 @@ export type MinimaxImage01SubjectReferenceInput = {
     | "3:4"
     | "9:16"
     | "21:9";
+  /**
+   * Prompt Optimizer
+   *
+   * Whether to enable automatic prompt optimization
+   */
+  prompt_optimizer?: boolean;
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9)
+   */
+  num_images?: number;
   /**
    * Image Url
    *
@@ -34238,17 +34753,17 @@ export type BagelEditInput = {
    */
   enable_safety_checker?: boolean;
   /**
-   * Seed
-   *
-   * The seed to use for the generation.
-   */
-  seed?: number;
-  /**
    * Use Thought
    *
    * Whether to use thought tokens for generation. If set to true, the model will "think" to potentially improve generation quality. Increases generation time and increases the cost by 20%.
    */
   use_thought?: boolean;
+  /**
+   * Seed
+   *
+   * The seed to use for the generation.
+   */
+  seed?: number;
   /**
    * Image Url
    *
@@ -34496,12 +35011,6 @@ export type FluxProKontextMaxInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -34516,6 +35025,12 @@ export type FluxProKontextMaxInput = {
     | "3:4"
     | "9:16"
     | "9:21";
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -34616,12 +35131,6 @@ export type FluxProKontextMultiInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -34636,6 +35145,12 @@ export type FluxProKontextMultiInput = {
     | "3:4"
     | "9:16"
     | "9:21";
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -34736,12 +35251,6 @@ export type FluxProKontextMaxMultiInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -34756,6 +35265,12 @@ export type FluxProKontextMaxMultiInput = {
     | "3:4"
     | "9:16"
     | "9:21";
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -37511,12 +38026,7 @@ export type ImageEditingBroccoliHaircutInput = {
  * ImageUpscaleOutput
  */
 export type TopazUpscaleImageOutput = {
-  /**
-   * Image
-   *
-   * The upscaled image.
-   */
-  image: File;
+  image: FileType2;
 };
 
 /**
@@ -37574,15 +38084,15 @@ export type TopazUpscaleImageInput = {
    */
   subject_detection?: "All" | "Foreground" | "Background";
   /**
-   * Crop To Fill
-   */
-  crop_to_fill?: boolean;
-  /**
    * Upscale Factor
    *
    * Factor to upscale the video by (e.g. 2.0 doubles width and height)
    */
   upscale_factor?: number;
+  /**
+   * Crop To Fill
+   */
+  crop_to_fill?: boolean;
 };
 
 /**
@@ -39836,17 +40346,17 @@ export type IdeogramCharacterRemixInput = {
    */
   expand_prompt?: boolean;
   /**
-   * Rendering Speed
-   *
-   * The rendering speed to use.
-   */
-  rendering_speed?: "TURBO" | "BALANCED" | "QUALITY";
-  /**
    * Reference Mask Urls
    *
    * A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format
    */
   reference_mask_urls?: Array<string>;
+  /**
+   * Rendering Speed
+   *
+   * The rendering speed to use.
+   */
+  rendering_speed?: "TURBO" | "BALANCED" | "QUALITY";
   /**
    * Reference Image Urls
    *
@@ -39878,11 +40388,11 @@ export type IdeogramCharacterRemixInput = {
    */
   image_url: string;
   /**
-   * Sync Mode
+   * Strength
    *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * Strength of the input image in the remix
    */
-  sync_mode?: boolean;
+  strength?: number;
   /**
    * A color palette for generation, must EITHER be specified via one of the presets (name) or explicitly via hexadecimal representations of the color with optional weights (members)
    */
@@ -39894,11 +40404,11 @@ export type IdeogramCharacterRemixInput = {
    */
   style_codes?: Array<string> | unknown;
   /**
-   * Strength
+   * Sync Mode
    *
-   * Strength of the input image in the remix
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  strength?: number;
+  sync_mode?: boolean;
   /**
    * Seed
    *
@@ -39960,17 +40470,17 @@ export type IdeogramCharacterInput = {
    */
   expand_prompt?: boolean;
   /**
-   * Reference Mask Urls
-   *
-   * A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format
-   */
-  reference_mask_urls?: Array<string>;
-  /**
    * Rendering Speed
    *
    * The rendering speed to use.
    */
   rendering_speed?: "TURBO" | "BALANCED" | "QUALITY";
+  /**
+   * Reference Mask Urls
+   *
+   * A set of masks to apply to the character references. Currently only 1 mask is supported, rest will be ignored. (maximum total size 10MB across all character references). The masks should be in JPEG, PNG or WebP format
+   */
+  reference_mask_urls?: Array<string>;
   /**
    * Reference Image Urls
    *
@@ -40903,15 +41413,21 @@ export type WanV22A14bImageToImageOutput = {
  */
 export type WanV22A14bImageToImageInput = {
   /**
-   * Shift
-   */
-  shift?: number;
-  /**
    * Prompt
    *
    * The text prompt to guide image generation.
    */
   prompt: string;
+  /**
+   * Shift
+   */
+  shift?: number;
+  /**
+   * Acceleration
+   *
+   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
+   */
+  acceleration?: "none" | "regular";
   /**
    * Image Size
    */
@@ -40923,12 +41439,6 @@ export type WanV22A14bImageToImageInput = {
     | "portrait_16_9"
     | "landscape_4_3"
     | "landscape_16_9";
-  /**
-   * Acceleration
-   *
-   * Acceleration level to use. The more acceleration, the faster the generation, but with lower quality. The recommended value is 'regular'.
-   */
-  acceleration?: "none" | "regular";
   /**
    * Enable Safety Checker
    *
@@ -40990,17 +41500,17 @@ export type WanV22A14bImageToImageInput = {
    */
   enable_prompt_expansion?: boolean;
   /**
-   * Number of Inference Steps
-   *
-   * Number of inference steps for sampling. Higher values give better quality but take longer.
-   */
-  num_inference_steps?: number;
-  /**
    * Seed
    *
    * Random seed for reproducibility. If None, a random seed is chosen.
    */
   seed?: number;
+  /**
+   * Number of Inference Steps
+   *
+   * Number of inference steps for sampling. Higher values give better quality but take longer.
+   */
+  num_inference_steps?: number;
 };
 
 /**
@@ -42982,6 +43492,18 @@ export type QwenImageEditPlusLoraOutput = {
    */
   images: Array<ImageType2>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -42990,18 +43512,6 @@ export type QwenImageEditPlusLoraOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -43034,17 +43544,20 @@ export type QwenImageEditPlusLoraInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number;
+  /**
    * Acceleration
    *
    * Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.
    */
   acceleration?: "none" | "regular";
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
   /**
    * Output Format
    *
@@ -43067,14 +43580,11 @@ export type QwenImageEditPlusLoraInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance scale
+   * Enable Safety Checker
    *
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
-   * the model to stick to your prompt when looking for a related image to show you.
-   *
+   * If set to true, the safety checker will be enabled.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Num Inference Steps
    *
@@ -43094,14 +43604,14 @@ export type QwenImageEditPlusLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Guidance scale
    *
    *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt when looking for a related image to show you.
    *
    */
-  seed?: number;
+  guidance_scale?: number;
 };
 
 /**
@@ -43356,6 +43866,12 @@ export type ReveRemixInput = {
    */
   prompt: string;
   /**
+   * Number of Images
+   *
+   * Number of images to generate
+   */
+  num_images?: number;
+  /**
    * Aspect Ratio
    *
    * The desired aspect ratio of the generated image. If not provided, will be smartly chosen by the model.
@@ -43367,12 +43883,6 @@ export type ReveRemixInput = {
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
-  /**
-   * Number of Images
-   *
-   * Number of images to generate
-   */
-  num_images?: number;
   /**
    * Output Format
    *
@@ -43396,7 +43906,7 @@ export type GptImage1MiniEditOutput = {
    *
    * The generated images.
    */
-  images: Array<ImageFile>;
+  images: Array<ImageFileType2>;
 };
 
 /**
@@ -43404,11 +43914,11 @@ export type GptImage1MiniEditOutput = {
  */
 export type GptImage1MiniEditInput = {
   /**
-   * Prompt
+   * Background
    *
-   * The prompt for image generation
+   * Background for the generated image
    */
-  prompt: string;
+  background?: "auto" | "transparent" | "opaque";
   /**
    * Number of Images
    *
@@ -43422,11 +43932,11 @@ export type GptImage1MiniEditInput = {
    */
   image_size?: "auto" | "1024x1024" | "1536x1024" | "1024x1536";
   /**
-   * Background
+   * Prompt
    *
-   * Background for the generated image
+   * The prompt for image generation
    */
-  background?: "auto" | "transparent" | "opaque";
+  prompt: string;
   /**
    * Quality
    *
@@ -43888,6 +44398,12 @@ export type ReveFastRemixInput = {
    */
   prompt: string;
   /**
+   * Number of Images
+   *
+   * Number of images to generate
+   */
+  num_images?: number;
+  /**
    * Aspect Ratio
    *
    * The desired aspect ratio of the generated image. If not provided, will be smartly chosen by the model.
@@ -43899,12 +44415,6 @@ export type ReveFastRemixInput = {
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
-  /**
-   * Number of Images
-   *
-   * Number of images to generate
-   */
-  num_images?: number;
   /**
    * Output Format
    *
@@ -44942,7 +45452,7 @@ export type NanoBananaProEditOutput = {
    *
    * The edited images.
    */
-  images: Array<ImageFileType2>;
+  images: Array<ImageFile>;
   /**
    * Description
    *
@@ -44974,6 +45484,12 @@ export type NanoBananaProEditInput = {
    */
   enable_web_search?: boolean;
   /**
+   * Resolution
+   *
+   * The resolution of the image to generate.
+   */
+  resolution?: "1K" | "2K" | "4K";
+  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -44989,14 +45505,7 @@ export type NanoBananaProEditInput = {
     | "4:5"
     | "3:4"
     | "2:3"
-    | "9:16"
-    | unknown;
-  /**
-   * Resolution
-   *
-   * The resolution of the image to generate.
-   */
-  resolution?: "1K" | "2K" | "4K";
+    | "9:16";
   /**
    * Output Format
    *
@@ -45010,11 +45519,17 @@ export type NanoBananaProEditInput = {
    */
   sync_mode?: boolean;
   /**
+   * Safety Tolerance
+   *
+   * The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+   */
+  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
+  /**
    * Seed
    *
    * The seed for the random number generator.
    */
-  seed?: number | unknown;
+  seed?: number;
   /**
    * Image URLs
    *
@@ -45034,17 +45549,17 @@ export type NanoBananaProEditInput = {
  */
 export type Gemini3ProImagePreviewEditOutput = {
   /**
-   * Images
-   *
-   * The edited images.
-   */
-  images: Array<ImageFileType2>;
-  /**
    * Description
    *
    * The description of the generated images.
    */
   description: string;
+  /**
+   * Images
+   *
+   * The edited images.
+   */
+  images: Array<ImageFileType2>;
 };
 
 /**
@@ -45058,11 +45573,11 @@ export type Gemini3ProImagePreviewEditInput = {
    */
   prompt: string;
   /**
-   * Number of Images
+   * Resolution
    *
-   * The number of images to generate.
+   * The resolution of the image to generate.
    */
-  num_images?: number;
+  resolution?: "1K" | "2K" | "4K";
   /**
    * Enable Web Search
    *
@@ -45070,11 +45585,11 @@ export type Gemini3ProImagePreviewEditInput = {
    */
   enable_web_search?: boolean;
   /**
-   * Resolution
+   * Number of Images
    *
-   * The resolution of the image to generate.
+   * The number of images to generate.
    */
-  resolution?: "1K" | "2K" | "4K";
+  num_images?: number;
   /**
    * Aspect Ratio
    *
@@ -45105,6 +45620,12 @@ export type Gemini3ProImagePreviewEditInput = {
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Safety Tolerance
+   *
+   * The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict.
+   */
+  safety_tolerance?: "1" | "2" | "3" | "4" | "5" | "6";
   /**
    * Seed
    *
@@ -45172,17 +45693,17 @@ export type MaskMetadata = {
    */
   box?: Array<number>;
   /**
-   * Score
-   *
-   * Score for this mask.
-   */
-  score?: number;
-  /**
    * Index
    *
    * Index of the mask inside the model output.
    */
   index: number;
+  /**
+   * Score
+   *
+   * Score for this mask.
+   */
+  score?: number;
 };
 
 /**
@@ -45202,17 +45723,17 @@ export type Sam3ImageInput = {
    */
   include_boxes?: boolean;
   /**
-   * Box Prompts
+   * Output Format
    *
-   * Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.
+   * The format of the generated image.
    */
-  box_prompts?: Array<BoxPrompt>;
+  output_format?: "jpeg" | "png" | "webp";
   /**
-   * Return Multiple Masks
+   * Include Scores
    *
-   * If True, upload and return multiple generated masks as defined by `max_masks`.
+   * Whether to include mask confidence scores.
    */
-  return_multiple_masks?: boolean;
+  include_scores?: boolean;
   /**
    * Image Url
    *
@@ -45232,11 +45753,11 @@ export type Sam3ImageInput = {
    */
   point_prompts?: Array<PointPrompt>;
   /**
-   * Output Format
+   * Return Multiple Masks
    *
-   * The format of the generated image.
+   * If True, upload and return multiple generated masks as defined by `max_masks`.
    */
-  output_format?: "jpeg" | "png" | "webp";
+  return_multiple_masks?: boolean;
   /**
    * Max Masks
    *
@@ -45244,11 +45765,11 @@ export type Sam3ImageInput = {
    */
   max_masks?: number;
   /**
-   * Include Scores
+   * Box Prompts
    *
-   * Whether to include mask confidence scores.
+   * Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.
    */
-  include_scores?: boolean;
+  box_prompts?: Array<BoxPrompt>;
   /**
    * Apply Mask
    *
@@ -45263,42 +45784,6 @@ export type Sam3ImageInput = {
    * @deprecated
    */
   text_prompt?: string;
-};
-
-/**
- * PointPrompt
- */
-export type PointPrompt = {
-  /**
-   * Y
-   *
-   * Y Coordinate of the prompt
-   */
-  y?: number;
-  /**
-   * X
-   *
-   * X Coordinate of the prompt
-   */
-  x?: number;
-  /**
-   * Object Id
-   *
-   * Optional object identifier. Prompts sharing an object id refine the same object.
-   */
-  object_id?: number;
-  /**
-   * Frame Index
-   *
-   * The frame index to interact with.
-   */
-  frame_index?: number;
-  /**
-   * Label
-   *
-   * 1 for foreground, 0 for background
-   */
-  label?: 0 | 1;
 };
 
 /**
@@ -45341,6 +45826,42 @@ export type BoxPrompt = {
    * Y Max Coordinate of the box
    */
   y_max?: number;
+};
+
+/**
+ * PointPrompt
+ */
+export type PointPrompt = {
+  /**
+   * Y
+   *
+   * Y Coordinate of the prompt
+   */
+  y?: number;
+  /**
+   * Label
+   *
+   * 1 for foreground, 0 for background
+   */
+  label?: 0 | 1;
+  /**
+   * Object Id
+   *
+   * Optional object identifier. Prompts sharing an object id refine the same object.
+   */
+  object_id?: number;
+  /**
+   * Frame Index
+   *
+   * The frame index to interact with.
+   */
+  frame_index?: number;
+  /**
+   * X
+   *
+   * X Coordinate of the prompt
+   */
+  x?: number;
 };
 
 /**
@@ -45396,17 +45917,17 @@ export type Sam3ImageRleInput = {
    */
   include_boxes?: boolean;
   /**
-   * Box Prompts
+   * Output Format
    *
-   * Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.
+   * The format of the generated image.
    */
-  box_prompts?: Array<BoxPrompt>;
+  output_format?: "jpeg" | "png" | "webp";
   /**
-   * Return Multiple Masks
+   * Include Scores
    *
-   * If True, upload and return multiple generated masks as defined by `max_masks`.
+   * Whether to include mask confidence scores.
    */
-  return_multiple_masks?: boolean;
+  include_scores?: boolean;
   /**
    * Image Url
    *
@@ -45426,11 +45947,11 @@ export type Sam3ImageRleInput = {
    */
   point_prompts?: Array<PointPrompt>;
   /**
-   * Output Format
+   * Return Multiple Masks
    *
-   * The format of the generated image.
+   * If True, upload and return multiple generated masks as defined by `max_masks`.
    */
-  output_format?: "jpeg" | "png" | "webp";
+  return_multiple_masks?: boolean;
   /**
    * Max Masks
    *
@@ -45438,11 +45959,11 @@ export type Sam3ImageRleInput = {
    */
   max_masks?: number;
   /**
-   * Include Scores
+   * Box Prompts
    *
-   * Whether to include mask confidence scores.
+   * Box prompt coordinates (x_min, y_min, x_max, y_max). Multiple boxes supported - use object_id to group boxes for the same object or leave empty for separate objects.
    */
-  include_scores?: boolean;
+  box_prompts?: Array<BoxPrompt>;
   /**
    * Apply Mask
    *
@@ -46508,24 +47029,6 @@ export type Flux2LoraGalleryVirtualTryonInput = {
 };
 
 /**
- * OmniImageElementInput
- */
-export type OmniImageElementInput = {
-  /**
-   * Reference Image Urls
-   *
-   * Additional reference images from different angles. 1-3 images supported. At least one image is required.
-   */
-  reference_image_urls?: Array<string>;
-  /**
-   * Frontal Image Url
-   *
-   * The frontal image of the element (main view).
-   */
-  frontal_image_url: string;
-};
-
-/**
  * OmniImageOutput
  */
 export type KlingImageO1Output = {
@@ -46539,6 +47042,8 @@ export type KlingImageO1Output = {
 
 /**
  * OmniImageRequest
+ *
+ * Request model for Kling O1 Omni Image (legacy).
  */
 export type KlingImageO1Input = {
   /**
@@ -46547,6 +47052,18 @@ export type KlingImageO1Input = {
    * Text prompt for image generation. Reference images using @Image1, @Image2, etc. (or @Image if only one image). Max 2500 characters.
    */
   prompt: string;
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9).
+   */
+  num_images?: number;
+  /**
+   * Resolution
+   *
+   * Image generation resolution. 1K: standard, 2K: high-res.
+   */
+  resolution?: "1K" | "2K";
   /**
    * Aspect Ratio
    *
@@ -46562,18 +47079,6 @@ export type KlingImageO1Input = {
     | "3:2"
     | "2:3"
     | "21:9";
-  /**
-   * Num Images
-   *
-   * Number of images to generate (1-9).
-   */
-  num_images?: number;
-  /**
-   * Resolution
-   *
-   * Image generation resolution. 1K: standard, 2K: high-res.
-   */
-  resolution?: "1K" | "2K";
   /**
    * Output Format
    *
@@ -46591,7 +47096,7 @@ export type KlingImageO1Input = {
    *
    * Elements (characters/objects) to include in the image. Reference in prompt as @Element1, @Element2, etc. Maximum 10 total (elements + reference images).
    */
-  elements?: Array<OmniImageElementInput>;
+  elements?: Array<ElementInput>;
   /**
    * Image Urls
    *
@@ -47539,11 +48044,11 @@ export type UsageInfo = {
    */
   output_tokens: number;
   /**
-   * Decode Time Ms
+   * Prefill Time Ms
    *
-   * Time taken for decoding in milliseconds
+   * Time taken for prefill in milliseconds
    */
-  decode_time_ms: number;
+  prefill_time_ms: number;
   /**
    * Input Tokens
    *
@@ -47557,11 +48062,11 @@ export type UsageInfo = {
    */
   ttft_ms: number;
   /**
-   * Prefill Time Ms
+   * Decode Time Ms
    *
-   * Time taken for prefill in milliseconds
+   * Time taken for decoding in milliseconds
    */
-  prefill_time_ms: number;
+  decode_time_ms: number;
 };
 
 /**
@@ -47940,6 +48445,18 @@ export type QwenImageEdit2509LoraOutput = {
    */
   images: Array<ImageType2>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -47948,18 +48465,6 @@ export type QwenImageEdit2509LoraOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -47992,17 +48497,20 @@ export type QwenImageEdit2509LoraInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number;
+  /**
    * Acceleration
    *
    * Acceleration level for image generation. Options: 'none', 'regular'. Higher acceleration increases speed. 'regular' balances speed and quality.
    */
   acceleration?: "none" | "regular";
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
   /**
    * Output Format
    *
@@ -48025,14 +48533,11 @@ export type QwenImageEdit2509LoraInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance scale
+   * Enable Safety Checker
    *
-   *
-   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
-   * the model to stick to your prompt when looking for a related image to show you.
-   *
+   * If set to true, the safety checker will be enabled.
    */
-  guidance_scale?: number;
+  enable_safety_checker?: boolean;
   /**
    * Num Inference Steps
    *
@@ -48052,14 +48557,14 @@ export type QwenImageEdit2509LoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Guidance scale
    *
    *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
+   * The CFG (Classifier Free Guidance) scale is a measure of how close you want
+   * the model to stick to your prompt when looking for a related image to show you.
    *
    */
-  seed?: number;
+  guidance_scale?: number;
 };
 
 /**
@@ -49475,6 +49980,18 @@ export type Flux2TurboEditOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -49483,18 +50000,6 @@ export type Flux2TurboEditOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -49539,11 +50044,11 @@ export type Flux2TurboEditInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance Scale
+   * Enable Prompt Expansion
    *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   * If set to true, the prompt will be expanded for better results.
    */
-  guidance_scale?: number;
+  enable_prompt_expansion?: boolean;
   /**
    * Seed
    *
@@ -49557,17 +50062,17 @@ export type Flux2TurboEditInput = {
    */
   image_urls: Array<string>;
   /**
-   * Enable Prompt Expansion
-   *
-   * If set to true, the prompt will be expanded for better results.
-   */
-  enable_prompt_expansion?: boolean;
-  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
 };
 
 /**
@@ -49587,11 +50092,11 @@ export type GptImage15EditOutput = {
  */
 export type GptImage15EditInput = {
   /**
-   * Background
+   * Input Fidelity
    *
-   * Background for the generated image
+   * Input fidelity for the generated image
    */
-  background?: "auto" | "transparent" | "opaque";
+  input_fidelity?: "low" | "high";
   /**
    * Number of Images
    *
@@ -49623,11 +50128,11 @@ export type GptImage15EditInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
-   * Input Fidelity
+   * Background
    *
-   * Input fidelity for the generated image
+   * Background for the generated image
    */
-  input_fidelity?: "low" | "high";
+  background?: "auto" | "transparent" | "opaque";
   /**
    * Mask Image URL
    *
@@ -49665,6 +50170,18 @@ export type Flux2FlashEditOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -49673,18 +50190,6 @@ export type Flux2FlashEditOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -49729,11 +50234,11 @@ export type Flux2FlashEditInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance Scale
+   * Enable Prompt Expansion
    *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   * If set to true, the prompt will be expanded for better results.
    */
-  guidance_scale?: number;
+  enable_prompt_expansion?: boolean;
   /**
    * Seed
    *
@@ -49747,17 +50252,17 @@ export type Flux2FlashEditInput = {
    */
   image_urls: Array<string>;
   /**
-   * Enable Prompt Expansion
-   *
-   * If set to true, the prompt will be expanded for better results.
-   */
-  enable_prompt_expansion?: boolean;
-  /**
    * Enable Safety Checker
    *
    * If set to true, the safety checker will be enabled.
    */
   enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
 };
 
 /**
@@ -50199,18 +50704,6 @@ export type QwenImageEdit2511Output = {
    */
   images: Array<ImageType2>;
   /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
    * Seed
    *
    *
@@ -50219,6 +50712,18 @@ export type QwenImageEdit2511Output = {
    *
    */
   seed: number;
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
 };
 
 /**
@@ -50238,6 +50743,18 @@ export type QwenImageEdit2511Input = {
    */
   num_images?: number;
   /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "none" | "regular" | "high";
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
    * Image Size
    *
    * The size of the generated image. If None, uses the input image dimensions.
@@ -50250,18 +50767,6 @@ export type QwenImageEdit2511Input = {
     | "portrait_16_9"
     | "landscape_4_3"
     | "landscape_16_9";
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "none" | "regular" | "high";
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
   /**
    * Output Format
    *
@@ -50281,11 +50786,11 @@ export type QwenImageEdit2511Input = {
    */
   guidance_scale?: number;
   /**
-   * Num Inference Steps
+   * Seed
    *
-   * The number of inference steps to perform.
+   * The same seed and the same prompt given to the same version of the model will output the same image every time.
    */
-  num_inference_steps?: number;
+  seed?: number;
   /**
    * Image URLs
    *
@@ -50299,11 +50804,11 @@ export type QwenImageEdit2511Input = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Enable Safety Checker
    *
-   * The same seed and the same prompt given to the same version of the model will output the same image every time.
+   * If set to true, the safety checker will be enabled.
    */
-  seed?: number;
+  enable_safety_checker?: boolean;
 };
 
 /**
@@ -50980,18 +51485,6 @@ export type QwenImageEdit2511LoraOutput = {
    */
   images: Array<ImageType2>;
   /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
    * Seed
    *
    *
@@ -51000,6 +51493,18 @@ export type QwenImageEdit2511LoraOutput = {
    *
    */
   seed: number;
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
 };
 
 /**
@@ -51019,6 +51524,18 @@ export type QwenImageEdit2511LoraInput = {
    */
   num_images?: number;
   /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "none" | "regular" | "high";
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
    * Image Size
    *
    * The size of the generated image. If None, uses the input image dimensions.
@@ -51032,29 +51549,11 @@ export type QwenImageEdit2511LoraInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "none" | "regular" | "high";
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
-  /**
    * Output Format
    *
    * The format of the generated image.
    */
   output_format?: "jpeg" | "png" | "webp";
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI.
-   */
-  sync_mode?: boolean;
   /**
    * Loras
    *
@@ -51062,17 +51561,23 @@ export type QwenImageEdit2511LoraInput = {
    */
   loras?: Array<LoraWeight>;
   /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI.
+   */
+  sync_mode?: boolean;
+  /**
    * Guidance Scale
    *
    * The guidance scale to use for the image generation.
    */
   guidance_scale?: number;
   /**
-   * Num Inference Steps
+   * Seed
    *
-   * The number of inference steps to perform.
+   * The same seed and the same prompt given to the same version of the model will output the same image every time.
    */
-  num_inference_steps?: number;
+  seed?: number;
   /**
    * Image URLs
    *
@@ -51086,11 +51591,11 @@ export type QwenImageEdit2511LoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Enable Safety Checker
    *
-   * The same seed and the same prompt given to the same version of the model will output the same image every time.
+   * If set to true, the safety checker will be enabled.
    */
-  seed?: number;
+  enable_safety_checker?: boolean;
 };
 
 /**
@@ -51354,7 +51859,7 @@ export type GlmImageImageToImageInput = {
 };
 
 /**
- * Klein9BDistilledEditOutput
+ * KleinT2IOutput
  */
 export type Flux2Klein9bEditOutput = {
   /**
@@ -51366,7 +51871,7 @@ export type Flux2Klein9bEditOutput = {
   /**
    * Images
    *
-   * The edited images
+   * The generated images
    */
   images: Array<ImageFile>;
   /**
@@ -51393,7 +51898,7 @@ export type Flux2Klein9bEditOutput = {
 };
 
 /**
- * Klein9BDistilledEditInput
+ * KleinDistilledEditInput
  */
 export type Flux2Klein9bEditInput = {
   /**
@@ -51640,11 +52145,11 @@ export type Flux2Klein9bBaseEditInput = {
    */
   acceleration?: "none" | "regular" | "high";
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
   /**
    * Output Format
    *
@@ -51682,11 +52187,11 @@ export type Flux2Klein9bBaseEditInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
 };
 
 /**
@@ -51764,11 +52269,11 @@ export type Flux2Klein4bBaseEditInput = {
    */
   acceleration?: "none" | "regular" | "high";
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
   /**
    * Output Format
    *
@@ -51806,11 +52311,11 @@ export type Flux2Klein4bBaseEditInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
 };
 
 /**
@@ -51888,11 +52393,11 @@ export type Flux2Klein4bBaseEditLoraInput = {
    */
   acceleration?: "none" | "regular" | "high";
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
   /**
    * Output Format
    *
@@ -51900,17 +52405,17 @@ export type Flux2Klein4bBaseEditLoraInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
-   * Loras
-   *
-   * List of LoRA weights to apply (maximum 3).
-   */
-  loras?: Array<FalAiFlux2KleinLoRaInput>;
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI. Output is not stored when this is True.
    */
   sync_mode?: boolean;
+  /**
+   * Loras
+   *
+   * List of LoRA weights to apply (maximum 3).
+   */
+  loras?: Array<FalAiFlux2KleinLoRaInput>;
   /**
    * Enable Safety Checker
    *
@@ -51936,11 +52441,11 @@ export type Flux2Klein4bBaseEditLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
 };
 
 /**
@@ -52018,11 +52523,11 @@ export type Flux2Klein9bBaseEditLoraInput = {
    */
   acceleration?: "none" | "regular" | "high";
   /**
-   * Guidance Scale
+   * Seed
    *
-   * Guidance scale for classifier-free guidance.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  guidance_scale?: number;
+  seed?: number;
   /**
    * Output Format
    *
@@ -52030,17 +52535,17 @@ export type Flux2Klein9bBaseEditLoraInput = {
    */
   output_format?: "jpeg" | "png" | "webp";
   /**
-   * Loras
-   *
-   * List of LoRA weights to apply (maximum 3).
-   */
-  loras?: Array<FalAiFlux2KleinLoRaInput>;
-  /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI. Output is not stored when this is True.
    */
   sync_mode?: boolean;
+  /**
+   * Loras
+   *
+   * List of LoRA weights to apply (maximum 3).
+   */
+  loras?: Array<FalAiFlux2KleinLoRaInput>;
   /**
    * Enable Safety Checker
    *
@@ -52066,11 +52571,11 @@ export type Flux2Klein9bBaseEditLoraInput = {
    */
   negative_prompt?: string;
   /**
-   * Seed
+   * Guidance Scale
    *
-   * The seed to use for the generation. If not provided, a random seed will be used.
+   * Guidance scale for classifier-free guidance.
    */
-  seed?: number;
+  guidance_scale?: number;
 };
 
 /**
@@ -52316,11 +52821,9 @@ export type FiboEditEditInput = {
    */
   guidance_scale?: number | number;
   /**
-   * Seed
-   *
-   * Random seed for reproducibility.
+   * The structured prompt to generate an image from.
    */
-  seed?: number;
+  structured_instruction?: StructuredInstruction | unknown;
   /**
    * Mask Url
    *
@@ -52334,9 +52837,11 @@ export type FiboEditEditInput = {
    */
   negative_prompt?: string;
   /**
-   * The structured prompt to generate an image from.
+   * Seed
+   *
+   * Random seed for reproducibility.
    */
-  structured_instruction?: StructuredInstruction | unknown;
+  seed?: number;
 };
 
 /**
@@ -52971,11 +53476,11 @@ export type GrokImagineImageEditOutput = {
  */
 export type GrokImagineImageEditInput = {
   /**
-   * Sync Mode
+   * Prompt
    *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * Text description of the desired image.
    */
-  sync_mode?: boolean;
+  prompt: string;
   /**
    * Number of Images
    *
@@ -52983,11 +53488,11 @@ export type GrokImagineImageEditInput = {
    */
   num_images?: number;
   /**
-   * Prompt
+   * Sync Mode
    *
-   * Text description of the desired image.
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  prompt: string;
+  sync_mode?: boolean;
   /**
    * Output Format
    *
@@ -53003,6 +53508,327 @@ export type GrokImagineImageEditInput = {
 };
 
 /**
+ * I2IO3ImageOutput
+ *
+ * Output model for Kling O3 Image Generation.
+ */
+export type KlingImageO3ImageToImageOutput = {
+  /**
+   * Images
+   *
+   * Generated images
+   */
+  images: Array<Image>;
+};
+
+/**
+ * O3ImageToImageRequest
+ *
+ * Request model for Kling O3 Image-to-Image Generation.
+ */
+export type KlingImageO3ImageToImageInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for image generation. Reference images using @Image1, @Image2, etc. (or @Image if only one image). Max 2500 characters.
+   */
+  prompt: string;
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9). Only used when result_type is 'single'.
+   */
+  num_images?: number;
+  /**
+   * Resolution
+   *
+   * Image generation resolution. 1K: standard, 2K: high-res, 4K: ultra high-res.
+   */
+  resolution?: "1K" | "2K" | "4K";
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of generated images. 'auto' intelligently determines based on input content.
+   */
+  aspect_ratio?:
+    | "16:9"
+    | "9:16"
+    | "1:1"
+    | "4:3"
+    | "3:4"
+    | "3:2"
+    | "2:3"
+    | "21:9"
+    | "auto";
+  /**
+   * Series Amount
+   *
+   * Number of images in series (2-9). Only used when result_type is 'series'.
+   */
+  series_amount?: number;
+  /**
+   * Result Type
+   *
+   * Result type. 'single' for one image, 'series' for a series of related images.
+   */
+  result_type?: "single" | "series";
+  /**
+   * Output Format
+   *
+   * The format of the generated image.
+   */
+  output_format?: "jpeg" | "png" | "webp";
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI.
+   */
+  sync_mode?: boolean;
+  /**
+   * Elements
+   *
+   * Optional: Elements (characters/objects) for face control. Reference in prompt as @Element1, @Element2, etc.
+   */
+  elements?: Array<ElementInput>;
+  /**
+   * Image Urls
+   *
+   * List of reference images. Reference images in prompt using @Image1, @Image2, etc. (1-indexed). Max 10 images.
+   */
+  image_urls: Array<string>;
+};
+
+/**
+ * I2IV3ImageOutput
+ *
+ * Output model for Kling V3 Image Generation.
+ */
+export type KlingImageV3ImageToImageOutput = {
+  /**
+   * Images
+   *
+   * Generated images
+   */
+  images: Array<Image>;
+};
+
+/**
+ * V3ImageToImageRequest
+ *
+ * Request model for Kling V3 Image-to-Image Generation.
+ */
+export type KlingImageV3ImageToImageInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt for image generation. Max 2500 characters.
+   */
+  prompt: string;
+  /**
+   * Num Images
+   *
+   * Number of images to generate (1-9).
+   */
+  num_images?: number;
+  /**
+   * Resolution
+   *
+   * Image generation resolution. 1K: standard, 2K: high-res.
+   */
+  resolution?: "1K" | "2K";
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio of generated images.
+   */
+  aspect_ratio?:
+    | "16:9"
+    | "9:16"
+    | "1:1"
+    | "4:3"
+    | "3:4"
+    | "3:2"
+    | "2:3"
+    | "21:9";
+  /**
+   * Output Format
+   *
+   * The format of the generated image.
+   */
+  output_format?: "jpeg" | "png" | "webp";
+  /**
+   * Image Url
+   *
+   * Reference image for image-to-image generation.
+   */
+  image_url: string;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI.
+   */
+  sync_mode?: boolean;
+  /**
+   * Elements
+   *
+   * Optional: Elements (characters/objects) to include in the image for face control.
+   */
+  elements?: Array<ElementInput>;
+};
+
+/**
+ * ExtractNthFrameOutput
+ *
+ * Output model for extracted frames
+ */
+export type WorkflowUtilitiesExtractNthFrameOutput = {
+  /**
+   * Images
+   *
+   * Array of extracted frame images
+   */
+  images: Array<Image>;
+  /**
+   * Frame Count
+   *
+   * Total number of frames extracted
+   */
+  frame_count: number;
+};
+
+/**
+ * ExtractNthFrameInput
+ *
+ * Input model for extracting every Nth frame from a video
+ */
+export type WorkflowUtilitiesExtractNthFrameInput = {
+  /**
+   * Video Url
+   *
+   * URL of the video file to extract frames from
+   *
+   * Max file size: 95.4MB, Timeout: 30.0s
+   */
+  video_url: string;
+  /**
+   * Quality
+   *
+   * Quality for jpg/webp output (1-100)
+   */
+  quality?: number;
+  /**
+   * Output Format
+   *
+   * Output format for extracted frames
+   */
+  output_format?: "png" | "jpg" | "jpeg" | "webp";
+  /**
+   * Frame Interval
+   *
+   * Extract every Nth frame (e.g., 3 = every 3rd frame, 12 = every 12th frame)
+   */
+  frame_interval?: number;
+  /**
+   * Max Frames
+   *
+   * Maximum number of frames to extract
+   */
+  max_frames?: number;
+};
+
+/**
+ * RawImage
+ */
+export type RawImage = {
+  /**
+   * Height
+   */
+  height: number;
+  /**
+   * Content
+   */
+  content: Blob | File;
+  /**
+   * Content Type
+   */
+  content_type?: string;
+  /**
+   * Width
+   */
+  width: number;
+};
+
+/**
+ * RealtimeEditOutput
+ */
+export type Flux2KleinRealtimeOutput = {
+  /**
+   * Images
+   *
+   * Generated images as raw bytes. When interpolation is enabled, returns [interpolated_frame, current_frame] in chronological order. Otherwise returns [current_frame].
+   */
+  images: Array<RawImage>;
+  /**
+   * Seed
+   *
+   * Seed used for generation.
+   */
+  seed: number;
+};
+
+/**
+ * RealtimeEditInput
+ */
+export type Flux2KleinRealtimeInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to guide image editing.
+   */
+  prompt?: string;
+  /**
+   * Image Size
+   *
+   * The size of the generated image. square=768x768, square_hd=1024x1024.
+   */
+  image_size?: "square" | "square_hd";
+  /**
+   * Image URL
+   *
+   * Base64-encoded image data URI for editing. CDN URLs are not supported for realtime. For optimal performance, use 704x704 JPEG images with 50% quality. Other sizes will be resized automatically.
+   */
+  image_url: string;
+  /**
+   * Enable Interpolation
+   *
+   * Enable RIFE frame interpolation between consecutive frames (doubles output frames).
+   */
+  enable_interpolation?: boolean;
+  /**
+   * Schedule Mu
+   *
+   * Schedule mu for time shift. 2.3=default, lower=more even denoising, 0.3=nearly linear.
+   */
+  schedule_mu?: number;
+  /**
+   * Num Inference Steps
+   */
+  num_inference_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Output Feedback Strength
+   *
+   * Output feedback loop. 1.0 = pure noise (no feedback), 0.9 = 90% noise + 10% previous output latent.
+   */
+  output_feedback_strength?: number;
+};
+
+/**
  * Output
  */
 export type ClarityUpscalerOutput = {
@@ -53011,12 +53837,6 @@ export type ClarityUpscalerOutput = {
    */
   image: ImageType3;
   /**
-   * Seed
-   *
-   * The seed used to generate the image.
-   */
-  seed: number;
-  /**
    * Timings
    *
    * The timings of the different steps in the workflow.
@@ -53024,6 +53844,12 @@ export type ClarityUpscalerOutput = {
   timings: {
     [key: string]: number;
   };
+  /**
+   * Seed
+   *
+   * The seed used to generate the image.
+   */
+  seed: number;
 };
 
 /**
@@ -53067,6 +53893,18 @@ export type ClarityUpscalerInput = {
    */
   upscale_factor?: number;
   /**
+   * Enable Safety Checker
+   *
+   * If set to false, the safety checker will be disabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Num Inference Steps
+   *
+   * The number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
    * Guidance scale (CFG)
    *
    *
@@ -53076,11 +53914,11 @@ export type ClarityUpscalerInput = {
    */
   guidance_scale?: number;
   /**
-   * Num Inference Steps
+   * Negative Prompt
    *
-   * The number of inference steps to perform.
+   * The negative prompt to use. Use it to address details that you don't want in the image.
    */
-  num_inference_steps?: number;
+  negative_prompt?: string;
   /**
    * Seed
    *
@@ -53090,18 +53928,6 @@ export type ClarityUpscalerInput = {
    *
    */
   seed?: number | unknown;
-  /**
-   * Negative Prompt
-   *
-   * The negative prompt to use. Use it to address details that you don't want in the image.
-   */
-  negative_prompt?: string;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to false, the safety checker will be disabled.
-   */
-  enable_safety_checker?: boolean;
 };
 
 /**
@@ -53145,7 +53971,7 @@ export type AuraSrInput = {
    *
    * Upscaling factor. More coming soon.
    */
-  upscaling_factor?: 4;
+  upscale_factor?: 4;
   /**
    * Image URL
    *
@@ -53368,6 +54194,18 @@ export type Flux2EditOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -53376,18 +54214,6 @@ export type Flux2EditOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -53420,17 +54246,17 @@ export type Flux2EditInput = {
     | "landscape_4_3"
     | "landscape_16_9";
   /**
+   * Seed
+   *
+   * The seed to use for the generation. If not provided, a random seed will be used.
+   */
+  seed?: number;
+  /**
    * Acceleration
    *
    * The acceleration level to use for the image generation.
    */
   acceleration?: "none" | "regular" | "high";
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, the safety checker will be enabled.
-   */
-  enable_safety_checker?: boolean;
   /**
    * Output Format
    *
@@ -53444,24 +54270,6 @@ export type Flux2EditInput = {
    */
   sync_mode?: boolean;
   /**
-   * Guidance Scale
-   *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   * The seed to use for the generation. If not provided, a random seed will be used.
-   */
-  seed?: number;
-  /**
-   * Image URLs
-   *
-   * The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used.
-   */
-  image_urls: Array<string>;
-  /**
    * Enable Prompt Expansion
    *
    * If set to true, the prompt will be expanded for better results.
@@ -53473,6 +54281,24 @@ export type Flux2EditInput = {
    * The number of inference steps to perform.
    */
   num_inference_steps?: number;
+  /**
+   * Image URLs
+   *
+   * The URLs of the images for editing. A maximum of 4 images are allowed, if more are provided, only the first 4 will be used.
+   */
+  image_urls: Array<string>;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
 };
 
 /**
@@ -53492,6 +54318,18 @@ export type Flux2LoraEditOutput = {
    */
   images: Array<ImageFile>;
   /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Has Nsfw Concepts
+   *
+   * Whether the generated images contain NSFW concepts.
+   */
+  has_nsfw_concepts: Array<boolean>;
+  /**
    * Seed
    *
    *
@@ -53500,18 +54338,6 @@ export type Flux2LoraEditOutput = {
    *
    */
   seed: number;
-  /**
-   * Has Nsfw Concepts
-   *
-   * Whether the generated images contain NSFW concepts.
-   */
-  has_nsfw_concepts: Array<boolean>;
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
 };
 
 /**
@@ -53550,11 +54376,11 @@ export type Flux2LoraEditInput = {
    */
   acceleration?: "none" | "regular" | "high";
   /**
-   * Enable Safety Checker
+   * Seed
    *
-   * If set to true, the safety checker will be enabled.
+   * The seed to use for the generation. If not provided, a random seed will be used.
    */
-  enable_safety_checker?: boolean;
+  seed?: number;
   /**
    * Output Format
    *
@@ -53574,24 +54400,6 @@ export type Flux2LoraEditInput = {
    */
   loras?: Array<LoRaInput>;
   /**
-   * Guidance Scale
-   *
-   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   * The seed to use for the generation. If not provided, a random seed will be used.
-   */
-  seed?: number;
-  /**
-   * Image URLs
-   *
-   * The URsL of the images for editing. A maximum of 3 images are allowed, if more are provided, only the first 3 will be used.
-   */
-  image_urls: Array<string>;
-  /**
    * Enable Prompt Expansion
    *
    * If set to true, the prompt will be expanded for better results.
@@ -53603,6 +54411,24 @@ export type Flux2LoraEditInput = {
    * The number of inference steps to perform.
    */
   num_inference_steps?: number;
+  /**
+   * Image URLs
+   *
+   * The URsL of the images for editing. A maximum of 3 images are allowed, if more are provided, only the first 3 will be used.
+   */
+  image_urls: Array<string>;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, the safety checker will be enabled.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * Guidance Scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.
+   */
+  guidance_scale?: number;
 };
 
 /**
@@ -53655,12 +54481,6 @@ export type FluxProKontextInput = {
    */
   prompt: string;
   /**
-   * Num Images
-   *
-   * The number of images to generate.
-   */
-  num_images?: number;
-  /**
    * Aspect Ratio
    *
    * The aspect ratio of the generated image.
@@ -53675,6 +54495,12 @@ export type FluxProKontextInput = {
     | "3:4"
     | "9:16"
     | "9:21";
+  /**
+   * Num Images
+   *
+   * The number of images to generate.
+   */
+  num_images?: number;
   /**
    * Output Format
    *
@@ -54411,6 +55237,387 @@ export type GetFalAiClarityUpscalerRequestsByRequestIdResponses = {
 
 export type GetFalAiClarityUpscalerRequestsByRequestIdResponse =
   GetFalAiClarityUpscalerRequestsByRequestIdResponses[keyof GetFalAiClarityUpscalerRequestsByRequestIdResponses];
+
+export type GetFalAiFlux2KleinRealtimeRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/flux-2/klein/realtime/requests/{request_id}/status";
+};
+
+export type GetFalAiFlux2KleinRealtimeRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFlux2KleinRealtimeRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2KleinRealtimeRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2KleinRealtimeRequestsByRequestIdStatusResponses];
+
+export type PutFalAiFlux2KleinRealtimeRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2/klein/realtime/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2KleinRealtimeRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFlux2KleinRealtimeRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2KleinRealtimeRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2KleinRealtimeRequestsByRequestIdCancelResponses];
+
+export type PostFalAiFlux2KleinRealtimeData = {
+  body: Flux2KleinRealtimeInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-2/klein/realtime";
+};
+
+export type PostFalAiFlux2KleinRealtimeResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFlux2KleinRealtimeResponse =
+  PostFalAiFlux2KleinRealtimeResponses[keyof PostFalAiFlux2KleinRealtimeResponses];
+
+export type GetFalAiFlux2KleinRealtimeRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2/klein/realtime/requests/{request_id}";
+};
+
+export type GetFalAiFlux2KleinRealtimeRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Flux2KleinRealtimeOutput;
+};
+
+export type GetFalAiFlux2KleinRealtimeRequestsByRequestIdResponse =
+  GetFalAiFlux2KleinRealtimeRequestsByRequestIdResponses[keyof GetFalAiFlux2KleinRealtimeRequestsByRequestIdResponses];
+
+export type GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/workflow-utilities/extract-nth-frame/requests/{request_id}/status";
+  };
+
+export type GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/workflow-utilities/extract-nth-frame/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWorkflowUtilitiesExtractNthFrameData = {
+  body: WorkflowUtilitiesExtractNthFrameInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/workflow-utilities/extract-nth-frame";
+};
+
+export type PostFalAiWorkflowUtilitiesExtractNthFrameResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWorkflowUtilitiesExtractNthFrameResponse =
+  PostFalAiWorkflowUtilitiesExtractNthFrameResponses[keyof PostFalAiWorkflowUtilitiesExtractNthFrameResponses];
+
+export type GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/workflow-utilities/extract-nth-frame/requests/{request_id}";
+};
+
+export type GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: WorkflowUtilitiesExtractNthFrameOutput;
+  };
+
+export type GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdResponse =
+  GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesExtractNthFrameRequestsByRequestIdResponses];
+
+export type GetFalAiKlingImageV3ImageToImageRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-image/v3/image-to-image/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingImageV3ImageToImageRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingImageV3ImageToImageRequestsByRequestIdStatusResponse =
+  GetFalAiKlingImageV3ImageToImageRequestsByRequestIdStatusResponses[keyof GetFalAiKlingImageV3ImageToImageRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingImageV3ImageToImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/v3/image-to-image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingImageV3ImageToImageRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingImageV3ImageToImageRequestsByRequestIdCancelResponse =
+  PutFalAiKlingImageV3ImageToImageRequestsByRequestIdCancelResponses[keyof PutFalAiKlingImageV3ImageToImageRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingImageV3ImageToImageData = {
+  body: KlingImageV3ImageToImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-image/v3/image-to-image";
+};
+
+export type PostFalAiKlingImageV3ImageToImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingImageV3ImageToImageResponse =
+  PostFalAiKlingImageV3ImageToImageResponses[keyof PostFalAiKlingImageV3ImageToImageResponses];
+
+export type GetFalAiKlingImageV3ImageToImageRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/v3/image-to-image/requests/{request_id}";
+};
+
+export type GetFalAiKlingImageV3ImageToImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingImageV3ImageToImageOutput;
+};
+
+export type GetFalAiKlingImageV3ImageToImageRequestsByRequestIdResponse =
+  GetFalAiKlingImageV3ImageToImageRequestsByRequestIdResponses[keyof GetFalAiKlingImageV3ImageToImageRequestsByRequestIdResponses];
+
+export type GetFalAiKlingImageO3ImageToImageRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-image/o3/image-to-image/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingImageO3ImageToImageRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingImageO3ImageToImageRequestsByRequestIdStatusResponse =
+  GetFalAiKlingImageO3ImageToImageRequestsByRequestIdStatusResponses[keyof GetFalAiKlingImageO3ImageToImageRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingImageO3ImageToImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/o3/image-to-image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingImageO3ImageToImageRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingImageO3ImageToImageRequestsByRequestIdCancelResponse =
+  PutFalAiKlingImageO3ImageToImageRequestsByRequestIdCancelResponses[keyof PutFalAiKlingImageO3ImageToImageRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingImageO3ImageToImageData = {
+  body: KlingImageO3ImageToImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-image/o3/image-to-image";
+};
+
+export type PostFalAiKlingImageO3ImageToImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingImageO3ImageToImageResponse =
+  PostFalAiKlingImageO3ImageToImageResponses[keyof PostFalAiKlingImageO3ImageToImageResponses];
+
+export type GetFalAiKlingImageO3ImageToImageRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/o3/image-to-image/requests/{request_id}";
+};
+
+export type GetFalAiKlingImageO3ImageToImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingImageO3ImageToImageOutput;
+};
+
+export type GetFalAiKlingImageO3ImageToImageRequestsByRequestIdResponse =
+  GetFalAiKlingImageO3ImageToImageRequestsByRequestIdResponses[keyof GetFalAiKlingImageO3ImageToImageRequestsByRequestIdResponses];
 
 export type GetXaiGrokImagineImageEditRequestsByRequestIdStatusData = {
   body?: never;
@@ -88250,6 +89457,196 @@ export type GetFalAiFluxLoraRequestsByRequestIdResponses = {
 
 export type GetFalAiFluxLoraRequestsByRequestIdResponse =
   GetFalAiFluxLoraRequestsByRequestIdResponses[keyof GetFalAiFluxLoraRequestsByRequestIdResponses];
+
+export type GetFalAiKlingImageV3TextToImageRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-image/v3/text-to-image/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingImageV3TextToImageRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingImageV3TextToImageRequestsByRequestIdStatusResponse =
+  GetFalAiKlingImageV3TextToImageRequestsByRequestIdStatusResponses[keyof GetFalAiKlingImageV3TextToImageRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingImageV3TextToImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/v3/text-to-image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingImageV3TextToImageRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingImageV3TextToImageRequestsByRequestIdCancelResponse =
+  PutFalAiKlingImageV3TextToImageRequestsByRequestIdCancelResponses[keyof PutFalAiKlingImageV3TextToImageRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingImageV3TextToImageData = {
+  body: KlingImageV3TextToImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-image/v3/text-to-image";
+};
+
+export type PostFalAiKlingImageV3TextToImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingImageV3TextToImageResponse =
+  PostFalAiKlingImageV3TextToImageResponses[keyof PostFalAiKlingImageV3TextToImageResponses];
+
+export type GetFalAiKlingImageV3TextToImageRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/v3/text-to-image/requests/{request_id}";
+};
+
+export type GetFalAiKlingImageV3TextToImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingImageV3TextToImageOutput;
+};
+
+export type GetFalAiKlingImageV3TextToImageRequestsByRequestIdResponse =
+  GetFalAiKlingImageV3TextToImageRequestsByRequestIdResponses[keyof GetFalAiKlingImageV3TextToImageRequestsByRequestIdResponses];
+
+export type GetFalAiKlingImageO3TextToImageRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-image/o3/text-to-image/requests/{request_id}/status";
+};
+
+export type GetFalAiKlingImageO3TextToImageRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiKlingImageO3TextToImageRequestsByRequestIdStatusResponse =
+  GetFalAiKlingImageO3TextToImageRequestsByRequestIdStatusResponses[keyof GetFalAiKlingImageO3TextToImageRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingImageO3TextToImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/o3/text-to-image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingImageO3TextToImageRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKlingImageO3TextToImageRequestsByRequestIdCancelResponse =
+  PutFalAiKlingImageO3TextToImageRequestsByRequestIdCancelResponses[keyof PutFalAiKlingImageO3TextToImageRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingImageO3TextToImageData = {
+  body: KlingImageO3TextToImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-image/o3/text-to-image";
+};
+
+export type PostFalAiKlingImageO3TextToImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingImageO3TextToImageResponse =
+  PostFalAiKlingImageO3TextToImageResponses[keyof PostFalAiKlingImageO3TextToImageResponses];
+
+export type GetFalAiKlingImageO3TextToImageRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-image/o3/text-to-image/requests/{request_id}";
+};
+
+export type GetFalAiKlingImageO3TextToImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingImageO3TextToImageOutput;
+};
+
+export type GetFalAiKlingImageO3TextToImageRequestsByRequestIdResponse =
+  GetFalAiKlingImageO3TextToImageRequestsByRequestIdResponses[keyof GetFalAiKlingImageO3TextToImageRequestsByRequestIdResponses];
 
 export type GetXaiGrokImagineImageRequestsByRequestIdStatusData = {
   body?: never;

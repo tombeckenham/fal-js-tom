@@ -2202,8 +2202,18 @@ export type Flux2Klein9bBaseTrainerEditInput = {
  * Output
  */
 export type ZImageTurboTrainerV2Output = {
-  config_file: File;
-  diffusers_lora_file: File;
+  /**
+   * Config File
+   *
+   * URL to the configuration file for the trained model.
+   */
+  config_file: FileType2;
+  /**
+   * Diffusers Lora File
+   *
+   * URL to the trained diffusers lora weights.
+   */
+  diffusers_lora_file: FileType2;
 };
 
 /**
@@ -2243,7 +2253,7 @@ export type ZImageTurboTrainerV2Input = {
    *
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
-  default_caption?: string | unknown;
+  default_caption?: string;
 };
 
 /**
@@ -2284,6 +2294,58 @@ export type ZImageBaseTrainerInput = {
    * Learning Rate
    *
    * Learning rate.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageTrainerV2Output = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputImage
+ */
+export type QwenImageTrainerV2Input = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive for text-to-image training.
+   *
+   * The zip should contain images with their corresponding text captions:
+   *
+   * image.EXT and image.txt
+   * For example:
+   * photo.jpg and photo.txt
+   *
+   * The text file contains the caption/prompt describing the target image.
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   * If no default_caption is provided and a text file is missing, the training will fail.
+   *
+   */
+  image_data_url: string;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
    */
   learning_rate?: number;
   /**
@@ -3016,6 +3078,99 @@ export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses = {
 
 export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponse =
   GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses];
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses];
+
+export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses];
+
+export type PostFalAiQwenImageTrainerV2Data = {
+  body: QwenImageTrainerV2Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer-v2";
+};
+
+export type PostFalAiQwenImageTrainerV2Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImageTrainerV2Response =
+  PostFalAiQwenImageTrainerV2Responses[keyof PostFalAiQwenImageTrainerV2Responses];
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}";
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImageTrainerV2Output;
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdResponse =
+  GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses[keyof GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses];
 
 export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusData = {
   body?: never;

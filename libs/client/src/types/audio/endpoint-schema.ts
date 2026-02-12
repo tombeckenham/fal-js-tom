@@ -110,6 +110,10 @@ import {
   zV2InpaintOutput,
   zV2TextToMusicInput,
   zV2TextToMusicOutput,
+  zWorkflowUtilitiesAudioCompressorInput,
+  zWorkflowUtilitiesAudioCompressorOutput,
+  zWorkflowUtilitiesImpulseResponseInput,
+  zWorkflowUtilitiesImpulseResponseOutput,
   zYueInput,
   zYueOutput,
   zZonosInput,
@@ -118,6 +122,16 @@ import {
 
 /** Zod schema for audio endpoints using discriminatedUnion */
 export const AudioEndpointSchema = z.discriminatedUnion("endpoint", [
+  z.object({
+    endpoint: z.literal("fal-ai/workflow-utilities/impulse-response"),
+    input: zWorkflowUtilitiesImpulseResponseInput,
+    output: zWorkflowUtilitiesImpulseResponseOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/workflow-utilities/audio-compressor"),
+    input: zWorkflowUtilitiesAudioCompressorInput,
+    output: zWorkflowUtilitiesAudioCompressorOutput,
+  }),
   z.object({
     endpoint: z.literal("fal-ai/elevenlabs/voice-changer"),
     input: zElevenlabsVoiceChangerInput,

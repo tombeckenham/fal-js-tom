@@ -38,6 +38,8 @@ import type {
   BriaVideoEraserEraseMaskOutput,
   BriaVideoEraserErasePromptInput,
   BriaVideoEraserErasePromptOutput,
+  BytedanceDreamactorV2Input,
+  BytedanceDreamactorV2Output,
   BytedanceOmnihumanInput,
   BytedanceOmnihumanOutput,
   BytedanceOmnihumanV15Input,
@@ -194,6 +196,26 @@ import type {
   KlingVideoO1VideoToVideoEditOutput,
   KlingVideoO1VideoToVideoReferenceInput,
   KlingVideoO1VideoToVideoReferenceOutput,
+  KlingVideoO3ProImageToVideoInput,
+  KlingVideoO3ProImageToVideoOutput,
+  KlingVideoO3ProReferenceToVideoInput,
+  KlingVideoO3ProReferenceToVideoOutput,
+  KlingVideoO3ProTextToVideoInput,
+  KlingVideoO3ProTextToVideoOutput,
+  KlingVideoO3ProVideoToVideoEditInput,
+  KlingVideoO3ProVideoToVideoEditOutput,
+  KlingVideoO3ProVideoToVideoReferenceInput,
+  KlingVideoO3ProVideoToVideoReferenceOutput,
+  KlingVideoO3StandardImageToVideoInput,
+  KlingVideoO3StandardImageToVideoOutput,
+  KlingVideoO3StandardReferenceToVideoInput,
+  KlingVideoO3StandardReferenceToVideoOutput,
+  KlingVideoO3StandardTextToVideoInput,
+  KlingVideoO3StandardTextToVideoOutput,
+  KlingVideoO3StandardVideoToVideoEditInput,
+  KlingVideoO3StandardVideoToVideoEditOutput,
+  KlingVideoO3StandardVideoToVideoReferenceInput,
+  KlingVideoO3StandardVideoToVideoReferenceOutput,
   KlingVideoV15ProEffectsInput,
   KlingVideoV15ProEffectsOutput,
   KlingVideoV15ProImageToVideoInput,
@@ -252,6 +274,14 @@ import type {
   KlingVideoV2MasterImageToVideoOutput,
   KlingVideoV2MasterTextToVideoInput,
   KlingVideoV2MasterTextToVideoOutput,
+  KlingVideoV3ProImageToVideoInput,
+  KlingVideoV3ProImageToVideoOutput,
+  KlingVideoV3ProTextToVideoInput,
+  KlingVideoV3ProTextToVideoOutput,
+  KlingVideoV3StandardImageToVideoInput,
+  KlingVideoV3StandardImageToVideoOutput,
+  KlingVideoV3StandardTextToVideoInput,
+  KlingVideoV3StandardTextToVideoOutput,
   KreaWan14bTextToVideoInput,
   KreaWan14bTextToVideoOutput,
   KreaWan14bVideoToVideoInput,
@@ -624,6 +654,8 @@ import type {
   V26ImageToVideoFlashOutput,
   V26ImageToVideoInput,
   V26ImageToVideoOutput,
+  V26ReferenceToVideoFlashInput,
+  V26ReferenceToVideoFlashOutput,
   V26ReferenceToVideoInput,
   V26ReferenceToVideoOutput,
   V26TextToVideoInput,
@@ -800,6 +832,10 @@ import type {
   WanVisionEnhancerOutput,
   WorkflowUtilitiesAutoSubtitleInput,
   WorkflowUtilitiesAutoSubtitleOutput,
+  WorkflowUtilitiesBlendVideoInput,
+  WorkflowUtilitiesBlendVideoOutput,
+  WorkflowUtilitiesTrimVideoInput,
+  WorkflowUtilitiesTrimVideoOutput,
 } from "./types.gen";
 
 export type VideoEndpointMap = {
@@ -914,6 +950,30 @@ export type VideoEndpointMap = {
   "fal-ai/wan-i2v": {
     input: WanI2vInput;
     output: WanI2vOutput;
+  };
+  "fal-ai/kling-video/o3/pro/image-to-video": {
+    input: KlingVideoO3ProImageToVideoInput;
+    output: KlingVideoO3ProImageToVideoOutput;
+  };
+  "fal-ai/kling-video/o3/pro/reference-to-video": {
+    input: KlingVideoO3ProReferenceToVideoInput;
+    output: KlingVideoO3ProReferenceToVideoOutput;
+  };
+  "fal-ai/kling-video/o3/standard/reference-to-video": {
+    input: KlingVideoO3StandardReferenceToVideoInput;
+    output: KlingVideoO3StandardReferenceToVideoOutput;
+  };
+  "fal-ai/kling-video/o3/standard/image-to-video": {
+    input: KlingVideoO3StandardImageToVideoInput;
+    output: KlingVideoO3StandardImageToVideoOutput;
+  };
+  "fal-ai/kling-video/v3/standard/image-to-video": {
+    input: KlingVideoV3StandardImageToVideoInput;
+    output: KlingVideoV3StandardImageToVideoOutput;
+  };
+  "fal-ai/kling-video/v3/pro/image-to-video": {
+    input: KlingVideoV3ProImageToVideoInput;
+    output: KlingVideoV3ProImageToVideoOutput;
   };
   "fal-ai/vidu/q3/image-to-video": {
     input: ViduQ3ImageToVideoInput;
@@ -1487,6 +1547,22 @@ export type VideoEndpointMap = {
     input: KlingVideoV2MasterTextToVideoInput;
     output: KlingVideoV2MasterTextToVideoOutput;
   };
+  "fal-ai/kling-video/v3/pro/text-to-video": {
+    input: KlingVideoV3ProTextToVideoInput;
+    output: KlingVideoV3ProTextToVideoOutput;
+  };
+  "fal-ai/kling-video/o3/pro/text-to-video": {
+    input: KlingVideoO3ProTextToVideoInput;
+    output: KlingVideoO3ProTextToVideoOutput;
+  };
+  "fal-ai/kling-video/o3/standard/text-to-video": {
+    input: KlingVideoO3StandardTextToVideoInput;
+    output: KlingVideoO3StandardTextToVideoOutput;
+  };
+  "fal-ai/kling-video/v3/standard/text-to-video": {
+    input: KlingVideoV3StandardTextToVideoInput;
+    output: KlingVideoV3StandardTextToVideoOutput;
+  };
   "fal-ai/vidu/q3/text-to-video": {
     input: ViduQ3TextToVideoInput;
     output: ViduQ3TextToVideoOutput;
@@ -1886,6 +1962,38 @@ export type VideoEndpointMap = {
   "fal-ai/mmaudio-v2": {
     input: MmaudioV2Input;
     output: MmaudioV2Output;
+  };
+  "fal-ai/workflow-utilities/trim-video": {
+    input: WorkflowUtilitiesTrimVideoInput;
+    output: WorkflowUtilitiesTrimVideoOutput;
+  };
+  "wan/v2.6/reference-to-video/flash": {
+    input: V26ReferenceToVideoFlashInput;
+    output: V26ReferenceToVideoFlashOutput;
+  };
+  "fal-ai/bytedance/dreamactor/v2": {
+    input: BytedanceDreamactorV2Input;
+    output: BytedanceDreamactorV2Output;
+  };
+  "fal-ai/workflow-utilities/blend-video": {
+    input: WorkflowUtilitiesBlendVideoInput;
+    output: WorkflowUtilitiesBlendVideoOutput;
+  };
+  "fal-ai/kling-video/o3/standard/video-to-video/edit": {
+    input: KlingVideoO3StandardVideoToVideoEditInput;
+    output: KlingVideoO3StandardVideoToVideoEditOutput;
+  };
+  "fal-ai/kling-video/o3/pro/video-to-video/edit": {
+    input: KlingVideoO3ProVideoToVideoEditInput;
+    output: KlingVideoO3ProVideoToVideoEditOutput;
+  };
+  "fal-ai/kling-video/o3/standard/video-to-video/reference": {
+    input: KlingVideoO3StandardVideoToVideoReferenceInput;
+    output: KlingVideoO3StandardVideoToVideoReferenceOutput;
+  };
+  "fal-ai/kling-video/o3/pro/video-to-video/reference": {
+    input: KlingVideoO3ProVideoToVideoReferenceInput;
+    output: KlingVideoO3ProVideoToVideoReferenceOutput;
   };
   "xai/grok-imagine-video/edit-video": {
     input: GrokImagineVideoEditVideoInput;
