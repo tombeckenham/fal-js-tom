@@ -4,7 +4,6 @@
 import type { Gen3dEndpointMap } from "./3d/endpoint-map";
 import type { AudioEndpointMap } from "./audio/endpoint-map";
 import type { ImageEndpointMap } from "./image/endpoint-map";
-import type { JsonEndpointMap } from "./json/endpoint-map";
 import type { LlmEndpointMap } from "./llm/endpoint-map";
 import type { SpeechEndpointMap } from "./speech/endpoint-map";
 import type { TextEndpointMap } from "./text/endpoint-map";
@@ -17,7 +16,6 @@ import type { VisionEndpointMap } from "./vision/endpoint-map";
 export type EndpointTypeMap = Gen3dEndpointMap &
   AudioEndpointMap &
   ImageEndpointMap &
-  JsonEndpointMap &
   LlmEndpointMap &
   SpeechEndpointMap &
   TextEndpointMap &

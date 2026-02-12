@@ -17,11 +17,6 @@ import type {
   ImageModelOutput,
 } from "./image/endpoint-map";
 import type {
-  JsonModel,
-  JsonModelInput,
-  JsonModelOutput,
-} from "./json/endpoint-map";
-import type {
   LlmModel,
   LlmModelInput,
   LlmModelOutput,
@@ -62,7 +57,6 @@ export type EndpointType =
   | Gen3dModel
   | AudioModel
   | ImageModel
-  | JsonModel
   | LlmModel
   | SpeechModel
   | TextModel
@@ -78,23 +72,21 @@ export type InputType<T extends EndpointType> = T extends Gen3dModel
     ? AudioModelInput<T>
     : T extends ImageModel
       ? ImageModelInput<T>
-      : T extends JsonModel
-        ? JsonModelInput<T>
-        : T extends LlmModel
-          ? LlmModelInput<T>
-          : T extends SpeechModel
-            ? SpeechModelInput<T>
-            : T extends TextModel
-              ? TextModelInput<T>
-              : T extends TrainingModel
-                ? TrainingModelInput<T>
-                : T extends UnknownModel
-                  ? UnknownModelInput<T>
-                  : T extends VideoModel
-                    ? VideoModelInput<T>
-                    : T extends VisionModel
-                      ? VisionModelInput<T>
-                      : never;
+      : T extends LlmModel
+        ? LlmModelInput<T>
+        : T extends SpeechModel
+          ? SpeechModelInput<T>
+          : T extends TextModel
+            ? TextModelInput<T>
+            : T extends TrainingModel
+              ? TrainingModelInput<T>
+              : T extends UnknownModel
+                ? UnknownModelInput<T>
+                : T extends VideoModel
+                  ? VideoModelInput<T>
+                  : T extends VisionModel
+                    ? VisionModelInput<T>
+                    : never;
 
 /** Get the output type for an endpoint */
 export type OutputType<T extends EndpointType> = T extends Gen3dModel
@@ -103,20 +95,18 @@ export type OutputType<T extends EndpointType> = T extends Gen3dModel
     ? AudioModelOutput<T>
     : T extends ImageModel
       ? ImageModelOutput<T>
-      : T extends JsonModel
-        ? JsonModelOutput<T>
-        : T extends LlmModel
-          ? LlmModelOutput<T>
-          : T extends SpeechModel
-            ? SpeechModelOutput<T>
-            : T extends TextModel
-              ? TextModelOutput<T>
-              : T extends TrainingModel
-                ? TrainingModelOutput<T>
-                : T extends UnknownModel
-                  ? UnknownModelOutput<T>
-                  : T extends VideoModel
-                    ? VideoModelOutput<T>
-                    : T extends VisionModel
-                      ? VisionModelOutput<T>
-                      : never;
+      : T extends LlmModel
+        ? LlmModelOutput<T>
+        : T extends SpeechModel
+          ? SpeechModelOutput<T>
+          : T extends TextModel
+            ? TextModelOutput<T>
+            : T extends TrainingModel
+              ? TrainingModelOutput<T>
+              : T extends UnknownModel
+                ? UnknownModelOutput<T>
+                : T extends VideoModel
+                  ? VideoModelOutput<T>
+                  : T extends VisionModel
+                    ? VisionModelOutput<T>
+                    : never;

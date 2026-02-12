@@ -389,7 +389,7 @@ async function generateClientFile(
 }
 
 async function main() {
-  const generatedDir = join(__dirname, "..", "libs", "client", "src", "types");
+  const generatedDir = join(__dirname, "..", "libs", "types", "src");
 
   if (!existsSync(generatedDir)) {
     console.error("Error: src/types/ directory not found.");
@@ -452,7 +452,7 @@ async function main() {
     }
   }
 
-  console.log(`\n✓ Done! Generated endpoint maps in libs/client/src/types/`);
+  console.log(`\n✓ Done! Generated endpoint maps in libs/types/src/`);
   console.log(`\nCategories generated:`);
   for (const category of processedCategories) {
     console.log(`  - ${category} (${toPascalCase(category)}Model)`);
