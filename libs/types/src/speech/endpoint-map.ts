@@ -18,8 +18,12 @@ import type {
   ElevenlabsTtsTurboV25Output,
   IndexTts2TextToSpeechInput,
   IndexTts2TextToSpeechOutput,
+  InworldTtsInput,
+  InworldTtsOutput,
   KlingVideoV1TtsInput,
   KlingVideoV1TtsOutput,
+  LuxTtsInput,
+  LuxTtsOutput,
   MayaBatchInput,
   MayaBatchOutput,
   MayaInput,
@@ -54,6 +58,8 @@ import type {
   Qwen3TtsTextToSpeech17bOutput,
   Qwen3TtsVoiceDesign17bInput,
   Qwen3TtsVoiceDesign17bOutput,
+  TtsV1Input,
+  TtsV1Output,
   Vibevoice05bInput,
   Vibevoice05bOutput,
   Vibevoice7bInput,
@@ -63,121 +69,133 @@ import type {
 } from "./types.gen";
 
 export type SpeechEndpointMap = {
-  "resemble-ai/chatterboxhd/speech-to-speech": {
-    input: ChatterboxhdSpeechToSpeechInput;
-    output: ChatterboxhdSpeechToSpeechOutput;
-  };
   "fal-ai/chatterbox/speech-to-speech": {
     input: ChatterboxSpeechToSpeechInput;
     output: ChatterboxSpeechToSpeechOutput;
   };
-  "fal-ai/minimax/speech-2.8-hd": {
-    input: MinimaxSpeech28HdInput;
-    output: MinimaxSpeech28HdOutput;
+  "resemble-ai/chatterboxhd/speech-to-speech": {
+    input: ChatterboxhdSpeechToSpeechInput;
+    output: ChatterboxhdSpeechToSpeechOutput;
   };
-  "fal-ai/minimax/speech-2.8-turbo": {
-    input: MinimaxSpeech28TurboInput;
-    output: MinimaxSpeech28TurboOutput;
-  };
-  "fal-ai/qwen-3-tts/voice-design/1.7b": {
-    input: Qwen3TtsVoiceDesign17bInput;
-    output: Qwen3TtsVoiceDesign17bOutput;
-  };
-  "fal-ai/qwen-3-tts/text-to-speech/1.7b": {
-    input: Qwen3TtsTextToSpeech17bInput;
-    output: Qwen3TtsTextToSpeech17bOutput;
-  };
-  "fal-ai/qwen-3-tts/text-to-speech/0.6b": {
-    input: Qwen3TtsTextToSpeech06bInput;
-    output: Qwen3TtsTextToSpeech06bOutput;
-  };
-  "fal-ai/vibevoice/0.5b": {
-    input: Vibevoice05bInput;
-    output: Vibevoice05bOutput;
-  };
-  "fal-ai/maya/batch": {
-    input: MayaBatchInput;
-    output: MayaBatchOutput;
-  };
-  "fal-ai/maya/stream": {
-    input: MayaStreamInput;
-    output: MayaStreamOutput;
-  };
-  "fal-ai/maya": {
-    input: MayaInput;
-    output: MayaOutput;
-  };
-  "fal-ai/minimax/speech-2.6-turbo": {
-    input: MinimaxSpeech26TurboInput;
-    output: MinimaxSpeech26TurboOutput;
-  };
-  "fal-ai/minimax/speech-2.6-hd": {
-    input: MinimaxSpeech26HdInput;
-    output: MinimaxSpeech26HdOutput;
-  };
-  "fal-ai/index-tts-2/text-to-speech": {
-    input: IndexTts2TextToSpeechInput;
-    output: IndexTts2TextToSpeechOutput;
-  };
-  "fal-ai/kling-video/v1/tts": {
-    input: KlingVideoV1TtsInput;
-    output: KlingVideoV1TtsOutput;
-  };
-  "fal-ai/chatterbox/text-to-speech/multilingual": {
-    input: ChatterboxTextToSpeechMultilingualInput;
-    output: ChatterboxTextToSpeechMultilingualOutput;
-  };
-  "fal-ai/vibevoice/7b": {
-    input: Vibevoice7bInput;
-    output: Vibevoice7bOutput;
-  };
-  "fal-ai/vibevoice": {
-    input: VibevoiceInput;
-    output: VibevoiceOutput;
-  };
-  "fal-ai/minimax/preview/speech-2.5-hd": {
-    input: MinimaxPreviewSpeech25HdInput;
-    output: MinimaxPreviewSpeech25HdOutput;
-  };
-  "fal-ai/minimax/preview/speech-2.5-turbo": {
-    input: MinimaxPreviewSpeech25TurboInput;
-    output: MinimaxPreviewSpeech25TurboOutput;
-  };
-  "fal-ai/minimax/voice-design": {
-    input: MinimaxVoiceDesignInput;
-    output: MinimaxVoiceDesignOutput;
-  };
-  "resemble-ai/chatterboxhd/text-to-speech": {
-    input: ChatterboxhdTextToSpeechInput;
-    output: ChatterboxhdTextToSpeechOutput;
-  };
-  "fal-ai/chatterbox/text-to-speech": {
-    input: ChatterboxTextToSpeechInput;
-    output: ChatterboxTextToSpeechOutput;
-  };
-  "fal-ai/minimax/voice-clone": {
-    input: MinimaxVoiceCloneInput;
-    output: MinimaxVoiceCloneOutput;
-  };
-  "fal-ai/minimax/speech-02-turbo": {
-    input: MinimaxSpeech02TurboInput;
-    output: MinimaxSpeech02TurboOutput;
+  "fal-ai/elevenlabs/tts/turbo-v2.5": {
+    input: ElevenlabsTtsTurboV25Input;
+    output: ElevenlabsTtsTurboV25Output;
   };
   "fal-ai/minimax/speech-02-hd": {
     input: MinimaxSpeech02HdInput;
     output: MinimaxSpeech02HdOutput;
   };
-  "fal-ai/dia-tts": {
-    input: DiaTtsInput;
-    output: DiaTtsOutput;
+  "fal-ai/minimax/speech-2.8-hd": {
+    input: MinimaxSpeech28HdInput;
+    output: MinimaxSpeech28HdOutput;
+  };
+  "fal-ai/minimax/voice-clone": {
+    input: MinimaxVoiceCloneInput;
+    output: MinimaxVoiceCloneOutput;
+  };
+  "fal-ai/qwen-3-tts/text-to-speech/1.7b": {
+    input: Qwen3TtsTextToSpeech17bInput;
+    output: Qwen3TtsTextToSpeech17bOutput;
+  };
+  "fal-ai/minimax/speech-2.8-turbo": {
+    input: MinimaxSpeech28TurboInput;
+    output: MinimaxSpeech28TurboOutput;
+  };
+  "fal-ai/chatterbox/text-to-speech": {
+    input: ChatterboxTextToSpeechInput;
+    output: ChatterboxTextToSpeechOutput;
+  };
+  "fal-ai/minimax/speech-2.6-hd": {
+    input: MinimaxSpeech26HdInput;
+    output: MinimaxSpeech26HdOutput;
+  };
+  "fal-ai/minimax/speech-2.6-turbo": {
+    input: MinimaxSpeech26TurboInput;
+    output: MinimaxSpeech26TurboOutput;
+  };
+  "fal-ai/minimax/speech-02-turbo": {
+    input: MinimaxSpeech02TurboInput;
+    output: MinimaxSpeech02TurboOutput;
+  };
+  "fal-ai/vibevoice/7b": {
+    input: Vibevoice7bInput;
+    output: Vibevoice7bOutput;
+  };
+  "fal-ai/lux-tts": {
+    input: LuxTtsInput;
+    output: LuxTtsOutput;
+  };
+  "fal-ai/index-tts-2/text-to-speech": {
+    input: IndexTts2TextToSpeechInput;
+    output: IndexTts2TextToSpeechOutput;
   };
   "fal-ai/orpheus-tts": {
     input: OrpheusTtsInput;
     output: OrpheusTtsOutput;
   };
-  "fal-ai/elevenlabs/tts/turbo-v2.5": {
-    input: ElevenlabsTtsTurboV25Input;
-    output: ElevenlabsTtsTurboV25Output;
+  "fal-ai/minimax/voice-design": {
+    input: MinimaxVoiceDesignInput;
+    output: MinimaxVoiceDesignOutput;
+  };
+  "fal-ai/dia-tts": {
+    input: DiaTtsInput;
+    output: DiaTtsOutput;
+  };
+  "fal-ai/kling-video/v1/tts": {
+    input: KlingVideoV1TtsInput;
+    output: KlingVideoV1TtsOutput;
+  };
+  "fal-ai/qwen-3-tts/voice-design/1.7b": {
+    input: Qwen3TtsVoiceDesign17bInput;
+    output: Qwen3TtsVoiceDesign17bOutput;
+  };
+  "fal-ai/chatterbox/text-to-speech/multilingual": {
+    input: ChatterboxTextToSpeechMultilingualInput;
+    output: ChatterboxTextToSpeechMultilingualOutput;
+  };
+  "fal-ai/minimax/preview/speech-2.5-hd": {
+    input: MinimaxPreviewSpeech25HdInput;
+    output: MinimaxPreviewSpeech25HdOutput;
+  };
+  "resemble-ai/chatterboxhd/text-to-speech": {
+    input: ChatterboxhdTextToSpeechInput;
+    output: ChatterboxhdTextToSpeechOutput;
+  };
+  "fal-ai/maya": {
+    input: MayaInput;
+    output: MayaOutput;
+  };
+  "fal-ai/qwen-3-tts/text-to-speech/0.6b": {
+    input: Qwen3TtsTextToSpeech06bInput;
+    output: Qwen3TtsTextToSpeech06bOutput;
+  };
+  "fal-ai/vibevoice": {
+    input: VibevoiceInput;
+    output: VibevoiceOutput;
+  };
+  "fal-ai/vibevoice/0.5b": {
+    input: Vibevoice05bInput;
+    output: Vibevoice05bOutput;
+  };
+  "fal-ai/minimax/preview/speech-2.5-turbo": {
+    input: MinimaxPreviewSpeech25TurboInput;
+    output: MinimaxPreviewSpeech25TurboOutput;
+  };
+  "fal-ai/maya/stream": {
+    input: MayaStreamInput;
+    output: MayaStreamOutput;
+  };
+  "fal-ai/inworld-tts": {
+    input: InworldTtsInput;
+    output: InworldTtsOutput;
+  };
+  "fal-ai/maya/batch": {
+    input: MayaBatchInput;
+    output: MayaBatchOutput;
+  };
+  "xai/tts/v1": {
+    input: TtsV1Input;
+    output: TtsV1Output;
   };
 };
 

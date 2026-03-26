@@ -4,8 +4,6 @@
 import { z } from "zod";
 
 import {
-  zAiDetectorDetectTextInput,
-  zAiDetectorDetectTextOutput,
   zElevenlabsSpeechToTextInput,
   zElevenlabsSpeechToTextOutput,
   zElevenlabsSpeechToTextScribeV2Input,
@@ -39,9 +37,9 @@ import {
 /** Zod schema for text endpoints using discriminatedUnion */
 export const TextEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
-    endpoint: z.literal("fal-ai/nemotron/asr/stream"),
-    input: zNemotronAsrStreamInput,
-    output: zNemotronAsrStreamOutput,
+    endpoint: z.literal("fal-ai/silero-vad"),
+    input: zSileroVadInput,
+    output: zSileroVadOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/nemotron/asr"),
@@ -49,49 +47,9 @@ export const TextEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zNemotronAsrOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/silero-vad"),
-    input: zSileroVadInput,
-    output: zSileroVadOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/speech-to-text/scribe-v2"),
-    input: zElevenlabsSpeechToTextScribeV2Input,
-    output: zElevenlabsSpeechToTextScribeV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/smart-turn"),
-    input: zSmartTurnInput,
-    output: zSmartTurnOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/speech-to-text/turbo"),
-    input: zSpeechToTextTurboInput,
-    output: zSpeechToTextTurboOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/speech-to-text/turbo/stream"),
-    input: zSpeechToTextTurboStreamInput,
-    output: zSpeechToTextTurboStreamOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/speech-to-text/stream"),
-    input: zSpeechToTextStreamInput,
-    output: zSpeechToTextStreamOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/speech-to-text"),
-    input: zSpeechToTextInput,
-    output: zSpeechToTextOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/speech-to-text"),
-    input: zElevenlabsSpeechToTextInput,
-    output: zElevenlabsSpeechToTextOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/wizper"),
-    input: zWizperInput,
-    output: zWizperOutput,
+    endpoint: z.literal("fal-ai/nemotron/asr/stream"),
+    input: zNemotronAsrStreamInput,
+    output: zNemotronAsrStreamOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/whisper"),
@@ -99,19 +57,54 @@ export const TextEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zWhisperOutput,
   }),
   z.object({
-    endpoint: z.literal("half-moon-ai/ai-detector/detect-text"),
-    input: zAiDetectorDetectTextInput,
-    output: zAiDetectorDetectTextOutput,
+    endpoint: z.literal("fal-ai/wizper"),
+    input: zWizperInput,
+    output: zWizperOutput,
   }),
   z.object({
-    endpoint: z.literal("openrouter/router/video/enterprise"),
-    input: zRouterVideoEnterpriseInput,
-    output: zRouterVideoEnterpriseOutput,
+    endpoint: z.literal("fal-ai/elevenlabs/speech-to-text/scribe-v2"),
+    input: zElevenlabsSpeechToTextScribeV2Input,
+    output: zElevenlabsSpeechToTextScribeV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/speech-to-text"),
+    input: zElevenlabsSpeechToTextInput,
+    output: zElevenlabsSpeechToTextOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/speech-to-text/turbo"),
+    input: zSpeechToTextTurboInput,
+    output: zSpeechToTextTurboOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/speech-to-text"),
+    input: zSpeechToTextInput,
+    output: zSpeechToTextOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/smart-turn"),
+    input: zSmartTurnInput,
+    output: zSmartTurnOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/speech-to-text/stream"),
+    input: zSpeechToTextStreamInput,
+    output: zSpeechToTextStreamOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/speech-to-text/turbo/stream"),
+    input: zSpeechToTextTurboStreamInput,
+    output: zSpeechToTextTurboStreamOutput,
   }),
   z.object({
     endpoint: z.literal("openrouter/router/video"),
     input: zRouterVideoInput,
     output: zRouterVideoOutput,
+  }),
+  z.object({
+    endpoint: z.literal("openrouter/router/video/enterprise"),
+    input: zRouterVideoEnterpriseInput,
+    output: zRouterVideoEnterpriseOutput,
   }),
 ]);
 

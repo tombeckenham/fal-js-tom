@@ -2,8 +2,6 @@
 
 import * as z from "zod";
 
-export const zFiboGenerateStructuredPromptOutput = z.unknown();
-
 /**
  * Lighting
  */
@@ -14,6 +12,21 @@ export const zLighting = z.object({
 });
 
 /**
+ * Aesthetics
+ */
+export const zAestheticsType2 = z.object({
+  preference_score: z.string().register(z.globalRegistry, {
+    description: "The preference score of the image.",
+  }),
+  composition: z.optional(z.union([z.string(), z.unknown()])),
+  mood_atmosphere: z.optional(z.union([z.string(), z.unknown()])),
+  aesthetic_score: z.string().register(z.globalRegistry, {
+    description: "The aesthetic score of the image.",
+  }),
+  color_scheme: z.optional(z.union([z.string(), z.unknown()])),
+});
+
+/**
  * PhotographicCharacteristics
  */
 export const zPhotographicCharacteristics = z.object({
@@ -21,15 +34,6 @@ export const zPhotographicCharacteristics = z.object({
   lens_focal_length: z.optional(z.union([z.string(), z.unknown()])),
   camera_angle: z.optional(z.union([z.string(), z.unknown()])),
   depth_of_field: z.optional(z.union([z.string(), z.unknown()])),
-});
-
-/**
- * Aesthetics
- */
-export const zAestheticsType2 = z.object({
-  composition: z.optional(z.union([z.string(), z.unknown()])),
-  mood_atmosphere: z.optional(z.union([z.string(), z.unknown()])),
-  color_scheme: z.optional(z.union([z.string(), z.unknown()])),
 });
 
 /**
@@ -59,55 +63,6 @@ export const zPromptObject = z.object({
 /**
  * StructuredPrompt
  */
-export const zStructuredPromptType2 = z.object({
-  background_setting: z.optional(z.union([z.string(), z.unknown()])),
-  artistic_style: z.optional(z.union([z.string(), z.unknown()])),
-  context: z.optional(z.union([z.string(), z.unknown()])),
-  text_render: z.optional(z.union([z.array(z.unknown()), z.unknown()])),
-  objects: z.optional(z.union([z.array(zPromptObject), z.unknown()])),
-  aesthetics: z.optional(z.union([zAestheticsType2, z.unknown()])),
-  photographic_characteristics: z.optional(
-    z.union([zPhotographicCharacteristics, z.unknown()]),
-  ),
-  style_medium: z.optional(z.union([z.string(), z.unknown()])),
-  lighting: z.optional(z.union([zLighting, z.unknown()])),
-  short_description: z.optional(z.union([z.string(), z.unknown()])),
-});
-
-/**
- * StructuredPromptModel
- */
-export const zFiboGenerateStructuredPromptInput = z.object({
-  prompt: z.optional(z.union([z.string(), z.unknown()])),
-  seed: z
-    .optional(
-      z.int().register(z.globalRegistry, {
-        description: "Random seed for reproducibility.",
-      }),
-    )
-    .default(5555),
-  structured_prompt: z.optional(z.union([zStructuredPromptType2, z.unknown()])),
-  image_url: z.optional(z.union([z.string(), z.unknown()])),
-});
-
-/**
- * Aesthetics
- */
-export const zAesthetics = z.object({
-  preference_score: z.string().register(z.globalRegistry, {
-    description: "The preference score of the image.",
-  }),
-  composition: z.optional(z.union([z.string(), z.unknown()])),
-  mood_atmosphere: z.optional(z.union([z.string(), z.unknown()])),
-  aesthetic_score: z.string().register(z.globalRegistry, {
-    description: "The aesthetic score of the image.",
-  }),
-  color_scheme: z.optional(z.union([z.string(), z.unknown()])),
-});
-
-/**
- * StructuredPrompt
- */
 export const zBriaFiboVlmStructuredPrompt = z.object({
   background_setting: z.optional(z.union([z.string(), z.unknown()])),
   artistic_style: z.optional(z.union([z.string(), z.unknown()])),
@@ -118,7 +73,7 @@ export const zBriaFiboVlmStructuredPrompt = z.object({
   photographic_characteristics: z.optional(
     z.union([zPhotographicCharacteristics, z.unknown()]),
   ),
-  aesthetics: z.optional(z.union([zAesthetics, z.unknown()])),
+  aesthetics: z.optional(z.union([zAestheticsType2, z.unknown()])),
   lighting: z.optional(z.union([zLighting, z.unknown()])),
   short_description: z.optional(z.union([z.string(), z.unknown()])),
 });
@@ -140,6 +95,77 @@ export const zFiboLiteGenerateStructuredPromptLiteInput = z.object({
   structured_prompt: z.optional(
     z.union([zBriaFiboVlmStructuredPrompt, z.unknown()]),
   ),
+  image_url: z.optional(z.union([z.string(), z.unknown()])),
+});
+
+export const zFiboEditEditStructuredInstructionOutput = z.unknown();
+
+/**
+ * StructuredInstructionInputModel
+ */
+export const zFiboEditEditStructuredInstructionInput = z.object({
+  sync_mode: z
+    .optional(
+      z.boolean().register(z.globalRegistry, {
+        description:
+          "If true, returns the image directly in the response (increases latency).",
+      }),
+    )
+    .default(false),
+  seed: z
+    .optional(
+      z.int().register(z.globalRegistry, {
+        description: "Random seed for reproducibility.",
+      }),
+    )
+    .default(5555),
+  instruction: z.optional(z.union([z.string(), z.unknown()])),
+  mask_url: z.optional(z.union([z.string(), z.unknown()])),
+  image_url: z.optional(z.union([z.string(), z.unknown()])),
+});
+
+/**
+ * Aesthetics
+ */
+export const zAesthetics = z.object({
+  composition: z.optional(z.union([z.string(), z.unknown()])),
+  mood_atmosphere: z.optional(z.union([z.string(), z.unknown()])),
+  color_scheme: z.optional(z.union([z.string(), z.unknown()])),
+});
+
+export const zFiboGenerateStructuredPromptOutput = z.unknown();
+
+/**
+ * StructuredPrompt
+ */
+export const zStructuredPromptType2 = z.object({
+  background_setting: z.optional(z.union([z.string(), z.unknown()])),
+  artistic_style: z.optional(z.union([z.string(), z.unknown()])),
+  aesthetics: z.optional(z.union([zAesthetics, z.unknown()])),
+  text_render: z.optional(z.union([z.array(z.unknown()), z.unknown()])),
+  objects: z.optional(z.union([z.array(zPromptObject), z.unknown()])),
+  style_medium: z.optional(z.union([z.string(), z.unknown()])),
+  photographic_characteristics: z.optional(
+    z.union([zPhotographicCharacteristics, z.unknown()]),
+  ),
+  context: z.optional(z.union([z.string(), z.unknown()])),
+  lighting: z.optional(z.union([zLighting, z.unknown()])),
+  short_description: z.optional(z.union([z.string(), z.unknown()])),
+});
+
+/**
+ * StructuredPromptModel
+ */
+export const zFiboGenerateStructuredPromptInput = z.object({
+  prompt: z.optional(z.union([z.string(), z.unknown()])),
+  seed: z
+    .optional(
+      z.int().register(z.globalRegistry, {
+        description: "Random seed for reproducibility.",
+      }),
+    )
+    .default(5555),
+  structured_prompt: z.optional(z.union([zStructuredPromptType2, z.unknown()])),
   image_url: z.optional(z.union([z.string(), z.unknown()])),
 });
 
@@ -173,15 +199,15 @@ export const zAestheticsDetails = z
     preference_score: z.string().register(z.globalRegistry, {
       description: "E.g., 'very low', 'low', 'medium', 'high', 'very high'.",
     }),
-    aesthetic_score: z.string().register(z.globalRegistry, {
-      description: "E.g., 'very low', 'low', 'medium', 'high', 'very high'.",
+    composition: z.string().register(z.globalRegistry, {
+      description:
+        "E.g., 'rule of thirds', 'symmetrical', 'centered', 'leading lines'.",
     }),
     mood_atmosphere: z.string().register(z.globalRegistry, {
       description: "E.g., 'serene', 'energetic', 'mysterious', 'joyful'.",
     }),
-    composition: z.string().register(z.globalRegistry, {
-      description:
-        "E.g., 'rule of thirds', 'symmetrical', 'centered', 'leading lines'.",
+    aesthetic_score: z.string().register(z.globalRegistry, {
+      description: "E.g., 'very low', 'low', 'medium', 'high', 'very high'.",
     }),
     color_scheme: z.string().register(z.globalRegistry, {
       description:
@@ -225,7 +251,7 @@ export const zPhotographicCharacteristicsDetails = z
  */
 export const zObjectDescription = z
   .object({
-    clothing: z.optional(z.union([z.string(), z.unknown()])),
+    relative_size: z.optional(z.union([z.string(), z.unknown()])),
     description: z.string().register(z.globalRegistry, {
       description: "Short description of the object.",
     }),
@@ -241,7 +267,7 @@ export const zObjectDescription = z
     }),
     texture: z.optional(z.union([z.string(), z.unknown()])),
     gender: z.optional(z.union([z.string(), z.unknown()])),
-    relative_size: z.optional(z.union([z.string(), z.unknown()])),
+    clothing: z.optional(z.union([z.string(), z.unknown()])),
     location: z.string().register(z.globalRegistry, {
       description: "E.g., 'center', 'top-left', 'bottom-right foreground'.",
     }),
@@ -293,10 +319,10 @@ export const zStructuredPrompt = z.object({
   }),
   style_medium: z.optional(z.union([z.string(), z.unknown()])),
   text_render: z.optional(z.union([z.array(zTextRender), z.unknown()])),
+  subject_emotions: z.optional(z.union([z.string(), z.unknown()])),
   objects: z.array(zObjectDescription).register(z.globalRegistry, {
     description: "List of prominent foreground/midground objects.",
   }),
-  subject_emotions: z.optional(z.union([z.string(), z.unknown()])),
   photographic_characteristics: z.optional(
     z.union([zPhotographicCharacteristicsDetails, z.unknown()]),
   ),
@@ -329,30 +355,287 @@ export const zFiboLiteGenerateStructuredPromptInput = z.object({
   image_url: z.optional(z.union([z.string(), z.unknown()])),
 });
 
-export const zFiboEditEditStructuredInstructionOutput = z.unknown();
+/**
+ * File
+ */
+export const zFile = z.object({
+  file_size: z.optional(z.union([z.int(), z.unknown()])),
+  file_name: z.optional(z.union([z.string(), z.unknown()])),
+  content_type: z.optional(z.union([z.string(), z.unknown()])),
+  url: z.string().register(z.globalRegistry, {
+    description: "The URL where the file can be downloaded from.",
+  }),
+});
 
 /**
- * StructuredInstructionInputModel
+ * LottieOutput
  */
-export const zFiboEditEditStructuredInstructionInput = z.object({
-  sync_mode: z
+export const zOmnilottieVideoToLottieOutput = z.object({
+  lottie_file: zFile,
+});
+
+/**
+ * VideoToLottieInput
+ */
+export const zOmnilottieVideoToLottieInput = z.object({
+  prompt: z.optional(z.union([z.string(), z.unknown()])),
+  video_url: z.union([z.string(), z.string()]),
+  top_p: z
+    .optional(
+      z.number().gte(0).lte(1).register(z.globalRegistry, {
+        description: "Nucleus sampling probability threshold.",
+      }),
+    )
+    .default(0.25),
+  max_tokens: z
+    .optional(
+      z.int().gte(256).lte(8192).register(z.globalRegistry, {
+        description: "Maximum number of Lottie tokens to generate.",
+      }),
+    )
+    .default(4096),
+  temperature: z
+    .optional(
+      z.number().gte(0).lte(2).register(z.globalRegistry, {
+        description: "Sampling temperature for generation.",
+      }),
+    )
+    .default(0.9),
+  top_k: z
+    .optional(
+      z.int().gte(1).lte(100).register(z.globalRegistry, {
+        description: "Top-k sampling parameter.",
+      }),
+    )
+    .default(5),
+});
+
+/**
+ * WaveformOutput
+ */
+export const zFfmpegApiWaveformOutput = z.object({
+  waveform: z.array(z.number()).register(z.globalRegistry, {
+    description:
+      "Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.",
+  }),
+  duration: z.number().register(z.globalRegistry, {
+    description: "Duration of the audio in seconds",
+  }),
+  points: z.int().register(z.globalRegistry, {
+    description: "Number of points in the waveform data",
+  }),
+  precision: z.int().register(z.globalRegistry, {
+    description: "Number of decimal places used in the waveform values",
+  }),
+});
+
+/**
+ * WaveformInput
+ */
+export const zFfmpegApiWaveformInput = z.object({
+  points_per_second: z
+    .optional(
+      z.number().gte(1).lte(10).register(z.globalRegistry, {
+        description:
+          "Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.",
+      }),
+    )
+    .default(4),
+  smoothing_window: z
+    .optional(
+      z.int().gte(1).lte(21).register(z.globalRegistry, {
+        description:
+          "Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.",
+      }),
+    )
+    .default(3),
+  media_url: z.union([z.string(), z.string()]),
+  precision: z
+    .optional(
+      z.int().gte(1).lte(6).register(z.globalRegistry, {
+        description:
+          "Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.",
+      }),
+    )
+    .default(2),
+});
+
+/**
+ * LoudnormSummary
+ */
+export const zLoudnormSummary = z.object({
+  output_integrated: z.optional(z.union([z.number(), z.unknown()])),
+  output_lra: z.optional(z.union([z.number(), z.unknown()])),
+  input_lra: z.optional(z.union([z.number(), z.unknown()])),
+  normalization_type: z.optional(z.union([z.string(), z.unknown()])),
+  output_true_peak: z.optional(z.union([z.number(), z.unknown()])),
+  target_offset: z.optional(z.union([z.number(), z.unknown()])),
+  input_integrated: z.optional(z.union([z.number(), z.unknown()])),
+  input_true_peak: z.optional(z.union([z.number(), z.unknown()])),
+  output_threshold: z.optional(z.union([z.number(), z.unknown()])),
+  input_threshold: z.optional(z.union([z.number(), z.unknown()])),
+});
+
+/**
+ * LoudnormOutput
+ */
+export const zFfmpegApiLoudnormOutput = z.object({
+  summary: z.optional(z.union([zLoudnormSummary, z.unknown()])),
+  audio: zFile,
+});
+
+/**
+ * LoudnormInput
+ */
+export const zFfmpegApiLoudnormInput = z.object({
+  measured_lra: z.optional(z.union([z.number().gte(0).lte(99), z.unknown()])),
+  print_summary: z
     .optional(
       z.boolean().register(z.globalRegistry, {
         description:
-          "If true, returns the image directly in the response (increases latency).",
+          "Return loudness measurement summary with the normalized audio",
       }),
     )
     .default(false),
-  seed: z
+  offset: z
     .optional(
-      z.int().register(z.globalRegistry, {
-        description: "Random seed for reproducibility.",
+      z.number().gte(-99).lte(99).register(z.globalRegistry, {
+        description: "Offset gain in dB applied before the true-peak limiter",
       }),
     )
-    .default(5555),
-  mask_url: z.optional(z.union([z.string(), z.unknown()])),
-  instruction: z.optional(z.union([z.string(), z.unknown()])),
-  image_url: z.optional(z.union([z.string(), z.unknown()])),
+    .default(0),
+  measured_i: z.optional(z.union([z.number().gte(-99).lte(0), z.unknown()])),
+  measured_tp: z.optional(z.union([z.number().gte(-99).lte(99), z.unknown()])),
+  linear: z
+    .optional(
+      z.boolean().register(z.globalRegistry, {
+        description:
+          "Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).",
+      }),
+    )
+    .default(false),
+  dual_mono: z
+    .optional(
+      z.boolean().register(z.globalRegistry, {
+        description:
+          "Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems",
+      }),
+    )
+    .default(false),
+  measured_thresh: z.optional(
+    z.union([z.number().gte(-99).lte(0), z.unknown()]),
+  ),
+  true_peak: z
+    .optional(
+      z.number().gte(-9).lte(0).register(z.globalRegistry, {
+        description: "Maximum true peak in dBTP.",
+      }),
+    )
+    .default(-0.1),
+  audio_url: z.union([z.string(), z.string()]),
+  integrated_loudness: z
+    .optional(
+      z.number().gte(-70).lte(-5).register(z.globalRegistry, {
+        description: "Integrated loudness target in LUFS.",
+      }),
+    )
+    .default(-18),
+  loudness_range: z
+    .optional(
+      z.number().gte(1).lte(20).register(z.globalRegistry, {
+        description: "Loudness range target in LU",
+      }),
+    )
+    .default(7),
+});
+
+/**
+ * LottieOutput
+ */
+export const zOmnilottieOutput = z.object({
+  lottie_file: zFile,
+});
+
+/**
+ * TextToLottieInput
+ */
+export const zOmnilottieInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Text description of the Lottie animation to generate.",
+  }),
+  top_p: z
+    .optional(
+      z.number().gte(0).lte(1).register(z.globalRegistry, {
+        description: "Nucleus sampling probability threshold.",
+      }),
+    )
+    .default(0.25),
+  max_tokens: z
+    .optional(
+      z.int().gte(256).lte(8192).register(z.globalRegistry, {
+        description: "Maximum number of Lottie tokens to generate.",
+      }),
+    )
+    .default(4096),
+  temperature: z
+    .optional(
+      z.number().gte(0).lte(2).register(z.globalRegistry, {
+        description: "Sampling temperature for generation.",
+      }),
+    )
+    .default(0.9),
+  top_k: z
+    .optional(
+      z.int().gte(1).lte(100).register(z.globalRegistry, {
+        description: "Top-k sampling parameter.",
+      }),
+    )
+    .default(5),
+});
+
+/**
+ * LottieOutput
+ */
+export const zOmnilottieImageToLottieOutput = z.object({
+  lottie_file: zFile,
+});
+
+/**
+ * ImageToLottieInput
+ */
+export const zOmnilottieImageToLottieInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Text description guiding the animation of the image.",
+  }),
+  image_url: z.union([z.string(), z.string()]),
+  top_p: z
+    .optional(
+      z.number().gte(0).lte(1).register(z.globalRegistry, {
+        description: "Nucleus sampling probability threshold.",
+      }),
+    )
+    .default(0.25),
+  max_tokens: z
+    .optional(
+      z.int().gte(256).lte(8192).register(z.globalRegistry, {
+        description: "Maximum number of Lottie tokens to generate.",
+      }),
+    )
+    .default(4096),
+  temperature: z
+    .optional(
+      z.number().gte(0).lte(2).register(z.globalRegistry, {
+        description: "Sampling temperature for generation.",
+      }),
+    )
+    .default(0.9),
+  top_k: z
+    .optional(
+      z.int().gte(1).lte(100).register(z.globalRegistry, {
+        description: "Top-k sampling parameter.",
+      }),
+    )
+    .default(5),
 });
 
 /**
@@ -362,14 +645,14 @@ export const zAudioTrack = z.object({
   codec: z.string().register(z.globalRegistry, {
     description: "Audio codec used (e.g., 'aac', 'mp3')",
   }),
-  channels: z.int().register(z.globalRegistry, {
-    description: "Number of audio channels",
+  bitrate: z.int().register(z.globalRegistry, {
+    description: "Audio bitrate in bits per second",
   }),
   sample_rate: z.int().register(z.globalRegistry, {
     description: "Audio sample rate in Hz",
   }),
-  bitrate: z.int().register(z.globalRegistry, {
-    description: "Audio bitrate in bits per second",
+  channels: z.int().register(z.globalRegistry, {
+    description: "Number of audio channels",
   }),
 });
 
@@ -392,8 +675,8 @@ export const zResolution = z.object({
  * VideoFormat
  */
 export const zVideoFormat = z.object({
-  container: z.string().register(z.globalRegistry, {
-    description: "Container format of the video",
+  profile: z.string().register(z.globalRegistry, {
+    description: "Codec profile (e.g., 'main', 'high')",
   }),
   level: z.number().register(z.globalRegistry, {
     description: "Codec level (e.g., 4.1)",
@@ -404,8 +687,8 @@ export const zVideoFormat = z.object({
   video_codec: z.string().register(z.globalRegistry, {
     description: "Video codec used (e.g., 'h264')",
   }),
-  profile: z.string().register(z.globalRegistry, {
-    description: "Codec profile (e.g., 'main', 'high')",
+  container: z.string().register(z.globalRegistry, {
+    description: "Container format of the video",
   }),
   bitrate: z.int().register(z.globalRegistry, {
     description: "Video bitrate in bits per second",
@@ -526,157 +809,6 @@ export const zFfmpegApiMetadataInput = z.object({
     )
     .default(false),
   media_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * WaveformOutput
- */
-export const zFfmpegApiWaveformOutput = z.object({
-  precision: z.int().register(z.globalRegistry, {
-    description: "Number of decimal places used in the waveform values",
-  }),
-  duration: z.number().register(z.globalRegistry, {
-    description: "Duration of the audio in seconds",
-  }),
-  points: z.int().register(z.globalRegistry, {
-    description: "Number of points in the waveform data",
-  }),
-  waveform: z.array(z.number()).register(z.globalRegistry, {
-    description:
-      "Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.",
-  }),
-});
-
-/**
- * WaveformInput
- */
-export const zFfmpegApiWaveformInput = z.object({
-  precision: z
-    .optional(
-      z.int().gte(1).lte(6).register(z.globalRegistry, {
-        description:
-          "Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.",
-      }),
-    )
-    .default(2),
-  smoothing_window: z
-    .optional(
-      z.int().gte(1).lte(21).register(z.globalRegistry, {
-        description:
-          "Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.",
-      }),
-    )
-    .default(3),
-  media_url: z.union([z.string(), z.string()]),
-  points_per_second: z
-    .optional(
-      z.number().gte(1).lte(10).register(z.globalRegistry, {
-        description:
-          "Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.",
-      }),
-    )
-    .default(4),
-});
-
-/**
- * File
- */
-export const zFile = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
-  url: z.string().register(z.globalRegistry, {
-    description: "The URL where the file can be downloaded from.",
-  }),
-});
-
-/**
- * LoudnormSummary
- */
-export const zLoudnormSummary = z.object({
-  normalization_type: z.optional(z.union([z.string(), z.unknown()])),
-  output_lra: z.optional(z.union([z.number(), z.unknown()])),
-  input_lra: z.optional(z.union([z.number(), z.unknown()])),
-  output_true_peak: z.optional(z.union([z.number(), z.unknown()])),
-  output_integrated: z.optional(z.union([z.number(), z.unknown()])),
-  output_threshold: z.optional(z.union([z.number(), z.unknown()])),
-  input_integrated: z.optional(z.union([z.number(), z.unknown()])),
-  input_true_peak: z.optional(z.union([z.number(), z.unknown()])),
-  target_offset: z.optional(z.union([z.number(), z.unknown()])),
-  input_threshold: z.optional(z.union([z.number(), z.unknown()])),
-});
-
-/**
- * LoudnormOutput
- */
-export const zFfmpegApiLoudnormOutput = z.object({
-  summary: z.optional(z.union([zLoudnormSummary, z.unknown()])),
-  audio: zFile,
-});
-
-/**
- * LoudnormInput
- */
-export const zFfmpegApiLoudnormInput = z.object({
-  measured_tp: z.optional(z.union([z.number().gte(-99).lte(99), z.unknown()])),
-  offset: z
-    .optional(
-      z.number().gte(-99).lte(99).register(z.globalRegistry, {
-        description: "Offset gain in dB applied before the true-peak limiter",
-      }),
-    )
-    .default(0),
-  print_summary: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Return loudness measurement summary with the normalized audio",
-      }),
-    )
-    .default(false),
-  measured_i: z.optional(z.union([z.number().gte(-99).lte(0), z.unknown()])),
-  linear: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).",
-      }),
-    )
-    .default(false),
-  measured_lra: z.optional(z.union([z.number().gte(0).lte(99), z.unknown()])),
-  dual_mono: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems",
-      }),
-    )
-    .default(false),
-  measured_thresh: z.optional(
-    z.union([z.number().gte(-99).lte(0), z.unknown()]),
-  ),
-  true_peak: z
-    .optional(
-      z.number().gte(-9).lte(0).register(z.globalRegistry, {
-        description: "Maximum true peak in dBTP.",
-      }),
-    )
-    .default(-0.1),
-  audio_url: z.union([z.string(), z.string()]),
-  integrated_loudness: z
-    .optional(
-      z.number().gte(-70).lte(-5).register(z.globalRegistry, {
-        description: "Integrated loudness target in LUFS.",
-      }),
-    )
-    .default(-18),
-  loudness_range: z
-    .optional(
-      z.number().gte(1).lte(20).register(z.globalRegistry, {
-        description: "Loudness range target in LU",
-      }),
-    )
-    .default(7),
 });
 
 /**
@@ -825,6 +957,245 @@ export const zGetFalAiBagelUnderstandRequestsByRequestIdData = z.object({
  */
 export const zGetFalAiBagelUnderstandRequestsByRequestIdResponse =
   zBagelUnderstandOutput;
+
+export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdStatusData = z.object(
+  {
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(
+      z.object({
+        logs: z.optional(
+          z.number().register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          }),
+        ),
+      }),
+    ),
+  },
+);
+
+/**
+ * The request status.
+ */
+export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPutFalAiFfmpegApiMetadataRequestsByRequestIdCancelData = z.object(
+  {
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  },
+);
+
+/**
+ * The request was cancelled.
+ */
+export const zPutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponse = z
+  .object({
+    success: z.optional(
+      z.boolean().register(z.globalRegistry, {
+        description: "Whether the request was cancelled successfully.",
+      }),
+    ),
+  })
+  .register(z.globalRegistry, {
+    description: "The request was cancelled.",
+  });
+
+export const zPostFalAiFfmpegApiMetadataData = z.object({
+  body: zFfmpegApiMetadataInput,
+  path: z.optional(z.never()),
+  query: z.optional(z.never()),
+});
+
+/**
+ * The request status.
+ */
+export const zPostFalAiFfmpegApiMetadataResponse = zQueueStatus;
+
+export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdData = z.object({
+  body: z.optional(z.never()),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.optional(z.never()),
+});
+
+/**
+ * Result of the request.
+ */
+export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdResponse =
+  zFfmpegApiMetadataOutput;
+
+export const zGetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(
+      z.object({
+        logs: z.optional(
+          z.number().register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          }),
+        ),
+      }),
+    ),
+  });
+
+/**
+ * The request status.
+ */
+export const zGetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  });
+
+/**
+ * The request was cancelled.
+ */
+export const zPutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponse =
+  z
+    .object({
+      success: z.optional(
+        z.boolean().register(z.globalRegistry, {
+          description: "Whether the request was cancelled successfully.",
+        }),
+      ),
+    })
+    .register(z.globalRegistry, {
+      description: "The request was cancelled.",
+    });
+
+export const zPostFalAiOmnilottieImageToLottieData = z.object({
+  body: zOmnilottieImageToLottieInput,
+  path: z.optional(z.never()),
+  query: z.optional(z.never()),
+});
+
+/**
+ * The request status.
+ */
+export const zPostFalAiOmnilottieImageToLottieResponse = zQueueStatus;
+
+export const zGetFalAiOmnilottieImageToLottieRequestsByRequestIdData = z.object(
+  {
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  },
+);
+
+/**
+ * Result of the request.
+ */
+export const zGetFalAiOmnilottieImageToLottieRequestsByRequestIdResponse =
+  zOmnilottieImageToLottieOutput;
+
+export const zGetFalAiOmnilottieRequestsByRequestIdStatusData = z.object({
+  body: z.optional(z.never()),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.optional(
+    z.object({
+      logs: z.optional(
+        z.number().register(z.globalRegistry, {
+          description:
+            "Whether to include logs (`1`) in the response or not (`0`).",
+        }),
+      ),
+    }),
+  ),
+});
+
+/**
+ * The request status.
+ */
+export const zGetFalAiOmnilottieRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPutFalAiOmnilottieRequestsByRequestIdCancelData = z.object({
+  body: z.optional(z.never()),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.optional(z.never()),
+});
+
+/**
+ * The request was cancelled.
+ */
+export const zPutFalAiOmnilottieRequestsByRequestIdCancelResponse = z
+  .object({
+    success: z.optional(
+      z.boolean().register(z.globalRegistry, {
+        description: "Whether the request was cancelled successfully.",
+      }),
+    ),
+  })
+  .register(z.globalRegistry, {
+    description: "The request was cancelled.",
+  });
+
+export const zPostFalAiOmnilottieData = z.object({
+  body: zOmnilottieInput,
+  path: z.optional(z.never()),
+  query: z.optional(z.never()),
+});
+
+/**
+ * The request status.
+ */
+export const zPostFalAiOmnilottieResponse = zQueueStatus;
+
+export const zGetFalAiOmnilottieRequestsByRequestIdData = z.object({
+  body: z.optional(z.never()),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.optional(z.never()),
+});
+
+/**
+ * Result of the request.
+ */
+export const zGetFalAiOmnilottieRequestsByRequestIdResponse = zOmnilottieOutput;
 
 export const zGetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusData = z.object(
   {
@@ -988,88 +1359,7 @@ export const zGetFalAiFfmpegApiWaveformRequestsByRequestIdData = z.object({
 export const zGetFalAiFfmpegApiWaveformRequestsByRequestIdResponse =
   zFfmpegApiWaveformOutput;
 
-export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdStatusData = z.object(
-  {
-    body: z.optional(z.never()),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
-            description:
-              "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
-  },
-);
-
-/**
- * The request status.
- */
-export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponse =
-  zQueueStatus;
-
-export const zPutFalAiFfmpegApiMetadataRequestsByRequestIdCancelData = z.object(
-  {
-    body: z.optional(z.never()),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.optional(z.never()),
-  },
-);
-
-/**
- * The request was cancelled.
- */
-export const zPutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponse = z
-  .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether the request was cancelled successfully.",
-      }),
-    ),
-  })
-  .register(z.globalRegistry, {
-    description: "The request was cancelled.",
-  });
-
-export const zPostFalAiFfmpegApiMetadataData = z.object({
-  body: zFfmpegApiMetadataInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
-});
-
-/**
- * The request status.
- */
-export const zPostFalAiFfmpegApiMetadataResponse = zQueueStatus;
-
-export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
-  }),
-  query: z.optional(z.never()),
-});
-
-/**
- * Result of the request.
- */
-export const zGetFalAiFfmpegApiMetadataRequestsByRequestIdResponse =
-  zFfmpegApiMetadataOutput;
-
-export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusData =
+export const zGetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusData =
   z.object({
     body: z.optional(z.never()),
     path: z.object({
@@ -1092,10 +1382,10 @@ export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusD
 /**
  * The request status.
  */
-export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponse =
+export const zGetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
-export const zPutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelData =
+export const zPutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelData =
   z.object({
     body: z.optional(z.never()),
     path: z.object({
@@ -1109,7 +1399,7 @@ export const zPutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelD
 /**
  * The request was cancelled.
  */
-export const zPutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponse =
+export const zPutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponse =
   z
     .object({
       success: z.optional(
@@ -1122,8 +1412,8 @@ export const zPutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelR
       description: "The request was cancelled.",
     });
 
-export const zPostBriaFiboEditEditStructuredInstructionData = z.object({
-  body: zFiboEditEditStructuredInstructionInput,
+export const zPostFalAiOmnilottieVideoToLottieData = z.object({
+  body: zOmnilottieVideoToLottieInput,
   path: z.optional(z.never()),
   query: z.optional(z.never()),
 });
@@ -1131,10 +1421,10 @@ export const zPostBriaFiboEditEditStructuredInstructionData = z.object({
 /**
  * The request status.
  */
-export const zPostBriaFiboEditEditStructuredInstructionResponse = zQueueStatus;
+export const zPostFalAiOmnilottieVideoToLottieResponse = zQueueStatus;
 
-export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdData =
-  z.object({
+export const zGetFalAiOmnilottieVideoToLottieRequestsByRequestIdData = z.object(
+  {
     body: z.optional(z.never()),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
@@ -1142,13 +1432,14 @@ export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdData =
       }),
     }),
     query: z.optional(z.never()),
-  });
+  },
+);
 
 /**
  * Result of the request.
  */
-export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdResponse =
-  zFiboEditEditStructuredInstructionOutput;
+export const zGetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponse =
+  zOmnilottieVideoToLottieOutput;
 
 export const zGetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusData =
   z.object({
@@ -1231,6 +1522,168 @@ export const zGetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdData =
 export const zGetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponse =
   zFiboLiteGenerateStructuredPromptOutput;
 
+export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(
+      z.object({
+        logs: z.optional(
+          z.number().register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          }),
+        ),
+      }),
+    ),
+  });
+
+/**
+ * The request status.
+ */
+export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  });
+
+/**
+ * The request was cancelled.
+ */
+export const zPutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponse =
+  z
+    .object({
+      success: z.optional(
+        z.boolean().register(z.globalRegistry, {
+          description: "Whether the request was cancelled successfully.",
+        }),
+      ),
+    })
+    .register(z.globalRegistry, {
+      description: "The request was cancelled.",
+    });
+
+export const zPostBriaFiboGenerateStructuredPromptData = z.object({
+  body: zFiboGenerateStructuredPromptInput,
+  path: z.optional(z.never()),
+  query: z.optional(z.never()),
+});
+
+/**
+ * The request status.
+ */
+export const zPostBriaFiboGenerateStructuredPromptResponse = zQueueStatus;
+
+export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  });
+
+/**
+ * Result of the request.
+ */
+export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponse =
+  zFiboGenerateStructuredPromptOutput;
+
+export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(
+      z.object({
+        logs: z.optional(
+          z.number().register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          }),
+        ),
+      }),
+    ),
+  });
+
+/**
+ * The request status.
+ */
+export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  });
+
+/**
+ * The request was cancelled.
+ */
+export const zPutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponse =
+  z
+    .object({
+      success: z.optional(
+        z.boolean().register(z.globalRegistry, {
+          description: "Whether the request was cancelled successfully.",
+        }),
+      ),
+    })
+    .register(z.globalRegistry, {
+      description: "The request was cancelled.",
+    });
+
+export const zPostBriaFiboEditEditStructuredInstructionData = z.object({
+  body: zFiboEditEditStructuredInstructionInput,
+  path: z.optional(z.never()),
+  query: z.optional(z.never()),
+});
+
+/**
+ * The request status.
+ */
+export const zPostBriaFiboEditEditStructuredInstructionResponse = zQueueStatus;
+
+export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdData =
+  z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.optional(z.never()),
+  });
+
+/**
+ * Result of the request.
+ */
+export const zGetBriaFiboEditEditStructuredInstructionRequestsByRequestIdResponse =
+  zFiboEditEditStructuredInstructionOutput;
+
 export const zGetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusData =
   z.object({
     body: z.optional(z.never()),
@@ -1312,84 +1765,3 @@ export const zGetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdData
  */
 export const zGetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdResponse =
   zFiboLiteGenerateStructuredPromptLiteOutput;
-
-export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusData =
-  z.object({
-    body: z.optional(z.never()),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
-            description:
-              "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
-  });
-
-/**
- * The request status.
- */
-export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponse =
-  zQueueStatus;
-
-export const zPutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelData =
-  z.object({
-    body: z.optional(z.never()),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.optional(z.never()),
-  });
-
-/**
- * The request was cancelled.
- */
-export const zPutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponse =
-  z
-    .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
-          description: "Whether the request was cancelled successfully.",
-        }),
-      ),
-    })
-    .register(z.globalRegistry, {
-      description: "The request was cancelled.",
-    });
-
-export const zPostBriaFiboGenerateStructuredPromptData = z.object({
-  body: zFiboGenerateStructuredPromptInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
-});
-
-/**
- * The request status.
- */
-export const zPostBriaFiboGenerateStructuredPromptResponse = zQueueStatus;
-
-export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdData =
-  z.object({
-    body: z.optional(z.never()),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.optional(z.never()),
-  });
-
-/**
- * Result of the request.
- */
-export const zGetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponse =
-  zFiboGenerateStructuredPromptOutput;

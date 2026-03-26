@@ -20,6 +20,12 @@ import {
   zFiboLiteGenerateStructuredPromptLiteInput,
   zFiboLiteGenerateStructuredPromptLiteOutput,
   zFiboLiteGenerateStructuredPromptOutput,
+  zOmnilottieImageToLottieInput,
+  zOmnilottieImageToLottieOutput,
+  zOmnilottieInput,
+  zOmnilottieOutput,
+  zOmnilottieVideoToLottieInput,
+  zOmnilottieVideoToLottieOutput,
 } from "./zod.gen";
 
 /** Zod schema for json endpoints using discriminatedUnion */
@@ -28,6 +34,21 @@ export const JsonEndpointSchema = z.discriminatedUnion("endpoint", [
     endpoint: z.literal("fal-ai/bagel/understand"),
     input: zBagelUnderstandInput,
     output: zBagelUnderstandOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ffmpeg-api/metadata"),
+    input: zFfmpegApiMetadataInput,
+    output: zFfmpegApiMetadataOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/omnilottie/image-to-lottie"),
+    input: zOmnilottieImageToLottieInput,
+    output: zOmnilottieImageToLottieOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/omnilottie"),
+    input: zOmnilottieInput,
+    output: zOmnilottieOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/ffmpeg-api/loudnorm"),
@@ -40,14 +61,9 @@ export const JsonEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zFfmpegApiWaveformOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/ffmpeg-api/metadata"),
-    input: zFfmpegApiMetadataInput,
-    output: zFfmpegApiMetadataOutput,
-  }),
-  z.object({
-    endpoint: z.literal("bria/fibo-edit/edit/structured_instruction"),
-    input: zFiboEditEditStructuredInstructionInput,
-    output: zFiboEditEditStructuredInstructionOutput,
+    endpoint: z.literal("fal-ai/omnilottie/video-to-lottie"),
+    input: zOmnilottieVideoToLottieInput,
+    output: zOmnilottieVideoToLottieOutput,
   }),
   z.object({
     endpoint: z.literal("bria/fibo-lite/generate/structured_prompt"),
@@ -55,14 +71,19 @@ export const JsonEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zFiboLiteGenerateStructuredPromptOutput,
   }),
   z.object({
-    endpoint: z.literal("bria/fibo-lite/generate/structured_prompt/lite"),
-    input: zFiboLiteGenerateStructuredPromptLiteInput,
-    output: zFiboLiteGenerateStructuredPromptLiteOutput,
-  }),
-  z.object({
     endpoint: z.literal("bria/fibo/generate/structured_prompt"),
     input: zFiboGenerateStructuredPromptInput,
     output: zFiboGenerateStructuredPromptOutput,
+  }),
+  z.object({
+    endpoint: z.literal("bria/fibo-edit/edit/structured_instruction"),
+    input: zFiboEditEditStructuredInstructionInput,
+    output: zFiboEditEditStructuredInstructionOutput,
+  }),
+  z.object({
+    endpoint: z.literal("bria/fibo-lite/generate/structured_prompt/lite"),
+    input: zFiboLiteGenerateStructuredPromptLiteInput,
+    output: zFiboLiteGenerateStructuredPromptLiteOutput,
   }),
 ]);
 

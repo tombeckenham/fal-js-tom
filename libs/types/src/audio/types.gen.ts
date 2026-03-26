@@ -5,6 +5,114 @@ export type ClientOptions = {
 };
 
 /**
+ * SAMAudioVisualSeparateOutput
+ *
+ * Output for visual-prompted audio separation.
+ */
+export type SamAudioVisualSeparateOutput = {
+  target: File;
+  /**
+   * Duration
+   *
+   * Duration of the output audio in seconds.
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the output audio in Hz.
+   */
+  sample_rate?: number;
+  residual: File;
+};
+
+/**
+ * File
+ */
+export type File = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+};
+
+/**
+ * SAMAudioVisualInput
+ *
+ * Input for visual-prompted audio separation.
+ */
+export type SamAudioVisualSeparateInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt to assist with separation. Use natural language to describe the target sound.
+   */
+  prompt?: string;
+  /**
+   * Video Url
+   *
+   * URL of the video file to process (MP4, MOV, etc.)
+   */
+  video_url: string;
+  /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "fast" | "balanced" | "quality";
+  /**
+   * Chunk Overlap
+   *
+   * Overlap duration (in seconds) between chunks for crossfade blending.
+   */
+  chunk_overlap?: number;
+  /**
+   * Output Format
+   *
+   * Output audio format.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Max Chunk Duration
+   *
+   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
+   */
+  max_chunk_duration?: number;
+  /**
+   * Mask Video Url
+   *
+   * URL of the mask video (binary mask indicating target object). Black=target, White=background.
+   */
+  mask_video_url?: string | unknown;
+  /**
+   * Reranking Candidates
+   *
+   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
+   */
+  reranking_candidates?: number;
+};
+
+/**
  * Audio
  */
 export type Audio = {
@@ -86,54 +194,8 @@ export type SfxV1VideoToAudioInput = {
  * VideoToAudioOutput
  */
 export type KlingVideoVideoToAudioOutput = {
-  /**
-   * Audio
-   *
-   * The extracted/generated audio from the video in MP3 format
-   */
-  audio: File;
-  /**
-   * Video
-   *
-   * The original video with dubbed audio applied
-   */
   video: File;
-};
-
-/**
- * File
- */
-export type File = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
+  audio: File;
 };
 
 /**
@@ -141,11 +203,11 @@ export type File = {
  */
 export type KlingVideoVideoToAudioInput = {
   /**
-   * Video Url
+   * Background Music Prompt
    *
-   * The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.
+   * Background music prompt. Cannot exceed 200 characters.
    */
-  video_url: string;
+  background_music_prompt?: string | unknown;
   /**
    * Asmr Mode
    *
@@ -153,17 +215,17 @@ export type KlingVideoVideoToAudioInput = {
    */
   asmr_mode?: boolean;
   /**
-   * Background Music Prompt
+   * Video Url
    *
-   * Background music prompt. Cannot exceed 200 characters.
+   * The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.
    */
-  background_music_prompt?: string;
+  video_url: string;
   /**
    * Sound Effect Prompt
    *
    * Sound effect prompt. Cannot exceed 200 characters.
    */
-  sound_effect_prompt?: string;
+  sound_effect_prompt?: string | unknown;
 };
 
 /**
@@ -251,378 +313,172 @@ export type SfxV15VideoToAudioInput = {
 };
 
 /**
- * SAMAudioVisualSeparateOutput
+ * SoundEffectGenerationOutput
  *
- * Output for visual-prompted audio separation.
+ * Output schema for sound effect generation.
  */
-export type SamAudioVisualSeparateOutput = {
-  /**
-   * Target
-   *
-   * The isolated target sound.
-   */
-  target: File;
-  /**
-   * Duration
-   *
-   * Duration of the output audio in seconds.
-   */
-  duration: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the output audio in Hz.
-   */
-  sample_rate?: number;
-  /**
-   * Residual
-   *
-   * Everything else in the audio.
-   */
-  residual: File;
-};
-
-/**
- * SAMAudioVisualInput
- *
- * Input for visual-prompted audio separation.
- */
-export type SamAudioVisualSeparateInput = {
+export type SoundEffectGenerationOutput = {
   /**
    * Prompt
    *
-   * Text prompt to assist with separation. Use natural language to describe the target sound.
-   */
-  prompt?: string;
-  /**
-   * Video Url
-   *
-   * URL of the video file to process (MP4, MOV, etc.)
-   */
-  video_url: string;
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "fast" | "balanced" | "quality";
-  /**
-   * Mask Video Url
-   *
-   * URL of the mask video (binary mask indicating target object). Black=target, White=background.
-   */
-  mask_video_url?: string;
-  /**
-   * Output Format
-   *
-   * Output audio format.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Reranking Candidates
-   *
-   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
-   */
-  reranking_candidates?: number;
-};
-
-/**
- * Output
- */
-export type StableAudioOutput = {
-  audio_file: FileType2;
-};
-
-/**
- * File
- */
-export type FileType2 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-};
-
-/**
- * Input
- */
-export type StableAudioInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate audio from
+   * The processed prompt used for generation
    */
   prompt: string;
   /**
-   * Steps
+   * Metadata
    *
-   * The number of steps to denoise the audio for
+   * Generation metadata including duration, sample rate, and parameters
    */
-  steps?: number;
-  /**
-   * Seconds Total
-   *
-   * The duration of the audio clip to generate
-   */
-  seconds_total?: number;
-  /**
-   * Seconds Start
-   *
-   * The start point of the audio clip to generate
-   */
-  seconds_start?: number;
-};
-
-/**
- * TTSOutput
- */
-export type F5TtsOutput = {
-  audio_url: AudioFileType3;
-};
-
-/**
- * AudioFile
- */
-export type AudioFileType3 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * File Name
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   */
-  content_type?: string;
-  /**
-   * Url
-   */
-  url: string;
-};
-
-/**
- * TTSInput
- */
-export type F5TtsInput = {
-  /**
-   * Reference Text for the Reference Audio
-   *
-   * The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.
-   */
-  ref_text?: string;
-  /**
-   * Remove Silence
-   *
-   * Whether to remove the silence from the audio file.
-   */
-  remove_silence?: boolean;
-  /**
-   * Text to be converted to speech
-   *
-   * The text to be converted to speech.
-   */
-  gen_text: string;
-  /**
-   * Model Type
-   *
-   * The name of the model to be used for TTS.
-   */
-  model_type: "F5-TTS" | "E2-TTS";
-  /**
-   * Reference Audio URL
-   *
-   * The URL of the reference audio file.
-   */
-  ref_audio_url: string;
-};
-
-/**
- * MusicOutput
- */
-export type MinimaxMusicOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
+  metadata: {
+    [key: string]: unknown;
+  };
   audio: File;
 };
 
 /**
- * TextToMusicRequest
+ * SoundEffectGenerationInput
+ *
+ * Input schema for sound effect generation with form controls for the playground.
  */
-export type MinimaxMusicInput = {
+export type SoundEffectGenerationInput = {
   /**
    * Prompt
    *
-   * Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.
+   * Describe the sound effect you want to generate
    */
   prompt: string;
-  /**
-   * Reference Audio Url
-   *
-   * Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.
-   */
-  reference_audio_url: string;
-};
-
-/**
- * AudioOutput
- */
-export type MmaudioV2TextToAudioOutput = {
-  /**
-   * Audio
-   *
-   * The generated audio.
-   */
-  audio: File;
-};
-
-/**
- * AudioInput
- */
-export type MmaudioV2TextToAudioInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate the audio for.
-   */
-  prompt: string;
-  /**
-   * Num Steps
-   *
-   * The number of steps to generate the audio for.
-   */
-  num_steps?: number;
   /**
    * Duration
    *
-   * The duration of the audio to generate.
+   * Length of the generated sound effect in seconds
    */
   duration?: number;
   /**
-   * Cfg Strength
+   * Refinement
    *
-   * The strength of Classifier Free Guidance.
+   * Refinement level - Higher values may improve quality but take longer
    */
-  cfg_strength?: number;
+  refinement?: number;
   /**
    * Seed
    *
-   * The seed for the random number generator
+   * Random seed for reproducible results - leave empty for random generation
    */
-  seed?: number;
-  /**
-   * Mask Away Clip
-   *
-   * Whether to mask away the clip.
-   */
-  mask_away_clip?: boolean;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
-   * The negative prompt to generate the audio for.
+   * Describe the types of sounds you don't want to generate in the output, avoid double-negatives, compare with positive prompts
    */
   negative_prompt?: string;
+  /**
+   * Creativity
+   *
+   * Creativity level - higher values allow more creative interpretation of the prompt
+   */
+  creativity?: number;
 };
 
 /**
- * Output
+ * MusicGenerationOutput
+ *
+ * Output schema for music generation.
  */
-export type YueOutput = {
-  /**
-   * Audio
-   *
-   * Generated music file.
-   */
-  audio: File;
-};
-
-/**
- * TextToMusicInput
- */
-export type YueInput = {
-  /**
-   * Lyrics
-   *
-   * The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse].
-   */
-  lyrics: string;
-  /**
-   * Genres
-   *
-   * The genres (separated by a space ' ') to guide the music generation.
-   */
-  genres: string;
-};
-
-/**
- * SpanishOutput
- */
-export type KokoroSpanishOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * SpanishRequest
- */
-export type KokoroSpanishInput = {
+export type MusicGenerationOutput = {
   /**
    * Prompt
+   *
+   * The processed prompt used for generation
    */
   prompt: string;
   /**
-   * Voice
+   * Metadata
    *
-   * Voice ID for the desired voice.
+   * Generation metadata including duration, sample rate, and parameters
    */
-  voice: "ef_dora" | "em_alex" | "em_santa";
+  metadata: {
+    [key: string]: unknown;
+  };
+  audio: File;
+};
+
+/**
+ * MusicGenerationInput
+ *
+ * Input schema for music generation with form controls for the playground.
+ */
+export type MusicGenerationInput = {
+  /**
+   * Prompt
+   *
+   * Describe the music you want to generate
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * Length of the generated music in seconds
+   */
+  duration?: number;
+  /**
+   * Refinement
+   *
+   * Refinement level - higher values may improve quality but take longer
+   */
+  refinement?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducible results - leave empty for random generation
+   */
+  seed?: number | unknown;
+  /**
+   * Negative Prompt
+   *
+   * Describe what you want to avoid in the music (instruments, styles, moods). Leave blank for none.
+   */
+  negative_prompt?: string;
+  /**
+   * Creativity
+   *
+   * Creativity level - higher values allow more creative interpretation of the prompt
+   */
+  creativity?: number;
+};
+
+/**
+ * ItalianOutput
+ */
+export type KokoroItalianOutput = {
+  audio: File;
+};
+
+/**
+ * ItalianRequest
+ */
+export type KokoroItalianInput = {
   /**
    * Speed
    *
    * Speed of the generated audio. Default is 1.0.
    */
   speed?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "if_sara" | "im_nicola";
+  /**
+   * Prompt
+   */
+  prompt: string;
 };
 
 /**
  * MandarinOutput
  */
 export type KokoroMandarinChineseOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
   audio: File;
 };
 
@@ -631,9 +487,11 @@ export type KokoroMandarinChineseOutput = {
  */
 export type KokoroMandarinChineseInput = {
   /**
-   * Prompt
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
    */
-  prompt: string;
+  speed?: number;
   /**
    * Voice
    *
@@ -649,403 +507,15 @@ export type KokoroMandarinChineseInput = {
     | "zm_yunxia"
     | "zm_yunyang";
   /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * JapaneseOutput
- */
-export type KokoroJapaneseOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * JapaneseRequest
- */
-export type KokoroJapaneseInput = {
-  /**
    * Prompt
    */
   prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "jf_alpha" | "jf_gongitsune" | "jf_nezumi" | "jf_tebukuro" | "jm_kumo";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * FrenchOutput
- */
-export type KokoroFrenchOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * FrenchRequest
- */
-export type KokoroFrenchInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "ff_siwis";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * BrPortugeseOutput
- */
-export type KokoroBrazilianPortugueseOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * BrPortugueseRequest
- */
-export type KokoroBrazilianPortugueseInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "pf_dora" | "pm_alex" | "pm_santa";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * ItalianOutput
- */
-export type KokoroItalianOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * ItalianRequest
- */
-export type KokoroItalianInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "if_sara" | "im_nicola";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * ZonosOutput
- */
-export type ZonosOutput = {
-  /**
-   * Audio
-   *
-   * The generated audio
-   */
-  audio: File;
-};
-
-/**
- * ZonosInput
- */
-export type ZonosInput = {
-  /**
-   * Prompt
-   *
-   * The content generated using cloned voice.
-   */
-  prompt: string;
-  /**
-   * Reference Audio Url
-   *
-   * The reference audio.
-   */
-  reference_audio_url: string;
-};
-
-/**
- * AmEngOutput
- */
-export type KokoroAmericanEnglishOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * AmEnglishRequest
- */
-export type KokoroAmericanEnglishInput = {
-  /**
-   * Prompt
-   */
-  prompt?: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice?:
-    | "af_heart"
-    | "af_alloy"
-    | "af_aoede"
-    | "af_bella"
-    | "af_jessica"
-    | "af_kore"
-    | "af_nicole"
-    | "af_nova"
-    | "af_river"
-    | "af_sarah"
-    | "af_sky"
-    | "am_adam"
-    | "am_echo"
-    | "am_eric"
-    | "am_fenrir"
-    | "am_liam"
-    | "am_michael"
-    | "am_onyx"
-    | "am_puck"
-    | "am_santa";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * BrEngOutput
- */
-export type KokoroBritishEnglishOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * BrEnglishRequest
- */
-export type KokoroBritishEnglishInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice:
-    | "bf_alice"
-    | "bf_emma"
-    | "bf_isabella"
-    | "bf_lily"
-    | "bm_daniel"
-    | "bm_fable"
-    | "bm_george"
-    | "bm_lewis";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * HindiOutput
- */
-export type KokoroHindiOutput = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * HindiRequest
- */
-export type KokoroHindiInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "hf_alpha" | "hf_beta" | "hm_omega" | "hm_psi";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * TTSOutput
- */
-export type ElevenlabsTtsMultilingualV2Output = {
-  audio: FileType2;
-  /**
-   * Timestamps
-   *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
-   */
-  timestamps?: Array<unknown> | unknown;
-};
-
-/**
- * TextToSpeechRequest
- */
-export type ElevenlabsTtsMultilingualV2Input = {
-  /**
-   * Stability
-   *
-   * Voice stability (0-1)
-   */
-  stability?: number;
-  /**
-   * Next Text
-   *
-   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
-   */
-  next_text?: string | unknown;
-  /**
-   * Speed
-   *
-   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
-   */
-  speed?: number;
-  /**
-   * Style
-   *
-   * Style exaggeration (0-1)
-   */
-  style?: number;
-  /**
-   * Text
-   *
-   * The text to convert to speech
-   */
-  text: string;
-  /**
-   * Timestamps
-   *
-   * Whether to return timestamps for each word in the generated speech
-   */
-  timestamps?: boolean;
-  /**
-   * Similarity Boost
-   *
-   * Similarity boost (0-1)
-   */
-  similarity_boost?: number;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Apply Text Normalization
-   *
-   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-   */
-  apply_text_normalization?: "auto" | "on" | "off";
-  /**
-   * Previous Text
-   *
-   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
-   */
-  previous_text?: string | unknown;
 };
 
 /**
  * Output
  */
 export type DiffrhythmOutput = {
-  /**
-   * Audio
-   *
-   * Generated music file.
-   */
   audio: File;
 };
 
@@ -1138,7 +608,7 @@ export type Csm1bOutput = {
    *
    * The generated audio.
    */
-  audio: FileType2 | Blob | File;
+  audio: File | Blob | File;
 };
 
 /**
@@ -1160,177 +630,457 @@ export type Csm1bInput = {
 };
 
 /**
- * AudioOutput
- *
- * Example Pydantic model showing how to include a File in the output.
+ * BrPortugeseOutput
  */
-export type MusicGeneratorOutput = {
-  audio_file: FileType2;
+export type KokoroBrazilianPortugueseOutput = {
+  audio: File;
 };
 
 /**
- * Input
+ * BrPortugueseRequest
  */
-export type MusicGeneratorInput = {
+export type KokoroBrazilianPortugueseInput = {
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "pf_dora" | "pm_alex" | "pm_santa";
   /**
    * Prompt
-   *
-   * The prompt to generate music from.
    */
   prompt: string;
-  /**
-   * Duration
-   *
-   * The duration of the generated music in seconds.
-   */
-  duration: number;
 };
 
 /**
- * AudioOutput
- *
- * Example Pydantic model showing how to include a File in the output.
+ * InpaintSection
  */
-export type SoundEffectsGeneratorOutput = {
-  audio_file: FileType2;
+export type InpaintSection = {
+  /**
+   * End
+   *
+   * End time in seconds of the section to inpaint.
+   */
+  end: number;
+  /**
+   * Start
+   *
+   * Start time in seconds of the section to inpaint.
+   */
+  start: number;
 };
 
 /**
- * Input
+ * InpaintOutput
  */
-export type SoundEffectsGeneratorInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate SFX.
-   */
-  prompt: string;
-  /**
-   * Duration
-   *
-   * The duration of the generated SFX in seconds.
-   */
-  duration: number;
-};
-
-/**
- * ACEStepResponse
- */
-export type AceStepOutput = {
-  /**
-   * Tags
-   *
-   * The genre tags used in the generation process.
-   */
-  tags: string;
-  /**
-   * Lyrics
-   *
-   * The lyrics used in the generation process.
-   */
-  lyrics: string;
+export type V2InpaintOutput = {
   /**
    * Seed
    *
-   * The random seed used for the generation process.
+   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
    */
   seed: number;
   /**
    * Audio
    *
-   * The generated audio file.
+   * The generated audio files.
    */
+  audio: Array<File>;
+};
+
+/**
+ * InpaintInput
+ */
+export type V2InpaintInput = {
+  /**
+   * Lyrics Prompt
+   *
+   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
+   */
+  lyrics_prompt: string;
+  /**
+   * Tags
+   *
+   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
+   */
+  tags?: Array<string>;
+  /**
+   * Prompt Strength
+   *
+   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
+   */
+  prompt_strength?: number;
+  /**
+   * Output Bit Rate
+   *
+   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
+   */
+  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
+  /**
+   * Num Songs
+   *
+   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
+   */
+  num_songs?: number;
+  /**
+   * Output Format
+   */
+  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
+  /**
+   * Selection Crop
+   *
+   * Crop to the selected region
+   */
+  selection_crop?: boolean;
+  /**
+   * Sections
+   *
+   * List of sections to inpaint. Currently, only one section is supported so the list length must be 1.
+   */
+  sections: Array<InpaintSection>;
+  /**
+   * Balance Strength
+   *
+   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
+   */
+  balance_strength?: number;
+  /**
+   * Audio Url
+   *
+   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
+   */
+  audio_url: string;
+  /**
+   * Seed
+   *
+   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
+   */
+  seed?: number | unknown;
+};
+
+/**
+ * ZonosOutput
+ */
+export type ZonosOutput = {
+  /**
+   * Audio
+   *
+   * The generated audio
+   */
+  audio: FileType2;
+};
+
+/**
+ * File
+ */
+export type FileType2 = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Data
+   *
+   * File data
+   */
+  file_data?: Blob | File;
+};
+
+/**
+ * ZonosInput
+ */
+export type ZonosInput = {
+  /**
+   * Prompt
+   *
+   * The content generated using cloned voice.
+   */
+  prompt: string;
+  /**
+   * Reference Audio Url
+   *
+   * The reference audio.
+   */
+  reference_audio_url: string;
+};
+
+/**
+ * JapaneseOutput
+ */
+export type KokoroJapaneseOutput = {
   audio: File;
 };
 
 /**
- * ACEStepTextToAudioRequest
+ * JapaneseRequest
  */
-export type AceStepInput = {
+export type KokoroJapaneseInput = {
   /**
-   * Number Of Steps
+   * Speed
    *
-   * Number of steps to generate the audio.
+   * Speed of the generated audio. Default is 1.0.
    */
-  number_of_steps?: number;
+  speed?: number;
   /**
-   * Duration
+   * Voice
    *
-   * The duration of the generated audio in seconds.
+   * Voice ID for the desired voice.
    */
-  duration?: number;
+  voice: "jf_alpha" | "jf_gongitsune" | "jf_nezumi" | "jf_tebukuro" | "jm_kumo";
   /**
-   * Tags
-   *
-   * Comma-separated list of genre tags to control the style of the generated audio.
+   * Prompt
    */
-  tags: string;
+  prompt: string;
+};
+
+/**
+ * HindiOutput
+ */
+export type KokoroHindiOutput = {
+  audio: File;
+};
+
+/**
+ * HindiRequest
+ */
+export type KokoroHindiInput = {
   /**
-   * Minimum Guidance Scale
+   * Speed
    *
-   * Minimum guidance scale for the generation after the decay.
+   * Speed of the generated audio. Default is 1.0.
    */
-  minimum_guidance_scale?: number;
+  speed?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "hf_alpha" | "hf_beta" | "hm_omega" | "hm_psi";
+  /**
+   * Prompt
+   */
+  prompt: string;
+};
+
+/**
+ * Output
+ */
+export type YueOutput = {
+  audio: File;
+};
+
+/**
+ * TextToMusicInput
+ */
+export type YueInput = {
   /**
    * Lyrics
    *
-   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   * The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse].
    */
-  lyrics?: string;
+  lyrics: string;
   /**
-   * Tag Guidance Scale
+   * Genres
    *
-   * Tag guidance scale for the generation.
+   * The genres (separated by a space ' ') to guide the music generation.
    */
-  tag_guidance_scale?: number;
+  genres: string;
+};
+
+/**
+ * SpanishOutput
+ */
+export type KokoroSpanishOutput = {
+  audio: File;
+};
+
+/**
+ * SpanishRequest
+ */
+export type KokoroSpanishInput = {
   /**
-   * Scheduler
+   * Speed
    *
-   * Scheduler to use for the generation process.
+   * Speed of the generated audio. Default is 1.0.
    */
-  scheduler?: "euler" | "heun";
+  speed?: number;
   /**
-   * Guidance Scale
+   * Voice
    *
-   * Guidance scale for the generation.
+   * Voice ID for the desired voice.
    */
-  guidance_scale?: number;
+  voice: "ef_dora" | "em_alex" | "em_santa";
   /**
-   * Guidance Type
-   *
-   * Type of CFG to use for the generation process.
+   * Prompt
    */
-  guidance_type?: "cfg" | "apg" | "cfg_star";
+  prompt: string;
+};
+
+/**
+ * FrenchOutput
+ */
+export type KokoroFrenchOutput = {
+  audio: File;
+};
+
+/**
+ * FrenchRequest
+ */
+export type KokoroFrenchInput = {
   /**
-   * Lyric Guidance Scale
+   * Speed
    *
-   * Lyric guidance scale for the generation.
+   * Speed of the generated audio. Default is 1.0.
    */
-  lyric_guidance_scale?: number;
+  speed?: number;
   /**
-   * Guidance Interval
+   * Voice
    *
-   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   * Voice ID for the desired voice.
    */
-  guidance_interval?: number;
+  voice: string;
   /**
-   * Guidance Interval Decay
-   *
-   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   * Prompt
    */
-  guidance_interval_decay?: number;
+  prompt: string;
+};
+
+/**
+ * BrEngOutput
+ */
+export type KokoroBritishEnglishOutput = {
+  audio: File;
+};
+
+/**
+ * BrEnglishRequest
+ */
+export type KokoroBritishEnglishInput = {
   /**
-   * Seed
+   * Speed
    *
-   * Random seed for reproducibility. If not provided, a random seed will be used.
+   * Speed of the generated audio. Default is 1.0.
    */
-  seed?: number;
+  speed?: number;
   /**
-   * Granularity Scale
+   * Voice
    *
-   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   * Voice ID for the desired voice.
    */
-  granularity_scale?: number;
+  voice:
+    | "bf_alice"
+    | "bf_emma"
+    | "bf_isabella"
+    | "bf_lily"
+    | "bm_daniel"
+    | "bm_fable"
+    | "bm_george"
+    | "bm_lewis";
+  /**
+   * Prompt
+   */
+  prompt: string;
+};
+
+/**
+ * MusicV15Output
+ */
+export type MinimaxMusicV15Output = {
+  audio: File;
+};
+
+/**
+ * TextToMusic15Request
+ */
+export type MinimaxMusicV15Input = {
+  /**
+   * Prompt
+   *
+   * Lyrics, supports [intro][verse][chorus][bridge][outro] sections. 10-600 characters.
+   */
+  prompt: string;
+  /**
+   * Lyrics Prompt
+   *
+   * Control music generation. 10-3000 characters.
+   */
+  lyrics_prompt: string;
+  audio_setting?: AudioSetting;
+};
+
+/**
+ * AudioSetting
+ */
+export type AudioSetting = {
+  /**
+   * Format
+   *
+   * Audio format
+   */
+  format?: "mp3" | "pcm" | "flac";
+  /**
+   * Sample Rate
+   *
+   * Sample rate of generated audio
+   */
+  sample_rate?: 8000 | 16000 | 22050 | 24000 | 32000 | 44100;
+  /**
+   * Bitrate
+   *
+   * Bitrate of generated audio
+   */
+  bitrate?: 32000 | 64000 | 128000 | 256000;
+};
+
+/**
+ * MusicOutput
+ */
+export type MinimaxMusicOutput = {
+  audio: File;
+};
+
+/**
+ * TextToMusicRequest
+ */
+export type MinimaxMusicInput = {
+  /**
+   * Prompt
+   *
+   * Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.
+   */
+  prompt: string;
+  /**
+   * Reference Audio Url
+   *
+   * Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.
+   */
+  reference_audio_url: string;
 };
 
 /**
@@ -1355,11 +1105,6 @@ export type AceStepPromptToAudioOutput = {
    * The random seed used for the generation process.
    */
   seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio file.
-   */
   audio: File;
 };
 
@@ -1444,7 +1189,7 @@ export type AceStepPromptToAudioInput = {
    *
    * Random seed for reproducibility. If not provided, a random seed will be used.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Granularity Scale
    *
@@ -1454,14 +1199,559 @@ export type AceStepPromptToAudioInput = {
 };
 
 /**
+ * ACEStepResponse
+ */
+export type AceStepOutput = {
+  /**
+   * Tags
+   *
+   * The genre tags used in the generation process.
+   */
+  tags: string;
+  /**
+   * Lyrics
+   *
+   * The lyrics used in the generation process.
+   */
+  lyrics: string;
+  /**
+   * Seed
+   *
+   * The random seed used for the generation process.
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * ACEStepTextToAudioRequest
+ */
+export type AceStepInput = {
+  /**
+   * Number Of Steps
+   *
+   * Number of steps to generate the audio.
+   */
+  number_of_steps?: number;
+  /**
+   * Duration
+   *
+   * The duration of the generated audio in seconds.
+   */
+  duration?: number;
+  /**
+   * Tags
+   *
+   * Comma-separated list of genre tags to control the style of the generated audio.
+   */
+  tags: string;
+  /**
+   * Minimum Guidance Scale
+   *
+   * Minimum guidance scale for the generation after the decay.
+   */
+  minimum_guidance_scale?: number;
+  /**
+   * Lyrics
+   *
+   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   */
+  lyrics?: string;
+  /**
+   * Tag Guidance Scale
+   *
+   * Tag guidance scale for the generation.
+   */
+  tag_guidance_scale?: number;
+  /**
+   * Scheduler
+   *
+   * Scheduler to use for the generation process.
+   */
+  scheduler?: "euler" | "heun";
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Guidance Type
+   *
+   * Type of CFG to use for the generation process.
+   */
+  guidance_type?: "cfg" | "apg" | "cfg_star";
+  /**
+   * Lyric Guidance Scale
+   *
+   * Lyric guidance scale for the generation.
+   */
+  lyric_guidance_scale?: number;
+  /**
+   * Guidance Interval
+   *
+   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   */
+  guidance_interval?: number;
+  /**
+   * Guidance Interval Decay
+   *
+   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   */
+  guidance_interval_decay?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If not provided, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Granularity Scale
+   *
+   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   */
+  granularity_scale?: number;
+};
+
+/**
+ * AudioOutput
+ *
+ * Example Pydantic model showing how to include a File in the output.
+ */
+export type SoundEffectsGeneratorOutput = {
+  audio_file: File;
+};
+
+/**
+ * Input
+ */
+export type SoundEffectsGeneratorInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate SFX.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated SFX in seconds.
+   */
+  duration: number;
+};
+
+/**
+ * AudioOutput
+ */
+export type MmaudioV2TextToAudioOutput = {
+  audio: File;
+};
+
+/**
+ * AudioInput
+ */
+export type MmaudioV2TextToAudioInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate the audio for.
+   */
+  prompt: string;
+  /**
+   * Num Steps
+   *
+   * The number of steps to generate the audio for.
+   */
+  num_steps?: number;
+  /**
+   * Duration
+   *
+   * The duration of the audio to generate.
+   */
+  duration?: number;
+  /**
+   * Cfg Strength
+   *
+   * The strength of Classifier Free Guidance.
+   */
+  cfg_strength?: number;
+  /**
+   * Seed
+   *
+   * The seed for the random number generator
+   */
+  seed?: number | unknown;
+  /**
+   * Mask Away Clip
+   *
+   * Whether to mask away the clip.
+   */
+  mask_away_clip?: boolean;
+  /**
+   * Negative Prompt
+   *
+   * The negative prompt to generate the audio for.
+   */
+  negative_prompt?: string;
+};
+
+/**
+ * TTSOutput
+ */
+export type F5TtsOutput = {
+  audio_url: AudioFileType3;
+};
+
+/**
+ * AudioFile
+ */
+export type AudioFileType3 = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * File Name
+   */
+  file_name?: string;
+  /**
+   * Content Type
+   */
+  content_type?: string;
+  /**
+   * Url
+   */
+  url: string;
+};
+
+/**
+ * TTSInput
+ */
+export type F5TtsInput = {
+  /**
+   * Reference Text for the Reference Audio
+   *
+   * The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.
+   */
+  ref_text?: string;
+  /**
+   * Remove Silence
+   *
+   * Whether to remove the silence from the audio file.
+   */
+  remove_silence?: boolean;
+  /**
+   * Text to be converted to speech
+   *
+   * The text to be converted to speech.
+   */
+  gen_text: string;
+  /**
+   * Model Type
+   *
+   * The name of the model to be used for TTS.
+   */
+  model_type: "F5-TTS" | "E2-TTS";
+  /**
+   * Reference Audio URL
+   *
+   * The URL of the reference audio file.
+   */
+  ref_audio_url: string;
+};
+
+/**
+ * SpeakerConfig
+ *
+ * Voice configuration for a single speaker in multi-speaker synthesis.
+ */
+export type SpeakerConfig = {
+  /**
+   * Voice
+   *
+   * Voice preset for this speaker.
+   */
+  voice:
+    | "Achernar"
+    | "Achird"
+    | "Algenib"
+    | "Algieba"
+    | "Alnilam"
+    | "Aoede"
+    | "Autonoe"
+    | "Callirrhoe"
+    | "Charon"
+    | "Despina"
+    | "Enceladus"
+    | "Erinome"
+    | "Fenrir"
+    | "Gacrux"
+    | "Iapetus"
+    | "Kore"
+    | "Laomedeia"
+    | "Leda"
+    | "Orus"
+    | "Pulcherrima"
+    | "Puck"
+    | "Rasalgethi"
+    | "Sadachbia"
+    | "Sadaltager"
+    | "Schedar"
+    | "Sulafat"
+    | "Umbriel"
+    | "Vindemiatrix"
+    | "Zephyr"
+    | "Zubenelgenubi";
+  /**
+   * Speaker Id
+   *
+   * Alias used to identify this speaker in the prompt. Use this alias as a prefix in the prompt field, e.g. 'Alice: Hello! Bob: Hi there!'. Must be alphanumeric with no whitespace.
+   */
+  speaker_id: string;
+};
+
+/**
+ * GeminiTTSOutput
+ *
+ * Output for Gemini text-to-speech generation.
+ */
+export type GeminiTtsOutput = {
+  audio: File;
+};
+
+/**
+ * GeminiTTSInput
+ *
+ * Input for Gemini text-to-speech generation.
+ */
+export type GeminiTtsInput = {
+  /**
+   * Prompt
+   *
+   * The text to convert to speech. Gemini TTS supports natural-language prompting for style, pace, accent, and emotional expression — include delivery instructions inline with the text (e.g. 'Say cheerfully: Have a wonderful day!'). For multi-speaker synthesis, prefix lines with speaker aliases defined in the speakers field (e.g. 'Alice: Hello!\nBob: Hi!'). Supports inline pace/style markers like [slowly], [whispering], [excited], [extremely fast].
+   */
+  prompt: string;
+  /**
+   * Speakers
+   *
+   * Multi-speaker voice configuration. When set, enables multi-speaker synthesis where different parts of the text are spoken by different voices. Each speaker needs a voice and a speaker_id (alias) that matches prefixes in the prompt. Requires gemini-2.5-pro-tts or gemini-2.5-flash-tts model. Not supported with gemini-2.5-flash-lite-preview-tts.
+   */
+  speakers?: Array<SpeakerConfig> | unknown;
+  /**
+   * Output Format
+   *
+   * Audio output format. mp3: compressed, small file size (recommended). wav: uncompressed PCM wrapped in WAV (24 kHz, 16-bit mono). ogg_opus: Ogg container with Opus codec, good quality-to-size ratio.
+   */
+  output_format?: "wav" | "mp3" | "ogg_opus";
+  /**
+   * Model
+   *
+   * Which Gemini TTS model to use. gemini-2.5-flash-tts: low latency, cost-efficient for everyday applications (recommended). gemini-2.5-pro-tts: highest quality, best for structured workflows like podcasts, audiobooks, and customer support.
+   */
+  model?: "gemini-2.5-flash-tts" | "gemini-2.5-pro-tts";
+  /**
+   * Voice
+   *
+   * Voice preset for single-speaker synthesis. 30 distinct voices are available. Ignored when speakers is set. Popular choices: Kore (strong, firm female), Puck (upbeat, lively male), Charon (calm, professional male), Zephyr (bright, clear female), Aoede (warm, melodic female).
+   */
+  voice?:
+    | "Achernar"
+    | "Achird"
+    | "Algenib"
+    | "Algieba"
+    | "Alnilam"
+    | "Aoede"
+    | "Autonoe"
+    | "Callirrhoe"
+    | "Charon"
+    | "Despina"
+    | "Enceladus"
+    | "Erinome"
+    | "Fenrir"
+    | "Gacrux"
+    | "Iapetus"
+    | "Kore"
+    | "Laomedeia"
+    | "Leda"
+    | "Orus"
+    | "Pulcherrima"
+    | "Puck"
+    | "Rasalgethi"
+    | "Sadachbia"
+    | "Sadaltager"
+    | "Schedar"
+    | "Sulafat"
+    | "Umbriel"
+    | "Vindemiatrix"
+    | "Zephyr"
+    | "Zubenelgenubi";
+  /**
+   * Language Code
+   *
+   * Language for multilingual synthesis. When set, steers the model to speak in the specified language. Supports 24 GA languages and 60+ Preview languages. If not set, the model auto-detects the language from the text.
+   */
+  language_code?:
+    | "Arabic (Egypt)"
+    | "Bangla (Bangladesh)"
+    | "Dutch (Netherlands)"
+    | "English (India)"
+    | "English (US)"
+    | "French (France)"
+    | "German (Germany)"
+    | "Hindi (India)"
+    | "Indonesian (Indonesia)"
+    | "Italian (Italy)"
+    | "Japanese (Japan)"
+    | "Korean (South Korea)"
+    | "Marathi (India)"
+    | "Polish (Poland)"
+    | "Portuguese (Brazil)"
+    | "Romanian (Romania)"
+    | "Russian (Russia)"
+    | "Spanish (Spain)"
+    | "Tamil (India)"
+    | "Telugu (India)"
+    | "Thai (Thailand)"
+    | "Turkish (Turkey)"
+    | "Ukrainian (Ukraine)"
+    | "Vietnamese (Vietnam)"
+    | "Afrikaans (South Africa)"
+    | "Albanian (Albania)"
+    | "Amharic (Ethiopia)"
+    | "Arabic (World)"
+    | "Armenian (Armenia)"
+    | "Azerbaijani (Azerbaijan)"
+    | "Basque (Spain)"
+    | "Belarusian (Belarus)"
+    | "Bulgarian (Bulgaria)"
+    | "Burmese (Myanmar)"
+    | "Catalan (Spain)"
+    | "Cebuano (Philippines)"
+    | "Chinese Mandarin (China)"
+    | "Chinese Mandarin (Taiwan)"
+    | "Croatian (Croatia)"
+    | "Czech (Czech Republic)"
+    | "Danish (Denmark)"
+    | "English (Australia)"
+    | "English (UK)"
+    | "Estonian (Estonia)"
+    | "Filipino (Philippines)"
+    | "Finnish (Finland)"
+    | "French (Canada)"
+    | "Galician (Spain)"
+    | "Georgian (Georgia)"
+    | "Greek (Greece)"
+    | "Gujarati (India)"
+    | "Haitian Creole (Haiti)"
+    | "Hebrew (Israel)"
+    | "Hungarian (Hungary)"
+    | "Icelandic (Iceland)"
+    | "Javanese (Java)"
+    | "Kannada (India)"
+    | "Konkani (India)"
+    | "Lao (Laos)"
+    | "Latin (Vatican City)"
+    | "Latvian (Latvia)"
+    | "Lithuanian (Lithuania)"
+    | "Luxembourgish (Luxembourg)"
+    | "Macedonian (North Macedonia)"
+    | "Maithili (India)"
+    | "Malagasy (Madagascar)"
+    | "Malay (Malaysia)"
+    | "Malayalam (India)"
+    | "Mongolian (Mongolia)"
+    | "Nepali (Nepal)"
+    | "Norwegian Bokmal (Norway)"
+    | "Norwegian Nynorsk (Norway)"
+    | "Odia (India)"
+    | "Pashto (Afghanistan)"
+    | "Persian (Iran)"
+    | "Portuguese (Portugal)"
+    | "Punjabi (India)"
+    | "Serbian (Serbia)"
+    | "Sindhi (India)"
+    | "Sinhala (Sri Lanka)"
+    | "Slovak (Slovakia)"
+    | "Slovenian (Slovenia)"
+    | "Spanish (Latin America)"
+    | "Spanish (Mexico)"
+    | "Swahili (Kenya)"
+    | "Swedish (Sweden)"
+    | "Urdu (Pakistan)"
+    | unknown;
+  /**
+   * Temperature
+   *
+   * Controls the randomness of the speech output. Higher values produce more creative and varied delivery, while lower values make the output more predictable and focused.
+   */
+  temperature?: number;
+  /**
+   * Style Instructions
+   *
+   * Optional style and delivery instructions prepended to the prompt. Controls expressiveness, accent, pace, tone, and emotional expression using natural language. Use this to separate style control from the text content. Examples: 'Speak warmly and slowly', 'Read this as a dramatic newscast', 'Use a British accent with a cheerful tone', 'Whisper mysteriously'.
+   */
+  style_instructions?: string | unknown;
+};
+
+/**
+ * TextToAudioOutput
+ */
+export type StableAudio25TextToAudioOutput = {
+  /**
+   * Seed
+   *
+   * The random seed used for generation
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * TextToAudioInput
+ */
+export type StableAudio25TextToAudioInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate audio from
+   */
+  prompt: string;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Seconds Total
+   *
+   * The duration of the audio clip to generate
+   */
+  seconds_total?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of steps to denoise the audio for
+   */
+  num_inference_steps?: number;
+  /**
+   * Seed
+   */
+  seed?: number | unknown;
+  /**
+   * Guidance Scale
+   *
+   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
+   */
+  guidance_scale?: number;
+};
+
+/**
  * TextToMusicOutput
  */
 export type Lyria2Output = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
   audio: File;
 };
 
@@ -1480,88 +1770,13 @@ export type Lyria2Input = {
    *
    * A seed for deterministic generation. If provided, the model will attempt to produce the same audio given the same prompt and other parameters.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Negative Prompt
    *
    * A description of what to exclude from the generated audio
    */
   negative_prompt?: string;
-};
-
-/**
- * TTSOutput
- */
-export type ElevenlabsTtsElevenV3Output = {
-  audio: FileType2;
-  /**
-   * Timestamps
-   *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
-   */
-  timestamps?: Array<unknown> | unknown;
-};
-
-/**
- * TextToSpeechRequestV3
- *
- * Request model for eleven_v3 which doesn't support previous_text/next_text
- */
-export type ElevenlabsTtsElevenV3Input = {
-  /**
-   * Stability
-   *
-   * Voice stability (0-1)
-   */
-  stability?: number;
-  /**
-   * Speed
-   *
-   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
-   */
-  speed?: number;
-  /**
-   * Text
-   *
-   * The text to convert to speech
-   */
-  text: string;
-  /**
-   * Style
-   *
-   * Style exaggeration (0-1)
-   */
-  style?: number;
-  /**
-   * Timestamps
-   *
-   * Whether to return timestamps for each word in the generated speech
-   */
-  timestamps?: boolean;
-  /**
-   * Similarity Boost
-   *
-   * Similarity boost (0-1)
-   */
-  similarity_boost?: number;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Apply Text Normalization
-   *
-   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-   */
-  apply_text_normalization?: "auto" | "on" | "off";
 };
 
 /**
@@ -1591,7 +1806,7 @@ export type V2TextToMusicOutput = {
    *
    * The generated audio files.
    */
-  audio: Array<FileType2>;
+  audio: Array<File>;
 };
 
 /**
@@ -1659,173 +1874,52 @@ export type V2TextToMusicInput = {
 };
 
 /**
- * InpaintSection
+ * AmEngOutput
  */
-export type InpaintSection = {
-  /**
-   * End
-   *
-   * End time in seconds of the section to inpaint.
-   */
-  end: number;
-  /**
-   * Start
-   *
-   * Start time in seconds of the section to inpaint.
-   */
-  start: number;
+export type KokoroAmericanEnglishOutput = {
+  audio: File;
 };
 
 /**
- * InpaintOutput
+ * AmEnglishRequest
  */
-export type V2InpaintOutput = {
+export type KokoroAmericanEnglishInput = {
   /**
-   * Seed
+   * Speed
    *
-   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
+   * Speed of the generated audio. Default is 1.0.
    */
-  seed: number;
+  speed?: number;
   /**
-   * Audio
+   * Voice
    *
-   * The generated audio files.
+   * Voice ID for the desired voice.
    */
-  audio: Array<FileType2>;
-};
-
-/**
- * InpaintInput
- */
-export type V2InpaintInput = {
+  voice?:
+    | "af_heart"
+    | "af_alloy"
+    | "af_aoede"
+    | "af_bella"
+    | "af_jessica"
+    | "af_kore"
+    | "af_nicole"
+    | "af_nova"
+    | "af_river"
+    | "af_sarah"
+    | "af_sky"
+    | "am_adam"
+    | "am_echo"
+    | "am_eric"
+    | "am_fenrir"
+    | "am_liam"
+    | "am_michael"
+    | "am_onyx"
+    | "am_puck"
+    | "am_santa";
   /**
-   * Lyrics Prompt
-   *
-   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
+   * Prompt
    */
-  lyrics_prompt: string;
-  /**
-   * Tags
-   *
-   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
-   */
-  tags?: Array<string>;
-  /**
-   * Prompt Strength
-   *
-   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
-   */
-  prompt_strength?: number;
-  /**
-   * Output Bit Rate
-   *
-   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
-   */
-  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
-  /**
-   * Num Songs
-   *
-   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
-   */
-  num_songs?: number;
-  /**
-   * Output Format
-   */
-  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
-  /**
-   * Selection Crop
-   *
-   * Crop to the selected region
-   */
-  selection_crop?: boolean;
-  /**
-   * Sections
-   *
-   * List of sections to inpaint. Currently, only one section is supported so the list length must be 1.
-   */
-  sections: Array<InpaintSection>;
-  /**
-   * Balance Strength
-   *
-   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
-   */
-  balance_strength?: number;
-  /**
-   * Audio Url
-   *
-   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
-   */
-  audio_url: string;
-  /**
-   * Seed
-   *
-   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
-   */
-  seed?: number | unknown;
-};
-
-/**
- * SoundEffectOutput
- *
- * Output format for generated sound effects
- */
-export type ElevenlabsSoundEffectsV2Output = {
-  audio: FileType2;
-};
-
-/**
- * SoundEffectRequestV2
- */
-export type ElevenlabsSoundEffectsV2Input = {
-  /**
-   * Text
-   *
-   * The text describing the sound effect to generate
-   */
-  text: string;
-  /**
-   * Loop
-   *
-   * Whether to create a sound effect that loops smoothly.
-   */
-  loop?: boolean;
-  /**
-   * Prompt Influence
-   *
-   * How closely to follow the prompt (0-1). Higher values mean less variation.
-   */
-  prompt_influence?: number;
-  /**
-   * Output Format
-   *
-   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
-   */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192";
-  /**
-   * Duration Seconds
-   *
-   * Duration in seconds (0.5-22). If None, optimal duration will be determined from prompt.
-   */
-  duration_seconds?: number | unknown;
+  prompt?: string;
 };
 
 /**
@@ -1843,7 +1937,7 @@ export type PronunciationDictionaryLocator = {
    *
    * The ID of the pronunciation dictionary.
    */
-  pronunciation_dictionary_id: string | unknown;
+  pronunciation_dictionary_id?: string | unknown;
 };
 
 /**
@@ -1874,7 +1968,7 @@ export type ElevenlabsTextToDialogueElevenV3Output = {
    * Random seed for reproducibility.
    */
   seed: number;
-  audio: FileType2;
+  audio: File;
 };
 
 /**
@@ -1888,17 +1982,17 @@ export type ElevenlabsTextToDialogueElevenV3Input = {
    */
   stability?: number | unknown;
   /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
-   */
-  language_code?: string | unknown;
-  /**
    * Inputs
    *
    * A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.
    */
   inputs: Array<DialogueBlock>;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
+   */
+  language_code?: string | unknown;
   /**
    * Seed
    *
@@ -1920,27 +2014,43 @@ export type ElevenlabsTextToDialogueElevenV3Input = {
 };
 
 /**
- * TextToAudioOutput
+ * AudioOutput
+ *
+ * Example Pydantic model showing how to include a File in the output.
  */
-export type StableAudio25TextToAudioOutput = {
-  /**
-   * Seed
-   *
-   * The random seed used for generation
-   */
-  seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio clip
-   */
-  audio: File;
+export type MusicGeneratorOutput = {
+  audio_file: File;
 };
 
 /**
- * TextToAudioInput
+ * Input
  */
-export type StableAudio25TextToAudioInput = {
+export type MusicGeneratorInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate music from.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated music in seconds.
+   */
+  duration: number;
+};
+
+/**
+ * Output
+ */
+export type StableAudioOutput = {
+  audio_file: File;
+};
+
+/**
+ * Input
+ */
+export type StableAudioInput = {
   /**
    * Prompt
    *
@@ -1948,11 +2058,11 @@ export type StableAudio25TextToAudioInput = {
    */
   prompt: string;
   /**
-   * Sync Mode
+   * Steps
    *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   * The number of steps to denoise the audio for
    */
-  sync_mode?: boolean;
+  steps?: number;
   /**
    * Seconds Total
    *
@@ -1960,251 +2070,11 @@ export type StableAudio25TextToAudioInput = {
    */
   seconds_total?: number;
   /**
-   * Num Inference Steps
+   * Seconds Start
    *
-   * The number of steps to denoise the audio for
+   * The start point of the audio clip to generate
    */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   */
-  seed?: number;
-};
-
-/**
- * MusicV15Output
- */
-export type MinimaxMusicV15Output = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * TextToMusic15Request
- */
-export type MinimaxMusicV15Input = {
-  /**
-   * Prompt
-   *
-   * Lyrics, supports [intro][verse][chorus][bridge][outro] sections. 10-600 characters.
-   */
-  prompt: string;
-  /**
-   * Lyrics Prompt
-   *
-   * Control music generation. 10-3000 characters.
-   */
-  lyrics_prompt: string;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
-  audio_setting?: AudioSetting;
-};
-
-/**
- * AudioSetting
- */
-export type AudioSetting = {
-  /**
-   * Format
-   *
-   * Audio format
-   */
-  format?: "mp3" | "pcm" | "flac";
-  /**
-   * Sample Rate
-   *
-   * Sample rate of generated audio
-   */
-  sample_rate?: 8000 | 16000 | 22050 | 24000 | 32000 | 44100;
-  /**
-   * Bitrate
-   *
-   * Bitrate of generated audio
-   */
-  bitrate?: 32000 | 64000 | 128000 | 256000;
-};
-
-/**
- * MusicGenerationOutput
- *
- * Output schema for music generation.
- */
-export type MusicGenerationOutput = {
-  /**
-   * Prompt
-   *
-   * The processed prompt used for generation
-   */
-  prompt: string;
-  /**
-   * Metadata
-   *
-   * Generation metadata including duration, sample rate, and parameters
-   */
-  metadata: {
-    [key: string]: unknown;
-  };
-  audio: FileType2;
-};
-
-/**
- * MusicGenerationInput
- *
- * Input schema for music generation with form controls for the playground.
- */
-export type MusicGenerationInput = {
-  /**
-   * Prompt
-   *
-   * Describe the music you want to generate
-   */
-  prompt: string;
-  /**
-   * Duration
-   *
-   * Length of the generated music in seconds
-   */
-  duration?: number;
-  /**
-   * Refinement
-   *
-   * Refinement level - higher values may improve quality but take longer
-   */
-  refinement?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible results - leave empty for random generation
-   */
-  seed?: number | unknown;
-  /**
-   * Negative Prompt
-   *
-   * Describe what you want to avoid in the music (instruments, styles, moods). Leave blank for none.
-   */
-  negative_prompt?: string;
-  /**
-   * Creativity
-   *
-   * Creativity level - higher values allow more creative interpretation of the prompt
-   */
-  creativity?: number;
-};
-
-/**
- * SoundEffectGenerationOutput
- *
- * Output schema for sound effect generation.
- */
-export type SoundEffectGenerationOutput = {
-  /**
-   * Prompt
-   *
-   * The processed prompt used for generation
-   */
-  prompt: string;
-  /**
-   * Metadata
-   *
-   * Generation metadata including duration, sample rate, and parameters
-   */
-  metadata: {
-    [key: string]: unknown;
-  };
-  audio: FileType2;
-};
-
-/**
- * SoundEffectGenerationInput
- *
- * Input schema for sound effect generation with form controls for the playground.
- */
-export type SoundEffectGenerationInput = {
-  /**
-   * Prompt
-   *
-   * Describe the sound effect you want to generate
-   */
-  prompt: string;
-  /**
-   * Duration
-   *
-   * Length of the generated sound effect in seconds
-   */
-  duration?: number;
-  /**
-   * Refinement
-   *
-   * Refinement level - Higher values may improve quality but take longer
-   */
-  refinement?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible results - leave empty for random generation
-   */
-  seed?: number | unknown;
-  /**
-   * Negative Prompt
-   *
-   * Describe the types of sounds you don't want to generate in the output, avoid double-negatives, compare with positive prompts
-   */
-  negative_prompt?: string;
-  /**
-   * Creativity
-   *
-   * Creativity level - higher values allow more creative interpretation of the prompt
-   */
-  creativity?: number;
-};
-
-/**
- * MusicV15Output
- */
-export type MinimaxMusicV2Output = {
-  /**
-   * Audio
-   *
-   * The generated music
-   */
-  audio: File;
-};
-
-/**
- * TextToMusic20Request
- */
-export type MinimaxMusicV2Input = {
-  /**
-   * Prompt
-   *
-   * A description of the music, specifying style, mood, and scenario. 10-300 characters.
-   */
-  prompt: string;
-  /**
-   * Lyrics Prompt
-   *
-   * Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.
-   */
-  lyrics_prompt: string;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
-  audio_setting?: AudioSetting;
+  seconds_start?: number;
 };
 
 /**
@@ -2271,7 +2141,7 @@ export type MusicCompositionPlan = {
  * MusicOutput
  */
 export type ElevenlabsMusicOutput = {
-  audio: FileType2;
+  audio: File;
 };
 
 /**
@@ -2336,10 +2206,74 @@ export type ElevenlabsMusicInput = {
 };
 
 /**
+ * SoundEffectOutput
+ *
+ * Output format for generated sound effects
+ */
+export type ElevenlabsSoundEffectsV2Output = {
+  audio: File;
+};
+
+/**
+ * SoundEffectRequestV2
+ */
+export type ElevenlabsSoundEffectsV2Input = {
+  /**
+   * Text
+   *
+   * The text describing the sound effect to generate
+   */
+  text: string;
+  /**
+   * Loop
+   *
+   * Whether to create a sound effect that loops smoothly.
+   */
+  loop?: boolean;
+  /**
+   * Prompt Influence
+   *
+   * How closely to follow the prompt (0-1). Higher values mean less variation.
+   */
+  prompt_influence?: number;
+  /**
+   * Output Format
+   *
+   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
+   */
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192";
+  /**
+   * Duration Seconds
+   *
+   * Duration in seconds (0.5-22). If None, optimal duration will be determined from prompt.
+   */
+  duration_seconds?: number | unknown;
+};
+
+/**
  * TTSOutput
  */
-export type ElevenlabsAudioIsolationOutput = {
-  audio: FileType2;
+export type ElevenlabsTtsMultilingualV2Output = {
+  audio: File;
   /**
    * Timestamps
    *
@@ -2349,61 +2283,432 @@ export type ElevenlabsAudioIsolationOutput = {
 };
 
 /**
- * AudioIsolationRequest
+ * TextToSpeechRequest
  */
-export type ElevenlabsAudioIsolationInput = {
+export type ElevenlabsTtsMultilingualV2Input = {
   /**
-   * Video Url
+   * Stability
    *
-   * Video file to use for audio isolation. Either `audio_url` or `video_url` must be provided.
+   * Voice stability (0-1)
    */
-  video_url?: string | unknown;
+  stability?: number;
   /**
-   * Audio Url
+   * Next Text
    *
-   * URL of the audio file to isolate voice from
+   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
    */
-  audio_url?: string | unknown;
-};
-
-/**
- * DiaCloneOutput
- */
-export type DiaTtsVoiceCloneOutput = {
+  next_text?: string | unknown;
   /**
-   * The generated speech audio
+   * Speed
+   *
+   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
    */
-  audio: FileType2;
-};
-
-/**
- * CloneRequest
- */
-export type DiaTtsVoiceCloneInput = {
+  speed?: number;
+  /**
+   * Style
+   *
+   * Style exaggeration (0-1)
+   */
+  style?: number;
   /**
    * Text
    *
-   * The text to be converted to speech.
+   * The text to convert to speech
    */
   text: string;
   /**
-   * Reference Text for the Reference Audio
+   * Timestamps
    *
-   * The reference text to be used for TTS.
+   * Whether to return timestamps for each word in the generated speech
    */
-  ref_text: string;
+  timestamps?: boolean;
   /**
-   * Reference Audio URL
+   * Similarity Boost
    *
-   * The URL of the reference audio file.
+   * Similarity boost (0-1)
    */
-  ref_audio_url: string;
+  similarity_boost?: number;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Apply Text Normalization
+   *
+   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+   */
+  apply_text_normalization?: "auto" | "on" | "off";
+  /**
+   * Previous Text
+   *
+   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  previous_text?: string | unknown;
 };
 
 /**
- * ACEStepAudioToAudioResponse
+ * MusicV15Output
  */
-export type AceStepAudioToAudioOutput = {
+export type MinimaxMusicV2Output = {
+  audio: File;
+};
+
+/**
+ * TextToMusic20Request
+ */
+export type MinimaxMusicV2Input = {
+  /**
+   * Prompt
+   *
+   * A description of the music, specifying style, mood, and scenario. 10-300 characters.
+   */
+  prompt: string;
+  /**
+   * Lyrics Prompt
+   *
+   * Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.
+   */
+  lyrics_prompt: string;
+  audio_setting?: AudioSetting;
+};
+
+/**
+ * TTSOutput
+ */
+export type ElevenlabsTtsElevenV3Output = {
+  audio: File;
+  /**
+   * Timestamps
+   *
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   */
+  timestamps?: Array<unknown> | unknown;
+};
+
+/**
+ * TextToSpeechRequestV3
+ *
+ * Request model for eleven_v3 which doesn't support previous_text/next_text
+ */
+export type ElevenlabsTtsElevenV3Input = {
+  /**
+   * Text
+   *
+   * The text to convert to speech
+   */
+  text: string;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Stability
+   *
+   * Voice stability (0-1)
+   */
+  stability?: number;
+  /**
+   * Apply Text Normalization
+   *
+   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+   */
+  apply_text_normalization?: "auto" | "on" | "off";
+  /**
+   * Timestamps
+   *
+   * Whether to return timestamps for each word in the generated speech
+   */
+  timestamps?: boolean;
+};
+
+/**
+ * ImpulseResponseOutput
+ *
+ * Output model for impulse response processed audio
+ */
+export type WorkflowUtilitiesImpulseResponseOutput = {
+  audio: AudioFileType2;
+};
+
+/**
+ * AudioFile
+ *
+ * Audio file with url field
+ */
+export type AudioFileType2 = {
+  /**
+   * File Size
+   *
+   * Size of the audio file in bytes
+   */
+  file_size: number;
+  /**
+   * File Name
+   *
+   * Name of the audio file
+   */
+  file_name: string;
+  /**
+   * Content Type
+   *
+   * Content type of the audio file
+   */
+  content_type: string;
+  /**
+   * Url
+   *
+   * URL of the audio file
+   */
+  url: string;
+};
+
+/**
+ * ImpulseResponseInput
+ *
+ * Input model for applying impulse response (IR) convolution reverb to audio
+ */
+export type WorkflowUtilitiesImpulseResponseInput = {
+  /**
+   * Impulse Response Url
+   *
+   * URL of the impulse response WAV file (reverb/effect profile)
+   */
+  impulse_response_url: string;
+  /**
+   * Loudness Tp
+   *
+   * Maximum true peak in dBTP (typically -2 to -1)
+   */
+  loudness_tp?: number;
+  /**
+   * Loudness Lra
+   *
+   * Loudness Range target in LU (typically 5-15)
+   */
+  loudness_lra?: number;
+  /**
+   * Dry Level
+   *
+   * Level of the original (dry) signal in the mix (0.0-1.0)
+   */
+  dry_level?: number;
+  /**
+   * Loudness I
+   *
+   * Target integrated loudness in LUFS (typically -24 to -14)
+   */
+  loudness_i?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the main audio file to process
+   */
+  audio_url: string;
+  /**
+   * Wet Level
+   *
+   * Level of the processed (wet) signal in the mix (0.0-1.0)
+   */
+  wet_level?: number;
+  /**
+   * Output Bitrate
+   *
+   * Output audio bitrate
+   */
+  output_bitrate?: "128k" | "192k" | "256k" | "320k";
+};
+
+/**
+ * InpaintOutput
+ */
+export type StableAudio25InpaintOutput = {
+  /**
+   * Seed
+   *
+   * The random seed used for generation
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * InpaintInput
+ */
+export type StableAudio25InpaintInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to guide the audio generation
+   */
+  prompt: string;
+  /**
+   * Audio Url
+   *
+   * The audio clip to inpaint
+   */
+  audio_url: string;
+  /**
+   * Mask End
+   *
+   * The end point of the audio mask
+   */
+  mask_end?: number;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
+   */
+  guidance_scale?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of steps to denoise the audio for
+   */
+  num_inference_steps?: number;
+  /**
+   * Seed
+   */
+  seed?: number | unknown;
+  /**
+   * Seconds Total
+   *
+   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
+   */
+  seconds_total?: number | unknown;
+  /**
+   * Mask Start
+   *
+   * The start point of the audio mask
+   */
+  mask_start?: number;
+};
+
+/**
+ * RealtimeConversationOutput
+ *
+ * Output from @fal.realtime endpoint.
+ */
+export type PersonaplexRealtimeOutput = {
+  /**
+   * Text
+   *
+   * Generated text tokens for this chunk.
+   */
+  text?: string;
+  /**
+   * Audio
+   *
+   * Generated audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
+   */
+  audio: Blob | File;
+};
+
+/**
+ * RealtimeConversationInput
+ *
+ * Input for @fal.realtime endpoint. Audio is raw PCM s16le 24kHz mono.
+ */
+export type PersonaplexRealtimeInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the AI persona and conversation context.
+   */
+  prompt?: string;
+  /**
+   * Top K Text
+   *
+   * Top-K sampling for text tokens.
+   */
+  top_k_text?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.
+   */
+  voice?:
+    | "NATF0"
+    | "NATF1"
+    | "NATF2"
+    | "NATF3"
+    | "NATM0"
+    | "NATM1"
+    | "NATM2"
+    | "NATM3"
+    | "VARF0"
+    | "VARF1"
+    | "VARF2"
+    | "VARF3"
+    | "VARF4"
+    | "VARM0"
+    | "VARM1"
+    | "VARM2"
+    | "VARM3"
+    | "VARM4";
+  /**
+   * Temperature Text
+   *
+   * Text sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_text?: number;
+  /**
+   * Voice Audio Url
+   *
+   * URL to a voice sample audio for on-the-fly voice cloning. When provided, the AI responds in the cloned voice instead of the preset 'voice'. 10+ seconds of clear speech recommended. Billed at 2x rate.
+   */
+  voice_audio_url?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Top K Audio
+   *
+   * Top-K sampling for audio tokens.
+   */
+  top_k_audio?: number;
+  /**
+   * Audio
+   *
+   * Input audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
+   */
+  audio: string;
+  /**
+   * Temperature Audio
+   *
+   * Audio sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_audio?: number;
+};
+
+/**
+ * ACEStepResponse
+ */
+export type AceStepAudioOutpaintOutput = {
   /**
    * Tags
    *
@@ -2422,18 +2727,13 @@ export type AceStepAudioToAudioOutput = {
    * The random seed used for the generation process.
    */
   seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio file.
-   */
   audio: File;
 };
 
 /**
- * ACEStepAudioToAudioRequest
+ * ACEStepAudioOutpaintRequest
  */
-export type AceStepAudioToAudioInput = {
+export type AceStepAudioOutpaintInput = {
   /**
    * Number Of Steps
    *
@@ -2453,6 +2753,12 @@ export type AceStepAudioToAudioInput = {
    */
   minimum_guidance_scale?: number;
   /**
+   * Extend After Duration
+   *
+   * Duration in seconds to extend the audio from the end.
+   */
+  extend_after_duration?: number;
+  /**
    * Lyrics
    *
    * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
@@ -2464,12 +2770,6 @@ export type AceStepAudioToAudioInput = {
    * Tag guidance scale for the generation.
    */
   tag_guidance_scale?: number;
-  /**
-   * Original Lyrics
-   *
-   * Original lyrics of the audio file.
-   */
-  original_lyrics?: string;
   /**
    * Scheduler
    *
@@ -2489,6 +2789,12 @@ export type AceStepAudioToAudioInput = {
    */
   guidance_type?: "cfg" | "apg" | "cfg_star";
   /**
+   * Extend Before Duration
+   *
+   * Duration in seconds to extend the audio from the start.
+   */
+  extend_before_duration?: number;
+  /**
    * Lyric Guidance Scale
    *
    * Lyric guidance scale for the generation.
@@ -2500,12 +2806,6 @@ export type AceStepAudioToAudioInput = {
    * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
    */
   guidance_interval?: number;
-  /**
-   * Edit Mode
-   *
-   * Whether to edit the lyrics only or remix the audio.
-   */
-  edit_mode?: "lyrics" | "remix";
   /**
    * Guidance Interval Decay
    *
@@ -2523,25 +2823,780 @@ export type AceStepAudioToAudioInput = {
    *
    * Random seed for reproducibility. If not provided, a random seed will be used.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Granularity Scale
    *
    * Granularity scale for the generation process. Higher values can reduce artifacts.
    */
   granularity_scale?: number;
+};
+
+/**
+ * LavaSRTimings
+ */
+export type LavaSrTimings = {
   /**
-   * Original Tags
+   * Postprocess
    *
-   * Original tags of the audio file.
+   * Time taken to postprocess the audio in seconds.
    */
-  original_tags: string;
+  postprocess: number;
   /**
-   * Original Seed
+   * Inference
    *
-   * Original seed of the audio file.
+   * Time taken to run the inference in seconds.
    */
-  original_seed?: number;
+  inference: number;
+  /**
+   * Preprocess
+   *
+   * Time taken to preprocess the audio in seconds.
+   */
+  preprocess: number;
+};
+
+/**
+ * LavaSROutput
+ */
+export type LavaSrOutput = {
+  timings: LavaSrTimings;
+  audio: AudioFile;
+};
+
+/**
+ * AudioFile
+ */
+export type AudioFile = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Duration
+   *
+   * The duration of the audio
+   */
+  duration?: number | unknown;
+  /**
+   * Channels
+   *
+   * The number of channels in the audio
+   */
+  channels?: number | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Sample Rate
+   *
+   * The sample rate of the audio
+   */
+  sample_rate?: number | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Bitrate
+   *
+   * The bitrate of the audio (e.g., '192k' or 192000)
+   */
+  bitrate?: string | number | unknown;
+};
+
+/**
+ * LavaSRInput
+ */
+export type LavaSrInput = {
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Bitrate
+   *
+   * The bitrate of the output audio.
+   */
+  bitrate?: string;
+  /**
+   * Audio URL
+   *
+   * The URL of the audio file to enhance.
+   */
+  audio_url: string;
+  /**
+   * Denoise
+   *
+   * If `True`, applies UL-UNAS noise filtering before bandwidth extension.
+   */
+  denoise?: boolean;
+  /**
+   * Audio Format
+   *
+   * The format for the output audio.
+   */
+  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
+};
+
+/**
+ * MiniOutput
+ */
+export type Tada1bTextToSpeechOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Input
+ */
+export type Tada1bTextToSpeechInput = {
+  /**
+   * Language
+   *
+   * Language for text alignment. Use the appropriate code for non-English synthesis.
+   */
+  language?:
+    | "en"
+    | "ar"
+    | "ch"
+    | "de"
+    | "es"
+    | "fr"
+    | "it"
+    | "ja"
+    | "pl"
+    | "pt";
+  /**
+   * Repetition Penalty
+   *
+   * Penalty applied to repeated tokens during generation.
+   */
+  repetition_penalty?: number;
+  /**
+   * Num Extra Steps
+   *
+   * Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.
+   */
+  num_extra_steps?: number;
+  /**
+   * Top P
+   *
+   * Top-p (nucleus) sampling parameter for text generation.
+   */
+  top_p?: number;
+  /**
+   * Prompt
+   *
+   * The text to synthesize into speech using the reference speaker's voice.
+   */
+  prompt: string;
+  /**
+   * Speed Up Factor
+   *
+   * Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.
+   */
+  speed_up_factor?: number;
+  /**
+   * Output Format
+   *
+   * The format of the output audio file.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Acoustic Cfg Scale
+   *
+   * Classifier-free guidance scale for acoustic feature generation.
+   */
+  acoustic_cfg_scale?: number;
+  /**
+   * Noise Temperature
+   *
+   * Temperature for noise in the flow matching diffusion process.
+   */
+  noise_temperature?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
+   */
+  audio_url: string;
+  /**
+   * Temperature
+   *
+   * Sampling temperature for text token generation. Higher values produce more varied output.
+   */
+  temperature?: number;
+  /**
+   * Num Inference Steps
+   *
+   * Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.
+   */
+  num_inference_steps?: number;
+  /**
+   * Transcript
+   *
+   * Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.
+   */
+  transcript?: string;
+};
+
+/**
+ * AudioCompressorOutput
+ *
+ * Output model for compressed audio
+ */
+export type WorkflowUtilitiesAudioCompressorOutput = {
+  audio: AudioFileType2;
+};
+
+/**
+ * AudioCompressorInput
+ *
+ * Input model for audio dynamic range compression
+ */
+export type WorkflowUtilitiesAudioCompressorInput = {
+  /**
+   * Threshold
+   *
+   * Threshold level in dB above which compression is applied (-60 to 0)
+   */
+  threshold?: number;
+  /**
+   * Ratio
+   *
+   * Compression ratio (1 = no compression, higher = more compression)
+   */
+  ratio?: number;
+  /**
+   * Makeup
+   *
+   * Makeup gain in dB to compensate for volume reduction
+   */
+  makeup?: number;
+  /**
+   * Attack
+   *
+   * Attack time in milliseconds (how fast compression starts)
+   */
+  attack?: number;
+  /**
+   * Release
+   *
+   * Release time in milliseconds (how fast compression stops)
+   */
+  release?: number;
+  /**
+   * Knee
+   *
+   * Knee width in dB for soft knee compression (0 = hard knee)
+   */
+  knee?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to compress
+   */
+  audio_url: string;
+  /**
+   * Output Bitrate
+   *
+   * Output audio bitrate
+   */
+  output_bitrate?: "128k" | "192k" | "256k" | "320k";
+};
+
+/**
+ * ConversationOutput
+ */
+export type PersonaplexOutput = {
+  /**
+   * Text
+   *
+   * Transcribed text of the AI's response.
+   */
+  text: string;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds.
+   */
+  duration: number;
+  /**
+   * Seed
+   *
+   * The seed used for generation.
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * ConversationInput
+ */
+export type PersonaplexInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the AI persona and conversation context.
+   */
+  prompt?: string;
+  /**
+   * Top K Text
+   *
+   * Top-K sampling for text tokens.
+   */
+  top_k_text?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.
+   */
+  voice?:
+    | "NATF0"
+    | "NATF1"
+    | "NATF2"
+    | "NATF3"
+    | "NATM0"
+    | "NATM1"
+    | "NATM2"
+    | "NATM3"
+    | "VARF0"
+    | "VARF1"
+    | "VARF2"
+    | "VARF3"
+    | "VARF4"
+    | "VARM0"
+    | "VARM1"
+    | "VARM2"
+    | "VARM3"
+    | "VARM4";
+  /**
+   * Temperature Text
+   *
+   * Text sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_text?: number;
+  /**
+   * Audio Url
+   *
+   * URL to the input audio file (user's speech).
+   */
+  audio_url: string;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Voice Audio Url
+   *
+   * URL to a voice sample audio for on-the-fly voice cloning. When provided, the AI responds in the cloned voice instead of the preset 'voice'. 10+ seconds of clear speech recommended. Billed at 2x rate.
+   */
+  voice_audio_url?: string | unknown;
+  /**
+   * Top K Audio
+   *
+   * Top-K sampling for audio tokens.
+   */
+  top_k_audio?: number;
+  /**
+   * Temperature Audio
+   *
+   * Audio sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_audio?: number;
+};
+
+/**
+ * AudioTimeSpan
+ *
+ * A time span indicating where the target sound occurs.
+ */
+export type AudioTimeSpan = {
+  /**
+   * End
+   *
+   * End time of the span in seconds
+   */
+  end: number;
+  /**
+   * Start
+   *
+   * Start time of the span in seconds
+   */
+  start: number;
+  /**
+   * Include
+   *
+   * Whether to include (True) or exclude (False) sounds in this span
+   */
+  include?: boolean;
+};
+
+/**
+ * SAMAudioSpanSeparateOutput
+ *
+ * Output for span-based audio separation.
+ */
+export type SamAudioSpanSeparateOutput = {
+  target: File;
+  /**
+   * Duration
+   *
+   * Duration of the output audio in seconds.
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the output audio in Hz.
+   */
+  sample_rate?: number;
+  residual: File;
+};
+
+/**
+ * SAMAudioSpanInput
+ *
+ * Input for temporal span-based audio separation.
+ */
+export type SamAudioSpanSeparateInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span.
+   */
+  prompt?: string | unknown;
+  /**
+   * Chunk Overlap
+   *
+   * Overlap duration (in seconds) between chunks for crossfade blending.
+   */
+  chunk_overlap?: number;
+  /**
+   * Spans
+   *
+   * Time spans where the target sound occurs which should be isolated.
+   */
+  spans: Array<AudioTimeSpan>;
+  /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "fast" | "balanced" | "quality";
+  /**
+   * Use Sound Activity Ranking
+   *
+   * Use sound activity detection to rank reranking candidates based on how well each candidate's non-silent regions match the provided spans. Enables effective reranking even without a text prompt (span-only separation). Requires reranking_candidates > 1.
+   */
+  use_sound_activity_ranking?: boolean;
+  /**
+   * Output Format
+   *
+   * Output audio format.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Trim To Span
+   *
+   * Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.
+   */
+  trim_to_span?: boolean;
+  /**
+   * Max Chunk Duration
+   *
+   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
+   */
+  max_chunk_duration?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to process.
+   */
+  audio_url: string;
+  /**
+   * Reranking Candidates
+   *
+   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.
+   */
+  reranking_candidates?: number;
+};
+
+/**
+ * DiaCloneOutput
+ */
+export type DiaTtsVoiceCloneOutput = {
+  audio: File;
+};
+
+/**
+ * CloneRequest
+ */
+export type DiaTtsVoiceCloneInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+};
+
+/**
+ * ExtendOutput
+ */
+export type V2ExtendOutput = {
+  /**
+   * Tags
+   *
+   * The style tags used for generation.
+   */
+  tags?: Array<string> | unknown;
+  /**
+   * Seed
+   *
+   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
+   */
+  seed: number;
+  /**
+   * Extend Duration
+   *
+   * The duration in seconds that the song was extended by.
+   */
+  extend_duration: number;
+  /**
+   * Audio
+   *
+   * The generated audio files.
+   */
+  audio: Array<File>;
+  /**
+   * Lyrics
+   *
+   * The lyrics used for generation.
+   */
+  lyrics?: string | unknown;
+};
+
+/**
+ * ExtendInput
+ */
+export type V2ExtendInput = {
+  /**
+   * Prompt
+   *
+   * A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.
+   */
+  prompt?: string | unknown;
+  /**
+   * Lyrics Prompt
+   *
+   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
+   */
+  lyrics_prompt?: string | unknown;
+  /**
+   * Tags
+   *
+   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
+   */
+  tags?: Array<string> | unknown;
+  /**
+   * Prompt Strength
+   *
+   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
+   */
+  prompt_strength?: number;
+  /**
+   * Output Bit Rate
+   *
+   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
+   */
+  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
+  /**
+   * Num Songs
+   *
+   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
+   */
+  num_songs?: number;
+  /**
+   * Output Format
+   */
+  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
+  /**
+   * Side
+   *
+   * Add more to the beginning (left) or end (right) of the song
+   */
+  side: "left" | "right";
+  /**
+   * Balance Strength
+   *
+   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
+   */
+  balance_strength?: number;
+  /**
+   * Crop Duration
+   *
+   * Duration in seconds to crop from the selected side before extending from that side.
+   */
+  crop_duration?: number;
+  /**
+   * Audio Url
+   *
+   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
+   */
+  audio_url: string;
+  /**
+   * Seed
+   *
+   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
+   */
+  seed?: number | unknown;
+  /**
+   * Extend Duration
+   *
+   * Duration in seconds to extend the song. If not provided, will attempt to automatically determine.
+   */
+  extend_duration?: number | unknown;
+};
+
+/**
+ * AudioUnderstandingOutput
+ */
+export type AudioUnderstandingOutput = {
+  /**
+   * Output
+   *
+   * The analysis of the audio content based on the prompt
+   */
+  output: string;
+};
+
+/**
+ * AudioUnderstandingInput
+ */
+export type AudioUnderstandingInput = {
+  /**
+   * Prompt
+   *
+   * The question or prompt about the audio content.
+   */
+  prompt: string;
+  /**
+   * Detailed Analysis
+   *
+   * Whether to request a more detailed analysis of the audio
+   */
+  detailed_analysis?: boolean;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to analyze
+   */
+  audio_url: string;
+};
+
+/**
+ * NovaSRTimings
+ */
+export type NovaSrTimings = {
+  /**
+   * Postprocess
+   *
+   * Time taken to postprocess the audio in seconds.
+   */
+  postprocess: number;
+  /**
+   * Inference
+   *
+   * Time taken to run the inference in seconds.
+   */
+  inference: number;
+  /**
+   * Preprocess
+   *
+   * Time taken to preprocess the audio in seconds.
+   */
+  preprocess: number;
+};
+
+/**
+ * NovaSROutput
+ */
+export type NovaSrOutput = {
+  timings: NovaSrTimings;
+  audio: AudioFile;
+};
+
+/**
+ * NovaSRInput
+ */
+export type NovaSrInput = {
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Bitrate
+   *
+   * The bitrate of the output audio.
+   */
+  bitrate?: string;
+  /**
+   * Audio URL
+   *
+   * The URL of the audio file to enhance.
+   */
+  audio_url: string;
+  /**
+   * Audio Format
+   *
+   * The format for the output audio.
+   */
+  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
+};
+
+/**
+ * Qwen3CloneVoiceOutput
+ */
+export type Qwen3TtsCloneVoice06bOutput = {
+  speaker_embedding: File;
+};
+
+/**
+ * Qwen3CloneVoiceInput
+ */
+export type Qwen3TtsCloneVoice06bInput = {
+  /**
+   * Audio Url
+   *
+   * URL to the reference audio file used for voice cloning.
+   */
+  audio_url: string;
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
 };
 
 /**
@@ -2566,11 +3621,6 @@ export type AceStepAudioInpaintOutput = {
    * The random seed used for the generation process.
    */
   seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio file.
-   */
   audio: File;
 };
 
@@ -2685,7 +3735,7 @@ export type AceStepAudioInpaintInput = {
    *
    * Random seed for reproducibility. If not provided, a random seed will be used.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Granularity Scale
    *
@@ -2695,9 +3745,175 @@ export type AceStepAudioInpaintInput = {
 };
 
 /**
- * ACEStepResponse
+ * AudioToAudioOutput
  */
-export type AceStepAudioOutpaintOutput = {
+export type StableAudio25AudioToAudioOutput = {
+  /**
+   * Seed
+   *
+   * The random seed used for generation
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * AudioToAudioInput
+ */
+export type StableAudio25AudioToAudioInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to guide the audio generation
+   */
+  prompt: string;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Strength
+   *
+   * Sometimes referred to as denoising, this parameter controls how much influence the `audio_url` parameter has on the generated audio. A value of 0 would yield audio that is identical to the input. A value of 1 would be as if you passed in no audio at all.
+   */
+  strength?: number;
+  /**
+   * Guidance Scale
+   *
+   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
+   */
+  guidance_scale?: number;
+  /**
+   * Num Inference Steps
+   *
+   * The number of steps to denoise the audio for
+   */
+  num_inference_steps?: number;
+  /**
+   * Seed
+   */
+  seed?: number | unknown;
+  /**
+   * Audio Url
+   *
+   * The audio clip to transform
+   */
+  audio_url: string;
+  /**
+   * Total Seconds
+   *
+   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
+   */
+  total_seconds?: number | unknown;
+};
+
+/**
+ * Output
+ */
+export type Tada3bTextToSpeechOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Input
+ */
+export type Tada3bTextToSpeechInput = {
+  /**
+   * Language
+   *
+   * Language for text alignment. Use the appropriate code for non-English synthesis.
+   */
+  language?:
+    | "en"
+    | "ar"
+    | "ch"
+    | "de"
+    | "es"
+    | "fr"
+    | "it"
+    | "ja"
+    | "pl"
+    | "pt";
+  /**
+   * Repetition Penalty
+   *
+   * Penalty applied to repeated tokens during generation.
+   */
+  repetition_penalty?: number;
+  /**
+   * Num Extra Steps
+   *
+   * Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.
+   */
+  num_extra_steps?: number;
+  /**
+   * Top P
+   *
+   * Top-p (nucleus) sampling parameter for text generation.
+   */
+  top_p?: number;
+  /**
+   * Prompt
+   *
+   * The text to synthesize into speech using the reference speaker's voice.
+   */
+  prompt: string;
+  /**
+   * Speed Up Factor
+   *
+   * Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.
+   */
+  speed_up_factor?: number;
+  /**
+   * Output Format
+   *
+   * The format of the output audio file.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Acoustic Cfg Scale
+   *
+   * Classifier-free guidance scale for acoustic feature generation.
+   */
+  acoustic_cfg_scale?: number;
+  /**
+   * Noise Temperature
+   *
+   * Temperature for noise in the flow matching diffusion process.
+   */
+  noise_temperature?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
+   */
+  audio_url: string;
+  /**
+   * Temperature
+   *
+   * Sampling temperature for text token generation. Higher values produce more varied output.
+   */
+  temperature?: number;
+  /**
+   * Num Inference Steps
+   *
+   * Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.
+   */
+  num_inference_steps?: number;
+  /**
+   * Transcript
+   *
+   * Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.
+   */
+  transcript?: string;
+};
+
+/**
+ * ACEStepAudioToAudioResponse
+ */
+export type AceStepAudioToAudioOutput = {
   /**
    * Tags
    *
@@ -2716,18 +3932,13 @@ export type AceStepAudioOutpaintOutput = {
    * The random seed used for the generation process.
    */
   seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio file.
-   */
   audio: File;
 };
 
 /**
- * ACEStepAudioOutpaintRequest
+ * ACEStepAudioToAudioRequest
  */
-export type AceStepAudioOutpaintInput = {
+export type AceStepAudioToAudioInput = {
   /**
    * Number Of Steps
    *
@@ -2747,12 +3958,6 @@ export type AceStepAudioOutpaintInput = {
    */
   minimum_guidance_scale?: number;
   /**
-   * Extend After Duration
-   *
-   * Duration in seconds to extend the audio from the end.
-   */
-  extend_after_duration?: number;
-  /**
    * Lyrics
    *
    * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
@@ -2765,29 +3970,29 @@ export type AceStepAudioOutpaintInput = {
    */
   tag_guidance_scale?: number;
   /**
+   * Original Lyrics
+   *
+   * Original lyrics of the audio file.
+   */
+  original_lyrics?: string;
+  /**
    * Scheduler
    *
    * Scheduler to use for the generation process.
    */
   scheduler?: "euler" | "heun";
   /**
-   * Extend Before Duration
+   * Guidance Scale
    *
-   * Duration in seconds to extend the audio from the start.
+   * Guidance scale for the generation.
    */
-  extend_before_duration?: number;
+  guidance_scale?: number;
   /**
    * Guidance Type
    *
    * Type of CFG to use for the generation process.
    */
   guidance_type?: "cfg" | "apg" | "cfg_star";
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the generation.
-   */
-  guidance_scale?: number;
   /**
    * Lyric Guidance Scale
    *
@@ -2800,6 +4005,12 @@ export type AceStepAudioOutpaintInput = {
    * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
    */
   guidance_interval?: number;
+  /**
+   * Edit Mode
+   *
+   * Whether to edit the lyrics only or remix the audio.
+   */
+  edit_mode?: "lyrics" | "remix";
   /**
    * Guidance Interval Decay
    *
@@ -2817,313 +4028,303 @@ export type AceStepAudioOutpaintInput = {
    *
    * Random seed for reproducibility. If not provided, a random seed will be used.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Granularity Scale
    *
    * Granularity scale for the generation process. Higher values can reduce artifacts.
    */
   granularity_scale?: number;
+  /**
+   * Original Tags
+   *
+   * Original tags of the audio file.
+   */
+  original_tags: string;
+  /**
+   * Original Seed
+   *
+   * Original seed of the audio file.
+   */
+  original_seed?: number | unknown;
 };
 
 /**
- * ExtendOutput
+ * DeepFilterNetTimings
  */
-export type V2ExtendOutput = {
+export type DeepFilterNetTimings = {
   /**
-   * Tags
+   * Postprocess
    *
-   * The style tags used for generation.
+   * Postprocessing time.
    */
-  tags?: Array<string> | unknown;
+  postprocess: number;
   /**
-   * Seed
+   * Inference
    *
-   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
+   * Inference time.
    */
-  seed: number;
+  inference: number;
   /**
-   * Extend Duration
+   * Preprocess
    *
-   * The duration in seconds that the song was extended by.
+   * Preprocessing time.
    */
-  extend_duration: number;
-  /**
-   * Audio
-   *
-   * The generated audio files.
-   */
-  audio: Array<FileType2>;
-  /**
-   * Lyrics
-   *
-   * The lyrics used for generation.
-   */
-  lyrics?: string | unknown;
+  preprocess: number;
 };
 
 /**
- * ExtendInput
+ * DeepFilterNet3Output
  */
-export type V2ExtendInput = {
+export type Deepfilternet3Output = {
+  timings: DeepFilterNetTimings;
+  audio_file: AudioFile;
+};
+
+/**
+ * DeepFilterNet3Input
+ */
+export type Deepfilternet3Input = {
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Bitrate
+   *
+   * The bitrate of the output audio.
+   */
+  bitrate?: string;
+  /**
+   * Audio URL
+   *
+   * The URL of the audio to enhance.
+   */
+  audio_url: string;
+  /**
+   * Audio Format
+   *
+   * The format for the output audio.
+   */
+  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
+};
+
+/**
+ * SAMAudioSeparateOutput
+ *
+ * Output for text-based audio separation.
+ */
+export type SamAudioSeparateOutput = {
+  target: File;
+  /**
+   * Duration
+   *
+   * Duration of the output audio in seconds.
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the output audio in Hz.
+   */
+  sample_rate?: number;
+  residual: File;
+};
+
+/**
+ * SAMAudioInput
+ *
+ * Input for text-based audio separation.
+ */
+export type SamAudioSeparateInput = {
   /**
    * Prompt
    *
-   * A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.
+   * Text prompt describing the sound to isolate.
    */
-  prompt?: string | unknown;
+  prompt: string;
   /**
-   * Lyrics Prompt
+   * Chunk Overlap
    *
-   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
+   * Overlap duration (in seconds) between chunks for crossfade blending.
    */
-  lyrics_prompt?: string | unknown;
+  chunk_overlap?: number;
   /**
-   * Tags
+   * Acceleration
    *
-   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
+   * The acceleration level to use.
    */
-  tags?: Array<string> | unknown;
-  /**
-   * Prompt Strength
-   *
-   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
-   */
-  prompt_strength?: number;
-  /**
-   * Output Bit Rate
-   *
-   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
-   */
-  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
-  /**
-   * Num Songs
-   *
-   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
-   */
-  num_songs?: number;
+  acceleration?: "fast" | "balanced" | "quality";
   /**
    * Output Format
-   */
-  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
-  /**
-   * Side
    *
-   * Add more to the beginning (left) or end (right) of the song
+   * Output audio format.
    */
-  side: "left" | "right";
+  output_format?: "wav" | "mp3";
   /**
-   * Balance Strength
+   * Max Chunk Duration
    *
-   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
+   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
    */
-  balance_strength?: number;
-  /**
-   * Crop Duration
-   *
-   * Duration in seconds to crop from the selected side before extending from that side.
-   */
-  crop_duration?: number;
+  max_chunk_duration?: number;
   /**
    * Audio Url
    *
-   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
+   * URL of the audio file to process (WAV, MP3, FLAC supported)
    */
   audio_url: string;
   /**
-   * Seed
+   * Predict Spans
    *
-   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
+   * Automatically predict temporal spans where the target sound occurs.
    */
-  seed?: number | unknown;
+  predict_spans?: boolean;
   /**
-   * Extend Duration
+   * Reranking Candidates
    *
-   * Duration in seconds to extend the song. If not provided, will attempt to automatically determine.
+   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
    */
-  extend_duration?: number | unknown;
+  reranking_candidates?: number;
 };
 
 /**
- * InpaintOutput
+ * MergeAudiosOutput
  */
-export type StableAudio25InpaintOutput = {
-  /**
-   * Seed
-   *
-   * The random seed used for generation
-   */
-  seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio clip
-   */
+export type FfmpegApiMergeAudiosOutput = {
   audio: File;
 };
 
 /**
- * InpaintInput
+ * MergeAudiosInput
  */
-export type StableAudio25InpaintInput = {
+export type FfmpegApiMergeAudiosInput = {
   /**
-   * Prompt
+   * Audio Urls
    *
-   * The prompt to guide the audio generation
+   * List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.
    */
-  prompt: string;
+  audio_urls: Array<string>;
   /**
-   * Guidance Scale
+   * Output Format
    *
-   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
+   * Output format of the combined audio. If not used, will be determined automatically using FFMPEG. Formatted as codec_sample_rate_bitrate.
    */
-  guidance_scale?: number;
-  /**
-   * Mask End
-   *
-   * The end point of the audio mask
-   */
-  mask_end?: number;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Audio Url
-   *
-   * The audio clip to inpaint
-   */
-  audio_url: string;
-  /**
-   * Seed
-   */
-  seed?: number;
-  /**
-   * Seconds Total
-   *
-   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
-   */
-  seconds_total?: number;
-  /**
-   * Num Inference Steps
-   *
-   * The number of steps to denoise the audio for
-   */
-  num_inference_steps?: number;
-  /**
-   * Mask Start
-   *
-   * The start point of the audio mask
-   */
-  mask_start?: number;
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192"
+    | unknown;
 };
 
 /**
- * AudioToAudioOutput
+ * VoiceChangerOutput
  */
-export type StableAudio25AudioToAudioOutput = {
+export type ElevenlabsVoiceChangerOutput = {
   /**
    * Seed
    *
-   * The random seed used for generation
+   * Random seed for reproducibility.
    */
   seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio clip
-   */
   audio: File;
 };
 
 /**
- * AudioToAudioInput
+ * VoiceChangerRequest
  */
-export type StableAudio25AudioToAudioInput = {
+export type ElevenlabsVoiceChangerInput = {
   /**
-   * Prompt
+   * Voice
    *
-   * The prompt to guide the audio generation
+   * The voice to use for speech generation
    */
-  prompt: string;
-  /**
-   * Strength
-   *
-   * Sometimes referred to as denoising, this parameter controls how much influence the `audio_url` parameter has on the generated audio. A value of 0 would yield audio that is identical to the input. A value of 1 would be as if you passed in no audio at all.
-   */
-  strength?: number;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
+  voice?: string;
   /**
    * Audio Url
    *
-   * The audio clip to transform
+   * The input audio file
    */
   audio_url: string;
   /**
-   * Num Inference Steps
-   *
-   * The number of steps to denoise the audio for
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
-   */
-  guidance_scale?: number;
-  /**
    * Seed
+   *
+   * Random seed for reproducibility.
    */
   seed?: number;
   /**
-   * Total Seconds
+   * Output Format
    *
-   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
+   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
    */
-  total_seconds?: number;
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192";
+  /**
+   * Remove Background Noise
+   *
+   * If set, will remove the background noise from your audio input using our audio isolation model.
+   */
+  remove_background_noise?: boolean;
 };
 
 /**
- * AudioUnderstandingOutput
+ * Qwen3CloneVoiceOutput
  */
-export type AudioUnderstandingOutput = {
-  /**
-   * Output
-   *
-   * The analysis of the audio content based on the prompt
-   */
-  output: string;
+export type Qwen3TtsCloneVoice17bOutput = {
+  speaker_embedding: File;
 };
 
 /**
- * AudioUnderstandingInput
+ * Qwen3CloneVoiceInput
  */
-export type AudioUnderstandingInput = {
-  /**
-   * Prompt
-   *
-   * The question or prompt about the audio content.
-   */
-  prompt: string;
-  /**
-   * Detailed Analysis
-   *
-   * Whether to request a more detailed analysis of the audio
-   */
-  detailed_analysis?: boolean;
+export type Qwen3TtsCloneVoice17bInput = {
   /**
    * Audio Url
    *
-   * URL of the audio file to analyze
+   * URL to the reference audio file used for voice cloning.
    */
   audio_url: string;
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
 };
 
 /**
@@ -3133,27 +4334,27 @@ export type DemucsOutput = {
   /**
    * Separated vocals audio file
    */
-  vocals?: FileType2 | unknown;
+  vocals?: File | unknown;
   /**
    * Separated guitar audio file (only available for 6s models)
    */
-  guitar?: FileType2 | unknown;
+  guitar?: File | unknown;
   /**
    * Separated bass audio file
    */
-  bass?: FileType2 | unknown;
+  bass?: File | unknown;
   /**
    * Separated piano audio file (only available for 6s models)
    */
-  piano?: FileType2 | unknown;
+  piano?: File | unknown;
   /**
    * Separated other instruments audio file
    */
-  other?: FileType2 | unknown;
+  other?: File | unknown;
   /**
    * Separated drums audio file
    */
-  drums?: FileType2 | unknown;
+  drums?: File | unknown;
 };
 
 /**
@@ -3215,6 +4416,37 @@ export type DemucsInput = {
 };
 
 /**
+ * TTSOutput
+ */
+export type ElevenlabsAudioIsolationOutput = {
+  audio: File;
+  /**
+   * Timestamps
+   *
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   */
+  timestamps?: Array<unknown> | unknown;
+};
+
+/**
+ * AudioIsolationRequest
+ */
+export type ElevenlabsAudioIsolationInput = {
+  /**
+   * Video Url
+   *
+   * Video file to use for audio isolation. Either `audio_url` or `video_url` must be provided.
+   */
+  video_url?: string | unknown;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to isolate voice from
+   */
+  audio_url?: string | unknown;
+};
+
+/**
  * CreateVoiceOutput
  *
  * Response model for creating a custom voice.
@@ -3240,679 +4472,6 @@ export type KlingVideoCreateVoiceInput = {
    * URL of the voice audio file. Supports .mp3/.wav audio or .mp4/.mov video. Duration must be 5-30 seconds with clean, single-voice audio.
    */
   voice_url: string;
-};
-
-/**
- * MergeAudiosOutput
- */
-export type FfmpegApiMergeAudiosOutput = {
-  audio: FileType2;
-};
-
-/**
- * MergeAudiosInput
- */
-export type FfmpegApiMergeAudiosInput = {
-  /**
-   * Audio Urls
-   *
-   * List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.
-   */
-  audio_urls: Array<string>;
-  /**
-   * Output Format
-   *
-   * Output format of the combined audio. If not used, will be determined automatically using FFMPEG. Formatted as codec_sample_rate_bitrate.
-   */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192"
-    | unknown;
-};
-
-/**
- * AudioTimeSpan
- *
- * A time span indicating where the target sound occurs.
- */
-export type AudioTimeSpan = {
-  /**
-   * End
-   *
-   * End time of the span in seconds
-   */
-  end: number;
-  /**
-   * Start
-   *
-   * Start time of the span in seconds
-   */
-  start: number;
-  /**
-   * Include
-   *
-   * Whether to include (True) or exclude (False) sounds in this span
-   */
-  include?: boolean;
-};
-
-/**
- * SAMAudioSpanSeparateOutput
- *
- * Output for span-based audio separation.
- */
-export type SamAudioSpanSeparateOutput = {
-  /**
-   * Target
-   *
-   * The isolated target sound.
-   */
-  target: File;
-  /**
-   * Duration
-   *
-   * Duration of the output audio in seconds.
-   */
-  duration: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the output audio in Hz.
-   */
-  sample_rate?: number;
-  /**
-   * Residual
-   *
-   * Everything else in the audio.
-   */
-  residual: File;
-};
-
-/**
- * SAMAudioSpanInput
- *
- * Input for temporal span-based audio separation.
- */
-export type SamAudioSpanSeparateInput = {
-  /**
-   * Prompt
-   *
-   * Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span.
-   */
-  prompt?: string;
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "fast" | "balanced" | "quality";
-  /**
-   * Spans
-   *
-   * Time spans where the target sound occurs which should be isolated.
-   */
-  spans: Array<AudioTimeSpan>;
-  /**
-   * Output Format
-   *
-   * Output audio format.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Trim To Span
-   *
-   * Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.
-   */
-  trim_to_span?: boolean;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to process.
-   */
-  audio_url: string;
-  /**
-   * Reranking Candidates
-   *
-   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.
-   */
-  reranking_candidates?: number;
-};
-
-/**
- * SAMAudioSeparateOutput
- *
- * Output for text-based audio separation.
- */
-export type SamAudioSeparateOutput = {
-  /**
-   * Target
-   *
-   * The isolated target sound.
-   */
-  target: File;
-  /**
-   * Duration
-   *
-   * Duration of the output audio in seconds.
-   */
-  duration: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the output audio in Hz.
-   */
-  sample_rate?: number;
-  /**
-   * Residual
-   *
-   * Everything else in the audio.
-   */
-  residual: File;
-};
-
-/**
- * SAMAudioInput
- *
- * Input for text-based audio separation.
- */
-export type SamAudioSeparateInput = {
-  /**
-   * Prompt
-   *
-   * Text prompt describing the sound to isolate.
-   */
-  prompt: string;
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "fast" | "balanced" | "quality";
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to process (WAV, MP3, FLAC supported)
-   */
-  audio_url: string;
-  /**
-   * Predict Spans
-   *
-   * Automatically predict temporal spans where the target sound occurs.
-   */
-  predict_spans?: boolean;
-  /**
-   * Output Format
-   *
-   * Output audio format.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Reranking Candidates
-   *
-   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
-   */
-  reranking_candidates?: number;
-};
-
-/**
- * DeepFilterNetTimings
- */
-export type DeepFilterNetTimings = {
-  /**
-   * Postprocess
-   *
-   * Postprocessing time.
-   */
-  postprocess: number;
-  /**
-   * Inference
-   *
-   * Inference time.
-   */
-  inference: number;
-  /**
-   * Preprocess
-   *
-   * Preprocessing time.
-   */
-  preprocess: number;
-};
-
-/**
- * DeepFilterNet3Output
- */
-export type Deepfilternet3Output = {
-  /**
-   * Timings
-   *
-   * Timings for each step in the pipeline.
-   */
-  timings: DeepFilterNetTimings;
-  /**
-   * Audio File
-   *
-   * The audio file that was enhanced.
-   */
-  audio_file: AudioFileType2;
-};
-
-/**
- * AudioFile
- */
-export type AudioFileType2 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number;
-  /**
-   * Duration
-   *
-   * The duration of the audio
-   */
-  duration?: number;
-  /**
-   * Bitrate
-   *
-   * The bitrate of the audio (e.g., '192k' or 192000)
-   */
-  bitrate?: string | number;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Sample Rate
-   *
-   * The sample rate of the audio
-   */
-  sample_rate?: number;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * Channels
-   *
-   * The number of channels in the audio
-   */
-  channels?: number;
-};
-
-/**
- * DeepFilterNet3Input
- */
-export type Deepfilternet3Input = {
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Audio Format
-   *
-   * The format for the output audio.
-   */
-  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
-  /**
-   * Audio URL
-   *
-   * The URL of the audio to enhance.
-   */
-  audio_url: string;
-  /**
-   * Bitrate
-   *
-   * The bitrate of the output audio.
-   */
-  bitrate?: string;
-};
-
-/**
- * NovaSRTimings
- */
-export type NovaSrTimings = {
-  /**
-   * Postprocess
-   *
-   * Time taken to postprocess the audio in seconds.
-   */
-  postprocess: number;
-  /**
-   * Inference
-   *
-   * Time taken to run the inference in seconds.
-   */
-  inference: number;
-  /**
-   * Preprocess
-   *
-   * Time taken to preprocess the audio in seconds.
-   */
-  preprocess: number;
-};
-
-/**
- * NovaSROutput
- */
-export type NovaSrOutput = {
-  /**
-   * Timings
-   *
-   * Timings for each step in the pipeline.
-   */
-  timings: NovaSrTimings;
-  /**
-   * Audio
-   *
-   * The enhanced audio file.
-   */
-  audio: AudioFileType2;
-};
-
-/**
- * NovaSRInput
- */
-export type NovaSrInput = {
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Audio Format
-   *
-   * The format for the output audio.
-   */
-  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
-  /**
-   * Audio URL
-   *
-   * The URL of the audio file to enhance.
-   */
-  audio_url: string;
-  /**
-   * Bitrate
-   *
-   * The bitrate of the output audio.
-   */
-  bitrate?: string;
-};
-
-/**
- * VoiceChangerOutput
- */
-export type ElevenlabsVoiceChangerOutput = {
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed: number;
-  audio: FileType2;
-};
-
-/**
- * VoiceChangerRequest
- */
-export type ElevenlabsVoiceChangerInput = {
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Audio Url
-   *
-   * The input audio file
-   */
-  audio_url: string;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number;
-  /**
-   * Output Format
-   *
-   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
-   */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192";
-  /**
-   * Remove Background Noise
-   *
-   * If set, will remove the background noise from your audio input using our audio isolation model.
-   */
-  remove_background_noise?: boolean;
-};
-
-/**
- * AudioCompressorOutput
- *
- * Output model for compressed audio
- */
-export type WorkflowUtilitiesAudioCompressorOutput = {
-  /**
-   * Audio
-   *
-   * The compressed audio file
-   */
-  audio: AudioFile;
-};
-
-/**
- * AudioFile
- *
- * Audio file with url field
- */
-export type AudioFile = {
-  /**
-   * File Size
-   *
-   * Size of the audio file in bytes
-   */
-  file_size: number;
-  /**
-   * File Name
-   *
-   * Name of the audio file
-   */
-  file_name: string;
-  /**
-   * Content Type
-   *
-   * Content type of the audio file
-   */
-  content_type: string;
-  /**
-   * Url
-   *
-   * URL of the audio file
-   */
-  url: string;
-};
-
-/**
- * AudioCompressorInput
- *
- * Input model for audio dynamic range compression
- */
-export type WorkflowUtilitiesAudioCompressorInput = {
-  /**
-   * Threshold
-   *
-   * Threshold level in dB above which compression is applied (-60 to 0)
-   */
-  threshold?: number;
-  /**
-   * Ratio
-   *
-   * Compression ratio (1 = no compression, higher = more compression)
-   */
-  ratio?: number;
-  /**
-   * Attack
-   *
-   * Attack time in milliseconds (how fast compression starts)
-   */
-  attack?: number;
-  /**
-   * Makeup
-   *
-   * Makeup gain in dB to compensate for volume reduction
-   */
-  makeup?: number;
-  /**
-   * Release
-   *
-   * Release time in milliseconds (how fast compression stops)
-   */
-  release?: number;
-  /**
-   * Knee
-   *
-   * Knee width in dB for soft knee compression (0 = hard knee)
-   */
-  knee?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to compress
-   */
-  audio_url: string;
-  /**
-   * Output Bitrate
-   *
-   * Output audio bitrate
-   */
-  output_bitrate?: "128k" | "192k" | "256k" | "320k";
-};
-
-/**
- * ImpulseResponseOutput
- *
- * Output model for impulse response processed audio
- */
-export type WorkflowUtilitiesImpulseResponseOutput = {
-  /**
-   * Audio
-   *
-   * The processed audio file with reverb applied
-   */
-  audio: AudioFile;
-};
-
-/**
- * ImpulseResponseInput
- *
- * Input model for applying impulse response (IR) convolution reverb to audio
- */
-export type WorkflowUtilitiesImpulseResponseInput = {
-  /**
-   * Impulse Response Url
-   *
-   * URL of the impulse response WAV file (reverb/effect profile)
-   */
-  impulse_response_url: string;
-  /**
-   * Loudness Lra
-   *
-   * Loudness Range target in LU (typically 5-15)
-   */
-  loudness_lra?: number;
-  /**
-   * Loudness Tp
-   *
-   * Maximum true peak in dBTP (typically -2 to -1)
-   */
-  loudness_tp?: number;
-  /**
-   * Wet Level
-   *
-   * Level of the processed (wet) signal in the mix (0.0-1.0)
-   */
-  wet_level?: number;
-  /**
-   * Loudness I
-   *
-   * Target integrated loudness in LUFS (typically -24 to -14)
-   */
-  loudness_i?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the main audio file to process
-   */
-  audio_url: string;
-  /**
-   * Dry Level
-   *
-   * Level of the original (dry) signal in the mix (0.0-1.0)
-   */
-  dry_level?: number;
-  /**
-   * Output Bitrate
-   *
-   * Output audio bitrate
-   */
-  output_bitrate?: "128k" | "192k" | "256k" | "320k";
 };
 
 export type QueueStatus = {
@@ -3951,25 +4510,117 @@ export type QueueStatus = {
   queue_position?: number;
 };
 
-export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}/status";
+export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
   };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kling-video/create-voice/requests/{request_id}/status";
+};
 
-export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses =
+export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponse =
+  GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/create-voice/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponse =
+  PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKlingVideoCreateVoiceData = {
+  body: KlingVideoCreateVoiceInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kling-video/create-voice";
+};
+
+export type PostFalAiKlingVideoCreateVoiceResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKlingVideoCreateVoiceResponse =
+  PostFalAiKlingVideoCreateVoiceResponses[keyof PostFalAiKlingVideoCreateVoiceResponses];
+
+export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kling-video/create-voice/requests/{request_id}";
+};
+
+export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KlingVideoCreateVoiceOutput;
+};
+
+export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponse =
+  GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponses[keyof GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponses];
+
+export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/elevenlabs/audio-isolation/requests/{request_id}/status";
+};
+
+export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -3977,23 +4628,22 @@ export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusRes
     200: QueueStatus;
   };
 
-export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponse =
-  GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses];
+export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses];
 
-export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}/cancel";
+export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
   };
+  query?: never;
+  url: "/fal-ai/elevenlabs/audio-isolation/requests/{request_id}/cancel";
+};
 
-export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses =
+export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -4006,27 +4656,27 @@ export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelRes
     };
   };
 
-export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponse =
-  PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses];
+export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses];
 
-export type PostFalAiWorkflowUtilitiesImpulseResponseData = {
-  body: WorkflowUtilitiesImpulseResponseInput;
+export type PostFalAiElevenlabsAudioIsolationData = {
+  body: ElevenlabsAudioIsolationInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/workflow-utilities/impulse-response";
+  url: "/fal-ai/elevenlabs/audio-isolation";
 };
 
-export type PostFalAiWorkflowUtilitiesImpulseResponseResponses = {
+export type PostFalAiElevenlabsAudioIsolationResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiWorkflowUtilitiesImpulseResponseResponse =
-  PostFalAiWorkflowUtilitiesImpulseResponseResponses[keyof PostFalAiWorkflowUtilitiesImpulseResponseResponses];
+export type PostFalAiElevenlabsAudioIsolationResponse =
+  PostFalAiElevenlabsAudioIsolationResponses[keyof PostFalAiElevenlabsAudioIsolationResponses];
 
-export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdData = {
+export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4035,19 +4685,1601 @@ export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}";
+  url: "/fal-ai/elevenlabs/audio-isolation/requests/{request_id}";
 };
 
-export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses =
+export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ElevenlabsAudioIsolationOutput;
+};
+
+export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponse =
+  GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponses[keyof GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponses];
+
+export type GetFalAiDemucsRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/demucs/requests/{request_id}/status";
+};
+
+export type GetFalAiDemucsRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiDemucsRequestsByRequestIdStatusResponse =
+  GetFalAiDemucsRequestsByRequestIdStatusResponses[keyof GetFalAiDemucsRequestsByRequestIdStatusResponses];
+
+export type PutFalAiDemucsRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/demucs/requests/{request_id}/cancel";
+};
+
+export type PutFalAiDemucsRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiDemucsRequestsByRequestIdCancelResponse =
+  PutFalAiDemucsRequestsByRequestIdCancelResponses[keyof PutFalAiDemucsRequestsByRequestIdCancelResponses];
+
+export type PostFalAiDemucsData = {
+  body: DemucsInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/demucs";
+};
+
+export type PostFalAiDemucsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiDemucsResponse =
+  PostFalAiDemucsResponses[keyof PostFalAiDemucsResponses];
+
+export type GetFalAiDemucsRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/demucs/requests/{request_id}";
+};
+
+export type GetFalAiDemucsRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: DemucsOutput;
+};
+
+export type GetFalAiDemucsRequestsByRequestIdResponse =
+  GetFalAiDemucsRequestsByRequestIdResponses[keyof GetFalAiDemucsRequestsByRequestIdResponses];
+
+export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b/requests/{request_id}/status";
+};
+
+export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponse =
+  GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponses];
+
+export type PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponse =
+  PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponses];
+
+export type PostFalAiQwen3TtsCloneVoice17bData = {
+  body: Qwen3TtsCloneVoice17bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b";
+};
+
+export type PostFalAiQwen3TtsCloneVoice17bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwen3TtsCloneVoice17bResponse =
+  PostFalAiQwen3TtsCloneVoice17bResponses[keyof PostFalAiQwen3TtsCloneVoice17bResponses];
+
+export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b/requests/{request_id}";
+};
+
+export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Qwen3TtsCloneVoice17bOutput;
+};
+
+export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponse =
+  GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponses];
+
+export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/elevenlabs/voice-changer/requests/{request_id}/status";
+};
+
+export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponses];
+
+export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/elevenlabs/voice-changer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses];
+
+export type PostFalAiElevenlabsVoiceChangerData = {
+  body: ElevenlabsVoiceChangerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/elevenlabs/voice-changer";
+};
+
+export type PostFalAiElevenlabsVoiceChangerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiElevenlabsVoiceChangerResponse =
+  PostFalAiElevenlabsVoiceChangerResponses[keyof PostFalAiElevenlabsVoiceChangerResponses];
+
+export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/elevenlabs/voice-changer/requests/{request_id}";
+};
+
+export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ElevenlabsVoiceChangerOutput;
+};
+
+export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponse =
+  GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponses[keyof GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponses];
+
+export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ffmpeg-api/merge-audios/requests/{request_id}/status";
+};
+
+export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponse =
+  GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponses];
+
+export type PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/merge-audios/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponse =
+  PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponses];
+
+export type PostFalAiFfmpegApiMergeAudiosData = {
+  body: FfmpegApiMergeAudiosInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/merge-audios";
+};
+
+export type PostFalAiFfmpegApiMergeAudiosResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFfmpegApiMergeAudiosResponse =
+  PostFalAiFfmpegApiMergeAudiosResponses[keyof PostFalAiFfmpegApiMergeAudiosResponses];
+
+export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/merge-audios/requests/{request_id}";
+};
+
+export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FfmpegApiMergeAudiosOutput;
+};
+
+export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponse =
+  GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponses];
+
+export type GetFalAiSamAudioSeparateRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sam-audio/separate/requests/{request_id}/status";
+};
+
+export type GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponse =
+  GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponses[keyof GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSamAudioSeparateRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-audio/separate/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponse =
+  PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponses[keyof PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSamAudioSeparateData = {
+  body: SamAudioSeparateInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sam-audio/separate";
+};
+
+export type PostFalAiSamAudioSeparateResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSamAudioSeparateResponse =
+  PostFalAiSamAudioSeparateResponses[keyof PostFalAiSamAudioSeparateResponses];
+
+export type GetFalAiSamAudioSeparateRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-audio/separate/requests/{request_id}";
+};
+
+export type GetFalAiSamAudioSeparateRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SamAudioSeparateOutput;
+};
+
+export type GetFalAiSamAudioSeparateRequestsByRequestIdResponse =
+  GetFalAiSamAudioSeparateRequestsByRequestIdResponses[keyof GetFalAiSamAudioSeparateRequestsByRequestIdResponses];
+
+export type GetFalAiDeepfilternet3RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/deepfilternet3/requests/{request_id}/status";
+};
+
+export type GetFalAiDeepfilternet3RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiDeepfilternet3RequestsByRequestIdStatusResponse =
+  GetFalAiDeepfilternet3RequestsByRequestIdStatusResponses[keyof GetFalAiDeepfilternet3RequestsByRequestIdStatusResponses];
+
+export type PutFalAiDeepfilternet3RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/deepfilternet3/requests/{request_id}/cancel";
+};
+
+export type PutFalAiDeepfilternet3RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiDeepfilternet3RequestsByRequestIdCancelResponse =
+  PutFalAiDeepfilternet3RequestsByRequestIdCancelResponses[keyof PutFalAiDeepfilternet3RequestsByRequestIdCancelResponses];
+
+export type PostFalAiDeepfilternet3Data = {
+  body: Deepfilternet3Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/deepfilternet3";
+};
+
+export type PostFalAiDeepfilternet3Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiDeepfilternet3Response =
+  PostFalAiDeepfilternet3Responses[keyof PostFalAiDeepfilternet3Responses];
+
+export type GetFalAiDeepfilternet3RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/deepfilternet3/requests/{request_id}";
+};
+
+export type GetFalAiDeepfilternet3RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Deepfilternet3Output;
+};
+
+export type GetFalAiDeepfilternet3RequestsByRequestIdResponse =
+  GetFalAiDeepfilternet3RequestsByRequestIdResponses[keyof GetFalAiDeepfilternet3RequestsByRequestIdResponses];
+
+export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ace-step/audio-to-audio/requests/{request_id}/status";
+};
+
+export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponse =
+  GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponses];
+
+export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ace-step/audio-to-audio/requests/{request_id}/cancel";
+};
+
+export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponse =
+  PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses];
+
+export type PostFalAiAceStepAudioToAudioData = {
+  body: AceStepAudioToAudioInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ace-step/audio-to-audio";
+};
+
+export type PostFalAiAceStepAudioToAudioResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiAceStepAudioToAudioResponse =
+  PostFalAiAceStepAudioToAudioResponses[keyof PostFalAiAceStepAudioToAudioResponses];
+
+export type GetFalAiAceStepAudioToAudioRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ace-step/audio-to-audio/requests/{request_id}";
+};
+
+export type GetFalAiAceStepAudioToAudioRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: AceStepAudioToAudioOutput;
+};
+
+export type GetFalAiAceStepAudioToAudioRequestsByRequestIdResponse =
+  GetFalAiAceStepAudioToAudioRequestsByRequestIdResponses[keyof GetFalAiAceStepAudioToAudioRequestsByRequestIdResponses];
+
+export type GetFalAiTada3bTextToSpeechRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/tada/3b/text-to-speech/requests/{request_id}/status";
+};
+
+export type GetFalAiTada3bTextToSpeechRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiTada3bTextToSpeechRequestsByRequestIdStatusResponse =
+  GetFalAiTada3bTextToSpeechRequestsByRequestIdStatusResponses[keyof GetFalAiTada3bTextToSpeechRequestsByRequestIdStatusResponses];
+
+export type PutFalAiTada3bTextToSpeechRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/tada/3b/text-to-speech/requests/{request_id}/cancel";
+};
+
+export type PutFalAiTada3bTextToSpeechRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiTada3bTextToSpeechRequestsByRequestIdCancelResponse =
+  PutFalAiTada3bTextToSpeechRequestsByRequestIdCancelResponses[keyof PutFalAiTada3bTextToSpeechRequestsByRequestIdCancelResponses];
+
+export type PostFalAiTada3bTextToSpeechData = {
+  body: Tada3bTextToSpeechInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/tada/3b/text-to-speech";
+};
+
+export type PostFalAiTada3bTextToSpeechResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiTada3bTextToSpeechResponse =
+  PostFalAiTada3bTextToSpeechResponses[keyof PostFalAiTada3bTextToSpeechResponses];
+
+export type GetFalAiTada3bTextToSpeechRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/tada/3b/text-to-speech/requests/{request_id}";
+};
+
+export type GetFalAiTada3bTextToSpeechRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Tada3bTextToSpeechOutput;
+};
+
+export type GetFalAiTada3bTextToSpeechRequestsByRequestIdResponse =
+  GetFalAiTada3bTextToSpeechRequestsByRequestIdResponses[keyof GetFalAiTada3bTextToSpeechRequestsByRequestIdResponses];
+
+export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/stable-audio-25/audio-to-audio/requests/{request_id}/status";
+};
+
+export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponses =
   {
     /**
-     * Result of the request.
+     * The request status.
      */
-    200: WorkflowUtilitiesImpulseResponseOutput;
+    200: QueueStatus;
   };
 
-export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponse =
-  GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses];
+export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponse =
+  GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponses];
+
+export type PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/stable-audio-25/audio-to-audio/requests/{request_id}/cancel";
+};
+
+export type PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponse =
+  PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponses];
+
+export type PostFalAiStableAudio25AudioToAudioData = {
+  body: StableAudio25AudioToAudioInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/stable-audio-25/audio-to-audio";
+};
+
+export type PostFalAiStableAudio25AudioToAudioResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiStableAudio25AudioToAudioResponse =
+  PostFalAiStableAudio25AudioToAudioResponses[keyof PostFalAiStableAudio25AudioToAudioResponses];
+
+export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/stable-audio-25/audio-to-audio/requests/{request_id}";
+};
+
+export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: StableAudio25AudioToAudioOutput;
+};
+
+export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponse =
+  GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponses[keyof GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponses];
+
+export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ace-step/audio-inpaint/requests/{request_id}/status";
+};
+
+export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponse =
+  GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponses];
+
+export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ace-step/audio-inpaint/requests/{request_id}/cancel";
+};
+
+export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponse =
+  PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses];
+
+export type PostFalAiAceStepAudioInpaintData = {
+  body: AceStepAudioInpaintInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ace-step/audio-inpaint";
+};
+
+export type PostFalAiAceStepAudioInpaintResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiAceStepAudioInpaintResponse =
+  PostFalAiAceStepAudioInpaintResponses[keyof PostFalAiAceStepAudioInpaintResponses];
+
+export type GetFalAiAceStepAudioInpaintRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ace-step/audio-inpaint/requests/{request_id}";
+};
+
+export type GetFalAiAceStepAudioInpaintRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: AceStepAudioInpaintOutput;
+};
+
+export type GetFalAiAceStepAudioInpaintRequestsByRequestIdResponse =
+  GetFalAiAceStepAudioInpaintRequestsByRequestIdResponses[keyof GetFalAiAceStepAudioInpaintRequestsByRequestIdResponses];
+
+export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b/requests/{request_id}/status";
+};
+
+export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponse =
+  GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponses];
+
+export type PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponse =
+  PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponses];
+
+export type PostFalAiQwen3TtsCloneVoice06bData = {
+  body: Qwen3TtsCloneVoice06bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b";
+};
+
+export type PostFalAiQwen3TtsCloneVoice06bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwen3TtsCloneVoice06bResponse =
+  PostFalAiQwen3TtsCloneVoice06bResponses[keyof PostFalAiQwen3TtsCloneVoice06bResponses];
+
+export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b/requests/{request_id}";
+};
+
+export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Qwen3TtsCloneVoice06bOutput;
+};
+
+export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponse =
+  GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponses];
+
+export type GetFalAiNovaSrRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/nova-sr/requests/{request_id}/status";
+};
+
+export type GetFalAiNovaSrRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiNovaSrRequestsByRequestIdStatusResponse =
+  GetFalAiNovaSrRequestsByRequestIdStatusResponses[keyof GetFalAiNovaSrRequestsByRequestIdStatusResponses];
+
+export type PutFalAiNovaSrRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/nova-sr/requests/{request_id}/cancel";
+};
+
+export type PutFalAiNovaSrRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiNovaSrRequestsByRequestIdCancelResponse =
+  PutFalAiNovaSrRequestsByRequestIdCancelResponses[keyof PutFalAiNovaSrRequestsByRequestIdCancelResponses];
+
+export type PostFalAiNovaSrData = {
+  body: NovaSrInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/nova-sr";
+};
+
+export type PostFalAiNovaSrResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiNovaSrResponse =
+  PostFalAiNovaSrResponses[keyof PostFalAiNovaSrResponses];
+
+export type GetFalAiNovaSrRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/nova-sr/requests/{request_id}";
+};
+
+export type GetFalAiNovaSrRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: NovaSrOutput;
+};
+
+export type GetFalAiNovaSrRequestsByRequestIdResponse =
+  GetFalAiNovaSrRequestsByRequestIdResponses[keyof GetFalAiNovaSrRequestsByRequestIdResponses];
+
+export type GetFalAiAudioUnderstandingRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/audio-understanding/requests/{request_id}/status";
+};
+
+export type GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponse =
+  GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponses[keyof GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponses];
+
+export type PutFalAiAudioUnderstandingRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/audio-understanding/requests/{request_id}/cancel";
+};
+
+export type PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponse =
+  PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponses[keyof PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponses];
+
+export type PostFalAiAudioUnderstandingData = {
+  body: AudioUnderstandingInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/audio-understanding";
+};
+
+export type PostFalAiAudioUnderstandingResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiAudioUnderstandingResponse =
+  PostFalAiAudioUnderstandingResponses[keyof PostFalAiAudioUnderstandingResponses];
+
+export type GetFalAiAudioUnderstandingRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/audio-understanding/requests/{request_id}";
+};
+
+export type GetFalAiAudioUnderstandingRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: AudioUnderstandingOutput;
+};
+
+export type GetFalAiAudioUnderstandingRequestsByRequestIdResponse =
+  GetFalAiAudioUnderstandingRequestsByRequestIdResponses[keyof GetFalAiAudioUnderstandingRequestsByRequestIdResponses];
+
+export type GetSonautoV2ExtendRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/sonauto/v2/extend/requests/{request_id}/status";
+};
+
+export type GetSonautoV2ExtendRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetSonautoV2ExtendRequestsByRequestIdStatusResponse =
+  GetSonautoV2ExtendRequestsByRequestIdStatusResponses[keyof GetSonautoV2ExtendRequestsByRequestIdStatusResponses];
+
+export type PutSonautoV2ExtendRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/sonauto/v2/extend/requests/{request_id}/cancel";
+};
+
+export type PutSonautoV2ExtendRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutSonautoV2ExtendRequestsByRequestIdCancelResponse =
+  PutSonautoV2ExtendRequestsByRequestIdCancelResponses[keyof PutSonautoV2ExtendRequestsByRequestIdCancelResponses];
+
+export type PostSonautoV2ExtendData = {
+  body: V2ExtendInput;
+  path?: never;
+  query?: never;
+  url: "/sonauto/v2/extend";
+};
+
+export type PostSonautoV2ExtendResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostSonautoV2ExtendResponse =
+  PostSonautoV2ExtendResponses[keyof PostSonautoV2ExtendResponses];
+
+export type GetSonautoV2ExtendRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/sonauto/v2/extend/requests/{request_id}";
+};
+
+export type GetSonautoV2ExtendRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: V2ExtendOutput;
+};
+
+export type GetSonautoV2ExtendRequestsByRequestIdResponse =
+  GetSonautoV2ExtendRequestsByRequestIdResponses[keyof GetSonautoV2ExtendRequestsByRequestIdResponses];
+
+export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/dia-tts/voice-clone/requests/{request_id}/status";
+};
+
+export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponse =
+  GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponses[keyof GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponses];
+
+export type PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/dia-tts/voice-clone/requests/{request_id}/cancel";
+};
+
+export type PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponse =
+  PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponses[keyof PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponses];
+
+export type PostFalAiDiaTtsVoiceCloneData = {
+  body: DiaTtsVoiceCloneInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/dia-tts/voice-clone";
+};
+
+export type PostFalAiDiaTtsVoiceCloneResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiDiaTtsVoiceCloneResponse =
+  PostFalAiDiaTtsVoiceCloneResponses[keyof PostFalAiDiaTtsVoiceCloneResponses];
+
+export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/dia-tts/voice-clone/requests/{request_id}";
+};
+
+export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: DiaTtsVoiceCloneOutput;
+};
+
+export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponse =
+  GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponses[keyof GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponses];
+
+export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sam-audio/span-separate/requests/{request_id}/status";
+};
+
+export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponse =
+  GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponses[keyof GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-audio/span-separate/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponse =
+  PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponses[keyof PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSamAudioSpanSeparateData = {
+  body: SamAudioSpanSeparateInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sam-audio/span-separate";
+};
+
+export type PostFalAiSamAudioSpanSeparateResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSamAudioSpanSeparateResponse =
+  PostFalAiSamAudioSpanSeparateResponses[keyof PostFalAiSamAudioSpanSeparateResponses];
+
+export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-audio/span-separate/requests/{request_id}";
+};
+
+export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SamAudioSpanSeparateOutput;
+};
+
+export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponse =
+  GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponses[keyof GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponses];
+
+export type GetFalAiPersonaplexRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/personaplex/requests/{request_id}/status";
+};
+
+export type GetFalAiPersonaplexRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiPersonaplexRequestsByRequestIdStatusResponse =
+  GetFalAiPersonaplexRequestsByRequestIdStatusResponses[keyof GetFalAiPersonaplexRequestsByRequestIdStatusResponses];
+
+export type PutFalAiPersonaplexRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/personaplex/requests/{request_id}/cancel";
+};
+
+export type PutFalAiPersonaplexRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiPersonaplexRequestsByRequestIdCancelResponse =
+  PutFalAiPersonaplexRequestsByRequestIdCancelResponses[keyof PutFalAiPersonaplexRequestsByRequestIdCancelResponses];
+
+export type PostFalAiPersonaplexData = {
+  body: PersonaplexInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/personaplex";
+};
+
+export type PostFalAiPersonaplexResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiPersonaplexResponse =
+  PostFalAiPersonaplexResponses[keyof PostFalAiPersonaplexResponses];
+
+export type GetFalAiPersonaplexRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/personaplex/requests/{request_id}";
+};
+
+export type GetFalAiPersonaplexRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: PersonaplexOutput;
+};
+
+export type GetFalAiPersonaplexRequestsByRequestIdResponse =
+  GetFalAiPersonaplexRequestsByRequestIdResponses[keyof GetFalAiPersonaplexRequestsByRequestIdResponses];
 
 export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusData =
   {
@@ -4147,7 +6379,7 @@ export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponses
 export type GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponse =
   GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdResponses];
 
-export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusData = {
+export type GetFalAiTada1bTextToSpeechRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4161,20 +6393,20 @@ export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/elevenlabs/voice-changer/requests/{request_id}/status";
+  url: "/fal-ai/tada/1b/text-to-speech/requests/{request_id}/status";
 };
 
-export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponses = {
+export type GetFalAiTada1bTextToSpeechRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponses];
+export type GetFalAiTada1bTextToSpeechRequestsByRequestIdStatusResponse =
+  GetFalAiTada1bTextToSpeechRequestsByRequestIdStatusResponses[keyof GetFalAiTada1bTextToSpeechRequestsByRequestIdStatusResponses];
 
-export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelData = {
+export type PutFalAiTada1bTextToSpeechRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4183,10 +6415,10 @@ export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/voice-changer/requests/{request_id}/cancel";
+  url: "/fal-ai/tada/1b/text-to-speech/requests/{request_id}/cancel";
 };
 
-export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses = {
+export type PutFalAiTada1bTextToSpeechRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -4198,27 +6430,27 @@ export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponses];
+export type PutFalAiTada1bTextToSpeechRequestsByRequestIdCancelResponse =
+  PutFalAiTada1bTextToSpeechRequestsByRequestIdCancelResponses[keyof PutFalAiTada1bTextToSpeechRequestsByRequestIdCancelResponses];
 
-export type PostFalAiElevenlabsVoiceChangerData = {
-  body: ElevenlabsVoiceChangerInput;
+export type PostFalAiTada1bTextToSpeechData = {
+  body: Tada1bTextToSpeechInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/elevenlabs/voice-changer";
+  url: "/fal-ai/tada/1b/text-to-speech";
 };
 
-export type PostFalAiElevenlabsVoiceChangerResponses = {
+export type PostFalAiTada1bTextToSpeechResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiElevenlabsVoiceChangerResponse =
-  PostFalAiElevenlabsVoiceChangerResponses[keyof PostFalAiElevenlabsVoiceChangerResponses];
+export type PostFalAiTada1bTextToSpeechResponse =
+  PostFalAiTada1bTextToSpeechResponses[keyof PostFalAiTada1bTextToSpeechResponses];
 
-export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdData = {
+export type GetFalAiTada1bTextToSpeechRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4227,20 +6459,20 @@ export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/voice-changer/requests/{request_id}";
+  url: "/fal-ai/tada/1b/text-to-speech/requests/{request_id}";
 };
 
-export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponses = {
+export type GetFalAiTada1bTextToSpeechRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: ElevenlabsVoiceChangerOutput;
+  200: Tada1bTextToSpeechOutput;
 };
 
-export type GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponse =
-  GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponses[keyof GetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponses];
+export type GetFalAiTada1bTextToSpeechRequestsByRequestIdResponse =
+  GetFalAiTada1bTextToSpeechRequestsByRequestIdResponses[keyof GetFalAiTada1bTextToSpeechRequestsByRequestIdResponses];
 
-export type GetFalAiNovaSrRequestsByRequestIdStatusData = {
+export type GetFalAiLavaSrRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4254,20 +6486,20 @@ export type GetFalAiNovaSrRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/nova-sr/requests/{request_id}/status";
+  url: "/fal-ai/lava-sr/requests/{request_id}/status";
 };
 
-export type GetFalAiNovaSrRequestsByRequestIdStatusResponses = {
+export type GetFalAiLavaSrRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiNovaSrRequestsByRequestIdStatusResponse =
-  GetFalAiNovaSrRequestsByRequestIdStatusResponses[keyof GetFalAiNovaSrRequestsByRequestIdStatusResponses];
+export type GetFalAiLavaSrRequestsByRequestIdStatusResponse =
+  GetFalAiLavaSrRequestsByRequestIdStatusResponses[keyof GetFalAiLavaSrRequestsByRequestIdStatusResponses];
 
-export type PutFalAiNovaSrRequestsByRequestIdCancelData = {
+export type PutFalAiLavaSrRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4276,10 +6508,10 @@ export type PutFalAiNovaSrRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/nova-sr/requests/{request_id}/cancel";
+  url: "/fal-ai/lava-sr/requests/{request_id}/cancel";
 };
 
-export type PutFalAiNovaSrRequestsByRequestIdCancelResponses = {
+export type PutFalAiLavaSrRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -4291,27 +6523,27 @@ export type PutFalAiNovaSrRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiNovaSrRequestsByRequestIdCancelResponse =
-  PutFalAiNovaSrRequestsByRequestIdCancelResponses[keyof PutFalAiNovaSrRequestsByRequestIdCancelResponses];
+export type PutFalAiLavaSrRequestsByRequestIdCancelResponse =
+  PutFalAiLavaSrRequestsByRequestIdCancelResponses[keyof PutFalAiLavaSrRequestsByRequestIdCancelResponses];
 
-export type PostFalAiNovaSrData = {
-  body: NovaSrInput;
+export type PostFalAiLavaSrData = {
+  body: LavaSrInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/nova-sr";
+  url: "/fal-ai/lava-sr";
 };
 
-export type PostFalAiNovaSrResponses = {
+export type PostFalAiLavaSrResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiNovaSrResponse =
-  PostFalAiNovaSrResponses[keyof PostFalAiNovaSrResponses];
+export type PostFalAiLavaSrResponse =
+  PostFalAiLavaSrResponses[keyof PostFalAiLavaSrResponses];
 
-export type GetFalAiNovaSrRequestsByRequestIdData = {
+export type GetFalAiLavaSrRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4320,950 +6552,18 @@ export type GetFalAiNovaSrRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/nova-sr/requests/{request_id}";
+  url: "/fal-ai/lava-sr/requests/{request_id}";
 };
 
-export type GetFalAiNovaSrRequestsByRequestIdResponses = {
+export type GetFalAiLavaSrRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: NovaSrOutput;
+  200: LavaSrOutput;
 };
 
-export type GetFalAiNovaSrRequestsByRequestIdResponse =
-  GetFalAiNovaSrRequestsByRequestIdResponses[keyof GetFalAiNovaSrRequestsByRequestIdResponses];
-
-export type GetFalAiDeepfilternet3RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/deepfilternet3/requests/{request_id}/status";
-};
-
-export type GetFalAiDeepfilternet3RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiDeepfilternet3RequestsByRequestIdStatusResponse =
-  GetFalAiDeepfilternet3RequestsByRequestIdStatusResponses[keyof GetFalAiDeepfilternet3RequestsByRequestIdStatusResponses];
-
-export type PutFalAiDeepfilternet3RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/deepfilternet3/requests/{request_id}/cancel";
-};
-
-export type PutFalAiDeepfilternet3RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiDeepfilternet3RequestsByRequestIdCancelResponse =
-  PutFalAiDeepfilternet3RequestsByRequestIdCancelResponses[keyof PutFalAiDeepfilternet3RequestsByRequestIdCancelResponses];
-
-export type PostFalAiDeepfilternet3Data = {
-  body: Deepfilternet3Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/deepfilternet3";
-};
-
-export type PostFalAiDeepfilternet3Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiDeepfilternet3Response =
-  PostFalAiDeepfilternet3Responses[keyof PostFalAiDeepfilternet3Responses];
-
-export type GetFalAiDeepfilternet3RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/deepfilternet3/requests/{request_id}";
-};
-
-export type GetFalAiDeepfilternet3RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Deepfilternet3Output;
-};
-
-export type GetFalAiDeepfilternet3RequestsByRequestIdResponse =
-  GetFalAiDeepfilternet3RequestsByRequestIdResponses[keyof GetFalAiDeepfilternet3RequestsByRequestIdResponses];
-
-export type GetFalAiSamAudioSeparateRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sam-audio/separate/requests/{request_id}/status";
-};
-
-export type GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponse =
-  GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponses[keyof GetFalAiSamAudioSeparateRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSamAudioSeparateRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-audio/separate/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponse =
-  PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponses[keyof PutFalAiSamAudioSeparateRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSamAudioSeparateData = {
-  body: SamAudioSeparateInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sam-audio/separate";
-};
-
-export type PostFalAiSamAudioSeparateResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSamAudioSeparateResponse =
-  PostFalAiSamAudioSeparateResponses[keyof PostFalAiSamAudioSeparateResponses];
-
-export type GetFalAiSamAudioSeparateRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-audio/separate/requests/{request_id}";
-};
-
-export type GetFalAiSamAudioSeparateRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: SamAudioSeparateOutput;
-};
-
-export type GetFalAiSamAudioSeparateRequestsByRequestIdResponse =
-  GetFalAiSamAudioSeparateRequestsByRequestIdResponses[keyof GetFalAiSamAudioSeparateRequestsByRequestIdResponses];
-
-export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sam-audio/span-separate/requests/{request_id}/status";
-};
-
-export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponse =
-  GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponses[keyof GetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-audio/span-separate/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponse =
-  PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponses[keyof PutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSamAudioSpanSeparateData = {
-  body: SamAudioSpanSeparateInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sam-audio/span-separate";
-};
-
-export type PostFalAiSamAudioSpanSeparateResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSamAudioSpanSeparateResponse =
-  PostFalAiSamAudioSpanSeparateResponses[keyof PostFalAiSamAudioSpanSeparateResponses];
-
-export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-audio/span-separate/requests/{request_id}";
-};
-
-export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: SamAudioSpanSeparateOutput;
-};
-
-export type GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponse =
-  GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponses[keyof GetFalAiSamAudioSpanSeparateRequestsByRequestIdResponses];
-
-export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/ffmpeg-api/merge-audios/requests/{request_id}/status";
-};
-
-export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponse =
-  GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/merge-audios/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponse =
-  PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFfmpegApiMergeAudiosData = {
-  body: FfmpegApiMergeAudiosInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/merge-audios";
-};
-
-export type PostFalAiFfmpegApiMergeAudiosResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFfmpegApiMergeAudiosResponse =
-  PostFalAiFfmpegApiMergeAudiosResponses[keyof PostFalAiFfmpegApiMergeAudiosResponses];
-
-export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/merge-audios/requests/{request_id}";
-};
-
-export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: FfmpegApiMergeAudiosOutput;
-};
-
-export type GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponse =
-  GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponses];
-
-export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kling-video/create-voice/requests/{request_id}/status";
-};
-
-export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponse =
-  GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponses[keyof GetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kling-video/create-voice/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponse =
-  PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponses[keyof PutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponses];
-
-export type PostFalAiKlingVideoCreateVoiceData = {
-  body: KlingVideoCreateVoiceInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/kling-video/create-voice";
-};
-
-export type PostFalAiKlingVideoCreateVoiceResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiKlingVideoCreateVoiceResponse =
-  PostFalAiKlingVideoCreateVoiceResponses[keyof PostFalAiKlingVideoCreateVoiceResponses];
-
-export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kling-video/create-voice/requests/{request_id}";
-};
-
-export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: KlingVideoCreateVoiceOutput;
-};
-
-export type GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponse =
-  GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponses[keyof GetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponses];
-
-export type GetFalAiDemucsRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/demucs/requests/{request_id}/status";
-};
-
-export type GetFalAiDemucsRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiDemucsRequestsByRequestIdStatusResponse =
-  GetFalAiDemucsRequestsByRequestIdStatusResponses[keyof GetFalAiDemucsRequestsByRequestIdStatusResponses];
-
-export type PutFalAiDemucsRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/demucs/requests/{request_id}/cancel";
-};
-
-export type PutFalAiDemucsRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiDemucsRequestsByRequestIdCancelResponse =
-  PutFalAiDemucsRequestsByRequestIdCancelResponses[keyof PutFalAiDemucsRequestsByRequestIdCancelResponses];
-
-export type PostFalAiDemucsData = {
-  body: DemucsInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/demucs";
-};
-
-export type PostFalAiDemucsResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiDemucsResponse =
-  PostFalAiDemucsResponses[keyof PostFalAiDemucsResponses];
-
-export type GetFalAiDemucsRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/demucs/requests/{request_id}";
-};
-
-export type GetFalAiDemucsRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: DemucsOutput;
-};
-
-export type GetFalAiDemucsRequestsByRequestIdResponse =
-  GetFalAiDemucsRequestsByRequestIdResponses[keyof GetFalAiDemucsRequestsByRequestIdResponses];
-
-export type GetFalAiAudioUnderstandingRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/audio-understanding/requests/{request_id}/status";
-};
-
-export type GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponse =
-  GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponses[keyof GetFalAiAudioUnderstandingRequestsByRequestIdStatusResponses];
-
-export type PutFalAiAudioUnderstandingRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/audio-understanding/requests/{request_id}/cancel";
-};
-
-export type PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponse =
-  PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponses[keyof PutFalAiAudioUnderstandingRequestsByRequestIdCancelResponses];
-
-export type PostFalAiAudioUnderstandingData = {
-  body: AudioUnderstandingInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/audio-understanding";
-};
-
-export type PostFalAiAudioUnderstandingResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiAudioUnderstandingResponse =
-  PostFalAiAudioUnderstandingResponses[keyof PostFalAiAudioUnderstandingResponses];
-
-export type GetFalAiAudioUnderstandingRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/audio-understanding/requests/{request_id}";
-};
-
-export type GetFalAiAudioUnderstandingRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: AudioUnderstandingOutput;
-};
-
-export type GetFalAiAudioUnderstandingRequestsByRequestIdResponse =
-  GetFalAiAudioUnderstandingRequestsByRequestIdResponses[keyof GetFalAiAudioUnderstandingRequestsByRequestIdResponses];
-
-export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/stable-audio-25/audio-to-audio/requests/{request_id}/status";
-};
-
-export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponse =
-  GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponses];
-
-export type PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/stable-audio-25/audio-to-audio/requests/{request_id}/cancel";
-};
-
-export type PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponse =
-  PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponses];
-
-export type PostFalAiStableAudio25AudioToAudioData = {
-  body: StableAudio25AudioToAudioInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/stable-audio-25/audio-to-audio";
-};
-
-export type PostFalAiStableAudio25AudioToAudioResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiStableAudio25AudioToAudioResponse =
-  PostFalAiStableAudio25AudioToAudioResponses[keyof PostFalAiStableAudio25AudioToAudioResponses];
-
-export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/stable-audio-25/audio-to-audio/requests/{request_id}";
-};
-
-export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: StableAudio25AudioToAudioOutput;
-};
-
-export type GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponse =
-  GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponses[keyof GetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponses];
-
-export type GetFalAiStableAudio25InpaintRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/stable-audio-25/inpaint/requests/{request_id}/status";
-};
-
-export type GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponse =
-  GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponses];
-
-export type PutFalAiStableAudio25InpaintRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/stable-audio-25/inpaint/requests/{request_id}/cancel";
-};
-
-export type PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponse =
-  PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponses];
-
-export type PostFalAiStableAudio25InpaintData = {
-  body: StableAudio25InpaintInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/stable-audio-25/inpaint";
-};
-
-export type PostFalAiStableAudio25InpaintResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiStableAudio25InpaintResponse =
-  PostFalAiStableAudio25InpaintResponses[keyof PostFalAiStableAudio25InpaintResponses];
-
-export type GetFalAiStableAudio25InpaintRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/stable-audio-25/inpaint/requests/{request_id}";
-};
-
-export type GetFalAiStableAudio25InpaintRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: StableAudio25InpaintOutput;
-};
-
-export type GetFalAiStableAudio25InpaintRequestsByRequestIdResponse =
-  GetFalAiStableAudio25InpaintRequestsByRequestIdResponses[keyof GetFalAiStableAudio25InpaintRequestsByRequestIdResponses];
-
-export type GetSonautoV2ExtendRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/sonauto/v2/extend/requests/{request_id}/status";
-};
-
-export type GetSonautoV2ExtendRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetSonautoV2ExtendRequestsByRequestIdStatusResponse =
-  GetSonautoV2ExtendRequestsByRequestIdStatusResponses[keyof GetSonautoV2ExtendRequestsByRequestIdStatusResponses];
-
-export type PutSonautoV2ExtendRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/sonauto/v2/extend/requests/{request_id}/cancel";
-};
-
-export type PutSonautoV2ExtendRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutSonautoV2ExtendRequestsByRequestIdCancelResponse =
-  PutSonautoV2ExtendRequestsByRequestIdCancelResponses[keyof PutSonautoV2ExtendRequestsByRequestIdCancelResponses];
-
-export type PostSonautoV2ExtendData = {
-  body: V2ExtendInput;
-  path?: never;
-  query?: never;
-  url: "/sonauto/v2/extend";
-};
-
-export type PostSonautoV2ExtendResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostSonautoV2ExtendResponse =
-  PostSonautoV2ExtendResponses[keyof PostSonautoV2ExtendResponses];
-
-export type GetSonautoV2ExtendRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/sonauto/v2/extend/requests/{request_id}";
-};
-
-export type GetSonautoV2ExtendRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: V2ExtendOutput;
-};
-
-export type GetSonautoV2ExtendRequestsByRequestIdResponse =
-  GetSonautoV2ExtendRequestsByRequestIdResponses[keyof GetSonautoV2ExtendRequestsByRequestIdResponses];
+export type GetFalAiLavaSrRequestsByRequestIdResponse =
+  GetFalAiLavaSrRequestsByRequestIdResponses[keyof GetFalAiLavaSrRequestsByRequestIdResponses];
 
 export type GetFalAiAceStepAudioOutpaintRequestsByRequestIdStatusData = {
   body?: never;
@@ -5358,7 +6658,7 @@ export type GetFalAiAceStepAudioOutpaintRequestsByRequestIdResponses = {
 export type GetFalAiAceStepAudioOutpaintRequestsByRequestIdResponse =
   GetFalAiAceStepAudioOutpaintRequestsByRequestIdResponses[keyof GetFalAiAceStepAudioOutpaintRequestsByRequestIdResponses];
 
-export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusData = {
+export type GetFalAiPersonaplexRealtimeRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5372,20 +6672,20 @@ export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/ace-step/audio-inpaint/requests/{request_id}/status";
+  url: "/fal-ai/personaplex/realtime/requests/{request_id}/status";
 };
 
-export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponses = {
+export type GetFalAiPersonaplexRealtimeRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponse =
-  GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponses];
+export type GetFalAiPersonaplexRealtimeRequestsByRequestIdStatusResponse =
+  GetFalAiPersonaplexRealtimeRequestsByRequestIdStatusResponses[keyof GetFalAiPersonaplexRealtimeRequestsByRequestIdStatusResponses];
 
-export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelData = {
+export type PutFalAiPersonaplexRealtimeRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5394,10 +6694,10 @@ export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/audio-inpaint/requests/{request_id}/cancel";
+  url: "/fal-ai/personaplex/realtime/requests/{request_id}/cancel";
 };
 
-export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses = {
+export type PutFalAiPersonaplexRealtimeRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5409,27 +6709,27 @@ export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponse =
-  PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponses];
+export type PutFalAiPersonaplexRealtimeRequestsByRequestIdCancelResponse =
+  PutFalAiPersonaplexRealtimeRequestsByRequestIdCancelResponses[keyof PutFalAiPersonaplexRealtimeRequestsByRequestIdCancelResponses];
 
-export type PostFalAiAceStepAudioInpaintData = {
-  body: AceStepAudioInpaintInput;
+export type PostFalAiPersonaplexRealtimeData = {
+  body: PersonaplexRealtimeInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/ace-step/audio-inpaint";
+  url: "/fal-ai/personaplex/realtime";
 };
 
-export type PostFalAiAceStepAudioInpaintResponses = {
+export type PostFalAiPersonaplexRealtimeResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiAceStepAudioInpaintResponse =
-  PostFalAiAceStepAudioInpaintResponses[keyof PostFalAiAceStepAudioInpaintResponses];
+export type PostFalAiPersonaplexRealtimeResponse =
+  PostFalAiPersonaplexRealtimeResponses[keyof PostFalAiPersonaplexRealtimeResponses];
 
-export type GetFalAiAceStepAudioInpaintRequestsByRequestIdData = {
+export type GetFalAiPersonaplexRealtimeRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5438,20 +6738,20 @@ export type GetFalAiAceStepAudioInpaintRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/audio-inpaint/requests/{request_id}";
+  url: "/fal-ai/personaplex/realtime/requests/{request_id}";
 };
 
-export type GetFalAiAceStepAudioInpaintRequestsByRequestIdResponses = {
+export type GetFalAiPersonaplexRealtimeRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: AceStepAudioInpaintOutput;
+  200: PersonaplexRealtimeOutput;
 };
 
-export type GetFalAiAceStepAudioInpaintRequestsByRequestIdResponse =
-  GetFalAiAceStepAudioInpaintRequestsByRequestIdResponses[keyof GetFalAiAceStepAudioInpaintRequestsByRequestIdResponses];
+export type GetFalAiPersonaplexRealtimeRequestsByRequestIdResponse =
+  GetFalAiPersonaplexRealtimeRequestsByRequestIdResponses[keyof GetFalAiPersonaplexRealtimeRequestsByRequestIdResponses];
 
-export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusData = {
+export type GetFalAiStableAudio25InpaintRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5465,20 +6765,20 @@ export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/ace-step/audio-to-audio/requests/{request_id}/status";
+  url: "/fal-ai/stable-audio-25/inpaint/requests/{request_id}/status";
 };
 
-export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponses = {
+export type GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponse =
-  GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponses];
+export type GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponse =
+  GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponses];
 
-export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelData = {
+export type PutFalAiStableAudio25InpaintRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5487,10 +6787,10 @@ export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/audio-to-audio/requests/{request_id}/cancel";
+  url: "/fal-ai/stable-audio-25/inpaint/requests/{request_id}/cancel";
 };
 
-export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses = {
+export type PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5502,27 +6802,27 @@ export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponse =
-  PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponses];
+export type PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponse =
+  PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponses];
 
-export type PostFalAiAceStepAudioToAudioData = {
-  body: AceStepAudioToAudioInput;
+export type PostFalAiStableAudio25InpaintData = {
+  body: StableAudio25InpaintInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/ace-step/audio-to-audio";
+  url: "/fal-ai/stable-audio-25/inpaint";
 };
 
-export type PostFalAiAceStepAudioToAudioResponses = {
+export type PostFalAiStableAudio25InpaintResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiAceStepAudioToAudioResponse =
-  PostFalAiAceStepAudioToAudioResponses[keyof PostFalAiAceStepAudioToAudioResponses];
+export type PostFalAiStableAudio25InpaintResponse =
+  PostFalAiStableAudio25InpaintResponses[keyof PostFalAiStableAudio25InpaintResponses];
 
-export type GetFalAiAceStepAudioToAudioRequestsByRequestIdData = {
+export type GetFalAiStableAudio25InpaintRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5531,130 +6831,38 @@ export type GetFalAiAceStepAudioToAudioRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/audio-to-audio/requests/{request_id}";
+  url: "/fal-ai/stable-audio-25/inpaint/requests/{request_id}";
 };
 
-export type GetFalAiAceStepAudioToAudioRequestsByRequestIdResponses = {
+export type GetFalAiStableAudio25InpaintRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: AceStepAudioToAudioOutput;
+  200: StableAudio25InpaintOutput;
 };
 
-export type GetFalAiAceStepAudioToAudioRequestsByRequestIdResponse =
-  GetFalAiAceStepAudioToAudioRequestsByRequestIdResponses[keyof GetFalAiAceStepAudioToAudioRequestsByRequestIdResponses];
+export type GetFalAiStableAudio25InpaintRequestsByRequestIdResponse =
+  GetFalAiStableAudio25InpaintRequestsByRequestIdResponses[keyof GetFalAiStableAudio25InpaintRequestsByRequestIdResponses];
 
-export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}/status";
   };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/dia-tts/voice-clone/requests/{request_id}/status";
-};
 
-export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponse =
-  GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponses[keyof GetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponses];
-
-export type PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/dia-tts/voice-clone/requests/{request_id}/cancel";
-};
-
-export type PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponse =
-  PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponses[keyof PutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponses];
-
-export type PostFalAiDiaTtsVoiceCloneData = {
-  body: DiaTtsVoiceCloneInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/dia-tts/voice-clone";
-};
-
-export type PostFalAiDiaTtsVoiceCloneResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiDiaTtsVoiceCloneResponse =
-  PostFalAiDiaTtsVoiceCloneResponses[keyof PostFalAiDiaTtsVoiceCloneResponses];
-
-export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/dia-tts/voice-clone/requests/{request_id}";
-};
-
-export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: DiaTtsVoiceCloneOutput;
-};
-
-export type GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponse =
-  GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponses[keyof GetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponses];
-
-export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/elevenlabs/audio-isolation/requests/{request_id}/status";
-};
-
-export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses =
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -5662,22 +6870,23 @@ export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponses];
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusResponses];
 
-export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
+export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}/cancel";
   };
-  query?: never;
-  url: "/fal-ai/elevenlabs/audio-isolation/requests/{request_id}/cancel";
-};
 
-export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses =
+export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -5690,27 +6899,27 @@ export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponses];
+export type PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponses];
 
-export type PostFalAiElevenlabsAudioIsolationData = {
-  body: ElevenlabsAudioIsolationInput;
+export type PostFalAiWorkflowUtilitiesImpulseResponseData = {
+  body: WorkflowUtilitiesImpulseResponseInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/elevenlabs/audio-isolation";
+  url: "/fal-ai/workflow-utilities/impulse-response";
 };
 
-export type PostFalAiElevenlabsAudioIsolationResponses = {
+export type PostFalAiWorkflowUtilitiesImpulseResponseResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiElevenlabsAudioIsolationResponse =
-  PostFalAiElevenlabsAudioIsolationResponses[keyof PostFalAiElevenlabsAudioIsolationResponses];
+export type PostFalAiWorkflowUtilitiesImpulseResponseResponse =
+  PostFalAiWorkflowUtilitiesImpulseResponseResponses[keyof PostFalAiWorkflowUtilitiesImpulseResponseResponses];
 
-export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdData = {
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5719,20 +6928,21 @@ export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/audio-isolation/requests/{request_id}";
+  url: "/fal-ai/workflow-utilities/impulse-response/requests/{request_id}";
 };
 
-export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ElevenlabsAudioIsolationOutput;
-};
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: WorkflowUtilitiesImpulseResponseOutput;
+  };
 
-export type GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponse =
-  GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponses[keyof GetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponses];
+export type GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponse =
+  GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdResponses];
 
-export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusData = {
+export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5746,20 +6956,20 @@ export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/elevenlabs/music/requests/{request_id}/status";
+  url: "/fal-ai/elevenlabs/tts/eleven-v3/requests/{request_id}/status";
 };
 
-export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponses = {
+export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponses];
+export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponses];
 
-export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelData = {
+export type PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5768,10 +6978,10 @@ export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/music/requests/{request_id}/cancel";
+  url: "/fal-ai/elevenlabs/tts/eleven-v3/requests/{request_id}/cancel";
 };
 
-export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses = {
+export type PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5783,27 +6993,27 @@ export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses];
+export type PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponses];
 
-export type PostFalAiElevenlabsMusicData = {
-  body: ElevenlabsMusicInput;
+export type PostFalAiElevenlabsTtsElevenV3Data = {
+  body: ElevenlabsTtsElevenV3Input;
   path?: never;
   query?: never;
-  url: "/fal-ai/elevenlabs/music";
+  url: "/fal-ai/elevenlabs/tts/eleven-v3";
 };
 
-export type PostFalAiElevenlabsMusicResponses = {
+export type PostFalAiElevenlabsTtsElevenV3Responses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiElevenlabsMusicResponse =
-  PostFalAiElevenlabsMusicResponses[keyof PostFalAiElevenlabsMusicResponses];
+export type PostFalAiElevenlabsTtsElevenV3Response =
+  PostFalAiElevenlabsTtsElevenV3Responses[keyof PostFalAiElevenlabsTtsElevenV3Responses];
 
-export type GetFalAiElevenlabsMusicRequestsByRequestIdData = {
+export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5812,18 +7022,18 @@ export type GetFalAiElevenlabsMusicRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/music/requests/{request_id}";
+  url: "/fal-ai/elevenlabs/tts/eleven-v3/requests/{request_id}";
 };
 
-export type GetFalAiElevenlabsMusicRequestsByRequestIdResponses = {
+export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: ElevenlabsMusicOutput;
+  200: ElevenlabsTtsElevenV3Output;
 };
 
-export type GetFalAiElevenlabsMusicRequestsByRequestIdResponse =
-  GetFalAiElevenlabsMusicRequestsByRequestIdResponses[keyof GetFalAiElevenlabsMusicRequestsByRequestIdResponses];
+export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponse =
+  GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponses];
 
 export type GetFalAiMinimaxMusicV2RequestsByRequestIdStatusData = {
   body?: never;
@@ -5918,7 +7128,7 @@ export type GetFalAiMinimaxMusicV2RequestsByRequestIdResponses = {
 export type GetFalAiMinimaxMusicV2RequestsByRequestIdResponse =
   GetFalAiMinimaxMusicV2RequestsByRequestIdResponses[keyof GetFalAiMinimaxMusicV2RequestsByRequestIdResponses];
 
-export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusData = {
+export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5932,10 +7142,10 @@ export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/beatoven/sound-effect-generation/requests/{request_id}/status";
+  url: "/fal-ai/elevenlabs/tts/multilingual-v2/requests/{request_id}/status";
 };
 
-export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses =
+export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -5943,10 +7153,10 @@ export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponse =
-  GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses[keyof GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses];
+export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponses];
 
-export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelData = {
+export type PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5955,10 +7165,10 @@ export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/beatoven/sound-effect-generation/requests/{request_id}/cancel";
+  url: "/fal-ai/elevenlabs/tts/multilingual-v2/requests/{request_id}/cancel";
 };
 
-export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses =
+export type PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -5971,27 +7181,27 @@ export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponse =
-  PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses[keyof PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses];
+export type PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponses];
 
-export type PostBeatovenSoundEffectGenerationData = {
-  body: SoundEffectGenerationInput;
+export type PostFalAiElevenlabsTtsMultilingualV2Data = {
+  body: ElevenlabsTtsMultilingualV2Input;
   path?: never;
   query?: never;
-  url: "/beatoven/sound-effect-generation";
+  url: "/fal-ai/elevenlabs/tts/multilingual-v2";
 };
 
-export type PostBeatovenSoundEffectGenerationResponses = {
+export type PostFalAiElevenlabsTtsMultilingualV2Responses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostBeatovenSoundEffectGenerationResponse =
-  PostBeatovenSoundEffectGenerationResponses[keyof PostBeatovenSoundEffectGenerationResponses];
+export type PostFalAiElevenlabsTtsMultilingualV2Response =
+  PostFalAiElevenlabsTtsMultilingualV2Responses[keyof PostFalAiElevenlabsTtsMultilingualV2Responses];
 
-export type GetBeatovenSoundEffectGenerationRequestsByRequestIdData = {
+export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6000,20 +7210,20 @@ export type GetBeatovenSoundEffectGenerationRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/beatoven/sound-effect-generation/requests/{request_id}";
+  url: "/fal-ai/elevenlabs/tts/multilingual-v2/requests/{request_id}";
 };
 
-export type GetBeatovenSoundEffectGenerationRequestsByRequestIdResponses = {
+export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: SoundEffectGenerationOutput;
+  200: ElevenlabsTtsMultilingualV2Output;
 };
 
-export type GetBeatovenSoundEffectGenerationRequestsByRequestIdResponse =
-  GetBeatovenSoundEffectGenerationRequestsByRequestIdResponses[keyof GetBeatovenSoundEffectGenerationRequestsByRequestIdResponses];
+export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponse =
+  GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponses];
 
-export type GetBeatovenMusicGenerationRequestsByRequestIdStatusData = {
+export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6027,196 +7237,10 @@ export type GetBeatovenMusicGenerationRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/beatoven/music-generation/requests/{request_id}/status";
+  url: "/fal-ai/elevenlabs/sound-effects/v2/requests/{request_id}/status";
 };
 
-export type GetBeatovenMusicGenerationRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetBeatovenMusicGenerationRequestsByRequestIdStatusResponse =
-  GetBeatovenMusicGenerationRequestsByRequestIdStatusResponses[keyof GetBeatovenMusicGenerationRequestsByRequestIdStatusResponses];
-
-export type PutBeatovenMusicGenerationRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/beatoven/music-generation/requests/{request_id}/cancel";
-};
-
-export type PutBeatovenMusicGenerationRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutBeatovenMusicGenerationRequestsByRequestIdCancelResponse =
-  PutBeatovenMusicGenerationRequestsByRequestIdCancelResponses[keyof PutBeatovenMusicGenerationRequestsByRequestIdCancelResponses];
-
-export type PostBeatovenMusicGenerationData = {
-  body: MusicGenerationInput;
-  path?: never;
-  query?: never;
-  url: "/beatoven/music-generation";
-};
-
-export type PostBeatovenMusicGenerationResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostBeatovenMusicGenerationResponse =
-  PostBeatovenMusicGenerationResponses[keyof PostBeatovenMusicGenerationResponses];
-
-export type GetBeatovenMusicGenerationRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/beatoven/music-generation/requests/{request_id}";
-};
-
-export type GetBeatovenMusicGenerationRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MusicGenerationOutput;
-};
-
-export type GetBeatovenMusicGenerationRequestsByRequestIdResponse =
-  GetBeatovenMusicGenerationRequestsByRequestIdResponses[keyof GetBeatovenMusicGenerationRequestsByRequestIdResponses];
-
-export type GetFalAiMinimaxMusicV15RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/minimax-music/v1.5/requests/{request_id}/status";
-};
-
-export type GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponses];
-
-export type PutFalAiMinimaxMusicV15RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax-music/v1.5/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponses];
-
-export type PostFalAiMinimaxMusicV15Data = {
-  body: MinimaxMusicV15Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/minimax-music/v1.5";
-};
-
-export type PostFalAiMinimaxMusicV15Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMinimaxMusicV15Response =
-  PostFalAiMinimaxMusicV15Responses[keyof PostFalAiMinimaxMusicV15Responses];
-
-export type GetFalAiMinimaxMusicV15RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax-music/v1.5/requests/{request_id}";
-};
-
-export type GetFalAiMinimaxMusicV15RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MinimaxMusicV15Output;
-};
-
-export type GetFalAiMinimaxMusicV15RequestsByRequestIdResponse =
-  GetFalAiMinimaxMusicV15RequestsByRequestIdResponses[keyof GetFalAiMinimaxMusicV15RequestsByRequestIdResponses];
-
-export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/stable-audio-25/text-to-audio/requests/{request_id}/status";
-};
-
-export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses =
+export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -6224,10 +7248,10 @@ export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponse =
-  GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses];
+export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponses];
 
-export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelData = {
+export type PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6236,10 +7260,10 @@ export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/stable-audio-25/text-to-audio/requests/{request_id}/cancel";
+  url: "/fal-ai/elevenlabs/sound-effects/v2/requests/{request_id}/cancel";
 };
 
-export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses =
+export type PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -6252,27 +7276,27 @@ export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponse =
-  PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses];
+export type PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponses];
 
-export type PostFalAiStableAudio25TextToAudioData = {
-  body: StableAudio25TextToAudioInput;
+export type PostFalAiElevenlabsSoundEffectsV2Data = {
+  body: ElevenlabsSoundEffectsV2Input;
   path?: never;
   query?: never;
-  url: "/fal-ai/stable-audio-25/text-to-audio";
+  url: "/fal-ai/elevenlabs/sound-effects/v2";
 };
 
-export type PostFalAiStableAudio25TextToAudioResponses = {
+export type PostFalAiElevenlabsSoundEffectsV2Responses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiStableAudio25TextToAudioResponse =
-  PostFalAiStableAudio25TextToAudioResponses[keyof PostFalAiStableAudio25TextToAudioResponses];
+export type PostFalAiElevenlabsSoundEffectsV2Response =
+  PostFalAiElevenlabsSoundEffectsV2Responses[keyof PostFalAiElevenlabsSoundEffectsV2Responses];
 
-export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdData = {
+export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6281,18 +7305,297 @@ export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/stable-audio-25/text-to-audio/requests/{request_id}";
+  url: "/fal-ai/elevenlabs/sound-effects/v2/requests/{request_id}";
 };
 
-export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponses = {
+export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: StableAudio25TextToAudioOutput;
+  200: ElevenlabsSoundEffectsV2Output;
 };
 
-export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponse =
-  GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponses[keyof GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponses];
+export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponse =
+  GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponses[keyof GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponses];
+
+export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/elevenlabs/music/requests/{request_id}/status";
+};
+
+export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsMusicRequestsByRequestIdStatusResponses];
+
+export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/elevenlabs/music/requests/{request_id}/cancel";
+};
+
+export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsMusicRequestsByRequestIdCancelResponses];
+
+export type PostFalAiElevenlabsMusicData = {
+  body: ElevenlabsMusicInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/elevenlabs/music";
+};
+
+export type PostFalAiElevenlabsMusicResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiElevenlabsMusicResponse =
+  PostFalAiElevenlabsMusicResponses[keyof PostFalAiElevenlabsMusicResponses];
+
+export type GetFalAiElevenlabsMusicRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/elevenlabs/music/requests/{request_id}";
+};
+
+export type GetFalAiElevenlabsMusicRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ElevenlabsMusicOutput;
+};
+
+export type GetFalAiElevenlabsMusicRequestsByRequestIdResponse =
+  GetFalAiElevenlabsMusicRequestsByRequestIdResponses[keyof GetFalAiElevenlabsMusicRequestsByRequestIdResponses];
+
+export type GetFalAiStableAudioRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/stable-audio/requests/{request_id}/status";
+};
+
+export type GetFalAiStableAudioRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiStableAudioRequestsByRequestIdStatusResponse =
+  GetFalAiStableAudioRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudioRequestsByRequestIdStatusResponses];
+
+export type PutFalAiStableAudioRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/stable-audio/requests/{request_id}/cancel";
+};
+
+export type PutFalAiStableAudioRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiStableAudioRequestsByRequestIdCancelResponse =
+  PutFalAiStableAudioRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudioRequestsByRequestIdCancelResponses];
+
+export type PostFalAiStableAudioData = {
+  body: StableAudioInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/stable-audio";
+};
+
+export type PostFalAiStableAudioResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiStableAudioResponse =
+  PostFalAiStableAudioResponses[keyof PostFalAiStableAudioResponses];
+
+export type GetFalAiStableAudioRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/stable-audio/requests/{request_id}";
+};
+
+export type GetFalAiStableAudioRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: StableAudioOutput;
+};
+
+export type GetFalAiStableAudioRequestsByRequestIdResponse =
+  GetFalAiStableAudioRequestsByRequestIdResponses[keyof GetFalAiStableAudioRequestsByRequestIdResponses];
+
+export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/cassetteai/music-generator/requests/{request_id}/status";
+};
+
+export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponse =
+  GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponses[keyof GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponses];
+
+export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/cassetteai/music-generator/requests/{request_id}/cancel";
+};
+
+export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponse =
+  PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses[keyof PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses];
+
+export type PostCassetteaiMusicGeneratorData = {
+  body: MusicGeneratorInput;
+  path?: never;
+  query?: never;
+  url: "/cassetteai/music-generator";
+};
+
+export type PostCassetteaiMusicGeneratorResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostCassetteaiMusicGeneratorResponse =
+  PostCassetteaiMusicGeneratorResponses[keyof PostCassetteaiMusicGeneratorResponses];
+
+export type GetCassetteaiMusicGeneratorRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/cassetteai/music-generator/requests/{request_id}";
+};
+
+export type GetCassetteaiMusicGeneratorRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MusicGeneratorOutput;
+};
+
+export type GetCassetteaiMusicGeneratorRequestsByRequestIdResponse =
+  GetCassetteaiMusicGeneratorRequestsByRequestIdResponses[keyof GetCassetteaiMusicGeneratorRequestsByRequestIdResponses];
 
 export type GetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdStatusData =
   {
@@ -6392,7 +7695,7 @@ export type GetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdResponses
 export type GetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdResponse =
   GetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdResponses];
 
-export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusData = {
+export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6406,66 +7709,20 @@ export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/elevenlabs/sound-effects/v2/requests/{request_id}/status";
+  url: "/fal-ai/kokoro/american-english/requests/{request_id}/status";
 };
 
-export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/elevenlabs/sound-effects/v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiElevenlabsSoundEffectsV2Data = {
-  body: ElevenlabsSoundEffectsV2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/elevenlabs/sound-effects/v2";
-};
-
-export type PostFalAiElevenlabsSoundEffectsV2Responses = {
+export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiElevenlabsSoundEffectsV2Response =
-  PostFalAiElevenlabsSoundEffectsV2Responses[keyof PostFalAiElevenlabsSoundEffectsV2Responses];
+export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponse =
+  GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponses];
 
-export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdData = {
+export type PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6474,59 +7731,10 @@ export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/sound-effects/v2/requests/{request_id}";
+  url: "/fal-ai/kokoro/american-english/requests/{request_id}/cancel";
 };
 
-export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ElevenlabsSoundEffectsV2Output;
-};
-
-export type GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponse =
-  GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponses[keyof GetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponses];
-
-export type GetSonautoV2InpaintRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/sonauto/v2/inpaint/requests/{request_id}/status";
-};
-
-export type GetSonautoV2InpaintRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetSonautoV2InpaintRequestsByRequestIdStatusResponse =
-  GetSonautoV2InpaintRequestsByRequestIdStatusResponses[keyof GetSonautoV2InpaintRequestsByRequestIdStatusResponses];
-
-export type PutSonautoV2InpaintRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/sonauto/v2/inpaint/requests/{request_id}/cancel";
-};
-
-export type PutSonautoV2InpaintRequestsByRequestIdCancelResponses = {
+export type PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -6538,27 +7746,27 @@ export type PutSonautoV2InpaintRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutSonautoV2InpaintRequestsByRequestIdCancelResponse =
-  PutSonautoV2InpaintRequestsByRequestIdCancelResponses[keyof PutSonautoV2InpaintRequestsByRequestIdCancelResponses];
+export type PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponse =
+  PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponses];
 
-export type PostSonautoV2InpaintData = {
-  body: V2InpaintInput;
+export type PostFalAiKokoroAmericanEnglishData = {
+  body: KokoroAmericanEnglishInput;
   path?: never;
   query?: never;
-  url: "/sonauto/v2/inpaint";
+  url: "/fal-ai/kokoro/american-english";
 };
 
-export type PostSonautoV2InpaintResponses = {
+export type PostFalAiKokoroAmericanEnglishResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostSonautoV2InpaintResponse =
-  PostSonautoV2InpaintResponses[keyof PostSonautoV2InpaintResponses];
+export type PostFalAiKokoroAmericanEnglishResponse =
+  PostFalAiKokoroAmericanEnglishResponses[keyof PostFalAiKokoroAmericanEnglishResponses];
 
-export type GetSonautoV2InpaintRequestsByRequestIdData = {
+export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6567,18 +7775,18 @@ export type GetSonautoV2InpaintRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/sonauto/v2/inpaint/requests/{request_id}";
+  url: "/fal-ai/kokoro/american-english/requests/{request_id}";
 };
 
-export type GetSonautoV2InpaintRequestsByRequestIdResponses = {
+export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: V2InpaintOutput;
+  200: KokoroAmericanEnglishOutput;
 };
 
-export type GetSonautoV2InpaintRequestsByRequestIdResponse =
-  GetSonautoV2InpaintRequestsByRequestIdResponses[keyof GetSonautoV2InpaintRequestsByRequestIdResponses];
+export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponse =
+  GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponses[keyof GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponses];
 
 export type GetSonautoV2TextToMusicRequestsByRequestIdStatusData = {
   body?: never;
@@ -6673,99 +7881,6 @@ export type GetSonautoV2TextToMusicRequestsByRequestIdResponses = {
 export type GetSonautoV2TextToMusicRequestsByRequestIdResponse =
   GetSonautoV2TextToMusicRequestsByRequestIdResponses[keyof GetSonautoV2TextToMusicRequestsByRequestIdResponses];
 
-export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/elevenlabs/tts/eleven-v3/requests/{request_id}/status";
-};
-
-export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponses];
-
-export type PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/elevenlabs/tts/eleven-v3/requests/{request_id}/cancel";
-};
-
-export type PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponses];
-
-export type PostFalAiElevenlabsTtsElevenV3Data = {
-  body: ElevenlabsTtsElevenV3Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/elevenlabs/tts/eleven-v3";
-};
-
-export type PostFalAiElevenlabsTtsElevenV3Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiElevenlabsTtsElevenV3Response =
-  PostFalAiElevenlabsTtsElevenV3Responses[keyof PostFalAiElevenlabsTtsElevenV3Responses];
-
-export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/elevenlabs/tts/eleven-v3/requests/{request_id}";
-};
-
-export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ElevenlabsTtsElevenV3Output;
-};
-
-export type GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponse =
-  GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponses];
-
 export type GetFalAiLyria2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -6859,7 +7974,7 @@ export type GetFalAiLyria2RequestsByRequestIdResponses = {
 export type GetFalAiLyria2RequestsByRequestIdResponse =
   GetFalAiLyria2RequestsByRequestIdResponses[keyof GetFalAiLyria2RequestsByRequestIdResponses];
 
-export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusData = {
+export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6873,20 +7988,21 @@ export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/ace-step/prompt-to-audio/requests/{request_id}/status";
+  url: "/fal-ai/stable-audio-25/text-to-audio/requests/{request_id}/status";
 };
 
-export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
 
-export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponse =
-  GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponses];
+export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponse =
+  GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponses];
 
-export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelData = {
+export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6895,42 +8011,43 @@ export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/prompt-to-audio/requests/{request_id}/cancel";
+  url: "/fal-ai/stable-audio-25/text-to-audio/requests/{request_id}/cancel";
 };
 
-export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
+export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether the request was cancelled successfully.
+     * The request was cancelled.
      */
-    success?: boolean;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-};
 
-export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponse =
-  PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponses];
+export type PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponse =
+  PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponses];
 
-export type PostFalAiAceStepPromptToAudioData = {
-  body: AceStepPromptToAudioInput;
+export type PostFalAiStableAudio25TextToAudioData = {
+  body: StableAudio25TextToAudioInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/ace-step/prompt-to-audio";
+  url: "/fal-ai/stable-audio-25/text-to-audio";
 };
 
-export type PostFalAiAceStepPromptToAudioResponses = {
+export type PostFalAiStableAudio25TextToAudioResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiAceStepPromptToAudioResponse =
-  PostFalAiAceStepPromptToAudioResponses[keyof PostFalAiAceStepPromptToAudioResponses];
+export type PostFalAiStableAudio25TextToAudioResponse =
+  PostFalAiStableAudio25TextToAudioResponses[keyof PostFalAiStableAudio25TextToAudioResponses];
 
-export type GetFalAiAceStepPromptToAudioRequestsByRequestIdData = {
+export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6939,20 +8056,20 @@ export type GetFalAiAceStepPromptToAudioRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/prompt-to-audio/requests/{request_id}";
+  url: "/fal-ai/stable-audio-25/text-to-audio/requests/{request_id}";
 };
 
-export type GetFalAiAceStepPromptToAudioRequestsByRequestIdResponses = {
+export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: AceStepPromptToAudioOutput;
+  200: StableAudio25TextToAudioOutput;
 };
 
-export type GetFalAiAceStepPromptToAudioRequestsByRequestIdResponse =
-  GetFalAiAceStepPromptToAudioRequestsByRequestIdResponses[keyof GetFalAiAceStepPromptToAudioRequestsByRequestIdResponses];
+export type GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponse =
+  GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponses[keyof GetFalAiStableAudio25TextToAudioRequestsByRequestIdResponses];
 
-export type GetFalAiAceStepRequestsByRequestIdStatusData = {
+export type GetFalAiGeminiTtsRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6966,20 +8083,20 @@ export type GetFalAiAceStepRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/ace-step/requests/{request_id}/status";
+  url: "/fal-ai/gemini-tts/requests/{request_id}/status";
 };
 
-export type GetFalAiAceStepRequestsByRequestIdStatusResponses = {
+export type GetFalAiGeminiTtsRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiAceStepRequestsByRequestIdStatusResponse =
-  GetFalAiAceStepRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepRequestsByRequestIdStatusResponses];
+export type GetFalAiGeminiTtsRequestsByRequestIdStatusResponse =
+  GetFalAiGeminiTtsRequestsByRequestIdStatusResponses[keyof GetFalAiGeminiTtsRequestsByRequestIdStatusResponses];
 
-export type PutFalAiAceStepRequestsByRequestIdCancelData = {
+export type PutFalAiGeminiTtsRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6988,10 +8105,10 @@ export type PutFalAiAceStepRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/requests/{request_id}/cancel";
+  url: "/fal-ai/gemini-tts/requests/{request_id}/cancel";
 };
 
-export type PutFalAiAceStepRequestsByRequestIdCancelResponses = {
+export type PutFalAiGeminiTtsRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -7003,27 +8120,27 @@ export type PutFalAiAceStepRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiAceStepRequestsByRequestIdCancelResponse =
-  PutFalAiAceStepRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepRequestsByRequestIdCancelResponses];
+export type PutFalAiGeminiTtsRequestsByRequestIdCancelResponse =
+  PutFalAiGeminiTtsRequestsByRequestIdCancelResponses[keyof PutFalAiGeminiTtsRequestsByRequestIdCancelResponses];
 
-export type PostFalAiAceStepData = {
-  body: AceStepInput;
+export type PostFalAiGeminiTtsData = {
+  body: GeminiTtsInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/ace-step";
+  url: "/fal-ai/gemini-tts";
 };
 
-export type PostFalAiAceStepResponses = {
+export type PostFalAiGeminiTtsResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiAceStepResponse =
-  PostFalAiAceStepResponses[keyof PostFalAiAceStepResponses];
+export type PostFalAiGeminiTtsResponse =
+  PostFalAiGeminiTtsResponses[keyof PostFalAiGeminiTtsResponses];
 
-export type GetFalAiAceStepRequestsByRequestIdData = {
+export type GetFalAiGeminiTtsRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7032,18 +8149,204 @@ export type GetFalAiAceStepRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/ace-step/requests/{request_id}";
+  url: "/fal-ai/gemini-tts/requests/{request_id}";
 };
 
-export type GetFalAiAceStepRequestsByRequestIdResponses = {
+export type GetFalAiGeminiTtsRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: AceStepOutput;
+  200: GeminiTtsOutput;
 };
 
-export type GetFalAiAceStepRequestsByRequestIdResponse =
-  GetFalAiAceStepRequestsByRequestIdResponses[keyof GetFalAiAceStepRequestsByRequestIdResponses];
+export type GetFalAiGeminiTtsRequestsByRequestIdResponse =
+  GetFalAiGeminiTtsRequestsByRequestIdResponses[keyof GetFalAiGeminiTtsRequestsByRequestIdResponses];
+
+export type GetFalAiF5TtsRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/f5-tts/requests/{request_id}/status";
+};
+
+export type GetFalAiF5TtsRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiF5TtsRequestsByRequestIdStatusResponse =
+  GetFalAiF5TtsRequestsByRequestIdStatusResponses[keyof GetFalAiF5TtsRequestsByRequestIdStatusResponses];
+
+export type PutFalAiF5TtsRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/f5-tts/requests/{request_id}/cancel";
+};
+
+export type PutFalAiF5TtsRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiF5TtsRequestsByRequestIdCancelResponse =
+  PutFalAiF5TtsRequestsByRequestIdCancelResponses[keyof PutFalAiF5TtsRequestsByRequestIdCancelResponses];
+
+export type PostFalAiF5TtsData = {
+  body: F5TtsInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/f5-tts";
+};
+
+export type PostFalAiF5TtsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiF5TtsResponse =
+  PostFalAiF5TtsResponses[keyof PostFalAiF5TtsResponses];
+
+export type GetFalAiF5TtsRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/f5-tts/requests/{request_id}";
+};
+
+export type GetFalAiF5TtsRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: F5TtsOutput;
+};
+
+export type GetFalAiF5TtsRequestsByRequestIdResponse =
+  GetFalAiF5TtsRequestsByRequestIdResponses[keyof GetFalAiF5TtsRequestsByRequestIdResponses];
+
+export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/mmaudio-v2/text-to-audio/requests/{request_id}/status";
+};
+
+export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponse =
+  GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/mmaudio-v2/text-to-audio/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponse =
+  PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMmaudioV2TextToAudioData = {
+  body: MmaudioV2TextToAudioInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/mmaudio-v2/text-to-audio";
+};
+
+export type PostFalAiMmaudioV2TextToAudioResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMmaudioV2TextToAudioResponse =
+  PostFalAiMmaudioV2TextToAudioResponses[keyof PostFalAiMmaudioV2TextToAudioResponses];
+
+export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/mmaudio-v2/text-to-audio/requests/{request_id}";
+};
+
+export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MmaudioV2TextToAudioOutput;
+};
+
+export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponse =
+  GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponses[keyof GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponses];
 
 export type GetCassetteaiSoundEffectsGeneratorRequestsByRequestIdStatusData = {
   body?: never;
@@ -7140,7 +8443,7 @@ export type GetCassetteaiSoundEffectsGeneratorRequestsByRequestIdResponses = {
 export type GetCassetteaiSoundEffectsGeneratorRequestsByRequestIdResponse =
   GetCassetteaiSoundEffectsGeneratorRequestsByRequestIdResponses[keyof GetCassetteaiSoundEffectsGeneratorRequestsByRequestIdResponses];
 
-export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusData = {
+export type GetFalAiAceStepRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -7154,20 +8457,20 @@ export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/cassetteai/music-generator/requests/{request_id}/status";
+  url: "/fal-ai/ace-step/requests/{request_id}/status";
 };
 
-export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponses = {
+export type GetFalAiAceStepRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponse =
-  GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponses[keyof GetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponses];
+export type GetFalAiAceStepRequestsByRequestIdStatusResponse =
+  GetFalAiAceStepRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepRequestsByRequestIdStatusResponses];
 
-export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelData = {
+export type PutFalAiAceStepRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7176,10 +8479,10 @@ export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/cassetteai/music-generator/requests/{request_id}/cancel";
+  url: "/fal-ai/ace-step/requests/{request_id}/cancel";
 };
 
-export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses = {
+export type PutFalAiAceStepRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -7191,27 +8494,27 @@ export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponse =
-  PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses[keyof PutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponses];
+export type PutFalAiAceStepRequestsByRequestIdCancelResponse =
+  PutFalAiAceStepRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepRequestsByRequestIdCancelResponses];
 
-export type PostCassetteaiMusicGeneratorData = {
-  body: MusicGeneratorInput;
+export type PostFalAiAceStepData = {
+  body: AceStepInput;
   path?: never;
   query?: never;
-  url: "/cassetteai/music-generator";
+  url: "/fal-ai/ace-step";
 };
 
-export type PostCassetteaiMusicGeneratorResponses = {
+export type PostFalAiAceStepResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostCassetteaiMusicGeneratorResponse =
-  PostCassetteaiMusicGeneratorResponses[keyof PostCassetteaiMusicGeneratorResponses];
+export type PostFalAiAceStepResponse =
+  PostFalAiAceStepResponses[keyof PostFalAiAceStepResponses];
 
-export type GetCassetteaiMusicGeneratorRequestsByRequestIdData = {
+export type GetFalAiAceStepRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7220,20 +8523,20 @@ export type GetCassetteaiMusicGeneratorRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/cassetteai/music-generator/requests/{request_id}";
+  url: "/fal-ai/ace-step/requests/{request_id}";
 };
 
-export type GetCassetteaiMusicGeneratorRequestsByRequestIdResponses = {
+export type GetFalAiAceStepRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MusicGeneratorOutput;
+  200: AceStepOutput;
 };
 
-export type GetCassetteaiMusicGeneratorRequestsByRequestIdResponse =
-  GetCassetteaiMusicGeneratorRequestsByRequestIdResponses[keyof GetCassetteaiMusicGeneratorRequestsByRequestIdResponses];
+export type GetFalAiAceStepRequestsByRequestIdResponse =
+  GetFalAiAceStepRequestsByRequestIdResponses[keyof GetFalAiAceStepRequestsByRequestIdResponses];
 
-export type GetFalAiCsm1bRequestsByRequestIdStatusData = {
+export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -7247,20 +8550,20 @@ export type GetFalAiCsm1bRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/csm-1b/requests/{request_id}/status";
+  url: "/fal-ai/ace-step/prompt-to-audio/requests/{request_id}/status";
 };
 
-export type GetFalAiCsm1bRequestsByRequestIdStatusResponses = {
+export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiCsm1bRequestsByRequestIdStatusResponse =
-  GetFalAiCsm1bRequestsByRequestIdStatusResponses[keyof GetFalAiCsm1bRequestsByRequestIdStatusResponses];
+export type GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponse =
+  GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponses];
 
-export type PutFalAiCsm1bRequestsByRequestIdCancelData = {
+export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7269,10 +8572,10 @@ export type PutFalAiCsm1bRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/csm-1b/requests/{request_id}/cancel";
+  url: "/fal-ai/ace-step/prompt-to-audio/requests/{request_id}/cancel";
 };
 
-export type PutFalAiCsm1bRequestsByRequestIdCancelResponses = {
+export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -7284,27 +8587,27 @@ export type PutFalAiCsm1bRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiCsm1bRequestsByRequestIdCancelResponse =
-  PutFalAiCsm1bRequestsByRequestIdCancelResponses[keyof PutFalAiCsm1bRequestsByRequestIdCancelResponses];
+export type PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponse =
+  PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponses];
 
-export type PostFalAiCsm1bData = {
-  body: Csm1bInput;
+export type PostFalAiAceStepPromptToAudioData = {
+  body: AceStepPromptToAudioInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/csm-1b";
+  url: "/fal-ai/ace-step/prompt-to-audio";
 };
 
-export type PostFalAiCsm1bResponses = {
+export type PostFalAiAceStepPromptToAudioResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiCsm1bResponse =
-  PostFalAiCsm1bResponses[keyof PostFalAiCsm1bResponses];
+export type PostFalAiAceStepPromptToAudioResponse =
+  PostFalAiAceStepPromptToAudioResponses[keyof PostFalAiAceStepPromptToAudioResponses];
 
-export type GetFalAiCsm1bRequestsByRequestIdData = {
+export type GetFalAiAceStepPromptToAudioRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7313,20 +8616,20 @@ export type GetFalAiCsm1bRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/csm-1b/requests/{request_id}";
+  url: "/fal-ai/ace-step/prompt-to-audio/requests/{request_id}";
 };
 
-export type GetFalAiCsm1bRequestsByRequestIdResponses = {
+export type GetFalAiAceStepPromptToAudioRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Csm1bOutput;
+  200: AceStepPromptToAudioOutput;
 };
 
-export type GetFalAiCsm1bRequestsByRequestIdResponse =
-  GetFalAiCsm1bRequestsByRequestIdResponses[keyof GetFalAiCsm1bRequestsByRequestIdResponses];
+export type GetFalAiAceStepPromptToAudioRequestsByRequestIdResponse =
+  GetFalAiAceStepPromptToAudioRequestsByRequestIdResponses[keyof GetFalAiAceStepPromptToAudioRequestsByRequestIdResponses];
 
-export type GetFalAiDiffrhythmRequestsByRequestIdStatusData = {
+export type GetFalAiMinimaxMusicRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -7340,20 +8643,20 @@ export type GetFalAiDiffrhythmRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/diffrhythm/requests/{request_id}/status";
+  url: "/fal-ai/minimax-music/requests/{request_id}/status";
 };
 
-export type GetFalAiDiffrhythmRequestsByRequestIdStatusResponses = {
+export type GetFalAiMinimaxMusicRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiDiffrhythmRequestsByRequestIdStatusResponse =
-  GetFalAiDiffrhythmRequestsByRequestIdStatusResponses[keyof GetFalAiDiffrhythmRequestsByRequestIdStatusResponses];
+export type GetFalAiMinimaxMusicRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxMusicRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxMusicRequestsByRequestIdStatusResponses];
 
-export type PutFalAiDiffrhythmRequestsByRequestIdCancelData = {
+export type PutFalAiMinimaxMusicRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7362,10 +8665,10 @@ export type PutFalAiDiffrhythmRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/diffrhythm/requests/{request_id}/cancel";
+  url: "/fal-ai/minimax-music/requests/{request_id}/cancel";
 };
 
-export type PutFalAiDiffrhythmRequestsByRequestIdCancelResponses = {
+export type PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -7377,27 +8680,27 @@ export type PutFalAiDiffrhythmRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiDiffrhythmRequestsByRequestIdCancelResponse =
-  PutFalAiDiffrhythmRequestsByRequestIdCancelResponses[keyof PutFalAiDiffrhythmRequestsByRequestIdCancelResponses];
+export type PutFalAiMinimaxMusicRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses];
 
-export type PostFalAiDiffrhythmData = {
-  body: DiffrhythmInput;
+export type PostFalAiMinimaxMusicData = {
+  body: MinimaxMusicInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/diffrhythm";
+  url: "/fal-ai/minimax-music";
 };
 
-export type PostFalAiDiffrhythmResponses = {
+export type PostFalAiMinimaxMusicResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiDiffrhythmResponse =
-  PostFalAiDiffrhythmResponses[keyof PostFalAiDiffrhythmResponses];
+export type PostFalAiMinimaxMusicResponse =
+  PostFalAiMinimaxMusicResponses[keyof PostFalAiMinimaxMusicResponses];
 
-export type GetFalAiDiffrhythmRequestsByRequestIdData = {
+export type GetFalAiMinimaxMusicRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7406,20 +8709,20 @@ export type GetFalAiDiffrhythmRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/diffrhythm/requests/{request_id}";
+  url: "/fal-ai/minimax-music/requests/{request_id}";
 };
 
-export type GetFalAiDiffrhythmRequestsByRequestIdResponses = {
+export type GetFalAiMinimaxMusicRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: DiffrhythmOutput;
+  200: MinimaxMusicOutput;
 };
 
-export type GetFalAiDiffrhythmRequestsByRequestIdResponse =
-  GetFalAiDiffrhythmRequestsByRequestIdResponses[keyof GetFalAiDiffrhythmRequestsByRequestIdResponses];
+export type GetFalAiMinimaxMusicRequestsByRequestIdResponse =
+  GetFalAiMinimaxMusicRequestsByRequestIdResponses[keyof GetFalAiMinimaxMusicRequestsByRequestIdResponses];
 
-export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusData = {
+export type GetFalAiMinimaxMusicV15RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -7433,66 +8736,20 @@ export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/elevenlabs/tts/multilingual-v2/requests/{request_id}/status";
+  url: "/fal-ai/minimax-music/v1.5/requests/{request_id}/status";
 };
 
-export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/elevenlabs/tts/multilingual-v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiElevenlabsTtsMultilingualV2Data = {
-  body: ElevenlabsTtsMultilingualV2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/elevenlabs/tts/multilingual-v2";
-};
-
-export type PostFalAiElevenlabsTtsMultilingualV2Responses = {
+export type GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiElevenlabsTtsMultilingualV2Response =
-  PostFalAiElevenlabsTtsMultilingualV2Responses[keyof PostFalAiElevenlabsTtsMultilingualV2Responses];
+export type GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponses];
 
-export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdData = {
+export type PutFalAiMinimaxMusicV15RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7501,59 +8758,10 @@ export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/tts/multilingual-v2/requests/{request_id}";
+  url: "/fal-ai/minimax-music/v1.5/requests/{request_id}/cancel";
 };
 
-export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ElevenlabsTtsMultilingualV2Output;
-};
-
-export type GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponse =
-  GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponses];
-
-export type GetFalAiKokoroHindiRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kokoro/hindi/requests/{request_id}/status";
-};
-
-export type GetFalAiKokoroHindiRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiKokoroHindiRequestsByRequestIdStatusResponse =
-  GetFalAiKokoroHindiRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroHindiRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKokoroHindiRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/hindi/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKokoroHindiRequestsByRequestIdCancelResponses = {
+export type PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -7565,27 +8773,27 @@ export type PutFalAiKokoroHindiRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiKokoroHindiRequestsByRequestIdCancelResponse =
-  PutFalAiKokoroHindiRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroHindiRequestsByRequestIdCancelResponses];
+export type PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponses];
 
-export type PostFalAiKokoroHindiData = {
-  body: KokoroHindiInput;
+export type PostFalAiMinimaxMusicV15Data = {
+  body: MinimaxMusicV15Input;
   path?: never;
   query?: never;
-  url: "/fal-ai/kokoro/hindi";
+  url: "/fal-ai/minimax-music/v1.5";
 };
 
-export type PostFalAiKokoroHindiResponses = {
+export type PostFalAiMinimaxMusicV15Responses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiKokoroHindiResponse =
-  PostFalAiKokoroHindiResponses[keyof PostFalAiKokoroHindiResponses];
+export type PostFalAiMinimaxMusicV15Response =
+  PostFalAiMinimaxMusicV15Responses[keyof PostFalAiMinimaxMusicV15Responses];
 
-export type GetFalAiKokoroHindiRequestsByRequestIdData = {
+export type GetFalAiMinimaxMusicV15RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7594,18 +8802,18 @@ export type GetFalAiKokoroHindiRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/kokoro/hindi/requests/{request_id}";
+  url: "/fal-ai/minimax-music/v1.5/requests/{request_id}";
 };
 
-export type GetFalAiKokoroHindiRequestsByRequestIdResponses = {
+export type GetFalAiMinimaxMusicV15RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: KokoroHindiOutput;
+  200: MinimaxMusicV15Output;
 };
 
-export type GetFalAiKokoroHindiRequestsByRequestIdResponse =
-  GetFalAiKokoroHindiRequestsByRequestIdResponses[keyof GetFalAiKokoroHindiRequestsByRequestIdResponses];
+export type GetFalAiMinimaxMusicV15RequestsByRequestIdResponse =
+  GetFalAiMinimaxMusicV15RequestsByRequestIdResponses[keyof GetFalAiMinimaxMusicV15RequestsByRequestIdResponses];
 
 export type GetFalAiKokoroBritishEnglishRequestsByRequestIdStatusData = {
   body?: never;
@@ -7700,380 +8908,6 @@ export type GetFalAiKokoroBritishEnglishRequestsByRequestIdResponses = {
 export type GetFalAiKokoroBritishEnglishRequestsByRequestIdResponse =
   GetFalAiKokoroBritishEnglishRequestsByRequestIdResponses[keyof GetFalAiKokoroBritishEnglishRequestsByRequestIdResponses];
 
-export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kokoro/american-english/requests/{request_id}/status";
-};
-
-export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponse =
-  GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/american-english/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponse =
-  PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponses];
-
-export type PostFalAiKokoroAmericanEnglishData = {
-  body: KokoroAmericanEnglishInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/kokoro/american-english";
-};
-
-export type PostFalAiKokoroAmericanEnglishResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiKokoroAmericanEnglishResponse =
-  PostFalAiKokoroAmericanEnglishResponses[keyof PostFalAiKokoroAmericanEnglishResponses];
-
-export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/american-english/requests/{request_id}";
-};
-
-export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: KokoroAmericanEnglishOutput;
-};
-
-export type GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponse =
-  GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponses[keyof GetFalAiKokoroAmericanEnglishRequestsByRequestIdResponses];
-
-export type GetFalAiZonosRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/zonos/requests/{request_id}/status";
-};
-
-export type GetFalAiZonosRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiZonosRequestsByRequestIdStatusResponse =
-  GetFalAiZonosRequestsByRequestIdStatusResponses[keyof GetFalAiZonosRequestsByRequestIdStatusResponses];
-
-export type PutFalAiZonosRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/zonos/requests/{request_id}/cancel";
-};
-
-export type PutFalAiZonosRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiZonosRequestsByRequestIdCancelResponse =
-  PutFalAiZonosRequestsByRequestIdCancelResponses[keyof PutFalAiZonosRequestsByRequestIdCancelResponses];
-
-export type PostFalAiZonosData = {
-  body: ZonosInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/zonos";
-};
-
-export type PostFalAiZonosResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiZonosResponse =
-  PostFalAiZonosResponses[keyof PostFalAiZonosResponses];
-
-export type GetFalAiZonosRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/zonos/requests/{request_id}";
-};
-
-export type GetFalAiZonosRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ZonosOutput;
-};
-
-export type GetFalAiZonosRequestsByRequestIdResponse =
-  GetFalAiZonosRequestsByRequestIdResponses[keyof GetFalAiZonosRequestsByRequestIdResponses];
-
-export type GetFalAiKokoroItalianRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kokoro/italian/requests/{request_id}/status";
-};
-
-export type GetFalAiKokoroItalianRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiKokoroItalianRequestsByRequestIdStatusResponse =
-  GetFalAiKokoroItalianRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroItalianRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKokoroItalianRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/italian/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKokoroItalianRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiKokoroItalianRequestsByRequestIdCancelResponse =
-  PutFalAiKokoroItalianRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroItalianRequestsByRequestIdCancelResponses];
-
-export type PostFalAiKokoroItalianData = {
-  body: KokoroItalianInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/kokoro/italian";
-};
-
-export type PostFalAiKokoroItalianResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiKokoroItalianResponse =
-  PostFalAiKokoroItalianResponses[keyof PostFalAiKokoroItalianResponses];
-
-export type GetFalAiKokoroItalianRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/italian/requests/{request_id}";
-};
-
-export type GetFalAiKokoroItalianRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: KokoroItalianOutput;
-};
-
-export type GetFalAiKokoroItalianRequestsByRequestIdResponse =
-  GetFalAiKokoroItalianRequestsByRequestIdResponses[keyof GetFalAiKokoroItalianRequestsByRequestIdResponses];
-
-export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kokoro/brazilian-portuguese/requests/{request_id}/status";
-};
-
-export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponse =
-  GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/brazilian-portuguese/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponse =
-  PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponses];
-
-export type PostFalAiKokoroBrazilianPortugueseData = {
-  body: KokoroBrazilianPortugueseInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/kokoro/brazilian-portuguese";
-};
-
-export type PostFalAiKokoroBrazilianPortugueseResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiKokoroBrazilianPortugueseResponse =
-  PostFalAiKokoroBrazilianPortugueseResponses[keyof PostFalAiKokoroBrazilianPortugueseResponses];
-
-export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/brazilian-portuguese/requests/{request_id}";
-};
-
-export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: KokoroBrazilianPortugueseOutput;
-};
-
-export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponse =
-  GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponses[keyof GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponses];
-
 export type GetFalAiKokoroFrenchRequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -8166,192 +9000,6 @@ export type GetFalAiKokoroFrenchRequestsByRequestIdResponses = {
 
 export type GetFalAiKokoroFrenchRequestsByRequestIdResponse =
   GetFalAiKokoroFrenchRequestsByRequestIdResponses[keyof GetFalAiKokoroFrenchRequestsByRequestIdResponses];
-
-export type GetFalAiKokoroJapaneseRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kokoro/japanese/requests/{request_id}/status";
-};
-
-export type GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponse =
-  GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKokoroJapaneseRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/japanese/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponse =
-  PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponses];
-
-export type PostFalAiKokoroJapaneseData = {
-  body: KokoroJapaneseInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/kokoro/japanese";
-};
-
-export type PostFalAiKokoroJapaneseResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiKokoroJapaneseResponse =
-  PostFalAiKokoroJapaneseResponses[keyof PostFalAiKokoroJapaneseResponses];
-
-export type GetFalAiKokoroJapaneseRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/japanese/requests/{request_id}";
-};
-
-export type GetFalAiKokoroJapaneseRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: KokoroJapaneseOutput;
-};
-
-export type GetFalAiKokoroJapaneseRequestsByRequestIdResponse =
-  GetFalAiKokoroJapaneseRequestsByRequestIdResponses[keyof GetFalAiKokoroJapaneseRequestsByRequestIdResponses];
-
-export type GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/kokoro/mandarin-chinese/requests/{request_id}/status";
-};
-
-export type GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponse =
-  GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponses];
-
-export type PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/mandarin-chinese/requests/{request_id}/cancel";
-};
-
-export type PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponse =
-  PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponses];
-
-export type PostFalAiKokoroMandarinChineseData = {
-  body: KokoroMandarinChineseInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/kokoro/mandarin-chinese";
-};
-
-export type PostFalAiKokoroMandarinChineseResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiKokoroMandarinChineseResponse =
-  PostFalAiKokoroMandarinChineseResponses[keyof PostFalAiKokoroMandarinChineseResponses];
-
-export type GetFalAiKokoroMandarinChineseRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/kokoro/mandarin-chinese/requests/{request_id}";
-};
-
-export type GetFalAiKokoroMandarinChineseRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: KokoroMandarinChineseOutput;
-};
-
-export type GetFalAiKokoroMandarinChineseRequestsByRequestIdResponse =
-  GetFalAiKokoroMandarinChineseRequestsByRequestIdResponses[keyof GetFalAiKokoroMandarinChineseRequestsByRequestIdResponses];
 
 export type GetFalAiKokoroSpanishRequestsByRequestIdStatusData = {
   body?: never;
@@ -8539,7 +9187,7 @@ export type GetFalAiYueRequestsByRequestIdResponses = {
 export type GetFalAiYueRequestsByRequestIdResponse =
   GetFalAiYueRequestsByRequestIdResponses[keyof GetFalAiYueRequestsByRequestIdResponses];
 
-export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusData = {
+export type GetFalAiKokoroHindiRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -8553,20 +9201,20 @@ export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/mmaudio-v2/text-to-audio/requests/{request_id}/status";
+  url: "/fal-ai/kokoro/hindi/requests/{request_id}/status";
 };
 
-export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponses = {
+export type GetFalAiKokoroHindiRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponse =
-  GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponses[keyof GetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponses];
+export type GetFalAiKokoroHindiRequestsByRequestIdStatusResponse =
+  GetFalAiKokoroHindiRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroHindiRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelData = {
+export type PutFalAiKokoroHindiRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -8575,10 +9223,10 @@ export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/mmaudio-v2/text-to-audio/requests/{request_id}/cancel";
+  url: "/fal-ai/kokoro/hindi/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses = {
+export type PutFalAiKokoroHindiRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -8590,27 +9238,27 @@ export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponse =
-  PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses[keyof PutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponses];
+export type PutFalAiKokoroHindiRequestsByRequestIdCancelResponse =
+  PutFalAiKokoroHindiRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroHindiRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMmaudioV2TextToAudioData = {
-  body: MmaudioV2TextToAudioInput;
+export type PostFalAiKokoroHindiData = {
+  body: KokoroHindiInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/mmaudio-v2/text-to-audio";
+  url: "/fal-ai/kokoro/hindi";
 };
 
-export type PostFalAiMmaudioV2TextToAudioResponses = {
+export type PostFalAiKokoroHindiResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMmaudioV2TextToAudioResponse =
-  PostFalAiMmaudioV2TextToAudioResponses[keyof PostFalAiMmaudioV2TextToAudioResponses];
+export type PostFalAiKokoroHindiResponse =
+  PostFalAiKokoroHindiResponses[keyof PostFalAiKokoroHindiResponses];
 
-export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdData = {
+export type GetFalAiKokoroHindiRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -8619,20 +9267,20 @@ export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/mmaudio-v2/text-to-audio/requests/{request_id}";
+  url: "/fal-ai/kokoro/hindi/requests/{request_id}";
 };
 
-export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponses = {
+export type GetFalAiKokoroHindiRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MmaudioV2TextToAudioOutput;
+  200: KokoroHindiOutput;
 };
 
-export type GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponse =
-  GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponses[keyof GetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponses];
+export type GetFalAiKokoroHindiRequestsByRequestIdResponse =
+  GetFalAiKokoroHindiRequestsByRequestIdResponses[keyof GetFalAiKokoroHindiRequestsByRequestIdResponses];
 
-export type GetFalAiMinimaxMusicRequestsByRequestIdStatusData = {
+export type GetFalAiKokoroJapaneseRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -8646,20 +9294,20 @@ export type GetFalAiMinimaxMusicRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/minimax-music/requests/{request_id}/status";
+  url: "/fal-ai/kokoro/japanese/requests/{request_id}/status";
 };
 
-export type GetFalAiMinimaxMusicRequestsByRequestIdStatusResponses = {
+export type GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMinimaxMusicRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxMusicRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxMusicRequestsByRequestIdStatusResponses];
+export type GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponse =
+  GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroJapaneseRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMinimaxMusicRequestsByRequestIdCancelData = {
+export type PutFalAiKokoroJapaneseRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -8668,10 +9316,10 @@ export type PutFalAiMinimaxMusicRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax-music/requests/{request_id}/cancel";
+  url: "/fal-ai/kokoro/japanese/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses = {
+export type PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -8683,27 +9331,27 @@ export type PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMinimaxMusicRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxMusicRequestsByRequestIdCancelResponses];
+export type PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponse =
+  PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroJapaneseRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMinimaxMusicData = {
-  body: MinimaxMusicInput;
+export type PostFalAiKokoroJapaneseData = {
+  body: KokoroJapaneseInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/minimax-music";
+  url: "/fal-ai/kokoro/japanese";
 };
 
-export type PostFalAiMinimaxMusicResponses = {
+export type PostFalAiKokoroJapaneseResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMinimaxMusicResponse =
-  PostFalAiMinimaxMusicResponses[keyof PostFalAiMinimaxMusicResponses];
+export type PostFalAiKokoroJapaneseResponse =
+  PostFalAiKokoroJapaneseResponses[keyof PostFalAiKokoroJapaneseResponses];
 
-export type GetFalAiMinimaxMusicRequestsByRequestIdData = {
+export type GetFalAiKokoroJapaneseRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -8712,20 +9360,20 @@ export type GetFalAiMinimaxMusicRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax-music/requests/{request_id}";
+  url: "/fal-ai/kokoro/japanese/requests/{request_id}";
 };
 
-export type GetFalAiMinimaxMusicRequestsByRequestIdResponses = {
+export type GetFalAiKokoroJapaneseRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MinimaxMusicOutput;
+  200: KokoroJapaneseOutput;
 };
 
-export type GetFalAiMinimaxMusicRequestsByRequestIdResponse =
-  GetFalAiMinimaxMusicRequestsByRequestIdResponses[keyof GetFalAiMinimaxMusicRequestsByRequestIdResponses];
+export type GetFalAiKokoroJapaneseRequestsByRequestIdResponse =
+  GetFalAiKokoroJapaneseRequestsByRequestIdResponses[keyof GetFalAiKokoroJapaneseRequestsByRequestIdResponses];
 
-export type GetFalAiF5TtsRequestsByRequestIdStatusData = {
+export type GetFalAiZonosRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -8739,20 +9387,20 @@ export type GetFalAiF5TtsRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/f5-tts/requests/{request_id}/status";
+  url: "/fal-ai/zonos/requests/{request_id}/status";
 };
 
-export type GetFalAiF5TtsRequestsByRequestIdStatusResponses = {
+export type GetFalAiZonosRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiF5TtsRequestsByRequestIdStatusResponse =
-  GetFalAiF5TtsRequestsByRequestIdStatusResponses[keyof GetFalAiF5TtsRequestsByRequestIdStatusResponses];
+export type GetFalAiZonosRequestsByRequestIdStatusResponse =
+  GetFalAiZonosRequestsByRequestIdStatusResponses[keyof GetFalAiZonosRequestsByRequestIdStatusResponses];
 
-export type PutFalAiF5TtsRequestsByRequestIdCancelData = {
+export type PutFalAiZonosRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -8761,10 +9409,10 @@ export type PutFalAiF5TtsRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/f5-tts/requests/{request_id}/cancel";
+  url: "/fal-ai/zonos/requests/{request_id}/cancel";
 };
 
-export type PutFalAiF5TtsRequestsByRequestIdCancelResponses = {
+export type PutFalAiZonosRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -8776,27 +9424,27 @@ export type PutFalAiF5TtsRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiF5TtsRequestsByRequestIdCancelResponse =
-  PutFalAiF5TtsRequestsByRequestIdCancelResponses[keyof PutFalAiF5TtsRequestsByRequestIdCancelResponses];
+export type PutFalAiZonosRequestsByRequestIdCancelResponse =
+  PutFalAiZonosRequestsByRequestIdCancelResponses[keyof PutFalAiZonosRequestsByRequestIdCancelResponses];
 
-export type PostFalAiF5TtsData = {
-  body: F5TtsInput;
+export type PostFalAiZonosData = {
+  body: ZonosInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/f5-tts";
+  url: "/fal-ai/zonos";
 };
 
-export type PostFalAiF5TtsResponses = {
+export type PostFalAiZonosResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiF5TtsResponse =
-  PostFalAiF5TtsResponses[keyof PostFalAiF5TtsResponses];
+export type PostFalAiZonosResponse =
+  PostFalAiZonosResponses[keyof PostFalAiZonosResponses];
 
-export type GetFalAiF5TtsRequestsByRequestIdData = {
+export type GetFalAiZonosRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -8805,20 +9453,20 @@ export type GetFalAiF5TtsRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/f5-tts/requests/{request_id}";
+  url: "/fal-ai/zonos/requests/{request_id}";
 };
 
-export type GetFalAiF5TtsRequestsByRequestIdResponses = {
+export type GetFalAiZonosRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: F5TtsOutput;
+  200: ZonosOutput;
 };
 
-export type GetFalAiF5TtsRequestsByRequestIdResponse =
-  GetFalAiF5TtsRequestsByRequestIdResponses[keyof GetFalAiF5TtsRequestsByRequestIdResponses];
+export type GetFalAiZonosRequestsByRequestIdResponse =
+  GetFalAiZonosRequestsByRequestIdResponses[keyof GetFalAiZonosRequestsByRequestIdResponses];
 
-export type GetFalAiStableAudioRequestsByRequestIdStatusData = {
+export type GetSonautoV2InpaintRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -8832,20 +9480,20 @@ export type GetFalAiStableAudioRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/stable-audio/requests/{request_id}/status";
+  url: "/sonauto/v2/inpaint/requests/{request_id}/status";
 };
 
-export type GetFalAiStableAudioRequestsByRequestIdStatusResponses = {
+export type GetSonautoV2InpaintRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiStableAudioRequestsByRequestIdStatusResponse =
-  GetFalAiStableAudioRequestsByRequestIdStatusResponses[keyof GetFalAiStableAudioRequestsByRequestIdStatusResponses];
+export type GetSonautoV2InpaintRequestsByRequestIdStatusResponse =
+  GetSonautoV2InpaintRequestsByRequestIdStatusResponses[keyof GetSonautoV2InpaintRequestsByRequestIdStatusResponses];
 
-export type PutFalAiStableAudioRequestsByRequestIdCancelData = {
+export type PutSonautoV2InpaintRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -8854,10 +9502,10 @@ export type PutFalAiStableAudioRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/stable-audio/requests/{request_id}/cancel";
+  url: "/sonauto/v2/inpaint/requests/{request_id}/cancel";
 };
 
-export type PutFalAiStableAudioRequestsByRequestIdCancelResponses = {
+export type PutSonautoV2InpaintRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -8869,27 +9517,27 @@ export type PutFalAiStableAudioRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiStableAudioRequestsByRequestIdCancelResponse =
-  PutFalAiStableAudioRequestsByRequestIdCancelResponses[keyof PutFalAiStableAudioRequestsByRequestIdCancelResponses];
+export type PutSonautoV2InpaintRequestsByRequestIdCancelResponse =
+  PutSonautoV2InpaintRequestsByRequestIdCancelResponses[keyof PutSonautoV2InpaintRequestsByRequestIdCancelResponses];
 
-export type PostFalAiStableAudioData = {
-  body: StableAudioInput;
+export type PostSonautoV2InpaintData = {
+  body: V2InpaintInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/stable-audio";
+  url: "/sonauto/v2/inpaint";
 };
 
-export type PostFalAiStableAudioResponses = {
+export type PostSonautoV2InpaintResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiStableAudioResponse =
-  PostFalAiStableAudioResponses[keyof PostFalAiStableAudioResponses];
+export type PostSonautoV2InpaintResponse =
+  PostSonautoV2InpaintResponses[keyof PostSonautoV2InpaintResponses];
 
-export type GetFalAiStableAudioRequestsByRequestIdData = {
+export type GetSonautoV2InpaintRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -8898,20 +9546,20 @@ export type GetFalAiStableAudioRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/stable-audio/requests/{request_id}";
+  url: "/sonauto/v2/inpaint/requests/{request_id}";
 };
 
-export type GetFalAiStableAudioRequestsByRequestIdResponses = {
+export type GetSonautoV2InpaintRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: StableAudioOutput;
+  200: V2InpaintOutput;
 };
 
-export type GetFalAiStableAudioRequestsByRequestIdResponse =
-  GetFalAiStableAudioRequestsByRequestIdResponses[keyof GetFalAiStableAudioRequestsByRequestIdResponses];
+export type GetSonautoV2InpaintRequestsByRequestIdResponse =
+  GetSonautoV2InpaintRequestsByRequestIdResponses[keyof GetSonautoV2InpaintRequestsByRequestIdResponses];
 
-export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusData = {
+export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -8925,20 +9573,21 @@ export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/sam-audio/visual-separate/requests/{request_id}/status";
+  url: "/fal-ai/kokoro/brazilian-portuguese/requests/{request_id}/status";
 };
 
-export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
 
-export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponse =
-  GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponses[keyof GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponses];
+export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponse =
+  GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponses];
 
-export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelData = {
+export type PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -8947,10 +9596,104 @@ export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/sam-audio/visual-separate/requests/{request_id}/cancel";
+  url: "/fal-ai/kokoro/brazilian-portuguese/requests/{request_id}/cancel";
 };
 
-export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses = {
+export type PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponse =
+  PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKokoroBrazilianPortugueseData = {
+  body: KokoroBrazilianPortugueseInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kokoro/brazilian-portuguese";
+};
+
+export type PostFalAiKokoroBrazilianPortugueseResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKokoroBrazilianPortugueseResponse =
+  PostFalAiKokoroBrazilianPortugueseResponses[keyof PostFalAiKokoroBrazilianPortugueseResponses];
+
+export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kokoro/brazilian-portuguese/requests/{request_id}";
+};
+
+export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KokoroBrazilianPortugueseOutput;
+};
+
+export type GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponse =
+  GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponses[keyof GetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponses];
+
+export type GetFalAiCsm1bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/csm-1b/requests/{request_id}/status";
+};
+
+export type GetFalAiCsm1bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiCsm1bRequestsByRequestIdStatusResponse =
+  GetFalAiCsm1bRequestsByRequestIdStatusResponses[keyof GetFalAiCsm1bRequestsByRequestIdStatusResponses];
+
+export type PutFalAiCsm1bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/csm-1b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiCsm1bRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -8962,27 +9705,27 @@ export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponse =
-  PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses[keyof PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses];
+export type PutFalAiCsm1bRequestsByRequestIdCancelResponse =
+  PutFalAiCsm1bRequestsByRequestIdCancelResponses[keyof PutFalAiCsm1bRequestsByRequestIdCancelResponses];
 
-export type PostFalAiSamAudioVisualSeparateData = {
-  body: SamAudioVisualSeparateInput;
+export type PostFalAiCsm1bData = {
+  body: Csm1bInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/sam-audio/visual-separate";
+  url: "/fal-ai/csm-1b";
 };
 
-export type PostFalAiSamAudioVisualSeparateResponses = {
+export type PostFalAiCsm1bResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiSamAudioVisualSeparateResponse =
-  PostFalAiSamAudioVisualSeparateResponses[keyof PostFalAiSamAudioVisualSeparateResponses];
+export type PostFalAiCsm1bResponse =
+  PostFalAiCsm1bResponses[keyof PostFalAiCsm1bResponses];
 
-export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdData = {
+export type GetFalAiCsm1bRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -8991,18 +9734,485 @@ export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/sam-audio/visual-separate/requests/{request_id}";
+  url: "/fal-ai/csm-1b/requests/{request_id}";
 };
 
-export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponses = {
+export type GetFalAiCsm1bRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: SamAudioVisualSeparateOutput;
+  200: Csm1bOutput;
 };
 
-export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponse =
-  GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponses[keyof GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponses];
+export type GetFalAiCsm1bRequestsByRequestIdResponse =
+  GetFalAiCsm1bRequestsByRequestIdResponses[keyof GetFalAiCsm1bRequestsByRequestIdResponses];
+
+export type GetFalAiDiffrhythmRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/diffrhythm/requests/{request_id}/status";
+};
+
+export type GetFalAiDiffrhythmRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiDiffrhythmRequestsByRequestIdStatusResponse =
+  GetFalAiDiffrhythmRequestsByRequestIdStatusResponses[keyof GetFalAiDiffrhythmRequestsByRequestIdStatusResponses];
+
+export type PutFalAiDiffrhythmRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/diffrhythm/requests/{request_id}/cancel";
+};
+
+export type PutFalAiDiffrhythmRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiDiffrhythmRequestsByRequestIdCancelResponse =
+  PutFalAiDiffrhythmRequestsByRequestIdCancelResponses[keyof PutFalAiDiffrhythmRequestsByRequestIdCancelResponses];
+
+export type PostFalAiDiffrhythmData = {
+  body: DiffrhythmInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/diffrhythm";
+};
+
+export type PostFalAiDiffrhythmResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiDiffrhythmResponse =
+  PostFalAiDiffrhythmResponses[keyof PostFalAiDiffrhythmResponses];
+
+export type GetFalAiDiffrhythmRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/diffrhythm/requests/{request_id}";
+};
+
+export type GetFalAiDiffrhythmRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: DiffrhythmOutput;
+};
+
+export type GetFalAiDiffrhythmRequestsByRequestIdResponse =
+  GetFalAiDiffrhythmRequestsByRequestIdResponses[keyof GetFalAiDiffrhythmRequestsByRequestIdResponses];
+
+export type GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kokoro/mandarin-chinese/requests/{request_id}/status";
+};
+
+export type GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponse =
+  GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kokoro/mandarin-chinese/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponse =
+  PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKokoroMandarinChineseData = {
+  body: KokoroMandarinChineseInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kokoro/mandarin-chinese";
+};
+
+export type PostFalAiKokoroMandarinChineseResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKokoroMandarinChineseResponse =
+  PostFalAiKokoroMandarinChineseResponses[keyof PostFalAiKokoroMandarinChineseResponses];
+
+export type GetFalAiKokoroMandarinChineseRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kokoro/mandarin-chinese/requests/{request_id}";
+};
+
+export type GetFalAiKokoroMandarinChineseRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KokoroMandarinChineseOutput;
+};
+
+export type GetFalAiKokoroMandarinChineseRequestsByRequestIdResponse =
+  GetFalAiKokoroMandarinChineseRequestsByRequestIdResponses[keyof GetFalAiKokoroMandarinChineseRequestsByRequestIdResponses];
+
+export type GetFalAiKokoroItalianRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/kokoro/italian/requests/{request_id}/status";
+};
+
+export type GetFalAiKokoroItalianRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiKokoroItalianRequestsByRequestIdStatusResponse =
+  GetFalAiKokoroItalianRequestsByRequestIdStatusResponses[keyof GetFalAiKokoroItalianRequestsByRequestIdStatusResponses];
+
+export type PutFalAiKokoroItalianRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kokoro/italian/requests/{request_id}/cancel";
+};
+
+export type PutFalAiKokoroItalianRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiKokoroItalianRequestsByRequestIdCancelResponse =
+  PutFalAiKokoroItalianRequestsByRequestIdCancelResponses[keyof PutFalAiKokoroItalianRequestsByRequestIdCancelResponses];
+
+export type PostFalAiKokoroItalianData = {
+  body: KokoroItalianInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/kokoro/italian";
+};
+
+export type PostFalAiKokoroItalianResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiKokoroItalianResponse =
+  PostFalAiKokoroItalianResponses[keyof PostFalAiKokoroItalianResponses];
+
+export type GetFalAiKokoroItalianRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/kokoro/italian/requests/{request_id}";
+};
+
+export type GetFalAiKokoroItalianRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: KokoroItalianOutput;
+};
+
+export type GetFalAiKokoroItalianRequestsByRequestIdResponse =
+  GetFalAiKokoroItalianRequestsByRequestIdResponses[keyof GetFalAiKokoroItalianRequestsByRequestIdResponses];
+
+export type GetBeatovenMusicGenerationRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/beatoven/music-generation/requests/{request_id}/status";
+};
+
+export type GetBeatovenMusicGenerationRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetBeatovenMusicGenerationRequestsByRequestIdStatusResponse =
+  GetBeatovenMusicGenerationRequestsByRequestIdStatusResponses[keyof GetBeatovenMusicGenerationRequestsByRequestIdStatusResponses];
+
+export type PutBeatovenMusicGenerationRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/beatoven/music-generation/requests/{request_id}/cancel";
+};
+
+export type PutBeatovenMusicGenerationRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutBeatovenMusicGenerationRequestsByRequestIdCancelResponse =
+  PutBeatovenMusicGenerationRequestsByRequestIdCancelResponses[keyof PutBeatovenMusicGenerationRequestsByRequestIdCancelResponses];
+
+export type PostBeatovenMusicGenerationData = {
+  body: MusicGenerationInput;
+  path?: never;
+  query?: never;
+  url: "/beatoven/music-generation";
+};
+
+export type PostBeatovenMusicGenerationResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostBeatovenMusicGenerationResponse =
+  PostBeatovenMusicGenerationResponses[keyof PostBeatovenMusicGenerationResponses];
+
+export type GetBeatovenMusicGenerationRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/beatoven/music-generation/requests/{request_id}";
+};
+
+export type GetBeatovenMusicGenerationRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MusicGenerationOutput;
+};
+
+export type GetBeatovenMusicGenerationRequestsByRequestIdResponse =
+  GetBeatovenMusicGenerationRequestsByRequestIdResponses[keyof GetBeatovenMusicGenerationRequestsByRequestIdResponses];
+
+export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/beatoven/sound-effect-generation/requests/{request_id}/status";
+};
+
+export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponse =
+  GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses[keyof GetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponses];
+
+export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/beatoven/sound-effect-generation/requests/{request_id}/cancel";
+};
+
+export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponse =
+  PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses[keyof PutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponses];
+
+export type PostBeatovenSoundEffectGenerationData = {
+  body: SoundEffectGenerationInput;
+  path?: never;
+  query?: never;
+  url: "/beatoven/sound-effect-generation";
+};
+
+export type PostBeatovenSoundEffectGenerationResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostBeatovenSoundEffectGenerationResponse =
+  PostBeatovenSoundEffectGenerationResponses[keyof PostBeatovenSoundEffectGenerationResponses];
+
+export type GetBeatovenSoundEffectGenerationRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/beatoven/sound-effect-generation/requests/{request_id}";
+};
+
+export type GetBeatovenSoundEffectGenerationRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SoundEffectGenerationOutput;
+};
+
+export type GetBeatovenSoundEffectGenerationRequestsByRequestIdResponse =
+  GetBeatovenSoundEffectGenerationRequestsByRequestIdResponses[keyof GetBeatovenSoundEffectGenerationRequestsByRequestIdResponses];
 
 export type GetMireloAiSfxV15VideoToAudioRequestsByRequestIdStatusData = {
   body?: never;
@@ -9282,3 +10492,96 @@ export type GetMireloAiSfxV1VideoToAudioRequestsByRequestIdResponses = {
 
 export type GetMireloAiSfxV1VideoToAudioRequestsByRequestIdResponse =
   GetMireloAiSfxV1VideoToAudioRequestsByRequestIdResponses[keyof GetMireloAiSfxV1VideoToAudioRequestsByRequestIdResponses];
+
+export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sam-audio/visual-separate/requests/{request_id}/status";
+};
+
+export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponse =
+  GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponses[keyof GetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-audio/visual-separate/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponse =
+  PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses[keyof PutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSamAudioVisualSeparateData = {
+  body: SamAudioVisualSeparateInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sam-audio/visual-separate";
+};
+
+export type PostFalAiSamAudioVisualSeparateResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSamAudioVisualSeparateResponse =
+  PostFalAiSamAudioVisualSeparateResponses[keyof PostFalAiSamAudioVisualSeparateResponses];
+
+export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-audio/visual-separate/requests/{request_id}";
+};
+
+export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SamAudioVisualSeparateOutput;
+};
+
+export type GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponse =
+  GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponses[keyof GetFalAiSamAudioVisualSeparateRequestsByRequestIdResponses];

@@ -30,12 +30,12 @@ import {
   zFluxLoraPortraitTrainerOutput,
   zHunyuanVideoLoraTrainingInput,
   zHunyuanVideoLoraTrainingOutput,
-  zLtx2V2vTrainerInput,
-  zLtx2V2vTrainerOutput,
   zLtx2VideoTrainerInput,
   zLtx2VideoTrainerOutput,
   zLtxVideoTrainerInput,
   zLtxVideoTrainerOutput,
+  zPhotaCreateProfileInput,
+  zPhotaCreateProfileOutput,
   zQwenImage2512TrainerInput,
   zQwenImage2512TrainerOutput,
   zQwenImage2512TrainerV2Input,
@@ -60,6 +60,10 @@ import {
   zTurboFluxTrainerOutput,
   zWan22ImageTrainerInput,
   zWan22ImageTrainerOutput,
+  zWan22TrainerI2vA14bInput,
+  zWan22TrainerI2vA14bOutput,
+  zWan22TrainerT2vA14bInput,
+  zWan22TrainerT2vA14bOutput,
   zWanTrainerFlf2V720pInput,
   zWanTrainerFlf2V720pOutput,
   zWanTrainerI2V720pInput,
@@ -81,16 +85,6 @@ import {
 /** Zod schema for training endpoints using discriminatedUnion */
 export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
-    endpoint: z.literal("fal-ai/flux-krea-trainer"),
-    input: zFluxKreaTrainerInput,
-    output: zFluxKreaTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/flux-kontext-trainer"),
-    input: zFluxKontextTrainerInput,
-    output: zFluxKontextTrainerOutput,
-  }),
-  z.object({
     endpoint: z.literal("fal-ai/flux-lora-fast-training"),
     input: zFluxLoraFastTrainingInput,
     output: zFluxLoraFastTrainingOutput,
@@ -101,14 +95,9 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zFluxLoraPortraitTrainerOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/qwen-image-trainer-v2"),
-    input: zQwenImageTrainerV2Input,
-    output: zQwenImageTrainerV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/z-image-base-trainer"),
-    input: zZImageBaseTrainerInput,
-    output: zZImageBaseTrainerOutput,
+    endpoint: z.literal("fal-ai/flux-2-trainer"),
+    input: zFlux2TrainerInput,
+    output: zFlux2TrainerOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/z-image-turbo-trainer-v2"),
@@ -116,9 +105,14 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zZImageTurboTrainerV2Output,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/flux-2-klein-9b-base-trainer/edit"),
-    input: zFlux2Klein9bBaseTrainerEditInput,
-    output: zFlux2Klein9bBaseTrainerEditOutput,
+    endpoint: z.literal("fal-ai/z-image-trainer"),
+    input: zZImageTrainerInput,
+    output: zZImageTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/turbo-flux-trainer"),
+    input: zTurboFluxTrainerInput,
+    output: zTurboFluxTrainerOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/flux-2-klein-9b-base-trainer"),
@@ -126,9 +120,44 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zFlux2Klein9bBaseTrainerOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/flux-2-klein-4b-base-trainer"),
-    input: zFlux2Klein4bBaseTrainerInput,
-    output: zFlux2Klein4bBaseTrainerOutput,
+    endpoint: z.literal("fal-ai/wan-22-image-trainer"),
+    input: zWan22ImageTrainerInput,
+    output: zWan22ImageTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/flux-2-klein-9b-base-trainer/edit"),
+    input: zFlux2Klein9bBaseTrainerEditInput,
+    output: zFlux2Klein9bBaseTrainerEditOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/flux-2-trainer-v2"),
+    input: zFlux2TrainerV2Input,
+    output: zFlux2TrainerV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/flux-kontext-trainer"),
+    input: zFluxKontextTrainerInput,
+    output: zFluxKontextTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ltx2-video-trainer"),
+    input: zLtx2VideoTrainerInput,
+    output: zLtx2VideoTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/z-image-base-trainer"),
+    input: zZImageBaseTrainerInput,
+    output: zZImageBaseTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-trainer"),
+    input: zQwenImageTrainerInput,
+    output: zQwenImageTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-edit-2511-trainer"),
+    input: zQwenImageEdit2511TrainerInput,
+    output: zQwenImageEdit2511TrainerOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/flux-2-klein-4b-base-trainer/edit"),
@@ -141,104 +170,19 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zQwenImage2512TrainerV2Output,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/flux-2-trainer-v2/edit"),
-    input: zFlux2TrainerV2EditInput,
-    output: zFlux2TrainerV2EditOutput,
+    endpoint: z.literal("fal-ai/flux-2-klein-4b-base-trainer"),
+    input: zFlux2Klein4bBaseTrainerInput,
+    output: zFlux2Klein4bBaseTrainerOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/flux-2-trainer-v2"),
-    input: zFlux2TrainerV2Input,
-    output: zFlux2TrainerV2Output,
+    endpoint: z.literal("fal-ai/wan-22-trainer/i2v-a14b"),
+    input: zWan22TrainerI2vA14bInput,
+    output: zWan22TrainerI2vA14bOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/ltx2-v2v-trainer"),
-    input: zLtx2V2vTrainerInput,
-    output: zLtx2V2vTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ltx2-video-trainer"),
-    input: zLtx2VideoTrainerInput,
-    output: zLtx2VideoTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-2512-trainer"),
-    input: zQwenImage2512TrainerInput,
-    output: zQwenImage2512TrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-edit-2511-trainer"),
-    input: zQwenImageEdit2511TrainerInput,
-    output: zQwenImageEdit2511TrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-layered-trainer"),
-    input: zQwenImageLayeredTrainerInput,
-    output: zQwenImageLayeredTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-edit-2509-trainer"),
-    input: zQwenImageEdit2509TrainerInput,
-    output: zQwenImageEdit2509TrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/z-image-trainer"),
-    input: zZImageTrainerInput,
-    output: zZImageTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/flux-2-trainer/edit"),
-    input: zFlux2TrainerEditInput,
-    output: zFlux2TrainerEditOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/flux-2-trainer"),
-    input: zFlux2TrainerInput,
-    output: zFlux2TrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-edit-plus-trainer"),
-    input: zQwenImageEditPlusTrainerInput,
-    output: zQwenImageEditPlusTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-edit-trainer"),
-    input: zQwenImageEditTrainerInput,
-    output: zQwenImageEditTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-image-trainer"),
-    input: zQwenImageTrainerInput,
-    output: zQwenImageTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/wan-22-image-trainer"),
-    input: zWan22ImageTrainerInput,
-    output: zWan22ImageTrainerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/wan-trainer/t2v"),
-    input: zWanTrainerT2vInput,
-    output: zWanTrainerT2vOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/wan-trainer/t2v-14b"),
-    input: zWanTrainerT2V14bInput,
-    output: zWanTrainerT2V14bOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/wan-trainer/i2v-720p"),
-    input: zWanTrainerI2V720pInput,
-    output: zWanTrainerI2V720pOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/wan-trainer/flf2v-720p"),
-    input: zWanTrainerFlf2V720pInput,
-    output: zWanTrainerFlf2V720pOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ltx-video-trainer"),
-    input: zLtxVideoTrainerInput,
-    output: zLtxVideoTrainerOutput,
+    endpoint: z.literal("fal-ai/wan-22-trainer/t2v-a14b"),
+    input: zWan22TrainerT2vA14bInput,
+    output: zWan22TrainerT2vA14bOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/recraft/v3/create-style"),
@@ -246,9 +190,14 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zRecraftV3CreateStyleOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/turbo-flux-trainer"),
-    input: zTurboFluxTrainerInput,
-    output: zTurboFluxTrainerOutput,
+    endpoint: z.literal("fal-ai/flux-2-trainer/edit"),
+    input: zFlux2TrainerEditInput,
+    output: zFlux2TrainerEditOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-trainer-v2"),
+    input: zQwenImageTrainerV2Input,
+    output: zQwenImageTrainerV2Output,
   }),
   z.object({
     endpoint: z.literal("fal-ai/wan-trainer"),
@@ -256,9 +205,74 @@ export const TrainingEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zWanTrainerOutput,
   }),
   z.object({
+    endpoint: z.literal("fal-ai/qwen-image-2512-trainer"),
+    input: zQwenImage2512TrainerInput,
+    output: zQwenImage2512TrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/flux-krea-trainer"),
+    input: zFluxKreaTrainerInput,
+    output: zFluxKreaTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ltx-video-trainer"),
+    input: zLtxVideoTrainerInput,
+    output: zLtxVideoTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-layered-trainer"),
+    input: zQwenImageLayeredTrainerInput,
+    output: zQwenImageLayeredTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/wan-trainer/t2v"),
+    input: zWanTrainerT2vInput,
+    output: zWanTrainerT2vOutput,
+  }),
+  z.object({
     endpoint: z.literal("fal-ai/hunyuan-video-lora-training"),
     input: zHunyuanVideoLoraTrainingInput,
     output: zHunyuanVideoLoraTrainingOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/flux-2-trainer-v2/edit"),
+    input: zFlux2TrainerV2EditInput,
+    output: zFlux2TrainerV2EditOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-edit-trainer"),
+    input: zQwenImageEditTrainerInput,
+    output: zQwenImageEditTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/wan-trainer/t2v-14b"),
+    input: zWanTrainerT2V14bInput,
+    output: zWanTrainerT2V14bOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/phota/create-profile"),
+    input: zPhotaCreateProfileInput,
+    output: zPhotaCreateProfileOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-edit-2509-trainer"),
+    input: zQwenImageEdit2509TrainerInput,
+    output: zQwenImageEdit2509TrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-image-edit-plus-trainer"),
+    input: zQwenImageEditPlusTrainerInput,
+    output: zQwenImageEditPlusTrainerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/wan-trainer/flf2v-720p"),
+    input: zWanTrainerFlf2V720pInput,
+    output: zWanTrainerFlf2V720pOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/wan-trainer/i2v-720p"),
+    input: zWanTrainerI2V720pInput,
+    output: zWanTrainerI2V720pOutput,
   }),
 ]);
 

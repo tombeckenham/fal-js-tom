@@ -5,22 +5,44 @@ export type ClientOptions = {
 };
 
 /**
- * TTSOutput
+ * OutputFormat
+ *
+ * Output format configuration for the TTS API.
  */
-export type ElevenlabsTtsTurboV25Output = {
-  audio: FileType2;
+export type OutputFormat = {
   /**
-   * Timestamps
+   * Codec
    *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   * Audio codec. Supported: mp3, wav, pcm, mulaw, alaw.
    */
-  timestamps?: Array<unknown> | unknown;
+  codec?: "mp3" | "wav" | "pcm" | "mulaw" | "alaw";
+  /**
+   * Sample Rate
+   *
+   * Sample rate in Hz.
+   */
+  sample_rate?: 8000 | 16000 | 22050 | 24000 | 44100 | 48000;
+  /**
+   * Bit Rate
+   *
+   * Bit rate in bps. Only applicable for MP3 codec. Defaults to 128000 for MP3.
+   */
+  bit_rate?: 32000 | 64000 | 96000 | 128000 | 192000 | unknown;
+};
+
+/**
+ * XAITTSOutput
+ *
+ * Output for xAI text-to-speech generation.
+ */
+export type TtsV1Output = {
+  audio: File;
 };
 
 /**
  * File
  */
-export type FileType2 = {
+export type File = {
   /**
    * File Size
    *
@@ -48,205 +70,372 @@ export type FileType2 = {
 };
 
 /**
- * TextToSpeechRequest
+ * XAITTSInput
+ *
+ * Input for xAI text-to-speech generation.
  */
-export type ElevenlabsTtsTurboV25Input = {
-  /**
-   * Stability
-   *
-   * Voice stability (0-1)
-   */
-  stability?: number;
-  /**
-   * Next Text
-   *
-   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
-   */
-  next_text?: string | unknown;
-  /**
-   * Speed
-   *
-   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
-   */
-  speed?: number;
-  /**
-   * Style
-   *
-   * Style exaggeration (0-1)
-   */
-  style?: number;
+export type TtsV1Input = {
   /**
    * Text
    *
-   * The text to convert to speech
-   */
-  text: string;
-  /**
-   * Timestamps
-   *
-   * Whether to return timestamps for each word in the generated speech
-   */
-  timestamps?: boolean;
-  /**
-   * Similarity Boost
-   *
-   * Similarity boost (0-1)
-   */
-  similarity_boost?: number;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Apply Text Normalization
-   *
-   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-   */
-  apply_text_normalization?: "auto" | "on" | "off";
-  /**
-   * Previous Text
-   *
-   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
-   */
-  previous_text?: string | unknown;
-};
-
-/**
- * OrpheusOutput
- */
-export type OrpheusTtsOutput = {
-  audio: FileType2;
-};
-
-/**
- * OrpheusRequest
- */
-export type OrpheusTtsInput = {
-  /**
-   * Text
-   *
-   * The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
+   * The text to convert to speech. Maximum 15,000 characters. Supports speech tags for expressive delivery: inline tags like [laugh], [pause], [sigh] and wrapping tags like <whisper>text</whisper>, <slow>text</slow>.
    */
   text: string;
   /**
    * Voice
    *
-   * Voice ID for the desired voice.
+   * Voice to use for synthesis. eve: energetic, upbeat. ara: warm, friendly. rex: confident, clear. sal: smooth, balanced. leo: authoritative, strong.
    */
-  voice?: "tara" | "leah" | "jess" | "leo" | "dan" | "mia" | "zac" | "zoe";
+  voice?: "eve" | "ara" | "rex" | "sal" | "leo";
+  /**
+   * Language
+   *
+   * BCP-47 language code or 'auto' for automatic detection. Supported: en, zh, fr, de, hi, id, it, ja, ko, pt-BR, pt-PT, ru, es-MX, es-ES, tr, vi, bn, ar-EG, ar-SA, ar-AE.
+   */
+  language?:
+    | "auto"
+    | "en"
+    | "ar-EG"
+    | "ar-SA"
+    | "ar-AE"
+    | "bn"
+    | "zh"
+    | "fr"
+    | "de"
+    | "hi"
+    | "id"
+    | "it"
+    | "ja"
+    | "ko"
+    | "pt-BR"
+    | "pt-PT"
+    | "ru"
+    | "es-MX"
+    | "es-ES"
+    | "tr"
+    | "vi";
+  output_format?: OutputFormat;
+};
+
+/**
+ * MayaVoiceBatchOutput
+ *
+ * Output schema for batch Maya-1-Voice TTS generation
+ */
+export type MayaBatchOutput = {
+  /**
+   * Average Rtf
+   *
+   * Average real-time factor across all generations
+   */
+  average_rtf: number;
+  /**
+   * Durations
+   *
+   * Duration of each generated audio in seconds
+   */
+  durations: Array<number>;
+  /**
+   * Total Generation Time
+   *
+   * Total time taken to generate all audio files in seconds
+   */
+  total_generation_time: number;
+  /**
+   * Audios
+   *
+   * List of generated audio files
+   */
+  audios: Array<File>;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of all generated audio files
+   */
+  sample_rate: string;
+};
+
+/**
+ * MayaVoiceBatchInput
+ *
+ * Input schema for batch Maya-1-Voice TTS generation
+ */
+export type MayaBatchInput = {
   /**
    * Repetition Penalty
    *
-   * Repetition penalty (>= 1.1 required for stable generations).
+   * Repetition penalty for all generations.
    */
   repetition_penalty?: number;
   /**
+   * Top P
+   *
+   * Nucleus sampling parameter for all generations.
+   */
+  top_p?: number;
+  /**
+   * Output Format
+   *
+   * Output audio format for all generated speech files
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Texts
+   *
+   * List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.
+   */
+  texts: Array<string>;
+  /**
+   * Prompts
+   *
+   * List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.
+   */
+  prompts: Array<string>;
+  /**
+   * Max Tokens
+   *
+   * Maximum SNAC tokens per generation.
+   */
+  max_tokens?: number;
+  /**
    * Temperature
    *
-   * Temperature for generation (higher = more creative).
+   * Sampling temperature for all generations.
    */
   temperature?: number;
-};
-
-/**
- * DiaOutput
- */
-export type DiaTtsOutput = {
   /**
-   * The generated speech audio
+   * Sample Rate
+   *
+   * Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.
    */
-  audio: FileType2;
+  sample_rate?: "48 kHz" | "24 kHz";
 };
 
 /**
- * DiaRequest
+ * Output
  */
-export type DiaTtsInput = {
+export type InworldTtsOutput = {
+  audio: File;
+};
+
+/**
+ * InworldTTSInput
+ */
+export type InworldTtsInput = {
   /**
    * Text
    *
-   * The text to be converted to speech.
+   * The text to synthesize into speech.
    */
   text: string;
+  /**
+   * Voice
+   *
+   * The voice to use for synthesis.
+   */
+  voice?:
+    | "Loretta (en)"
+    | "Darlene (en)"
+    | "Marlene (en)"
+    | "Hank (en)"
+    | "Evelyn (en)"
+    | "Celeste (en)"
+    | "Pippa (en)"
+    | "Tessa (en)"
+    | "Liam (en)"
+    | "Callum (en)"
+    | "Hamish (en)"
+    | "Abby (en)"
+    | "Graham (en)"
+    | "Rupert (en)"
+    | "Mortimer (en)"
+    | "Snik (en)"
+    | "Anjali (en)"
+    | "Saanvi (en)"
+    | "Arjun (en)"
+    | "Claire (en)"
+    | "Oliver (en)"
+    | "Simon (en)"
+    | "Elliot (en)"
+    | "James (en)"
+    | "Serena (en)"
+    | "Gareth (en)"
+    | "Vinny (en)"
+    | "Lauren (en)"
+    | "Jessica (en)"
+    | "Ethan (en)"
+    | "Tyler (en)"
+    | "Jason (en)"
+    | "Chloe (en)"
+    | "Veronica (en)"
+    | "Victoria (en)"
+    | "Miranda (en)"
+    | "Sebastian (en)"
+    | "Victor (en)"
+    | "Malcolm (en)"
+    | "Kayla (en)"
+    | "Nate (en)"
+    | "Jake (en)"
+    | "Brian (en)"
+    | "Amina (en)"
+    | "Kelsey (en)"
+    | "Derek (en)"
+    | "Grant (en)"
+    | "Evan (en)"
+    | "Alex (en)"
+    | "Ashley (en)"
+    | "Craig (en)"
+    | "Deborah (en)"
+    | "Dennis (en)"
+    | "Edward (en)"
+    | "Elizabeth (en)"
+    | "Hades (en)"
+    | "Julia (en)"
+    | "Pixie (en)"
+    | "Mark (en)"
+    | "Olivia (en)"
+    | "Priya (en)"
+    | "Ronald (en)"
+    | "Sarah (en)"
+    | "Shaun (en)"
+    | "Theodore (en)"
+    | "Timothy (en)"
+    | "Wendy (en)"
+    | "Dominus (en)"
+    | "Hana (en)"
+    | "Clive (en)"
+    | "Carter (en)"
+    | "Blake (en)"
+    | "Luna (en)"
+    | "Yichen (zh)"
+    | "Xiaoyin (zh)"
+    | "Xinyi (zh)"
+    | "Jing (zh)"
+    | "Erik (nl)"
+    | "Katrien (nl)"
+    | "Lennart (nl)"
+    | "Lore (nl)"
+    | "Alain (fr)"
+    | "Hélène (fr)"
+    | "Mathieu (fr)"
+    | "Étienne (fr)"
+    | "Johanna (de)"
+    | "Josef (de)"
+    | "Gianni (it)"
+    | "Orietta (it)"
+    | "Asuka (ja)"
+    | "Satoshi (ja)"
+    | "Hyunwoo (ko)"
+    | "Minji (ko)"
+    | "Seojun (ko)"
+    | "Yoona (ko)"
+    | "Szymon (pl)"
+    | "Wojciech (pl)"
+    | "Heitor (pt)"
+    | "Maitê (pt)"
+    | "Diego (es)"
+    | "Lupita (es)"
+    | "Miguel (es)"
+    | "Rafael (es)"
+    | "Svetlana (ru)"
+    | "Elena (ru)"
+    | "Dmitry (ru)"
+    | "Nikolai (ru)"
+    | "Riya (hi)"
+    | "Manoj (hi)"
+    | "Yael (he)"
+    | "Oren (he)"
+    | "Nour (ar)"
+    | "Omar (ar)";
+  /**
+   * Sample Rate Hertz
+   *
+   * The sample rate in Hz for the output audio.
+   */
+  sample_rate_hertz?: 8000 | 16000 | 24000 | 32000 | 40000 | 48000;
+};
+
+export type MayaStreamOutput = unknown;
+
+/**
+ * MayaVoiceStreamingInput
+ *
+ * Input schema for Maya-1-Voice streaming TTS generation
+ */
+export type MayaStreamInput = {
+  /**
+   * Text
+   *
+   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
+   */
+  text: string;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
+   */
+  repetition_penalty?: number;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter. Controls diversity of token selection.
+   */
+  top_p?: number;
+  /**
+   * Prompt
+   *
+   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
+   */
+  prompt: string;
+  /**
+   * Output Format
+   *
+   * Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).
+   */
+  output_format?: "mp3" | "wav" | "pcm";
+  /**
+   * Max Tokens
+   *
+   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
+   */
+  max_tokens?: number;
+  /**
+   * Temperature
+   *
+   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
+   */
+  temperature?: number;
+  /**
+   * Sample Rate
+   *
+   * Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).
+   */
+  sample_rate?: "48 kHz" | "24 kHz";
 };
 
 /**
  * TextToSpeechOutput
  */
-export type MinimaxSpeech02HdOutput = {
+export type MinimaxPreviewSpeech25TurboOutput = {
   /**
    * Duration Ms
    *
    * Duration of the audio in milliseconds
    */
   duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
   audio: File;
 };
 
 /**
- * File
+ * TextToSpeechTurbov25Request
  */
-export type File = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
-};
-
-/**
- * TextToSpeechHDRequest
- */
-export type MinimaxSpeech02HdInput = {
+export type MinimaxPreviewSpeech25TurboInput = {
   /**
    * Text
    *
    * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
    */
   text: string;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
   voice_setting?: VoiceSetting;
   /**
    * Language Boost
@@ -254,6 +443,9 @@ export type MinimaxSpeech02HdInput = {
    * Enhance recognition of specified languages and dialects
    */
   language_boost?:
+    | "Persian"
+    | "Filipino"
+    | "Tamil"
     | "Chinese"
     | "Chinese,Yue"
     | "English"
@@ -291,7 +483,8 @@ export type MinimaxSpeech02HdInput = {
     | "Catalan"
     | "Nynorsk"
     | "Afrikaans"
-    | "auto";
+    | "auto"
+    | unknown;
   /**
    * Output Format
    *
@@ -299,16 +492,9 @@ export type MinimaxSpeech02HdInput = {
    */
   output_format?: "url" | "hex";
   /**
-   * Pronunciation Dict
-   *
    * Custom pronunciation dictionary for text replacement
    */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
+  pronunciation_dict?: PronunciationDict | unknown;
   audio_setting?: AudioSetting;
 };
 
@@ -400,216 +586,431 @@ export type VoiceSetting = {
     | "fearful"
     | "disgusted"
     | "surprised"
-    | "neutral";
+    | "neutral"
+    | unknown;
 };
 
 /**
- * TextToSpeechOutput
+ * VibeVoice_0_5BOutput
+ *
+ * Output schema for VibeVoice-0.5b TTS generation
  */
-export type MinimaxSpeech02TurboOutput = {
+export type Vibevoice05bOutput = {
   /**
-   * Duration Ms
+   * Rtf
    *
-   * Duration of the audio in milliseconds
+   * Real-time factor (generation_time / audio_duration). Lower is better.
    */
-  duration_ms: number;
+  rtf: number;
   /**
-   * Audio
+   * Duration
    *
-   * The generated audio file
+   * Duration of the generated audio in seconds
    */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: number;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
   audio: File;
 };
 
 /**
- * TextToSpeechTurboRequest
+ * VibeVoice0_5bInput
+ *
+ * Input schema for VibeVoice-0.5b TTS generation
  */
-export type MinimaxSpeech02TurboInput = {
+export type Vibevoice05bInput = {
   /**
-   * Text
+   * Script
    *
-   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
+   * The script to convert to speech.
    */
-  text: string;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
-  voice_setting?: VoiceSetting;
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto";
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  /**
-   * Pronunciation Dict
-   *
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
-  audio_setting?: AudioSetting;
-};
-
-/**
- * VoiceCloneOutput
- */
-export type MinimaxVoiceCloneOutput = {
-  /**
-   * Custom Voice Id
-   *
-   * The cloned voice ID for use with TTS
-   */
-  custom_voice_id: string;
-  /**
-   * Audio
-   *
-   * Preview audio generated with the cloned voice (if requested)
-   */
-  audio?: File;
-};
-
-/**
- * VoiceCloneRequest
- */
-export type MinimaxVoiceCloneInput = {
-  /**
-   * Model
-   *
-   * TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo
-   */
-  model?:
-    | "speech-02-hd"
-    | "speech-02-turbo"
-    | "speech-01-hd"
-    | "speech-01-turbo";
-  /**
-   * Text
-   *
-   * Text to generate a TTS preview with the cloned voice (optional)
-   */
-  text?: string;
-  /**
-   * Audio Url
-   *
-   *
-   * URL of the input audio file for voice cloning. Should be at least 10 seconds
-   * long. To retain the voice permanently, use it with a TTS (text-to-speech)
-   * endpoint at least once within 7 days. Otherwise, it will be
-   * automatically deleted.
-   *
-   */
-  audio_url: string;
-  /**
-   * Accuracy
-   *
-   * Text validation accuracy threshold (0-1)
-   */
-  accuracy?: number;
-  /**
-   * Noise Reduction
-   *
-   * Enable noise reduction for the cloned voice
-   */
-  noise_reduction?: boolean;
-  /**
-   * Need Volume Normalization
-   *
-   * Enable volume normalization for the cloned voice
-   */
-  need_volume_normalization?: boolean;
-};
-
-export type ChatterboxTextToSpeechOutput = unknown;
-
-/**
- * ChatterboxRequest
- */
-export type ChatterboxTextToSpeechInput = {
-  /**
-   * Text
-   *
-   * The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
-   */
-  text: string;
-  /**
-   * Exaggeration
-   *
-   * Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).
-   */
-  exaggeration?: number;
-  /**
-   * Audio Url
-   *
-   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
-   */
-  audio_url?: string;
-  /**
-   * Temperature
-   *
-   * Temperature for generation (higher = more creative).
-   */
-  temperature?: number;
+  script: string;
   /**
    * Seed
    *
-   * Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed..
+   * Random seed for reproducible generation.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Cfg
+   * Speaker
+   *
+   * Voice to use for speaking.
    */
-  cfg?: number;
+  speaker: "Frank" | "Wayne" | "Carter" | "Emma" | "Grace" | "Mike";
+  /**
+   * CFG Scale
+   *
+   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
+   */
+  cfg_scale?: number;
+};
+
+/**
+ * VibeVoiceOutput
+ *
+ * Output schema for VibeVoice TTS generation
+ */
+export type VibevoiceOutput = {
+  /**
+   * Rtf
+   *
+   * Real-time factor (generation_time / audio_duration). Lower is better.
+   */
+  rtf: number;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: number;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+  audio: File;
+};
+
+/**
+ * VibeVoiceInput
+ *
+ * Input schema for VibeVoice TTS generation
+ */
+export type VibevoiceInput = {
+  /**
+   * Script
+   *
+   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
+   */
+  script: string;
+  /**
+   * Seed
+   *
+   * Random seed for reproducible generation.
+   */
+  seed?: number | unknown;
+  /**
+   * Speakers
+   *
+   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
+   */
+  speakers: Array<VibeVoiceSpeaker>;
+  /**
+   * CFG Scale
+   *
+   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
+   */
+  cfg_scale?: number;
+};
+
+/**
+ * VibeVoiceSpeaker
+ */
+export type VibeVoiceSpeaker = {
+  /**
+   * Preset
+   *
+   * Default voice preset to use for the speaker. Not used if `audio_url` is provided.
+   */
+  preset?:
+    | "Alice [EN]"
+    | "Carter [EN]"
+    | "Frank [EN]"
+    | "Mary [EN] (Background Music)"
+    | "Maya [EN]"
+    | "Anchen [ZH] (Background Music)"
+    | "Bowen [ZH]"
+    | "Xinran [ZH]";
+  /**
+   * Audio URL
+   *
+   * URL to a voice sample audio file. If provided, `preset` will be ignored.
+   */
+  audio_url?: string | unknown;
+};
+
+/**
+ * Qwen3TTSOutput06b
+ */
+export type Qwen3TtsTextToSpeech06bOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * AudioFile
+ */
+export type AudioFile = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Duration
+   *
+   * The duration of the audio
+   */
+  duration?: number | unknown;
+  /**
+   * Channels
+   *
+   * The number of channels in the audio
+   */
+  channels?: number | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Sample Rate
+   *
+   * The sample rate of the audio
+   */
+  sample_rate?: number | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Bitrate
+   *
+   * The bitrate of the audio (e.g., '192k' or 192000)
+   */
+  bitrate?: string | number | unknown;
+};
+
+/**
+ * Qwen3TTSInput06b
+ */
+export type Qwen3TtsTextToSpeech06bInput = {
+  /**
+   * Prompt
+   *
+   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
+   */
+  prompt?: string | unknown;
+  /**
+   * Speaker Voice Embedding File Url
+   *
+   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice/0.6b` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
+   */
+  speaker_voice_embedding_file_url?: string | unknown;
+  /**
+   * Top P
+   *
+   * Top-p sampling parameter.
+   */
+  top_p?: number | unknown;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty to reduce repeated tokens/codes.
+   */
+  repetition_penalty?: number | unknown;
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number | unknown;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number | unknown;
+  /**
+   * Voice
+   *
+   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
+   */
+  voice?:
+    | "Vivian"
+    | "Serena"
+    | "Uncle_Fu"
+    | "Dylan"
+    | "Eric"
+    | "Ryan"
+    | "Aiden"
+    | "Ono_Anna"
+    | "Sohee"
+    | unknown;
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
+  /**
+   * Temperature
+   *
+   * Sampling temperature; higher => more random.
+   */
+  temperature?: number | unknown;
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number | unknown;
+  /**
+   * Language
+   *
+   * The language of the voice.
+   */
+  language?:
+    | "Auto"
+    | "English"
+    | "Chinese"
+    | "Spanish"
+    | "French"
+    | "German"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Portuguese"
+    | "Russian";
+  /**
+   * Max New Tokens
+   *
+   * Maximum number of new codec tokens to generate.
+   */
+  max_new_tokens?: number | unknown;
+  /**
+   * Subtalker Dosample
+   *
+   * Sampling switch for the sub-talker.
+   */
+  subtalker_dosample?: boolean | unknown;
+  /**
+   * Subtalker Top P
+   *
+   * Top-p for sub-talker sampling.
+   */
+  subtalker_top_p?: number | unknown;
+};
+
+/**
+ * MayaVoiceOutput
+ *
+ * Output schema for Maya-1-Voice TTS generation
+ */
+export type MayaOutput = {
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
+  /**
+   * Rtf
+   *
+   * Real-time factor (generation_time / audio_duration). Lower is better.
+   */
+  rtf: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: string;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+  audio: File;
+};
+
+/**
+ * MayaVoiceInput
+ *
+ * Input schema for Maya-1-Voice TTS generation
+ */
+export type MayaInput = {
+  /**
+   * Text
+   *
+   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
+   */
+  text: string;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
+   */
+  repetition_penalty?: number;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter. Controls diversity of token selection.
+   */
+  top_p?: number;
+  /**
+   * Prompt
+   *
+   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
+   */
+  prompt: string;
+  /**
+   * Output Format
+   *
+   * Output audio format for the generated speech
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Max Tokens
+   *
+   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
+   */
+  max_tokens?: number;
+  /**
+   * Temperature
+   *
+   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
+   */
+  temperature?: number;
+  /**
+   * Sample Rate
+   *
+   * Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.
+   */
+  sample_rate?: "48 kHz" | "24 kHz";
 };
 
 /**
@@ -728,143 +1129,6 @@ export type ChatterboxhdTextToSpeechInput = {
 };
 
 /**
- * VoiceDesignOutput
- */
-export type MinimaxVoiceDesignOutput = {
-  /**
-   * Custom Voice Id
-   *
-   * The voice_id of the generated voice
-   */
-  custom_voice_id: string;
-  /**
-   * Audio
-   *
-   * The preview audio using the generated voice
-   */
-  audio: File;
-};
-
-/**
- * VoiceDesignRequest
- */
-export type MinimaxVoiceDesignInput = {
-  /**
-   * Prompt
-   *
-   * Voice description prompt for generating a personalized voice
-   */
-  prompt: string;
-  /**
-   * Preview Text
-   *
-   * Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.
-   */
-  preview_text: string;
-};
-
-/**
- * TextToSpeechOutput
- */
-export type MinimaxPreviewSpeech25TurboOutput = {
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
-  audio: File;
-};
-
-/**
- * TextToSpeechTurbov25Request
- */
-export type MinimaxPreviewSpeech25TurboInput = {
-  /**
-   * Text
-   *
-   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
-   */
-  text: string;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
-  voice_setting?: VoiceSetting;
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Persian"
-    | "Filipino"
-    | "Tamil"
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto";
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  /**
-   * Pronunciation Dict
-   *
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
-  audio_setting?: AudioSetting;
-};
-
-/**
  * TextToSpeechOutput
  */
 export type MinimaxPreviewSpeech25HdOutput = {
@@ -874,11 +1138,6 @@ export type MinimaxPreviewSpeech25HdOutput = {
    * Duration of the audio in milliseconds
    */
   duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
   audio: File;
 };
 
@@ -892,11 +1151,6 @@ export type MinimaxPreviewSpeech25HdInput = {
    * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
    */
   text: string;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
   voice_setting?: VoiceSetting;
   /**
    * Language Boost
@@ -944,7 +1198,8 @@ export type MinimaxPreviewSpeech25HdInput = {
     | "Catalan"
     | "Nynorsk"
     | "Afrikaans"
-    | "auto";
+    | "auto"
+    | unknown;
   /**
    * Output Format
    *
@@ -952,194 +1207,16 @@ export type MinimaxPreviewSpeech25HdInput = {
    */
   output_format?: "url" | "hex";
   /**
-   * Pronunciation Dict
-   *
    * Custom pronunciation dictionary for text replacement
    */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
+  pronunciation_dict?: PronunciationDict | unknown;
   audio_setting?: AudioSetting;
-};
-
-/**
- * VibeVoiceOutput
- *
- * Output schema for VibeVoice TTS generation
- */
-export type VibevoiceOutput = {
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: number;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-  /**
-   * Audio
-   *
-   * The generated audio file containing the speech
-   */
-  audio: File;
-};
-
-/**
- * VibeVoiceInput
- *
- * Input schema for VibeVoice TTS generation
- */
-export type VibevoiceInput = {
-  /**
-   * Script
-   *
-   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
-   */
-  script: string;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number;
-  /**
-   * Speakers
-   *
-   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
-   */
-  speakers: Array<VibeVoiceSpeaker>;
-  /**
-   * CFG Scale
-   *
-   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
-   */
-  cfg_scale?: number;
-};
-
-/**
- * VibeVoiceSpeaker
- */
-export type VibeVoiceSpeaker = {
-  /**
-   * Preset
-   *
-   * Default voice preset to use for the speaker. Not used if `audio_url` is provided.
-   */
-  preset?:
-    | "Alice [EN]"
-    | "Carter [EN]"
-    | "Frank [EN]"
-    | "Mary [EN] (Background Music)"
-    | "Maya [EN]"
-    | "Anchen [ZH] (Background Music)"
-    | "Bowen [ZH]"
-    | "Xinran [ZH]";
-  /**
-   * Audio URL
-   *
-   * URL to a voice sample audio file. If provided, `preset` will be ignored.
-   */
-  audio_url?: string;
-};
-
-/**
- * VibeVoiceOutput
- *
- * Output schema for VibeVoice TTS generation
- */
-export type Vibevoice7bOutput = {
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: number;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-  /**
-   * Audio
-   *
-   * The generated audio file containing the speech
-   */
-  audio: File;
-};
-
-/**
- * VibeVoice7bInput
- *
- * Input schema for VibeVoice-7b TTS generation
- */
-export type Vibevoice7bInput = {
-  /**
-   * Script
-   *
-   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
-   */
-  script: string;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number;
-  /**
-   * Speakers
-   *
-   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
-   */
-  speakers: Array<VibeVoiceSpeaker>;
-  /**
-   * CFG Scale
-   *
-   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
-   */
-  cfg_scale?: number;
 };
 
 /**
  * ChatterboxMultilingualOutput
  */
 export type ChatterboxTextToSpeechMultilingualOutput = {
-  /**
-   * Audio
-   *
-   * The generated multilingual speech audio file
-   */
   audio: File;
 };
 
@@ -1181,7 +1258,8 @@ export type ChatterboxTextToSpeechMultilingualInput = {
     | "swedish"
     | "swahili"
     | "turkish"
-    | "chinese";
+    | "chinese"
+    | unknown;
   /**
    * Exaggeration
    *
@@ -1205,7 +1283,7 @@ export type ChatterboxTextToSpeechMultilingualInput = {
    *
    * Random seed for reproducible results. Set to 0 for random generation, or provide a specific number for consistent outputs.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * CFG Scale
    *
@@ -1215,14 +1293,105 @@ export type ChatterboxTextToSpeechMultilingualInput = {
 };
 
 /**
+ * Qwen3DesignVoiceOutput
+ */
+export type Qwen3TtsVoiceDesign17bOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Qwen3DesignVoiceInput
+ */
+export type Qwen3TtsVoiceDesign17bInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number | unknown;
+  /**
+   * Top P
+   *
+   * Top-p sampling parameter.
+   */
+  top_p?: number | unknown;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty to reduce repeated tokens/codes.
+   */
+  repetition_penalty?: number | unknown;
+  /**
+   * Max New Tokens
+   *
+   * Maximum number of new codec tokens to generate.
+   */
+  max_new_tokens?: number | unknown;
+  /**
+   * Language
+   *
+   * The language of the voice to be designed.
+   */
+  language?:
+    | "Auto"
+    | "English"
+    | "Chinese"
+    | "Spanish"
+    | "French"
+    | "German"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Portuguese"
+    | "Russian";
+  /**
+   * Prompt
+   *
+   * Optional prompt to guide the style of the generated speech.
+   */
+  prompt: string;
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number | unknown;
+  /**
+   * Subtalker Dosample
+   *
+   * Sampling switch for the sub-talker.
+   */
+  subtalker_dosample?: boolean | unknown;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number | unknown;
+  /**
+   * Subtalker Top P
+   *
+   * Top-p for sub-talker sampling.
+   */
+  subtalker_top_p?: number | unknown;
+  /**
+   * Temperature
+   *
+   * Sampling temperature; higher => more random.
+   */
+  temperature?: number | unknown;
+};
+
+/**
  * TTSOutput
  */
 export type KlingVideoV1TtsOutput = {
-  /**
-   * Audio
-   *
-   * The generated audio
-   */
   audio: File;
 };
 
@@ -1297,6 +1466,93 @@ export type KlingVideoV1TtsInput = {
 };
 
 /**
+ * DiaOutput
+ */
+export type DiaTtsOutput = {
+  audio: File;
+};
+
+/**
+ * DiaRequest
+ */
+export type DiaTtsInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+};
+
+/**
+ * VoiceDesignOutput
+ */
+export type MinimaxVoiceDesignOutput = {
+  /**
+   * Custom Voice Id
+   *
+   * The voice_id of the generated voice
+   */
+  custom_voice_id: string;
+  audio: File;
+};
+
+/**
+ * VoiceDesignRequest
+ */
+export type MinimaxVoiceDesignInput = {
+  /**
+   * Prompt
+   *
+   * Voice description prompt for generating a personalized voice
+   */
+  prompt: string;
+  /**
+   * Preview Text
+   *
+   * Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.
+   */
+  preview_text: string;
+};
+
+/**
+ * OrpheusOutput
+ */
+export type OrpheusTtsOutput = {
+  audio: File;
+};
+
+/**
+ * OrpheusRequest
+ */
+export type OrpheusTtsInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
+   */
+  text: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice?: "tara" | "leah" | "jess" | "leo" | "dan" | "mia" | "zac" | "zoe";
+  /**
+   * Repetition Penalty
+   *
+   * Repetition penalty (>= 1.1 required for stable generations).
+   */
+  repetition_penalty?: number;
+  /**
+   * Temperature
+   *
+   * Temperature for generation (higher = more creative).
+   */
+  temperature?: number;
+};
+
+/**
  * EmotionalStrengths
  */
 export type EmotionalStrengths = {
@@ -1313,11 +1569,11 @@ export type EmotionalStrengths = {
    */
   calm?: number;
   /**
-   * Disgusted
+   * Surprised
    *
-   * Strength of disgust emotion
+   * Strength of surprise emotion
    */
-  disgusted?: number;
+  surprised?: number;
   /**
    * Angry
    *
@@ -1337,11 +1593,11 @@ export type EmotionalStrengths = {
    */
   melancholic?: number;
   /**
-   * Surprised
+   * Disgusted
    *
-   * Strength of surprise emotion
+   * Strength of disgust emotion
    */
-  surprised?: number;
+  disgusted?: number;
   /**
    * Happy
    *
@@ -1354,11 +1610,6 @@ export type EmotionalStrengths = {
  * IndexTTS2Output
  */
 export type IndexTts2TextToSpeechOutput = {
-  /**
-   * Audio
-   *
-   * The generated audio file in base64 format.
-   */
   audio: File;
 };
 
@@ -1373,11 +1624,9 @@ export type IndexTts2TextToSpeechInput = {
    */
   prompt: string;
   /**
-   * Emotional Strengths
-   *
    * The strengths of individual emotions for fine-grained control.
    */
-  emotional_strengths?: EmotionalStrengths;
+  emotional_strengths?: EmotionalStrengths | unknown;
   /**
    * Strength
    *
@@ -1389,7 +1638,7 @@ export type IndexTts2TextToSpeechInput = {
    *
    * The emotional reference audio file to extract the style from.
    */
-  emotional_audio_url?: string;
+  emotional_audio_url?: string | unknown;
   /**
    * Audio Url
    *
@@ -1401,7 +1650,7 @@ export type IndexTts2TextToSpeechInput = {
    *
    * The emotional prompt to influence the emotional style. Must be used together with should_use_prompt_for_emotion.
    */
-  emotion_prompt?: string;
+  emotion_prompt?: string | unknown;
   /**
    * Should Use Prompt For Emotion
    *
@@ -1411,33 +1660,153 @@ export type IndexTts2TextToSpeechInput = {
 };
 
 /**
- * TextToSpeechHD26Output
+ * Output
  */
-export type MinimaxSpeech26HdOutput = {
+export type LuxTtsOutput = {
+  /**
+   * Timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  /**
+   * Seed
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * Input
+ */
+export type LuxTtsInput = {
+  /**
+   * Prompt
+   *
+   * The text to be converted to speech.
+   */
+  prompt: string;
+  /**
+   * Audio Url
+   *
+   * URL of the reference audio file for voice cloning. The model will mimic the voice characteristics from this audio.
+   */
+  audio_url: string;
+  /**
+   * Num Inference Steps
+   *
+   * Number of flow-matching inference steps. 4 is recommended for best efficiency.
+   */
+  num_inference_steps?: number;
+  /**
+   * Guidance Scale
+   *
+   * Classifier-free guidance scale. Higher values increase adherence to the reference voice at the cost of diversity.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Max Ref Length
+   *
+   * Maximum length of the reference audio to use for voice encoding, in seconds. Longer durations capture more voice characteristics but increase processing time.
+   */
+  max_ref_length?: number;
+};
+
+/**
+ * VibeVoiceOutput
+ *
+ * Output schema for VibeVoice TTS generation
+ */
+export type Vibevoice7bOutput = {
+  /**
+   * Rtf
+   *
+   * Real-time factor (generation_time / audio_duration). Lower is better.
+   */
+  rtf: number;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: number;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+  audio: File;
+};
+
+/**
+ * VibeVoice7bInput
+ *
+ * Input schema for VibeVoice-7b TTS generation
+ */
+export type Vibevoice7bInput = {
+  /**
+   * Script
+   *
+   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
+   */
+  script: string;
+  /**
+   * Seed
+   *
+   * Random seed for reproducible generation.
+   */
+  seed?: number | unknown;
+  /**
+   * Speakers
+   *
+   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
+   */
+  speakers: Array<VibeVoiceSpeaker>;
+  /**
+   * CFG Scale
+   *
+   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
+   */
+  cfg_scale?: number;
+};
+
+/**
+ * TextToSpeechOutput
+ */
+export type MinimaxSpeech02TurboOutput = {
   /**
    * Duration Ms
    *
    * Duration of the audio in milliseconds
    */
   duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
   audio: File;
 };
 
 /**
- * TextToSpeechHD26Request
+ * TextToSpeechTurboRequest
  */
-export type MinimaxSpeech26HdInput = {
+export type MinimaxSpeech02TurboInput = {
   /**
-   * Prompt
+   * Text
    *
-   * Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.
+   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
    */
-  prompt: string;
+  text: string;
+  voice_setting?: VoiceSetting;
   /**
    * Language Boost
    *
@@ -1481,7 +1850,8 @@ export type MinimaxSpeech26HdInput = {
     | "Catalan"
     | "Nynorsk"
     | "Afrikaans"
-    | "auto";
+    | "auto"
+    | unknown;
   /**
    * Output Format
    *
@@ -1489,59 +1859,10 @@ export type MinimaxSpeech26HdInput = {
    */
   output_format?: "url" | "hex";
   /**
-   * Pronunciation Dict
-   *
    * Custom pronunciation dictionary for text replacement
    */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
-  voice_setting?: VoiceSetting;
-  /**
-   * Normalization Setting
-   *
-   * Loudness normalization settings for the audio
-   */
-  normalization_setting?: LoudnessNormalizationSetting;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
+  pronunciation_dict?: PronunciationDict | unknown;
   audio_setting?: AudioSetting;
-};
-
-/**
- * LoudnessNormalizationSetting
- */
-export type LoudnessNormalizationSetting = {
-  /**
-   * Enabled
-   *
-   * Enable loudness normalization for the audio
-   */
-  enabled?: boolean;
-  /**
-   * Target Loudness
-   *
-   * Target loudness in LUFS (default -18.0)
-   */
-  target_loudness?: number;
-  /**
-   * Target Range
-   *
-   * Target loudness range in LU (default 8.0)
-   */
-  target_range?: number;
-  /**
-   * Target Peak
-   *
-   * Target peak level in dBTP (default -0.5).
-   */
-  target_peak?: number;
 };
 
 /**
@@ -1554,11 +1875,6 @@ export type MinimaxSpeech26TurboOutput = {
    * Duration of the audio in milliseconds
    */
   duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
   audio: File;
 };
 
@@ -1615,7 +1931,8 @@ export type MinimaxSpeech26TurboInput = {
     | "Catalan"
     | "Nynorsk"
     | "Afrikaans"
-    | "auto";
+    | "auto"
+    | unknown;
   /**
    * Output Format
    *
@@ -1623,797 +1940,67 @@ export type MinimaxSpeech26TurboInput = {
    */
   output_format?: "url" | "hex";
   /**
-   * Pronunciation Dict
-   *
    * Custom pronunciation dictionary for text replacement
    */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
+  pronunciation_dict?: PronunciationDict | unknown;
   voice_setting?: VoiceSetting;
-  /**
-   * Normalization Setting
-   *
-   * Loudness normalization settings for the audio
-   */
   normalization_setting?: LoudnessNormalizationSetting;
-  /**
-   * Audio Setting
-   *
-   * Audio configuration settings
-   */
   audio_setting?: AudioSetting;
 };
 
 /**
- * MayaVoiceOutput
- *
- * Output schema for Maya-1-Voice TTS generation
+ * LoudnessNormalizationSetting
  */
-export type MayaOutput = {
+export type LoudnessNormalizationSetting = {
   /**
-   * Rtf
+   * Enabled
    *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
+   * Enable loudness normalization for the audio
    */
-  rtf: number;
+  enabled?: boolean;
   /**
-   * Duration
+   * Target Loudness
    *
-   * Duration of the generated audio in seconds
+   * Target loudness in LUFS (default -18.0)
    */
-  duration: number;
+  target_loudness?: number;
   /**
-   * Sample Rate
+   * Target Range
    *
-   * Sample rate of the generated audio
+   * Target loudness range in LU (default 8.0)
    */
-  sample_rate: string;
+  target_range?: number;
   /**
-   * Generation Time
+   * Target Peak
    *
-   * Time taken to generate the audio in seconds
+   * Target peak level in dBTP (default -0.5).
    */
-  generation_time: number;
-  audio: FileType2;
+  target_peak?: number;
 };
 
 /**
- * MayaVoiceInput
- *
- * Input schema for Maya-1-Voice TTS generation
+ * TextToSpeechHD26Output
  */
-export type MayaInput = {
-  /**
-   * Repetition Penalty
-   *
-   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
-   */
-  repetition_penalty?: number;
-  /**
-   * Prompt
-   *
-   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
-   */
-  prompt: string;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter. Controls diversity of token selection.
-   */
-  top_p?: number;
-  /**
-   * Text
-   *
-   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
-   */
-  text: string;
-  /**
-   * Output Format
-   *
-   * Output audio format for the generated speech
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Max Tokens
-   *
-   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
-   */
-  temperature?: number;
-  /**
-   * Sample Rate
-   *
-   * Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.
-   */
-  sample_rate?: "48 kHz" | "24 kHz";
-};
-
-export type MayaStreamOutput = unknown;
-
-/**
- * MayaVoiceStreamingInput
- *
- * Input schema for Maya-1-Voice streaming TTS generation
- */
-export type MayaStreamInput = {
-  /**
-   * Repetition Penalty
-   *
-   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
-   */
-  repetition_penalty?: number;
-  /**
-   * Prompt
-   *
-   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
-   */
-  prompt: string;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter. Controls diversity of token selection.
-   */
-  top_p?: number;
-  /**
-   * Text
-   *
-   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
-   */
-  text: string;
-  /**
-   * Output Format
-   *
-   * Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).
-   */
-  output_format?: "mp3" | "wav" | "pcm";
-  /**
-   * Max Tokens
-   *
-   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
-   */
-  temperature?: number;
-  /**
-   * Sample Rate
-   *
-   * Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).
-   */
-  sample_rate?: "48 kHz" | "24 kHz";
-};
-
-/**
- * MayaVoiceBatchOutput
- *
- * Output schema for batch Maya-1-Voice TTS generation
- */
-export type MayaBatchOutput = {
-  /**
-   * Average Rtf
-   *
-   * Average real-time factor across all generations
-   */
-  average_rtf: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of all generated audio files
-   */
-  sample_rate: string;
-  /**
-   * Total Generation Time
-   *
-   * Total time taken to generate all audio files in seconds
-   */
-  total_generation_time: number;
-  /**
-   * Audios
-   *
-   * List of generated audio files
-   */
-  audios: Array<FileType2>;
-  /**
-   * Durations
-   *
-   * Duration of each generated audio in seconds
-   */
-  durations: Array<number>;
-};
-
-/**
- * MayaVoiceBatchInput
- *
- * Input schema for batch Maya-1-Voice TTS generation
- */
-export type MayaBatchInput = {
-  /**
-   * Repetition Penalty
-   *
-   * Repetition penalty for all generations.
-   */
-  repetition_penalty?: number;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter for all generations.
-   */
-  top_p?: number;
-  /**
-   * Output Format
-   *
-   * Output audio format for all generated speech files
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Texts
-   *
-   * List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.
-   */
-  texts: Array<string>;
-  /**
-   * Prompts
-   *
-   * List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.
-   */
-  prompts: Array<string>;
-  /**
-   * Max Tokens
-   *
-   * Maximum SNAC tokens per generation.
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Sampling temperature for all generations.
-   */
-  temperature?: number;
-  /**
-   * Sample Rate
-   *
-   * Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.
-   */
-  sample_rate?: "48 kHz" | "24 kHz";
-};
-
-/**
- * VibeVoice_0_5BOutput
- *
- * Output schema for VibeVoice-0.5b TTS generation
- */
-export type Vibevoice05bOutput = {
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: number;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-  /**
-   * Audio
-   *
-   * The generated audio file containing the speech
-   */
-  audio: File;
-};
-
-/**
- * VibeVoice0_5bInput
- *
- * Input schema for VibeVoice-0.5b TTS generation
- */
-export type Vibevoice05bInput = {
-  /**
-   * Script
-   *
-   * The script to convert to speech.
-   */
-  script: string;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number;
-  /**
-   * Speaker
-   *
-   * Voice to use for speaking.
-   */
-  speaker: "Frank" | "Wayne" | "Carter" | "Emma" | "Grace" | "Mike";
-  /**
-   * CFG Scale
-   *
-   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
-   */
-  cfg_scale?: number;
-};
-
-/**
- * Qwen3TTSOutput06b
- */
-export type Qwen3TtsTextToSpeech06bOutput = {
-  /**
-   * Audio
-   *
-   * The generated speech audio file.
-   */
-  audio: AudioFile;
-};
-
-/**
- * AudioFile
- */
-export type AudioFile = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number;
-  /**
-   * Duration
-   *
-   * The duration of the audio
-   */
-  duration?: number;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
-  /**
-   * Bitrate
-   *
-   * The bitrate of the audio (e.g., '192k' or 192000)
-   */
-  bitrate?: string | number;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Sample Rate
-   *
-   * The sample rate of the audio
-   */
-  sample_rate?: number;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * Channels
-   *
-   * The number of channels in the audio
-   */
-  channels?: number;
-};
-
-/**
- * Qwen3TTSInput06b
- */
-export type Qwen3TtsTextToSpeech06bInput = {
-  /**
-   * Prompt
-   *
-   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
-   */
-  prompt?: string;
-  /**
-   * Speaker Voice Embedding File Url
-   *
-   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice/0.6b` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
-   */
-  speaker_voice_embedding_file_url?: string;
-  /**
-   * Top P
-   *
-   * Top-p sampling parameter.
-   */
-  top_p?: number;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty to reduce repeated tokens/codes.
-   */
-  repetition_penalty?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-  /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number;
-  /**
-   * Voice
-   *
-   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
-   */
-  voice?:
-    | "Vivian"
-    | "Serena"
-    | "Uncle_Fu"
-    | "Dylan"
-    | "Eric"
-    | "Ryan"
-    | "Aiden"
-    | "Ono_Anna"
-    | "Sohee";
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string;
-  /**
-   * Temperature
-   *
-   * Sampling temperature; higher => more random.
-   */
-  temperature?: number;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number;
-  /**
-   * Language
-   *
-   * The language of the voice.
-   */
-  language?:
-    | "Auto"
-    | "English"
-    | "Chinese"
-    | "Spanish"
-    | "French"
-    | "German"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Portuguese"
-    | "Russian";
-  /**
-   * Max New Tokens
-   *
-   * Maximum number of new codec tokens to generate.
-   */
-  max_new_tokens?: number;
-  /**
-   * Subtalker Dosample
-   *
-   * Sampling switch for the sub-talker.
-   */
-  subtalker_dosample?: boolean;
-  /**
-   * Subtalker Top P
-   *
-   * Top-p for sub-talker sampling.
-   */
-  subtalker_top_p?: number;
-};
-
-/**
- * Qwen3TTSOutput
- */
-export type Qwen3TtsTextToSpeech17bOutput = {
-  /**
-   * Audio
-   *
-   * The generated speech audio file.
-   */
-  audio: AudioFile;
-};
-
-/**
- * Qwen3TTSInput
- */
-export type Qwen3TtsTextToSpeech17bInput = {
-  /**
-   * Prompt
-   *
-   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
-   */
-  prompt?: string;
-  /**
-   * Speaker Voice Embedding File Url
-   *
-   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
-   */
-  speaker_voice_embedding_file_url?: string;
-  /**
-   * Top P
-   *
-   * Top-p sampling parameter.
-   */
-  top_p?: number;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty to reduce repeated tokens/codes.
-   */
-  repetition_penalty?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-  /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number;
-  /**
-   * Voice
-   *
-   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
-   */
-  voice?:
-    | "Vivian"
-    | "Serena"
-    | "Uncle_Fu"
-    | "Dylan"
-    | "Eric"
-    | "Ryan"
-    | "Aiden"
-    | "Ono_Anna"
-    | "Sohee";
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string;
-  /**
-   * Temperature
-   *
-   * Sampling temperature; higher => more random.
-   */
-  temperature?: number;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number;
-  /**
-   * Language
-   *
-   * The language of the voice.
-   */
-  language?:
-    | "Auto"
-    | "English"
-    | "Chinese"
-    | "Spanish"
-    | "French"
-    | "German"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Portuguese"
-    | "Russian";
-  /**
-   * Max New Tokens
-   *
-   * Maximum number of new codec tokens to generate.
-   */
-  max_new_tokens?: number;
-  /**
-   * Subtalker Dosample
-   *
-   * Sampling switch for the sub-talker.
-   */
-  subtalker_dosample?: boolean;
-  /**
-   * Subtalker Top P
-   *
-   * Top-p for sub-talker sampling.
-   */
-  subtalker_top_p?: number;
-};
-
-/**
- * Qwen3DesignVoiceOutput
- */
-export type Qwen3TtsVoiceDesign17bOutput = {
-  /**
-   * Audio
-   *
-   * The generated speech audio file.
-   */
-  audio: AudioFile;
-};
-
-/**
- * Qwen3DesignVoiceInput
- */
-export type Qwen3TtsVoiceDesign17bInput = {
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number;
-  /**
-   * Top P
-   *
-   * Top-p sampling parameter.
-   */
-  top_p?: number;
-  /**
-   * Prompt
-   *
-   * Optional prompt to guide the style of the generated speech.
-   */
-  prompt: string;
-  /**
-   * Max New Tokens
-   *
-   * Maximum number of new codec tokens to generate.
-   */
-  max_new_tokens?: number;
-  /**
-   * Language
-   *
-   * The language of the voice to be designed.
-   */
-  language?:
-    | "Auto"
-    | "English"
-    | "Chinese"
-    | "Spanish"
-    | "French"
-    | "German"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Portuguese"
-    | "Russian";
-  /**
-   * Repetition Penalty
-   *
-   * Penalty to reduce repeated tokens/codes.
-   */
-  repetition_penalty?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-  /**
-   * Subtalker Dosample
-   *
-   * Sampling switch for the sub-talker.
-   */
-  subtalker_dosample?: boolean;
-  /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number;
-  /**
-   * Subtalker Top P
-   *
-   * Top-p for sub-talker sampling.
-   */
-  subtalker_top_p?: number;
-  /**
-   * Temperature
-   *
-   * Sampling temperature; higher => more random.
-   */
-  temperature?: number;
-};
-
-/**
- * TextToSpeechTurbo28Output
- *
- * Output model for Speech 2.8 Turbo.
- */
-export type MinimaxSpeech28TurboOutput = {
+export type MinimaxSpeech26HdOutput = {
   /**
    * Duration Ms
    *
    * Duration of the audio in milliseconds
    */
   duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
   audio: File;
 };
 
 /**
- * TextToSpeechTurbo28Request
- *
- * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
+ * TextToSpeechHD26Request
  */
-export type MinimaxSpeech28TurboInput = {
+export type MinimaxSpeech26HdInput = {
   /**
    * Prompt
    *
-   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
+   * Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.
    */
   prompt: string;
-  /**
-   * Voice Modify
-   *
-   * Voice modification settings to adjust pitch, intensity, and timbre.
-   */
-  voice_modify?: VoiceModify;
   /**
    * Language Boost
    *
@@ -2457,7 +2044,8 @@ export type MinimaxSpeech28TurboInput = {
     | "Catalan"
     | "Nynorsk"
     | "Afrikaans"
-    | "auto";
+    | "auto"
+    | unknown;
   /**
    * Output Format
    *
@@ -2465,29 +2053,150 @@ export type MinimaxSpeech28TurboInput = {
    */
   output_format?: "url" | "hex";
   /**
-   * Pronunciation Dict
-   *
    * Custom pronunciation dictionary for text replacement
    */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
+  pronunciation_dict?: PronunciationDict | unknown;
   voice_setting?: VoiceSetting;
+  normalization_setting?: LoudnessNormalizationSetting;
+  audio_setting?: AudioSetting;
+};
+
+/**
+ * ChatterboxOutput
+ */
+export type ChatterboxTextToSpeechOutput = {
+  audio: File;
+};
+
+/**
+ * ChatterboxRequest
+ */
+export type ChatterboxTextToSpeechInput = {
   /**
-   * Normalization Setting
+   * Text
    *
-   * Loudness normalization settings for the audio
+   * The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
    */
+  text: string;
+  /**
+   * Exaggeration
+   *
+   * Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).
+   */
+  exaggeration?: number;
+  /**
+   * Audio Url
+   *
+   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
+   */
+  audio_url?: string | unknown;
+  /**
+   * Seed
+   *
+   * Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed..
+   */
+  seed?: number | unknown;
+  /**
+   * Temperature
+   *
+   * Temperature for generation (higher = more creative).
+   */
+  temperature?: number;
+  /**
+   * Cfg
+   */
+  cfg?: number;
+};
+
+/**
+ * TextToSpeechTurbo28Output
+ *
+ * Output model for Speech 2.8 Turbo.
+ */
+export type MinimaxSpeech28TurboOutput = {
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+  audio: File;
+};
+
+/**
+ * TextToSpeechTurbo28Request
+ *
+ * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
+ */
+export type MinimaxSpeech28TurboInput = {
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
+   */
+  prompt: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  voice_setting?: VoiceSetting;
   normalization_setting?: LoudnessNormalizationSetting;
   /**
-   * Audio Setting
-   *
-   * Audio configuration settings
+   * Voice modification settings to adjust pitch, intensity, and timbre.
    */
-  audio_setting?: AudioSetting;
+  voice_modify?: VoiceModify | unknown;
 };
 
 /**
@@ -2517,6 +2226,197 @@ export type VoiceModify = {
 };
 
 /**
+ * Qwen3TTSOutput
+ */
+export type Qwen3TtsTextToSpeech17bOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Qwen3TTSInput
+ */
+export type Qwen3TtsTextToSpeech17bInput = {
+  /**
+   * Prompt
+   *
+   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
+   */
+  prompt?: string | unknown;
+  /**
+   * Speaker Voice Embedding File Url
+   *
+   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
+   */
+  speaker_voice_embedding_file_url?: string | unknown;
+  /**
+   * Top P
+   *
+   * Top-p sampling parameter.
+   */
+  top_p?: number | unknown;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty to reduce repeated tokens/codes.
+   */
+  repetition_penalty?: number | unknown;
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number | unknown;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number | unknown;
+  /**
+   * Voice
+   *
+   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
+   */
+  voice?:
+    | "Vivian"
+    | "Serena"
+    | "Uncle_Fu"
+    | "Dylan"
+    | "Eric"
+    | "Ryan"
+    | "Aiden"
+    | "Ono_Anna"
+    | "Sohee"
+    | unknown;
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
+  /**
+   * Temperature
+   *
+   * Sampling temperature; higher => more random.
+   */
+  temperature?: number | unknown;
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number | unknown;
+  /**
+   * Language
+   *
+   * The language of the voice.
+   */
+  language?:
+    | "Auto"
+    | "English"
+    | "Chinese"
+    | "Spanish"
+    | "French"
+    | "German"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Portuguese"
+    | "Russian";
+  /**
+   * Max New Tokens
+   *
+   * Maximum number of new codec tokens to generate.
+   */
+  max_new_tokens?: number | unknown;
+  /**
+   * Subtalker Dosample
+   *
+   * Sampling switch for the sub-talker.
+   */
+  subtalker_dosample?: boolean | unknown;
+  /**
+   * Subtalker Top P
+   *
+   * Top-p for sub-talker sampling.
+   */
+  subtalker_top_p?: number | unknown;
+};
+
+/**
+ * VoiceCloneOutput
+ */
+export type MinimaxVoiceCloneOutput = {
+  /**
+   * Custom Voice Id
+   *
+   * The cloned voice ID for use with TTS
+   */
+  custom_voice_id: string;
+  /**
+   * Preview audio generated with the cloned voice (if requested)
+   */
+  audio?: File | unknown;
+};
+
+/**
+ * VoiceCloneRequest
+ */
+export type MinimaxVoiceCloneInput = {
+  /**
+   * Model
+   *
+   * TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo
+   */
+  model?:
+    | "speech-02-hd"
+    | "speech-02-turbo"
+    | "speech-01-hd"
+    | "speech-01-turbo";
+  /**
+   * Text
+   *
+   * Text to generate a TTS preview with the cloned voice (optional)
+   */
+  text?: string | unknown;
+  /**
+   * Audio Url
+   *
+   *
+   * URL of the input audio file for voice cloning. Should be at least 10 seconds
+   * long. To retain the voice permanently, use it with a TTS (text-to-speech)
+   * endpoint at least once within 7 days. Otherwise, it will be
+   * automatically deleted.
+   *
+   */
+  audio_url: string;
+  /**
+   * Accuracy
+   *
+   * Text validation accuracy threshold (0-1)
+   */
+  accuracy?: number | unknown;
+  /**
+   * Noise Reduction
+   *
+   * Enable noise reduction for the cloned voice
+   */
+  noise_reduction?: boolean;
+  /**
+   * Need Volume Normalization
+   *
+   * Enable volume normalization for the cloned voice
+   */
+  need_volume_normalization?: boolean;
+};
+
+/**
  * TextToSpeechHD28Output
  *
  * Output model for Speech 2.8 HD.
@@ -2528,11 +2428,6 @@ export type MinimaxSpeech28HdOutput = {
    * Duration of the audio in milliseconds
    */
   duration_ms: number;
-  /**
-   * Audio
-   *
-   * The generated audio file
-   */
   audio: File;
 };
 
@@ -2548,12 +2443,7 @@ export type MinimaxSpeech28HdInput = {
    * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
    */
   prompt: string;
-  /**
-   * Voice Modify
-   *
-   * Voice modification settings to adjust pitch, intensity, and timbre.
-   */
-  voice_modify?: VoiceModify;
+  audio_setting?: AudioSetting;
   /**
    * Language Boost
    *
@@ -2597,7 +2487,8 @@ export type MinimaxSpeech28HdInput = {
     | "Catalan"
     | "Nynorsk"
     | "Afrikaans"
-    | "auto";
+    | "auto"
+    | unknown;
   /**
    * Output Format
    *
@@ -2605,57 +2496,182 @@ export type MinimaxSpeech28HdInput = {
    */
   output_format?: "url" | "hex";
   /**
-   * Pronunciation Dict
-   *
    * Custom pronunciation dictionary for text replacement
    */
-  pronunciation_dict?: PronunciationDict;
-  /**
-   * Voice Setting
-   *
-   * Voice configuration settings
-   */
+  pronunciation_dict?: PronunciationDict | unknown;
   voice_setting?: VoiceSetting;
-  /**
-   * Normalization Setting
-   *
-   * Loudness normalization settings for the audio
-   */
   normalization_setting?: LoudnessNormalizationSetting;
   /**
-   * Audio Setting
-   *
-   * Audio configuration settings
+   * Voice modification settings to adjust pitch, intensity, and timbre.
    */
-  audio_setting?: AudioSetting;
+  voice_modify?: VoiceModify | unknown;
 };
 
 /**
- * ChatterboxOutput
+ * TextToSpeechOutput
  */
-export type ChatterboxSpeechToSpeechOutput = {
+export type MinimaxSpeech02HdOutput = {
   /**
-   * Audio
+   * Duration Ms
    *
-   * The generated speech audio
+   * Duration of the audio in milliseconds
    */
+  duration_ms: number;
   audio: File;
 };
 
 /**
- * ChatterboxVCRequest
+ * TextToSpeechHDRequest
  */
-export type ChatterboxSpeechToSpeechInput = {
+export type MinimaxSpeech02HdInput = {
   /**
-   * Source Audio Url
-   */
-  source_audio_url: string;
-  /**
-   * Target Voice Audio Url
+   * Text
    *
-   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
+   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
    */
-  target_voice_audio_url?: string;
+  text: string;
+  voice_setting?: VoiceSetting;
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  audio_setting?: AudioSetting;
+};
+
+/**
+ * TTSOutput
+ */
+export type ElevenlabsTtsTurboV25Output = {
+  audio: File;
+  /**
+   * Timestamps
+   *
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   */
+  timestamps?: Array<unknown> | unknown;
+};
+
+/**
+ * TextToSpeechRequest
+ */
+export type ElevenlabsTtsTurboV25Input = {
+  /**
+   * Stability
+   *
+   * Voice stability (0-1)
+   */
+  stability?: number;
+  /**
+   * Next Text
+   *
+   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  next_text?: string | unknown;
+  /**
+   * Speed
+   *
+   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
+   */
+  speed?: number;
+  /**
+   * Style
+   *
+   * Style exaggeration (0-1)
+   */
+  style?: number;
+  /**
+   * Text
+   *
+   * The text to convert to speech
+   */
+  text: string;
+  /**
+   * Timestamps
+   *
+   * Whether to return timestamps for each word in the generated speech
+   */
+  timestamps?: boolean;
+  /**
+   * Similarity Boost
+   *
+   * Similarity boost (0-1)
+   */
+  similarity_boost?: number;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Apply Text Normalization
+   *
+   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+   */
+  apply_text_normalization?: "auto" | "on" | "off";
+  /**
+   * Previous Text
+   *
+   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  previous_text?: string | unknown;
 };
 
 /**
@@ -2713,6 +2729,29 @@ export type ChatterboxhdSpeechToSpeechInput = {
     | "Vicky";
 };
 
+/**
+ * ChatterboxOutput
+ */
+export type ChatterboxSpeechToSpeechOutput = {
+  audio: File;
+};
+
+/**
+ * ChatterboxVCRequest
+ */
+export type ChatterboxSpeechToSpeechInput = {
+  /**
+   * Source Audio Url
+   */
+  source_audio_url: string;
+  /**
+   * Target Voice Audio Url
+   *
+   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
+   */
+  target_voice_audio_url?: string | unknown;
+};
+
 export type QueueStatus = {
   status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
   /**
@@ -2748,6 +2787,101 @@ export type QueueStatus = {
    */
   queue_position?: number;
 };
+
+export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/chatterbox/speech-to-speech/requests/{request_id}/status";
+};
+
+export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponse =
+  GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponses[keyof GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponses];
+
+export type PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/chatterbox/speech-to-speech/requests/{request_id}/cancel";
+};
+
+export type PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponse =
+  PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponses[keyof PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponses];
+
+export type PostFalAiChatterboxSpeechToSpeechData = {
+  body: ChatterboxSpeechToSpeechInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/chatterbox/speech-to-speech";
+};
+
+export type PostFalAiChatterboxSpeechToSpeechResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiChatterboxSpeechToSpeechResponse =
+  PostFalAiChatterboxSpeechToSpeechResponses[keyof PostFalAiChatterboxSpeechToSpeechResponses];
+
+export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/chatterbox/speech-to-speech/requests/{request_id}";
+};
+
+export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ChatterboxSpeechToSpeechOutput;
+};
+
+export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponse =
+  GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses[keyof GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses];
 
 export type GetResembleAiChatterboxhdSpeechToSpeechRequestsByRequestIdStatusData =
   {
@@ -2847,7 +2981,7 @@ export type GetResembleAiChatterboxhdSpeechToSpeechRequestsByRequestIdResponses 
 export type GetResembleAiChatterboxhdSpeechToSpeechRequestsByRequestIdResponse =
   GetResembleAiChatterboxhdSpeechToSpeechRequestsByRequestIdResponses[keyof GetResembleAiChatterboxhdSpeechToSpeechRequestsByRequestIdResponses];
 
-export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusData = {
+export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -2861,66 +2995,20 @@ export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/chatterbox/speech-to-speech/requests/{request_id}/status";
+  url: "/fal-ai/elevenlabs/tts/turbo-v2.5/requests/{request_id}/status";
 };
 
-export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponse =
-  GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponses[keyof GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdStatusResponses];
-
-export type PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/chatterbox/speech-to-speech/requests/{request_id}/cancel";
-};
-
-export type PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponse =
-  PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponses[keyof PutFalAiChatterboxSpeechToSpeechRequestsByRequestIdCancelResponses];
-
-export type PostFalAiChatterboxSpeechToSpeechData = {
-  body: ChatterboxSpeechToSpeechInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/chatterbox/speech-to-speech";
-};
-
-export type PostFalAiChatterboxSpeechToSpeechResponses = {
+export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiChatterboxSpeechToSpeechResponse =
-  PostFalAiChatterboxSpeechToSpeechResponses[keyof PostFalAiChatterboxSpeechToSpeechResponses];
+export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponses];
 
-export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdData = {
+export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -2929,18 +3017,155 @@ export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/chatterbox/speech-to-speech/requests/{request_id}";
+  url: "/fal-ai/elevenlabs/tts/turbo-v2.5/requests/{request_id}/cancel";
 };
 
-export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses = {
+export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses];
+
+export type PostFalAiElevenlabsTtsTurboV25Data = {
+  body: ElevenlabsTtsTurboV25Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/elevenlabs/tts/turbo-v2.5";
+};
+
+export type PostFalAiElevenlabsTtsTurboV25Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiElevenlabsTtsTurboV25Response =
+  PostFalAiElevenlabsTtsTurboV25Responses[keyof PostFalAiElevenlabsTtsTurboV25Responses];
+
+export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/elevenlabs/tts/turbo-v2.5/requests/{request_id}";
+};
+
+export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: ChatterboxSpeechToSpeechOutput;
+  200: ElevenlabsTtsTurboV25Output;
 };
 
-export type GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponse =
-  GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses[keyof GetFalAiChatterboxSpeechToSpeechRequestsByRequestIdResponses];
+export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponse =
+  GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponses];
+
+export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/minimax/speech-02-hd/requests/{request_id}/status";
+};
+
+export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-02-hd/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMinimaxSpeech02HdData = {
+  body: MinimaxSpeech02HdInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/minimax/speech-02-hd";
+};
+
+export type PostFalAiMinimaxSpeech02HdResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMinimaxSpeech02HdResponse =
+  PostFalAiMinimaxSpeech02HdResponses[keyof PostFalAiMinimaxSpeech02HdResponses];
+
+export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-02-hd/requests/{request_id}";
+};
+
+export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MinimaxSpeech02HdOutput;
+};
+
+export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponse =
+  GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponses];
 
 export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdStatusData = {
   body?: never;
@@ -3035,7 +3260,7 @@ export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponses = {
 export type GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponse =
   GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech28HdRequestsByRequestIdResponses];
 
-export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusData = {
+export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -3049,20 +3274,20 @@ export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}/status";
+  url: "/fal-ai/minimax/voice-clone/requests/{request_id}/status";
 };
 
-export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses = {
+export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses];
+export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelData = {
+export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -3071,10 +3296,10 @@ export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}/cancel";
+  url: "/fal-ai/minimax/voice-clone/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses = {
+export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -3086,27 +3311,27 @@ export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses];
+export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMinimaxSpeech28TurboData = {
-  body: MinimaxSpeech28TurboInput;
+export type PostFalAiMinimaxVoiceCloneData = {
+  body: MinimaxVoiceCloneInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/minimax/speech-2.8-turbo";
+  url: "/fal-ai/minimax/voice-clone";
 };
 
-export type PostFalAiMinimaxSpeech28TurboResponses = {
+export type PostFalAiMinimaxVoiceCloneResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMinimaxSpeech28TurboResponse =
-  PostFalAiMinimaxSpeech28TurboResponses[keyof PostFalAiMinimaxSpeech28TurboResponses];
+export type PostFalAiMinimaxVoiceCloneResponse =
+  PostFalAiMinimaxVoiceCloneResponses[keyof PostFalAiMinimaxVoiceCloneResponses];
 
-export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdData = {
+export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -3115,111 +3340,18 @@ export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}";
+  url: "/fal-ai/minimax/voice-clone/requests/{request_id}";
 };
 
-export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses = {
+export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MinimaxSpeech28TurboOutput;
+  200: MinimaxVoiceCloneOutput;
 };
 
-export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponse =
-  GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses];
-
-export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-3-tts/voice-design/1.7b/requests/{request_id}/status";
-};
-
-export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponse =
-  GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/voice-design/1.7b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponse =
-  PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwen3TtsVoiceDesign17bData = {
-  body: Qwen3TtsVoiceDesign17bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/voice-design/1.7b";
-};
-
-export type PostFalAiQwen3TtsVoiceDesign17bResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwen3TtsVoiceDesign17bResponse =
-  PostFalAiQwen3TtsVoiceDesign17bResponses[keyof PostFalAiQwen3TtsVoiceDesign17bResponses];
-
-export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/voice-design/1.7b/requests/{request_id}";
-};
-
-export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Qwen3TtsVoiceDesign17bOutput;
-};
-
-export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponse =
-  GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponses];
+export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponse =
+  GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponses[keyof GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponses];
 
 export type GetFalAiQwen3TtsTextToSpeech17bRequestsByRequestIdStatusData = {
   body?: never;
@@ -3316,7 +3448,7 @@ export type GetFalAiQwen3TtsTextToSpeech17bRequestsByRequestIdResponses = {
 export type GetFalAiQwen3TtsTextToSpeech17bRequestsByRequestIdResponse =
   GetFalAiQwen3TtsTextToSpeech17bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsTextToSpeech17bRequestsByRequestIdResponses];
 
-export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusData = {
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -3330,66 +3462,20 @@ export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b/requests/{request_id}/status";
+  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}/status";
 };
 
-export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponse =
-  GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponse =
-  PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwen3TtsTextToSpeech06bData = {
-  body: Qwen3TtsTextToSpeech06bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b";
-};
-
-export type PostFalAiQwen3TtsTextToSpeech06bResponses = {
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiQwen3TtsTextToSpeech06bResponse =
-  PostFalAiQwen3TtsTextToSpeech06bResponses[keyof PostFalAiQwen3TtsTextToSpeech06bResponses];
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech28TurboRequestsByRequestIdStatusResponses];
 
-export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdData = {
+export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -3398,59 +3484,10 @@ export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b/requests/{request_id}";
+  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}/cancel";
 };
 
-export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Qwen3TtsTextToSpeech06bOutput;
-};
-
-export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponse =
-  GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponses];
-
-export type GetFalAiVibevoice05bRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/vibevoice/0.5b/requests/{request_id}/status";
-};
-
-export type GetFalAiVibevoice05bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiVibevoice05bRequestsByRequestIdStatusResponse =
-  GetFalAiVibevoice05bRequestsByRequestIdStatusResponses[keyof GetFalAiVibevoice05bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiVibevoice05bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/vibevoice/0.5b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiVibevoice05bRequestsByRequestIdCancelResponses = {
+export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -3462,27 +3499,27 @@ export type PutFalAiVibevoice05bRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiVibevoice05bRequestsByRequestIdCancelResponse =
-  PutFalAiVibevoice05bRequestsByRequestIdCancelResponses[keyof PutFalAiVibevoice05bRequestsByRequestIdCancelResponses];
+export type PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech28TurboRequestsByRequestIdCancelResponses];
 
-export type PostFalAiVibevoice05bData = {
-  body: Vibevoice05bInput;
+export type PostFalAiMinimaxSpeech28TurboData = {
+  body: MinimaxSpeech28TurboInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/vibevoice/0.5b";
+  url: "/fal-ai/minimax/speech-2.8-turbo";
 };
 
-export type PostFalAiVibevoice05bResponses = {
+export type PostFalAiMinimaxSpeech28TurboResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiVibevoice05bResponse =
-  PostFalAiVibevoice05bResponses[keyof PostFalAiVibevoice05bResponses];
+export type PostFalAiMinimaxSpeech28TurboResponse =
+  PostFalAiMinimaxSpeech28TurboResponses[keyof PostFalAiMinimaxSpeech28TurboResponses];
 
-export type GetFalAiVibevoice05bRequestsByRequestIdData = {
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -3491,20 +3528,20 @@ export type GetFalAiVibevoice05bRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/vibevoice/0.5b/requests/{request_id}";
+  url: "/fal-ai/minimax/speech-2.8-turbo/requests/{request_id}";
 };
 
-export type GetFalAiVibevoice05bRequestsByRequestIdResponses = {
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Vibevoice05bOutput;
+  200: MinimaxSpeech28TurboOutput;
 };
 
-export type GetFalAiVibevoice05bRequestsByRequestIdResponse =
-  GetFalAiVibevoice05bRequestsByRequestIdResponses[keyof GetFalAiVibevoice05bRequestsByRequestIdResponses];
+export type GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponse =
+  GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech28TurboRequestsByRequestIdResponses];
 
-export type GetFalAiMayaBatchRequestsByRequestIdStatusData = {
+export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -3518,20 +3555,20 @@ export type GetFalAiMayaBatchRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/maya/batch/requests/{request_id}/status";
+  url: "/fal-ai/chatterbox/text-to-speech/requests/{request_id}/status";
 };
 
-export type GetFalAiMayaBatchRequestsByRequestIdStatusResponses = {
+export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMayaBatchRequestsByRequestIdStatusResponse =
-  GetFalAiMayaBatchRequestsByRequestIdStatusResponses[keyof GetFalAiMayaBatchRequestsByRequestIdStatusResponses];
+export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponse =
+  GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponses[keyof GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMayaBatchRequestsByRequestIdCancelData = {
+export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -3540,10 +3577,10 @@ export type PutFalAiMayaBatchRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/maya/batch/requests/{request_id}/cancel";
+  url: "/fal-ai/chatterbox/text-to-speech/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMayaBatchRequestsByRequestIdCancelResponses = {
+export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -3555,27 +3592,27 @@ export type PutFalAiMayaBatchRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMayaBatchRequestsByRequestIdCancelResponse =
-  PutFalAiMayaBatchRequestsByRequestIdCancelResponses[keyof PutFalAiMayaBatchRequestsByRequestIdCancelResponses];
+export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponse =
+  PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses[keyof PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMayaBatchData = {
-  body: MayaBatchInput;
+export type PostFalAiChatterboxTextToSpeechData = {
+  body: ChatterboxTextToSpeechInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/maya/batch";
+  url: "/fal-ai/chatterbox/text-to-speech";
 };
 
-export type PostFalAiMayaBatchResponses = {
+export type PostFalAiChatterboxTextToSpeechResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMayaBatchResponse =
-  PostFalAiMayaBatchResponses[keyof PostFalAiMayaBatchResponses];
+export type PostFalAiChatterboxTextToSpeechResponse =
+  PostFalAiChatterboxTextToSpeechResponses[keyof PostFalAiChatterboxTextToSpeechResponses];
 
-export type GetFalAiMayaBatchRequestsByRequestIdData = {
+export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -3584,297 +3621,18 @@ export type GetFalAiMayaBatchRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/maya/batch/requests/{request_id}";
+  url: "/fal-ai/chatterbox/text-to-speech/requests/{request_id}";
 };
 
-export type GetFalAiMayaBatchRequestsByRequestIdResponses = {
+export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MayaBatchOutput;
+  200: ChatterboxTextToSpeechOutput;
 };
 
-export type GetFalAiMayaBatchRequestsByRequestIdResponse =
-  GetFalAiMayaBatchRequestsByRequestIdResponses[keyof GetFalAiMayaBatchRequestsByRequestIdResponses];
-
-export type GetFalAiMayaStreamRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/maya/stream/requests/{request_id}/status";
-};
-
-export type GetFalAiMayaStreamRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMayaStreamRequestsByRequestIdStatusResponse =
-  GetFalAiMayaStreamRequestsByRequestIdStatusResponses[keyof GetFalAiMayaStreamRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMayaStreamRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/maya/stream/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMayaStreamRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMayaStreamRequestsByRequestIdCancelResponse =
-  PutFalAiMayaStreamRequestsByRequestIdCancelResponses[keyof PutFalAiMayaStreamRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMayaStreamData = {
-  body: MayaStreamInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/maya/stream";
-};
-
-export type PostFalAiMayaStreamResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMayaStreamResponse =
-  PostFalAiMayaStreamResponses[keyof PostFalAiMayaStreamResponses];
-
-export type GetFalAiMayaStreamRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/maya/stream/requests/{request_id}";
-};
-
-export type GetFalAiMayaStreamRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MayaStreamOutput;
-};
-
-export type GetFalAiMayaStreamRequestsByRequestIdResponse =
-  GetFalAiMayaStreamRequestsByRequestIdResponses[keyof GetFalAiMayaStreamRequestsByRequestIdResponses];
-
-export type GetFalAiMayaRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/maya/requests/{request_id}/status";
-};
-
-export type GetFalAiMayaRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMayaRequestsByRequestIdStatusResponse =
-  GetFalAiMayaRequestsByRequestIdStatusResponses[keyof GetFalAiMayaRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMayaRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/maya/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMayaRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMayaRequestsByRequestIdCancelResponse =
-  PutFalAiMayaRequestsByRequestIdCancelResponses[keyof PutFalAiMayaRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMayaData = {
-  body: MayaInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/maya";
-};
-
-export type PostFalAiMayaResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMayaResponse =
-  PostFalAiMayaResponses[keyof PostFalAiMayaResponses];
-
-export type GetFalAiMayaRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/maya/requests/{request_id}";
-};
-
-export type GetFalAiMayaRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MayaOutput;
-};
-
-export type GetFalAiMayaRequestsByRequestIdResponse =
-  GetFalAiMayaRequestsByRequestIdResponses[keyof GetFalAiMayaRequestsByRequestIdResponses];
-
-export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/minimax/speech-2.6-turbo/requests/{request_id}/status";
-};
-
-export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax/speech-2.6-turbo/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMinimaxSpeech26TurboData = {
-  body: MinimaxSpeech26TurboInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/minimax/speech-2.6-turbo";
-};
-
-export type PostFalAiMinimaxSpeech26TurboResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMinimaxSpeech26TurboResponse =
-  PostFalAiMinimaxSpeech26TurboResponses[keyof PostFalAiMinimaxSpeech26TurboResponses];
-
-export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax/speech-2.6-turbo/requests/{request_id}";
-};
-
-export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MinimaxSpeech26TurboOutput;
-};
-
-export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponse =
-  GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponses];
+export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponse =
+  GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponses[keyof GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponses];
 
 export type GetFalAiMinimaxSpeech26HdRequestsByRequestIdStatusData = {
   body?: never;
@@ -3969,6 +3727,378 @@ export type GetFalAiMinimaxSpeech26HdRequestsByRequestIdResponses = {
 export type GetFalAiMinimaxSpeech26HdRequestsByRequestIdResponse =
   GetFalAiMinimaxSpeech26HdRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech26HdRequestsByRequestIdResponses];
 
+export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/minimax/speech-2.6-turbo/requests/{request_id}/status";
+};
+
+export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech26TurboRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.6-turbo/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech26TurboRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMinimaxSpeech26TurboData = {
+  body: MinimaxSpeech26TurboInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.6-turbo";
+};
+
+export type PostFalAiMinimaxSpeech26TurboResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMinimaxSpeech26TurboResponse =
+  PostFalAiMinimaxSpeech26TurboResponses[keyof PostFalAiMinimaxSpeech26TurboResponses];
+
+export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-2.6-turbo/requests/{request_id}";
+};
+
+export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MinimaxSpeech26TurboOutput;
+};
+
+export type GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponse =
+  GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech26TurboRequestsByRequestIdResponses];
+
+export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/minimax/speech-02-turbo/requests/{request_id}/status";
+};
+
+export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-02-turbo/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMinimaxSpeech02TurboData = {
+  body: MinimaxSpeech02TurboInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/minimax/speech-02-turbo";
+};
+
+export type PostFalAiMinimaxSpeech02TurboResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMinimaxSpeech02TurboResponse =
+  PostFalAiMinimaxSpeech02TurboResponses[keyof PostFalAiMinimaxSpeech02TurboResponses];
+
+export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/speech-02-turbo/requests/{request_id}";
+};
+
+export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MinimaxSpeech02TurboOutput;
+};
+
+export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponse =
+  GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponses];
+
+export type GetFalAiVibevoice7bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/vibevoice/7b/requests/{request_id}/status";
+};
+
+export type GetFalAiVibevoice7bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiVibevoice7bRequestsByRequestIdStatusResponse =
+  GetFalAiVibevoice7bRequestsByRequestIdStatusResponses[keyof GetFalAiVibevoice7bRequestsByRequestIdStatusResponses];
+
+export type PutFalAiVibevoice7bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/vibevoice/7b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiVibevoice7bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiVibevoice7bRequestsByRequestIdCancelResponse =
+  PutFalAiVibevoice7bRequestsByRequestIdCancelResponses[keyof PutFalAiVibevoice7bRequestsByRequestIdCancelResponses];
+
+export type PostFalAiVibevoice7bData = {
+  body: Vibevoice7bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/vibevoice/7b";
+};
+
+export type PostFalAiVibevoice7bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiVibevoice7bResponse =
+  PostFalAiVibevoice7bResponses[keyof PostFalAiVibevoice7bResponses];
+
+export type GetFalAiVibevoice7bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/vibevoice/7b/requests/{request_id}";
+};
+
+export type GetFalAiVibevoice7bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Vibevoice7bOutput;
+};
+
+export type GetFalAiVibevoice7bRequestsByRequestIdResponse =
+  GetFalAiVibevoice7bRequestsByRequestIdResponses[keyof GetFalAiVibevoice7bRequestsByRequestIdResponses];
+
+export type GetFalAiLuxTtsRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/lux-tts/requests/{request_id}/status";
+};
+
+export type GetFalAiLuxTtsRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiLuxTtsRequestsByRequestIdStatusResponse =
+  GetFalAiLuxTtsRequestsByRequestIdStatusResponses[keyof GetFalAiLuxTtsRequestsByRequestIdStatusResponses];
+
+export type PutFalAiLuxTtsRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/lux-tts/requests/{request_id}/cancel";
+};
+
+export type PutFalAiLuxTtsRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiLuxTtsRequestsByRequestIdCancelResponse =
+  PutFalAiLuxTtsRequestsByRequestIdCancelResponses[keyof PutFalAiLuxTtsRequestsByRequestIdCancelResponses];
+
+export type PostFalAiLuxTtsData = {
+  body: LuxTtsInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/lux-tts";
+};
+
+export type PostFalAiLuxTtsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiLuxTtsResponse =
+  PostFalAiLuxTtsResponses[keyof PostFalAiLuxTtsResponses];
+
+export type GetFalAiLuxTtsRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/lux-tts/requests/{request_id}";
+};
+
+export type GetFalAiLuxTtsRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: LuxTtsOutput;
+};
+
+export type GetFalAiLuxTtsRequestsByRequestIdResponse =
+  GetFalAiLuxTtsRequestsByRequestIdResponses[keyof GetFalAiLuxTtsRequestsByRequestIdResponses];
+
 export type GetFalAiIndexTts2TextToSpeechRequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -4062,6 +4192,285 @@ export type GetFalAiIndexTts2TextToSpeechRequestsByRequestIdResponses = {
 export type GetFalAiIndexTts2TextToSpeechRequestsByRequestIdResponse =
   GetFalAiIndexTts2TextToSpeechRequestsByRequestIdResponses[keyof GetFalAiIndexTts2TextToSpeechRequestsByRequestIdResponses];
 
+export type GetFalAiOrpheusTtsRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/orpheus-tts/requests/{request_id}/status";
+};
+
+export type GetFalAiOrpheusTtsRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiOrpheusTtsRequestsByRequestIdStatusResponse =
+  GetFalAiOrpheusTtsRequestsByRequestIdStatusResponses[keyof GetFalAiOrpheusTtsRequestsByRequestIdStatusResponses];
+
+export type PutFalAiOrpheusTtsRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/orpheus-tts/requests/{request_id}/cancel";
+};
+
+export type PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiOrpheusTtsRequestsByRequestIdCancelResponse =
+  PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses[keyof PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses];
+
+export type PostFalAiOrpheusTtsData = {
+  body: OrpheusTtsInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/orpheus-tts";
+};
+
+export type PostFalAiOrpheusTtsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiOrpheusTtsResponse =
+  PostFalAiOrpheusTtsResponses[keyof PostFalAiOrpheusTtsResponses];
+
+export type GetFalAiOrpheusTtsRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/orpheus-tts/requests/{request_id}";
+};
+
+export type GetFalAiOrpheusTtsRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: OrpheusTtsOutput;
+};
+
+export type GetFalAiOrpheusTtsRequestsByRequestIdResponse =
+  GetFalAiOrpheusTtsRequestsByRequestIdResponses[keyof GetFalAiOrpheusTtsRequestsByRequestIdResponses];
+
+export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/minimax/voice-design/requests/{request_id}/status";
+};
+
+export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/voice-design/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMinimaxVoiceDesignData = {
+  body: MinimaxVoiceDesignInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/minimax/voice-design";
+};
+
+export type PostFalAiMinimaxVoiceDesignResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMinimaxVoiceDesignResponse =
+  PostFalAiMinimaxVoiceDesignResponses[keyof PostFalAiMinimaxVoiceDesignResponses];
+
+export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/minimax/voice-design/requests/{request_id}";
+};
+
+export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MinimaxVoiceDesignOutput;
+};
+
+export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponse =
+  GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponses[keyof GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponses];
+
+export type GetFalAiDiaTtsRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/dia-tts/requests/{request_id}/status";
+};
+
+export type GetFalAiDiaTtsRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiDiaTtsRequestsByRequestIdStatusResponse =
+  GetFalAiDiaTtsRequestsByRequestIdStatusResponses[keyof GetFalAiDiaTtsRequestsByRequestIdStatusResponses];
+
+export type PutFalAiDiaTtsRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/dia-tts/requests/{request_id}/cancel";
+};
+
+export type PutFalAiDiaTtsRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiDiaTtsRequestsByRequestIdCancelResponse =
+  PutFalAiDiaTtsRequestsByRequestIdCancelResponses[keyof PutFalAiDiaTtsRequestsByRequestIdCancelResponses];
+
+export type PostFalAiDiaTtsData = {
+  body: DiaTtsInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/dia-tts";
+};
+
+export type PostFalAiDiaTtsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiDiaTtsResponse =
+  PostFalAiDiaTtsResponses[keyof PostFalAiDiaTtsResponses];
+
+export type GetFalAiDiaTtsRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/dia-tts/requests/{request_id}";
+};
+
+export type GetFalAiDiaTtsRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: DiaTtsOutput;
+};
+
+export type GetFalAiDiaTtsRequestsByRequestIdResponse =
+  GetFalAiDiaTtsRequestsByRequestIdResponses[keyof GetFalAiDiaTtsRequestsByRequestIdResponses];
+
 export type GetFalAiKlingVideoV1TtsRequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -4154,6 +4563,99 @@ export type GetFalAiKlingVideoV1TtsRequestsByRequestIdResponses = {
 
 export type GetFalAiKlingVideoV1TtsRequestsByRequestIdResponse =
   GetFalAiKlingVideoV1TtsRequestsByRequestIdResponses[keyof GetFalAiKlingVideoV1TtsRequestsByRequestIdResponses];
+
+export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-3-tts/voice-design/1.7b/requests/{request_id}/status";
+};
+
+export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponse =
+  GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdStatusResponses];
+
+export type PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/voice-design/1.7b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponse =
+  PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdCancelResponses];
+
+export type PostFalAiQwen3TtsVoiceDesign17bData = {
+  body: Qwen3TtsVoiceDesign17bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/voice-design/1.7b";
+};
+
+export type PostFalAiQwen3TtsVoiceDesign17bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwen3TtsVoiceDesign17bResponse =
+  PostFalAiQwen3TtsVoiceDesign17bResponses[keyof PostFalAiQwen3TtsVoiceDesign17bResponses];
+
+export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-3-tts/voice-design/1.7b/requests/{request_id}";
+};
+
+export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Qwen3TtsVoiceDesign17bOutput;
+};
+
+export type GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponse =
+  GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsVoiceDesign17bRequestsByRequestIdResponses];
 
 export type GetFalAiChatterboxTextToSpeechMultilingualRequestsByRequestIdStatusData =
   {
@@ -4254,192 +4756,6 @@ export type GetFalAiChatterboxTextToSpeechMultilingualRequestsByRequestIdRespons
 export type GetFalAiChatterboxTextToSpeechMultilingualRequestsByRequestIdResponse =
   GetFalAiChatterboxTextToSpeechMultilingualRequestsByRequestIdResponses[keyof GetFalAiChatterboxTextToSpeechMultilingualRequestsByRequestIdResponses];
 
-export type GetFalAiVibevoice7bRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/vibevoice/7b/requests/{request_id}/status";
-};
-
-export type GetFalAiVibevoice7bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiVibevoice7bRequestsByRequestIdStatusResponse =
-  GetFalAiVibevoice7bRequestsByRequestIdStatusResponses[keyof GetFalAiVibevoice7bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiVibevoice7bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/vibevoice/7b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiVibevoice7bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiVibevoice7bRequestsByRequestIdCancelResponse =
-  PutFalAiVibevoice7bRequestsByRequestIdCancelResponses[keyof PutFalAiVibevoice7bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiVibevoice7bData = {
-  body: Vibevoice7bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/vibevoice/7b";
-};
-
-export type PostFalAiVibevoice7bResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiVibevoice7bResponse =
-  PostFalAiVibevoice7bResponses[keyof PostFalAiVibevoice7bResponses];
-
-export type GetFalAiVibevoice7bRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/vibevoice/7b/requests/{request_id}";
-};
-
-export type GetFalAiVibevoice7bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Vibevoice7bOutput;
-};
-
-export type GetFalAiVibevoice7bRequestsByRequestIdResponse =
-  GetFalAiVibevoice7bRequestsByRequestIdResponses[keyof GetFalAiVibevoice7bRequestsByRequestIdResponses];
-
-export type GetFalAiVibevoiceRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/vibevoice/requests/{request_id}/status";
-};
-
-export type GetFalAiVibevoiceRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiVibevoiceRequestsByRequestIdStatusResponse =
-  GetFalAiVibevoiceRequestsByRequestIdStatusResponses[keyof GetFalAiVibevoiceRequestsByRequestIdStatusResponses];
-
-export type PutFalAiVibevoiceRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/vibevoice/requests/{request_id}/cancel";
-};
-
-export type PutFalAiVibevoiceRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiVibevoiceRequestsByRequestIdCancelResponse =
-  PutFalAiVibevoiceRequestsByRequestIdCancelResponses[keyof PutFalAiVibevoiceRequestsByRequestIdCancelResponses];
-
-export type PostFalAiVibevoiceData = {
-  body: VibevoiceInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/vibevoice";
-};
-
-export type PostFalAiVibevoiceResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiVibevoiceResponse =
-  PostFalAiVibevoiceResponses[keyof PostFalAiVibevoiceResponses];
-
-export type GetFalAiVibevoiceRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/vibevoice/requests/{request_id}";
-};
-
-export type GetFalAiVibevoiceRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: VibevoiceOutput;
-};
-
-export type GetFalAiVibevoiceRequestsByRequestIdResponse =
-  GetFalAiVibevoiceRequestsByRequestIdResponses[keyof GetFalAiVibevoiceRequestsByRequestIdResponses];
-
 export type GetFalAiMinimaxPreviewSpeech25HdRequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -4534,194 +4850,6 @@ export type GetFalAiMinimaxPreviewSpeech25HdRequestsByRequestIdResponses = {
 
 export type GetFalAiMinimaxPreviewSpeech25HdRequestsByRequestIdResponse =
   GetFalAiMinimaxPreviewSpeech25HdRequestsByRequestIdResponses[keyof GetFalAiMinimaxPreviewSpeech25HdRequestsByRequestIdResponses];
-
-export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/minimax/preview/speech-2.5-turbo/requests/{request_id}/status";
-};
-
-export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax/preview/speech-2.5-turbo/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMinimaxPreviewSpeech25TurboData = {
-  body: MinimaxPreviewSpeech25TurboInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/minimax/preview/speech-2.5-turbo";
-};
-
-export type PostFalAiMinimaxPreviewSpeech25TurboResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMinimaxPreviewSpeech25TurboResponse =
-  PostFalAiMinimaxPreviewSpeech25TurboResponses[keyof PostFalAiMinimaxPreviewSpeech25TurboResponses];
-
-export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax/preview/speech-2.5-turbo/requests/{request_id}";
-};
-
-export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MinimaxPreviewSpeech25TurboOutput;
-};
-
-export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponse =
-  GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponses];
-
-export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/minimax/voice-design/requests/{request_id}/status";
-};
-
-export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxVoiceDesignRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax/voice-design/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxVoiceDesignRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMinimaxVoiceDesignData = {
-  body: MinimaxVoiceDesignInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/minimax/voice-design";
-};
-
-export type PostFalAiMinimaxVoiceDesignResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMinimaxVoiceDesignResponse =
-  PostFalAiMinimaxVoiceDesignResponses[keyof PostFalAiMinimaxVoiceDesignResponses];
-
-export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/minimax/voice-design/requests/{request_id}";
-};
-
-export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MinimaxVoiceDesignOutput;
-};
-
-export type GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponse =
-  GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponses[keyof GetFalAiMinimaxVoiceDesignRequestsByRequestIdResponses];
 
 export type GetResembleAiChatterboxhdTextToSpeechRequestsByRequestIdStatusData =
   {
@@ -4821,7 +4949,7 @@ export type GetResembleAiChatterboxhdTextToSpeechRequestsByRequestIdResponses =
 export type GetResembleAiChatterboxhdTextToSpeechRequestsByRequestIdResponse =
   GetResembleAiChatterboxhdTextToSpeechRequestsByRequestIdResponses[keyof GetResembleAiChatterboxhdTextToSpeechRequestsByRequestIdResponses];
 
-export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusData = {
+export type GetFalAiMayaRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4835,20 +4963,20 @@ export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/chatterbox/text-to-speech/requests/{request_id}/status";
+  url: "/fal-ai/maya/requests/{request_id}/status";
 };
 
-export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponses = {
+export type GetFalAiMayaRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponse =
-  GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponses[keyof GetFalAiChatterboxTextToSpeechRequestsByRequestIdStatusResponses];
+export type GetFalAiMayaRequestsByRequestIdStatusResponse =
+  GetFalAiMayaRequestsByRequestIdStatusResponses[keyof GetFalAiMayaRequestsByRequestIdStatusResponses];
 
-export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelData = {
+export type PutFalAiMayaRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4857,10 +4985,10 @@ export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/chatterbox/text-to-speech/requests/{request_id}/cancel";
+  url: "/fal-ai/maya/requests/{request_id}/cancel";
 };
 
-export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses = {
+export type PutFalAiMayaRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -4872,27 +5000,27 @@ export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponse =
-  PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses[keyof PutFalAiChatterboxTextToSpeechRequestsByRequestIdCancelResponses];
+export type PutFalAiMayaRequestsByRequestIdCancelResponse =
+  PutFalAiMayaRequestsByRequestIdCancelResponses[keyof PutFalAiMayaRequestsByRequestIdCancelResponses];
 
-export type PostFalAiChatterboxTextToSpeechData = {
-  body: ChatterboxTextToSpeechInput;
+export type PostFalAiMayaData = {
+  body: MayaInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/chatterbox/text-to-speech";
+  url: "/fal-ai/maya";
 };
 
-export type PostFalAiChatterboxTextToSpeechResponses = {
+export type PostFalAiMayaResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiChatterboxTextToSpeechResponse =
-  PostFalAiChatterboxTextToSpeechResponses[keyof PostFalAiChatterboxTextToSpeechResponses];
+export type PostFalAiMayaResponse =
+  PostFalAiMayaResponses[keyof PostFalAiMayaResponses];
 
-export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdData = {
+export type GetFalAiMayaRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4901,20 +5029,20 @@ export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/chatterbox/text-to-speech/requests/{request_id}";
+  url: "/fal-ai/maya/requests/{request_id}";
 };
 
-export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponses = {
+export type GetFalAiMayaRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: ChatterboxTextToSpeechOutput;
+  200: MayaOutput;
 };
 
-export type GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponse =
-  GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponses[keyof GetFalAiChatterboxTextToSpeechRequestsByRequestIdResponses];
+export type GetFalAiMayaRequestsByRequestIdResponse =
+  GetFalAiMayaRequestsByRequestIdResponses[keyof GetFalAiMayaRequestsByRequestIdResponses];
 
-export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusData = {
+export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4928,20 +5056,21 @@ export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/minimax/voice-clone/requests/{request_id}/status";
+  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b/requests/{request_id}/status";
 };
 
-export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
 
-export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxVoiceCloneRequestsByRequestIdStatusResponses];
+export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponse =
+  GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelData = {
+export type PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4950,42 +5079,43 @@ export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/voice-clone/requests/{request_id}/cancel";
+  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
+export type PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether the request was cancelled successfully.
+     * The request was cancelled.
      */
-    success?: boolean;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-};
 
-export type PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxVoiceCloneRequestsByRequestIdCancelResponses];
+export type PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponse =
+  PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMinimaxVoiceCloneData = {
-  body: MinimaxVoiceCloneInput;
+export type PostFalAiQwen3TtsTextToSpeech06bData = {
+  body: Qwen3TtsTextToSpeech06bInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/minimax/voice-clone";
+  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b";
 };
 
-export type PostFalAiMinimaxVoiceCloneResponses = {
+export type PostFalAiQwen3TtsTextToSpeech06bResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMinimaxVoiceCloneResponse =
-  PostFalAiMinimaxVoiceCloneResponses[keyof PostFalAiMinimaxVoiceCloneResponses];
+export type PostFalAiQwen3TtsTextToSpeech06bResponse =
+  PostFalAiQwen3TtsTextToSpeech06bResponses[keyof PostFalAiQwen3TtsTextToSpeech06bResponses];
 
-export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdData = {
+export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4994,20 +5124,20 @@ export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/voice-clone/requests/{request_id}";
+  url: "/fal-ai/qwen-3-tts/text-to-speech/0.6b/requests/{request_id}";
 };
 
-export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponses = {
+export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MinimaxVoiceCloneOutput;
+  200: Qwen3TtsTextToSpeech06bOutput;
 };
 
-export type GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponse =
-  GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponses[keyof GetFalAiMinimaxVoiceCloneRequestsByRequestIdResponses];
+export type GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponse =
+  GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsTextToSpeech06bRequestsByRequestIdResponses];
 
-export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusData = {
+export type GetFalAiVibevoiceRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5021,20 +5151,20 @@ export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/minimax/speech-02-turbo/requests/{request_id}/status";
+  url: "/fal-ai/vibevoice/requests/{request_id}/status";
 };
 
-export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponses = {
+export type GetFalAiVibevoiceRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech02TurboRequestsByRequestIdStatusResponses];
+export type GetFalAiVibevoiceRequestsByRequestIdStatusResponse =
+  GetFalAiVibevoiceRequestsByRequestIdStatusResponses[keyof GetFalAiVibevoiceRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelData = {
+export type PutFalAiVibevoiceRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5043,10 +5173,10 @@ export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/speech-02-turbo/requests/{request_id}/cancel";
+  url: "/fal-ai/vibevoice/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses = {
+export type PutFalAiVibevoiceRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5058,27 +5188,27 @@ export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech02TurboRequestsByRequestIdCancelResponses];
+export type PutFalAiVibevoiceRequestsByRequestIdCancelResponse =
+  PutFalAiVibevoiceRequestsByRequestIdCancelResponses[keyof PutFalAiVibevoiceRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMinimaxSpeech02TurboData = {
-  body: MinimaxSpeech02TurboInput;
+export type PostFalAiVibevoiceData = {
+  body: VibevoiceInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/minimax/speech-02-turbo";
+  url: "/fal-ai/vibevoice";
 };
 
-export type PostFalAiMinimaxSpeech02TurboResponses = {
+export type PostFalAiVibevoiceResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMinimaxSpeech02TurboResponse =
-  PostFalAiMinimaxSpeech02TurboResponses[keyof PostFalAiMinimaxSpeech02TurboResponses];
+export type PostFalAiVibevoiceResponse =
+  PostFalAiVibevoiceResponses[keyof PostFalAiVibevoiceResponses];
 
-export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdData = {
+export type GetFalAiVibevoiceRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5087,20 +5217,20 @@ export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/speech-02-turbo/requests/{request_id}";
+  url: "/fal-ai/vibevoice/requests/{request_id}";
 };
 
-export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponses = {
+export type GetFalAiVibevoiceRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MinimaxSpeech02TurboOutput;
+  200: VibevoiceOutput;
 };
 
-export type GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponse =
-  GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech02TurboRequestsByRequestIdResponses];
+export type GetFalAiVibevoiceRequestsByRequestIdResponse =
+  GetFalAiVibevoiceRequestsByRequestIdResponses[keyof GetFalAiVibevoiceRequestsByRequestIdResponses];
 
-export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusData = {
+export type GetFalAiVibevoice05bRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5114,20 +5244,20 @@ export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/minimax/speech-02-hd/requests/{request_id}/status";
+  url: "/fal-ai/vibevoice/0.5b/requests/{request_id}/status";
 };
 
-export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponses = {
+export type GetFalAiVibevoice05bRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponse =
-  GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxSpeech02HdRequestsByRequestIdStatusResponses];
+export type GetFalAiVibevoice05bRequestsByRequestIdStatusResponse =
+  GetFalAiVibevoice05bRequestsByRequestIdStatusResponses[keyof GetFalAiVibevoice05bRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelData = {
+export type PutFalAiVibevoice05bRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5136,10 +5266,10 @@ export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/speech-02-hd/requests/{request_id}/cancel";
+  url: "/fal-ai/vibevoice/0.5b/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses = {
+export type PutFalAiVibevoice05bRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5151,27 +5281,27 @@ export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponse =
-  PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxSpeech02HdRequestsByRequestIdCancelResponses];
+export type PutFalAiVibevoice05bRequestsByRequestIdCancelResponse =
+  PutFalAiVibevoice05bRequestsByRequestIdCancelResponses[keyof PutFalAiVibevoice05bRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMinimaxSpeech02HdData = {
-  body: MinimaxSpeech02HdInput;
+export type PostFalAiVibevoice05bData = {
+  body: Vibevoice05bInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/minimax/speech-02-hd";
+  url: "/fal-ai/vibevoice/0.5b";
 };
 
-export type PostFalAiMinimaxSpeech02HdResponses = {
+export type PostFalAiVibevoice05bResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMinimaxSpeech02HdResponse =
-  PostFalAiMinimaxSpeech02HdResponses[keyof PostFalAiMinimaxSpeech02HdResponses];
+export type PostFalAiVibevoice05bResponse =
+  PostFalAiVibevoice05bResponses[keyof PostFalAiVibevoice05bResponses];
 
-export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdData = {
+export type GetFalAiVibevoice05bRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5180,20 +5310,20 @@ export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/minimax/speech-02-hd/requests/{request_id}";
+  url: "/fal-ai/vibevoice/0.5b/requests/{request_id}";
 };
 
-export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponses = {
+export type GetFalAiVibevoice05bRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MinimaxSpeech02HdOutput;
+  200: Vibevoice05bOutput;
 };
 
-export type GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponse =
-  GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponses[keyof GetFalAiMinimaxSpeech02HdRequestsByRequestIdResponses];
+export type GetFalAiVibevoice05bRequestsByRequestIdResponse =
+  GetFalAiVibevoice05bRequestsByRequestIdResponses[keyof GetFalAiVibevoice05bRequestsByRequestIdResponses];
 
-export type GetFalAiDiaTtsRequestsByRequestIdStatusData = {
+export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5207,20 +5337,21 @@ export type GetFalAiDiaTtsRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/dia-tts/requests/{request_id}/status";
+  url: "/fal-ai/minimax/preview/speech-2.5-turbo/requests/{request_id}/status";
 };
 
-export type GetFalAiDiaTtsRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
 
-export type GetFalAiDiaTtsRequestsByRequestIdStatusResponse =
-  GetFalAiDiaTtsRequestsByRequestIdStatusResponses[keyof GetFalAiDiaTtsRequestsByRequestIdStatusResponses];
+export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponse =
+  GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponses[keyof GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdStatusResponses];
 
-export type PutFalAiDiaTtsRequestsByRequestIdCancelData = {
+export type PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5229,42 +5360,43 @@ export type PutFalAiDiaTtsRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/dia-tts/requests/{request_id}/cancel";
+  url: "/fal-ai/minimax/preview/speech-2.5-turbo/requests/{request_id}/cancel";
 };
 
-export type PutFalAiDiaTtsRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
+export type PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether the request was cancelled successfully.
+     * The request was cancelled.
      */
-    success?: boolean;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-};
 
-export type PutFalAiDiaTtsRequestsByRequestIdCancelResponse =
-  PutFalAiDiaTtsRequestsByRequestIdCancelResponses[keyof PutFalAiDiaTtsRequestsByRequestIdCancelResponses];
+export type PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponse =
+  PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponses[keyof PutFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdCancelResponses];
 
-export type PostFalAiDiaTtsData = {
-  body: DiaTtsInput;
+export type PostFalAiMinimaxPreviewSpeech25TurboData = {
+  body: MinimaxPreviewSpeech25TurboInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/dia-tts";
+  url: "/fal-ai/minimax/preview/speech-2.5-turbo";
 };
 
-export type PostFalAiDiaTtsResponses = {
+export type PostFalAiMinimaxPreviewSpeech25TurboResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiDiaTtsResponse =
-  PostFalAiDiaTtsResponses[keyof PostFalAiDiaTtsResponses];
+export type PostFalAiMinimaxPreviewSpeech25TurboResponse =
+  PostFalAiMinimaxPreviewSpeech25TurboResponses[keyof PostFalAiMinimaxPreviewSpeech25TurboResponses];
 
-export type GetFalAiDiaTtsRequestsByRequestIdData = {
+export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5273,20 +5405,20 @@ export type GetFalAiDiaTtsRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/dia-tts/requests/{request_id}";
+  url: "/fal-ai/minimax/preview/speech-2.5-turbo/requests/{request_id}";
 };
 
-export type GetFalAiDiaTtsRequestsByRequestIdResponses = {
+export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: DiaTtsOutput;
+  200: MinimaxPreviewSpeech25TurboOutput;
 };
 
-export type GetFalAiDiaTtsRequestsByRequestIdResponse =
-  GetFalAiDiaTtsRequestsByRequestIdResponses[keyof GetFalAiDiaTtsRequestsByRequestIdResponses];
+export type GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponse =
+  GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponses[keyof GetFalAiMinimaxPreviewSpeech25TurboRequestsByRequestIdResponses];
 
-export type GetFalAiOrpheusTtsRequestsByRequestIdStatusData = {
+export type GetFalAiMayaStreamRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5300,20 +5432,20 @@ export type GetFalAiOrpheusTtsRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/orpheus-tts/requests/{request_id}/status";
+  url: "/fal-ai/maya/stream/requests/{request_id}/status";
 };
 
-export type GetFalAiOrpheusTtsRequestsByRequestIdStatusResponses = {
+export type GetFalAiMayaStreamRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiOrpheusTtsRequestsByRequestIdStatusResponse =
-  GetFalAiOrpheusTtsRequestsByRequestIdStatusResponses[keyof GetFalAiOrpheusTtsRequestsByRequestIdStatusResponses];
+export type GetFalAiMayaStreamRequestsByRequestIdStatusResponse =
+  GetFalAiMayaStreamRequestsByRequestIdStatusResponses[keyof GetFalAiMayaStreamRequestsByRequestIdStatusResponses];
 
-export type PutFalAiOrpheusTtsRequestsByRequestIdCancelData = {
+export type PutFalAiMayaStreamRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5322,10 +5454,10 @@ export type PutFalAiOrpheusTtsRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/orpheus-tts/requests/{request_id}/cancel";
+  url: "/fal-ai/maya/stream/requests/{request_id}/cancel";
 };
 
-export type PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses = {
+export type PutFalAiMayaStreamRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5337,27 +5469,27 @@ export type PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiOrpheusTtsRequestsByRequestIdCancelResponse =
-  PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses[keyof PutFalAiOrpheusTtsRequestsByRequestIdCancelResponses];
+export type PutFalAiMayaStreamRequestsByRequestIdCancelResponse =
+  PutFalAiMayaStreamRequestsByRequestIdCancelResponses[keyof PutFalAiMayaStreamRequestsByRequestIdCancelResponses];
 
-export type PostFalAiOrpheusTtsData = {
-  body: OrpheusTtsInput;
+export type PostFalAiMayaStreamData = {
+  body: MayaStreamInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/orpheus-tts";
+  url: "/fal-ai/maya/stream";
 };
 
-export type PostFalAiOrpheusTtsResponses = {
+export type PostFalAiMayaStreamResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiOrpheusTtsResponse =
-  PostFalAiOrpheusTtsResponses[keyof PostFalAiOrpheusTtsResponses];
+export type PostFalAiMayaStreamResponse =
+  PostFalAiMayaStreamResponses[keyof PostFalAiMayaStreamResponses];
 
-export type GetFalAiOrpheusTtsRequestsByRequestIdData = {
+export type GetFalAiMayaStreamRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5366,20 +5498,20 @@ export type GetFalAiOrpheusTtsRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/orpheus-tts/requests/{request_id}";
+  url: "/fal-ai/maya/stream/requests/{request_id}";
 };
 
-export type GetFalAiOrpheusTtsRequestsByRequestIdResponses = {
+export type GetFalAiMayaStreamRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: OrpheusTtsOutput;
+  200: MayaStreamOutput;
 };
 
-export type GetFalAiOrpheusTtsRequestsByRequestIdResponse =
-  GetFalAiOrpheusTtsRequestsByRequestIdResponses[keyof GetFalAiOrpheusTtsRequestsByRequestIdResponses];
+export type GetFalAiMayaStreamRequestsByRequestIdResponse =
+  GetFalAiMayaStreamRequestsByRequestIdResponses[keyof GetFalAiMayaStreamRequestsByRequestIdResponses];
 
-export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusData = {
+export type GetFalAiInworldTtsRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5393,20 +5525,20 @@ export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/elevenlabs/tts/turbo-v2.5/requests/{request_id}/status";
+  url: "/fal-ai/inworld-tts/requests/{request_id}/status";
 };
 
-export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponses = {
+export type GetFalAiInworldTtsRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdStatusResponses];
+export type GetFalAiInworldTtsRequestsByRequestIdStatusResponse =
+  GetFalAiInworldTtsRequestsByRequestIdStatusResponses[keyof GetFalAiInworldTtsRequestsByRequestIdStatusResponses];
 
-export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelData = {
+export type PutFalAiInworldTtsRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5415,10 +5547,10 @@ export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/tts/turbo-v2.5/requests/{request_id}/cancel";
+  url: "/fal-ai/inworld-tts/requests/{request_id}/cancel";
 };
 
-export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses = {
+export type PutFalAiInworldTtsRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5430,27 +5562,27 @@ export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsTtsTurboV25RequestsByRequestIdCancelResponses];
+export type PutFalAiInworldTtsRequestsByRequestIdCancelResponse =
+  PutFalAiInworldTtsRequestsByRequestIdCancelResponses[keyof PutFalAiInworldTtsRequestsByRequestIdCancelResponses];
 
-export type PostFalAiElevenlabsTtsTurboV25Data = {
-  body: ElevenlabsTtsTurboV25Input;
+export type PostFalAiInworldTtsData = {
+  body: InworldTtsInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/elevenlabs/tts/turbo-v2.5";
+  url: "/fal-ai/inworld-tts";
 };
 
-export type PostFalAiElevenlabsTtsTurboV25Responses = {
+export type PostFalAiInworldTtsResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiElevenlabsTtsTurboV25Response =
-  PostFalAiElevenlabsTtsTurboV25Responses[keyof PostFalAiElevenlabsTtsTurboV25Responses];
+export type PostFalAiInworldTtsResponse =
+  PostFalAiInworldTtsResponses[keyof PostFalAiInworldTtsResponses];
 
-export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdData = {
+export type GetFalAiInworldTtsRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5459,15 +5591,201 @@ export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/elevenlabs/tts/turbo-v2.5/requests/{request_id}";
+  url: "/fal-ai/inworld-tts/requests/{request_id}";
 };
 
-export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponses = {
+export type GetFalAiInworldTtsRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: ElevenlabsTtsTurboV25Output;
+  200: InworldTtsOutput;
 };
 
-export type GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponse =
-  GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponses[keyof GetFalAiElevenlabsTtsTurboV25RequestsByRequestIdResponses];
+export type GetFalAiInworldTtsRequestsByRequestIdResponse =
+  GetFalAiInworldTtsRequestsByRequestIdResponses[keyof GetFalAiInworldTtsRequestsByRequestIdResponses];
+
+export type GetFalAiMayaBatchRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/maya/batch/requests/{request_id}/status";
+};
+
+export type GetFalAiMayaBatchRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMayaBatchRequestsByRequestIdStatusResponse =
+  GetFalAiMayaBatchRequestsByRequestIdStatusResponses[keyof GetFalAiMayaBatchRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMayaBatchRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/maya/batch/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMayaBatchRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMayaBatchRequestsByRequestIdCancelResponse =
+  PutFalAiMayaBatchRequestsByRequestIdCancelResponses[keyof PutFalAiMayaBatchRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMayaBatchData = {
+  body: MayaBatchInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/maya/batch";
+};
+
+export type PostFalAiMayaBatchResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMayaBatchResponse =
+  PostFalAiMayaBatchResponses[keyof PostFalAiMayaBatchResponses];
+
+export type GetFalAiMayaBatchRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/maya/batch/requests/{request_id}";
+};
+
+export type GetFalAiMayaBatchRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MayaBatchOutput;
+};
+
+export type GetFalAiMayaBatchRequestsByRequestIdResponse =
+  GetFalAiMayaBatchRequestsByRequestIdResponses[keyof GetFalAiMayaBatchRequestsByRequestIdResponses];
+
+export type GetXaiTtsV1RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/xai/tts/v1/requests/{request_id}/status";
+};
+
+export type GetXaiTtsV1RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetXaiTtsV1RequestsByRequestIdStatusResponse =
+  GetXaiTtsV1RequestsByRequestIdStatusResponses[keyof GetXaiTtsV1RequestsByRequestIdStatusResponses];
+
+export type PutXaiTtsV1RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/xai/tts/v1/requests/{request_id}/cancel";
+};
+
+export type PutXaiTtsV1RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutXaiTtsV1RequestsByRequestIdCancelResponse =
+  PutXaiTtsV1RequestsByRequestIdCancelResponses[keyof PutXaiTtsV1RequestsByRequestIdCancelResponses];
+
+export type PostXaiTtsV1Data = {
+  body: TtsV1Input;
+  path?: never;
+  query?: never;
+  url: "/xai/tts/v1";
+};
+
+export type PostXaiTtsV1Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostXaiTtsV1Response =
+  PostXaiTtsV1Responses[keyof PostXaiTtsV1Responses];
+
+export type GetXaiTtsV1RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/xai/tts/v1/requests/{request_id}";
+};
+
+export type GetXaiTtsV1RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: TtsV1Output;
+};
+
+export type GetXaiTtsV1RequestsByRequestIdResponse =
+  GetXaiTtsV1RequestsByRequestIdResponses[keyof GetXaiTtsV1RequestsByRequestIdResponses];

@@ -18,12 +18,30 @@ import type {
   FiboLiteGenerateStructuredPromptLiteInput,
   FiboLiteGenerateStructuredPromptLiteOutput,
   FiboLiteGenerateStructuredPromptOutput,
+  OmnilottieImageToLottieInput,
+  OmnilottieImageToLottieOutput,
+  OmnilottieInput,
+  OmnilottieOutput,
+  OmnilottieVideoToLottieInput,
+  OmnilottieVideoToLottieOutput,
 } from "./types.gen";
 
 export type JsonEndpointMap = {
   "fal-ai/bagel/understand": {
     input: BagelUnderstandInput;
     output: BagelUnderstandOutput;
+  };
+  "fal-ai/ffmpeg-api/metadata": {
+    input: FfmpegApiMetadataInput;
+    output: FfmpegApiMetadataOutput;
+  };
+  "fal-ai/omnilottie/image-to-lottie": {
+    input: OmnilottieImageToLottieInput;
+    output: OmnilottieImageToLottieOutput;
+  };
+  "fal-ai/omnilottie": {
+    input: OmnilottieInput;
+    output: OmnilottieOutput;
   };
   "fal-ai/ffmpeg-api/loudnorm": {
     input: FfmpegApiLoudnormInput;
@@ -33,25 +51,25 @@ export type JsonEndpointMap = {
     input: FfmpegApiWaveformInput;
     output: FfmpegApiWaveformOutput;
   };
-  "fal-ai/ffmpeg-api/metadata": {
-    input: FfmpegApiMetadataInput;
-    output: FfmpegApiMetadataOutput;
-  };
-  "bria/fibo-edit/edit/structured_instruction": {
-    input: FiboEditEditStructuredInstructionInput;
-    output: FiboEditEditStructuredInstructionOutput;
+  "fal-ai/omnilottie/video-to-lottie": {
+    input: OmnilottieVideoToLottieInput;
+    output: OmnilottieVideoToLottieOutput;
   };
   "bria/fibo-lite/generate/structured_prompt": {
     input: FiboLiteGenerateStructuredPromptInput;
     output: FiboLiteGenerateStructuredPromptOutput;
   };
-  "bria/fibo-lite/generate/structured_prompt/lite": {
-    input: FiboLiteGenerateStructuredPromptLiteInput;
-    output: FiboLiteGenerateStructuredPromptLiteOutput;
-  };
   "bria/fibo/generate/structured_prompt": {
     input: FiboGenerateStructuredPromptInput;
     output: FiboGenerateStructuredPromptOutput;
+  };
+  "bria/fibo-edit/edit/structured_instruction": {
+    input: FiboEditEditStructuredInstructionInput;
+    output: FiboEditEditStructuredInstructionOutput;
+  };
+  "bria/fibo-lite/generate/structured_prompt/lite": {
+    input: FiboLiteGenerateStructuredPromptLiteInput;
+    output: FiboLiteGenerateStructuredPromptLiteOutput;
   };
 };
 

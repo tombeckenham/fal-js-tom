@@ -9,7 +9,7 @@ export type ClientOptions = {
  *
  * Output for Text to 3D generation
  */
-export type MeshyV6PreviewTextTo3dOutput = {
+export type MeshyV6TextTo3dOutput = {
   /**
    * Prompt
    *
@@ -17,17 +17,19 @@ export type MeshyV6PreviewTextTo3dOutput = {
    */
   prompt: string;
   /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
+   * Rigged character in GLB format. Only present when enable_rigging is true.
    */
-  thumbnail?: File;
+  rigged_character_glb?: File | unknown;
   /**
    * Actual Prompt
    *
    * The actual prompt used if prompt expansion was enabled
    */
-  actual_prompt?: string;
+  actual_prompt?: string | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
   /**
    * Texture Urls
    *
@@ -35,22 +37,34 @@ export type MeshyV6PreviewTextTo3dOutput = {
    */
   texture_urls?: Array<TextureFiles>;
   /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
+   * Rigged character in FBX format. Only present when enable_rigging is true.
    */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
   model_glb: File;
   /**
    * Seed
    *
    * The seed used for generation
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Model Urls
+   * Rig Task Id
    *
-   * URLs for different 3D model formats
+   * Rigging task ID. Only present when enable_rigging is true.
    */
+  rig_task_id?: string | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
   model_urls: ModelUrls;
 };
 
@@ -61,41 +75,29 @@ export type MeshyV6PreviewTextTo3dOutput = {
  */
 export type ModelUrls = {
   /**
-   * Usdz
-   *
    * USDZ format 3D model
    */
-  usdz?: File;
+  usdz?: File | unknown;
   /**
-   * Fbx
-   *
    * FBX format 3D model
    */
-  fbx?: File;
+  fbx?: File | unknown;
   /**
-   * Blend
-   *
    * Blender format 3D model
    */
-  blend?: File;
+  blend?: File | unknown;
   /**
-   * Stl
-   *
-   * STL format 3D model
-   */
-  stl?: File;
-  /**
-   * Glb
-   *
-   * GLB format 3D model
-   */
-  glb?: File;
-  /**
-   * Obj
-   *
    * OBJ format 3D model
    */
-  obj?: File;
+  obj?: File | unknown;
+  /**
+   * STL format 3D model
+   */
+  stl?: File | unknown;
+  /**
+   * GLB format 3D model
+   */
+  glb?: File | unknown;
 };
 
 /**
@@ -107,31 +109,57 @@ export type File = {
    *
    * The size of the file in bytes.
    */
-  file_size?: number;
+  file_size?: number | unknown;
   /**
    * File Name
    *
    * The name of the file. It will be auto-generated if not provided.
    */
-  file_name?: string;
+  file_name?: string | unknown;
   /**
    * Content Type
    *
    * The mime type of the file.
    */
-  content_type?: string;
+  content_type?: string | unknown;
   /**
    * Url
    *
    * The URL where the file can be downloaded from.
    */
   url: string;
+};
+
+/**
+ * BasicAnimations
+ *
+ * Basic animation files included with the rigging result
+ */
+export type BasicAnimations = {
   /**
-   * File Data
-   *
-   * File data
+   * Running animation in GLB format
    */
-  file_data?: Blob | File;
+  running_glb?: File | unknown;
+  /**
+   * Walking animation in FBX format
+   */
+  walking_fbx?: File | unknown;
+  /**
+   * Walking armature only in GLB format
+   */
+  walking_armature_glb?: File | unknown;
+  /**
+   * Running armature only in GLB format
+   */
+  running_armature_glb?: File | unknown;
+  /**
+   * Running animation in FBX format
+   */
+  running_fbx?: File | unknown;
+  /**
+   * Walking animation in GLB format
+   */
+  walking_glb?: File | unknown;
 };
 
 /**
@@ -141,29 +169,18 @@ export type File = {
  */
 export type TextureFiles = {
   /**
-   * Base Color
-   *
-   * Base color texture
-   */
-  base_color: File;
-  /**
-   * Normal
-   *
-   * Normal texture (PBR)
-   */
-  normal?: File;
-  /**
-   * Roughness
-   *
    * Roughness texture (PBR)
    */
-  roughness?: File;
+  roughness?: File | unknown;
   /**
-   * Metallic
-   *
+   * Normal texture (PBR)
+   */
+  normal?: File | unknown;
+  base_color: File;
+  /**
    * Metallic texture (PBR)
    */
-  metallic?: File;
+  metallic?: File | unknown;
 };
 
 /**
@@ -171,7 +188,7 @@ export type TextureFiles = {
  *
  * Input for Text to 3D conversion
  */
-export type MeshyV6PreviewTextTo3dInput = {
+export type MeshyV6TextTo3dInput = {
   /**
    * Prompt
    *
@@ -185,17 +202,37 @@ export type MeshyV6PreviewTextTo3dInput = {
    */
   enable_pbr?: boolean;
   /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
    * Art Style
    *
    * Desired art style of the object. Note: enable_pbr should be false for sculpture style.
    */
   art_style?: "realistic" | "sculpture";
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Texture Prompt
+   *
+   * Additional text prompt to guide the texturing process (only used in 'full' mode)
+   */
+  texture_prompt?: string | unknown;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
   /**
    * Enable Safety Checker
    *
@@ -221,17 +258,29 @@ export type MeshyV6PreviewTextTo3dInput = {
    */
   should_remesh?: boolean;
   /**
-   * Texture Image Url
+   * Enable Animation
    *
-   * 2D image to guide the texturing process (only used in 'full' mode)
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
    */
-  texture_image_url?: string;
+  enable_animation?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
   /**
    * Topology
    *
    * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
    */
   topology?: "quad" | "triangle";
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process (only used in 'full' mode)
+   */
+  texture_image_url?: string | unknown;
   /**
    * Enable Prompt Expansion
    *
@@ -243,49 +292,37 @@ export type MeshyV6PreviewTextTo3dInput = {
    *
    * Seed for reproducible results. Same prompt and seed usually generate the same result.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Is A T Pose
+   * Enable Rigging
    *
-   * Whether to generate the model in an A/T pose
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
    */
-  is_a_t_pose?: boolean;
+  enable_rigging?: boolean;
   /**
-   * Texture Prompt
+   * Rigging Height Meters
    *
-   * Additional text prompt to guide the texturing process (only used in 'full' mode)
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
    */
-  texture_prompt?: string;
+  rigging_height_meters?: number;
 };
 
 /**
  * TextTo3DOutput
  */
 export type Hunyuan3dV3TextTo3dOutput = {
+  model_glb: File;
   /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrlsType3;
-  /**
-   * Thumbnail
-   *
    * Preview thumbnail of the generated model
    */
-  thumbnail?: File;
+  thumbnail?: File | unknown;
   /**
    * Seed
    *
    * The seed used for generation
    */
-  seed?: number;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
-   */
-  model_glb: File;
+  seed?: number | unknown;
+  model_urls: ModelUrlsType3;
 };
 
 /**
@@ -293,29 +330,21 @@ export type Hunyuan3dV3TextTo3dOutput = {
  */
 export type ModelUrlsType3 = {
   /**
-   * Fbx
-   *
    * FBX format 3D model
    */
-  fbx?: File;
+  fbx?: File | unknown;
   /**
-   * Usdz
-   *
    * USDZ format 3D model
    */
-  usdz?: File;
+  usdz?: File | unknown;
   /**
-   * Glb
-   *
    * GLB format 3D model
    */
-  glb?: File;
+  glb?: File | unknown;
   /**
-   * Obj
-   *
    * OBJ format 3D model
    */
-  obj?: File;
+  obj?: File | unknown;
 };
 
 /**
@@ -323,11 +352,11 @@ export type ModelUrlsType3 = {
  */
 export type Hunyuan3dV3TextTo3dInput = {
   /**
-   * Enable Pbr
+   * Prompt
    *
-   * Whether to enable PBR material generation
+   * Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.
    */
-  enable_pbr?: boolean;
+  prompt: string;
   /**
    * Polygon Type
    *
@@ -341,11 +370,11 @@ export type Hunyuan3dV3TextTo3dInput = {
    */
   face_count?: number;
   /**
-   * Prompt
+   * Enable Pbr
    *
-   * Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.
+   * Whether to enable PBR material generation
    */
-  prompt: string;
+  enable_pbr?: boolean;
   /**
    * Generate Type
    *
@@ -355,63 +384,128 @@ export type Hunyuan3dV3TextTo3dInput = {
 };
 
 /**
- * HYMotionOutput
+ * RapidTextTo3DOutput
  */
-export type HunyuanMotionOutput = {
+export type Hunyuan3dV31RapidTextTo3dOutput = {
   /**
-   * Fbx File
-   *
-   * Generated FBX animation file.
+   * Generated 3D model in OBJ format.
    */
-  fbx_file?: File;
+  model_obj?: File | unknown;
   /**
-   * Motion Json
-   *
-   * Generated motion data as JSON.
+   * Texture image for the 3D model.
    */
-  motion_json?: File;
+  texture?: File | unknown;
   /**
-   * Seed
-   *
-   * Seed used for generation.
+   * Preview thumbnail of the generated model
    */
-  seed: number;
+  thumbnail?: File | unknown;
+  /**
+   * MTL material file for the OBJ model.
+   */
+  material_mtl?: File | unknown;
+  model_urls: ModelUrlsType2;
 };
 
 /**
- * HYMotionInput
+ * ModelUrls
  */
-export type HunyuanMotionInput = {
+export type ModelUrlsType2 = {
+  /**
+   * Texture image for the 3D model
+   */
+  texture?: File | unknown;
+  /**
+   * MTL material file for OBJ model
+   */
+  mtl?: File | unknown;
+  /**
+   * FBX format 3D model
+   */
+  fbx?: File | unknown;
+  /**
+   * USDZ format 3D model
+   */
+  usdz?: File | unknown;
+  /**
+   * OBJ format 3D model
+   */
+  obj?: File | unknown;
+  /**
+   * GLB format 3D model
+   */
+  glb?: File | unknown;
+};
+
+/**
+ * RapidTextTo3DInput
+ */
+export type Hunyuan3dV31RapidTextTo3dInput = {
   /**
    * Prompt
    *
-   * Text prompt describing the motion to generate.
+   * Text description of the 3D content to generate. Max 200 UTF-8 characters.
    */
   prompt: string;
   /**
-   * Duration
+   * Enable Pbr
    *
-   * Motion duration in seconds (0.5-12.0).
+   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
    */
-  duration?: number;
+  enable_pbr?: boolean;
   /**
-   * Guidance Scale
+   * Enable Geometry
    *
-   * Classifier-free guidance scale. Higher = more faithful to prompt.
+   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
    */
-  guidance_scale?: number;
+  enable_geometry?: boolean;
+};
+
+/**
+ * ProTextTo3DOutput
+ */
+export type Hunyuan3dV31ProTextTo3dOutput = {
+  model_glb: File;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
   /**
    * Seed
    *
-   * Random seed for reproducible generation.
+   * The seed used for generation
    */
-  seed?: number;
+  seed?: number | unknown;
+  model_urls: ModelUrlsType2;
+};
+
+/**
+ * ProTextTo3DInput
+ */
+export type Hunyuan3dV31ProTextTo3dInput = {
   /**
-   * Output Format
+   * Prompt
    *
-   * Output format: 'fbx' for animation files, 'dict' for raw JSON.
+   * Text description of the 3D content to generate. Max 1024 UTF-8 characters.
    */
-  output_format?: "fbx" | "dict";
+  prompt: string;
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Face Count
+   *
+   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
+   */
+  face_count?: number;
+  /**
+   * Generate Type
+   *
+   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
+   */
+  generate_type?: "Normal" | "Geometry";
 };
 
 /**
@@ -419,17 +513,13 @@ export type HunyuanMotionInput = {
  */
 export type HunyuanMotionFastOutput = {
   /**
-   * Fbx File
-   *
    * Generated FBX animation file.
    */
-  fbx_file?: File;
+  fbx_file?: File | unknown;
   /**
-   * Motion Json
-   *
    * Generated motion data as JSON.
    */
-  motion_json?: File;
+  motion_json?: File | unknown;
   /**
    * Seed
    *
@@ -465,7 +555,7 @@ export type HunyuanMotionFastInput = {
    *
    * Random seed for reproducible generation.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Output Format
    *
@@ -475,165 +565,59 @@ export type HunyuanMotionFastInput = {
 };
 
 /**
- * ProTextTo3DOutput
+ * HYMotionOutput
  */
-export type Hunyuan3dV31ProTextTo3dOutput = {
+export type HunyuanMotionOutput = {
   /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
+   * Generated FBX animation file.
    */
-  model_urls: ModelUrlsType2;
+  fbx_file?: File | unknown;
   /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
+   * Generated motion data as JSON.
    */
-  thumbnail?: File;
+  motion_json?: File | unknown;
   /**
    * Seed
    *
-   * The seed used for generation
+   * Seed used for generation.
    */
-  seed?: number;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
-   */
-  model_glb: File;
+  seed: number;
 };
 
 /**
- * ModelUrls
+ * HYMotionInput
  */
-export type ModelUrlsType2 = {
-  /**
-   * Texture
-   *
-   * Texture image for the 3D model
-   */
-  texture?: File;
-  /**
-   * Mtl
-   *
-   * MTL material file for OBJ model
-   */
-  mtl?: File;
-  /**
-   * Fbx
-   *
-   * FBX format 3D model
-   */
-  fbx?: File;
-  /**
-   * Usdz
-   *
-   * USDZ format 3D model
-   */
-  usdz?: File;
-  /**
-   * Glb
-   *
-   * GLB format 3D model
-   */
-  glb?: File;
-  /**
-   * Obj
-   *
-   * OBJ format 3D model
-   */
-  obj?: File;
-};
-
-/**
- * ProTextTo3DInput
- */
-export type Hunyuan3dV31ProTextTo3dInput = {
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
-   */
-  enable_pbr?: boolean;
+export type HunyuanMotionInput = {
   /**
    * Prompt
    *
-   * Text description of the 3D content to generate. Max 1024 UTF-8 characters.
+   * Text prompt describing the motion to generate.
    */
   prompt: string;
   /**
-   * Face Count
+   * Duration
    *
-   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
+   * Motion duration in seconds (0.5-12.0).
    */
-  face_count?: number;
+  duration?: number;
   /**
-   * Generate Type
+   * Guidance Scale
    *
-   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
+   * Classifier-free guidance scale. Higher = more faithful to prompt.
    */
-  generate_type?: "Normal" | "Geometry";
-};
-
-/**
- * RapidTextTo3DOutput
- */
-export type Hunyuan3dV31RapidTextTo3dOutput = {
+  guidance_scale?: number;
   /**
-   * Model Obj
+   * Seed
    *
-   * Generated 3D model in OBJ format.
+   * Random seed for reproducible generation.
    */
-  model_obj?: File;
+  seed?: number | unknown;
   /**
-   * Texture
+   * Output Format
    *
-   * Texture image for the 3D model.
+   * Output format: 'fbx' for animation files, 'dict' for raw JSON.
    */
-  texture?: File;
-  /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File;
-  /**
-   * Material Mtl
-   *
-   * MTL material file for the OBJ model.
-   */
-  material_mtl?: File;
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats.
-   */
-  model_urls: ModelUrlsType2;
-};
-
-/**
- * RapidTextTo3DInput
- */
-export type Hunyuan3dV31RapidTextTo3dInput = {
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
-   */
-  enable_pbr?: boolean;
-  /**
-   * Prompt
-   *
-   * Text description of the 3D content to generate. Max 200 UTF-8 characters.
-   */
-  prompt: string;
-  /**
-   * Enable Geometry
-   *
-   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
-   */
-  enable_geometry?: boolean;
+  output_format?: "fbx" | "dict";
 };
 
 /**
@@ -641,7 +625,7 @@ export type Hunyuan3dV31RapidTextTo3dInput = {
  *
  * Output for Text to 3D generation
  */
-export type MeshyV6TextTo3dOutput = {
+export type MeshyV6PreviewTextTo3dOutput = {
   /**
    * Prompt
    *
@@ -649,17 +633,19 @@ export type MeshyV6TextTo3dOutput = {
    */
   prompt: string;
   /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
+   * Rigged character in GLB format. Only present when enable_rigging is true.
    */
-  thumbnail?: File;
+  rigged_character_glb?: File | unknown;
   /**
    * Actual Prompt
    *
    * The actual prompt used if prompt expansion was enabled
    */
-  actual_prompt?: string;
+  actual_prompt?: string | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
   /**
    * Texture Urls
    *
@@ -667,22 +653,34 @@ export type MeshyV6TextTo3dOutput = {
    */
   texture_urls?: Array<TextureFiles>;
   /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
+   * Rigged character in FBX format. Only present when enable_rigging is true.
    */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
   model_glb: File;
   /**
    * Seed
    *
    * The seed used for generation
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Model Urls
+   * Rig Task Id
    *
-   * URLs for different 3D model formats
+   * Rigging task ID. Only present when enable_rigging is true.
    */
+  rig_task_id?: string | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
   model_urls: ModelUrls;
 };
 
@@ -691,7 +689,7 @@ export type MeshyV6TextTo3dOutput = {
  *
  * Input for Text to 3D conversion
  */
-export type MeshyV6TextTo3dInput = {
+export type MeshyV6PreviewTextTo3dInput = {
   /**
    * Prompt
    *
@@ -705,17 +703,37 @@ export type MeshyV6TextTo3dInput = {
    */
   enable_pbr?: boolean;
   /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
    * Art Style
    *
    * Desired art style of the object. Note: enable_pbr should be false for sculpture style.
    */
   art_style?: "realistic" | "sculpture";
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Texture Prompt
+   *
+   * Additional text prompt to guide the texturing process (only used in 'full' mode)
+   */
+  texture_prompt?: string | unknown;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
   /**
    * Enable Safety Checker
    *
@@ -741,17 +759,29 @@ export type MeshyV6TextTo3dInput = {
    */
   should_remesh?: boolean;
   /**
-   * Texture Image Url
+   * Enable Animation
    *
-   * 2D image to guide the texturing process (only used in 'full' mode)
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
    */
-  texture_image_url?: string;
+  enable_animation?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
   /**
    * Topology
    *
    * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
    */
   topology?: "quad" | "triangle";
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process (only used in 'full' mode)
+   */
+  texture_image_url?: string | unknown;
   /**
    * Enable Prompt Expansion
    *
@@ -763,343 +793,526 @@ export type MeshyV6TextTo3dInput = {
    *
    * Seed for reproducible results. Same prompt and seed usually generate the same result.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Is A T Pose
+   * Enable Rigging
    *
-   * Whether to generate the model in an A/T pose
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
    */
-  is_a_t_pose?: boolean;
+  enable_rigging?: boolean;
   /**
-   * Texture Prompt
+   * Rigging Height Meters
    *
-   * Additional text prompt to guide the texturing process (only used in 'full' mode)
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
    */
-  texture_prompt?: string;
+  rigging_height_meters?: number;
 };
 
 /**
- * ObjectOutput
+ * ImageTo3DOutput
+ *
+ * Output for Image to 3D conversion
  */
-export type TriposrOutput = {
+export type MeshyV6ImageTo3dOutput = {
   /**
-   * Remeshing Dir
-   *
-   * Directory containing textures for the remeshed model.
+   * Rigged character in GLB format. Only present when enable_rigging is true.
    */
-  remeshing_dir?: File;
+  rigged_character_glb?: File | unknown;
   /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
+   * Preview thumbnail of the generated model
    */
-  model_mesh: File;
+  thumbnail?: File | unknown;
   /**
-   * Timings
+   * Texture Urls
    *
-   * Inference timings.
+   * Array of texture file objects, matching Meshy API structure
    */
-  timings: {
-    [key: string]: number;
-  };
-};
-
-/**
- * TripoSRInput
- */
-export type TriposrInput = {
+  texture_urls?: Array<TextureFiles>;
   /**
-   * Mc Resolution
-   *
-   * Resolution of the marching cubes. Above 512 is not recommended.
+   * Rigged character in FBX format. Only present when enable_rigging is true.
    */
-  mc_resolution?: number;
+  rigged_character_fbx?: File | unknown;
   /**
-   * Do Remove Background
-   *
-   * Whether to remove the background from the input image.
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
    */
-  do_remove_background?: boolean;
+  animation_fbx?: File | unknown;
   /**
-   * Foreground Ratio
-   *
-   * Ratio of the foreground image to the original image.
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
    */
-  foreground_ratio?: number;
-  /**
-   * Output Format
-   *
-   * Output format for the 3D model.
-   */
-  output_format?: "glb" | "obj";
-  /**
-   * Image Url
-   *
-   * Path for the image file to be processed.
-   */
-  image_url: string;
-};
-
-/**
- * ObjectOutput
- */
-export type TrellisOutput = {
-  model_mesh: FileType2;
-  /**
-   * Timings
-   *
-   * Processing timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-};
-
-/**
- * File
- */
-export type FileType2 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-};
-
-/**
- * InputModel
- */
-export type TrellisInput = {
-  /**
-   * Slat Sampling Steps
-   *
-   * Sampling steps for structured latent generation
-   */
-  slat_sampling_steps?: number;
-  /**
-   * Ss Sampling Steps
-   *
-   * Sampling steps for sparse structure generation
-   */
-  ss_sampling_steps?: number;
-  /**
-   * Image Url
-   *
-   * URL of the input image to convert to 3D
-   */
-  image_url: string;
-  /**
-   * Slat Guidance Strength
-   *
-   * Guidance strength for structured latent generation
-   */
-  slat_guidance_strength?: number;
-  /**
-   * Ss Guidance Strength
-   *
-   * Guidance strength for sparse structure generation
-   */
-  ss_guidance_strength?: number;
-  /**
-   * Mesh Simplify
-   *
-   * Mesh simplification factor
-   */
-  mesh_simplify?: number;
+  animation_glb?: File | unknown;
+  model_glb: File;
   /**
    * Seed
    *
-   * Random seed for reproducibility
+   * The seed used for generation (if available)
    */
   seed?: number | unknown;
   /**
-   * Texture Size
+   * Rig Task Id
    *
-   * Texture resolution
+   * Rigging task ID. Only present when enable_rigging is true.
    */
-  texture_size?: 512 | 1024 | 2048;
+  rig_task_id?: string | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
+  model_urls: ModelUrls;
 };
 
 /**
- * ObjectOutput
+ * ImageTo3DInput
+ *
+ * Input for Image to 3D conversion
  */
-export type Hyper3dRodinOutput = {
+export type MeshyV6ImageTo3dInput = {
   /**
-   * Model Mesh
+   * Enable Pbr
    *
-   * Generated 3D object file.
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
    */
-  model_mesh: File;
+  enable_pbr?: boolean;
   /**
-   * Textures
+   * Texture Prompt
    *
-   * Generated textures for the 3D object.
+   * Text prompt to guide the texturing process
    */
-  textures: Array<Image>;
+  texture_prompt?: string | unknown;
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
+  /**
+   * Enable Rigging
+   *
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
+   */
+  enable_rigging?: boolean;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Symmetry Mode
+   *
+   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
+   */
+  symmetry_mode?: "off" | "auto" | "on";
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Should Remesh
+   *
+   * Whether to enable the remesh phase
+   */
+  should_remesh?: boolean;
+  /**
+   * Should Texture
+   *
+   * Whether to generate textures
+   */
+  should_texture?: boolean;
+  /**
+   * Enable Animation
+   *
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
+   */
+  enable_animation?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
+  /**
+   * Image Url
+   *
+   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
+   */
+  image_url: string;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process
+   */
+  texture_image_url?: string | unknown;
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Rigging Height Meters
+   *
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   */
+  rigging_height_meters?: number;
+};
+
+/**
+ * SketchTo3DOutput
+ */
+export type Hunyuan3dV3SketchTo3dOutput = {
+  model_urls: ModelUrlsType3;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed?: number | unknown;
+  model_glb: File;
+};
+
+/**
+ * SketchTo3DInput
+ */
+export type Hunyuan3dV3SketchTo3dInput = {
+  /**
+   * Enable Pbr
+   *
+   * Whether to enable PBR material generation.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Input Image Url
+   *
+   * URL of sketch or line art image to transform into a 3D model. Image resolution must be between 128x128 and 5000x5000 pixels.
+   */
+  input_image_url: string;
+  /**
+   * Face Count
+   *
+   * Target face count. Range: 40000-1500000
+   */
+  face_count?: number;
+  /**
+   * Prompt
+   *
+   * Text prompt describing the 3D content attributes such as color, category, and material.
+   */
+  prompt: string;
+};
+
+/**
+ * ImageTo3DOutput
+ */
+export type Hunyuan3dV3ImageTo3dOutput = {
+  model_urls: ModelUrlsType3;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed?: number | unknown;
+  model_glb: File;
+};
+
+/**
+ * ImageTo3DInput
+ */
+export type Hunyuan3dV3ImageTo3dInput = {
+  /**
+   * Enable Pbr
+   *
+   * Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Polygon Type
+   *
+   * Polygon type. Only takes effect when GenerateType is LowPoly.
+   */
+  polygon_type?: "triangle" | "quadrilateral";
+  /**
+   * Back Image Url
+   *
+   * Optional back view image URL for better 3D reconstruction.
+   */
+  back_image_url?: string | unknown;
+  /**
+   * Right Image Url
+   *
+   * Optional right view image URL for better 3D reconstruction.
+   */
+  right_image_url?: string | unknown;
+  /**
+   * Face Count
+   *
+   * Target face count. Range: 40000-1500000
+   */
+  face_count?: number;
+  /**
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string;
+  /**
+   * Generate Type
+   *
+   * Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
+   */
+  generate_type?: "Normal" | "LowPoly" | "Geometry";
+  /**
+   * Left Image Url
+   *
+   * Optional left view image URL for better 3D reconstruction.
+   */
+  left_image_url?: string | unknown;
+};
+
+/**
+ * RapidImageTo3DOutput
+ */
+export type Hunyuan3dV31RapidImageTo3dOutput = {
+  /**
+   * Generated 3D model file. Contains GLB if available, otherwise OBJ.
+   */
+  model_glb?: File | unknown;
+  /**
+   * Texture image for the 3D model.
+   */
+  texture?: File | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  /**
+   * MTL material file for the OBJ model.
+   */
+  material_mtl?: File | unknown;
+  model_urls: ModelUrlsType2;
+};
+
+/**
+ * RapidImageTo3DInput
+ */
+export type Hunyuan3dV31RapidImageTo3dInput = {
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Input Image Url
+   *
+   * Front view image URL. Resolution: 128-5000px, max 8MB (recommended ≤6MB for base64 encoding), formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
+   */
+  input_image_url: string;
+  /**
+   * Enable Geometry
+   *
+   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
+   */
+  enable_geometry?: boolean;
+};
+
+/**
+ * ProImageTo3DOutput
+ */
+export type Hunyuan3dV31ProImageTo3dOutput = {
+  model_glb: File;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed?: number | unknown;
+  model_urls: ModelUrlsType2;
+};
+
+/**
+ * ProImageTo3DInput
+ */
+export type Hunyuan3dV31ProImageTo3dInput = {
+  /**
+   * Input Image Url
+   *
+   * Front view image URL. Resolution: 128-5000px, max 8MB, formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
+   */
+  input_image_url: string;
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Back Image Url
+   *
+   * Optional back/rear view image URL (JPG/PNG recommended).
+   */
+  back_image_url?: string | unknown;
+  /**
+   * Right Front Image Url
+   *
+   * Optional right-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  right_front_image_url?: string | unknown;
+  /**
+   * Right Image Url
+   *
+   * Optional right side view image URL (JPG/PNG recommended).
+   */
+  right_image_url?: string | unknown;
+  /**
+   * Bottom Image Url
+   *
+   * Optional bottom view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  bottom_image_url?: string | unknown;
+  /**
+   * Face Count
+   *
+   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
+   */
+  face_count?: number;
+  /**
+   * Top Image Url
+   *
+   * Optional top view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  top_image_url?: string | unknown;
+  /**
+   * Left Front Image Url
+   *
+   * Optional left-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  left_front_image_url?: string | unknown;
+  /**
+   * Generate Type
+   *
+   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
+   */
+  generate_type?: "Normal" | "Geometry";
+  /**
+   * Left Image Url
+   *
+   * Optional left side view image URL (JPG/PNG recommended).
+   */
+  left_image_url?: string | unknown;
+};
+
+/**
+ * PSHumanResponse
+ */
+export type PshumanOutput = {
+  model_obj: File;
+  preview_image: File;
+};
+
+/**
+ * PSHumanRequest
+ */
+export type PshumanInput = {
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   * Seed for reproducibility. If None, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Image Url
+   *
+   * A direct URL to the input image of a person.
+   */
+  image_url: string;
+};
+
+/**
+ * MultiViewObjectOutput
+ */
+export type OmnipartOutput = {
+  full_model_mesh: File;
+  output_zip: File;
   /**
    * Seed
    *
    * Seed value used for generation.
    */
   seed: number;
+  model_mesh: File;
 };
 
 /**
- * Image
- *
- * Represents an image file.
+ * OmnipartInput
  */
-export type Image = {
+export type OmnipartInput = {
   /**
-   * Height
+   * Input Image Url
    *
-   * The height of the image in pixels.
+   * URL of image to use while generating the 3D model.
    */
-  height?: number;
+  input_image_url: string;
   /**
-   * File Size
+   * Parts
    *
-   * The size of the file in bytes.
+   * Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)
    */
-  file_size?: number;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * Width
-   *
-   * The width of the image in pixels.
-   */
-  width?: number;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
-};
-
-/**
- * Rodin3DInput
- */
-export type Hyper3dRodinInput = {
-  /**
-   * Bbox Condition
-   *
-   * An array that specifies the dimensions and scaling factor of the bounding box. Typically, this array contains 3 elements, Length(X-axis), Width(Y-axis) and Height(Z-axis).
-   */
-  bbox_condition?: Array<number>;
-  /**
-   * Condition Mode
-   *
-   * For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)
-   */
-  condition_mode?: "fuse" | "concat";
-  /**
-   * Tier
-   *
-   * Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.
-   */
-  tier?: "Regular" | "Sketch";
-  /**
-   * Prompt
-   *
-   * A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.
-   */
-  prompt?: string;
-  /**
-   * Quality
-   *
-   * Generation quality. Possible values: high, medium, low, extra-low. Default is medium.
-   */
-  quality?: "high" | "medium" | "low" | "extra-low";
-  /**
-   * Input Image Urls
-   *
-   * URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.
-   */
-  input_image_urls?: Array<string>;
-  /**
-   * T/A Pose
-   *
-   * When generating the human-like model, this parameter control the generation result to T/A Pose.
-   */
-  TAPose?: boolean;
-  /**
-   * Geometry File Format
-   *
-   * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
-   */
-  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
-  /**
-   * Use Hyper
-   *
-   * Whether to export the model using hyper mode. Default is false.
-   */
-  use_hyper?: boolean;
-  /**
-   * Addons
-   *
-   * Generation add-on features. Default is []. Possible values are HighPack. The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost triple the billable units.
-   */
-  addons?: "HighPack";
+  parts?: string;
   /**
    * Seed
    *
-   * Seed value for randomization, ranging from 0 to 65535. Optional.
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
    */
   seed?: number;
   /**
-   * Material
+   * Minimum Segment Size
    *
-   * Material type. Possible values: PBR, Shaded. Default is PBR.
+   * Minimum segment size (pixels) for the model.
    */
-  material?: "PBR" | "Shaded";
+  minimum_segment_size?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
 };
 
 /**
  * MultiViewObjectOutput
  */
 export type Hunyuan3dV2MultiViewTurboOutput = {
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
-   */
   model_mesh: File;
   /**
    * Seed
@@ -1138,6 +1351,15 @@ export type Hunyuan3dV2MultiViewTurboInput = {
    */
   guidance_scale?: number;
   /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
    * Num Inference Steps
    *
    * Number of inference steps to perform.
@@ -1149,15 +1371,6 @@ export type Hunyuan3dV2MultiViewTurboInput = {
    * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
    */
   textured_mesh?: boolean;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
   /**
    * Left Image Url
    *
@@ -1169,201 +1382,7 @@ export type Hunyuan3dV2MultiViewTurboInput = {
 /**
  * ObjectOutput
  */
-export type Hunyuan3dV2Output = {
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
-   */
-  model_mesh: File;
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2Input = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV2MiniTurboOutput = {
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
-   */
-  model_mesh: File;
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2MiniTurboInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV2TurboOutput = {
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
-   */
-  model_mesh: File;
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2TurboInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-};
-
-/**
- * ObjectOutput
- */
 export type Hunyuan3dV2MiniOutput = {
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
-   */
   model_mesh: File;
   /**
    * Seed
@@ -1403,7 +1422,7 @@ export type Hunyuan3dV2MiniInput = {
    * will output the same image every time.
    *
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Num Inference Steps
    *
@@ -1419,14 +1438,393 @@ export type Hunyuan3dV2MiniInput = {
 };
 
 /**
+ * ObjectOutput
+ */
+export type Hunyuan3dV2MiniTurboOutput = {
+  model_mesh: File;
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+};
+
+/**
+ * Hunyuan3DInput
+ */
+export type Hunyuan3dV2MiniTurboInput = {
+  /**
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string;
+  /**
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
+   */
+  octree_resolution?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Hunyuan3dV2TurboOutput = {
+  model_mesh: File;
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+};
+
+/**
+ * Hunyuan3DInput
+ */
+export type Hunyuan3dV2TurboInput = {
+  /**
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string;
+  /**
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
+   */
+  octree_resolution?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
+};
+
+/**
+ * ImageToWorldResponse
+ */
+export type HunyuanWorldImageToWorldOutput = {
+  world_file: File;
+};
+
+/**
+ * ImageToWorldRequest
+ */
+export type HunyuanWorldImageToWorldInput = {
+  /**
+   * Classes
+   *
+   * Classes to use for the world generation.
+   */
+  classes: string;
+  /**
+   * Export Drc
+   *
+   * Whether to export DRC (Dynamic Resource Configuration).
+   */
+  export_drc?: boolean;
+  /**
+   * Labels Fg1
+   *
+   * Labels for the first foreground object.
+   */
+  labels_fg1: string;
+  /**
+   * Labels Fg2
+   *
+   * Labels for the second foreground object.
+   */
+  labels_fg2: string;
+  /**
+   * Image Url
+   *
+   * The URL of the image to convert to a world.
+   */
+  image_url: string;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Trellis2RetextureOutput = {
+  model_glb: File;
+};
+
+/**
+ * RetextureInputModel
+ */
+export type Trellis2RetextureInput = {
+  /**
+   * Resolution
+   *
+   * Internal resolution for texture generation. Higher produces finer texture details but is slower.
+   */
+  resolution?: 512 | 1024;
+  /**
+   * Tex Slat Sampling Steps
+   *
+   * Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.
+   */
+  tex_slat_sampling_steps?: number;
+  /**
+   * Tex Slat Rescale T
+   *
+   * Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.
+   */
+  tex_slat_rescale_t?: number;
+  /**
+   * Tex Slat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.
+   */
+  tex_slat_guidance_rescale?: number;
+  /**
+   * Image Url
+   *
+   * URL of the reference image for texturing
+   */
+  image_url: string;
+  /**
+   * Mesh Url
+   *
+   * URL of the untextured 3D mesh to retexture. Supports GLB, OBJ, PLY, and STL formats.
+   */
+  mesh_url: string;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Tex Slat Guidance Strength
+   *
+   * How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.
+   */
+  tex_slat_guidance_strength?: number;
+  /**
+   * Texture Size
+   *
+   * Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.
+   */
+  texture_size?: 1024 | 2048 | 4096;
+};
+
+/**
+ * MultiImageTo3DOutput
+ *
+ * Output for Multi-Image to 3D conversion
+ */
+export type MeshyV5MultiImageTo3dOutput = {
+  /**
+   * Rigged character in GLB format. Only present when enable_rigging is true.
+   */
+  rigged_character_glb?: File | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  /**
+   * Texture Urls
+   *
+   * Array of texture file objects
+   */
+  texture_urls?: Array<TextureFiles>;
+  /**
+   * Rigged character in FBX format. Only present when enable_rigging is true.
+   */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
+  model_glb: File;
+  /**
+   * Seed
+   *
+   * The seed used for generation (if available)
+   */
+  seed?: number | unknown;
+  /**
+   * Rig Task Id
+   *
+   * Rigging task ID. Only present when enable_rigging is true.
+   */
+  rig_task_id?: string | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
+  model_urls: ModelUrls;
+};
+
+/**
+ * MultiImageTo3DInput
+ *
+ * Input for Multi-Image to 3D conversion
+ */
+export type MeshyV5MultiImageTo3dInput = {
+  /**
+   * Enable Pbr
+   *
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Texture Prompt
+   *
+   * Text prompt to guide the texturing process. Requires should_texture to be true.
+   */
+  texture_prompt?: string | unknown;
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
+  /**
+   * Enable Rigging
+   *
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
+   */
+  enable_rigging?: boolean;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Symmetry Mode
+   *
+   * Controls symmetry behavior during model generation.
+   */
+  symmetry_mode?: "off" | "auto" | "on";
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Image Urls
+   *
+   * 1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.
+   */
+  image_urls: Array<string>;
+  /**
+   * Should Remesh
+   *
+   * Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.
+   */
+  should_remesh?: boolean;
+  /**
+   * Should Texture
+   *
+   * Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.
+   */
+  should_texture?: boolean;
+  /**
+   * Enable Animation
+   *
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
+   */
+  enable_animation?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process. Requires should_texture to be true.
+   */
+  texture_image_url?: string | unknown;
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Rigging Height Meters
+   *
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   */
+  rigging_height_meters?: number;
+};
+
+/**
  * MultiViewObjectOutput
  */
 export type Hunyuan3dV2MultiViewOutput = {
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object file.
-   */
   model_mesh: File;
   /**
    * Seed
@@ -1465,6 +1863,15 @@ export type Hunyuan3dV2MultiViewInput = {
    */
   guidance_scale?: number;
   /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
    * Num Inference Steps
    *
    * Number of inference steps to perform.
@@ -1477,15 +1884,6 @@ export type Hunyuan3dV2MultiViewInput = {
    */
   textured_mesh?: boolean;
   /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number;
-  /**
    * Left Image Url
    *
    * URL of image to use while generating the 3D model.
@@ -1494,232 +1892,131 @@ export type Hunyuan3dV2MultiViewInput = {
 };
 
 /**
- * Tripo3dOutput
+ * SAM3DBodyPersonMetadata
+ *
+ * Per-person metadata for body reconstruction.
  */
-export type TripoV25ImageTo3dOutput = {
+export type Sam3dBodyPersonMetadata = {
   /**
-   * Base Model
+   * Pred Cam T
    *
-   * Base model
+   * Predicted camera translation [tx, ty, tz]
    */
-  base_model?: File;
+  pred_cam_t: Array<number>;
   /**
-   * Task Id
+   * Person Id
    *
-   * The task id of the 3D model generation.
+   * Index of the person in the scene
    */
-  task_id: string;
+  person_id: number;
   /**
-   * Rendered Image
+   * Focal Length
    *
-   * A preview image of the model
+   * Estimated focal length
    */
-  rendered_image?: File;
+  focal_length: number;
   /**
-   * Model Mesh
+   * Keypoints 2D
    *
-   * Model
+   * 2D keypoints [[x, y], ...] - 70 body keypoints
    */
-  model_mesh?: File;
+  keypoints_2d: Array<Array<number>>;
   /**
-   * Pbr Model
+   * Bbox
    *
-   * Pbr model
+   * Bounding box [x_min, y_min, x_max, y_max]
    */
-  pbr_model?: File;
+  bbox: Array<number>;
+  /**
+   * Keypoints 3D
+   *
+   * 3D keypoints [[x, y, z], ...] - 70 body keypoints in camera space
+   */
+  keypoints_3d?: Array<Array<number>> | unknown;
 };
 
 /**
- * ImageTo3dInput
+ * SAM3DBodyMetadata
+ *
+ * Metadata for body reconstruction output.
  */
-export type TripoV25ImageTo3dInput = {
+export type Sam3dBodyMetadata = {
   /**
-   * Face Limit
+   * People
    *
-   * Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.
+   * Per-person metadata
    */
-  face_limit?: number;
+  people: Array<Sam3dBodyPersonMetadata>;
   /**
-   * Style
+   * Num People
    *
-   * [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
-   *
-   * @deprecated
+   * Number of people detected
    */
-  style?:
-    | "person:person2cartoon"
-    | "object:clay"
-    | "object:steampunk"
-    | "animal:venom"
-    | "object:barbie"
-    | "object:christmas"
-    | "gold"
-    | "ancient_bronze";
+  num_people: number;
+};
+
+/**
+ * SAM3DBodyOutput
+ */
+export type Sam33dBodyOutput = {
+  visualization: File;
+  metadata: Sam3dBodyMetadata;
   /**
-   * Pbr
+   * Meshes
    *
-   * A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.
+   * Individual mesh files (.ply), one per detected person (when export_meshes=True)
    */
-  pbr?: boolean;
-  /**
-   * Texture Alignment
-   *
-   * Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
-   */
-  texture_alignment?: "original_image" | "geometry";
+  meshes?: Array<File> | unknown;
+  model_glb: File;
+};
+
+/**
+ * SAM3DBodyInput
+ */
+export type Sam33dBodyInput = {
   /**
    * Image Url
    *
-   * URL of the image to use for model generation.
+   * URL of the image containing humans
    */
   image_url: string;
   /**
-   * Texture
+   * Include 3D Keypoints
    *
-   * An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
+   * Include 3D keypoint markers (spheres) in the GLB mesh for visualization
    */
-  texture?: "no" | "standard" | "HD";
+  include_3d_keypoints?: boolean;
   /**
-   * Auto Size
+   * Mask Url
    *
-   * Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.
+   * Optional URL of a binary mask image (white=person, black=background). When provided, skips auto human detection and uses this mask instead. Bbox is auto-computed from the mask.
    */
-  auto_size?: boolean;
+  mask_url?: string | unknown;
   /**
-   * Seed
+   * Export Meshes
    *
-   * This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.
+   * Export individual mesh files (.ply) per person
    */
-  seed?: number;
-  /**
-   * Quad
-   *
-   * Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.
-   */
-  quad?: boolean;
-  /**
-   * Orientation
-   *
-   * Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
-   */
-  orientation?: "default" | "align_image";
-  /**
-   * Texture Seed
-   *
-   * This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.
-   */
-  texture_seed?: number;
+  export_meshes?: boolean;
 };
 
 /**
  * ObjectOutput
  */
-export type TrellisMultiOutput = {
-  model_mesh: FileType2;
-  /**
-   * Timings
-   *
-   * Processing timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-};
-
-/**
- * MultiImageInputModel
- */
-export type TrellisMultiInput = {
-  /**
-   * Multiimage Algo
-   *
-   * Algorithm for multi-image generation
-   */
-  multiimage_algo?: "stochastic" | "multidiffusion";
-  /**
-   * Slat Sampling Steps
-   *
-   * Sampling steps for structured latent generation
-   */
-  slat_sampling_steps?: number;
-  /**
-   * Ss Sampling Steps
-   *
-   * Sampling steps for sparse structure generation
-   */
-  ss_sampling_steps?: number;
-  /**
-   * Ss Guidance Strength
-   *
-   * Guidance strength for sparse structure generation
-   */
-  ss_guidance_strength?: number;
-  /**
-   * Slat Guidance Strength
-   *
-   * Guidance strength for structured latent generation
-   */
-  slat_guidance_strength?: number;
-  /**
-   * Mesh Simplify
-   *
-   * Mesh simplification factor
-   */
-  mesh_simplify?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Texture Size
-   *
-   * Texture resolution
-   */
-  texture_size?: 512 | 1024 | 2048;
-  /**
-   * Image Urls
-   *
-   * List of URLs of input images to convert to 3D
-   */
-  image_urls: Array<string>;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV21Output = {
-  /**
-   * Model Glb Pbr
-   *
-   * Generated 3D object with PBR materials.
-   */
-  model_glb_pbr?: File;
+export type Hunyuan3dV2Output = {
+  model_mesh: File;
   /**
    * Seed
    *
    * Seed value used for generation.
    */
   seed: number;
-  /**
-   * Model Mesh
-   *
-   * Generated 3D object assets zip.
-   */
-  model_mesh: File;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object.
-   */
-  model_glb: File;
 };
 
 /**
  * Hunyuan3DInput
  */
-export type Hunyuan3dV21Input = {
+export type Hunyuan3dV2Input = {
   /**
    * Input Image Url
    *
@@ -1746,7 +2043,7 @@ export type Hunyuan3dV21Input = {
    * will output the same image every time.
    *
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Num Inference Steps
    *
@@ -1770,7 +2067,7 @@ export type TripoV25MultiviewTo3dOutput = {
    *
    * Base model
    */
-  base_model?: File;
+  base_model?: FileType2;
   /**
    * Task Id
    *
@@ -1782,19 +2079,55 @@ export type TripoV25MultiviewTo3dOutput = {
    *
    * A preview image of the model
    */
-  rendered_image?: File;
+  rendered_image?: FileType2;
   /**
    * Model Mesh
    *
    * Model
    */
-  model_mesh?: File;
+  model_mesh?: FileType2;
   /**
    * Pbr Model
    *
    * Pbr model
    */
-  pbr_model?: File;
+  pbr_model?: FileType2;
+};
+
+/**
+ * File
+ */
+export type FileType2 = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Data
+   *
+   * File data
+   */
+  file_data?: Blob | File;
 };
 
 /**
@@ -1898,105 +2231,202 @@ export type TripoV25MultiviewTo3dInput = {
 };
 
 /**
- * ImageToWorldResponse
+ * ObjectOutput
  */
-export type HunyuanWorldImageToWorldOutput = {
+export type TriposrOutput = {
   /**
-   * World File
-   *
-   * The generated world.
+   * Directory containing textures for the remeshed model.
    */
-  world_file: File;
+  remeshing_dir?: File | unknown;
+  /**
+   * Timings
+   *
+   * Inference timings.
+   */
+  timings: {
+    [key: string]: number;
+  };
+  model_mesh: File;
 };
 
 /**
- * ImageToWorldRequest
+ * TripoSRInput
  */
-export type HunyuanWorldImageToWorldInput = {
+export type TriposrInput = {
   /**
-   * Classes
+   * Mc Resolution
    *
-   * Classes to use for the world generation.
+   * Resolution of the marching cubes. Above 512 is not recommended.
    */
-  classes: string;
+  mc_resolution?: number;
   /**
-   * Export Drc
+   * Do Remove Background
    *
-   * Whether to export DRC (Dynamic Resource Configuration).
+   * Whether to remove the background from the input image.
    */
-  export_drc?: boolean;
+  do_remove_background?: boolean;
   /**
-   * Labels Fg1
+   * Foreground Ratio
    *
-   * Labels for the first foreground object.
+   * Ratio of the foreground image to the original image.
    */
-  labels_fg1: string;
+  foreground_ratio?: number;
   /**
-   * Labels Fg2
+   * Output Format
    *
-   * Labels for the second foreground object.
+   * Output format for the 3D model.
    */
-  labels_fg2: string;
+  output_format?: "glb" | "obj";
   /**
    * Image Url
    *
-   * The URL of the image to convert to a world.
+   * Path for the image file to be processed.
    */
   image_url: string;
 };
 
 /**
- * PSHumanResponse
+ * ObjectOutput
  */
-export type PshumanOutput = {
+export type Hunyuan3dV21Output = {
   /**
-   * Model Obj
-   *
-   * The generated 3D model in OBJ format.
+   * Generated 3D object with PBR materials.
    */
-  model_obj: File;
+  model_glb_pbr?: File | unknown;
   /**
-   * Preview Image
+   * Seed
    *
-   * A preview image showing the input and the generated multi-view outputs.
+   * Seed value used for generation.
    */
-  preview_image: File;
+  seed: number;
+  model_mesh: File;
+  model_glb: File;
 };
 
 /**
- * PSHumanRequest
+ * Hunyuan3DInput
  */
-export type PshumanInput = {
+export type Hunyuan3dV21Input = {
+  /**
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string;
+  /**
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
+   */
+  octree_resolution?: number;
   /**
    * Guidance Scale
    *
-   * Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.
+   * Guidance scale for the model.
    */
   guidance_scale?: number;
   /**
    * Seed
    *
-   * Seed for reproducibility. If None, a random seed will be used.
-   */
-  seed?: number;
-  /**
-   * Image Url
    *
-   * A direct URL to the input image of a person.
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
    */
-  image_url: string;
+  seed?: number | unknown;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
 };
 
 /**
- * ObjectOutputv2
+ * ObjectOutput
  */
-export type Hyper3dRodinV2Output = {
+export type TrellisMultiOutput = {
   /**
-   * Model Mesh
+   * Timings
    *
-   * Generated 3D object file.
+   * Processing timings
    */
+  timings: {
+    [key: string]: number;
+  };
   model_mesh: File;
+};
+
+/**
+ * MultiImageInputModel
+ */
+export type TrellisMultiInput = {
+  /**
+   * Multiimage Algo
+   *
+   * Algorithm for multi-image generation
+   */
+  multiimage_algo?: "stochastic" | "multidiffusion";
+  /**
+   * Slat Sampling Steps
+   *
+   * Sampling steps for structured latent generation
+   */
+  slat_sampling_steps?: number;
+  /**
+   * Mesh Simplify
+   *
+   * Mesh simplification factor
+   */
+  mesh_simplify?: number;
+  /**
+   * Ss Guidance Strength
+   *
+   * Guidance strength for sparse structure generation
+   */
+  ss_guidance_strength?: number;
+  /**
+   * Slat Guidance Strength
+   *
+   * Guidance strength for structured latent generation
+   */
+  slat_guidance_strength?: number;
+  /**
+   * Ss Sampling Steps
+   *
+   * Sampling steps for sparse structure generation
+   */
+  ss_sampling_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Image Urls
+   *
+   * List of URLs of input images to convert to 3D
+   */
+  image_urls: Array<string>;
+  /**
+   * Texture Size
+   *
+   * Texture resolution
+   */
+  texture_size?: 512 | 1024 | 2048;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Hyper3dRodinOutput = {
   /**
    * Textures
    *
@@ -2009,12 +2439,160 @@ export type Hyper3dRodinV2Output = {
    * Seed value used for generation.
    */
   seed: number;
+  model_mesh: File;
+};
+
+/**
+ * Image
+ *
+ * Represents an image file.
+ */
+export type Image = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Height
+   *
+   * The height of the image in pixels.
+   */
+  height?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * Width
+   *
+   * The width of the image in pixels.
+   */
+  width?: number | unknown;
+};
+
+/**
+ * Rodin3DInput
+ */
+export type Hyper3dRodinInput = {
+  /**
+   * Prompt
+   *
+   * A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.
+   */
+  prompt?: string;
+  /**
+   * Condition Mode
+   *
+   * For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)
+   */
+  condition_mode?: "fuse" | "concat";
+  /**
+   * Tier
+   *
+   * Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.
+   */
+  tier?: "Regular" | "Sketch";
+  /**
+   * Bbox Condition
+   *
+   * An array that specifies the dimensions and scaling factor of the bounding box. Typically, this array contains 3 elements, Length(X-axis), Width(Y-axis) and Height(Z-axis).
+   */
+  bbox_condition?: Array<number> | unknown;
+  /**
+   * Quality
+   *
+   * Generation quality. Possible values: high, medium, low, extra-low. Default is medium.
+   */
+  quality?: "high" | "medium" | "low" | "extra-low";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.
+   */
+  input_image_urls?: Array<string>;
+  /**
+   * T/A Pose
+   *
+   * When generating the human-like model, this parameter control the generation result to T/A Pose.
+   */
+  TAPose?: boolean;
+  /**
+   * Addons
+   *
+   * Generation add-on features. Default is []. Possible values are HighPack. The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost triple the billable units.
+   */
+  addons?: string | unknown;
+  /**
+   * Geometry File Format
+   *
+   * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
+   */
+  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
+  /**
+   * Use Hyper
+   *
+   * Whether to export the model using hyper mode. Default is false.
+   */
+  use_hyper?: boolean;
+  /**
+   * Seed
+   *
+   * Seed value for randomization, ranging from 0 to 65535. Optional.
+   */
+  seed?: number | unknown;
+  /**
+   * Material
+   *
+   * Material type. Possible values: PBR, Shaded. Default is PBR.
+   */
+  material?: "PBR" | "Shaded";
+};
+
+/**
+ * ObjectOutputv2
+ */
+export type Hyper3dRodinV2Output = {
+  /**
+   * Textures
+   *
+   * Generated textures for the 3D object.
+   */
+  textures: Array<Image>;
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
 };
 
 /**
  * RodinGen2Input
  */
 export type Hyper3dRodinV2Input = {
+  /**
+   * Prompt
+   *
+   * A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.
+   */
+  prompt?: string;
   /**
    * Quality Mesh Option
    *
@@ -2030,23 +2608,17 @@ export type Hyper3dRodinV2Input = {
     | "150K Triangle"
     | "500K Triangle";
   /**
-   * Bbox Condition
-   *
-   * An array that specifies the bounding box dimensions [width, height, length].
-   */
-  bbox_condition?: Array<number>;
-  /**
    * Preview Render
    *
    * Generate a preview render image of the 3D model along with the model files.
    */
   preview_render?: boolean;
   /**
-   * Prompt
+   * Bbox Condition
    *
-   * A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.
+   * An array that specifies the bounding box dimensions [width, height, length].
    */
-  prompt?: string;
+  bbox_condition?: Array<number> | unknown;
   /**
    * Input Image Urls
    *
@@ -2066,23 +2638,23 @@ export type Hyper3dRodinV2Input = {
    */
   use_original_alpha?: boolean;
   /**
+   * Addons
+   *
+   * The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost **triple the billable units**.
+   */
+  addons?: string | unknown;
+  /**
    * Geometry File Format
    *
    * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
    */
   geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
   /**
-   * Addons
-   *
-   * The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost **triple the billable units**.
-   */
-  addons?: "HighPack";
-  /**
    * Seed
    *
    * Seed value for randomization, ranging from 0 to 65535. Optional.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
    * Material
    *
@@ -2092,311 +2664,121 @@ export type Hyper3dRodinV2Input = {
 };
 
 /**
- * ImageTo3DOutput
- *
- * Output for Image to 3D conversion
+ * Tripo3dOutput
  */
-export type MeshyV6PreviewImageTo3dOutput = {
+export type TripoV25ImageTo3dOutput = {
   /**
-   * Model Urls
+   * Base Model
    *
-   * URLs for different 3D model formats
+   * Base model
    */
-  model_urls: ModelUrls;
+  base_model?: FileType2;
   /**
-   * Texture Urls
+   * Task Id
    *
-   * Array of texture file objects, matching Meshy API structure
+   * The task id of the 3D model generation.
    */
-  texture_urls?: Array<TextureFiles>;
+  task_id: string;
   /**
-   * Thumbnail
+   * Rendered Image
    *
-   * Preview thumbnail of the generated model
+   * A preview image of the model
    */
-  thumbnail?: File;
+  rendered_image?: FileType2;
   /**
-   * Seed
+   * Model Mesh
    *
-   * The seed used for generation (if available)
-   */
-  seed?: number;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
-   */
-  model_glb: File;
-};
-
-/**
- * ImageTo3DInput
- *
- * Input for Image to 3D conversion
- */
-export type MeshyV6PreviewImageTo3dInput = {
-  /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
-   */
-  enable_pbr?: boolean;
-  /**
-   * Is A T Pose
-   *
-   * Whether to generate the model in an A/T pose
-   */
-  is_a_t_pose?: boolean;
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
-   * Should Texture
-   *
-   * Whether to generate textures
-   */
-  should_texture?: boolean;
-  /**
-   * Texture Image Url
-   *
-   * 2D image to guide the texturing process
-   */
-  texture_image_url?: string;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-  /**
-   * Image Url
-   *
-   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
-   */
-  image_url: string;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
-   */
-  enable_safety_checker?: boolean;
-  /**
-   * Symmetry Mode
-   *
-   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
-   */
-  symmetry_mode?: "off" | "auto" | "on";
-  /**
-   * Texture Prompt
-   *
-   * Text prompt to guide the texturing process
-   */
-  texture_prompt?: string;
-  /**
-   * Should Remesh
-   *
-   * Whether to enable the remesh phase
-   */
-  should_remesh?: boolean;
-};
-
-/**
- * MultiImageTo3DOutput
- *
- * Output for Multi-Image to 3D conversion
- */
-export type MeshyV5MultiImageTo3dOutput = {
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrls;
-  /**
-   * Texture Urls
-   *
-   * Array of texture file objects
-   */
-  texture_urls?: Array<TextureFiles>;
-  /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File;
-  /**
-   * Seed
-   *
-   * The seed used for generation (if available)
-   */
-  seed?: number;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
-   */
-  model_glb: File;
-};
-
-/**
- * MultiImageTo3DInput
- *
- * Input for Multi-Image to 3D conversion
- */
-export type MeshyV5MultiImageTo3dInput = {
-  /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.
-   */
-  enable_pbr?: boolean;
-  /**
-   * Should Texture
-   *
-   * Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.
-   */
-  should_texture?: boolean;
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
-   * Is A T Pose
-   *
-   * Whether to generate the model in an A/T pose
-   */
-  is_a_t_pose?: boolean;
-  /**
-   * Texture Image Url
-   *
-   * 2D image to guide the texturing process. Requires should_texture to be true.
-   */
-  texture_image_url?: string;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
-   */
-  enable_safety_checker?: boolean;
-  /**
-   * Symmetry Mode
-   *
-   * Controls symmetry behavior during model generation.
-   */
-  symmetry_mode?: "off" | "auto" | "on";
-  /**
-   * Image Urls
-   *
-   * 1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.
-   */
-  image_urls: Array<string>;
-  /**
-   * Texture Prompt
-   *
-   * Text prompt to guide the texturing process. Requires should_texture to be true.
-   */
-  texture_prompt?: string;
-  /**
-   * Should Remesh
-   *
-   * Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.
-   */
-  should_remesh?: boolean;
-};
-
-/**
- * Seed3DImageTo3DOutput
- */
-export type BytedanceSeed3dImageTo3dOutput = {
-  /**
    * Model
-   *
-   * The generated 3D model files
    */
-  model: File;
+  model_mesh?: FileType2;
   /**
-   * Usage Tokens
+   * Pbr Model
    *
-   * The number of tokens used for the 3D model generation
+   * Pbr model
    */
-  usage_tokens: number;
+  pbr_model?: FileType2;
 };
 
 /**
- * Seed3DImageTo3DInput
+ * ImageTo3dInput
  */
-export type BytedanceSeed3dImageTo3dInput = {
+export type TripoV25ImageTo3dInput = {
+  /**
+   * Face Limit
+   *
+   * Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.
+   */
+  face_limit?: number;
+  /**
+   * Style
+   *
+   * [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
+   *
+   * @deprecated
+   */
+  style?:
+    | "person:person2cartoon"
+    | "object:clay"
+    | "object:steampunk"
+    | "animal:venom"
+    | "object:barbie"
+    | "object:christmas"
+    | "gold"
+    | "ancient_bronze";
+  /**
+   * Pbr
+   *
+   * A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.
+   */
+  pbr?: boolean;
+  /**
+   * Texture Alignment
+   *
+   * Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
+   */
+  texture_alignment?: "original_image" | "geometry";
   /**
    * Image Url
    *
-   * URL of the image for the 3D asset generation.
+   * URL of the image to use for model generation.
    */
   image_url: string;
-};
-
-/**
- * MultiViewObjectOutput
- */
-export type OmnipartOutput = {
-  full_model_mesh: FileType2;
-  output_zip: FileType2;
+  /**
+   * Texture
+   *
+   * An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
+   */
+  texture?: "no" | "standard" | "HD";
+  /**
+   * Auto Size
+   *
+   * Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.
+   */
+  auto_size?: boolean;
   /**
    * Seed
    *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: FileType2;
-};
-
-/**
- * OmnipartInput
- */
-export type OmnipartInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string;
-  /**
-   * Parts
-   *
-   * Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)
-   */
-  parts?: string;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
+   * This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.
    */
   seed?: number;
   /**
-   * Minimum Segment Size
+   * Quad
    *
-   * Minimum segment size (pixels) for the model.
+   * Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.
    */
-  minimum_segment_size?: number;
+  quad?: boolean;
   /**
-   * Guidance Scale
+   * Orientation
    *
-   * Guidance scale for the model.
+   * Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
    */
-  guidance_scale?: number;
+  orientation?: "default" | "align_image";
+  /**
+   * Texture Seed
+   *
+   * This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.
+   */
+  texture_seed?: number;
 };
 
 /**
@@ -2410,13 +2792,13 @@ export type Sam3dObjectMetadata = {
    *
    * Rotation quaternion [x, y, z, w]
    */
-  rotation?: Array<Array<number>>;
+  rotation?: Array<Array<number>> | unknown;
   /**
    * Translation
    *
    * Translation [tx, ty, tz]
    */
-  translation?: Array<Array<number>>;
+  translation?: Array<Array<number>> | unknown;
   /**
    * Object Index
    *
@@ -2428,13 +2810,13 @@ export type Sam3dObjectMetadata = {
    *
    * Scale factors [sx, sy, sz]
    */
-  scale?: Array<Array<number>>;
+  scale?: Array<Array<number>> | unknown;
   /**
    * Camera Pose
    *
    * Camera pose matrix
    */
-  camera_pose?: Array<Array<number>>;
+  camera_pose?: Array<Array<number>> | unknown;
 };
 
 /**
@@ -2446,25 +2828,25 @@ export type PointPromptBase = {
    *
    * Y Coordinate of the prompt
    */
-  y?: number;
+  y?: number | unknown;
   /**
    * Label
    *
    * 1 for foreground, 0 for background
    */
-  label?: 0 | 1;
+  label?: 0 | 1 | unknown;
   /**
    * Object Id
    *
    * Optional object identifier. Prompts sharing an object id refine the same object.
    */
-  object_id?: number;
+  object_id?: number | unknown;
   /**
    * X
    *
    * X Coordinate of the prompt
    */
-  x?: number;
+  x?: number | unknown;
 };
 
 /**
@@ -2476,31 +2858,31 @@ export type BoxPromptBase = {
    *
    * Y Min Coordinate of the box
    */
-  y_min?: number;
+  y_min?: number | unknown;
   /**
    * Object Id
    *
    * Optional object identifier. Boxes sharing an object id refine the same object.
    */
-  object_id?: number;
+  object_id?: number | unknown;
   /**
    * X Max
    *
    * X Max Coordinate of the box
    */
-  x_max?: number;
+  x_max?: number | unknown;
   /**
    * X Min
    *
    * X Min Coordinate of the box
    */
-  x_min?: number;
+  x_min?: number | unknown;
   /**
    * Y Max
    *
    * Y Max Coordinate of the box
    */
-  y_max?: number;
+  y_max?: number | unknown;
 };
 
 /**
@@ -2512,36 +2894,24 @@ export type Sam33dObjectsOutput = {
    *
    * Individual Gaussian splat files per object (only for multi-object scenes)
    */
-  individual_splats?: Array<File>;
+  individual_splats?: Array<File> | unknown;
   /**
    * Individual Glbs
    *
    * Individual GLB mesh files per object (only for multi-object scenes)
    */
-  individual_glbs?: Array<File>;
-  /**
-   * Gaussian Splat
-   *
-   * Gaussian splat file (.ply) - combined scene splat for multi-object, single splat otherwise
-   */
+  individual_glbs?: Array<File | unknown> | unknown;
   gaussian_splat: File;
+  /**
+   * Zip bundle containing all artifacts and metadata
+   */
+  artifacts_zip?: File | unknown;
   /**
    * Metadata
    *
    * Per-object metadata (rotation/translation/scale)
    */
   metadata: Array<Sam3dObjectMetadata>;
-  /**
-   * Artifacts Zip
-   *
-   * Zip bundle containing all artifacts and metadata
-   */
-  artifacts_zip?: File;
-  /**
-   * Model Glb
-   *
-   * 3D mesh in GLB format - combined scene for multi-object, single mesh otherwise
-   */
   model_glb?: File;
 };
 
@@ -2550,11 +2920,11 @@ export type Sam33dObjectsOutput = {
  */
 export type Sam33dObjectsInput = {
   /**
-   * Prompt
+   * Pointmap Url
    *
-   * Text prompt for auto-segmentation when no masks provided (e.g., 'chair', 'lamp')
+   * Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation
    */
-  prompt?: string;
+  pointmap_url?: string | unknown;
   /**
    * Export Textured Glb
    *
@@ -2566,13 +2936,13 @@ export type Sam33dObjectsInput = {
    *
    * Detection confidence threshold (0.1-1.0). Lower = more detections but less precise. If not set, uses the model's default.
    */
-  detection_threshold?: number;
+  detection_threshold?: number | unknown;
   /**
-   * Pointmap Url
+   * Prompt
    *
-   * Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation
+   * Text prompt for auto-segmentation when no masks provided (e.g., 'chair', 'lamp')
    */
-  pointmap_url?: string;
+  prompt?: string | unknown;
   /**
    * Box Prompts
    *
@@ -2602,286 +2972,240 @@ export type Sam33dObjectsInput = {
    *
    * Random seed for reproducibility
    */
-  seed?: number;
+  seed?: number | unknown;
 };
 
 /**
- * SAM3DBodyPersonMetadata
- *
- * Per-person metadata for body reconstruction.
+ * ObjectOutput
  */
-export type Sam3dBodyPersonMetadata = {
+export type TrellisOutput = {
   /**
-   * Pred Cam T
+   * Timings
    *
-   * Predicted camera translation [tx, ty, tz]
+   * Processing timings
    */
-  pred_cam_t: Array<number>;
-  /**
-   * Person Id
-   *
-   * Index of the person in the scene
-   */
-  person_id: number;
-  /**
-   * Keypoints 3D
-   *
-   * 3D keypoints [[x, y, z], ...] - 70 body keypoints in camera space
-   */
-  keypoints_3d?: Array<Array<number>>;
-  /**
-   * Bbox
-   *
-   * Bounding box [x_min, y_min, x_max, y_max]
-   */
-  bbox: Array<number>;
-  /**
-   * Keypoints 2D
-   *
-   * 2D keypoints [[x, y], ...] - 70 body keypoints
-   */
-  keypoints_2d: Array<Array<number>>;
-  /**
-   * Focal Length
-   *
-   * Estimated focal length
-   */
-  focal_length: number;
+  timings: {
+    [key: string]: number;
+  };
+  model_mesh: File;
 };
 
 /**
- * SAM3DBodyMetadata
- *
- * Metadata for body reconstruction output.
+ * InputModel
  */
-export type Sam3dBodyMetadata = {
+export type TrellisInput = {
   /**
-   * People
+   * Ss Guidance Strength
    *
-   * Per-person metadata
+   * Guidance strength for sparse structure generation
    */
-  people: Array<Sam3dBodyPersonMetadata>;
+  ss_guidance_strength?: number;
   /**
-   * Num People
+   * Mesh Simplify
    *
-   * Number of people detected
+   * Mesh simplification factor
    */
-  num_people: number;
-};
-
-/**
- * SAM3DBodyOutput
- */
-export type Sam33dBodyOutput = {
-  /**
-   * Visualization
-   *
-   * Combined visualization image (original + keypoints + mesh + side view)
-   */
-  visualization: File;
-  /**
-   * Metadata
-   *
-   * Structured metadata including keypoints and camera parameters
-   */
-  metadata: Sam3dBodyMetadata;
-  /**
-   * Meshes
-   *
-   * Individual mesh files (.ply), one per detected person (when export_meshes=True)
-   */
-  meshes?: Array<File>;
-  /**
-   * Model Glb
-   *
-   * 3D body mesh in GLB format with optional 3D keypoint markers
-   */
-  model_glb: File;
-};
-
-/**
- * SAM3DBodyInput
- */
-export type Sam33dBodyInput = {
-  /**
-   * Include 3D Keypoints
-   *
-   * Include 3D keypoint markers (spheres) in the GLB mesh for visualization
-   */
-  include_3d_keypoints?: boolean;
-  /**
-   * Export Meshes
-   *
-   * Export individual mesh files (.ply) per person
-   */
-  export_meshes?: boolean;
-  /**
-   * Mask Url
-   *
-   * Optional URL of a binary mask image (white=person, black=background). When provided, skips auto human detection and uses this mask instead. Bbox is auto-computed from the mask.
-   */
-  mask_url?: string;
+  mesh_simplify?: number;
   /**
    * Image Url
    *
-   * URL of the image containing humans
+   * URL of the input image to convert to 3D
    */
   image_url: string;
+  /**
+   * Slat Guidance Strength
+   *
+   * Guidance strength for structured latent generation
+   */
+  slat_guidance_strength?: number;
+  /**
+   * Slat Sampling Steps
+   *
+   * Sampling steps for structured latent generation
+   */
+  slat_sampling_steps?: number;
+  /**
+   * Ss Sampling Steps
+   *
+   * Sampling steps for sparse structure generation
+   */
+  ss_sampling_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Texture Size
+   *
+   * Texture resolution
+   */
+  texture_size?: 512 | 1024 | 2048;
 };
 
 /**
  * ImageTo3DOutput
+ *
+ * Output for Image to 3D conversion
  */
-export type Hunyuan3dV3ImageTo3dOutput = {
+export type MeshyV6PreviewImageTo3dOutput = {
   /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
+   * Rigged character in GLB format. Only present when enable_rigging is true.
    */
-  model_urls: ModelUrlsType3;
+  rigged_character_glb?: File | unknown;
   /**
-   * Thumbnail
-   *
    * Preview thumbnail of the generated model
    */
-  thumbnail?: File;
+  thumbnail?: File | unknown;
+  /**
+   * Texture Urls
+   *
+   * Array of texture file objects, matching Meshy API structure
+   */
+  texture_urls?: Array<TextureFiles>;
+  /**
+   * Rigged character in FBX format. Only present when enable_rigging is true.
+   */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
+  model_glb: File;
   /**
    * Seed
    *
-   * The seed used for generation
+   * The seed used for generation (if available)
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Model Glb
+   * Rig Task Id
    *
-   * Generated 3D object in GLB format.
+   * Rigging task ID. Only present when enable_rigging is true.
    */
-  model_glb: File;
+  rig_task_id?: string | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
+  model_urls: ModelUrls;
 };
 
 /**
  * ImageTo3DInput
+ *
+ * Input for Image to 3D conversion
  */
-export type Hunyuan3dV3ImageTo3dInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string;
-  /**
-   * Polygon Type
-   *
-   * Polygon type. Only takes effect when GenerateType is LowPoly.
-   */
-  polygon_type?: "triangle" | "quadrilateral";
-  /**
-   * Face Count
-   *
-   * Target face count. Range: 40000-1500000
-   */
-  face_count?: number;
-  /**
-   * Right Image Url
-   *
-   * Optional right view image URL for better 3D reconstruction.
-   */
-  right_image_url?: string;
-  /**
-   * Back Image Url
-   *
-   * Optional back view image URL for better 3D reconstruction.
-   */
-  back_image_url?: string;
+export type MeshyV6PreviewImageTo3dInput = {
   /**
    * Enable Pbr
    *
-   * Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
    */
   enable_pbr?: boolean;
   /**
-   * Generate Type
+   * Texture Prompt
    *
-   * Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
+   * Text prompt to guide the texturing process
    */
-  generate_type?: "Normal" | "LowPoly" | "Geometry";
+  texture_prompt?: string | unknown;
   /**
-   * Left Image Url
+   * Target Polycount
    *
-   * Optional left view image URL for better 3D reconstruction.
+   * Target number of polygons in the generated model
    */
-  left_image_url?: string;
-};
-
-/**
- * SketchTo3DOutput
- */
-export type Hunyuan3dV3SketchTo3dOutput = {
+  target_polycount?: number;
   /**
-   * Model Urls
+   * Enable Rigging
    *
-   * URLs for different 3D model formats
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
    */
-  model_urls: ModelUrlsType3;
+  enable_rigging?: boolean;
   /**
-   * Thumbnail
+   * Animation Action Id
    *
-   * Preview thumbnail of the generated model
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
    */
-  thumbnail?: File;
+  animation_action_id?: number;
   /**
-   * Seed
+   * Symmetry Mode
    *
-   * The seed used for generation
+   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
    */
-  seed?: number;
+  symmetry_mode?: "off" | "auto" | "on";
   /**
-   * Model Glb
+   * Enable Safety Checker
    *
-   * Generated 3D object in GLB format.
+   * If set to true, input data will be checked for safety before processing.
    */
-  model_glb: File;
-};
-
-/**
- * SketchTo3DInput
- */
-export type Hunyuan3dV3SketchTo3dInput = {
+  enable_safety_checker?: boolean;
   /**
-   * Input Image Url
+   * Should Remesh
    *
-   * URL of sketch or line art image to transform into a 3D model. Image resolution must be between 128x128 and 5000x5000 pixels.
+   * Whether to enable the remesh phase
    */
-  input_image_url: string;
+  should_remesh?: boolean;
   /**
-   * Prompt
+   * Should Texture
    *
-   * Text prompt describing the 3D content attributes such as color, category, and material.
+   * Whether to generate textures
    */
-  prompt: string;
+  should_texture?: boolean;
   /**
-   * Face Count
+   * Enable Animation
    *
-   * Target face count. Range: 40000-1500000
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
    */
-  face_count?: number;
+  enable_animation?: boolean;
   /**
-   * Enable Pbr
+   * Pose Mode
    *
-   * Whether to enable PBR material generation.
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
    */
-  enable_pbr?: boolean;
+  pose_mode?: "a-pose" | "t-pose" | "";
+  /**
+   * Image Url
+   *
+   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
+   */
+  image_url: string;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process
+   */
+  texture_image_url?: string | unknown;
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Rigging Height Meters
+   *
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   */
+  rigging_height_meters?: number;
 };
 
 /**
  * ObjectOutput
  */
 export type Trellis2Output = {
-  /**
-   * Model Glb
-   *
-   * Generated 3D GLB file
-   */
   model_glb: File;
 };
 
@@ -2890,49 +3214,69 @@ export type Trellis2Output = {
  */
 export type Trellis2Input = {
   /**
-   * Remesh Band
+   * Tex Slat Guidance Strength
+   *
+   * How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.
    */
-  remesh_band?: number;
+  tex_slat_guidance_strength?: number;
   /**
-   * Ss Guidance Rescale
+   * Tex Slat Sampling Steps
+   *
+   * Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.
    */
-  ss_guidance_rescale?: number;
+  tex_slat_sampling_steps?: number;
   /**
    * Ss Rescale T
+   *
+   * Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.
    */
   ss_rescale_t?: number;
   /**
    * Shape Slat Sampling Steps
+   *
+   * Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.
    */
   shape_slat_sampling_steps?: number;
   /**
    * Tex Slat Rescale T
+   *
+   * Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.
    */
   tex_slat_rescale_t?: number;
   /**
    * Ss Guidance Strength
+   *
+   * How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.
    */
   ss_guidance_strength?: number;
   /**
    * Ss Sampling Steps
+   *
+   * Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.
    */
   ss_sampling_steps?: number;
   /**
-   * Tex Slat Sampling Steps
+   * Ss Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.
    */
-  tex_slat_sampling_steps?: number;
+  ss_guidance_rescale?: number;
   /**
    * Remesh Project
+   *
+   * How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).
    */
   remesh_project?: number;
   /**
    * Texture Size
    *
-   * Texture resolution
+   * Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.
    */
   texture_size?: 1024 | 2048 | 4096;
   /**
    * Shape Slat Rescale T
+   *
+   * Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.
    */
   shape_slat_rescale_t?: number;
   /**
@@ -2944,15 +3288,19 @@ export type Trellis2Input = {
   /**
    * Remesh
    *
-   * Run remeshing (slower; often improves topology)
+   * Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).
    */
   remesh?: boolean;
   /**
    * Tex Slat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.
    */
   tex_slat_guidance_rescale?: number;
   /**
    * Shape Slat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.
    */
   shape_slat_guidance_rescale?: number;
   /**
@@ -2966,295 +3314,25 @@ export type Trellis2Input = {
    *
    * Random seed for reproducibility
    */
-  seed?: number;
+  seed?: number | unknown;
+  /**
+   * Remesh Band
+   *
+   * Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.
+   */
+  remesh_band?: number;
   /**
    * Shape Slat Guidance Strength
+   *
+   * How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.
    */
   shape_slat_guidance_strength?: number;
   /**
-   * Tex Slat Guidance Strength
-   */
-  tex_slat_guidance_strength?: number;
-  /**
    * Decimation Target
    *
-   * Target vertex count for mesh simplification during export
+   * Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.
    */
   decimation_target?: number;
-};
-
-/**
- * ProImageTo3DOutput
- */
-export type Hunyuan3dV31ProImageTo3dOutput = {
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrlsType2;
-  /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File;
-  /**
-   * Seed
-   *
-   * The seed used for generation
-   */
-  seed?: number;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
-   */
-  model_glb: File;
-};
-
-/**
- * ProImageTo3DInput
- */
-export type Hunyuan3dV31ProImageTo3dInput = {
-  /**
-   * Input Image Url
-   *
-   * Front view image URL. Resolution: 128-5000px, max 8MB, formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
-   */
-  input_image_url: string;
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
-   */
-  enable_pbr?: boolean;
-  /**
-   * Back Image Url
-   *
-   * Optional back/rear view image URL (JPG/PNG recommended).
-   */
-  back_image_url?: string;
-  /**
-   * Right Image Url
-   *
-   * Optional right side view image URL (JPG/PNG recommended).
-   */
-  right_image_url?: string;
-  /**
-   * Right Front Image Url
-   *
-   * Optional right-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  right_front_image_url?: string;
-  /**
-   * Bottom Image Url
-   *
-   * Optional bottom view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  bottom_image_url?: string;
-  /**
-   * Face Count
-   *
-   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
-   */
-  face_count?: number;
-  /**
-   * Top Image Url
-   *
-   * Optional top view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  top_image_url?: string;
-  /**
-   * Left Front Image Url
-   *
-   * Optional left-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  left_front_image_url?: string;
-  /**
-   * Generate Type
-   *
-   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
-   */
-  generate_type?: "Normal" | "Geometry";
-  /**
-   * Left Image Url
-   *
-   * Optional left side view image URL (JPG/PNG recommended).
-   */
-  left_image_url?: string;
-};
-
-/**
- * RapidImageTo3DOutput
- */
-export type Hunyuan3dV31RapidImageTo3dOutput = {
-  /**
-   * Model Glb
-   *
-   * Generated 3D model file. Contains GLB if available, otherwise OBJ.
-   */
-  model_glb?: File;
-  /**
-   * Texture
-   *
-   * Texture image for the 3D model.
-   */
-  texture?: File;
-  /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File;
-  /**
-   * Material Mtl
-   *
-   * MTL material file for the OBJ model.
-   */
-  material_mtl?: File;
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats.
-   */
-  model_urls: ModelUrlsType2;
-};
-
-/**
- * RapidImageTo3DInput
- */
-export type Hunyuan3dV31RapidImageTo3dInput = {
-  /**
-   * Input Image Url
-   *
-   * Front view image URL. Resolution: 128-5000px, max 8MB (recommended ≤6MB for base64 encoding), formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
-   */
-  input_image_url: string;
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
-   */
-  enable_pbr?: boolean;
-  /**
-   * Enable Geometry
-   *
-   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
-   */
-  enable_geometry?: boolean;
-};
-
-/**
- * ImageTo3DOutput
- *
- * Output for Image to 3D conversion
- */
-export type MeshyV6ImageTo3dOutput = {
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrls;
-  /**
-   * Texture Urls
-   *
-   * Array of texture file objects, matching Meshy API structure
-   */
-  texture_urls?: Array<TextureFiles>;
-  /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File;
-  /**
-   * Seed
-   *
-   * The seed used for generation (if available)
-   */
-  seed?: number;
-  /**
-   * Model Glb
-   *
-   * Generated 3D object in GLB format.
-   */
-  model_glb: File;
-};
-
-/**
- * ImageTo3DInput
- *
- * Input for Image to 3D conversion
- */
-export type MeshyV6ImageTo3dInput = {
-  /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
-   */
-  enable_pbr?: boolean;
-  /**
-   * Is A T Pose
-   *
-   * Whether to generate the model in an A/T pose
-   */
-  is_a_t_pose?: boolean;
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
-   * Should Texture
-   *
-   * Whether to generate textures
-   */
-  should_texture?: boolean;
-  /**
-   * Texture Image Url
-   *
-   * 2D image to guide the texturing process
-   */
-  texture_image_url?: string;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-  /**
-   * Image Url
-   *
-   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
-   */
-  image_url: string;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
-   */
-  enable_safety_checker?: boolean;
-  /**
-   * Symmetry Mode
-   *
-   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
-   */
-  symmetry_mode?: "off" | "auto" | "on";
-  /**
-   * Texture Prompt
-   *
-   * Text prompt to guide the texturing process
-   */
-  texture_prompt?: string;
-  /**
-   * Should Remesh
-   *
-   * Whether to enable the remesh phase
-   */
-  should_remesh?: boolean;
 };
 
 /**
@@ -3273,23 +3351,8 @@ export type HunyuanPartOutput = {
    * Index of the best mask (1, 2, or 3) based on IoU score.
    */
   best_mask_index: number;
-  /**
-   * Mask 2 Mesh
-   *
-   * Mesh showing segmentation mask 2.
-   */
   mask_2_mesh: File;
-  /**
-   * Mask 1 Mesh
-   *
-   * Mesh showing segmentation mask 1.
-   */
   mask_1_mesh: File;
-  /**
-   * Segmented Mesh
-   *
-   * Segmented 3D mesh with mask applied.
-   */
   segmented_mesh: File;
   /**
    * Seed
@@ -3297,11 +3360,6 @@ export type HunyuanPartOutput = {
    * Seed value used for generation.
    */
   seed: number;
-  /**
-   * Mask 3 Mesh
-   *
-   * Mesh showing segmentation mask 3.
-   */
   mask_3_mesh: File;
 };
 
@@ -3340,17 +3398,17 @@ export type HunyuanPartInput = {
    */
   point_num?: number;
   /**
-   * Model File Url
-   *
-   * URL of the 3D model file (.glb or .obj) to process for segmentation.
-   */
-  model_file_url: string;
-  /**
    * Point Prompt Y
    *
    * Y coordinate of the point prompt for segmentation (normalized space -1 to 1).
    */
   point_prompt_y?: number;
+  /**
+   * Model File Url
+   *
+   * URL of the 3D model file (.glb or .obj) to process for segmentation.
+   */
+  model_file_url: string;
   /**
    * Seed
    *
@@ -3358,159 +3416,69 @@ export type HunyuanPartInput = {
    * The same seed and input will produce the same segmentation results.
    *
    */
-  seed?: number;
+  seed?: number | unknown;
 };
 
 /**
- * RemeshOutput
- *
- * Output for 3D Model Remeshing
+ * SmartTopologyOutput
  */
-export type MeshyV5RemeshOutput = {
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrls;
-  /**
-   * Model Glb
-   *
-   * Remeshed 3D object in GLB format (if GLB was requested).
-   */
-  model_glb?: File;
-};
-
-/**
- * RemeshInput
- *
- * Input for 3D Model Remeshing
- */
-export type MeshyV5RemeshInput = {
-  /**
-   * Resize Height
-   *
-   * Resize the model to a certain height measured in meters. Set to 0 for no resizing.
-   */
-  resize_height?: number;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model. Actual count may vary based on geometry complexity.
-   */
-  target_polycount?: number;
-  /**
-   * Model Url
-   *
-   * URL or base64 data URI of a 3D model to remesh. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
-   */
-  model_url: string;
-  /**
-   * Origin At
-   *
-   * Position of the origin. None means no effect.
-   */
-  origin_at?: "bottom" | "center";
-  /**
-   * Target Formats
-   *
-   * List of target formats for the remeshed model.
-   */
-  target_formats?: Array<"glb" | "fbx" | "obj" | "usdz" | "blend" | "stl">;
-};
-
-/**
- * RetextureOutput
- *
- * Output for 3D Model Retexturing
- */
-export type MeshyV5RetextureOutput = {
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrls;
-  /**
-   * Text Style Prompt
-   *
-   * The text prompt used for texturing (if provided)
-   */
-  text_style_prompt?: string;
-  /**
-   * Texture Urls
-   *
-   * Array of texture file objects
-   */
-  texture_urls?: Array<TextureFiles>;
-  /**
-   * Thumbnail
-   *
-   * Preview thumbnail of the retextured model
-   */
-  thumbnail?: File;
-  /**
-   * Image Style Url
-   *
-   * The image URL used for texturing (if provided)
-   */
-  image_style_url?: string;
-  /**
-   * Model Glb
-   *
-   * Retextured 3D object in GLB format.
-   */
+export type Hunyuan3dV31SmartTopologyOutput = {
   model_glb: File;
+  model_urls: ModelUrlsType2;
 };
 
 /**
- * RetextureInput
- *
- * Input for 3D Model Retexturing
+ * SmartTopologyInput
  */
-export type MeshyV5RetextureInput = {
+export type Hunyuan3dV31SmartTopologyInput = {
   /**
-   * Enable Pbr
+   * Polygon Type
    *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color.
+   * Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.
    */
-  enable_pbr?: boolean;
+  polygon_type?: "triangle" | "quadrilateral";
   /**
-   * Text Style Prompt
+   * Face Level
    *
-   * Describe your desired texture style using text. Maximum 600 characters. Required if image_style_url is not provided.
+   * Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.
    */
-  text_style_prompt?: string;
+  face_level?: "high" | "medium" | "low";
   /**
-   * Enable Safety Checker
+   * Input File Url
    *
-   * If set to true, input data will be checked for safety before processing.
+   * URL of GLB or OBJ file to optimize topology. Max size: 200MB.
    */
-  enable_safety_checker?: boolean;
+  input_file_url?: string;
   /**
-   * Enable Original Uv
+   * Input File Type
    *
-   * Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.
+   * Input 3D file format.
    */
-  enable_original_uv?: boolean;
+  input_file_type?: "glb" | "obj";
+};
+
+/**
+ * PartOutput
+ */
+export type Hunyuan3dV31PartOutput = {
   /**
-   * Model Url
+   * Result Files
    *
-   * URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
+   * List of generated part files in FBX format
    */
-  model_url: string;
+  result_files: Array<File>;
+};
+
+/**
+ * PartInput
+ */
+export type Hunyuan3dV31PartInput = {
   /**
-   * Image Style Url
+   * Input File Url
    *
-   * 2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.
+   * URL of FBX file to split into parts. ONLY FBX format supported. Max size: 100MB, face count ≤30,000. Recommended: AIGC-generated models.
    */
-  image_style_url?: string;
+  input_file_url: string;
 };
 
 /**
@@ -3520,17 +3488,17 @@ export type MeshyV5RetextureInput = {
  */
 export type Sam3dBodyAlignmentInfo = {
   /**
-   * Translation
-   *
-   * Translation [tx, ty, tz]
-   */
-  translation: Array<number>;
-  /**
    * Cropped Vertices Count
    *
    * Number of cropped vertices
    */
   cropped_vertices_count: number;
+  /**
+   * Translation
+   *
+   * Translation [tx, ty, tz]
+   */
+  translation: Array<number>;
   /**
    * Person Id
    *
@@ -3538,11 +3506,11 @@ export type Sam3dBodyAlignmentInfo = {
    */
   person_id: number;
   /**
-   * Scale Factor
+   * Focal Length
    *
-   * Scale factor applied for alignment
+   * Focal length used
    */
-  scale_factor: number;
+  focal_length: number;
   /**
    * Target Points Count
    *
@@ -3550,11 +3518,11 @@ export type Sam3dBodyAlignmentInfo = {
    */
   target_points_count: number;
   /**
-   * Focal Length
+   * Scale Factor
    *
-   * Focal length used
+   * Scale factor applied for alignment
    */
-  focal_length: number;
+  scale_factor: number;
 };
 
 /**
@@ -3562,34 +3530,12 @@ export type Sam3dBodyAlignmentInfo = {
  */
 export type Sam33dAlignOutput = {
   /**
-   * Scene Glb
-   *
    * Combined scene with body + object meshes in GLB format (only when object_mesh_url provided)
    */
-  scene_glb?: File;
-  /**
-   * Visualization
-   *
-   * Visualization of aligned mesh overlaid on input image
-   */
-  visualization: File;
-  /**
-   * Metadata
-   *
-   * Alignment info (scale, translation, etc.)
-   */
-  metadata: Sam3dBodyAlignmentInfo;
-  /**
-   * Body Mesh Ply
-   *
-   * Aligned body mesh in PLY format
-   */
+  scene_glb?: File | unknown;
   body_mesh_ply: File;
-  /**
-   * Model Glb
-   *
-   * Aligned body mesh in GLB format (for 3D preview)
-   */
+  metadata: Sam3dBodyAlignmentInfo;
+  visualization: File;
   model_glb: File;
 };
 
@@ -3598,11 +3544,11 @@ export type Sam33dAlignOutput = {
  */
 export type Sam33dAlignInput = {
   /**
-   * Body Mask Url
+   * Image Url
    *
-   * URL of the human mask image. If not provided, uses full image.
+   * URL of the original image used for MoGe depth estimation
    */
-  body_mask_url?: string;
+  image_url: string;
   /**
    * Body Mesh Url
    *
@@ -3614,30 +3560,25 @@ export type Sam33dAlignInput = {
    *
    * Optional URL of SAM-3D Object mesh (.glb) to create combined scene
    */
-  object_mesh_url?: string;
+  object_mesh_url?: string | unknown;
   /**
    * Focal Length
    *
    * Focal length from SAM-3D Body metadata. If not provided, estimated from MoGe.
    */
-  focal_length?: number;
+  focal_length?: number | unknown;
   /**
-   * Image Url
+   * Body Mask Url
    *
-   * URL of the original image used for MoGe depth estimation
+   * URL of the human mask image. If not provided, uses full image.
    */
-  image_url: string;
+  body_mask_url?: string | unknown;
 };
 
 /**
  * UltraShapeResponse
  */
 export type UltrashapeOutput = {
-  /**
-   * Model Glb
-   *
-   * Generated 3D object.
-   */
   model_glb: File;
 };
 
@@ -3684,75 +3625,136 @@ export type UltrashapeInput = {
 };
 
 /**
- * PartOutput
+ * RetextureOutput
+ *
+ * Output for 3D Model Retexturing
  */
-export type Hunyuan3dV31PartOutput = {
+export type MeshyV5RetextureOutput = {
+  model_urls: ModelUrls;
   /**
-   * Result Files
+   * Text Style Prompt
    *
-   * List of generated part files in FBX format
+   * The text prompt used for texturing (if provided)
    */
-  result_files: Array<File>;
-};
-
-/**
- * PartInput
- */
-export type Hunyuan3dV31PartInput = {
+  text_style_prompt?: string | unknown;
   /**
-   * Input File Url
+   * Texture Urls
    *
-   * URL of FBX file to split into parts. ONLY FBX format supported. Max size: 100MB, face count ≤30,000. Recommended: AIGC-generated models.
+   * Array of texture file objects
    */
-  input_file_url: string;
-};
-
-/**
- * SmartTopologyOutput
- */
-export type Hunyuan3dV31SmartTopologyOutput = {
+  texture_urls?: Array<TextureFiles>;
   /**
-   * Model Glb
-   *
-   * Processed 3D model with optimized topology (primary file).
+   * Preview thumbnail of the retextured model
    */
+  thumbnail?: File | unknown;
+  /**
+   * Image Style Url
+   *
+   * The image URL used for texturing (if provided)
+   */
+  image_style_url?: string | unknown;
   model_glb: File;
-  /**
-   * Model Urls
-   *
-   * URLs for different 3D model formats
-   */
-  model_urls: ModelUrlsType2;
 };
 
 /**
- * SmartTopologyInput
+ * RetextureInput
+ *
+ * Input for 3D Model Retexturing
  */
-export type Hunyuan3dV31SmartTopologyInput = {
+export type MeshyV5RetextureInput = {
   /**
-   * Polygon Type
+   * Enable Pbr
    *
-   * Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color.
    */
-  polygon_type?: "triangle" | "quadrilateral";
+  enable_pbr?: boolean;
   /**
-   * Face Level
+   * Text Style Prompt
    *
-   * Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.
+   * Describe your desired texture style using text. Maximum 600 characters. Required if image_style_url is not provided.
    */
-  face_level?: "high" | "medium" | "low";
+  text_style_prompt?: string | unknown;
   /**
-   * Input File Url
+   * Enable Safety Checker
    *
-   * URL of GLB or OBJ file to optimize topology. Max size: 200MB.
+   * If set to true, input data will be checked for safety before processing.
    */
-  input_file_url?: string;
+  enable_safety_checker?: boolean;
   /**
-   * Input File Type
+   * Enable Original Uv
    *
-   * Input 3D file format.
+   * Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.
    */
-  input_file_type?: "glb" | "obj";
+  enable_original_uv?: boolean;
+  /**
+   * Model Url
+   *
+   * URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
+   */
+  model_url: string;
+  /**
+   * Image Style Url
+   *
+   * 2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.
+   */
+  image_style_url?: string | unknown;
+};
+
+/**
+ * RemeshOutput
+ *
+ * Output for 3D Model Remeshing
+ */
+export type MeshyV5RemeshOutput = {
+  /**
+   * Remeshed 3D object in GLB format (if GLB was requested).
+   */
+  model_glb?: File | unknown;
+  model_urls: ModelUrls;
+};
+
+/**
+ * RemeshInput
+ *
+ * Input for 3D Model Remeshing
+ */
+export type MeshyV5RemeshInput = {
+  /**
+   * Resize Height
+   *
+   * Resize the model to a certain height measured in meters. Set to 0 for no resizing.
+   */
+  resize_height?: number;
+  /**
+   * Origin At
+   *
+   * Position of the origin. None means no effect.
+   */
+  origin_at?: "bottom" | "center" | unknown;
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model. Actual count may vary based on geometry complexity.
+   */
+  target_polycount?: number;
+  /**
+   * Model Url
+   *
+   * URL or base64 data URI of a 3D model to remesh. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
+   */
+  model_url: string;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+  /**
+   * Target Formats
+   *
+   * List of target formats for the remeshed model.
+   */
+  target_formats?: Array<"glb" | "fbx" | "obj" | "usdz" | "blend" | "stl">;
 };
 
 export type QueueStatus = {
@@ -3791,7 +3793,7 @@ export type QueueStatus = {
   queue_position?: number;
 };
 
-export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusData = {
+export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -3805,66 +3807,20 @@ export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology/requests/{request_id}/status";
+  url: "/fal-ai/meshy/v5/remesh/requests/{request_id}/status";
 };
 
-export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuan3dV31SmartTopologyData = {
-  body: Hunyuan3dV31SmartTopologyInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology";
-};
-
-export type PostFalAiHunyuan3dV31SmartTopologyResponses = {
+export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuan3dV31SmartTopologyResponse =
-  PostFalAiHunyuan3dV31SmartTopologyResponses[keyof PostFalAiHunyuan3dV31SmartTopologyResponses];
+export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponse =
+  GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponses];
 
-export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdData = {
+export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -3873,59 +3829,10 @@ export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology/requests/{request_id}";
+  url: "/fal-ai/meshy/v5/remesh/requests/{request_id}/cancel";
 };
 
-export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Hunyuan3dV31SmartTopologyOutput;
-};
-
-export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan-3d/v3.1/part/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/part/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses = {
+export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -3937,27 +3844,27 @@ export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses];
+export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponse =
+  PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuan3dV31PartData = {
-  body: Hunyuan3dV31PartInput;
+export type PostFalAiMeshyV5RemeshData = {
+  body: MeshyV5RemeshInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/part";
+  url: "/fal-ai/meshy/v5/remesh";
 };
 
-export type PostFalAiHunyuan3dV31PartResponses = {
+export type PostFalAiMeshyV5RemeshResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuan3dV31PartResponse =
-  PostFalAiHunyuan3dV31PartResponses[keyof PostFalAiHunyuan3dV31PartResponses];
+export type PostFalAiMeshyV5RemeshResponse =
+  PostFalAiMeshyV5RemeshResponses[keyof PostFalAiMeshyV5RemeshResponses];
 
-export type GetFalAiHunyuan3dV31PartRequestsByRequestIdData = {
+export type GetFalAiMeshyV5RemeshRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -3966,18 +3873,111 @@ export type GetFalAiHunyuan3dV31PartRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/part/requests/{request_id}";
+  url: "/fal-ai/meshy/v5/remesh/requests/{request_id}";
 };
 
-export type GetFalAiHunyuan3dV31PartRequestsByRequestIdResponses = {
+export type GetFalAiMeshyV5RemeshRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Hunyuan3dV31PartOutput;
+  200: MeshyV5RemeshOutput;
 };
 
-export type GetFalAiHunyuan3dV31PartRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV31PartRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31PartRequestsByRequestIdResponses];
+export type GetFalAiMeshyV5RemeshRequestsByRequestIdResponse =
+  GetFalAiMeshyV5RemeshRequestsByRequestIdResponses[keyof GetFalAiMeshyV5RemeshRequestsByRequestIdResponses];
+
+export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/meshy/v5/retexture/requests/{request_id}/status";
+};
+
+export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponse =
+  GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/meshy/v5/retexture/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponse =
+  PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMeshyV5RetextureData = {
+  body: MeshyV5RetextureInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/meshy/v5/retexture";
+};
+
+export type PostFalAiMeshyV5RetextureResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMeshyV5RetextureResponse =
+  PostFalAiMeshyV5RetextureResponses[keyof PostFalAiMeshyV5RetextureResponses];
+
+export type GetFalAiMeshyV5RetextureRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/meshy/v5/retexture/requests/{request_id}";
+};
+
+export type GetFalAiMeshyV5RetextureRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MeshyV5RetextureOutput;
+};
+
+export type GetFalAiMeshyV5RetextureRequestsByRequestIdResponse =
+  GetFalAiMeshyV5RetextureRequestsByRequestIdResponses[keyof GetFalAiMeshyV5RetextureRequestsByRequestIdResponses];
 
 export type GetFalAiUltrashapeRequestsByRequestIdStatusData = {
   body?: never;
@@ -4165,7 +4165,7 @@ export type GetFalAiSam33dAlignRequestsByRequestIdResponses = {
 export type GetFalAiSam33dAlignRequestsByRequestIdResponse =
   GetFalAiSam33dAlignRequestsByRequestIdResponses[keyof GetFalAiSam33dAlignRequestsByRequestIdResponses];
 
-export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusData = {
+export type GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4179,20 +4179,20 @@ export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/meshy/v5/retexture/requests/{request_id}/status";
+  url: "/fal-ai/hunyuan-3d/v3.1/part/requests/{request_id}/status";
 };
 
-export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponses = {
+export type GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponse =
-  GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponses];
+export type GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelData = {
+export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4201,10 +4201,10 @@ export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/meshy/v5/retexture/requests/{request_id}/cancel";
+  url: "/fal-ai/hunyuan-3d/v3.1/part/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses = {
+export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -4216,27 +4216,27 @@ export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponse =
-  PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponses];
+export type PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMeshyV5RetextureData = {
-  body: MeshyV5RetextureInput;
+export type PostFalAiHunyuan3dV31PartData = {
+  body: Hunyuan3dV31PartInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/meshy/v5/retexture";
+  url: "/fal-ai/hunyuan-3d/v3.1/part";
 };
 
-export type PostFalAiMeshyV5RetextureResponses = {
+export type PostFalAiHunyuan3dV31PartResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMeshyV5RetextureResponse =
-  PostFalAiMeshyV5RetextureResponses[keyof PostFalAiMeshyV5RetextureResponses];
+export type PostFalAiHunyuan3dV31PartResponse =
+  PostFalAiHunyuan3dV31PartResponses[keyof PostFalAiHunyuan3dV31PartResponses];
 
-export type GetFalAiMeshyV5RetextureRequestsByRequestIdData = {
+export type GetFalAiHunyuan3dV31PartRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4245,20 +4245,20 @@ export type GetFalAiMeshyV5RetextureRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/meshy/v5/retexture/requests/{request_id}";
+  url: "/fal-ai/hunyuan-3d/v3.1/part/requests/{request_id}";
 };
 
-export type GetFalAiMeshyV5RetextureRequestsByRequestIdResponses = {
+export type GetFalAiHunyuan3dV31PartRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MeshyV5RetextureOutput;
+  200: Hunyuan3dV31PartOutput;
 };
 
-export type GetFalAiMeshyV5RetextureRequestsByRequestIdResponse =
-  GetFalAiMeshyV5RetextureRequestsByRequestIdResponses[keyof GetFalAiMeshyV5RetextureRequestsByRequestIdResponses];
+export type GetFalAiHunyuan3dV31PartRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV31PartRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31PartRequestsByRequestIdResponses];
 
-export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusData = {
+export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4272,20 +4272,21 @@ export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/meshy/v5/remesh/requests/{request_id}/status";
+  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology/requests/{request_id}/status";
 };
 
-export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
 
-export type GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponse =
-  GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponses];
+export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelData = {
+export type PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4294,42 +4295,43 @@ export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/meshy/v5/remesh/requests/{request_id}/cancel";
+  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
+export type PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether the request was cancelled successfully.
+     * The request was cancelled.
      */
-    success?: boolean;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-};
 
-export type PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponse =
-  PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponses];
+export type PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMeshyV5RemeshData = {
-  body: MeshyV5RemeshInput;
+export type PostFalAiHunyuan3dV31SmartTopologyData = {
+  body: Hunyuan3dV31SmartTopologyInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/meshy/v5/remesh";
+  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology";
 };
 
-export type PostFalAiMeshyV5RemeshResponses = {
+export type PostFalAiHunyuan3dV31SmartTopologyResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMeshyV5RemeshResponse =
-  PostFalAiMeshyV5RemeshResponses[keyof PostFalAiMeshyV5RemeshResponses];
+export type PostFalAiHunyuan3dV31SmartTopologyResponse =
+  PostFalAiHunyuan3dV31SmartTopologyResponses[keyof PostFalAiHunyuan3dV31SmartTopologyResponses];
 
-export type GetFalAiMeshyV5RemeshRequestsByRequestIdData = {
+export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4338,18 +4340,18 @@ export type GetFalAiMeshyV5RemeshRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/meshy/v5/remesh/requests/{request_id}";
+  url: "/fal-ai/hunyuan-3d/v3.1/smart-topology/requests/{request_id}";
 };
 
-export type GetFalAiMeshyV5RemeshRequestsByRequestIdResponses = {
+export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MeshyV5RemeshOutput;
+  200: Hunyuan3dV31SmartTopologyOutput;
 };
 
-export type GetFalAiMeshyV5RemeshRequestsByRequestIdResponse =
-  GetFalAiMeshyV5RemeshRequestsByRequestIdResponses[keyof GetFalAiMeshyV5RemeshRequestsByRequestIdResponses];
+export type GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponses];
 
 export type GetFalAiHunyuanPartRequestsByRequestIdStatusData = {
   body?: never;
@@ -4444,289 +4446,6 @@ export type GetFalAiHunyuanPartRequestsByRequestIdResponses = {
 export type GetFalAiHunyuanPartRequestsByRequestIdResponse =
   GetFalAiHunyuanPartRequestsByRequestIdResponses[keyof GetFalAiHunyuanPartRequestsByRequestIdResponses];
 
-export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/meshy/v6/image-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/meshy/v6/image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMeshyV6ImageTo3dData = {
-  body: MeshyV6ImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/meshy/v6/image-to-3d";
-};
-
-export type PostFalAiMeshyV6ImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMeshyV6ImageTo3dResponse =
-  PostFalAiMeshyV6ImageTo3dResponses[keyof PostFalAiMeshyV6ImageTo3dResponses];
-
-export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/meshy/v6/image-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MeshyV6ImageTo3dOutput;
-};
-
-export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponse =
-  GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuan3dV31RapidImageTo3dData = {
-  body: Hunyuan3dV31RapidImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d";
-};
-
-export type PostFalAiHunyuan3dV31RapidImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiHunyuan3dV31RapidImageTo3dResponse =
-  PostFalAiHunyuan3dV31RapidImageTo3dResponses[keyof PostFalAiHunyuan3dV31RapidImageTo3dResponses];
-
-export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Hunyuan3dV31RapidImageTo3dOutput;
-};
-
-export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuan3dV31ProImageTo3dData = {
-  body: Hunyuan3dV31ProImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d";
-};
-
-export type PostFalAiHunyuan3dV31ProImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiHunyuan3dV31ProImageTo3dResponse =
-  PostFalAiHunyuan3dV31ProImageTo3dResponses[keyof PostFalAiHunyuan3dV31ProImageTo3dResponses];
-
-export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Hunyuan3dV31ProImageTo3dOutput;
-};
-
-export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponses];
-
 export type GetFalAiTrellis2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -4819,659 +4538,6 @@ export type GetFalAiTrellis2RequestsByRequestIdResponses = {
 
 export type GetFalAiTrellis2RequestsByRequestIdResponse =
   GetFalAiTrellis2RequestsByRequestIdResponses[keyof GetFalAiTrellis2RequestsByRequestIdResponses];
-
-export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuan3dV3SketchTo3dData = {
-  body: Hunyuan3dV3SketchTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d";
-};
-
-export type PostFalAiHunyuan3dV3SketchTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiHunyuan3dV3SketchTo3dResponse =
-  PostFalAiHunyuan3dV3SketchTo3dResponses[keyof PostFalAiHunyuan3dV3SketchTo3dResponses];
-
-export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Hunyuan3dV3SketchTo3dOutput;
-};
-
-export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan3d-v3/image-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan3d-v3/image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuan3dV3ImageTo3dData = {
-  body: Hunyuan3dV3ImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan3d-v3/image-to-3d";
-};
-
-export type PostFalAiHunyuan3dV3ImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiHunyuan3dV3ImageTo3dResponse =
-  PostFalAiHunyuan3dV3ImageTo3dResponses[keyof PostFalAiHunyuan3dV3ImageTo3dResponses];
-
-export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan3d-v3/image-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Hunyuan3dV3ImageTo3dOutput;
-};
-
-export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponses];
-
-export type GetFalAiSam33dBodyRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sam-3/3d-body/requests/{request_id}/status";
-};
-
-export type GetFalAiSam33dBodyRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSam33dBodyRequestsByRequestIdStatusResponse =
-  GetFalAiSam33dBodyRequestsByRequestIdStatusResponses[keyof GetFalAiSam33dBodyRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSam33dBodyRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-3/3d-body/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSam33dBodyRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSam33dBodyRequestsByRequestIdCancelResponse =
-  PutFalAiSam33dBodyRequestsByRequestIdCancelResponses[keyof PutFalAiSam33dBodyRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSam33dBodyData = {
-  body: Sam33dBodyInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sam-3/3d-body";
-};
-
-export type PostFalAiSam33dBodyResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSam33dBodyResponse =
-  PostFalAiSam33dBodyResponses[keyof PostFalAiSam33dBodyResponses];
-
-export type GetFalAiSam33dBodyRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-3/3d-body/requests/{request_id}";
-};
-
-export type GetFalAiSam33dBodyRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sam33dBodyOutput;
-};
-
-export type GetFalAiSam33dBodyRequestsByRequestIdResponse =
-  GetFalAiSam33dBodyRequestsByRequestIdResponses[keyof GetFalAiSam33dBodyRequestsByRequestIdResponses];
-
-export type GetFalAiSam33dObjectsRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sam-3/3d-objects/requests/{request_id}/status";
-};
-
-export type GetFalAiSam33dObjectsRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSam33dObjectsRequestsByRequestIdStatusResponse =
-  GetFalAiSam33dObjectsRequestsByRequestIdStatusResponses[keyof GetFalAiSam33dObjectsRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSam33dObjectsRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-3/3d-objects/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSam33dObjectsRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSam33dObjectsRequestsByRequestIdCancelResponse =
-  PutFalAiSam33dObjectsRequestsByRequestIdCancelResponses[keyof PutFalAiSam33dObjectsRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSam33dObjectsData = {
-  body: Sam33dObjectsInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sam-3/3d-objects";
-};
-
-export type PostFalAiSam33dObjectsResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSam33dObjectsResponse =
-  PostFalAiSam33dObjectsResponses[keyof PostFalAiSam33dObjectsResponses];
-
-export type GetFalAiSam33dObjectsRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-3/3d-objects/requests/{request_id}";
-};
-
-export type GetFalAiSam33dObjectsRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sam33dObjectsOutput;
-};
-
-export type GetFalAiSam33dObjectsRequestsByRequestIdResponse =
-  GetFalAiSam33dObjectsRequestsByRequestIdResponses[keyof GetFalAiSam33dObjectsRequestsByRequestIdResponses];
-
-export type GetFalAiOmnipartRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/omnipart/requests/{request_id}/status";
-};
-
-export type GetFalAiOmnipartRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiOmnipartRequestsByRequestIdStatusResponse =
-  GetFalAiOmnipartRequestsByRequestIdStatusResponses[keyof GetFalAiOmnipartRequestsByRequestIdStatusResponses];
-
-export type PutFalAiOmnipartRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnipart/requests/{request_id}/cancel";
-};
-
-export type PutFalAiOmnipartRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiOmnipartRequestsByRequestIdCancelResponse =
-  PutFalAiOmnipartRequestsByRequestIdCancelResponses[keyof PutFalAiOmnipartRequestsByRequestIdCancelResponses];
-
-export type PostFalAiOmnipartData = {
-  body: OmnipartInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/omnipart";
-};
-
-export type PostFalAiOmnipartResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiOmnipartResponse =
-  PostFalAiOmnipartResponses[keyof PostFalAiOmnipartResponses];
-
-export type GetFalAiOmnipartRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnipart/requests/{request_id}";
-};
-
-export type GetFalAiOmnipartRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: OmnipartOutput;
-};
-
-export type GetFalAiOmnipartRequestsByRequestIdResponse =
-  GetFalAiOmnipartRequestsByRequestIdResponses[keyof GetFalAiOmnipartRequestsByRequestIdResponses];
-
-export type GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/bytedance/seed3d/image-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/bytedance/seed3d/image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiBytedanceSeed3dImageTo3dData = {
-  body: BytedanceSeed3dImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/bytedance/seed3d/image-to-3d";
-};
-
-export type PostFalAiBytedanceSeed3dImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiBytedanceSeed3dImageTo3dResponse =
-  PostFalAiBytedanceSeed3dImageTo3dResponses[keyof PostFalAiBytedanceSeed3dImageTo3dResponses];
-
-export type GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/bytedance/seed3d/image-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: BytedanceSeed3dImageTo3dOutput;
-};
-
-export type GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdResponse =
-  GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdResponses[keyof GetFalAiBytedanceSeed3dImageTo3dRequestsByRequestIdResponses];
-
-export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/meshy/v5/multi-image-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/meshy/v5/multi-image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMeshyV5MultiImageTo3dData = {
-  body: MeshyV5MultiImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/meshy/v5/multi-image-to-3d";
-};
-
-export type PostFalAiMeshyV5MultiImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMeshyV5MultiImageTo3dResponse =
-  PostFalAiMeshyV5MultiImageTo3dResponses[keyof PostFalAiMeshyV5MultiImageTo3dResponses];
-
-export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/meshy/v5/multi-image-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MeshyV5MultiImageTo3dOutput;
-};
-
-export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponse =
-  GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponses];
 
 export type GetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdStatusData = {
   body?: never;
@@ -5568,6 +4634,285 @@ export type GetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdResponses = {
 export type GetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdResponse =
   GetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdResponses];
 
+export type GetFalAiTrellisRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/trellis/requests/{request_id}/status";
+};
+
+export type GetFalAiTrellisRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiTrellisRequestsByRequestIdStatusResponse =
+  GetFalAiTrellisRequestsByRequestIdStatusResponses[keyof GetFalAiTrellisRequestsByRequestIdStatusResponses];
+
+export type PutFalAiTrellisRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/trellis/requests/{request_id}/cancel";
+};
+
+export type PutFalAiTrellisRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiTrellisRequestsByRequestIdCancelResponse =
+  PutFalAiTrellisRequestsByRequestIdCancelResponses[keyof PutFalAiTrellisRequestsByRequestIdCancelResponses];
+
+export type PostFalAiTrellisData = {
+  body: TrellisInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/trellis";
+};
+
+export type PostFalAiTrellisResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiTrellisResponse =
+  PostFalAiTrellisResponses[keyof PostFalAiTrellisResponses];
+
+export type GetFalAiTrellisRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/trellis/requests/{request_id}";
+};
+
+export type GetFalAiTrellisRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: TrellisOutput;
+};
+
+export type GetFalAiTrellisRequestsByRequestIdResponse =
+  GetFalAiTrellisRequestsByRequestIdResponses[keyof GetFalAiTrellisRequestsByRequestIdResponses];
+
+export type GetFalAiSam33dObjectsRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sam-3/3d-objects/requests/{request_id}/status";
+};
+
+export type GetFalAiSam33dObjectsRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSam33dObjectsRequestsByRequestIdStatusResponse =
+  GetFalAiSam33dObjectsRequestsByRequestIdStatusResponses[keyof GetFalAiSam33dObjectsRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSam33dObjectsRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-3/3d-objects/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSam33dObjectsRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSam33dObjectsRequestsByRequestIdCancelResponse =
+  PutFalAiSam33dObjectsRequestsByRequestIdCancelResponses[keyof PutFalAiSam33dObjectsRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSam33dObjectsData = {
+  body: Sam33dObjectsInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sam-3/3d-objects";
+};
+
+export type PostFalAiSam33dObjectsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSam33dObjectsResponse =
+  PostFalAiSam33dObjectsResponses[keyof PostFalAiSam33dObjectsResponses];
+
+export type GetFalAiSam33dObjectsRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-3/3d-objects/requests/{request_id}";
+};
+
+export type GetFalAiSam33dObjectsRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Sam33dObjectsOutput;
+};
+
+export type GetFalAiSam33dObjectsRequestsByRequestIdResponse =
+  GetFalAiSam33dObjectsRequestsByRequestIdResponses[keyof GetFalAiSam33dObjectsRequestsByRequestIdResponses];
+
+export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/tripo3d/tripo/v2.5/image-to-3d/requests/{request_id}/status";
+};
+
+export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponse =
+  GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponses[keyof GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponses];
+
+export type PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/tripo3d/tripo/v2.5/image-to-3d/requests/{request_id}/cancel";
+};
+
+export type PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponse =
+  PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponses[keyof PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponses];
+
+export type PostTripo3dTripoV25ImageTo3dData = {
+  body: TripoV25ImageTo3dInput;
+  path?: never;
+  query?: never;
+  url: "/tripo3d/tripo/v2.5/image-to-3d";
+};
+
+export type PostTripo3dTripoV25ImageTo3dResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostTripo3dTripoV25ImageTo3dResponse =
+  PostTripo3dTripoV25ImageTo3dResponses[keyof PostTripo3dTripoV25ImageTo3dResponses];
+
+export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/tripo3d/tripo/v2.5/image-to-3d/requests/{request_id}";
+};
+
+export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: TripoV25ImageTo3dOutput;
+};
+
+export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponse =
+  GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponses[keyof GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponses];
+
 export type GetFalAiHyper3dRodinV2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -5661,7 +5006,7 @@ export type GetFalAiHyper3dRodinV2RequestsByRequestIdResponses = {
 export type GetFalAiHyper3dRodinV2RequestsByRequestIdResponse =
   GetFalAiHyper3dRodinV2RequestsByRequestIdResponses[keyof GetFalAiHyper3dRodinV2RequestsByRequestIdResponses];
 
-export type GetFalAiPshumanRequestsByRequestIdStatusData = {
+export type GetFalAiHyper3dRodinRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5675,20 +5020,20 @@ export type GetFalAiPshumanRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/pshuman/requests/{request_id}/status";
+  url: "/fal-ai/hyper3d/rodin/requests/{request_id}/status";
 };
 
-export type GetFalAiPshumanRequestsByRequestIdStatusResponses = {
+export type GetFalAiHyper3dRodinRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiPshumanRequestsByRequestIdStatusResponse =
-  GetFalAiPshumanRequestsByRequestIdStatusResponses[keyof GetFalAiPshumanRequestsByRequestIdStatusResponses];
+export type GetFalAiHyper3dRodinRequestsByRequestIdStatusResponse =
+  GetFalAiHyper3dRodinRequestsByRequestIdStatusResponses[keyof GetFalAiHyper3dRodinRequestsByRequestIdStatusResponses];
 
-export type PutFalAiPshumanRequestsByRequestIdCancelData = {
+export type PutFalAiHyper3dRodinRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5697,10 +5042,10 @@ export type PutFalAiPshumanRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/pshuman/requests/{request_id}/cancel";
+  url: "/fal-ai/hyper3d/rodin/requests/{request_id}/cancel";
 };
 
-export type PutFalAiPshumanRequestsByRequestIdCancelResponses = {
+export type PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5712,27 +5057,27 @@ export type PutFalAiPshumanRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiPshumanRequestsByRequestIdCancelResponse =
-  PutFalAiPshumanRequestsByRequestIdCancelResponses[keyof PutFalAiPshumanRequestsByRequestIdCancelResponses];
+export type PutFalAiHyper3dRodinRequestsByRequestIdCancelResponse =
+  PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses[keyof PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses];
 
-export type PostFalAiPshumanData = {
-  body: PshumanInput;
+export type PostFalAiHyper3dRodinData = {
+  body: Hyper3dRodinInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/pshuman";
+  url: "/fal-ai/hyper3d/rodin";
 };
 
-export type PostFalAiPshumanResponses = {
+export type PostFalAiHyper3dRodinResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiPshumanResponse =
-  PostFalAiPshumanResponses[keyof PostFalAiPshumanResponses];
+export type PostFalAiHyper3dRodinResponse =
+  PostFalAiHyper3dRodinResponses[keyof PostFalAiHyper3dRodinResponses];
 
-export type GetFalAiPshumanRequestsByRequestIdData = {
+export type GetFalAiHyper3dRodinRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5741,20 +5086,20 @@ export type GetFalAiPshumanRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/pshuman/requests/{request_id}";
+  url: "/fal-ai/hyper3d/rodin/requests/{request_id}";
 };
 
-export type GetFalAiPshumanRequestsByRequestIdResponses = {
+export type GetFalAiHyper3dRodinRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: PshumanOutput;
+  200: Hyper3dRodinOutput;
 };
 
-export type GetFalAiPshumanRequestsByRequestIdResponse =
-  GetFalAiPshumanRequestsByRequestIdResponses[keyof GetFalAiPshumanRequestsByRequestIdResponses];
+export type GetFalAiHyper3dRodinRequestsByRequestIdResponse =
+  GetFalAiHyper3dRodinRequestsByRequestIdResponses[keyof GetFalAiHyper3dRodinRequestsByRequestIdResponses];
 
-export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusData = {
+export type GetFalAiTrellisMultiRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5768,66 +5113,20 @@ export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hunyuan_world/image-to-world/requests/{request_id}/status";
+  url: "/fal-ai/trellis/multi/requests/{request_id}/status";
 };
 
-export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan_world/image-to-world/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuanWorldImageToWorldData = {
-  body: HunyuanWorldImageToWorldInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan_world/image-to-world";
-};
-
-export type PostFalAiHunyuanWorldImageToWorldResponses = {
+export type GetFalAiTrellisMultiRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuanWorldImageToWorldResponse =
-  PostFalAiHunyuanWorldImageToWorldResponses[keyof PostFalAiHunyuanWorldImageToWorldResponses];
+export type GetFalAiTrellisMultiRequestsByRequestIdStatusResponse =
+  GetFalAiTrellisMultiRequestsByRequestIdStatusResponses[keyof GetFalAiTrellisMultiRequestsByRequestIdStatusResponses];
 
-export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdData = {
+export type PutFalAiTrellisMultiRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5836,18 +5135,248 @@ export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan_world/image-to-world/requests/{request_id}";
+  url: "/fal-ai/trellis/multi/requests/{request_id}/cancel";
 };
 
-export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponses = {
+export type PutFalAiTrellisMultiRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiTrellisMultiRequestsByRequestIdCancelResponse =
+  PutFalAiTrellisMultiRequestsByRequestIdCancelResponses[keyof PutFalAiTrellisMultiRequestsByRequestIdCancelResponses];
+
+export type PostFalAiTrellisMultiData = {
+  body: TrellisMultiInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/trellis/multi";
+};
+
+export type PostFalAiTrellisMultiResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiTrellisMultiResponse =
+  PostFalAiTrellisMultiResponses[keyof PostFalAiTrellisMultiResponses];
+
+export type GetFalAiTrellisMultiRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/trellis/multi/requests/{request_id}";
+};
+
+export type GetFalAiTrellisMultiRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: HunyuanWorldImageToWorldOutput;
+  200: TrellisMultiOutput;
 };
 
-export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponse =
-  GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponses[keyof GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponses];
+export type GetFalAiTrellisMultiRequestsByRequestIdResponse =
+  GetFalAiTrellisMultiRequestsByRequestIdResponses[keyof GetFalAiTrellisMultiRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan3d-v21/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v21/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuan3dV21Data = {
+  body: Hunyuan3dV21Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v21";
+};
+
+export type PostFalAiHunyuan3dV21Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuan3dV21Response =
+  PostFalAiHunyuan3dV21Responses[keyof PostFalAiHunyuan3dV21Responses];
+
+export type GetFalAiHunyuan3dV21RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v21/requests/{request_id}";
+};
+
+export type GetFalAiHunyuan3dV21RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Hunyuan3dV21Output;
+};
+
+export type GetFalAiHunyuan3dV21RequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV21RequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV21RequestsByRequestIdResponses];
+
+export type GetFalAiTriposrRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/triposr/requests/{request_id}/status";
+};
+
+export type GetFalAiTriposrRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiTriposrRequestsByRequestIdStatusResponse =
+  GetFalAiTriposrRequestsByRequestIdStatusResponses[keyof GetFalAiTriposrRequestsByRequestIdStatusResponses];
+
+export type PutFalAiTriposrRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/triposr/requests/{request_id}/cancel";
+};
+
+export type PutFalAiTriposrRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiTriposrRequestsByRequestIdCancelResponse =
+  PutFalAiTriposrRequestsByRequestIdCancelResponses[keyof PutFalAiTriposrRequestsByRequestIdCancelResponses];
+
+export type PostFalAiTriposrData = {
+  body: TriposrInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/triposr";
+};
+
+export type PostFalAiTriposrResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiTriposrResponse =
+  PostFalAiTriposrResponses[keyof PostFalAiTriposrResponses];
+
+export type GetFalAiTriposrRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/triposr/requests/{request_id}";
+};
+
+export type GetFalAiTriposrRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: TriposrOutput;
+};
+
+export type GetFalAiTriposrRequestsByRequestIdResponse =
+  GetFalAiTriposrRequestsByRequestIdResponses[keyof GetFalAiTriposrRequestsByRequestIdResponses];
 
 export type GetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdStatusData = {
   body?: never;
@@ -5944,7 +5473,7 @@ export type GetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdResponses = {
 export type GetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdResponse =
   GetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdResponses[keyof GetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdResponses];
 
-export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusData = {
+export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5958,20 +5487,20 @@ export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hunyuan3d-v21/requests/{request_id}/status";
+  url: "/fal-ai/hunyuan3d/v2/requests/{request_id}/status";
 };
 
-export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponses = {
+export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV21RequestsByRequestIdStatusResponses];
+export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponses];
 
-export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelData = {
+export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -5980,10 +5509,10 @@ export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan3d-v21/requests/{request_id}/cancel";
+  url: "/fal-ai/hunyuan3d/v2/requests/{request_id}/cancel";
 };
 
-export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses = {
+export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5995,27 +5524,27 @@ export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV21RequestsByRequestIdCancelResponses];
+export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuan3dV21Data = {
-  body: Hunyuan3dV21Input;
+export type PostFalAiHunyuan3dV2Data = {
+  body: Hunyuan3dV2Input;
   path?: never;
   query?: never;
-  url: "/fal-ai/hunyuan3d-v21";
+  url: "/fal-ai/hunyuan3d/v2";
 };
 
-export type PostFalAiHunyuan3dV21Responses = {
+export type PostFalAiHunyuan3dV2Responses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuan3dV21Response =
-  PostFalAiHunyuan3dV21Responses[keyof PostFalAiHunyuan3dV21Responses];
+export type PostFalAiHunyuan3dV2Response =
+  PostFalAiHunyuan3dV2Responses[keyof PostFalAiHunyuan3dV2Responses];
 
-export type GetFalAiHunyuan3dV21RequestsByRequestIdData = {
+export type GetFalAiHunyuan3dV2RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6024,20 +5553,20 @@ export type GetFalAiHunyuan3dV21RequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan3d-v21/requests/{request_id}";
+  url: "/fal-ai/hunyuan3d/v2/requests/{request_id}";
 };
 
-export type GetFalAiHunyuan3dV21RequestsByRequestIdResponses = {
+export type GetFalAiHunyuan3dV2RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Hunyuan3dV21Output;
+  200: Hunyuan3dV2Output;
 };
 
-export type GetFalAiHunyuan3dV21RequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV21RequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV21RequestsByRequestIdResponses];
+export type GetFalAiHunyuan3dV2RequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV2RequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2RequestsByRequestIdResponses];
 
-export type GetFalAiTrellisMultiRequestsByRequestIdStatusData = {
+export type GetFalAiSam33dBodyRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6051,20 +5580,20 @@ export type GetFalAiTrellisMultiRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/trellis/multi/requests/{request_id}/status";
+  url: "/fal-ai/sam-3/3d-body/requests/{request_id}/status";
 };
 
-export type GetFalAiTrellisMultiRequestsByRequestIdStatusResponses = {
+export type GetFalAiSam33dBodyRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiTrellisMultiRequestsByRequestIdStatusResponse =
-  GetFalAiTrellisMultiRequestsByRequestIdStatusResponses[keyof GetFalAiTrellisMultiRequestsByRequestIdStatusResponses];
+export type GetFalAiSam33dBodyRequestsByRequestIdStatusResponse =
+  GetFalAiSam33dBodyRequestsByRequestIdStatusResponses[keyof GetFalAiSam33dBodyRequestsByRequestIdStatusResponses];
 
-export type PutFalAiTrellisMultiRequestsByRequestIdCancelData = {
+export type PutFalAiSam33dBodyRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6073,10 +5602,10 @@ export type PutFalAiTrellisMultiRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/trellis/multi/requests/{request_id}/cancel";
+  url: "/fal-ai/sam-3/3d-body/requests/{request_id}/cancel";
 };
 
-export type PutFalAiTrellisMultiRequestsByRequestIdCancelResponses = {
+export type PutFalAiSam33dBodyRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -6088,27 +5617,27 @@ export type PutFalAiTrellisMultiRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiTrellisMultiRequestsByRequestIdCancelResponse =
-  PutFalAiTrellisMultiRequestsByRequestIdCancelResponses[keyof PutFalAiTrellisMultiRequestsByRequestIdCancelResponses];
+export type PutFalAiSam33dBodyRequestsByRequestIdCancelResponse =
+  PutFalAiSam33dBodyRequestsByRequestIdCancelResponses[keyof PutFalAiSam33dBodyRequestsByRequestIdCancelResponses];
 
-export type PostFalAiTrellisMultiData = {
-  body: TrellisMultiInput;
+export type PostFalAiSam33dBodyData = {
+  body: Sam33dBodyInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/trellis/multi";
+  url: "/fal-ai/sam-3/3d-body";
 };
 
-export type PostFalAiTrellisMultiResponses = {
+export type PostFalAiSam33dBodyResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiTrellisMultiResponse =
-  PostFalAiTrellisMultiResponses[keyof PostFalAiTrellisMultiResponses];
+export type PostFalAiSam33dBodyResponse =
+  PostFalAiSam33dBodyResponses[keyof PostFalAiSam33dBodyResponses];
 
-export type GetFalAiTrellisMultiRequestsByRequestIdData = {
+export type GetFalAiSam33dBodyRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6117,111 +5646,18 @@ export type GetFalAiTrellisMultiRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/trellis/multi/requests/{request_id}";
+  url: "/fal-ai/sam-3/3d-body/requests/{request_id}";
 };
 
-export type GetFalAiTrellisMultiRequestsByRequestIdResponses = {
+export type GetFalAiSam33dBodyRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: TrellisMultiOutput;
+  200: Sam33dBodyOutput;
 };
 
-export type GetFalAiTrellisMultiRequestsByRequestIdResponse =
-  GetFalAiTrellisMultiRequestsByRequestIdResponses[keyof GetFalAiTrellisMultiRequestsByRequestIdResponses];
-
-export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/tripo3d/tripo/v2.5/image-to-3d/requests/{request_id}/status";
-};
-
-export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponse =
-  GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponses[keyof GetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponses];
-
-export type PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/tripo3d/tripo/v2.5/image-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponse =
-  PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponses[keyof PutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponses];
-
-export type PostTripo3dTripoV25ImageTo3dData = {
-  body: TripoV25ImageTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/tripo3d/tripo/v2.5/image-to-3d";
-};
-
-export type PostTripo3dTripoV25ImageTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostTripo3dTripoV25ImageTo3dResponse =
-  PostTripo3dTripoV25ImageTo3dResponses[keyof PostTripo3dTripoV25ImageTo3dResponses];
-
-export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/tripo3d/tripo/v2.5/image-to-3d/requests/{request_id}";
-};
-
-export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: TripoV25ImageTo3dOutput;
-};
-
-export type GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponse =
-  GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponses[keyof GetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponses];
+export type GetFalAiSam33dBodyRequestsByRequestIdResponse =
+  GetFalAiSam33dBodyRequestsByRequestIdResponses[keyof GetFalAiSam33dBodyRequestsByRequestIdResponses];
 
 export type GetFalAiHunyuan3dV2MultiViewRequestsByRequestIdStatusData = {
   body?: never;
@@ -6316,7 +5752,7 @@ export type GetFalAiHunyuan3dV2MultiViewRequestsByRequestIdResponses = {
 export type GetFalAiHunyuan3dV2MultiViewRequestsByRequestIdResponse =
   GetFalAiHunyuan3dV2MultiViewRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2MultiViewRequestsByRequestIdResponses];
 
-export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusData = {
+export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6330,20 +5766,20 @@ export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hunyuan3d/v2/mini/requests/{request_id}/status";
+  url: "/fal-ai/meshy/v5/multi-image-to-3d/requests/{request_id}/status";
 };
 
-export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponses = {
+export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponses];
+export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponses];
 
-export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelData = {
+export type PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6352,10 +5788,10 @@ export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan3d/v2/mini/requests/{request_id}/cancel";
+  url: "/fal-ai/meshy/v5/multi-image-to-3d/requests/{request_id}/cancel";
 };
 
-export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses = {
+export type PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -6367,27 +5803,27 @@ export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses];
+export type PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuan3dV2MiniData = {
-  body: Hunyuan3dV2MiniInput;
+export type PostFalAiMeshyV5MultiImageTo3dData = {
+  body: MeshyV5MultiImageTo3dInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/hunyuan3d/v2/mini";
+  url: "/fal-ai/meshy/v5/multi-image-to-3d";
 };
 
-export type PostFalAiHunyuan3dV2MiniResponses = {
+export type PostFalAiMeshyV5MultiImageTo3dResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuan3dV2MiniResponse =
-  PostFalAiHunyuan3dV2MiniResponses[keyof PostFalAiHunyuan3dV2MiniResponses];
+export type PostFalAiMeshyV5MultiImageTo3dResponse =
+  PostFalAiMeshyV5MultiImageTo3dResponses[keyof PostFalAiMeshyV5MultiImageTo3dResponses];
 
-export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdData = {
+export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6396,18 +5832,206 @@ export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan3d/v2/mini/requests/{request_id}";
+  url: "/fal-ai/meshy/v5/multi-image-to-3d/requests/{request_id}";
 };
 
-export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponses = {
+export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Hunyuan3dV2MiniOutput;
+  200: MeshyV5MultiImageTo3dOutput;
 };
 
-export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponses];
+export type GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponse =
+  GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiTrellis2RetextureRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/trellis-2/retexture/requests/{request_id}/status";
+};
+
+export type GetFalAiTrellis2RetextureRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiTrellis2RetextureRequestsByRequestIdStatusResponse =
+  GetFalAiTrellis2RetextureRequestsByRequestIdStatusResponses[keyof GetFalAiTrellis2RetextureRequestsByRequestIdStatusResponses];
+
+export type PutFalAiTrellis2RetextureRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/trellis-2/retexture/requests/{request_id}/cancel";
+};
+
+export type PutFalAiTrellis2RetextureRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiTrellis2RetextureRequestsByRequestIdCancelResponse =
+  PutFalAiTrellis2RetextureRequestsByRequestIdCancelResponses[keyof PutFalAiTrellis2RetextureRequestsByRequestIdCancelResponses];
+
+export type PostFalAiTrellis2RetextureData = {
+  body: Trellis2RetextureInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/trellis-2/retexture";
+};
+
+export type PostFalAiTrellis2RetextureResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiTrellis2RetextureResponse =
+  PostFalAiTrellis2RetextureResponses[keyof PostFalAiTrellis2RetextureResponses];
+
+export type GetFalAiTrellis2RetextureRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/trellis-2/retexture/requests/{request_id}";
+};
+
+export type GetFalAiTrellis2RetextureRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Trellis2RetextureOutput;
+};
+
+export type GetFalAiTrellis2RetextureRequestsByRequestIdResponse =
+  GetFalAiTrellis2RetextureRequestsByRequestIdResponses[keyof GetFalAiTrellis2RetextureRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan_world/image-to-world/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan_world/image-to-world/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuanWorldImageToWorldData = {
+  body: HunyuanWorldImageToWorldInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan_world/image-to-world";
+};
+
+export type PostFalAiHunyuanWorldImageToWorldResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuanWorldImageToWorldResponse =
+  PostFalAiHunyuanWorldImageToWorldResponses[keyof PostFalAiHunyuanWorldImageToWorldResponses];
+
+export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan_world/image-to-world/requests/{request_id}";
+};
+
+export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: HunyuanWorldImageToWorldOutput;
+};
+
+export type GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponse =
+  GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponses[keyof GetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponses];
 
 export type GetFalAiHunyuan3dV2TurboRequestsByRequestIdStatusData = {
   body?: never;
@@ -6595,7 +6219,7 @@ export type GetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdResponses = {
 export type GetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdResponse =
   GetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdResponses];
 
-export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusData = {
+export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6609,20 +6233,20 @@ export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hunyuan3d/v2/requests/{request_id}/status";
+  url: "/fal-ai/hunyuan3d/v2/mini/requests/{request_id}/status";
 };
 
-export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponses = {
+export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV2RequestsByRequestIdStatusResponses];
+export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponses];
 
-export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelData = {
+export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6631,10 +6255,10 @@ export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan3d/v2/requests/{request_id}/cancel";
+  url: "/fal-ai/hunyuan3d/v2/mini/requests/{request_id}/cancel";
 };
 
-export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses = {
+export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -6646,27 +6270,27 @@ export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV2RequestsByRequestIdCancelResponses];
+export type PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuan3dV2Data = {
-  body: Hunyuan3dV2Input;
+export type PostFalAiHunyuan3dV2MiniData = {
+  body: Hunyuan3dV2MiniInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/hunyuan3d/v2";
+  url: "/fal-ai/hunyuan3d/v2/mini";
 };
 
-export type PostFalAiHunyuan3dV2Responses = {
+export type PostFalAiHunyuan3dV2MiniResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuan3dV2Response =
-  PostFalAiHunyuan3dV2Responses[keyof PostFalAiHunyuan3dV2Responses];
+export type PostFalAiHunyuan3dV2MiniResponse =
+  PostFalAiHunyuan3dV2MiniResponses[keyof PostFalAiHunyuan3dV2MiniResponses];
 
-export type GetFalAiHunyuan3dV2RequestsByRequestIdData = {
+export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6675,18 +6299,18 @@ export type GetFalAiHunyuan3dV2RequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan3d/v2/requests/{request_id}";
+  url: "/fal-ai/hunyuan3d/v2/mini/requests/{request_id}";
 };
 
-export type GetFalAiHunyuan3dV2RequestsByRequestIdResponses = {
+export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Hunyuan3dV2Output;
+  200: Hunyuan3dV2MiniOutput;
 };
 
-export type GetFalAiHunyuan3dV2RequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV2RequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2RequestsByRequestIdResponses];
+export type GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2MiniRequestsByRequestIdResponses];
 
 export type GetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdStatusData = {
   body?: never;
@@ -6783,7 +6407,7 @@ export type GetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdResponses = {
 export type GetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdResponse =
   GetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdResponses];
 
-export type GetFalAiHyper3dRodinRequestsByRequestIdStatusData = {
+export type GetFalAiOmnipartRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6797,20 +6421,20 @@ export type GetFalAiHyper3dRodinRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hyper3d/rodin/requests/{request_id}/status";
+  url: "/fal-ai/omnipart/requests/{request_id}/status";
 };
 
-export type GetFalAiHyper3dRodinRequestsByRequestIdStatusResponses = {
+export type GetFalAiOmnipartRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiHyper3dRodinRequestsByRequestIdStatusResponse =
-  GetFalAiHyper3dRodinRequestsByRequestIdStatusResponses[keyof GetFalAiHyper3dRodinRequestsByRequestIdStatusResponses];
+export type GetFalAiOmnipartRequestsByRequestIdStatusResponse =
+  GetFalAiOmnipartRequestsByRequestIdStatusResponses[keyof GetFalAiOmnipartRequestsByRequestIdStatusResponses];
 
-export type PutFalAiHyper3dRodinRequestsByRequestIdCancelData = {
+export type PutFalAiOmnipartRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6819,10 +6443,10 @@ export type PutFalAiHyper3dRodinRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hyper3d/rodin/requests/{request_id}/cancel";
+  url: "/fal-ai/omnipart/requests/{request_id}/cancel";
 };
 
-export type PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses = {
+export type PutFalAiOmnipartRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -6834,27 +6458,27 @@ export type PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiHyper3dRodinRequestsByRequestIdCancelResponse =
-  PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses[keyof PutFalAiHyper3dRodinRequestsByRequestIdCancelResponses];
+export type PutFalAiOmnipartRequestsByRequestIdCancelResponse =
+  PutFalAiOmnipartRequestsByRequestIdCancelResponses[keyof PutFalAiOmnipartRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHyper3dRodinData = {
-  body: Hyper3dRodinInput;
+export type PostFalAiOmnipartData = {
+  body: OmnipartInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/hyper3d/rodin";
+  url: "/fal-ai/omnipart";
 };
 
-export type PostFalAiHyper3dRodinResponses = {
+export type PostFalAiOmnipartResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHyper3dRodinResponse =
-  PostFalAiHyper3dRodinResponses[keyof PostFalAiHyper3dRodinResponses];
+export type PostFalAiOmnipartResponse =
+  PostFalAiOmnipartResponses[keyof PostFalAiOmnipartResponses];
 
-export type GetFalAiHyper3dRodinRequestsByRequestIdData = {
+export type GetFalAiOmnipartRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6863,20 +6487,20 @@ export type GetFalAiHyper3dRodinRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hyper3d/rodin/requests/{request_id}";
+  url: "/fal-ai/omnipart/requests/{request_id}";
 };
 
-export type GetFalAiHyper3dRodinRequestsByRequestIdResponses = {
+export type GetFalAiOmnipartRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Hyper3dRodinOutput;
+  200: OmnipartOutput;
 };
 
-export type GetFalAiHyper3dRodinRequestsByRequestIdResponse =
-  GetFalAiHyper3dRodinRequestsByRequestIdResponses[keyof GetFalAiHyper3dRodinRequestsByRequestIdResponses];
+export type GetFalAiOmnipartRequestsByRequestIdResponse =
+  GetFalAiOmnipartRequestsByRequestIdResponses[keyof GetFalAiOmnipartRequestsByRequestIdResponses];
 
-export type GetFalAiTrellisRequestsByRequestIdStatusData = {
+export type GetFalAiPshumanRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6890,20 +6514,20 @@ export type GetFalAiTrellisRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/trellis/requests/{request_id}/status";
+  url: "/fal-ai/pshuman/requests/{request_id}/status";
 };
 
-export type GetFalAiTrellisRequestsByRequestIdStatusResponses = {
+export type GetFalAiPshumanRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiTrellisRequestsByRequestIdStatusResponse =
-  GetFalAiTrellisRequestsByRequestIdStatusResponses[keyof GetFalAiTrellisRequestsByRequestIdStatusResponses];
+export type GetFalAiPshumanRequestsByRequestIdStatusResponse =
+  GetFalAiPshumanRequestsByRequestIdStatusResponses[keyof GetFalAiPshumanRequestsByRequestIdStatusResponses];
 
-export type PutFalAiTrellisRequestsByRequestIdCancelData = {
+export type PutFalAiPshumanRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -6912,10 +6536,10 @@ export type PutFalAiTrellisRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/trellis/requests/{request_id}/cancel";
+  url: "/fal-ai/pshuman/requests/{request_id}/cancel";
 };
 
-export type PutFalAiTrellisRequestsByRequestIdCancelResponses = {
+export type PutFalAiPshumanRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -6927,27 +6551,27 @@ export type PutFalAiTrellisRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiTrellisRequestsByRequestIdCancelResponse =
-  PutFalAiTrellisRequestsByRequestIdCancelResponses[keyof PutFalAiTrellisRequestsByRequestIdCancelResponses];
+export type PutFalAiPshumanRequestsByRequestIdCancelResponse =
+  PutFalAiPshumanRequestsByRequestIdCancelResponses[keyof PutFalAiPshumanRequestsByRequestIdCancelResponses];
 
-export type PostFalAiTrellisData = {
-  body: TrellisInput;
+export type PostFalAiPshumanData = {
+  body: PshumanInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/trellis";
+  url: "/fal-ai/pshuman";
 };
 
-export type PostFalAiTrellisResponses = {
+export type PostFalAiPshumanResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiTrellisResponse =
-  PostFalAiTrellisResponses[keyof PostFalAiTrellisResponses];
+export type PostFalAiPshumanResponse =
+  PostFalAiPshumanResponses[keyof PostFalAiPshumanResponses];
 
-export type GetFalAiTrellisRequestsByRequestIdData = {
+export type GetFalAiPshumanRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -6956,20 +6580,20 @@ export type GetFalAiTrellisRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/trellis/requests/{request_id}";
+  url: "/fal-ai/pshuman/requests/{request_id}";
 };
 
-export type GetFalAiTrellisRequestsByRequestIdResponses = {
+export type GetFalAiPshumanRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: TrellisOutput;
+  200: PshumanOutput;
 };
 
-export type GetFalAiTrellisRequestsByRequestIdResponse =
-  GetFalAiTrellisRequestsByRequestIdResponses[keyof GetFalAiTrellisRequestsByRequestIdResponses];
+export type GetFalAiPshumanRequestsByRequestIdResponse =
+  GetFalAiPshumanRequestsByRequestIdResponses[keyof GetFalAiPshumanRequestsByRequestIdResponses];
 
-export type GetFalAiTriposrRequestsByRequestIdStatusData = {
+export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -6983,196 +6607,10 @@ export type GetFalAiTriposrRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/triposr/requests/{request_id}/status";
+  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d/requests/{request_id}/status";
 };
 
-export type GetFalAiTriposrRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiTriposrRequestsByRequestIdStatusResponse =
-  GetFalAiTriposrRequestsByRequestIdStatusResponses[keyof GetFalAiTriposrRequestsByRequestIdStatusResponses];
-
-export type PutFalAiTriposrRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/triposr/requests/{request_id}/cancel";
-};
-
-export type PutFalAiTriposrRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiTriposrRequestsByRequestIdCancelResponse =
-  PutFalAiTriposrRequestsByRequestIdCancelResponses[keyof PutFalAiTriposrRequestsByRequestIdCancelResponses];
-
-export type PostFalAiTriposrData = {
-  body: TriposrInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/triposr";
-};
-
-export type PostFalAiTriposrResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiTriposrResponse =
-  PostFalAiTriposrResponses[keyof PostFalAiTriposrResponses];
-
-export type GetFalAiTriposrRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/triposr/requests/{request_id}";
-};
-
-export type GetFalAiTriposrRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: TriposrOutput;
-};
-
-export type GetFalAiTriposrRequestsByRequestIdResponse =
-  GetFalAiTriposrRequestsByRequestIdResponses[keyof GetFalAiTriposrRequestsByRequestIdResponses];
-
-export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/meshy/v6/text-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/meshy/v6/text-to-3d/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMeshyV6TextTo3dData = {
-  body: MeshyV6TextTo3dInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/meshy/v6/text-to-3d";
-};
-
-export type PostFalAiMeshyV6TextTo3dResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMeshyV6TextTo3dResponse =
-  PostFalAiMeshyV6TextTo3dResponses[keyof PostFalAiMeshyV6TextTo3dResponses];
-
-export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/meshy/v6/text-to-3d/requests/{request_id}";
-};
-
-export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MeshyV6TextTo3dOutput;
-};
-
-export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponse =
-  GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses =
+export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -7180,10 +6618,10 @@ export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses 
     200: QueueStatus;
   };
 
-export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses];
+export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponses];
 
-export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelData = {
+export type PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7192,10 +6630,10 @@ export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d/requests/{request_id}/cancel";
+  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d/requests/{request_id}/cancel";
 };
 
-export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses =
+export type PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -7208,27 +6646,27 @@ export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses 
     };
   };
 
-export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses];
+export type PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuan3dV31RapidTextTo3dData = {
-  body: Hunyuan3dV31RapidTextTo3dInput;
+export type PostFalAiHunyuan3dV31ProImageTo3dData = {
+  body: Hunyuan3dV31ProImageTo3dInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d";
+  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d";
 };
 
-export type PostFalAiHunyuan3dV31RapidTextTo3dResponses = {
+export type PostFalAiHunyuan3dV31ProImageTo3dResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuan3dV31RapidTextTo3dResponse =
-  PostFalAiHunyuan3dV31RapidTextTo3dResponses[keyof PostFalAiHunyuan3dV31RapidTextTo3dResponses];
+export type PostFalAiHunyuan3dV31ProImageTo3dResponse =
+  PostFalAiHunyuan3dV31ProImageTo3dResponses[keyof PostFalAiHunyuan3dV31ProImageTo3dResponses];
 
-export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdData = {
+export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7237,18 +6675,671 @@ export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d/requests/{request_id}";
+  url: "/fal-ai/hunyuan-3d/v3.1/pro/image-to-3d/requests/{request_id}";
 };
 
-export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponses = {
+export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Hunyuan3dV31RapidTextTo3dOutput;
+  200: Hunyuan3dV31ProImageTo3dOutput;
 };
 
-export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponse =
-  GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponses];
+export type GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuan3dV31RapidImageTo3dData = {
+  body: Hunyuan3dV31RapidImageTo3dInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d";
+};
+
+export type PostFalAiHunyuan3dV31RapidImageTo3dResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuan3dV31RapidImageTo3dResponse =
+  PostFalAiHunyuan3dV31RapidImageTo3dResponses[keyof PostFalAiHunyuan3dV31RapidImageTo3dResponses];
+
+export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d/requests/{request_id}";
+};
+
+export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Hunyuan3dV31RapidImageTo3dOutput;
+};
+
+export type GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan3d-v3/image-to-3d/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v3/image-to-3d/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuan3dV3ImageTo3dData = {
+  body: Hunyuan3dV3ImageTo3dInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v3/image-to-3d";
+};
+
+export type PostFalAiHunyuan3dV3ImageTo3dResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuan3dV3ImageTo3dResponse =
+  PostFalAiHunyuan3dV3ImageTo3dResponses[keyof PostFalAiHunyuan3dV3ImageTo3dResponses];
+
+export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v3/image-to-3d/requests/{request_id}";
+};
+
+export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Hunyuan3dV3ImageTo3dOutput;
+};
+
+export type GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuan3dV3SketchTo3dData = {
+  body: Hunyuan3dV3SketchTo3dInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d";
+};
+
+export type PostFalAiHunyuan3dV3SketchTo3dResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuan3dV3SketchTo3dResponse =
+  PostFalAiHunyuan3dV3SketchTo3dResponses[keyof PostFalAiHunyuan3dV3SketchTo3dResponses];
+
+export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan3d-v3/sketch-to-3d/requests/{request_id}";
+};
+
+export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Hunyuan3dV3SketchTo3dOutput;
+};
+
+export type GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/meshy/v6/image-to-3d/requests/{request_id}/status";
+};
+
+export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/meshy/v6/image-to-3d/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMeshyV6ImageTo3dData = {
+  body: MeshyV6ImageTo3dInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/meshy/v6/image-to-3d";
+};
+
+export type PostFalAiMeshyV6ImageTo3dResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMeshyV6ImageTo3dResponse =
+  PostFalAiMeshyV6ImageTo3dResponses[keyof PostFalAiMeshyV6ImageTo3dResponses];
+
+export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/meshy/v6/image-to-3d/requests/{request_id}";
+};
+
+export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MeshyV6ImageTo3dOutput;
+};
+
+export type GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponse =
+  GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/meshy/v6-preview/text-to-3d/requests/{request_id}/status";
+};
+
+export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponses];
+
+export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/meshy/v6-preview/text-to-3d/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses];
+
+export type PostFalAiMeshyV6PreviewTextTo3dData = {
+  body: MeshyV6PreviewTextTo3dInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/meshy/v6-preview/text-to-3d";
+};
+
+export type PostFalAiMeshyV6PreviewTextTo3dResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMeshyV6PreviewTextTo3dResponse =
+  PostFalAiMeshyV6PreviewTextTo3dResponses[keyof PostFalAiMeshyV6PreviewTextTo3dResponses];
+
+export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/meshy/v6-preview/text-to-3d/requests/{request_id}";
+};
+
+export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MeshyV6PreviewTextTo3dOutput;
+};
+
+export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponse =
+  GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuanMotionRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan-motion/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuanMotionRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiHunyuanMotionRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuanMotionRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanMotionRequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuanMotionRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-motion/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuanMotionRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiHunyuanMotionRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuanMotionRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanMotionRequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuanMotionData = {
+  body: HunyuanMotionInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan-motion";
+};
+
+export type PostFalAiHunyuanMotionResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuanMotionResponse =
+  PostFalAiHunyuanMotionResponses[keyof PostFalAiHunyuanMotionResponses];
+
+export type GetFalAiHunyuanMotionRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-motion/requests/{request_id}";
+};
+
+export type GetFalAiHunyuanMotionRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: HunyuanMotionOutput;
+};
+
+export type GetFalAiHunyuanMotionRequestsByRequestIdResponse =
+  GetFalAiHunyuanMotionRequestsByRequestIdResponses[keyof GetFalAiHunyuanMotionRequestsByRequestIdResponses];
+
+export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan-motion/fast/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponses];
+
+export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-motion/fast/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponses];
+
+export type PostFalAiHunyuanMotionFastData = {
+  body: HunyuanMotionFastInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan-motion/fast";
+};
+
+export type PostFalAiHunyuanMotionFastResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuanMotionFastResponse =
+  PostFalAiHunyuanMotionFastResponses[keyof PostFalAiHunyuanMotionFastResponses];
+
+export type GetFalAiHunyuanMotionFastRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-motion/fast/requests/{request_id}";
+};
+
+export type GetFalAiHunyuanMotionFastRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: HunyuanMotionFastOutput;
+};
+
+export type GetFalAiHunyuanMotionFastRequestsByRequestIdResponse =
+  GetFalAiHunyuanMotionFastRequestsByRequestIdResponses[keyof GetFalAiHunyuanMotionFastRequestsByRequestIdResponses];
 
 export type GetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdStatusData = {
   body?: never;
@@ -7345,7 +7436,7 @@ export type GetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdResponses = {
 export type GetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdResponse =
   GetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdResponses];
 
-export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusData = {
+export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -7359,20 +7450,21 @@ export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/hunyuan-motion/fast/requests/{request_id}/status";
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d/requests/{request_id}/status";
 };
 
-export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
 
-export type GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponses];
+export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponses];
 
-export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelData = {
+export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7381,42 +7473,43 @@ export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-motion/fast/requests/{request_id}/cancel";
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d/requests/{request_id}/cancel";
 };
 
-export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
+export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether the request was cancelled successfully.
+     * The request was cancelled.
      */
-    success?: boolean;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-};
 
-export type PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponses];
+export type PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuanMotionFastData = {
-  body: HunyuanMotionFastInput;
+export type PostFalAiHunyuan3dV31RapidTextTo3dData = {
+  body: Hunyuan3dV31RapidTextTo3dInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/hunyuan-motion/fast";
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d";
 };
 
-export type PostFalAiHunyuanMotionFastResponses = {
+export type PostFalAiHunyuan3dV31RapidTextTo3dResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiHunyuanMotionFastResponse =
-  PostFalAiHunyuanMotionFastResponses[keyof PostFalAiHunyuanMotionFastResponses];
+export type PostFalAiHunyuan3dV31RapidTextTo3dResponse =
+  PostFalAiHunyuan3dV31RapidTextTo3dResponses[keyof PostFalAiHunyuan3dV31RapidTextTo3dResponses];
 
-export type GetFalAiHunyuanMotionFastRequestsByRequestIdData = {
+export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7425,111 +7518,18 @@ export type GetFalAiHunyuanMotionFastRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-motion/fast/requests/{request_id}";
+  url: "/fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d/requests/{request_id}";
 };
 
-export type GetFalAiHunyuanMotionFastRequestsByRequestIdResponses = {
+export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: HunyuanMotionFastOutput;
+  200: Hunyuan3dV31RapidTextTo3dOutput;
 };
 
-export type GetFalAiHunyuanMotionFastRequestsByRequestIdResponse =
-  GetFalAiHunyuanMotionFastRequestsByRequestIdResponses[keyof GetFalAiHunyuanMotionFastRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuanMotionRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan-motion/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuanMotionRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiHunyuanMotionRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuanMotionRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanMotionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiHunyuanMotionRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-motion/requests/{request_id}/cancel";
-};
-
-export type PutFalAiHunyuanMotionRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiHunyuanMotionRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuanMotionRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanMotionRequestsByRequestIdCancelResponses];
-
-export type PostFalAiHunyuanMotionData = {
-  body: HunyuanMotionInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan-motion";
-};
-
-export type PostFalAiHunyuanMotionResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiHunyuanMotionResponse =
-  PostFalAiHunyuanMotionResponses[keyof PostFalAiHunyuanMotionResponses];
-
-export type GetFalAiHunyuanMotionRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-motion/requests/{request_id}";
-};
-
-export type GetFalAiHunyuanMotionRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: HunyuanMotionOutput;
-};
-
-export type GetFalAiHunyuanMotionRequestsByRequestIdResponse =
-  GetFalAiHunyuanMotionRequestsByRequestIdResponses[keyof GetFalAiHunyuanMotionRequestsByRequestIdResponses];
+export type GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponse =
+  GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponses];
 
 export type GetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdStatusData = {
   body?: never;
@@ -7624,7 +7624,7 @@ export type GetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdResponses = {
 export type GetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdResponse =
   GetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdResponses[keyof GetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdResponses];
 
-export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusData = {
+export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -7638,20 +7638,20 @@ export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/meshy/v6-preview/text-to-3d/requests/{request_id}/status";
+  url: "/fal-ai/meshy/v6/text-to-3d/requests/{request_id}/status";
 };
 
-export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponses = {
+export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponse =
-  GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponses];
+export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponse =
+  GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponses[keyof GetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelData = {
+export type PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -7660,10 +7660,10 @@ export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/meshy/v6-preview/text-to-3d/requests/{request_id}/cancel";
+  url: "/fal-ai/meshy/v6/text-to-3d/requests/{request_id}/cancel";
 };
 
-export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses = {
+export type PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -7675,27 +7675,27 @@ export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponse =
-  PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponses];
+export type PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponse =
+  PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponses[keyof PutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMeshyV6PreviewTextTo3dData = {
-  body: MeshyV6PreviewTextTo3dInput;
+export type PostFalAiMeshyV6TextTo3dData = {
+  body: MeshyV6TextTo3dInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/meshy/v6-preview/text-to-3d";
+  url: "/fal-ai/meshy/v6/text-to-3d";
 };
 
-export type PostFalAiMeshyV6PreviewTextTo3dResponses = {
+export type PostFalAiMeshyV6TextTo3dResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMeshyV6PreviewTextTo3dResponse =
-  PostFalAiMeshyV6PreviewTextTo3dResponses[keyof PostFalAiMeshyV6PreviewTextTo3dResponses];
+export type PostFalAiMeshyV6TextTo3dResponse =
+  PostFalAiMeshyV6TextTo3dResponses[keyof PostFalAiMeshyV6TextTo3dResponses];
 
-export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdData = {
+export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -7704,15 +7704,15 @@ export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/meshy/v6-preview/text-to-3d/requests/{request_id}";
+  url: "/fal-ai/meshy/v6/text-to-3d/requests/{request_id}";
 };
 
-export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponses = {
+export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: MeshyV6PreviewTextTo3dOutput;
+  200: MeshyV6TextTo3dOutput;
 };
 
-export type GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponse =
-  GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponses];
+export type GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponse =
+  GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponses[keyof GetFalAiMeshyV6TextTo3dRequestsByRequestIdResponses];

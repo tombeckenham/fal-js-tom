@@ -5,21 +5,74 @@ export type ClientOptions = {
 };
 
 /**
+ * File
+ */
+export type File = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+};
+
+/**
+ * InterleaveVideoOutput
+ *
+ * Output model for interleaved video
+ */
+export type WorkflowUtilitiesInterleaveVideoOutput = {
+  video: File;
+};
+
+/**
+ * InterleaveVideoInput
+ *
+ * Input model for interleaving multiple videos
+ */
+export type WorkflowUtilitiesInterleaveVideoInput = {
+  /**
+   * Video Urls
+   *
+   * List of video URLs to interleave in order
+   */
+  video_urls: Array<string>;
+};
+
+/**
  * UsageInfo
  */
 export type UsageInfo = {
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number;
+  completion_tokens?: number | unknown;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number;
+  prompt_tokens?: number | unknown;
   /**
    * Cost
    */
@@ -31,11 +84,9 @@ export type UsageInfo = {
  */
 export type RouterAudioOutput = {
   /**
-   * Usage
-   *
    * Token usage information
    */
-  usage?: UsageInfo;
+  usage: UsageInfo | unknown;
   /**
    * Output
    *
@@ -59,7 +110,7 @@ export type RouterAudioInput = {
    *
    * System prompt to provide context or instructions to the model
    */
-  system_prompt?: string;
+  system_prompt?: string | unknown;
   /**
    * Reasoning
    *
@@ -89,131 +140,7 @@ export type RouterAudioInput = {
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number;
-};
-
-/**
- * Qwen3CloneVoiceOutput
- */
-export type Qwen3TtsCloneVoice06bOutput = {
-  /**
-   * Speaker Embedding
-   *
-   * The generated speaker embedding file in safetensors format.
-   */
-  speaker_embedding: File;
-};
-
-/**
- * File
- */
-export type File = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
-};
-
-/**
- * Qwen3CloneVoiceInput
- */
-export type Qwen3TtsCloneVoice06bInput = {
-  /**
-   * Audio Url
-   *
-   * URL to the reference audio file used for voice cloning.
-   */
-  audio_url: string;
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string;
-};
-
-/**
- * Qwen3CloneVoiceOutput
- */
-export type Qwen3TtsCloneVoice17bOutput = {
-  /**
-   * Speaker Embedding
-   *
-   * The generated speaker embedding file in safetensors format.
-   */
-  speaker_embedding: File;
-};
-
-/**
- * Qwen3CloneVoiceInput
- */
-export type Qwen3TtsCloneVoice17bInput = {
-  /**
-   * Audio Url
-   *
-   * URL to the reference audio file used for voice cloning.
-   */
-  audio_url: string;
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string;
-};
-
-/**
- * InterleaveVideoOutput
- *
- * Output model for interleaved video
- */
-export type WorkflowUtilitiesInterleaveVideoOutput = {
-  /**
-   * Video
-   *
-   * The interleaved video output
-   */
-  video: File;
-};
-
-/**
- * InterleaveVideoInput
- *
- * Input model for interleaving multiple videos
- */
-export type WorkflowUtilitiesInterleaveVideoInput = {
-  /**
-   * Video Urls
-   *
-   * List of video URLs to interleave in order
-   */
-  video_urls: Array<string>;
+  max_tokens?: number | unknown;
 };
 
 export type QueueStatus = {
@@ -251,6 +178,99 @@ export type QueueStatus = {
    */
   queue_position?: number;
 };
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/openrouter/router/audio/requests/{request_id}/status";
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponse =
+  GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses];
+
+export type PutOpenrouterRouterAudioRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/audio/requests/{request_id}/cancel";
+};
+
+export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponse =
+  PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses];
+
+export type PostOpenrouterRouterAudioData = {
+  body: RouterAudioInput;
+  path?: never;
+  query?: never;
+  url: "/openrouter/router/audio";
+};
+
+export type PostOpenrouterRouterAudioResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostOpenrouterRouterAudioResponse =
+  PostOpenrouterRouterAudioResponses[keyof PostOpenrouterRouterAudioResponses];
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/audio/requests/{request_id}";
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: RouterAudioOutput;
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdResponse =
+  GetOpenrouterRouterAudioRequestsByRequestIdResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdResponses];
 
 export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusData =
   {
@@ -349,282 +369,3 @@ export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponses
 
 export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponse =
   GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponses];
-
-export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b/requests/{request_id}/status";
-};
-
-export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponse =
-  GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponse =
-  PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwen3TtsCloneVoice17bData = {
-  body: Qwen3TtsCloneVoice17bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b";
-};
-
-export type PostFalAiQwen3TtsCloneVoice17bResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwen3TtsCloneVoice17bResponse =
-  PostFalAiQwen3TtsCloneVoice17bResponses[keyof PostFalAiQwen3TtsCloneVoice17bResponses];
-
-export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/clone-voice/1.7b/requests/{request_id}";
-};
-
-export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Qwen3TtsCloneVoice17bOutput;
-};
-
-export type GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponse =
-  GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponses];
-
-export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b/requests/{request_id}/status";
-};
-
-export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponse =
-  GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponses[keyof GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponse =
-  PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponses[keyof PutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwen3TtsCloneVoice06bData = {
-  body: Qwen3TtsCloneVoice06bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b";
-};
-
-export type PostFalAiQwen3TtsCloneVoice06bResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwen3TtsCloneVoice06bResponse =
-  PostFalAiQwen3TtsCloneVoice06bResponses[keyof PostFalAiQwen3TtsCloneVoice06bResponses];
-
-export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-3-tts/clone-voice/0.6b/requests/{request_id}";
-};
-
-export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Qwen3TtsCloneVoice06bOutput;
-};
-
-export type GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponse =
-  GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponses[keyof GetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponses];
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/openrouter/router/audio/requests/{request_id}/status";
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponse =
-  GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses];
-
-export type PutOpenrouterRouterAudioRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/audio/requests/{request_id}/cancel";
-};
-
-export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponse =
-  PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses];
-
-export type PostOpenrouterRouterAudioData = {
-  body: RouterAudioInput;
-  path?: never;
-  query?: never;
-  url: "/openrouter/router/audio";
-};
-
-export type PostOpenrouterRouterAudioResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostOpenrouterRouterAudioResponse =
-  PostOpenrouterRouterAudioResponses[keyof PostOpenrouterRouterAudioResponses];
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/audio/requests/{request_id}";
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: RouterAudioOutput;
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdResponse =
-  GetOpenrouterRouterAudioRequestsByRequestIdResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdResponses];

@@ -2,8 +2,6 @@
 // Generated from types.gen.ts via scripts/generate-endpoint-maps.ts
 
 import type {
-  AiDetectorDetectTextInput,
-  AiDetectorDetectTextOutput,
   ElevenlabsSpeechToTextInput,
   ElevenlabsSpeechToTextOutput,
   ElevenlabsSpeechToTextScribeV2Input,
@@ -35,65 +33,61 @@ import type {
 } from "./types.gen";
 
 export type TextEndpointMap = {
-  "fal-ai/nemotron/asr/stream": {
-    input: NemotronAsrStreamInput;
-    output: NemotronAsrStreamOutput;
+  "fal-ai/silero-vad": {
+    input: SileroVadInput;
+    output: SileroVadOutput;
   };
   "fal-ai/nemotron/asr": {
     input: NemotronAsrInput;
     output: NemotronAsrOutput;
   };
-  "fal-ai/silero-vad": {
-    input: SileroVadInput;
-    output: SileroVadOutput;
-  };
-  "fal-ai/elevenlabs/speech-to-text/scribe-v2": {
-    input: ElevenlabsSpeechToTextScribeV2Input;
-    output: ElevenlabsSpeechToTextScribeV2Output;
-  };
-  "fal-ai/smart-turn": {
-    input: SmartTurnInput;
-    output: SmartTurnOutput;
-  };
-  "fal-ai/speech-to-text/turbo": {
-    input: SpeechToTextTurboInput;
-    output: SpeechToTextTurboOutput;
-  };
-  "fal-ai/speech-to-text/turbo/stream": {
-    input: SpeechToTextTurboStreamInput;
-    output: SpeechToTextTurboStreamOutput;
-  };
-  "fal-ai/speech-to-text/stream": {
-    input: SpeechToTextStreamInput;
-    output: SpeechToTextStreamOutput;
-  };
-  "fal-ai/speech-to-text": {
-    input: SpeechToTextInput;
-    output: SpeechToTextOutput;
-  };
-  "fal-ai/elevenlabs/speech-to-text": {
-    input: ElevenlabsSpeechToTextInput;
-    output: ElevenlabsSpeechToTextOutput;
-  };
-  "fal-ai/wizper": {
-    input: WizperInput;
-    output: WizperOutput;
+  "fal-ai/nemotron/asr/stream": {
+    input: NemotronAsrStreamInput;
+    output: NemotronAsrStreamOutput;
   };
   "fal-ai/whisper": {
     input: WhisperInput;
     output: WhisperOutput;
   };
-  "half-moon-ai/ai-detector/detect-text": {
-    input: AiDetectorDetectTextInput;
-    output: AiDetectorDetectTextOutput;
+  "fal-ai/wizper": {
+    input: WizperInput;
+    output: WizperOutput;
   };
-  "openrouter/router/video/enterprise": {
-    input: RouterVideoEnterpriseInput;
-    output: RouterVideoEnterpriseOutput;
+  "fal-ai/elevenlabs/speech-to-text/scribe-v2": {
+    input: ElevenlabsSpeechToTextScribeV2Input;
+    output: ElevenlabsSpeechToTextScribeV2Output;
+  };
+  "fal-ai/elevenlabs/speech-to-text": {
+    input: ElevenlabsSpeechToTextInput;
+    output: ElevenlabsSpeechToTextOutput;
+  };
+  "fal-ai/speech-to-text/turbo": {
+    input: SpeechToTextTurboInput;
+    output: SpeechToTextTurboOutput;
+  };
+  "fal-ai/speech-to-text": {
+    input: SpeechToTextInput;
+    output: SpeechToTextOutput;
+  };
+  "fal-ai/smart-turn": {
+    input: SmartTurnInput;
+    output: SmartTurnOutput;
+  };
+  "fal-ai/speech-to-text/stream": {
+    input: SpeechToTextStreamInput;
+    output: SpeechToTextStreamOutput;
+  };
+  "fal-ai/speech-to-text/turbo/stream": {
+    input: SpeechToTextTurboStreamInput;
+    output: SpeechToTextTurboStreamOutput;
   };
   "openrouter/router/video": {
     input: RouterVideoInput;
     output: RouterVideoOutput;
+  };
+  "openrouter/router/video/enterprise": {
+    input: RouterVideoEnterpriseInput;
+    output: RouterVideoEnterpriseOutput;
   };
 };
 

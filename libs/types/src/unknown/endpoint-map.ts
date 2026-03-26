@@ -2,10 +2,6 @@
 // Generated from types.gen.ts via scripts/generate-endpoint-maps.ts
 
 import type {
-  Qwen3TtsCloneVoice06bInput,
-  Qwen3TtsCloneVoice06bOutput,
-  Qwen3TtsCloneVoice17bInput,
-  Qwen3TtsCloneVoice17bOutput,
   RouterAudioInput,
   RouterAudioOutput,
   WorkflowUtilitiesInterleaveVideoInput,
@@ -13,21 +9,13 @@ import type {
 } from "./types.gen";
 
 export type UnknownEndpointMap = {
-  "fal-ai/workflow-utilities/interleave-video": {
-    input: WorkflowUtilitiesInterleaveVideoInput;
-    output: WorkflowUtilitiesInterleaveVideoOutput;
-  };
-  "fal-ai/qwen-3-tts/clone-voice/1.7b": {
-    input: Qwen3TtsCloneVoice17bInput;
-    output: Qwen3TtsCloneVoice17bOutput;
-  };
-  "fal-ai/qwen-3-tts/clone-voice/0.6b": {
-    input: Qwen3TtsCloneVoice06bInput;
-    output: Qwen3TtsCloneVoice06bOutput;
-  };
   "openrouter/router/audio": {
     input: RouterAudioInput;
     output: RouterAudioOutput;
+  };
+  "fal-ai/workflow-utilities/interleave-video": {
+    input: WorkflowUtilitiesInterleaveVideoInput;
+    output: WorkflowUtilitiesInterleaveVideoOutput;
   };
 };
 

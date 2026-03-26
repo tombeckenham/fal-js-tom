@@ -7,13 +7,11 @@ export type ClientOptions = {
 /**
  * VideoOutput
  */
-export type RouterVideoOutput = {
+export type RouterVideoEnterpriseOutput = {
   /**
-   * Usage
-   *
    * Token usage information
    */
-  usage?: UsageInfo;
+  usage: UsageInfo | unknown;
   /**
    * Output
    *
@@ -27,87 +25,21 @@ export type RouterVideoOutput = {
  */
 export type UsageInfo = {
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number;
+  completion_tokens?: number | unknown;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number;
+  prompt_tokens?: number | unknown;
   /**
    * Cost
    */
   cost: number;
-};
-
-/**
- * VideoInput
- */
-export type RouterVideoInput = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the video processing
-   */
-  prompt: string;
-  /**
-   * Video Urls
-   *
-   * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
-   */
-  video_urls?: Array<string>;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string;
-  /**
-   * Reasoning
-   *
-   * Should reasoning be the part of the final answer.
-   */
-  reasoning?: boolean;
-  /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
-   * Max Tokens
-   *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
-   */
-  temperature?: number;
-};
-
-/**
- * VideoOutput
- */
-export type RouterVideoEnterpriseOutput = {
-  /**
-   * Usage
-   *
-   * Token usage information
-   */
-  usage?: UsageInfo;
-  /**
-   * Output
-   *
-   * Generated output from video processing
-   */
-  output: string;
 };
 
 /**
@@ -125,13 +57,13 @@ export type RouterVideoEnterpriseInput = {
    *
    * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
    */
-  video_urls?: Array<string>;
+  video_urls?: Array<string> | unknown;
   /**
    * System Prompt
    *
    * System prompt to provide context or instructions to the model
    */
-  system_prompt?: string;
+  system_prompt?: string | unknown;
   /**
    * Reasoning
    *
@@ -149,7 +81,7 @@ export type RouterVideoEnterpriseInput = {
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number;
+  max_tokens?: number | unknown;
   /**
    * Temperature
    *
@@ -159,394 +91,379 @@ export type RouterVideoEnterpriseInput = {
 };
 
 /**
- * AITextDetectionOutput
+ * VideoOutput
  */
-export type AiDetectorDetectTextOutput = {
+export type RouterVideoOutput = {
   /**
-   * Latency
+   * Token usage information
    */
-  latency: number;
+  usage: UsageInfo | unknown;
   /**
-   * Verdict
+   * Output
+   *
+   * Generated output from video processing
    */
-  verdict: string;
-  /**
-   * Is Ai Generated
-   */
-  is_ai_generated: boolean;
-  /**
-   * Confidence
-   */
-  confidence: number;
+  output: string;
 };
 
 /**
- * TextDetectionInput
+ * VideoInput
  */
-export type AiDetectorDetectTextInput = {
-  /**
-   * Text
-   *
-   * Text content to analyze for AI generation.
-   */
-  text: string;
-};
-
-/**
- * DiarizationSegment
- */
-export type DiarizationSegment = {
-  /**
-   * Timestamp
-   *
-   * Start and end timestamp of the segment
-   */
-  timestamp: [unknown, unknown];
-  /**
-   * Speaker
-   *
-   * Speaker ID of the segment
-   */
-  speaker: string;
-};
-
-/**
- * WhisperOutput
- */
-export type WhisperOutput = {
-  /**
-   * Text
-   *
-   * Transcription of the audio file
-   */
-  text: string;
-  /**
-   * Inferred Languages
-   *
-   * List of languages that the audio file is inferred to be. Defaults to null.
-   */
-  inferred_languages: Array<
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "zh"
-  >;
-  /**
-   * Chunks
-   *
-   * Timestamp chunks of the audio file
-   */
-  chunks?: Array<WhisperChunkType2>;
-  /**
-   * Diarization Segments
-   *
-   * Speaker diarization segments of the audio file. Only present if diarization is enabled.
-   */
-  diarization_segments: Array<DiarizationSegment>;
-};
-
-/**
- * WhisperChunk
- */
-export type WhisperChunkType2 = {
-  /**
-   * Text
-   *
-   * Transcription of the chunk
-   */
-  text: string;
-  /**
-   * Timestamp
-   *
-   * Start and end timestamp of the chunk
-   */
-  timestamp: [unknown, unknown];
-  /**
-   * Speaker
-   *
-   * Speaker ID of the chunk. Only present if diarization is enabled.
-   */
-  speaker?: string;
-};
-
-/**
- * WhisperInput
- */
-export type WhisperInput = {
-  /**
-   * Version
-   *
-   * Version of the model to use. All of the models are the Whisper large variant.
-   */
-  version?: "3";
-  /**
-   * Batch Size
-   */
-  batch_size?: number;
-  /**
-   * Language
-   *
-   *
-   * Language of the audio file. If set to null, the language will be
-   * automatically detected. Defaults to null.
-   *
-   * If translate is selected as the task, the audio will be translated to
-   * English, regardless of the language selected.
-   *
-   */
-  language?:
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "zh";
+export type RouterVideoInput = {
   /**
    * Prompt
    *
-   * Prompt to use for generation. Defaults to an empty string.
+   * Prompt to be used for the video processing
    */
-  prompt?: string;
+  prompt: string;
   /**
-   * Num Speakers
+   * Video Urls
    *
-   *
-   * Number of speakers in the audio file. Defaults to null.
-   * If not provided, the number of speakers will be automatically
-   * detected.
-   *
+   * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
    */
-  num_speakers?: number | null;
+  video_urls?: Array<string> | unknown;
   /**
-   * Task
+   * System Prompt
    *
-   * Task to perform on the audio file. Either transcribe or translate.
+   * System prompt to provide context or instructions to the model
    */
-  task?: "transcribe" | "translate";
+  system_prompt?: string | unknown;
   /**
-   * Chunk Level
+   * Reasoning
    *
-   * Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.
+   * Should reasoning be the part of the final answer.
    */
-  chunk_level?: "none" | "segment" | "word";
+  reasoning?: boolean;
+  /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
+   * Max Tokens
+   *
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
+   */
+  max_tokens?: number | unknown;
+  /**
+   * Temperature
+   *
+   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+   */
+  temperature?: number;
+};
+
+export type SpeechToTextTurboStreamOutput = unknown;
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextTurboStreamInput = {
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string;
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+};
+
+export type SpeechToTextStreamOutput = unknown;
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextStreamInput = {
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string;
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+};
+
+/**
+ * Output
+ */
+export type SmartTurnOutput = {
+  /**
+   * Prediction
+   *
+   * The predicted turn type. 1 for Complete, 0 for Incomplete.
+   */
+  prediction: number;
+  /**
+   * Probability
+   *
+   * The probability of the predicted turn type.
+   */
+  probability: number;
+  /**
+   * Metrics
+   *
+   * The metrics of the inference.
+   */
+  metrics: {
+    [key: string]: unknown;
+  };
+};
+
+/**
+ * SmartTurnInput
+ */
+export type SmartTurnInput = {
   /**
    * Audio Url
    *
-   * URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.
+   * The URL of the audio file to be processed.
+   */
+  audio_url: string;
+};
+
+/**
+ * SpeechOutput
+ */
+export type SpeechToTextOutput = {
+  /**
+   * Partial
+   *
+   * Indicates if this is a partial (in-progress) transcript
+   */
+  partial?: boolean;
+  /**
+   * Transcribed Text
+   *
+   * The partial or final transcription output from Canary
+   */
+  output: string;
+};
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextInput = {
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string;
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+};
+
+/**
+ * SpeechOutput
+ */
+export type SpeechToTextTurboOutput = {
+  /**
+   * Partial
+   *
+   * Indicates if this is a partial (in-progress) transcript
+   */
+  partial?: boolean;
+  /**
+   * Transcribed Text
+   *
+   * The partial or final transcription output from Canary
+   */
+  output: string;
+};
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextTurboInput = {
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string;
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+};
+
+/**
+ * TranscriptionOutput
+ */
+export type ElevenlabsSpeechToTextOutput = {
+  /**
+   * Text
+   *
+   * The full transcribed text
+   */
+  text: string;
+  /**
+   * Language Probability
+   *
+   * Confidence in language detection
+   */
+  language_probability: number;
+  /**
+   * Language Code
+   *
+   * Detected or specified language code
+   */
+  language_code: string;
+  /**
+   * Words
+   *
+   * Word-level transcription details
+   */
+  words: Array<TranscriptionWord>;
+};
+
+/**
+ * TranscriptionWord
+ */
+export type TranscriptionWord = {
+  /**
+   * Text
+   *
+   * The transcribed word or audio event
+   */
+  text: string;
+  /**
+   * Start
+   *
+   * Start time in seconds
+   */
+  start?: number | unknown;
+  /**
+   * Type
+   *
+   * Type of element (word, spacing, or audio_event)
+   */
+  type: string;
+  /**
+   * End
+   *
+   * End time in seconds
+   */
+  end?: number | unknown;
+  /**
+   * Speaker Id
+   *
+   * Speaker identifier if diarization was enabled
+   */
+  speaker_id?: string | unknown;
+};
+
+/**
+ * SpeechToTextRequest
+ */
+export type ElevenlabsSpeechToTextInput = {
+  /**
+   * Language Code
+   *
+   * Language code of the audio
+   */
+  language_code?: string | unknown;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to transcribe
    */
   audio_url: string;
   /**
    * Diarize
    *
-   * Whether to diarize the audio file. Defaults to false. Setting to true will add costs proportional to diarization inference time.
+   * Whether to annotate who is speaking
    */
   diarize?: boolean;
+  /**
+   * Tag Audio Events
+   *
+   * Tag audio events like laughter, applause, etc.
+   */
+  tag_audio_events?: boolean;
 };
 
 /**
- * WhisperChunk
+ * TranscriptionOutputV2
  */
-export type WhisperChunk = {
+export type ElevenlabsSpeechToTextScribeV2Output = {
   /**
    * Text
    *
-   * Transcription of the chunk
+   * The full transcribed text
    */
   text: string;
   /**
-   * Timestamp
+   * Language Probability
    *
-   * Start and end timestamp of the chunk
+   * Confidence in language detection
    */
-  timestamp: [];
+  language_probability: number;
+  /**
+   * Language Code
+   *
+   * Detected or specified language code
+   */
+  language_code: string;
+  /**
+   * Words
+   *
+   * Word-level transcription details
+   */
+  words: Array<TranscriptionWord>;
+};
+
+/**
+ * SpeechToTextRequestScribeV2
+ */
+export type ElevenlabsSpeechToTextScribeV2Input = {
+  /**
+   * Language Code
+   *
+   * Language code of the audio
+   */
+  language_code?: string | unknown;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to transcribe
+   */
+  audio_url: string;
+  /**
+   * Diarize
+   *
+   * Whether to annotate who is speaking
+   */
+  diarize?: boolean;
+  /**
+   * Keyterms
+   *
+   * Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.
+   */
+  keyterms?: Array<string>;
+  /**
+   * Tag Audio Events
+   *
+   * Tag audio events like laughter, applause, etc.
+   */
+  tag_audio_events?: boolean;
 };
 
 /**
@@ -670,7 +587,25 @@ export type WizperOutput = {
    *
    * Timestamp chunks of the audio file
    */
-  chunks: Array<WhisperChunk>;
+  chunks: Array<WhisperChunkType2>;
+};
+
+/**
+ * WhisperChunk
+ */
+export type WhisperChunkType2 = {
+  /**
+   * Text
+   *
+   * Transcription of the chunk
+   */
+  text: string;
+  /**
+   * Timestamp
+   *
+   * Start and end timestamp of the chunk
+   */
+  timestamp: [];
 };
 
 /**
@@ -828,115 +763,374 @@ export type WizperInput = {
 };
 
 /**
- * TranscriptionOutput
+ * DiarizationSegment
  */
-export type ElevenlabsSpeechToTextOutput = {
+export type DiarizationSegment = {
   /**
-   * Text
+   * Timestamp
    *
-   * The full transcribed text
+   * Start and end timestamp of the segment
    */
-  text: string;
+  timestamp: [];
   /**
-   * Language Probability
+   * Speaker
    *
-   * Confidence in language detection
+   * Speaker ID of the segment
    */
-  language_probability: number;
-  /**
-   * Language Code
-   *
-   * Detected or specified language code
-   */
-  language_code: string;
-  /**
-   * Words
-   *
-   * Word-level transcription details
-   */
-  words: Array<TranscriptionWord>;
+  speaker: string;
 };
 
 /**
- * TranscriptionWord
+ * WhisperChunk
  */
-export type TranscriptionWord = {
-  /**
-   * End
-   *
-   * End time in seconds
-   */
-  end: number | unknown;
-  /**
-   * Start
-   *
-   * Start time in seconds
-   */
-  start: number | unknown;
-  /**
-   * Type
-   *
-   * Type of element (word, spacing, or audio_event)
-   */
-  type: string;
+export type WhisperChunk = {
   /**
    * Text
    *
-   * The transcribed word or audio event
+   * Transcription of the chunk
    */
   text: string;
   /**
-   * Speaker Id
+   * Timestamp
    *
-   * Speaker identifier if diarization was enabled
+   * Start and end timestamp of the chunk
    */
-  speaker_id?: string | unknown;
+  timestamp: [];
+  /**
+   * Speaker
+   *
+   * Speaker ID of the chunk. Only present if diarization is enabled.
+   */
+  speaker?: string | unknown;
 };
 
 /**
- * SpeechToTextRequest
+ * WhisperOutput
  */
-export type ElevenlabsSpeechToTextInput = {
+export type WhisperOutput = {
   /**
-   * Language Code
+   * Text
    *
-   * Language code of the audio
+   * Transcription of the audio file
    */
-  language_code?: string | unknown;
+  text: string;
+  /**
+   * Inferred Languages
+   *
+   * List of languages that the audio file is inferred to be. Defaults to null.
+   */
+  inferred_languages: Array<
+    | "af"
+    | "am"
+    | "ar"
+    | "as"
+    | "az"
+    | "ba"
+    | "be"
+    | "bg"
+    | "bn"
+    | "bo"
+    | "br"
+    | "bs"
+    | "ca"
+    | "cs"
+    | "cy"
+    | "da"
+    | "de"
+    | "el"
+    | "en"
+    | "es"
+    | "et"
+    | "eu"
+    | "fa"
+    | "fi"
+    | "fo"
+    | "fr"
+    | "gl"
+    | "gu"
+    | "ha"
+    | "haw"
+    | "he"
+    | "hi"
+    | "hr"
+    | "ht"
+    | "hu"
+    | "hy"
+    | "id"
+    | "is"
+    | "it"
+    | "ja"
+    | "jw"
+    | "ka"
+    | "kk"
+    | "km"
+    | "kn"
+    | "ko"
+    | "la"
+    | "lb"
+    | "ln"
+    | "lo"
+    | "lt"
+    | "lv"
+    | "mg"
+    | "mi"
+    | "mk"
+    | "ml"
+    | "mn"
+    | "mr"
+    | "ms"
+    | "mt"
+    | "my"
+    | "ne"
+    | "nl"
+    | "nn"
+    | "no"
+    | "oc"
+    | "pa"
+    | "pl"
+    | "ps"
+    | "pt"
+    | "ro"
+    | "ru"
+    | "sa"
+    | "sd"
+    | "si"
+    | "sk"
+    | "sl"
+    | "sn"
+    | "so"
+    | "sq"
+    | "sr"
+    | "su"
+    | "sv"
+    | "sw"
+    | "ta"
+    | "te"
+    | "tg"
+    | "th"
+    | "tk"
+    | "tl"
+    | "tr"
+    | "tt"
+    | "uk"
+    | "ur"
+    | "uz"
+    | "vi"
+    | "yi"
+    | "yo"
+    | "zh"
+  >;
+  /**
+   * Chunks
+   *
+   * Timestamp chunks of the audio file
+   */
+  chunks?: Array<WhisperChunk> | unknown;
+  /**
+   * Diarization Segments
+   *
+   * Speaker diarization segments of the audio file. Only present if diarization is enabled.
+   */
+  diarization_segments: Array<DiarizationSegment>;
+};
+
+/**
+ * WhisperInput
+ */
+export type WhisperInput = {
+  /**
+   * Language
+   *
+   *
+   * Language of the audio file. If set to null, the language will be
+   * automatically detected. Defaults to null.
+   *
+   * If translate is selected as the task, the audio will be translated to
+   * English, regardless of the language selected.
+   *
+   */
+  language?:
+    | "af"
+    | "am"
+    | "ar"
+    | "as"
+    | "az"
+    | "ba"
+    | "be"
+    | "bg"
+    | "bn"
+    | "bo"
+    | "br"
+    | "bs"
+    | "ca"
+    | "cs"
+    | "cy"
+    | "da"
+    | "de"
+    | "el"
+    | "en"
+    | "es"
+    | "et"
+    | "eu"
+    | "fa"
+    | "fi"
+    | "fo"
+    | "fr"
+    | "gl"
+    | "gu"
+    | "ha"
+    | "haw"
+    | "he"
+    | "hi"
+    | "hr"
+    | "ht"
+    | "hu"
+    | "hy"
+    | "id"
+    | "is"
+    | "it"
+    | "ja"
+    | "jw"
+    | "ka"
+    | "kk"
+    | "km"
+    | "kn"
+    | "ko"
+    | "la"
+    | "lb"
+    | "ln"
+    | "lo"
+    | "lt"
+    | "lv"
+    | "mg"
+    | "mi"
+    | "mk"
+    | "ml"
+    | "mn"
+    | "mr"
+    | "ms"
+    | "mt"
+    | "my"
+    | "ne"
+    | "nl"
+    | "nn"
+    | "no"
+    | "oc"
+    | "pa"
+    | "pl"
+    | "ps"
+    | "pt"
+    | "ro"
+    | "ru"
+    | "sa"
+    | "sd"
+    | "si"
+    | "sk"
+    | "sl"
+    | "sn"
+    | "so"
+    | "sq"
+    | "sr"
+    | "su"
+    | "sv"
+    | "sw"
+    | "ta"
+    | "te"
+    | "tg"
+    | "th"
+    | "tk"
+    | "tl"
+    | "tr"
+    | "tt"
+    | "uk"
+    | "ur"
+    | "uz"
+    | "vi"
+    | "yi"
+    | "yo"
+    | "zh"
+    | unknown
+    | null;
+  /**
+   * Batch Size
+   */
+  batch_size?: number;
+  /**
+   * Prompt
+   *
+   * Prompt to use for generation. Defaults to an empty string.
+   */
+  prompt?: string;
+  /**
+   * Num Speakers
+   *
+   *
+   * Number of speakers in the audio file. Defaults to null.
+   * If not provided, the number of speakers will be automatically
+   * detected.
+   *
+   */
+  num_speakers?: number | unknown | null;
+  /**
+   * Task
+   *
+   * Task to perform on the audio file. Either transcribe or translate.
+   */
+  task?: "transcribe" | "translate";
+  /**
+   * Chunk Level
+   *
+   * Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.
+   */
+  chunk_level?: "none" | "segment" | "word";
   /**
    * Audio Url
    *
-   * URL of the audio file to transcribe
+   * URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.
    */
   audio_url: string;
   /**
    * Diarize
    *
-   * Whether to annotate who is speaking
+   * Whether to diarize the audio file. Defaults to false. Setting to true will add costs proportional to diarization inference time.
    */
   diarize?: boolean;
+};
+
+export type NemotronAsrStreamOutput = unknown;
+
+/**
+ * SpeechInput
+ */
+export type NemotronAsrStreamInput = {
   /**
-   * Tag Audio Events
+   * Acceleration
    *
-   * Tag audio events like laughter, applause, etc.
+   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
    */
-  tag_audio_events?: boolean;
+  acceleration?: "none" | "low" | "medium" | "high";
+  /**
+   * Audio URL
+   *
+   * URL of the audio file.
+   */
+  audio_url: string;
 };
 
 /**
  * SpeechOutput
  */
-export type SpeechToTextOutput = {
+export type NemotronAsrOutput = {
   /**
-   * Partial
+   * Partial Result
    *
-   * Indicates if this is a partial (in-progress) transcript
+   * True if this is an intermediate result during streaming.
    */
   partial?: boolean;
   /**
    * Transcribed Text
    *
-   * The partial or final transcription output from Canary
+   * The transcribed text from the audio.
    */
   output: string;
 };
@@ -944,199 +1138,19 @@ export type SpeechToTextOutput = {
 /**
  * SpeechInput
  */
-export type SpeechToTextInput = {
+export type NemotronAsrInput = {
   /**
-   * Audio Path
+   * Acceleration
    *
-   * Local filesystem path (or remote URL) to a long audio file
+   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
+   */
+  acceleration?: "none" | "low" | "medium" | "high";
+  /**
+   * Audio URL
+   *
+   * URL of the audio file.
    */
   audio_url: string;
-  /**
-   * Use Punctuation/Capitalization (PnC)
-   *
-   * Whether to use Canary's built-in punctuation & capitalization
-   */
-  use_pnc?: boolean;
-};
-
-export type SpeechToTextStreamOutput = unknown;
-
-/**
- * SpeechInput
- */
-export type SpeechToTextStreamInput = {
-  /**
-   * Audio Path
-   *
-   * Local filesystem path (or remote URL) to a long audio file
-   */
-  audio_url: string;
-  /**
-   * Use Punctuation/Capitalization (PnC)
-   *
-   * Whether to use Canary's built-in punctuation & capitalization
-   */
-  use_pnc?: boolean;
-};
-
-export type SpeechToTextTurboStreamOutput = unknown;
-
-/**
- * SpeechInput
- */
-export type SpeechToTextTurboStreamInput = {
-  /**
-   * Audio Path
-   *
-   * Local filesystem path (or remote URL) to a long audio file
-   */
-  audio_url: string;
-  /**
-   * Use Punctuation/Capitalization (PnC)
-   *
-   * Whether to use Canary's built-in punctuation & capitalization
-   */
-  use_pnc?: boolean;
-};
-
-/**
- * SpeechOutput
- */
-export type SpeechToTextTurboOutput = {
-  /**
-   * Partial
-   *
-   * Indicates if this is a partial (in-progress) transcript
-   */
-  partial?: boolean;
-  /**
-   * Transcribed Text
-   *
-   * The partial or final transcription output from Canary
-   */
-  output: string;
-};
-
-/**
- * SpeechInput
- */
-export type SpeechToTextTurboInput = {
-  /**
-   * Audio Path
-   *
-   * Local filesystem path (or remote URL) to a long audio file
-   */
-  audio_url: string;
-  /**
-   * Use Punctuation/Capitalization (PnC)
-   *
-   * Whether to use Canary's built-in punctuation & capitalization
-   */
-  use_pnc?: boolean;
-};
-
-/**
- * Output
- */
-export type SmartTurnOutput = {
-  /**
-   * Prediction
-   *
-   * The predicted turn type. 1 for Complete, 0 for Incomplete.
-   */
-  prediction: number;
-  /**
-   * Probability
-   *
-   * The probability of the predicted turn type.
-   */
-  probability: number;
-  /**
-   * Metrics
-   *
-   * The metrics of the inference.
-   */
-  metrics: {
-    [key: string]: unknown;
-  };
-};
-
-/**
- * SmartTurnInput
- */
-export type SmartTurnInput = {
-  /**
-   * Audio Url
-   *
-   * The URL of the audio file to be processed.
-   */
-  audio_url: string;
-};
-
-/**
- * TranscriptionOutputV2
- */
-export type ElevenlabsSpeechToTextScribeV2Output = {
-  /**
-   * Text
-   *
-   * The full transcribed text
-   */
-  text: string;
-  /**
-   * Language Probability
-   *
-   * Confidence in language detection
-   */
-  language_probability: number;
-  /**
-   * Language Code
-   *
-   * Detected or specified language code
-   */
-  language_code: string;
-  /**
-   * Words
-   *
-   * Word-level transcription details
-   */
-  words: Array<TranscriptionWord>;
-};
-
-/**
- * SpeechToTextRequestScribeV2
- */
-export type ElevenlabsSpeechToTextScribeV2Input = {
-  /**
-   * Language Code
-   *
-   * Language code of the audio
-   */
-  language_code?: string | unknown;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to transcribe
-   */
-  audio_url: string;
-  /**
-   * Diarize
-   *
-   * Whether to annotate who is speaking
-   */
-  diarize?: boolean;
-  /**
-   * Keyterms
-   *
-   * Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.
-   */
-  keyterms?: Array<string>;
-  /**
-   * Tag Audio Events
-   *
-   * Tag audio events like laughter, applause, etc.
-   */
-  tag_audio_events?: boolean;
 };
 
 /**
@@ -1187,62 +1201,6 @@ export type SileroVadInput = {
   audio_url: string;
 };
 
-/**
- * SpeechOutput
- */
-export type NemotronAsrOutput = {
-  /**
-   * Partial Result
-   *
-   * True if this is an intermediate result during streaming.
-   */
-  partial?: boolean;
-  /**
-   * Transcribed Text
-   *
-   * The transcribed text from the audio.
-   */
-  output: string;
-};
-
-/**
- * SpeechInput
- */
-export type NemotronAsrInput = {
-  /**
-   * Acceleration
-   *
-   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
-   */
-  acceleration?: "none" | "low" | "medium" | "high";
-  /**
-   * Audio URL
-   *
-   * URL of the audio file.
-   */
-  audio_url: string;
-};
-
-export type NemotronAsrStreamOutput = unknown;
-
-/**
- * SpeechInput
- */
-export type NemotronAsrStreamInput = {
-  /**
-   * Acceleration
-   *
-   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
-   */
-  acceleration?: "none" | "low" | "medium" | "high";
-  /**
-   * Audio URL
-   *
-   * URL of the audio file.
-   */
-  audio_url: string;
-};
-
 export type QueueStatus = {
   status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
   /**
@@ -1279,7 +1237,7 @@ export type QueueStatus = {
   queue_position?: number;
 };
 
-export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusData = {
+export type GetFalAiSileroVadRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1293,20 +1251,20 @@ export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/nemotron/asr/stream/requests/{request_id}/status";
+  url: "/fal-ai/silero-vad/requests/{request_id}/status";
 };
 
-export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponses = {
+export type GetFalAiSileroVadRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponse =
-  GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponses[keyof GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponses];
+export type GetFalAiSileroVadRequestsByRequestIdStatusResponse =
+  GetFalAiSileroVadRequestsByRequestIdStatusResponses[keyof GetFalAiSileroVadRequestsByRequestIdStatusResponses];
 
-export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelData = {
+export type PutFalAiSileroVadRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -1315,10 +1273,10 @@ export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/nemotron/asr/stream/requests/{request_id}/cancel";
+  url: "/fal-ai/silero-vad/requests/{request_id}/cancel";
 };
 
-export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses = {
+export type PutFalAiSileroVadRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1330,27 +1288,27 @@ export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponse =
-  PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses[keyof PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses];
+export type PutFalAiSileroVadRequestsByRequestIdCancelResponse =
+  PutFalAiSileroVadRequestsByRequestIdCancelResponses[keyof PutFalAiSileroVadRequestsByRequestIdCancelResponses];
 
-export type PostFalAiNemotronAsrStreamData = {
-  body: NemotronAsrStreamInput;
+export type PostFalAiSileroVadData = {
+  body: SileroVadInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/nemotron/asr/stream";
+  url: "/fal-ai/silero-vad";
 };
 
-export type PostFalAiNemotronAsrStreamResponses = {
+export type PostFalAiSileroVadResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiNemotronAsrStreamResponse =
-  PostFalAiNemotronAsrStreamResponses[keyof PostFalAiNemotronAsrStreamResponses];
+export type PostFalAiSileroVadResponse =
+  PostFalAiSileroVadResponses[keyof PostFalAiSileroVadResponses];
 
-export type GetFalAiNemotronAsrStreamRequestsByRequestIdData = {
+export type GetFalAiSileroVadRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -1359,18 +1317,18 @@ export type GetFalAiNemotronAsrStreamRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/nemotron/asr/stream/requests/{request_id}";
+  url: "/fal-ai/silero-vad/requests/{request_id}";
 };
 
-export type GetFalAiNemotronAsrStreamRequestsByRequestIdResponses = {
+export type GetFalAiSileroVadRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: NemotronAsrStreamOutput;
+  200: SileroVadOutput;
 };
 
-export type GetFalAiNemotronAsrStreamRequestsByRequestIdResponse =
-  GetFalAiNemotronAsrStreamRequestsByRequestIdResponses[keyof GetFalAiNemotronAsrStreamRequestsByRequestIdResponses];
+export type GetFalAiSileroVadRequestsByRequestIdResponse =
+  GetFalAiSileroVadRequestsByRequestIdResponses[keyof GetFalAiSileroVadRequestsByRequestIdResponses];
 
 export type GetFalAiNemotronAsrRequestsByRequestIdStatusData = {
   body?: never;
@@ -1465,7 +1423,7 @@ export type GetFalAiNemotronAsrRequestsByRequestIdResponses = {
 export type GetFalAiNemotronAsrRequestsByRequestIdResponse =
   GetFalAiNemotronAsrRequestsByRequestIdResponses[keyof GetFalAiNemotronAsrRequestsByRequestIdResponses];
 
-export type GetFalAiSileroVadRequestsByRequestIdStatusData = {
+export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1479,20 +1437,20 @@ export type GetFalAiSileroVadRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/silero-vad/requests/{request_id}/status";
+  url: "/fal-ai/nemotron/asr/stream/requests/{request_id}/status";
 };
 
-export type GetFalAiSileroVadRequestsByRequestIdStatusResponses = {
+export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiSileroVadRequestsByRequestIdStatusResponse =
-  GetFalAiSileroVadRequestsByRequestIdStatusResponses[keyof GetFalAiSileroVadRequestsByRequestIdStatusResponses];
+export type GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponse =
+  GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponses[keyof GetFalAiNemotronAsrStreamRequestsByRequestIdStatusResponses];
 
-export type PutFalAiSileroVadRequestsByRequestIdCancelData = {
+export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -1501,10 +1459,10 @@ export type PutFalAiSileroVadRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/silero-vad/requests/{request_id}/cancel";
+  url: "/fal-ai/nemotron/asr/stream/requests/{request_id}/cancel";
 };
 
-export type PutFalAiSileroVadRequestsByRequestIdCancelResponses = {
+export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1516,27 +1474,27 @@ export type PutFalAiSileroVadRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiSileroVadRequestsByRequestIdCancelResponse =
-  PutFalAiSileroVadRequestsByRequestIdCancelResponses[keyof PutFalAiSileroVadRequestsByRequestIdCancelResponses];
+export type PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponse =
+  PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses[keyof PutFalAiNemotronAsrStreamRequestsByRequestIdCancelResponses];
 
-export type PostFalAiSileroVadData = {
-  body: SileroVadInput;
+export type PostFalAiNemotronAsrStreamData = {
+  body: NemotronAsrStreamInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/silero-vad";
+  url: "/fal-ai/nemotron/asr/stream";
 };
 
-export type PostFalAiSileroVadResponses = {
+export type PostFalAiNemotronAsrStreamResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiSileroVadResponse =
-  PostFalAiSileroVadResponses[keyof PostFalAiSileroVadResponses];
+export type PostFalAiNemotronAsrStreamResponse =
+  PostFalAiNemotronAsrStreamResponses[keyof PostFalAiNemotronAsrStreamResponses];
 
-export type GetFalAiSileroVadRequestsByRequestIdData = {
+export type GetFalAiNemotronAsrStreamRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -1545,18 +1503,204 @@ export type GetFalAiSileroVadRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/silero-vad/requests/{request_id}";
+  url: "/fal-ai/nemotron/asr/stream/requests/{request_id}";
 };
 
-export type GetFalAiSileroVadRequestsByRequestIdResponses = {
+export type GetFalAiNemotronAsrStreamRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: SileroVadOutput;
+  200: NemotronAsrStreamOutput;
 };
 
-export type GetFalAiSileroVadRequestsByRequestIdResponse =
-  GetFalAiSileroVadRequestsByRequestIdResponses[keyof GetFalAiSileroVadRequestsByRequestIdResponses];
+export type GetFalAiNemotronAsrStreamRequestsByRequestIdResponse =
+  GetFalAiNemotronAsrStreamRequestsByRequestIdResponses[keyof GetFalAiNemotronAsrStreamRequestsByRequestIdResponses];
+
+export type GetFalAiWhisperRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/whisper/requests/{request_id}/status";
+};
+
+export type GetFalAiWhisperRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWhisperRequestsByRequestIdStatusResponse =
+  GetFalAiWhisperRequestsByRequestIdStatusResponses[keyof GetFalAiWhisperRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWhisperRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/whisper/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWhisperRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWhisperRequestsByRequestIdCancelResponse =
+  PutFalAiWhisperRequestsByRequestIdCancelResponses[keyof PutFalAiWhisperRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWhisperData = {
+  body: WhisperInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/whisper";
+};
+
+export type PostFalAiWhisperResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWhisperResponse =
+  PostFalAiWhisperResponses[keyof PostFalAiWhisperResponses];
+
+export type GetFalAiWhisperRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/whisper/requests/{request_id}";
+};
+
+export type GetFalAiWhisperRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WhisperOutput;
+};
+
+export type GetFalAiWhisperRequestsByRequestIdResponse =
+  GetFalAiWhisperRequestsByRequestIdResponses[keyof GetFalAiWhisperRequestsByRequestIdResponses];
+
+export type GetFalAiWizperRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wizper/requests/{request_id}/status";
+};
+
+export type GetFalAiWizperRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWizperRequestsByRequestIdStatusResponse =
+  GetFalAiWizperRequestsByRequestIdStatusResponses[keyof GetFalAiWizperRequestsByRequestIdStatusResponses];
+
+export type PutFalAiWizperRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wizper/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWizperRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWizperRequestsByRequestIdCancelResponse =
+  PutFalAiWizperRequestsByRequestIdCancelResponses[keyof PutFalAiWizperRequestsByRequestIdCancelResponses];
+
+export type PostFalAiWizperData = {
+  body: WizperInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wizper";
+};
+
+export type PostFalAiWizperResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWizperResponse =
+  PostFalAiWizperResponses[keyof PostFalAiWizperResponses];
+
+export type GetFalAiWizperRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wizper/requests/{request_id}";
+};
+
+export type GetFalAiWizperRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WizperOutput;
+};
+
+export type GetFalAiWizperRequestsByRequestIdResponse =
+  GetFalAiWizperRequestsByRequestIdResponses[keyof GetFalAiWizperRequestsByRequestIdResponses];
 
 export type GetFalAiElevenlabsSpeechToTextScribeV2RequestsByRequestIdStatusData =
   {
@@ -1656,7 +1800,7 @@ export type GetFalAiElevenlabsSpeechToTextScribeV2RequestsByRequestIdResponses =
 export type GetFalAiElevenlabsSpeechToTextScribeV2RequestsByRequestIdResponse =
   GetFalAiElevenlabsSpeechToTextScribeV2RequestsByRequestIdResponses[keyof GetFalAiElevenlabsSpeechToTextScribeV2RequestsByRequestIdResponses];
 
-export type GetFalAiSmartTurnRequestsByRequestIdStatusData = {
+export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1670,20 +1814,20 @@ export type GetFalAiSmartTurnRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/smart-turn/requests/{request_id}/status";
+  url: "/fal-ai/elevenlabs/speech-to-text/requests/{request_id}/status";
 };
 
-export type GetFalAiSmartTurnRequestsByRequestIdStatusResponses = {
+export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiSmartTurnRequestsByRequestIdStatusResponse =
-  GetFalAiSmartTurnRequestsByRequestIdStatusResponses[keyof GetFalAiSmartTurnRequestsByRequestIdStatusResponses];
+export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponse =
+  GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponses];
 
-export type PutFalAiSmartTurnRequestsByRequestIdCancelData = {
+export type PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -1692,10 +1836,10 @@ export type PutFalAiSmartTurnRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/smart-turn/requests/{request_id}/cancel";
+  url: "/fal-ai/elevenlabs/speech-to-text/requests/{request_id}/cancel";
 };
 
-export type PutFalAiSmartTurnRequestsByRequestIdCancelResponses = {
+export type PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1707,27 +1851,27 @@ export type PutFalAiSmartTurnRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiSmartTurnRequestsByRequestIdCancelResponse =
-  PutFalAiSmartTurnRequestsByRequestIdCancelResponses[keyof PutFalAiSmartTurnRequestsByRequestIdCancelResponses];
+export type PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponse =
+  PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponses];
 
-export type PostFalAiSmartTurnData = {
-  body: SmartTurnInput;
+export type PostFalAiElevenlabsSpeechToTextData = {
+  body: ElevenlabsSpeechToTextInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/smart-turn";
+  url: "/fal-ai/elevenlabs/speech-to-text";
 };
 
-export type PostFalAiSmartTurnResponses = {
+export type PostFalAiElevenlabsSpeechToTextResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiSmartTurnResponse =
-  PostFalAiSmartTurnResponses[keyof PostFalAiSmartTurnResponses];
+export type PostFalAiElevenlabsSpeechToTextResponse =
+  PostFalAiElevenlabsSpeechToTextResponses[keyof PostFalAiElevenlabsSpeechToTextResponses];
 
-export type GetFalAiSmartTurnRequestsByRequestIdData = {
+export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -1736,18 +1880,18 @@ export type GetFalAiSmartTurnRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/smart-turn/requests/{request_id}";
+  url: "/fal-ai/elevenlabs/speech-to-text/requests/{request_id}";
 };
 
-export type GetFalAiSmartTurnRequestsByRequestIdResponses = {
+export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: SmartTurnOutput;
+  200: ElevenlabsSpeechToTextOutput;
 };
 
-export type GetFalAiSmartTurnRequestsByRequestIdResponse =
-  GetFalAiSmartTurnRequestsByRequestIdResponses[keyof GetFalAiSmartTurnRequestsByRequestIdResponses];
+export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponse =
+  GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponses[keyof GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponses];
 
 export type GetFalAiSpeechToTextTurboRequestsByRequestIdStatusData = {
   body?: never;
@@ -1841,6 +1985,285 @@ export type GetFalAiSpeechToTextTurboRequestsByRequestIdResponses = {
 
 export type GetFalAiSpeechToTextTurboRequestsByRequestIdResponse =
   GetFalAiSpeechToTextTurboRequestsByRequestIdResponses[keyof GetFalAiSpeechToTextTurboRequestsByRequestIdResponses];
+
+export type GetFalAiSpeechToTextRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/speech-to-text/requests/{request_id}/status";
+};
+
+export type GetFalAiSpeechToTextRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSpeechToTextRequestsByRequestIdStatusResponse =
+  GetFalAiSpeechToTextRequestsByRequestIdStatusResponses[keyof GetFalAiSpeechToTextRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSpeechToTextRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/speech-to-text/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSpeechToTextRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSpeechToTextRequestsByRequestIdCancelResponse =
+  PutFalAiSpeechToTextRequestsByRequestIdCancelResponses[keyof PutFalAiSpeechToTextRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSpeechToTextData = {
+  body: SpeechToTextInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/speech-to-text";
+};
+
+export type PostFalAiSpeechToTextResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSpeechToTextResponse =
+  PostFalAiSpeechToTextResponses[keyof PostFalAiSpeechToTextResponses];
+
+export type GetFalAiSpeechToTextRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/speech-to-text/requests/{request_id}";
+};
+
+export type GetFalAiSpeechToTextRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SpeechToTextOutput;
+};
+
+export type GetFalAiSpeechToTextRequestsByRequestIdResponse =
+  GetFalAiSpeechToTextRequestsByRequestIdResponses[keyof GetFalAiSpeechToTextRequestsByRequestIdResponses];
+
+export type GetFalAiSmartTurnRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/smart-turn/requests/{request_id}/status";
+};
+
+export type GetFalAiSmartTurnRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSmartTurnRequestsByRequestIdStatusResponse =
+  GetFalAiSmartTurnRequestsByRequestIdStatusResponses[keyof GetFalAiSmartTurnRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSmartTurnRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/smart-turn/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSmartTurnRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSmartTurnRequestsByRequestIdCancelResponse =
+  PutFalAiSmartTurnRequestsByRequestIdCancelResponses[keyof PutFalAiSmartTurnRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSmartTurnData = {
+  body: SmartTurnInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/smart-turn";
+};
+
+export type PostFalAiSmartTurnResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSmartTurnResponse =
+  PostFalAiSmartTurnResponses[keyof PostFalAiSmartTurnResponses];
+
+export type GetFalAiSmartTurnRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/smart-turn/requests/{request_id}";
+};
+
+export type GetFalAiSmartTurnRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SmartTurnOutput;
+};
+
+export type GetFalAiSmartTurnRequestsByRequestIdResponse =
+  GetFalAiSmartTurnRequestsByRequestIdResponses[keyof GetFalAiSmartTurnRequestsByRequestIdResponses];
+
+export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/speech-to-text/stream/requests/{request_id}/status";
+};
+
+export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponse =
+  GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponses[keyof GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponses];
+
+export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/speech-to-text/stream/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponse =
+  PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses[keyof PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses];
+
+export type PostFalAiSpeechToTextStreamData = {
+  body: SpeechToTextStreamInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/speech-to-text/stream";
+};
+
+export type PostFalAiSpeechToTextStreamResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSpeechToTextStreamResponse =
+  PostFalAiSpeechToTextStreamResponses[keyof PostFalAiSpeechToTextStreamResponses];
+
+export type GetFalAiSpeechToTextStreamRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/speech-to-text/stream/requests/{request_id}";
+};
+
+export type GetFalAiSpeechToTextStreamRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: SpeechToTextStreamOutput;
+};
+
+export type GetFalAiSpeechToTextStreamRequestsByRequestIdResponse =
+  GetFalAiSpeechToTextStreamRequestsByRequestIdResponses[keyof GetFalAiSpeechToTextStreamRequestsByRequestIdResponses];
 
 export type GetFalAiSpeechToTextTurboStreamRequestsByRequestIdStatusData = {
   body?: never;
@@ -1937,7 +2360,7 @@ export type GetFalAiSpeechToTextTurboStreamRequestsByRequestIdResponses = {
 export type GetFalAiSpeechToTextTurboStreamRequestsByRequestIdResponse =
   GetFalAiSpeechToTextTurboStreamRequestsByRequestIdResponses[keyof GetFalAiSpeechToTextTurboStreamRequestsByRequestIdResponses];
 
-export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusData = {
+export type GetOpenrouterRouterVideoRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1951,20 +2374,20 @@ export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/speech-to-text/stream/requests/{request_id}/status";
+  url: "/openrouter/router/video/requests/{request_id}/status";
 };
 
-export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponses = {
+export type GetOpenrouterRouterVideoRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponse =
-  GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponses[keyof GetFalAiSpeechToTextStreamRequestsByRequestIdStatusResponses];
+export type GetOpenrouterRouterVideoRequestsByRequestIdStatusResponse =
+  GetOpenrouterRouterVideoRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterVideoRequestsByRequestIdStatusResponses];
 
-export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelData = {
+export type PutOpenrouterRouterVideoRequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -1973,10 +2396,10 @@ export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/speech-to-text/stream/requests/{request_id}/cancel";
+  url: "/openrouter/router/video/requests/{request_id}/cancel";
 };
 
-export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses = {
+export type PutOpenrouterRouterVideoRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1988,27 +2411,27 @@ export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponse =
-  PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses[keyof PutFalAiSpeechToTextStreamRequestsByRequestIdCancelResponses];
+export type PutOpenrouterRouterVideoRequestsByRequestIdCancelResponse =
+  PutOpenrouterRouterVideoRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterVideoRequestsByRequestIdCancelResponses];
 
-export type PostFalAiSpeechToTextStreamData = {
-  body: SpeechToTextStreamInput;
+export type PostOpenrouterRouterVideoData = {
+  body: RouterVideoInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/speech-to-text/stream";
+  url: "/openrouter/router/video";
 };
 
-export type PostFalAiSpeechToTextStreamResponses = {
+export type PostOpenrouterRouterVideoResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiSpeechToTextStreamResponse =
-  PostFalAiSpeechToTextStreamResponses[keyof PostFalAiSpeechToTextStreamResponses];
+export type PostOpenrouterRouterVideoResponse =
+  PostOpenrouterRouterVideoResponses[keyof PostOpenrouterRouterVideoResponses];
 
-export type GetFalAiSpeechToTextStreamRequestsByRequestIdData = {
+export type GetOpenrouterRouterVideoRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -2017,485 +2440,18 @@ export type GetFalAiSpeechToTextStreamRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/speech-to-text/stream/requests/{request_id}";
+  url: "/openrouter/router/video/requests/{request_id}";
 };
 
-export type GetFalAiSpeechToTextStreamRequestsByRequestIdResponses = {
+export type GetOpenrouterRouterVideoRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: SpeechToTextStreamOutput;
+  200: RouterVideoOutput;
 };
 
-export type GetFalAiSpeechToTextStreamRequestsByRequestIdResponse =
-  GetFalAiSpeechToTextStreamRequestsByRequestIdResponses[keyof GetFalAiSpeechToTextStreamRequestsByRequestIdResponses];
-
-export type GetFalAiSpeechToTextRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/speech-to-text/requests/{request_id}/status";
-};
-
-export type GetFalAiSpeechToTextRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSpeechToTextRequestsByRequestIdStatusResponse =
-  GetFalAiSpeechToTextRequestsByRequestIdStatusResponses[keyof GetFalAiSpeechToTextRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSpeechToTextRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/speech-to-text/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSpeechToTextRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSpeechToTextRequestsByRequestIdCancelResponse =
-  PutFalAiSpeechToTextRequestsByRequestIdCancelResponses[keyof PutFalAiSpeechToTextRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSpeechToTextData = {
-  body: SpeechToTextInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/speech-to-text";
-};
-
-export type PostFalAiSpeechToTextResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSpeechToTextResponse =
-  PostFalAiSpeechToTextResponses[keyof PostFalAiSpeechToTextResponses];
-
-export type GetFalAiSpeechToTextRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/speech-to-text/requests/{request_id}";
-};
-
-export type GetFalAiSpeechToTextRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: SpeechToTextOutput;
-};
-
-export type GetFalAiSpeechToTextRequestsByRequestIdResponse =
-  GetFalAiSpeechToTextRequestsByRequestIdResponses[keyof GetFalAiSpeechToTextRequestsByRequestIdResponses];
-
-export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/elevenlabs/speech-to-text/requests/{request_id}/status";
-};
-
-export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponse =
-  GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponses[keyof GetFalAiElevenlabsSpeechToTextRequestsByRequestIdStatusResponses];
-
-export type PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/elevenlabs/speech-to-text/requests/{request_id}/cancel";
-};
-
-export type PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponse =
-  PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponses[keyof PutFalAiElevenlabsSpeechToTextRequestsByRequestIdCancelResponses];
-
-export type PostFalAiElevenlabsSpeechToTextData = {
-  body: ElevenlabsSpeechToTextInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/elevenlabs/speech-to-text";
-};
-
-export type PostFalAiElevenlabsSpeechToTextResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiElevenlabsSpeechToTextResponse =
-  PostFalAiElevenlabsSpeechToTextResponses[keyof PostFalAiElevenlabsSpeechToTextResponses];
-
-export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/elevenlabs/speech-to-text/requests/{request_id}";
-};
-
-export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ElevenlabsSpeechToTextOutput;
-};
-
-export type GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponse =
-  GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponses[keyof GetFalAiElevenlabsSpeechToTextRequestsByRequestIdResponses];
-
-export type GetFalAiWizperRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/wizper/requests/{request_id}/status";
-};
-
-export type GetFalAiWizperRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWizperRequestsByRequestIdStatusResponse =
-  GetFalAiWizperRequestsByRequestIdStatusResponses[keyof GetFalAiWizperRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWizperRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wizper/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWizperRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWizperRequestsByRequestIdCancelResponse =
-  PutFalAiWizperRequestsByRequestIdCancelResponses[keyof PutFalAiWizperRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWizperData = {
-  body: WizperInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/wizper";
-};
-
-export type PostFalAiWizperResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWizperResponse =
-  PostFalAiWizperResponses[keyof PostFalAiWizperResponses];
-
-export type GetFalAiWizperRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wizper/requests/{request_id}";
-};
-
-export type GetFalAiWizperRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: WizperOutput;
-};
-
-export type GetFalAiWizperRequestsByRequestIdResponse =
-  GetFalAiWizperRequestsByRequestIdResponses[keyof GetFalAiWizperRequestsByRequestIdResponses];
-
-export type GetFalAiWhisperRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/whisper/requests/{request_id}/status";
-};
-
-export type GetFalAiWhisperRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWhisperRequestsByRequestIdStatusResponse =
-  GetFalAiWhisperRequestsByRequestIdStatusResponses[keyof GetFalAiWhisperRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWhisperRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/whisper/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWhisperRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWhisperRequestsByRequestIdCancelResponse =
-  PutFalAiWhisperRequestsByRequestIdCancelResponses[keyof PutFalAiWhisperRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWhisperData = {
-  body: WhisperInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/whisper";
-};
-
-export type PostFalAiWhisperResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWhisperResponse =
-  PostFalAiWhisperResponses[keyof PostFalAiWhisperResponses];
-
-export type GetFalAiWhisperRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/whisper/requests/{request_id}";
-};
-
-export type GetFalAiWhisperRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: WhisperOutput;
-};
-
-export type GetFalAiWhisperRequestsByRequestIdResponse =
-  GetFalAiWhisperRequestsByRequestIdResponses[keyof GetFalAiWhisperRequestsByRequestIdResponses];
-
-export type GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/half-moon-ai/ai-detector/detect-text/requests/{request_id}/status";
-};
-
-export type GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdStatusResponse =
-  GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdStatusResponses[keyof GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdStatusResponses];
-
-export type PutHalfMoonAiAiDetectorDetectTextRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/half-moon-ai/ai-detector/detect-text/requests/{request_id}/cancel";
-};
-
-export type PutHalfMoonAiAiDetectorDetectTextRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutHalfMoonAiAiDetectorDetectTextRequestsByRequestIdCancelResponse =
-  PutHalfMoonAiAiDetectorDetectTextRequestsByRequestIdCancelResponses[keyof PutHalfMoonAiAiDetectorDetectTextRequestsByRequestIdCancelResponses];
-
-export type PostHalfMoonAiAiDetectorDetectTextData = {
-  body: AiDetectorDetectTextInput;
-  path?: never;
-  query?: never;
-  url: "/half-moon-ai/ai-detector/detect-text";
-};
-
-export type PostHalfMoonAiAiDetectorDetectTextResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostHalfMoonAiAiDetectorDetectTextResponse =
-  PostHalfMoonAiAiDetectorDetectTextResponses[keyof PostHalfMoonAiAiDetectorDetectTextResponses];
-
-export type GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/half-moon-ai/ai-detector/detect-text/requests/{request_id}";
-};
-
-export type GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: AiDetectorDetectTextOutput;
-};
-
-export type GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdResponse =
-  GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdResponses[keyof GetHalfMoonAiAiDetectorDetectTextRequestsByRequestIdResponses];
+export type GetOpenrouterRouterVideoRequestsByRequestIdResponse =
+  GetOpenrouterRouterVideoRequestsByRequestIdResponses[keyof GetOpenrouterRouterVideoRequestsByRequestIdResponses];
 
 export type GetOpenrouterRouterVideoEnterpriseRequestsByRequestIdStatusData = {
   body?: never;
@@ -2591,96 +2547,3 @@ export type GetOpenrouterRouterVideoEnterpriseRequestsByRequestIdResponses = {
 
 export type GetOpenrouterRouterVideoEnterpriseRequestsByRequestIdResponse =
   GetOpenrouterRouterVideoEnterpriseRequestsByRequestIdResponses[keyof GetOpenrouterRouterVideoEnterpriseRequestsByRequestIdResponses];
-
-export type GetOpenrouterRouterVideoRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/openrouter/router/video/requests/{request_id}/status";
-};
-
-export type GetOpenrouterRouterVideoRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetOpenrouterRouterVideoRequestsByRequestIdStatusResponse =
-  GetOpenrouterRouterVideoRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterVideoRequestsByRequestIdStatusResponses];
-
-export type PutOpenrouterRouterVideoRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/video/requests/{request_id}/cancel";
-};
-
-export type PutOpenrouterRouterVideoRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutOpenrouterRouterVideoRequestsByRequestIdCancelResponse =
-  PutOpenrouterRouterVideoRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterVideoRequestsByRequestIdCancelResponses];
-
-export type PostOpenrouterRouterVideoData = {
-  body: RouterVideoInput;
-  path?: never;
-  query?: never;
-  url: "/openrouter/router/video";
-};
-
-export type PostOpenrouterRouterVideoResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostOpenrouterRouterVideoResponse =
-  PostOpenrouterRouterVideoResponses[keyof PostOpenrouterRouterVideoResponses];
-
-export type GetOpenrouterRouterVideoRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/video/requests/{request_id}";
-};
-
-export type GetOpenrouterRouterVideoRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: RouterVideoOutput;
-};
-
-export type GetOpenrouterRouterVideoRequestsByRequestIdResponse =
-  GetOpenrouterRouterVideoRequestsByRequestIdResponses[keyof GetOpenrouterRouterVideoRequestsByRequestIdResponses];

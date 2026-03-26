@@ -5,6 +5,65 @@ export type ClientOptions = {
 };
 
 /**
+ * Qwen3GuardOutput
+ */
+export type Qwen3GuardOutput = {
+  /**
+   * Categories
+   *
+   * The confidence score of the classification
+   */
+  categories: Array<
+    | "Violent"
+    | "Non-violent Illegal Acts"
+    | "Sexual Content or Sexual Acts"
+    | "PII"
+    | "Suicide & Self-Harm"
+    | "Unethical Acts"
+    | "Politically Sensitive Topics"
+    | "Copyright Violation"
+    | "Jailbreak"
+    | "None"
+  >;
+  /**
+   * Label
+   *
+   * The classification label
+   */
+  label: "Safe" | "Unsafe" | "Controversial";
+};
+
+/**
+ * Qwen3GuardInput
+ */
+export type Qwen3GuardInput = {
+  /**
+   * Prompt
+   *
+   * The input text to be classified
+   */
+  prompt: string;
+};
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export type RouterOpenaiV1EmbeddingsInput = {
+  [key: string]: unknown;
+};
+
+export type RouterOpenaiV1EmbeddingsOutput = unknown;
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export type RouterOpenaiV1ResponsesInput = {
+  [key: string]: unknown;
+};
+
+export type RouterOpenaiV1ResponsesOutput = unknown;
+
+/**
  * OutputModel
  */
 export type VideoPromptGeneratorOutput = {
@@ -144,6 +203,18 @@ export type VideoPromptGeneratorInput = {
     | "openai/gpt-4o"
     | "deepseek/deepseek-r1";
   /**
+   * Prompt Length
+   *
+   * Length of the prompt
+   */
+  prompt_length?: "Short" | "Medium" | "Long";
+  /**
+   * Input Concept
+   *
+   * Core concept or thematic input for the video prompt
+   */
+  input_concept: string;
+  /**
    * Camera Style
    *
    * Camera movement style
@@ -170,59 +241,118 @@ export type VideoPromptGeneratorInput = {
     | "Dutch angle tension"
     | "Underwater housing"
     | "Periscope lens";
-  /**
-   * Input Concept
-   *
-   * Core concept or thematic input for the video prompt
-   */
-  input_concept: string;
-  /**
-   * Prompt Length
-   *
-   * Length of the prompt
-   */
-  prompt_length?: "Short" | "Medium" | "Long";
 };
 
 /**
- * Qwen3GuardOutput
+ * Seed2MiniMessage
  */
-export type Qwen3GuardOutput = {
+export type Seed2MiniMessage = {
   /**
-   * Categories
+   * Content
    *
-   * The confidence score of the classification
+   * The content of the message. Can be a string for text-only messages, or a list of content parts for multimodal messages (e.g. with images).
    */
-  categories: Array<
-    | "Violent"
-    | "Non-violent Illegal Acts"
-    | "Sexual Content or Sexual Acts"
-    | "PII"
-    | "Suicide & Self-Harm"
-    | "Unethical Acts"
-    | "Politically Sensitive Topics"
-    | "Copyright Violation"
-    | "Jailbreak"
-    | "None"
-  >;
+  content:
+    | string
+    | Array<{
+        [key: string]: unknown;
+      }>;
   /**
-   * Label
+   * Role
    *
-   * The classification label
+   * The role of the message author.
    */
-  label: "Safe" | "Unsafe" | "Controversial";
+  role: "system" | "user" | "assistant";
 };
 
 /**
- * Qwen3GuardInput
+ * Seed2MiniOutput
  */
-export type Qwen3GuardInput = {
+export type BytedanceSeedV2MiniOutput = {
+  /**
+   * Reasoning Content
+   *
+   * The model's chain-of-thought reasoning content. Only present when `thinking` is `enabled` or `auto`.
+   */
+  reasoning_content?: string | unknown;
+  /**
+   * Output
+   *
+   * The model's text response.
+   */
+  output: string;
+  /**
+   * Messages
+   *
+   * The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.
+   */
+  messages: Array<Seed2MiniMessage>;
+};
+
+/**
+ * Seed2MiniInput
+ */
+export type BytedanceSeedV2MiniInput = {
   /**
    * Prompt
    *
-   * The input text to be classified
+   * The text prompt or question for the model.
    */
   prompt: string;
+  /**
+   * Video Urls
+   *
+   * URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.
+   */
+  video_urls?: Array<string>;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.
+   */
+  top_p?: number;
+  /**
+   * System Prompt
+   *
+   * Optional system prompt to guide the model's behavior.
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Thinking
+   *
+   * Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.
+   */
+  thinking?: "enabled" | "disabled" | "auto";
+  /**
+   * Reasoning Effort
+   *
+   * Controls the depth of reasoning before the model responds. Only applicable when `thinking` is `enabled` or `auto`. `minimal` for immediate response, `low` for faster response with light reasoning, `medium` for balanced speed and depth, `high` for deep analysis of complex issues.
+   */
+  reasoning_effort?: "minimal" | "low" | "medium" | "high" | unknown;
+  /**
+   * Temperature
+   *
+   * Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.
+   */
+  temperature?: number;
+  /**
+   * Image Urls
+   *
+   * URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.
+   */
+  image_urls?: Array<string>;
+  /**
+   * Messages
+   *
+   * Optional prior conversation history for multi-turn conversations. Pass back the `messages` field from a previous response to provide context. The current `prompt`, `image_urls`, `video_urls`, and `system_prompt` are always appended as the latest user turn.
+   */
+  messages?: Array<Seed2MiniMessage> | unknown;
+  /**
+   * Max Completion Tokens
+   *
+   * Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.
+   */
+  max_completion_tokens?: number;
 };
 
 /**
@@ -239,17 +369,17 @@ export type RouterOpenaiV1ChatCompletionsOutput = unknown;
  */
 export type UsageInfo = {
   /**
-   * Prompt Tokens
+   * Completion Tokens
    */
-  prompt_tokens?: number;
+  completion_tokens?: number | unknown;
   /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
-   * Completion Tokens
+   * Prompt Tokens
    */
-  completion_tokens?: number;
+  prompt_tokens?: number | unknown;
   /**
    * Cost
    */
@@ -261,17 +391,15 @@ export type UsageInfo = {
  */
 export type RouterOutput = {
   /**
-   * Usage
-   *
    * Token usage information
    */
-  usage?: UsageInfo;
+  usage?: UsageInfo | unknown;
   /**
    * Error
    *
    * Error message if an error occurred
    */
-  error?: string;
+  error?: string | unknown;
   /**
    * Partial
    *
@@ -283,7 +411,7 @@ export type RouterOutput = {
    *
    * Generated reasoning for the final answer
    */
-  reasoning?: string;
+  reasoning?: string | unknown;
   /**
    * Output
    *
@@ -297,23 +425,23 @@ export type RouterOutput = {
  */
 export type RouterInput = {
   /**
-   * Prompt
-   *
-   * Prompt to be used for the chat completion
-   */
-  prompt: string;
-  /**
    * Model
    *
    * Name of the model to use. Charged based on actual token usage.
    */
   model: string;
   /**
+   * Prompt
+   *
+   * Prompt to be used for the chat completion
+   */
+  prompt: string;
+  /**
    * Max Tokens
    *
    * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  max_tokens?: number;
+  max_tokens?: number | unknown;
   /**
    * Temperature
    *
@@ -325,7 +453,7 @@ export type RouterInput = {
    *
    * System prompt to provide context or instructions to the model
    */
-  system_prompt?: string;
+  system_prompt?: string | unknown;
   /**
    * Reasoning
    *
@@ -333,24 +461,6 @@ export type RouterInput = {
    */
   reasoning?: boolean;
 };
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export type RouterOpenaiV1EmbeddingsInput = {
-  [key: string]: unknown;
-};
-
-export type RouterOpenaiV1EmbeddingsOutput = unknown;
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export type RouterOpenaiV1ResponsesInput = {
-  [key: string]: unknown;
-};
-
-export type RouterOpenaiV1ResponsesOutput = unknown;
 
 export type QueueStatus = {
   status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
@@ -387,6 +497,384 @@ export type QueueStatus = {
    */
   queue_position?: number;
 };
+
+export type GetOpenrouterRouterRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/openrouter/router/requests/{request_id}/status";
+};
+
+export type GetOpenrouterRouterRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetOpenrouterRouterRequestsByRequestIdStatusResponse =
+  GetOpenrouterRouterRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterRequestsByRequestIdStatusResponses];
+
+export type PutOpenrouterRouterRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/requests/{request_id}/cancel";
+};
+
+export type PutOpenrouterRouterRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutOpenrouterRouterRequestsByRequestIdCancelResponse =
+  PutOpenrouterRouterRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterRequestsByRequestIdCancelResponses];
+
+export type PostOpenrouterRouterData = {
+  body: RouterInput;
+  path?: never;
+  query?: never;
+  url: "/openrouter/router";
+};
+
+export type PostOpenrouterRouterResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostOpenrouterRouterResponse =
+  PostOpenrouterRouterResponses[keyof PostOpenrouterRouterResponses];
+
+export type GetOpenrouterRouterRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/requests/{request_id}";
+};
+
+export type GetOpenrouterRouterRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: RouterOutput;
+};
+
+export type GetOpenrouterRouterRequestsByRequestIdResponse =
+  GetOpenrouterRouterRequestsByRequestIdResponses[keyof GetOpenrouterRouterRequestsByRequestIdResponses];
+
+export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/openrouter/router/openai/v1/chat/completions/requests/{request_id}/status";
+  };
+
+export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponse =
+  GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses];
+
+export type PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/openrouter/router/openai/v1/chat/completions/requests/{request_id}/cancel";
+  };
+
+export type PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponse =
+  PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses];
+
+export type PostOpenrouterRouterOpenaiV1ChatCompletionsData = {
+  body: RouterOpenaiV1ChatCompletionsInput;
+  path?: never;
+  query?: never;
+  url: "/openrouter/router/openai/v1/chat/completions";
+};
+
+export type PostOpenrouterRouterOpenaiV1ChatCompletionsResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostOpenrouterRouterOpenaiV1ChatCompletionsResponse =
+  PostOpenrouterRouterOpenaiV1ChatCompletionsResponses[keyof PostOpenrouterRouterOpenaiV1ChatCompletionsResponses];
+
+export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/openrouter/router/openai/v1/chat/completions/requests/{request_id}";
+  };
+
+export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: RouterOpenaiV1ChatCompletionsOutput;
+  };
+
+export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponse =
+  GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponses[keyof GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponses];
+
+export type GetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/bytedance/seed/v2/mini/requests/{request_id}/status";
+};
+
+export type GetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusResponse =
+  GetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusResponses[keyof GetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusResponses];
+
+export type PutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/bytedance/seed/v2/mini/requests/{request_id}/cancel";
+};
+
+export type PutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelResponse =
+  PutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelResponses[keyof PutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelResponses];
+
+export type PostFalAiBytedanceSeedV2MiniData = {
+  body: BytedanceSeedV2MiniInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/bytedance/seed/v2/mini";
+};
+
+export type PostFalAiBytedanceSeedV2MiniResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiBytedanceSeedV2MiniResponse =
+  PostFalAiBytedanceSeedV2MiniResponses[keyof PostFalAiBytedanceSeedV2MiniResponses];
+
+export type GetFalAiBytedanceSeedV2MiniRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/bytedance/seed/v2/mini/requests/{request_id}";
+};
+
+export type GetFalAiBytedanceSeedV2MiniRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: BytedanceSeedV2MiniOutput;
+};
+
+export type GetFalAiBytedanceSeedV2MiniRequestsByRequestIdResponse =
+  GetFalAiBytedanceSeedV2MiniRequestsByRequestIdResponses[keyof GetFalAiBytedanceSeedV2MiniRequestsByRequestIdResponses];
+
+export type GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/video-prompt-generator/requests/{request_id}/status";
+};
+
+export type GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponse =
+  GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponses[keyof GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponses];
+
+export type PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/video-prompt-generator/requests/{request_id}/cancel";
+};
+
+export type PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponse =
+  PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponses[keyof PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponses];
+
+export type PostFalAiVideoPromptGeneratorData = {
+  body: VideoPromptGeneratorInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/video-prompt-generator";
+};
+
+export type PostFalAiVideoPromptGeneratorResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiVideoPromptGeneratorResponse =
+  PostFalAiVideoPromptGeneratorResponses[keyof PostFalAiVideoPromptGeneratorResponses];
+
+export type GetFalAiVideoPromptGeneratorRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/video-prompt-generator/requests/{request_id}";
+};
+
+export type GetFalAiVideoPromptGeneratorRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: VideoPromptGeneratorOutput;
+};
+
+export type GetFalAiVideoPromptGeneratorRequestsByRequestIdResponse =
+  GetFalAiVideoPromptGeneratorRequestsByRequestIdResponses[keyof GetFalAiVideoPromptGeneratorRequestsByRequestIdResponses];
 
 export type GetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdStatusData =
   {
@@ -583,198 +1071,6 @@ export type GetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdResponses =
 export type GetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdResponse =
   GetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdResponses[keyof GetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdResponses];
 
-export type GetOpenrouterRouterRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/openrouter/router/requests/{request_id}/status";
-};
-
-export type GetOpenrouterRouterRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetOpenrouterRouterRequestsByRequestIdStatusResponse =
-  GetOpenrouterRouterRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterRequestsByRequestIdStatusResponses];
-
-export type PutOpenrouterRouterRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/requests/{request_id}/cancel";
-};
-
-export type PutOpenrouterRouterRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutOpenrouterRouterRequestsByRequestIdCancelResponse =
-  PutOpenrouterRouterRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterRequestsByRequestIdCancelResponses];
-
-export type PostOpenrouterRouterData = {
-  body: RouterInput;
-  path?: never;
-  query?: never;
-  url: "/openrouter/router";
-};
-
-export type PostOpenrouterRouterResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostOpenrouterRouterResponse =
-  PostOpenrouterRouterResponses[keyof PostOpenrouterRouterResponses];
-
-export type GetOpenrouterRouterRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/requests/{request_id}";
-};
-
-export type GetOpenrouterRouterRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: RouterOutput;
-};
-
-export type GetOpenrouterRouterRequestsByRequestIdResponse =
-  GetOpenrouterRouterRequestsByRequestIdResponses[keyof GetOpenrouterRouterRequestsByRequestIdResponses];
-
-export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/openrouter/router/openai/v1/chat/completions/requests/{request_id}/status";
-  };
-
-export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponse =
-  GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses];
-
-export type PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/openrouter/router/openai/v1/chat/completions/requests/{request_id}/cancel";
-  };
-
-export type PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponse =
-  PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses];
-
-export type PostOpenrouterRouterOpenaiV1ChatCompletionsData = {
-  body: RouterOpenaiV1ChatCompletionsInput;
-  path?: never;
-  query?: never;
-  url: "/openrouter/router/openai/v1/chat/completions";
-};
-
-export type PostOpenrouterRouterOpenaiV1ChatCompletionsResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostOpenrouterRouterOpenaiV1ChatCompletionsResponse =
-  PostOpenrouterRouterOpenaiV1ChatCompletionsResponses[keyof PostOpenrouterRouterOpenaiV1ChatCompletionsResponses];
-
-export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/openrouter/router/openai/v1/chat/completions/requests/{request_id}";
-  };
-
-export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponses =
-  {
-    /**
-     * Result of the request.
-     */
-    200: RouterOpenaiV1ChatCompletionsOutput;
-  };
-
-export type GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponse =
-  GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponses[keyof GetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponses];
-
 export type GetFalAiQwen3GuardRequestsByRequestIdStatusData = {
   body?: never;
   path: {
@@ -867,96 +1163,3 @@ export type GetFalAiQwen3GuardRequestsByRequestIdResponses = {
 
 export type GetFalAiQwen3GuardRequestsByRequestIdResponse =
   GetFalAiQwen3GuardRequestsByRequestIdResponses[keyof GetFalAiQwen3GuardRequestsByRequestIdResponses];
-
-export type GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/video-prompt-generator/requests/{request_id}/status";
-};
-
-export type GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponse =
-  GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponses[keyof GetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponses];
-
-export type PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/video-prompt-generator/requests/{request_id}/cancel";
-};
-
-export type PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponse =
-  PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponses[keyof PutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponses];
-
-export type PostFalAiVideoPromptGeneratorData = {
-  body: VideoPromptGeneratorInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/video-prompt-generator";
-};
-
-export type PostFalAiVideoPromptGeneratorResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiVideoPromptGeneratorResponse =
-  PostFalAiVideoPromptGeneratorResponses[keyof PostFalAiVideoPromptGeneratorResponses];
-
-export type GetFalAiVideoPromptGeneratorRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/video-prompt-generator/requests/{request_id}";
-};
-
-export type GetFalAiVideoPromptGeneratorRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: VideoPromptGeneratorOutput;
-};
-
-export type GetFalAiVideoPromptGeneratorRequestsByRequestIdResponse =
-  GetFalAiVideoPromptGeneratorRequestsByRequestIdResponses[keyof GetFalAiVideoPromptGeneratorRequestsByRequestIdResponses];

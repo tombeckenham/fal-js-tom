@@ -5,6 +5,7 @@
 export * from "./3d/endpoint-schema";
 export * from "./audio/endpoint-schema";
 export * from "./image/endpoint-schema";
+export * from "./json/endpoint-schema";
 export * from "./llm/endpoint-schema";
 export * from "./speech/endpoint-schema";
 export * from "./text/endpoint-schema";
