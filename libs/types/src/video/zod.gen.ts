@@ -27842,7 +27842,7 @@ export const zHunyuanVideoImageToVideoInput = z.object({
         description: "The number of frames to generate.",
       }),
     )
-    .default(129),
+    .default("129"),
   i2v_stability: z
     .optional(
       z.boolean().register(z.globalRegistry, {

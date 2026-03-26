@@ -100,6 +100,86 @@ function transformToFalFileSchema(
 }
 
 /**
+ * Coerce default values to match their declared schema type.
+ *
+ * Some fal.ai OpenAPI specs declare a property as type "string" but provide
+ * a numeric default (e.g. num_frames: { type: "string", default: 129 }).
+ * This causes Zod codegen to emit `.default(129)` on a `z.string()`, which
+ * fails TypeScript type checking.
+ */
+function coerceDefaults(spec: object): void {
+  const schemas = (
+    spec as { components?: { schemas?: Record<string, object> } }
+  ).components?.schemas;
+  if (!schemas) return;
+
+  for (const schema of Object.values(schemas)) {
+    coerceDefaultsRecursively(schema);
+  }
+}
+
+function coerceDefaultsRecursively(obj: object): void {
+  if (typeof obj !== "object" || obj === null) return;
+
+  const schema = obj as Record<string, unknown>;
+
+  if (schema.properties && typeof schema.properties === "object") {
+    const properties = schema.properties as Record<
+      string,
+      Record<string, unknown>
+    >;
+    for (const value of Object.values(properties)) {
+      if (
+        value.type === "string" &&
+        value.default !== undefined &&
+        typeof value.default !== "string"
+      ) {
+        value.default = String(value.default);
+      }
+      if (
+        value.type === "integer" &&
+        value.default !== undefined &&
+        typeof value.default === "string"
+      ) {
+        const parsed = parseInt(value.default, 10);
+        if (!isNaN(parsed)) value.default = parsed;
+      }
+      if (
+        value.type === "number" &&
+        value.default !== undefined &&
+        typeof value.default === "string"
+      ) {
+        const parsed = parseFloat(value.default);
+        if (!isNaN(parsed)) value.default = parsed;
+      }
+      if (
+        value.type === "boolean" &&
+        value.default !== undefined &&
+        typeof value.default === "string"
+      ) {
+        value.default = value.default === "true";
+      }
+      coerceDefaultsRecursively(value);
+    }
+  }
+
+  for (const key of ["allOf", "anyOf", "oneOf"]) {
+    const arr = schema[key];
+    if (Array.isArray(arr)) {
+      arr.forEach((item) => {
+        if (item && typeof item === "object") {
+          coerceDefaultsRecursively(item as object);
+        }
+      });
+    }
+  }
+
+  if (schema.items && typeof schema.items === "object") {
+    coerceDefaultsRecursively(schema.items);
+  }
+}
+
+/**
  * Transform URL fields on Input schemas to accept string | Blob | File.
  * Only transforms fields on Input schemas (schema names ending with 'Input')
  * so that Output schema URL fields remain as plain strings.
@@ -465,6 +545,9 @@ function getFalModelOpenApiObjects(filename: string): Array<object> {
 
     // Transform URL fields on Input schemas to accept string | Blob | File
     transformFalFileFields(spec);
+
+    // Coerce default values to match their declared schema types
+    coerceDefaults(spec);
 
     return spec;
   });

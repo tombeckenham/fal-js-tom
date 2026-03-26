@@ -382,10 +382,10 @@ async function generateClientFile(
   }
   lines.push(`  never`);
 
-  const outputPath = join(generatedDir, "client.ts");
+  const outputPath = join(generatedDir, "index.ts");
   const formattedContent = await formatTypeScript(lines.join("\n"));
   writeFileSync(outputPath, formattedContent);
-  console.log(`  ✓ Generated client.ts`);
+  console.log(`  ✓ Generated index.ts`);
 }
 
 async function main() {
@@ -443,7 +443,7 @@ async function main() {
   await generateEndpointsFile(generatedDir, processedCategories);
 
   // Delete old files if they exist
-  const oldFiles = ["index.ts"];
+  const oldFiles = ["client.ts"];
   for (const file of oldFiles) {
     const filePath = join(generatedDir, file);
     if (existsSync(filePath)) {

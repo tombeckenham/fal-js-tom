@@ -21,18 +21,15 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
+    "@fal-ai/types": ">=0.1.0 <1.0.0",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "eventsource-parser": "^1.1.2",
     "robot3": "^0.4.1"
   },
   "peerDependencies": {
-    "@fal-ai/types": ">=0.1.0",
     "zod": "^4"
   },
   "peerDependenciesMeta": {
-    "@fal-ai/types": {
-      "optional": true
-    },
     "zod": {
       "optional": true
     }
