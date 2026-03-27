@@ -1107,7 +1107,7 @@ export type ChatterboxhdTextToSpeechInput = {
    *
    * URL to the audio sample to use as a voice prompt for zero-shot TTS voice cloning. Providing a audio sample will override the voice setting. If neither voice nor audio_url are provided, a random voice will be used.
    */
-  audio_url?: string;
+  audio_url?: string | Blob | File;
   /**
    * Temperature
    *
@@ -1644,7 +1644,7 @@ export type IndexTts2TextToSpeechInput = {
    *
    * The audio file to generate the speech from.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Emotion Prompt
    *
@@ -1691,7 +1691,7 @@ export type LuxTtsInput = {
    *
    * URL of the reference audio file for voice cloning. The model will mimic the voice characteristics from this audio.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -2395,7 +2395,7 @@ export type MinimaxVoiceCloneInput = {
    * automatically deleted.
    *
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Accuracy
    *
@@ -2705,13 +2705,13 @@ export type ChatterboxhdSpeechToSpeechInput = {
    *
    * URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.
    */
-  target_voice_audio_url?: string;
+  target_voice_audio_url?: string | Blob | File;
   /**
    * Source Audio Url
    *
    * URL to the source audio file to be voice-converted.
    */
-  source_audio_url: string;
+  source_audio_url: string | Blob | File;
   /**
    * Target Voice
    *
@@ -2743,7 +2743,7 @@ export type ChatterboxSpeechToSpeechInput = {
   /**
    * Source Audio Url
    */
-  source_audio_url: string;
+  source_audio_url: string | Blob | File;
   /**
    * Target Voice Audio Url
    *

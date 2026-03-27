@@ -6,9 +6,9 @@ import * as z from "zod";
  * File
  */
 export const zFile = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
@@ -46,9 +46,9 @@ export const zWorkflowUtilitiesInterleaveVideoInput = z
  * UsageInfo
  */
 export const zUsageInfo = z.object({
-  completion_tokens: z.optional(z.union([z.int(), z.unknown()])),
-  total_tokens: z.optional(z.int()).default(0),
-  prompt_tokens: z.optional(z.union([z.int(), z.unknown()])),
+  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
+  total_tokens: z.int().optional().default(0),
+  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
   cost: z.number(),
 });
 
@@ -69,13 +69,13 @@ export const zRouterAudioInput = z.object({
   prompt: z.string().register(z.globalRegistry, {
     description: "Prompt to be used for the audio processing",
   }),
-  system_prompt: z.optional(z.union([z.string(), z.unknown()])),
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
   reasoning: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Should reasoning be the part of the final answer.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
     .default(false),
   model: z.string().register(z.globalRegistry, {
     description:
@@ -83,14 +83,16 @@ export const zRouterAudioInput = z.object({
   }),
   audio_url: z.union([z.string(), z.string()]),
   temperature: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
+    })
+    .optional()
     .default(1),
-  max_tokens: z.optional(z.union([z.int().gte(1), z.unknown()])),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
 });
 
 export const zQueueStatus = z.object({
@@ -98,55 +100,62 @@ export const zQueueStatus = z.object({
   request_id: z.string().register(z.globalRegistry, {
     description: "The request id.",
   }),
-  response_url: z.optional(
-    z.string().register(z.globalRegistry, {
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The response url.",
-    }),
-  ),
-  status_url: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The status url.",
-    }),
-  ),
-  cancel_url: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The cancel url.",
-    }),
-  ),
-  logs: z.optional(
-    z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
       description: "The logs.",
-    }),
-  ),
-  metrics: z.optional(
-    z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
       description: "The metrics.",
-    }),
-  ),
-  queue_position: z.optional(
-    z.int().register(z.globalRegistry, {
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
       description: "The queue position.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 export const zGetOpenrouterRouterAudioRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -156,13 +165,13 @@ export const zGetOpenrouterRouterAudioRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutOpenrouterRouterAudioRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -170,11 +179,12 @@ export const zPutOpenrouterRouterAudioRequestsByRequestIdCancelData = z.object({
  */
 export const zPutOpenrouterRouterAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -182,8 +192,8 @@ export const zPutOpenrouterRouterAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostOpenrouterRouterAudioData = z.object({
   body: zRouterAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -192,13 +202,13 @@ export const zPostOpenrouterRouterAudioData = z.object({
 export const zPostOpenrouterRouterAudioResponse = zQueueStatus;
 
 export const zGetOpenrouterRouterAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -209,22 +219,23 @@ export const zGetOpenrouterRouterAudioRequestsByRequestIdResponse =
 
 export const zGetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -235,13 +246,13 @@ export const zGetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusR
 
 export const zPutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -250,11 +261,12 @@ export const zPutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelD
 export const zPutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -262,8 +274,8 @@ export const zPutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelR
 
 export const zPostFalAiWorkflowUtilitiesInterleaveVideoData = z.object({
   body: zWorkflowUtilitiesInterleaveVideoInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -273,13 +285,13 @@ export const zPostFalAiWorkflowUtilitiesInterleaveVideoResponse = zQueueStatus;
 
 export const zGetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**

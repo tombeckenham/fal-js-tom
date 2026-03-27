@@ -6,9 +6,9 @@ import * as z from "zod";
  * File
  */
 export const zFile = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
@@ -21,12 +21,12 @@ export const zFile = z.object({
  */
 export const zModelUrls = z
   .object({
-    usdz: z.optional(z.union([zFile, z.unknown()])),
-    fbx: z.optional(z.union([zFile, z.unknown()])),
-    blend: z.optional(z.union([zFile, z.unknown()])),
-    obj: z.optional(z.union([zFile, z.unknown()])),
-    stl: z.optional(z.union([zFile, z.unknown()])),
-    glb: z.optional(z.union([zFile, z.unknown()])),
+    usdz: z.union([zFile, z.unknown()]).optional(),
+    fbx: z.union([zFile, z.unknown()]).optional(),
+    blend: z.union([zFile, z.unknown()]).optional(),
+    obj: z.union([zFile, z.unknown()]).optional(),
+    stl: z.union([zFile, z.unknown()]).optional(),
+    glb: z.union([zFile, z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
     description: "3D model files in various formats",
@@ -39,12 +39,12 @@ export const zModelUrls = z
  */
 export const zBasicAnimations = z
   .object({
-    running_glb: z.optional(z.union([zFile, z.unknown()])),
-    walking_fbx: z.optional(z.union([zFile, z.unknown()])),
-    walking_armature_glb: z.optional(z.union([zFile, z.unknown()])),
-    running_armature_glb: z.optional(z.union([zFile, z.unknown()])),
-    running_fbx: z.optional(z.union([zFile, z.unknown()])),
-    walking_glb: z.optional(z.union([zFile, z.unknown()])),
+    running_glb: z.union([zFile, z.unknown()]).optional(),
+    walking_fbx: z.union([zFile, z.unknown()]).optional(),
+    walking_armature_glb: z.union([zFile, z.unknown()]).optional(),
+    running_armature_glb: z.union([zFile, z.unknown()]).optional(),
+    running_fbx: z.union([zFile, z.unknown()]).optional(),
+    walking_glb: z.union([zFile, z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
     description: "Basic animation files included with the rigging result",
@@ -57,10 +57,10 @@ export const zBasicAnimations = z
  */
 export const zTextureFiles = z
   .object({
-    roughness: z.optional(z.union([zFile, z.unknown()])),
-    normal: z.optional(z.union([zFile, z.unknown()])),
+    roughness: z.union([zFile, z.unknown()]).optional(),
+    normal: z.union([zFile, z.unknown()]).optional(),
     base_color: zFile,
-    metallic: z.optional(z.union([zFile, z.unknown()])),
+    metallic: z.union([zFile, z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
     description: "Texture files downloaded and uploaded to CDN",
@@ -76,21 +76,22 @@ export const zMeshyV6TextTo3dOutput = z
     prompt: z.string().register(z.globalRegistry, {
       description: "The text prompt used for generation",
     }),
-    rigged_character_glb: z.optional(z.union([zFile, z.unknown()])),
-    actual_prompt: z.optional(z.union([z.string(), z.unknown()])),
-    thumbnail: z.optional(z.union([zFile, z.unknown()])),
-    texture_urls: z.optional(
-      z.array(zTextureFiles).register(z.globalRegistry, {
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    actual_prompt: z.union([z.string(), z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
         description: "Array of texture file objects",
-      }),
-    ),
-    rigged_character_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_glb: z.optional(z.union([zFile, z.unknown()])),
+      })
+      .optional(),
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
     model_glb: zFile,
-    seed: z.optional(z.union([z.int(), z.unknown()])),
-    rig_task_id: z.optional(z.union([z.string(), z.unknown()])),
-    basic_animations: z.optional(z.union([zBasicAnimations, z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
     model_urls: zModelUrls,
   })
   .register(z.globalRegistry, {
@@ -109,115 +110,122 @@ export const zMeshyV6TextTo3dInput = z
         "Describe what kind of object the 3D model is. Maximum 600 characters.",
     }),
     enable_pbr: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
+      })
+      .optional()
       .default(false),
-    art_style: z.optional(
-      z.enum(["realistic", "sculpture"]).register(z.globalRegistry, {
+    art_style: z
+      .enum(["realistic", "sculpture"])
+      .register(z.globalRegistry, {
         description:
           "Desired art style of the object. Note: enable_pbr should be false for sculpture style.",
-      }),
-    ),
+      })
+      .optional(),
     is_a_t_pose: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
       .default(false),
-    texture_prompt: z.optional(z.union([z.string().max(600), z.unknown()])),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
     animation_action_id: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description:
-            "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
       .default(1001),
     target_polycount: z
-      .optional(
-        z.int().gte(100).lte(300000).register(z.globalRegistry, {
-          description: "Target number of polygons in the generated model",
-        }),
-      )
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
       .default(30000),
     enable_safety_checker: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If set to true, input data will be checked for safety before processing.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
       .default(true),
-    mode: z.optional(
-      z.enum(["preview", "full"]).register(z.globalRegistry, {
+    mode: z
+      .enum(["preview", "full"])
+      .register(z.globalRegistry, {
         description:
           "Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
-      }),
-    ),
-    symmetry_mode: z.optional(
-      z.enum(["off", "auto", "on"]).register(z.globalRegistry, {
+      })
+      .optional(),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
         description: "Controls symmetry behavior during model generation.",
-      }),
-    ),
+      })
+      .optional(),
     should_remesh: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
+      })
+      .optional()
       .default(true),
     enable_animation: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
       .default(false),
-    pose_mode: z.optional(
-      z.enum(["a-pose", "t-pose", ""]).register(z.globalRegistry, {
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
         description:
           "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      }),
-    ),
-    topology: z.optional(
-      z.enum(["quad", "triangle"]).register(z.globalRegistry, {
+      })
+      .optional(),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
         description:
           "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      }),
-    ),
-    texture_image_url: z.optional(z.union([z.string(), z.unknown()])),
+      })
+      .optional(),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
     enable_prompt_expansion: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
+      })
+      .optional()
       .default(false),
-    seed: z.optional(z.union([z.int(), z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
     enable_rigging: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
       .default(false),
     rigging_height_meters: z
-      .optional(
-        z.number().register(z.globalRegistry, {
-          description:
-            "Approximate height of the character in meters. Only used when enable_rigging is true.",
-        }),
-      )
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
       .default(1.7),
   })
   .register(z.globalRegistry, {
@@ -228,10 +236,10 @@ export const zMeshyV6TextTo3dInput = z
  * ModelUrls
  */
 export const zModelUrlsType3 = z.object({
-  fbx: z.optional(z.union([zFile, z.unknown()])),
-  usdz: z.optional(z.union([zFile, z.unknown()])),
-  glb: z.optional(z.union([zFile, z.unknown()])),
-  obj: z.optional(z.union([zFile, z.unknown()])),
+  fbx: z.union([zFile, z.unknown()]).optional(),
+  usdz: z.union([zFile, z.unknown()]).optional(),
+  glb: z.union([zFile, z.unknown()]).optional(),
+  obj: z.union([zFile, z.unknown()]).optional(),
 });
 
 /**
@@ -239,8 +247,8 @@ export const zModelUrlsType3 = z.object({
  */
 export const zHunyuan3dV3TextTo3dOutput = z.object({
   model_glb: zFile,
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   model_urls: zModelUrlsType3,
 });
 
@@ -252,54 +260,58 @@ export const zHunyuan3dV3TextTo3dInput = z.object({
     description:
       "Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.",
   }),
-  polygon_type: z.optional(
-    z.enum(["triangle", "quadrilateral"]).register(z.globalRegistry, {
+  polygon_type: z
+    .enum(["triangle", "quadrilateral"])
+    .register(z.globalRegistry, {
       description:
         "Polygon type. Only takes effect when GenerateType is LowPoly.",
-    }),
-  ),
+    })
+    .optional(),
   face_count: z
-    .optional(
-      z.int().gte(40000).lte(1500000).register(z.globalRegistry, {
-        description: "Target face count. Range: 40000-1500000",
-      }),
-    )
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description: "Target face count. Range: 40000-1500000",
+    })
+    .optional()
     .default(500000),
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to enable PBR material generation",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to enable PBR material generation",
+    })
+    .optional()
     .default(false),
-  generate_type: z.optional(
-    z.enum(["Normal", "LowPoly", "Geometry"]).register(z.globalRegistry, {
+  generate_type: z
+    .enum(["Normal", "LowPoly", "Geometry"])
+    .register(z.globalRegistry, {
       description:
         "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
  * ModelUrls
  */
 export const zModelUrlsType2 = z.object({
-  texture: z.optional(z.union([zFile, z.unknown()])),
-  mtl: z.optional(z.union([zFile, z.unknown()])),
-  fbx: z.optional(z.union([zFile, z.unknown()])),
-  usdz: z.optional(z.union([zFile, z.unknown()])),
-  obj: z.optional(z.union([zFile, z.unknown()])),
-  glb: z.optional(z.union([zFile, z.unknown()])),
+  texture: z.union([zFile, z.unknown()]).optional(),
+  mtl: z.union([zFile, z.unknown()]).optional(),
+  fbx: z.union([zFile, z.unknown()]).optional(),
+  usdz: z.union([zFile, z.unknown()]).optional(),
+  obj: z.union([zFile, z.unknown()]).optional(),
+  glb: z.union([zFile, z.unknown()]).optional(),
 });
 
 /**
  * RapidTextTo3DOutput
  */
 export const zHunyuan3dV31RapidTextTo3dOutput = z.object({
-  model_obj: z.optional(z.union([zFile, z.unknown()])),
-  texture: z.optional(z.union([zFile, z.unknown()])),
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  material_mtl: z.optional(z.union([zFile, z.unknown()])),
+  model_obj: z.union([zFile, z.unknown()]).optional(),
+  texture: z.union([zFile, z.unknown()]).optional(),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  material_mtl: z.union([zFile, z.unknown()]).optional(),
   model_urls: zModelUrlsType2,
 });
 
@@ -312,20 +324,20 @@ export const zHunyuan3dV31RapidTextTo3dInput = z.object({
       "Text description of the 3D content to generate. Max 200 UTF-8 characters.",
   }),
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
+    })
+    .optional()
     .default(false),
   enable_geometry: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
+    })
+    .optional()
     .default(false),
 });
 
@@ -334,8 +346,8 @@ export const zHunyuan3dV31RapidTextTo3dInput = z.object({
  */
 export const zHunyuan3dV31ProTextTo3dOutput = z.object({
   model_glb: zFile,
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   model_urls: zModelUrlsType2,
 });
 
@@ -348,35 +360,38 @@ export const zHunyuan3dV31ProTextTo3dInput = z.object({
       "Text description of the 3D content to generate. Max 1024 UTF-8 characters.",
   }),
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
+    })
+    .optional()
     .default(false),
   face_count: z
-    .optional(
-      z.int().gte(40000).lte(1500000).register(z.globalRegistry, {
-        description:
-          "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
-      }),
-    )
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description:
+        "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
+    })
+    .optional()
     .default(500000),
-  generate_type: z.optional(
-    z.enum(["Normal", "Geometry"]).register(z.globalRegistry, {
+  generate_type: z
+    .enum(["Normal", "Geometry"])
+    .register(z.globalRegistry, {
       description:
         "Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
  * HYMotionOutput
  */
 export const zHunyuanMotionFastOutput = z.object({
-  fbx_file: z.optional(z.union([zFile, z.unknown()])),
-  motion_json: z.optional(z.union([zFile, z.unknown()])),
+  fbx_file: z.union([zFile, z.unknown()]).optional(),
+  motion_json: z.union([zFile, z.unknown()]).optional(),
   seed: z.int().register(z.globalRegistry, {
     description: "Seed used for generation.",
   }),
@@ -390,35 +405,40 @@ export const zHunyuanMotionFastInput = z.object({
     description: "Text prompt describing the motion to generate.",
   }),
   duration: z
-    .optional(
-      z.number().gte(0.5).lte(12).register(z.globalRegistry, {
-        description: "Motion duration in seconds (0.5-12.0).",
-      }),
-    )
+    .number()
+    .gte(0.5)
+    .lte(12)
+    .register(z.globalRegistry, {
+      description: "Motion duration in seconds (0.5-12.0).",
+    })
+    .optional()
     .default(5),
   guidance_scale: z
-    .optional(
-      z.number().gte(1).lte(10).register(z.globalRegistry, {
-        description:
-          "Classifier-free guidance scale. Higher = more faithful to prompt.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Classifier-free guidance scale. Higher = more faithful to prompt.",
+    })
+    .optional()
     .default(5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
-  output_format: z.optional(
-    z.enum(["fbx", "dict"]).register(z.globalRegistry, {
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  output_format: z
+    .enum(["fbx", "dict"])
+    .register(z.globalRegistry, {
       description:
         "Output format: 'fbx' for animation files, 'dict' for raw JSON.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
  * HYMotionOutput
  */
 export const zHunyuanMotionOutput = z.object({
-  fbx_file: z.optional(z.union([zFile, z.unknown()])),
-  motion_json: z.optional(z.union([zFile, z.unknown()])),
+  fbx_file: z.union([zFile, z.unknown()]).optional(),
+  motion_json: z.union([zFile, z.unknown()]).optional(),
   seed: z.int().register(z.globalRegistry, {
     description: "Seed used for generation.",
   }),
@@ -432,27 +452,32 @@ export const zHunyuanMotionInput = z.object({
     description: "Text prompt describing the motion to generate.",
   }),
   duration: z
-    .optional(
-      z.number().gte(0.5).lte(12).register(z.globalRegistry, {
-        description: "Motion duration in seconds (0.5-12.0).",
-      }),
-    )
+    .number()
+    .gte(0.5)
+    .lte(12)
+    .register(z.globalRegistry, {
+      description: "Motion duration in seconds (0.5-12.0).",
+    })
+    .optional()
     .default(5),
   guidance_scale: z
-    .optional(
-      z.number().gte(1).lte(10).register(z.globalRegistry, {
-        description:
-          "Classifier-free guidance scale. Higher = more faithful to prompt.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Classifier-free guidance scale. Higher = more faithful to prompt.",
+    })
+    .optional()
     .default(5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
-  output_format: z.optional(
-    z.enum(["fbx", "dict"]).register(z.globalRegistry, {
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  output_format: z
+    .enum(["fbx", "dict"])
+    .register(z.globalRegistry, {
       description:
         "Output format: 'fbx' for animation files, 'dict' for raw JSON.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -465,21 +490,22 @@ export const zMeshyV6PreviewTextTo3dOutput = z
     prompt: z.string().register(z.globalRegistry, {
       description: "The text prompt used for generation",
     }),
-    rigged_character_glb: z.optional(z.union([zFile, z.unknown()])),
-    actual_prompt: z.optional(z.union([z.string(), z.unknown()])),
-    thumbnail: z.optional(z.union([zFile, z.unknown()])),
-    texture_urls: z.optional(
-      z.array(zTextureFiles).register(z.globalRegistry, {
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    actual_prompt: z.union([z.string(), z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
         description: "Array of texture file objects",
-      }),
-    ),
-    rigged_character_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_glb: z.optional(z.union([zFile, z.unknown()])),
+      })
+      .optional(),
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
     model_glb: zFile,
-    seed: z.optional(z.union([z.int(), z.unknown()])),
-    rig_task_id: z.optional(z.union([z.string(), z.unknown()])),
-    basic_animations: z.optional(z.union([zBasicAnimations, z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
     model_urls: zModelUrls,
   })
   .register(z.globalRegistry, {
@@ -498,115 +524,122 @@ export const zMeshyV6PreviewTextTo3dInput = z
         "Describe what kind of object the 3D model is. Maximum 600 characters.",
     }),
     enable_pbr: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
+      })
+      .optional()
       .default(false),
-    art_style: z.optional(
-      z.enum(["realistic", "sculpture"]).register(z.globalRegistry, {
+    art_style: z
+      .enum(["realistic", "sculpture"])
+      .register(z.globalRegistry, {
         description:
           "Desired art style of the object. Note: enable_pbr should be false for sculpture style.",
-      }),
-    ),
+      })
+      .optional(),
     is_a_t_pose: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
       .default(false),
-    texture_prompt: z.optional(z.union([z.string().max(600), z.unknown()])),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
     animation_action_id: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description:
-            "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
       .default(1001),
     target_polycount: z
-      .optional(
-        z.int().gte(100).lte(300000).register(z.globalRegistry, {
-          description: "Target number of polygons in the generated model",
-        }),
-      )
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
       .default(30000),
     enable_safety_checker: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If set to true, input data will be checked for safety before processing.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
       .default(true),
-    mode: z.optional(
-      z.enum(["preview", "full"]).register(z.globalRegistry, {
+    mode: z
+      .enum(["preview", "full"])
+      .register(z.globalRegistry, {
         description:
           "Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
-      }),
-    ),
-    symmetry_mode: z.optional(
-      z.enum(["off", "auto", "on"]).register(z.globalRegistry, {
+      })
+      .optional(),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
         description: "Controls symmetry behavior during model generation.",
-      }),
-    ),
+      })
+      .optional(),
     should_remesh: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
+      })
+      .optional()
       .default(true),
     enable_animation: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
       .default(false),
-    pose_mode: z.optional(
-      z.enum(["a-pose", "t-pose", ""]).register(z.globalRegistry, {
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
         description:
           "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      }),
-    ),
-    topology: z.optional(
-      z.enum(["quad", "triangle"]).register(z.globalRegistry, {
+      })
+      .optional(),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
         description:
           "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      }),
-    ),
-    texture_image_url: z.optional(z.union([z.string(), z.unknown()])),
+      })
+      .optional(),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
     enable_prompt_expansion: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
+      })
+      .optional()
       .default(false),
-    seed: z.optional(z.union([z.int(), z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
     enable_rigging: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
       .default(false),
     rigging_height_meters: z
-      .optional(
-        z.number().register(z.globalRegistry, {
-          description:
-            "Approximate height of the character in meters. Only used when enable_rigging is true.",
-        }),
-      )
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
       .default(1.7),
   })
   .register(z.globalRegistry, {
@@ -620,21 +653,22 @@ export const zMeshyV6PreviewTextTo3dInput = z
  */
 export const zMeshyV6ImageTo3dOutput = z
   .object({
-    rigged_character_glb: z.optional(z.union([zFile, z.unknown()])),
-    thumbnail: z.optional(z.union([zFile, z.unknown()])),
-    texture_urls: z.optional(
-      z.array(zTextureFiles).register(z.globalRegistry, {
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
         description:
           "Array of texture file objects, matching Meshy API structure",
-      }),
-    ),
-    rigged_character_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_glb: z.optional(z.union([zFile, z.unknown()])),
+      })
+      .optional(),
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
     model_glb: zFile,
-    seed: z.optional(z.union([z.int(), z.unknown()])),
-    rig_task_id: z.optional(z.union([z.string(), z.unknown()])),
-    basic_animations: z.optional(z.union([zBasicAnimations, z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
     model_urls: zModelUrls,
   })
   .register(z.globalRegistry, {
@@ -649,102 +683,107 @@ export const zMeshyV6ImageTo3dOutput = z
 export const zMeshyV6ImageTo3dInput = z
   .object({
     enable_pbr: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
+      })
+      .optional()
       .default(false),
-    texture_prompt: z.optional(z.union([z.string().max(600), z.unknown()])),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
     target_polycount: z
-      .optional(
-        z.int().gte(100).lte(300000).register(z.globalRegistry, {
-          description: "Target number of polygons in the generated model",
-        }),
-      )
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
       .default(30000),
     enable_rigging: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
       .default(false),
     animation_action_id: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description:
-            "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
       .default(1001),
-    symmetry_mode: z.optional(
-      z.enum(["off", "auto", "on"]).register(z.globalRegistry, {
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
         description:
           "Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.",
-      }),
-    ),
+      })
+      .optional(),
     enable_safety_checker: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If set to true, input data will be checked for safety before processing.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
       .default(true),
     should_remesh: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description: "Whether to enable the remesh phase",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to enable the remesh phase",
+      })
+      .optional()
       .default(true),
     should_texture: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description: "Whether to generate textures",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to generate textures",
+      })
+      .optional()
       .default(true),
     enable_animation: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
       .default(false),
-    pose_mode: z.optional(
-      z.enum(["a-pose", "t-pose", ""]).register(z.globalRegistry, {
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
         description:
           "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      }),
-    ),
+      })
+      .optional(),
     image_url: z.union([z.string(), z.string()]),
-    topology: z.optional(
-      z.enum(["quad", "triangle"]).register(z.globalRegistry, {
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
         description:
           "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      }),
-    ),
-    texture_image_url: z.optional(z.union([z.string(), z.unknown()])),
+      })
+      .optional(),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
     is_a_t_pose: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
       .default(false),
     rigging_height_meters: z
-      .optional(
-        z.number().register(z.globalRegistry, {
-          description:
-            "Approximate height of the character in meters. Only used when enable_rigging is true.",
-        }),
-      )
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
       .default(1.7),
   })
   .register(z.globalRegistry, {
@@ -756,8 +795,8 @@ export const zMeshyV6ImageTo3dInput = z
  */
 export const zHunyuan3dV3SketchTo3dOutput = z.object({
   model_urls: zModelUrlsType3,
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   model_glb: zFile,
 });
 
@@ -766,19 +805,21 @@ export const zHunyuan3dV3SketchTo3dOutput = z.object({
  */
 export const zHunyuan3dV3SketchTo3dInput = z.object({
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to enable PBR material generation.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to enable PBR material generation.",
+    })
+    .optional()
     .default(false),
   input_image_url: z.union([z.string(), z.string()]),
   face_count: z
-    .optional(
-      z.int().gte(40000).lte(1500000).register(z.globalRegistry, {
-        description: "Target face count. Range: 40000-1500000",
-      }),
-    )
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description: "Target face count. Range: 40000-1500000",
+    })
+    .optional()
     .default(500000),
   prompt: z.string().max(1024).register(z.globalRegistry, {
     description:
@@ -791,8 +832,8 @@ export const zHunyuan3dV3SketchTo3dInput = z.object({
  */
 export const zHunyuan3dV3ImageTo3dOutput = z.object({
   model_urls: zModelUrlsType3,
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   model_glb: zFile,
 });
 
@@ -801,46 +842,50 @@ export const zHunyuan3dV3ImageTo3dOutput = z.object({
  */
 export const zHunyuan3dV3ImageTo3dInput = z.object({
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.",
+    })
+    .optional()
     .default(false),
-  polygon_type: z.optional(
-    z.enum(["triangle", "quadrilateral"]).register(z.globalRegistry, {
+  polygon_type: z
+    .enum(["triangle", "quadrilateral"])
+    .register(z.globalRegistry, {
       description:
         "Polygon type. Only takes effect when GenerateType is LowPoly.",
-    }),
-  ),
-  back_image_url: z.optional(z.union([z.string(), z.unknown()])),
-  right_image_url: z.optional(z.union([z.string(), z.unknown()])),
+    })
+    .optional(),
+  back_image_url: z.union([z.string(), z.unknown()]).optional(),
+  right_image_url: z.union([z.string(), z.unknown()]).optional(),
   face_count: z
-    .optional(
-      z.int().gte(40000).lte(1500000).register(z.globalRegistry, {
-        description: "Target face count. Range: 40000-1500000",
-      }),
-    )
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description: "Target face count. Range: 40000-1500000",
+    })
+    .optional()
     .default(500000),
   input_image_url: z.union([z.string(), z.string()]),
-  generate_type: z.optional(
-    z.enum(["Normal", "LowPoly", "Geometry"]).register(z.globalRegistry, {
+  generate_type: z
+    .enum(["Normal", "LowPoly", "Geometry"])
+    .register(z.globalRegistry, {
       description:
         "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
-    }),
-  ),
-  left_image_url: z.optional(z.union([z.string(), z.unknown()])),
+    })
+    .optional(),
+  left_image_url: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
  * RapidImageTo3DOutput
  */
 export const zHunyuan3dV31RapidImageTo3dOutput = z.object({
-  model_glb: z.optional(z.union([zFile, z.unknown()])),
-  texture: z.optional(z.union([zFile, z.unknown()])),
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  material_mtl: z.optional(z.union([zFile, z.unknown()])),
+  model_glb: z.union([zFile, z.unknown()]).optional(),
+  texture: z.union([zFile, z.unknown()]).optional(),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  material_mtl: z.union([zFile, z.unknown()]).optional(),
   model_urls: zModelUrlsType2,
 });
 
@@ -849,21 +894,21 @@ export const zHunyuan3dV31RapidImageTo3dOutput = z.object({
  */
 export const zHunyuan3dV31RapidImageTo3dInput = z.object({
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
+    })
+    .optional()
     .default(false),
   input_image_url: z.union([z.string(), z.string()]),
   enable_geometry: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
+    })
+    .optional()
     .default(false),
 });
 
@@ -872,8 +917,8 @@ export const zHunyuan3dV31RapidImageTo3dInput = z.object({
  */
 export const zHunyuan3dV31ProImageTo3dOutput = z.object({
   model_glb: zFile,
-  thumbnail: z.optional(z.union([zFile, z.unknown()])),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   model_urls: zModelUrlsType2,
 });
 
@@ -883,34 +928,37 @@ export const zHunyuan3dV31ProImageTo3dOutput = z.object({
 export const zHunyuan3dV31ProImageTo3dInput = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   enable_pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
+    })
+    .optional()
     .default(false),
-  back_image_url: z.optional(z.union([z.string(), z.unknown()])),
-  right_front_image_url: z.optional(z.union([z.string(), z.unknown()])),
-  right_image_url: z.optional(z.union([z.string(), z.unknown()])),
-  bottom_image_url: z.optional(z.union([z.string(), z.unknown()])),
+  back_image_url: z.union([z.string(), z.unknown()]).optional(),
+  right_front_image_url: z.union([z.string(), z.unknown()]).optional(),
+  right_image_url: z.union([z.string(), z.unknown()]).optional(),
+  bottom_image_url: z.union([z.string(), z.unknown()]).optional(),
   face_count: z
-    .optional(
-      z.int().gte(40000).lte(1500000).register(z.globalRegistry, {
-        description:
-          "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
-      }),
-    )
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description:
+        "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
+    })
+    .optional()
     .default(500000),
-  top_image_url: z.optional(z.union([z.string(), z.unknown()])),
-  left_front_image_url: z.optional(z.union([z.string(), z.unknown()])),
-  generate_type: z.optional(
-    z.enum(["Normal", "Geometry"]).register(z.globalRegistry, {
+  top_image_url: z.union([z.string(), z.unknown()]).optional(),
+  left_front_image_url: z.union([z.string(), z.unknown()]).optional(),
+  generate_type: z
+    .enum(["Normal", "Geometry"])
+    .register(z.globalRegistry, {
       description:
         "Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.",
-    }),
-  ),
-  left_image_url: z.optional(z.union([z.string(), z.unknown()])),
+    })
+    .optional(),
+  left_image_url: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -926,14 +974,16 @@ export const zPshumanOutput = z.object({
  */
 export const zPshumanInput = z.object({
   guidance_scale: z
-    .optional(
-      z.number().gte(1).lte(10).register(z.globalRegistry, {
-        description:
-          "Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.",
+    })
+    .optional()
     .default(4),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   image_url: z.union([z.string(), z.string()]),
 });
 
@@ -955,34 +1005,38 @@ export const zOmnipartOutput = z.object({
 export const zOmnipartInput = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   parts: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)",
+    })
+    .optional()
     .default(""),
   seed: z
-    .optional(
-      z.int().register(z.globalRegistry, {
-        description:
-          "\n            The same seed and the same prompt given to the same version of the model\n            will output the same image every time.\n        ",
-      }),
-    )
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "\n            The same seed and the same prompt given to the same version of the model\n            will output the same image every time.\n        ",
+    })
+    .optional()
     .default(765464),
   minimum_segment_size: z
-    .optional(
-      z.int().gte(1).lte(10000).register(z.globalRegistry, {
-        description: "Minimum segment size (pixels) for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Minimum segment size (pixels) for the model.",
+    })
+    .optional()
     .default(2000),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
 });
 
@@ -1002,35 +1056,41 @@ export const zHunyuan3dV2MultiViewTurboOutput = z.object({
 export const zHunyuan3dV2MultiViewTurboInput = z.object({
   front_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   back_image_url: z.union([z.string(), z.string()]),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
   left_image_url: z.union([z.string(), z.string()]),
 });
@@ -1051,34 +1111,40 @@ export const zHunyuan3dV2MiniOutput = z.object({
 export const zHunyuan3dV2MiniInput = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
 });
 
@@ -1098,34 +1164,40 @@ export const zHunyuan3dV2MiniTurboOutput = z.object({
 export const zHunyuan3dV2MiniTurboInput = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
 });
 
@@ -1145,34 +1217,40 @@ export const zHunyuan3dV2TurboOutput = z.object({
 export const zHunyuan3dV2TurboInput = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
 });
 
@@ -1191,11 +1269,11 @@ export const zHunyuanWorldImageToWorldInput = z.object({
     description: "Classes to use for the world generation.",
   }),
   export_drc: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to export DRC (Dynamic Resource Configuration).",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to export DRC (Dynamic Resource Configuration).",
+    })
+    .optional()
     .default(false),
   labels_fg1: z.string().register(z.globalRegistry, {
     description: "Labels for the first foreground object.",
@@ -1217,55 +1295,63 @@ export const zTrellis2RetextureOutput = z.object({
  * RetextureInputModel
  */
 export const zTrellis2RetextureInput = z.object({
-  resolution: z.optional(
-    z.union([z.literal(512), z.literal(1024)]).register(z.globalRegistry, {
+  resolution: z
+    .union([z.literal(512), z.literal(1024)])
+    .register(z.globalRegistry, {
       description:
         "Internal resolution for texture generation. Higher produces finer texture details but is slower.",
-    }),
-  ),
+    })
+    .optional(),
   tex_slat_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
+    })
+    .optional()
     .default(12),
   tex_slat_rescale_t: z
-    .optional(
-      z.number().gte(1).lte(6).register(z.globalRegistry, {
-        description:
-          "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
+    })
+    .optional()
     .default(3),
   tex_slat_guidance_rescale: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
+    })
+    .optional()
     .default(0),
   image_url: z.union([z.string(), z.string()]),
   mesh_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   tex_slat_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description:
-          "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
+    })
+    .optional()
     .default(1),
-  texture_size: z.optional(
-    z
-      .union([z.literal(1024), z.literal(2048), z.literal(4096)])
-      .register(z.globalRegistry, {
-        description:
-          "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
-      }),
-  ),
+  texture_size: z
+    .union([z.literal(1024), z.literal(2048), z.literal(4096)])
+    .register(z.globalRegistry, {
+      description:
+        "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
+    })
+    .optional(),
 });
 
 /**
@@ -1275,20 +1361,21 @@ export const zTrellis2RetextureInput = z.object({
  */
 export const zMeshyV5MultiImageTo3dOutput = z
   .object({
-    rigged_character_glb: z.optional(z.union([zFile, z.unknown()])),
-    thumbnail: z.optional(z.union([zFile, z.unknown()])),
-    texture_urls: z.optional(
-      z.array(zTextureFiles).register(z.globalRegistry, {
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
         description: "Array of texture file objects",
-      }),
-    ),
-    rigged_character_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_glb: z.optional(z.union([zFile, z.unknown()])),
+      })
+      .optional(),
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
     model_glb: zFile,
-    seed: z.optional(z.union([z.int(), z.unknown()])),
-    rig_task_id: z.optional(z.union([z.string(), z.unknown()])),
-    basic_animations: z.optional(z.union([zBasicAnimations, z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
     model_urls: zModelUrls,
   })
   .register(z.globalRegistry, {
@@ -1303,106 +1390,111 @@ export const zMeshyV5MultiImageTo3dOutput = z
 export const zMeshyV5MultiImageTo3dInput = z
   .object({
     enable_pbr: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.",
+      })
+      .optional()
       .default(false),
-    texture_prompt: z.optional(z.union([z.string().max(600), z.unknown()])),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
     target_polycount: z
-      .optional(
-        z.int().gte(100).lte(300000).register(z.globalRegistry, {
-          description: "Target number of polygons in the generated model",
-        }),
-      )
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
       .default(30000),
     enable_rigging: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
       .default(false),
     animation_action_id: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description:
-            "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
       .default(1001),
-    symmetry_mode: z.optional(
-      z.enum(["off", "auto", "on"]).register(z.globalRegistry, {
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
         description: "Controls symmetry behavior during model generation.",
-      }),
-    ),
+      })
+      .optional(),
     enable_safety_checker: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If set to true, input data will be checked for safety before processing.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
       .default(true),
     image_urls: z.array(z.string()).register(z.globalRegistry, {
       description:
         "1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.",
     }),
     should_remesh: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.",
+      })
+      .optional()
       .default(true),
     should_texture: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.",
+      })
+      .optional()
       .default(true),
     enable_animation: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
       .default(false),
-    pose_mode: z.optional(
-      z.enum(["a-pose", "t-pose", ""]).register(z.globalRegistry, {
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
         description:
           "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      }),
-    ),
-    topology: z.optional(
-      z.enum(["quad", "triangle"]).register(z.globalRegistry, {
+      })
+      .optional(),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
         description:
           "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      }),
-    ),
-    texture_image_url: z.optional(z.union([z.string(), z.unknown()])),
+      })
+      .optional(),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
     is_a_t_pose: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
       .default(false),
     rigging_height_meters: z
-      .optional(
-        z.number().register(z.globalRegistry, {
-          description:
-            "Approximate height of the character in meters. Only used when enable_rigging is true.",
-        }),
-      )
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
       .default(1.7),
   })
   .register(z.globalRegistry, {
@@ -1425,35 +1517,41 @@ export const zHunyuan3dV2MultiViewOutput = z.object({
 export const zHunyuan3dV2MultiViewInput = z.object({
   front_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   back_image_url: z.union([z.string(), z.string()]),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
   left_image_url: z.union([z.string(), z.string()]),
 });
@@ -1480,9 +1578,9 @@ export const zSam3dBodyPersonMetadata = z
     bbox: z.array(z.number()).register(z.globalRegistry, {
       description: "Bounding box [x_min, y_min, x_max, y_max]",
     }),
-    keypoints_3d: z.optional(
-      z.union([z.array(z.array(z.number())), z.unknown()]),
-    ),
+    keypoints_3d: z
+      .union([z.array(z.array(z.number())), z.unknown()])
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "Per-person metadata for body reconstruction.",
@@ -1512,7 +1610,7 @@ export const zSam3dBodyMetadata = z
 export const zSam33dBodyOutput = z.object({
   visualization: zFile,
   metadata: zSam3dBodyMetadata,
-  meshes: z.optional(z.union([z.array(zFile), z.unknown()])),
+  meshes: z.union([z.array(zFile), z.unknown()]).optional(),
   model_glb: zFile,
 });
 
@@ -1522,20 +1620,20 @@ export const zSam33dBodyOutput = z.object({
 export const zSam33dBodyInput = z.object({
   image_url: z.union([z.string(), z.string()]),
   include_3d_keypoints: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Include 3D keypoint markers (spheres) in the GLB mesh for visualization",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Include 3D keypoint markers (spheres) in the GLB mesh for visualization",
+    })
+    .optional()
     .default(true),
-  mask_url: z.optional(z.union([z.string(), z.unknown()])),
+  mask_url: z.union([z.string(), z.unknown()]).optional(),
   export_meshes: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Export individual mesh files (.ply) per person",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Export individual mesh files (.ply) per person",
+    })
+    .optional()
     .default(true),
 });
 
@@ -1555,34 +1653,40 @@ export const zHunyuan3dV2Output = z.object({
 export const zHunyuan3dV2Input = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
 });
 
@@ -1590,137 +1694,146 @@ export const zHunyuan3dV2Input = z.object({
  * File
  */
 export const zFileType2 = z.object({
-  file_size: z.optional(
-    z.int().register(z.globalRegistry, {
+  file_size: z
+    .int()
+    .register(z.globalRegistry, {
       description: "The size of the file in bytes.",
-    }),
-  ),
-  file_name: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  file_name: z
+    .string()
+    .register(z.globalRegistry, {
       description:
         "The name of the file. It will be auto-generated if not provided.",
-    }),
-  ),
-  content_type: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  content_type: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The mime type of the file.",
-    }),
-  ),
+    })
+    .optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
-  file_data: z.optional(
-    z.string().register(z.globalRegistry, {
+  file_data: z
+    .string()
+    .register(z.globalRegistry, {
       description: "File data",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
  * Tripo3dOutput
  */
 export const zTripoV25MultiviewTo3dOutput = z.object({
-  base_model: z.optional(zFileType2),
+  base_model: zFileType2.optional(),
   task_id: z.string().register(z.globalRegistry, {
     description: "The task id of the 3D model generation.",
   }),
-  rendered_image: z.optional(zFileType2),
-  model_mesh: z.optional(zFileType2),
-  pbr_model: z.optional(zFileType2),
+  rendered_image: zFileType2.optional(),
+  model_mesh: zFileType2.optional(),
+  pbr_model: zFileType2.optional(),
 });
 
 /**
  * MultiviewTo3dInput
  */
 export const zTripoV25MultiviewTo3dInput = z.object({
-  face_limit: z.optional(
-    z.int().register(z.globalRegistry, {
+  face_limit: z
+    .int()
+    .register(z.globalRegistry, {
       description:
         "Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
-    }),
-  ),
-  right_image_url: z.optional(z.union([z.string(), z.string()])),
-  style: z.optional(
-    z
-      .enum([
-        "person:person2cartoon",
-        "object:clay",
-        "object:steampunk",
-        "animal:venom",
-        "object:barbie",
-        "object:christmas",
-        "gold",
-        "ancient_bronze",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
-      }),
-  ),
+    })
+    .optional(),
+  right_image_url: z.union([z.string(), z.string()]).optional(),
+  style: z
+    .enum([
+      "person:person2cartoon",
+      "object:clay",
+      "object:steampunk",
+      "animal:venom",
+      "object:barbie",
+      "object:christmas",
+      "gold",
+      "ancient_bronze",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
+    })
+    .optional(),
   quad: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
+    })
+    .optional()
     .default(false),
   front_image_url: z.union([z.string(), z.string()]),
-  texture_seed: z.optional(
-    z.int().register(z.globalRegistry, {
+  texture_seed: z
+    .int()
+    .register(z.globalRegistry, {
       description:
         "This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
-    }),
-  ),
-  back_image_url: z.optional(z.union([z.string(), z.string()])),
+    })
+    .optional(),
+  back_image_url: z.union([z.string(), z.string()]).optional(),
   pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
+    })
+    .optional()
     .default(false),
-  texture_alignment: z.optional(
-    z.enum(["original_image", "geometry"]).register(z.globalRegistry, {
+  texture_alignment: z
+    .enum(["original_image", "geometry"])
+    .register(z.globalRegistry, {
       description:
         "Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
-    }),
-  ),
-  texture: z.optional(
-    z.enum(["no", "standard", "HD"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  texture: z
+    .enum(["no", "standard", "HD"])
+    .register(z.globalRegistry, {
       description:
         "An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.",
-    }),
-  ),
+    })
+    .optional(),
   auto_size: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
+    })
+    .optional()
     .default(false),
-  seed: z.optional(
-    z.int().register(z.globalRegistry, {
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
       description:
         "This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.",
-    }),
-  ),
-  orientation: z.optional(
-    z.enum(["default", "align_image"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  orientation: z
+    .enum(["default", "align_image"])
+    .register(z.globalRegistry, {
       description:
         "Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
-    }),
-  ),
-  left_image_url: z.optional(z.union([z.string(), z.string()])),
+    })
+    .optional(),
+  left_image_url: z.union([z.string(), z.string()]).optional(),
 });
 
 /**
  * ObjectOutput
  */
 export const zTriposrOutput = z.object({
-  remeshing_dir: z.optional(z.union([zFile, z.unknown()])),
+  remeshing_dir: z.union([zFile, z.unknown()]).optional(),
   timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
     description: "Inference timings.",
   }),
@@ -1732,32 +1845,37 @@ export const zTriposrOutput = z.object({
  */
 export const zTriposrInput = z.object({
   mc_resolution: z
-    .optional(
-      z.int().gte(32).lte(1024).register(z.globalRegistry, {
-        description:
-          "Resolution of the marching cubes. Above 512 is not recommended.",
-      }),
-    )
+    .int()
+    .gte(32)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description:
+        "Resolution of the marching cubes. Above 512 is not recommended.",
+    })
+    .optional()
     .default(256),
   do_remove_background: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to remove the background from the input image.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to remove the background from the input image.",
+    })
+    .optional()
     .default(true),
   foreground_ratio: z
-    .optional(
-      z.number().gte(0.5).lte(1).register(z.globalRegistry, {
-        description: "Ratio of the foreground image to the original image.",
-      }),
-    )
+    .number()
+    .gte(0.5)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Ratio of the foreground image to the original image.",
+    })
+    .optional()
     .default(0.9),
-  output_format: z.optional(
-    z.enum(["glb", "obj"]).register(z.globalRegistry, {
+  output_format: z
+    .enum(["glb", "obj"])
+    .register(z.globalRegistry, {
       description: "Output format for the 3D model.",
-    }),
-  ),
+    })
+    .optional(),
   image_url: z.union([z.string(), z.string()]),
 });
 
@@ -1765,7 +1883,7 @@ export const zTriposrInput = z.object({
  * ObjectOutput
  */
 export const zHunyuan3dV21Output = z.object({
-  model_glb_pbr: z.optional(z.union([zFile, z.unknown()])),
+  model_glb_pbr: z.union([zFile, z.unknown()]).optional(),
   seed: z.int().register(z.globalRegistry, {
     description: "Seed value used for generation.",
   }),
@@ -1779,34 +1897,40 @@ export const zHunyuan3dV21Output = z.object({
 export const zHunyuan3dV21Input = z.object({
   input_image_url: z.union([z.string(), z.string()]),
   octree_resolution: z
-    .optional(
-      z.int().gte(1).lte(1024).register(z.globalRegistry, {
-        description: "Octree resolution for the model.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
     .default(256),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "Guidance scale for the model.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
     .default(7.5),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Number of inference steps to perform.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
     .default(50),
   textured_mesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
     .default(false),
 });
 
@@ -1824,57 +1948,67 @@ export const zTrellisMultiOutput = z.object({
  * MultiImageInputModel
  */
 export const zTrellisMultiInput = z.object({
-  multiimage_algo: z.optional(
-    z.enum(["stochastic", "multidiffusion"]).register(z.globalRegistry, {
+  multiimage_algo: z
+    .enum(["stochastic", "multidiffusion"])
+    .register(z.globalRegistry, {
       description: "Algorithm for multi-image generation",
-    }),
-  ),
+    })
+    .optional(),
   slat_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Sampling steps for structured latent generation",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for structured latent generation",
+    })
+    .optional()
     .default(12),
   mesh_simplify: z
-    .optional(
-      z.number().gte(0.9).lte(0.98).register(z.globalRegistry, {
-        description: "Mesh simplification factor",
-      }),
-    )
+    .number()
+    .gte(0.9)
+    .lte(0.98)
+    .register(z.globalRegistry, {
+      description: "Mesh simplification factor",
+    })
+    .optional()
     .default(0.95),
   ss_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Guidance strength for sparse structure generation",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for sparse structure generation",
+    })
+    .optional()
     .default(7.5),
   slat_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Guidance strength for structured latent generation",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for structured latent generation",
+    })
+    .optional()
     .default(3),
   ss_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Sampling steps for sparse structure generation",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for sparse structure generation",
+    })
+    .optional()
     .default(12),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   image_urls: z.array(z.string()).register(z.globalRegistry, {
     description: "List of URLs of input images to convert to 3D",
   }),
-  texture_size: z.optional(
-    z
-      .union([z.literal(512), z.literal(1024), z.literal(2048)])
-      .register(z.globalRegistry, {
-        description: "Texture resolution",
-      }),
-  ),
+  texture_size: z
+    .union([z.literal(512), z.literal(1024), z.literal(2048)])
+    .register(z.globalRegistry, {
+      description: "Texture resolution",
+    })
+    .optional(),
 });
 
 /**
@@ -1884,14 +2018,14 @@ export const zTrellisMultiInput = z.object({
  */
 export const zImage = z
   .object({
-    file_size: z.optional(z.union([z.int(), z.unknown()])),
-    height: z.optional(z.union([z.int(), z.unknown()])),
-    file_name: z.optional(z.union([z.string(), z.unknown()])),
-    content_type: z.optional(z.union([z.string(), z.unknown()])),
+    file_size: z.union([z.int(), z.unknown()]).optional(),
+    height: z.union([z.int(), z.unknown()]).optional(),
+    file_name: z.union([z.string(), z.unknown()]).optional(),
+    content_type: z.union([z.string(), z.unknown()]).optional(),
     url: z.string().register(z.globalRegistry, {
       description: "The URL where the file can be downloaded from.",
     }),
-    width: z.optional(z.union([z.int(), z.unknown()])),
+    width: z.union([z.int(), z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
     description: "Represents an image file.",
@@ -1915,68 +2049,74 @@ export const zHyper3dRodinOutput = z.object({
  */
 export const zHyper3dRodinInput = z.object({
   prompt: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.",
+    })
+    .optional()
     .default(""),
-  condition_mode: z.optional(
-    z.enum(["fuse", "concat"]).register(z.globalRegistry, {
+  condition_mode: z
+    .enum(["fuse", "concat"])
+    .register(z.globalRegistry, {
       description:
         "For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)",
-    }),
-  ),
-  tier: z.optional(
-    z.enum(["Regular", "Sketch"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  tier: z
+    .enum(["Regular", "Sketch"])
+    .register(z.globalRegistry, {
       description:
         "Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.",
-    }),
-  ),
-  bbox_condition: z.optional(z.union([z.array(z.int()), z.unknown()])),
-  quality: z.optional(
-    z.enum(["high", "medium", "low", "extra-low"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  bbox_condition: z.union([z.array(z.int()), z.unknown()]).optional(),
+  quality: z
+    .enum(["high", "medium", "low", "extra-low"])
+    .register(z.globalRegistry, {
       description:
         "Generation quality. Possible values: high, medium, low, extra-low. Default is medium.",
-    }),
-  ),
-  input_image_urls: z.optional(
-    z.array(z.string()).register(z.globalRegistry, {
+    })
+    .optional(),
+  input_image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
       description:
         "URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.",
-    }),
-  ),
+    })
+    .optional(),
   TAPose: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "When generating the human-like model, this parameter control the generation result to T/A Pose.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "When generating the human-like model, this parameter control the generation result to T/A Pose.",
+    })
+    .optional()
     .default(false),
-  addons: z.optional(z.union([z.string(), z.unknown()])),
-  geometry_file_format: z.optional(
-    z.enum(["glb", "usdz", "fbx", "obj", "stl"]).register(z.globalRegistry, {
+  addons: z.union([z.string(), z.unknown()]).optional(),
+  geometry_file_format: z
+    .enum(["glb", "usdz", "fbx", "obj", "stl"])
+    .register(z.globalRegistry, {
       description:
         "Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.",
-    }),
-  ),
+    })
+    .optional(),
   use_hyper: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Whether to export the model using hyper mode. Default is false.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to export the model using hyper mode. Default is false.",
+    })
+    .optional()
     .default(false),
-  seed: z.optional(z.union([z.int().gte(0).lte(65535), z.unknown()])),
-  material: z.optional(
-    z.enum(["PBR", "Shaded"]).register(z.globalRegistry, {
+  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
+  material: z
+    .enum(["PBR", "Shaded"])
+    .register(z.globalRegistry, {
       description:
         "Material type. Possible values: PBR, Shaded. Default is PBR.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -1997,172 +2137,179 @@ export const zHyper3dRodinV2Output = z.object({
  */
 export const zHyper3dRodinV2Input = z.object({
   prompt: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.",
+    })
+    .optional()
     .default(""),
-  quality_mesh_option: z.optional(
-    z
-      .enum([
-        "4K Quad",
-        "8K Quad",
-        "18K Quad",
-        "50K Quad",
-        "2K Triangle",
-        "20K Triangle",
-        "150K Triangle",
-        "500K Triangle",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.",
-      }),
-  ),
+  quality_mesh_option: z
+    .enum([
+      "4K Quad",
+      "8K Quad",
+      "18K Quad",
+      "50K Quad",
+      "2K Triangle",
+      "20K Triangle",
+      "150K Triangle",
+      "500K Triangle",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.",
+    })
+    .optional(),
   preview_render: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Generate a preview render image of the 3D model along with the model files.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate a preview render image of the 3D model along with the model files.",
+    })
+    .optional()
     .default(false),
-  bbox_condition: z.optional(z.union([z.array(z.int()), z.unknown()])),
-  input_image_urls: z.optional(
-    z.array(z.string()).register(z.globalRegistry, {
+  bbox_condition: z.union([z.array(z.int()), z.unknown()]).optional(),
+  input_image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
       description:
         "URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed.",
-    }),
-  ),
+    })
+    .optional(),
   TAPose: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.",
+    })
+    .optional()
     .default(false),
   use_original_alpha: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "When enabled, preserves the transparency channel from input images during 3D generation.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "When enabled, preserves the transparency channel from input images during 3D generation.",
+    })
+    .optional()
     .default(false),
-  addons: z.optional(z.union([z.string(), z.unknown()])),
-  geometry_file_format: z.optional(
-    z.enum(["glb", "usdz", "fbx", "obj", "stl"]).register(z.globalRegistry, {
+  addons: z.union([z.string(), z.unknown()]).optional(),
+  geometry_file_format: z
+    .enum(["glb", "usdz", "fbx", "obj", "stl"])
+    .register(z.globalRegistry, {
       description:
         "Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.",
-    }),
-  ),
-  seed: z.optional(z.union([z.int().gte(0).lte(65535), z.unknown()])),
-  material: z.optional(
-    z.enum(["PBR", "Shaded", "All"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
+  material: z
+    .enum(["PBR", "Shaded", "All"])
+    .register(z.globalRegistry, {
       description:
         "Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
  * Tripo3dOutput
  */
 export const zTripoV25ImageTo3dOutput = z.object({
-  base_model: z.optional(zFileType2),
+  base_model: zFileType2.optional(),
   task_id: z.string().register(z.globalRegistry, {
     description: "The task id of the 3D model generation.",
   }),
-  rendered_image: z.optional(zFileType2),
-  model_mesh: z.optional(zFileType2),
-  pbr_model: z.optional(zFileType2),
+  rendered_image: zFileType2.optional(),
+  model_mesh: zFileType2.optional(),
+  pbr_model: zFileType2.optional(),
 });
 
 /**
  * ImageTo3dInput
  */
 export const zTripoV25ImageTo3dInput = z.object({
-  face_limit: z.optional(
-    z.int().register(z.globalRegistry, {
+  face_limit: z
+    .int()
+    .register(z.globalRegistry, {
       description:
         "Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
-    }),
-  ),
-  style: z.optional(
-    z
-      .enum([
-        "person:person2cartoon",
-        "object:clay",
-        "object:steampunk",
-        "animal:venom",
-        "object:barbie",
-        "object:christmas",
-        "gold",
-        "ancient_bronze",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
-      }),
-  ),
+    })
+    .optional(),
+  style: z
+    .enum([
+      "person:person2cartoon",
+      "object:clay",
+      "object:steampunk",
+      "animal:venom",
+      "object:barbie",
+      "object:christmas",
+      "gold",
+      "ancient_bronze",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
+    })
+    .optional(),
   pbr: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
+    })
+    .optional()
     .default(false),
-  texture_alignment: z.optional(
-    z.enum(["original_image", "geometry"]).register(z.globalRegistry, {
+  texture_alignment: z
+    .enum(["original_image", "geometry"])
+    .register(z.globalRegistry, {
       description:
         "Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
-    }),
-  ),
+    })
+    .optional(),
   image_url: z.union([z.string(), z.string()]),
-  texture: z.optional(
-    z.enum(["no", "standard", "HD"]).register(z.globalRegistry, {
+  texture: z
+    .enum(["no", "standard", "HD"])
+    .register(z.globalRegistry, {
       description:
         "An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.",
-    }),
-  ),
+    })
+    .optional(),
   auto_size: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
+    })
+    .optional()
     .default(false),
-  seed: z.optional(
-    z.int().register(z.globalRegistry, {
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
       description:
         "This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.",
-    }),
-  ),
+    })
+    .optional(),
   quad: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
+    })
+    .optional()
     .default(false),
-  orientation: z.optional(
-    z.enum(["default", "align_image"]).register(z.globalRegistry, {
+  orientation: z
+    .enum(["default", "align_image"])
+    .register(z.globalRegistry, {
       description:
         "Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
-    }),
-  ),
-  texture_seed: z.optional(
-    z.int().register(z.globalRegistry, {
+    })
+    .optional(),
+  texture_seed: z
+    .int()
+    .register(z.globalRegistry, {
       description:
         "This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -2172,17 +2319,17 @@ export const zTripoV25ImageTo3dInput = z.object({
  */
 export const zSam3dObjectMetadata = z
   .object({
-    rotation: z.optional(z.union([z.array(z.array(z.number())), z.unknown()])),
-    translation: z.optional(
-      z.union([z.array(z.array(z.number())), z.unknown()]),
-    ),
+    rotation: z.union([z.array(z.array(z.number())), z.unknown()]).optional(),
+    translation: z
+      .union([z.array(z.array(z.number())), z.unknown()])
+      .optional(),
     object_index: z.int().register(z.globalRegistry, {
       description: "Index of the object in the scene",
     }),
-    scale: z.optional(z.union([z.array(z.array(z.number())), z.unknown()])),
-    camera_pose: z.optional(
-      z.union([z.array(z.array(z.number())), z.unknown()]),
-    ),
+    scale: z.union([z.array(z.array(z.number())), z.unknown()]).optional(),
+    camera_pose: z
+      .union([z.array(z.array(z.number())), z.unknown()])
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "Per-object metadata for 3D reconstruction.",
@@ -2192,82 +2339,82 @@ export const zSam3dObjectMetadata = z
  * PointPromptBase
  */
 export const zPointPromptBase = z.object({
-  y: z.optional(z.union([z.int(), z.unknown()])),
-  label: z.optional(
-    z.union([z.union([z.literal(0), z.literal(1)]), z.unknown()]),
-  ),
-  object_id: z.optional(z.union([z.int(), z.unknown()])),
-  x: z.optional(z.union([z.int(), z.unknown()])),
+  y: z.union([z.int(), z.unknown()]).optional(),
+  label: z
+    .union([z.union([z.literal(0), z.literal(1)]), z.unknown()])
+    .optional(),
+  object_id: z.union([z.int(), z.unknown()]).optional(),
+  x: z.union([z.int(), z.unknown()]).optional(),
 });
 
 /**
  * BoxPromptBase
  */
 export const zBoxPromptBase = z.object({
-  y_min: z.optional(z.union([z.int(), z.unknown()])),
-  object_id: z.optional(z.union([z.int(), z.unknown()])),
-  x_max: z.optional(z.union([z.int(), z.unknown()])),
-  x_min: z.optional(z.union([z.int(), z.unknown()])),
-  y_max: z.optional(z.union([z.int(), z.unknown()])),
+  y_min: z.union([z.int(), z.unknown()]).optional(),
+  object_id: z.union([z.int(), z.unknown()]).optional(),
+  x_max: z.union([z.int(), z.unknown()]).optional(),
+  x_min: z.union([z.int(), z.unknown()]).optional(),
+  y_max: z.union([z.int(), z.unknown()]).optional(),
 });
 
 /**
  * SAM3DObjectOutput
  */
 export const zSam33dObjectsOutput = z.object({
-  individual_splats: z.optional(z.union([z.array(zFile), z.unknown()])),
-  individual_glbs: z.optional(
-    z.union([z.array(z.union([zFile, z.unknown()])), z.unknown()]),
-  ),
+  individual_splats: z.union([z.array(zFile), z.unknown()]).optional(),
+  individual_glbs: z
+    .union([z.array(z.union([zFile, z.unknown()])), z.unknown()])
+    .optional(),
   gaussian_splat: zFile,
-  artifacts_zip: z.optional(z.union([zFile, z.unknown()])),
+  artifacts_zip: z.union([zFile, z.unknown()]).optional(),
   metadata: z.array(zSam3dObjectMetadata).register(z.globalRegistry, {
     description: "Per-object metadata (rotation/translation/scale)",
   }),
-  model_glb: z.optional(zFile),
+  model_glb: zFile.optional(),
 });
 
 /**
  * SAM3DObjectInput
  */
 export const zSam33dObjectsInput = z.object({
-  pointmap_url: z.optional(z.union([z.string(), z.unknown()])),
+  pointmap_url: z.union([z.string(), z.unknown()]).optional(),
   export_textured_glb: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If True, exports GLB with baked texture and UVs instead of vertex colors.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If True, exports GLB with baked texture and UVs instead of vertex colors.",
+    })
+    .optional()
     .default(false),
-  detection_threshold: z.optional(
-    z.union([z.number().gte(0.1).lte(1), z.unknown()]),
-  ),
-  prompt: z.optional(z.union([z.string(), z.unknown()])),
+  detection_threshold: z
+    .union([z.number().gte(0.1).lte(1), z.unknown()])
+    .optional(),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
   box_prompts: z
-    .optional(
-      z.array(zBoxPromptBase).register(z.globalRegistry, {
-        description:
-          "Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.",
-      }),
-    )
+    .array(zBoxPromptBase)
+    .register(z.globalRegistry, {
+      description:
+        "Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.",
+    })
+    .optional()
     .default([]),
   image_url: z.union([z.string(), z.string()]),
-  mask_urls: z.optional(
-    z.array(z.string()).register(z.globalRegistry, {
+  mask_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
       description:
         "Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.",
-    }),
-  ),
+    })
+    .optional(),
   point_prompts: z
-    .optional(
-      z.array(zPointPromptBase).register(z.globalRegistry, {
-        description:
-          "Point prompts for auto-segmentation when no masks provided",
-      }),
-    )
+    .array(zPointPromptBase)
+    .register(z.globalRegistry, {
+      description: "Point prompts for auto-segmentation when no masks provided",
+    })
+    .optional()
     .default([]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
 });
 
 /**
@@ -2285,49 +2432,58 @@ export const zTrellisOutput = z.object({
  */
 export const zTrellisInput = z.object({
   ss_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Guidance strength for sparse structure generation",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for sparse structure generation",
+    })
+    .optional()
     .default(7.5),
   mesh_simplify: z
-    .optional(
-      z.number().gte(0.9).lte(0.98).register(z.globalRegistry, {
-        description: "Mesh simplification factor",
-      }),
-    )
+    .number()
+    .gte(0.9)
+    .lte(0.98)
+    .register(z.globalRegistry, {
+      description: "Mesh simplification factor",
+    })
+    .optional()
     .default(0.95),
   image_url: z.union([z.string(), z.string()]),
   slat_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Guidance strength for structured latent generation",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for structured latent generation",
+    })
+    .optional()
     .default(3),
   slat_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Sampling steps for structured latent generation",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for structured latent generation",
+    })
+    .optional()
     .default(12),
   ss_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Sampling steps for sparse structure generation",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for sparse structure generation",
+    })
+    .optional()
     .default(12),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
-  texture_size: z.optional(
-    z
-      .union([z.literal(512), z.literal(1024), z.literal(2048)])
-      .register(z.globalRegistry, {
-        description: "Texture resolution",
-      }),
-  ),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  texture_size: z
+    .union([z.literal(512), z.literal(1024), z.literal(2048)])
+    .register(z.globalRegistry, {
+      description: "Texture resolution",
+    })
+    .optional(),
 });
 
 /**
@@ -2337,21 +2493,22 @@ export const zTrellisInput = z.object({
  */
 export const zMeshyV6PreviewImageTo3dOutput = z
   .object({
-    rigged_character_glb: z.optional(z.union([zFile, z.unknown()])),
-    thumbnail: z.optional(z.union([zFile, z.unknown()])),
-    texture_urls: z.optional(
-      z.array(zTextureFiles).register(z.globalRegistry, {
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
         description:
           "Array of texture file objects, matching Meshy API structure",
-      }),
-    ),
-    rigged_character_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_fbx: z.optional(z.union([zFile, z.unknown()])),
-    animation_glb: z.optional(z.union([zFile, z.unknown()])),
+      })
+      .optional(),
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
     model_glb: zFile,
-    seed: z.optional(z.union([z.int(), z.unknown()])),
-    rig_task_id: z.optional(z.union([z.string(), z.unknown()])),
-    basic_animations: z.optional(z.union([zBasicAnimations, z.unknown()])),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
     model_urls: zModelUrls,
   })
   .register(z.globalRegistry, {
@@ -2366,102 +2523,107 @@ export const zMeshyV6PreviewImageTo3dOutput = z
 export const zMeshyV6PreviewImageTo3dInput = z
   .object({
     enable_pbr: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
+      })
+      .optional()
       .default(false),
-    texture_prompt: z.optional(z.union([z.string().max(600), z.unknown()])),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
     target_polycount: z
-      .optional(
-        z.int().gte(100).lte(300000).register(z.globalRegistry, {
-          description: "Target number of polygons in the generated model",
-        }),
-      )
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
       .default(30000),
     enable_rigging: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
       .default(false),
     animation_action_id: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description:
-            "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
       .default(1001),
-    symmetry_mode: z.optional(
-      z.enum(["off", "auto", "on"]).register(z.globalRegistry, {
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
         description:
           "Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.",
-      }),
-    ),
+      })
+      .optional(),
     enable_safety_checker: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If set to true, input data will be checked for safety before processing.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
       .default(true),
     should_remesh: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description: "Whether to enable the remesh phase",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to enable the remesh phase",
+      })
+      .optional()
       .default(true),
     should_texture: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description: "Whether to generate textures",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to generate textures",
+      })
+      .optional()
       .default(true),
     enable_animation: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
       .default(false),
-    pose_mode: z.optional(
-      z.enum(["a-pose", "t-pose", ""]).register(z.globalRegistry, {
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
         description:
           "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      }),
-    ),
+      })
+      .optional(),
     image_url: z.union([z.string(), z.string()]),
-    topology: z.optional(
-      z.enum(["quad", "triangle"]).register(z.globalRegistry, {
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
         description:
           "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      }),
-    ),
-    texture_image_url: z.optional(z.union([z.string(), z.unknown()])),
+      })
+      .optional(),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
     is_a_t_pose: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
       .default(false),
     rigging_height_meters: z
-      .optional(
-        z.number().register(z.globalRegistry, {
-          description:
-            "Approximate height of the character in meters. Only used when enable_rigging is true.",
-        }),
-      )
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
       .default(1.7),
   })
   .register(z.globalRegistry, {
@@ -2480,149 +2642,177 @@ export const zTrellis2Output = z.object({
  */
 export const zTrellis2Input = z.object({
   tex_slat_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description:
-          "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
+    })
+    .optional()
     .default(1),
   tex_slat_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
+    })
+    .optional()
     .default(12),
   ss_rescale_t: z
-    .optional(
-      z.number().gte(1).lte(6).register(z.globalRegistry, {
-        description:
-          "Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.",
+    })
+    .optional()
     .default(5),
   shape_slat_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.",
+    })
+    .optional()
     .default(12),
   tex_slat_rescale_t: z
-    .optional(
-      z.number().gte(1).lte(6).register(z.globalRegistry, {
-        description:
-          "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
+    })
+    .optional()
     .default(3),
   ss_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description:
-          "How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.",
+    })
+    .optional()
     .default(7.5),
   ss_sampling_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.",
+    })
+    .optional()
     .default(12),
   ss_guidance_rescale: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.",
+    })
+    .optional()
     .default(0.7),
   remesh_project: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).",
+    })
+    .optional()
     .default(0),
-  texture_size: z.optional(
-    z
-      .union([z.literal(1024), z.literal(2048), z.literal(4096)])
-      .register(z.globalRegistry, {
-        description:
-          "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
-      }),
-  ),
+  texture_size: z
+    .union([z.literal(1024), z.literal(2048), z.literal(4096)])
+    .register(z.globalRegistry, {
+      description:
+        "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
+    })
+    .optional(),
   shape_slat_rescale_t: z
-    .optional(
-      z.number().gte(1).lte(6).register(z.globalRegistry, {
-        description:
-          "Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.",
+    })
+    .optional()
     .default(3),
-  resolution: z.optional(
-    z
-      .union([z.literal(512), z.literal(1024), z.literal(1536)])
-      .register(z.globalRegistry, {
-        description: "Output resolution; higher is slower but more detailed",
-      }),
-  ),
+  resolution: z
+    .union([z.literal(512), z.literal(1024), z.literal(1536)])
+    .register(z.globalRegistry, {
+      description: "Output resolution; higher is slower but more detailed",
+    })
+    .optional(),
   remesh: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).",
+    })
+    .optional()
     .default(true),
   tex_slat_guidance_rescale: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
+    })
+    .optional()
     .default(0),
   shape_slat_guidance_rescale: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.",
+    })
+    .optional()
     .default(0.5),
   image_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   remesh_band: z
-    .optional(
-      z.number().gte(0).lte(4).register(z.globalRegistry, {
-        description:
-          "Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(4)
+    .register(z.globalRegistry, {
+      description:
+        "Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.",
+    })
+    .optional()
     .default(1),
   shape_slat_guidance_strength: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description:
-          "How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.",
+    })
+    .optional()
     .default(7.5),
   decimation_target: z
-    .optional(
-      z.int().gte(5000).lte(2000000).register(z.globalRegistry, {
-        description:
-          "Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.",
-      }),
-    )
+    .int()
+    .gte(5000)
+    .lte(2000000)
+    .register(z.globalRegistry, {
+      description:
+        "Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.",
+    })
+    .optional()
     .default(500000),
 });
 
@@ -2650,52 +2840,62 @@ export const zHunyuanPartOutput = z.object({
  */
 export const zHunyuanPartInput = z.object({
   point_prompt_x: z
-    .optional(
-      z.number().gte(-1).lte(1).register(z.globalRegistry, {
-        description:
-          "X coordinate of the point prompt for segmentation (normalized space -1 to 1).",
-      }),
-    )
+    .number()
+    .gte(-1)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "X coordinate of the point prompt for segmentation (normalized space -1 to 1).",
+    })
+    .optional()
     .default(0),
   point_prompt_z: z
-    .optional(
-      z.number().gte(-1).lte(1).register(z.globalRegistry, {
-        description:
-          "Z coordinate of the point prompt for segmentation (normalized space -1 to 1).",
-      }),
-    )
+    .number()
+    .gte(-1)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Z coordinate of the point prompt for segmentation (normalized space -1 to 1).",
+    })
+    .optional()
     .default(0),
   use_normal: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to use normal information for segmentation.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to use normal information for segmentation.",
+    })
+    .optional()
     .default(true),
   noise_std: z
-    .optional(
-      z.number().gte(0).lte(0.02).register(z.globalRegistry, {
-        description: "Standard deviation of noise to add to sampled points.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(0.02)
+    .register(z.globalRegistry, {
+      description: "Standard deviation of noise to add to sampled points.",
+    })
+    .optional()
     .default(0),
   point_num: z
-    .optional(
-      z.int().gte(10000).lte(500000).register(z.globalRegistry, {
-        description: "Number of points to sample from the mesh.",
-      }),
-    )
+    .int()
+    .gte(10000)
+    .lte(500000)
+    .register(z.globalRegistry, {
+      description: "Number of points to sample from the mesh.",
+    })
+    .optional()
     .default(100000),
   point_prompt_y: z
-    .optional(
-      z.number().gte(-1).lte(1).register(z.globalRegistry, {
-        description:
-          "Y coordinate of the point prompt for segmentation (normalized space -1 to 1).",
-      }),
-    )
+    .number()
+    .gte(-1)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Y coordinate of the point prompt for segmentation (normalized space -1 to 1).",
+    })
+    .optional()
     .default(0),
   model_file_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
 });
 
 /**
@@ -2710,24 +2910,27 @@ export const zHunyuan3dV31SmartTopologyOutput = z.object({
  * SmartTopologyInput
  */
 export const zHunyuan3dV31SmartTopologyInput = z.object({
-  polygon_type: z.optional(
-    z.enum(["triangle", "quadrilateral"]).register(z.globalRegistry, {
+  polygon_type: z
+    .enum(["triangle", "quadrilateral"])
+    .register(z.globalRegistry, {
       description:
         "Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.",
-    }),
-  ),
-  face_level: z.optional(
-    z.enum(["high", "medium", "low"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  face_level: z
+    .enum(["high", "medium", "low"])
+    .register(z.globalRegistry, {
       description:
         "Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.",
-    }),
-  ),
-  input_file_url: z.optional(z.union([z.string(), z.string()])),
-  input_file_type: z.optional(
-    z.enum(["glb", "obj"]).register(z.globalRegistry, {
+    })
+    .optional(),
+  input_file_url: z.union([z.string(), z.string()]).optional(),
+  input_file_type: z
+    .enum(["glb", "obj"])
+    .register(z.globalRegistry, {
       description: "Input 3D file format.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -2780,7 +2983,7 @@ export const zSam3dBodyAlignmentInfo = z
  * SAM3DAlignmentOutput
  */
 export const zSam33dAlignOutput = z.object({
-  scene_glb: z.optional(z.union([zFile, z.unknown()])),
+  scene_glb: z.union([zFile, z.unknown()]).optional(),
   body_mesh_ply: zFile,
   metadata: zSam3dBodyAlignmentInfo,
   visualization: zFile,
@@ -2793,9 +2996,9 @@ export const zSam33dAlignOutput = z.object({
 export const zSam33dAlignInput = z.object({
   image_url: z.union([z.string(), z.string()]),
   body_mesh_url: z.union([z.string(), z.string()]),
-  object_mesh_url: z.optional(z.union([z.string(), z.unknown()])),
-  focal_length: z.optional(z.union([z.number(), z.unknown()])),
-  body_mask_url: z.optional(z.union([z.string(), z.unknown()])),
+  object_mesh_url: z.union([z.string(), z.unknown()]).optional(),
+  focal_length: z.union([z.number(), z.unknown()]).optional(),
+  body_mask_url: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -2810,33 +3013,37 @@ export const zUltrashapeOutput = z.object({
  */
 export const zUltrashapeInput = z.object({
   octree_resolution: z
-    .optional(
-      z.int().gte(128).lte(1024).register(z.globalRegistry, {
-        description: "Marching cubes resolution.",
-      }),
-    )
+    .int()
+    .gte(128)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Marching cubes resolution.",
+    })
+    .optional()
     .default(1024),
   remove_background: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Remove image background.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Remove image background.",
+    })
+    .optional()
     .default(true),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description: "Diffusion steps.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Diffusion steps.",
+    })
+    .optional()
     .default(50),
   model_url: z.union([z.string(), z.string()]),
   seed: z
-    .optional(
-      z.int().register(z.globalRegistry, {
-        description: "Random seed.",
-      }),
-    )
+    .int()
+    .register(z.globalRegistry, {
+      description: "Random seed.",
+    })
+    .optional()
     .default(42),
   image_url: z.union([z.string(), z.string()]),
 });
@@ -2849,14 +3056,15 @@ export const zUltrashapeInput = z.object({
 export const zMeshyV5RetextureOutput = z
   .object({
     model_urls: zModelUrls,
-    text_style_prompt: z.optional(z.union([z.string(), z.unknown()])),
-    texture_urls: z.optional(
-      z.array(zTextureFiles).register(z.globalRegistry, {
+    text_style_prompt: z.union([z.string(), z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
         description: "Array of texture file objects",
-      }),
-    ),
-    thumbnail: z.optional(z.union([zFile, z.unknown()])),
-    image_style_url: z.optional(z.union([z.string(), z.unknown()])),
+      })
+      .optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+    image_style_url: z.union([z.string(), z.unknown()]).optional(),
     model_glb: zFile,
   })
   .register(z.globalRegistry, {
@@ -2871,32 +3079,32 @@ export const zMeshyV5RetextureOutput = z
 export const zMeshyV5RetextureInput = z
   .object({
     enable_pbr: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Generate PBR Maps (metallic, roughness, normal) in addition to base color.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color.",
+      })
+      .optional()
       .default(false),
-    text_style_prompt: z.optional(z.union([z.string().max(600), z.unknown()])),
+    text_style_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
     enable_safety_checker: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If set to true, input data will be checked for safety before processing.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
       .default(true),
     enable_original_uv: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.",
+      })
+      .optional()
       .default(true),
     model_url: z.union([z.string(), z.string()]),
-    image_style_url: z.optional(z.union([z.string(), z.unknown()])),
+    image_style_url: z.union([z.string(), z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
     description: "Input for 3D Model Retexturing",
@@ -2909,7 +3117,7 @@ export const zMeshyV5RetextureInput = z
  */
 export const zMeshyV5RemeshOutput = z
   .object({
-    model_glb: z.optional(z.union([zFile, z.unknown()])),
+    model_glb: z.union([zFile, z.unknown()]).optional(),
     model_urls: zModelUrls,
   })
   .register(z.globalRegistry, {
@@ -2924,37 +3132,39 @@ export const zMeshyV5RemeshOutput = z
 export const zMeshyV5RemeshInput = z
   .object({
     resize_height: z
-      .optional(
-        z.number().gte(0).register(z.globalRegistry, {
-          description:
-            "Resize the model to a certain height measured in meters. Set to 0 for no resizing.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .register(z.globalRegistry, {
+        description:
+          "Resize the model to a certain height measured in meters. Set to 0 for no resizing.",
+      })
+      .optional()
       .default(0),
-    origin_at: z.optional(z.union([z.enum(["bottom", "center"]), z.unknown()])),
+    origin_at: z.union([z.enum(["bottom", "center"]), z.unknown()]).optional(),
     target_polycount: z
-      .optional(
-        z.int().gte(100).lte(300000).register(z.globalRegistry, {
-          description:
-            "Target number of polygons in the generated model. Actual count may vary based on geometry complexity.",
-        }),
-      )
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description:
+          "Target number of polygons in the generated model. Actual count may vary based on geometry complexity.",
+      })
+      .optional()
       .default(30000),
     model_url: z.union([z.string(), z.string()]),
-    topology: z.optional(
-      z.enum(["quad", "triangle"]).register(z.globalRegistry, {
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
         description:
           "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      }),
-    ),
+      })
+      .optional(),
     target_formats: z
-      .optional(
-        z
-          .array(z.enum(["glb", "fbx", "obj", "usdz", "blend", "stl"]))
-          .register(z.globalRegistry, {
-            description: "List of target formats for the remeshed model.",
-          }),
-      )
+      .array(z.enum(["glb", "fbx", "obj", "usdz", "blend", "stl"]))
+      .register(z.globalRegistry, {
+        description: "List of target formats for the remeshed model.",
+      })
+      .optional()
       .default(["glb"]),
   })
   .register(z.globalRegistry, {
@@ -2966,55 +3176,62 @@ export const zQueueStatus = z.object({
   request_id: z.string().register(z.globalRegistry, {
     description: "The request id.",
   }),
-  response_url: z.optional(
-    z.string().register(z.globalRegistry, {
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The response url.",
-    }),
-  ),
-  status_url: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The status url.",
-    }),
-  ),
-  cancel_url: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The cancel url.",
-    }),
-  ),
-  logs: z.optional(
-    z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
       description: "The logs.",
-    }),
-  ),
-  metrics: z.optional(
-    z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
       description: "The metrics.",
-    }),
-  ),
-  queue_position: z.optional(
-    z.int().register(z.globalRegistry, {
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
       description: "The queue position.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 export const zGetFalAiMeshyV5RemeshRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3024,13 +3241,13 @@ export const zGetFalAiMeshyV5RemeshRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMeshyV5RemeshRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3038,11 +3255,12 @@ export const zPutFalAiMeshyV5RemeshRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3050,8 +3268,8 @@ export const zPutFalAiMeshyV5RemeshRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMeshyV5RemeshData = z.object({
   body: zMeshyV5RemeshInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3060,13 +3278,13 @@ export const zPostFalAiMeshyV5RemeshData = z.object({
 export const zPostFalAiMeshyV5RemeshResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV5RemeshRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3076,22 +3294,23 @@ export const zGetFalAiMeshyV5RemeshRequestsByRequestIdResponse =
   zMeshyV5RemeshOutput;
 
 export const zGetFalAiMeshyV5RetextureRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3101,13 +3320,13 @@ export const zGetFalAiMeshyV5RetextureRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMeshyV5RetextureRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3115,11 +3334,12 @@ export const zPutFalAiMeshyV5RetextureRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3127,8 +3347,8 @@ export const zPutFalAiMeshyV5RetextureRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMeshyV5RetextureData = z.object({
   body: zMeshyV5RetextureInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3137,13 +3357,13 @@ export const zPostFalAiMeshyV5RetextureData = z.object({
 export const zPostFalAiMeshyV5RetextureResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV5RetextureRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3153,22 +3373,23 @@ export const zGetFalAiMeshyV5RetextureRequestsByRequestIdResponse =
   zMeshyV5RetextureOutput;
 
 export const zGetFalAiUltrashapeRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3178,13 +3399,13 @@ export const zGetFalAiUltrashapeRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiUltrashapeRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3192,11 +3413,12 @@ export const zPutFalAiUltrashapeRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiUltrashapeRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3204,8 +3426,8 @@ export const zPutFalAiUltrashapeRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiUltrashapeData = z.object({
   body: zUltrashapeInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3214,13 +3436,13 @@ export const zPostFalAiUltrashapeData = z.object({
 export const zPostFalAiUltrashapeResponse = zQueueStatus;
 
 export const zGetFalAiUltrashapeRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3229,22 +3451,23 @@ export const zGetFalAiUltrashapeRequestsByRequestIdData = z.object({
 export const zGetFalAiUltrashapeRequestsByRequestIdResponse = zUltrashapeOutput;
 
 export const zGetFalAiSam33dAlignRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3254,13 +3477,13 @@ export const zGetFalAiSam33dAlignRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiSam33dAlignRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3268,11 +3491,12 @@ export const zPutFalAiSam33dAlignRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiSam33dAlignRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3280,8 +3504,8 @@ export const zPutFalAiSam33dAlignRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiSam33dAlignData = z.object({
   body: zSam33dAlignInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3290,13 +3514,13 @@ export const zPostFalAiSam33dAlignData = z.object({
 export const zPostFalAiSam33dAlignResponse = zQueueStatus;
 
 export const zGetFalAiSam33dAlignRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3306,22 +3530,23 @@ export const zGetFalAiSam33dAlignRequestsByRequestIdResponse =
   zSam33dAlignOutput;
 
 export const zGetFalAiHunyuan3dV31PartRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3331,13 +3556,13 @@ export const zGetFalAiHunyuan3dV31PartRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuan3dV31PartRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3345,11 +3570,12 @@ export const zPutFalAiHunyuan3dV31PartRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3357,8 +3583,8 @@ export const zPutFalAiHunyuan3dV31PartRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV31PartData = z.object({
   body: zHunyuan3dV31PartInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3367,13 +3593,13 @@ export const zPostFalAiHunyuan3dV31PartData = z.object({
 export const zPostFalAiHunyuan3dV31PartResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV31PartRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3384,22 +3610,23 @@ export const zGetFalAiHunyuan3dV31PartRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -3410,13 +3637,13 @@ export const zGetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdStatusResponse
 
 export const zPutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -3425,11 +3652,12 @@ export const zPutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -3437,8 +3665,8 @@ export const zPutFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdCancelResponse
 
 export const zPostFalAiHunyuan3dV31SmartTopologyData = z.object({
   body: zHunyuan3dV31SmartTopologyInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3448,13 +3676,13 @@ export const zPostFalAiHunyuan3dV31SmartTopologyResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -3464,22 +3692,23 @@ export const zGetFalAiHunyuan3dV31SmartTopologyRequestsByRequestIdResponse =
   zHunyuan3dV31SmartTopologyOutput;
 
 export const zGetFalAiHunyuanPartRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3489,13 +3718,13 @@ export const zGetFalAiHunyuanPartRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuanPartRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3503,11 +3732,12 @@ export const zPutFalAiHunyuanPartRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuanPartRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3515,8 +3745,8 @@ export const zPutFalAiHunyuanPartRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuanPartData = z.object({
   body: zHunyuanPartInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3525,13 +3755,13 @@ export const zPostFalAiHunyuanPartData = z.object({
 export const zPostFalAiHunyuanPartResponse = zQueueStatus;
 
 export const zGetFalAiHunyuanPartRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3541,22 +3771,23 @@ export const zGetFalAiHunyuanPartRequestsByRequestIdResponse =
   zHunyuanPartOutput;
 
 export const zGetFalAiTrellis2RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3565,13 +3796,13 @@ export const zGetFalAiTrellis2RequestsByRequestIdStatusData = z.object({
 export const zGetFalAiTrellis2RequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiTrellis2RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3579,11 +3810,12 @@ export const zPutFalAiTrellis2RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiTrellis2RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3591,8 +3823,8 @@ export const zPutFalAiTrellis2RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTrellis2Data = z.object({
   body: zTrellis2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3601,13 +3833,13 @@ export const zPostFalAiTrellis2Data = z.object({
 export const zPostFalAiTrellis2Response = zQueueStatus;
 
 export const zGetFalAiTrellis2RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3617,22 +3849,23 @@ export const zGetFalAiTrellis2RequestsByRequestIdResponse = zTrellis2Output;
 
 export const zGetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -3643,13 +3876,13 @@ export const zGetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -3658,11 +3891,12 @@ export const zPutFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdCancelData =
 export const zPutFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -3670,8 +3904,8 @@ export const zPutFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdCancelResponse =
 
 export const zPostFalAiMeshyV6PreviewImageTo3dData = z.object({
   body: zMeshyV6PreviewImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3681,13 +3915,13 @@ export const zPostFalAiMeshyV6PreviewImageTo3dResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   },
 );
 
@@ -3698,22 +3932,23 @@ export const zGetFalAiMeshyV6PreviewImageTo3dRequestsByRequestIdResponse =
   zMeshyV6PreviewImageTo3dOutput;
 
 export const zGetFalAiTrellisRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3722,13 +3957,13 @@ export const zGetFalAiTrellisRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiTrellisRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiTrellisRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3736,11 +3971,12 @@ export const zPutFalAiTrellisRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiTrellisRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3748,8 +3984,8 @@ export const zPutFalAiTrellisRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTrellisData = z.object({
   body: zTrellisInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3758,13 +3994,13 @@ export const zPostFalAiTrellisData = z.object({
 export const zPostFalAiTrellisResponse = zQueueStatus;
 
 export const zGetFalAiTrellisRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3773,22 +4009,23 @@ export const zGetFalAiTrellisRequestsByRequestIdData = z.object({
 export const zGetFalAiTrellisRequestsByRequestIdResponse = zTrellisOutput;
 
 export const zGetFalAiSam33dObjectsRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3798,13 +4035,13 @@ export const zGetFalAiSam33dObjectsRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiSam33dObjectsRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3812,11 +4049,12 @@ export const zPutFalAiSam33dObjectsRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiSam33dObjectsRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3824,8 +4062,8 @@ export const zPutFalAiSam33dObjectsRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiSam33dObjectsData = z.object({
   body: zSam33dObjectsInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3834,13 +4072,13 @@ export const zPostFalAiSam33dObjectsData = z.object({
 export const zPostFalAiSam33dObjectsResponse = zQueueStatus;
 
 export const zGetFalAiSam33dObjectsRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3851,22 +4089,23 @@ export const zGetFalAiSam33dObjectsRequestsByRequestIdResponse =
 
 export const zGetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -3877,13 +4116,13 @@ export const zGetTripo3dTripoV25ImageTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -3891,11 +4130,12 @@ export const zPutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelData =
  */
 export const zPutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3903,8 +4143,8 @@ export const zPutTripo3dTripoV25ImageTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostTripo3dTripoV25ImageTo3dData = z.object({
   body: zTripoV25ImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3913,13 +4153,13 @@ export const zPostTripo3dTripoV25ImageTo3dData = z.object({
 export const zPostTripo3dTripoV25ImageTo3dResponse = zQueueStatus;
 
 export const zGetTripo3dTripoV25ImageTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3929,22 +4169,23 @@ export const zGetTripo3dTripoV25ImageTo3dRequestsByRequestIdResponse =
   zTripoV25ImageTo3dOutput;
 
 export const zGetFalAiHyper3dRodinV2RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -3954,13 +4195,13 @@ export const zGetFalAiHyper3dRodinV2RequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHyper3dRodinV2RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -3968,11 +4209,12 @@ export const zPutFalAiHyper3dRodinV2RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHyper3dRodinV2RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3980,8 +4222,8 @@ export const zPutFalAiHyper3dRodinV2RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHyper3dRodinV2Data = z.object({
   body: zHyper3dRodinV2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3990,13 +4232,13 @@ export const zPostFalAiHyper3dRodinV2Data = z.object({
 export const zPostFalAiHyper3dRodinV2Response = zQueueStatus;
 
 export const zGetFalAiHyper3dRodinV2RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4006,22 +4248,23 @@ export const zGetFalAiHyper3dRodinV2RequestsByRequestIdResponse =
   zHyper3dRodinV2Output;
 
 export const zGetFalAiHyper3dRodinRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4031,13 +4274,13 @@ export const zGetFalAiHyper3dRodinRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHyper3dRodinRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4045,11 +4288,12 @@ export const zPutFalAiHyper3dRodinRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHyper3dRodinRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4057,8 +4301,8 @@ export const zPutFalAiHyper3dRodinRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHyper3dRodinData = z.object({
   body: zHyper3dRodinInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4067,13 +4311,13 @@ export const zPostFalAiHyper3dRodinData = z.object({
 export const zPostFalAiHyper3dRodinResponse = zQueueStatus;
 
 export const zGetFalAiHyper3dRodinRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4083,22 +4327,23 @@ export const zGetFalAiHyper3dRodinRequestsByRequestIdResponse =
   zHyper3dRodinOutput;
 
 export const zGetFalAiTrellisMultiRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4108,13 +4353,13 @@ export const zGetFalAiTrellisMultiRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiTrellisMultiRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4122,11 +4367,12 @@ export const zPutFalAiTrellisMultiRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiTrellisMultiRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4134,8 +4380,8 @@ export const zPutFalAiTrellisMultiRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTrellisMultiData = z.object({
   body: zTrellisMultiInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4144,13 +4390,13 @@ export const zPostFalAiTrellisMultiData = z.object({
 export const zPostFalAiTrellisMultiResponse = zQueueStatus;
 
 export const zGetFalAiTrellisMultiRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4160,22 +4406,23 @@ export const zGetFalAiTrellisMultiRequestsByRequestIdResponse =
   zTrellisMultiOutput;
 
 export const zGetFalAiHunyuan3dV21RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4185,13 +4432,13 @@ export const zGetFalAiHunyuan3dV21RequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuan3dV21RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4199,11 +4446,12 @@ export const zPutFalAiHunyuan3dV21RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuan3dV21RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4211,8 +4459,8 @@ export const zPutFalAiHunyuan3dV21RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV21Data = z.object({
   body: zHunyuan3dV21Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4221,13 +4469,13 @@ export const zPostFalAiHunyuan3dV21Data = z.object({
 export const zPostFalAiHunyuan3dV21Response = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV21RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4237,22 +4485,23 @@ export const zGetFalAiHunyuan3dV21RequestsByRequestIdResponse =
   zHunyuan3dV21Output;
 
 export const zGetFalAiTriposrRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4261,13 +4510,13 @@ export const zGetFalAiTriposrRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiTriposrRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiTriposrRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4275,11 +4524,12 @@ export const zPutFalAiTriposrRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiTriposrRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4287,8 +4537,8 @@ export const zPutFalAiTriposrRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTriposrData = z.object({
   body: zTriposrInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4297,13 +4547,13 @@ export const zPostFalAiTriposrData = z.object({
 export const zPostFalAiTriposrResponse = zQueueStatus;
 
 export const zGetFalAiTriposrRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4313,22 +4563,23 @@ export const zGetFalAiTriposrRequestsByRequestIdResponse = zTriposrOutput;
 
 export const zGetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4339,13 +4590,13 @@ export const zGetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutTripo3dTripoV25MultiviewTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4354,11 +4605,12 @@ export const zPutTripo3dTripoV25MultiviewTo3dRequestsByRequestIdCancelData =
 export const zPutTripo3dTripoV25MultiviewTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -4366,8 +4618,8 @@ export const zPutTripo3dTripoV25MultiviewTo3dRequestsByRequestIdCancelResponse =
 
 export const zPostTripo3dTripoV25MultiviewTo3dData = z.object({
   body: zTripoV25MultiviewTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4377,13 +4629,13 @@ export const zPostTripo3dTripoV25MultiviewTo3dResponse = zQueueStatus;
 
 export const zGetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   },
 );
 
@@ -4394,22 +4646,23 @@ export const zGetTripo3dTripoV25MultiviewTo3dRequestsByRequestIdResponse =
   zTripoV25MultiviewTo3dOutput;
 
 export const zGetFalAiHunyuan3dV2RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4419,13 +4672,13 @@ export const zGetFalAiHunyuan3dV2RequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuan3dV2RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4433,11 +4686,12 @@ export const zPutFalAiHunyuan3dV2RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuan3dV2RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4445,8 +4699,8 @@ export const zPutFalAiHunyuan3dV2RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV2Data = z.object({
   body: zHunyuan3dV2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4455,13 +4709,13 @@ export const zPostFalAiHunyuan3dV2Data = z.object({
 export const zPostFalAiHunyuan3dV2Response = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV2RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4471,22 +4725,23 @@ export const zGetFalAiHunyuan3dV2RequestsByRequestIdResponse =
   zHunyuan3dV2Output;
 
 export const zGetFalAiSam33dBodyRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4496,13 +4751,13 @@ export const zGetFalAiSam33dBodyRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiSam33dBodyRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4510,11 +4765,12 @@ export const zPutFalAiSam33dBodyRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiSam33dBodyRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4522,8 +4778,8 @@ export const zPutFalAiSam33dBodyRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiSam33dBodyData = z.object({
   body: zSam33dBodyInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4532,13 +4788,13 @@ export const zPostFalAiSam33dBodyData = z.object({
 export const zPostFalAiSam33dBodyResponse = zQueueStatus;
 
 export const zGetFalAiSam33dBodyRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4548,22 +4804,23 @@ export const zGetFalAiSam33dBodyRequestsByRequestIdResponse = zSam33dBodyOutput;
 
 export const zGetFalAiHunyuan3dV2MultiViewRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4574,13 +4831,13 @@ export const zGetFalAiHunyuan3dV2MultiViewRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuan3dV2MultiViewRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4588,11 +4845,12 @@ export const zPutFalAiHunyuan3dV2MultiViewRequestsByRequestIdCancelData =
  */
 export const zPutFalAiHunyuan3dV2MultiViewRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4600,8 +4858,8 @@ export const zPutFalAiHunyuan3dV2MultiViewRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV2MultiViewData = z.object({
   body: zHunyuan3dV2MultiViewInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4610,13 +4868,13 @@ export const zPostFalAiHunyuan3dV2MultiViewData = z.object({
 export const zPostFalAiHunyuan3dV2MultiViewResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV2MultiViewRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4627,22 +4885,23 @@ export const zGetFalAiHunyuan3dV2MultiViewRequestsByRequestIdResponse =
 
 export const zGetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4653,13 +4912,13 @@ export const zGetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4667,11 +4926,12 @@ export const zPutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelData =
  */
 export const zPutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4679,8 +4939,8 @@ export const zPutFalAiMeshyV5MultiImageTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMeshyV5MultiImageTo3dData = z.object({
   body: zMeshyV5MultiImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4689,13 +4949,13 @@ export const zPostFalAiMeshyV5MultiImageTo3dData = z.object({
 export const zPostFalAiMeshyV5MultiImageTo3dResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4706,22 +4966,23 @@ export const zGetFalAiMeshyV5MultiImageTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiTrellis2RetextureRequestsByRequestIdStatusData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   },
 );
 
@@ -4733,13 +4994,13 @@ export const zGetFalAiTrellis2RetextureRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiTrellis2RetextureRequestsByRequestIdCancelData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   },
 );
 
@@ -4748,11 +5009,12 @@ export const zPutFalAiTrellis2RetextureRequestsByRequestIdCancelData = z.object(
  */
 export const zPutFalAiTrellis2RetextureRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4760,8 +5022,8 @@ export const zPutFalAiTrellis2RetextureRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTrellis2RetextureData = z.object({
   body: zTrellis2RetextureInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4770,13 +5032,13 @@ export const zPostFalAiTrellis2RetextureData = z.object({
 export const zPostFalAiTrellis2RetextureResponse = zQueueStatus;
 
 export const zGetFalAiTrellis2RetextureRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4787,22 +5049,23 @@ export const zGetFalAiTrellis2RetextureRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4813,13 +5076,13 @@ export const zGetFalAiHunyuanWorldImageToWorldRequestsByRequestIdStatusResponse 
 
 export const zPutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4828,11 +5091,12 @@ export const zPutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -4840,8 +5104,8 @@ export const zPutFalAiHunyuanWorldImageToWorldRequestsByRequestIdCancelResponse 
 
 export const zPostFalAiHunyuanWorldImageToWorldData = z.object({
   body: zHunyuanWorldImageToWorldInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4851,13 +5115,13 @@ export const zPostFalAiHunyuanWorldImageToWorldResponse = zQueueStatus;
 
 export const zGetFalAiHunyuanWorldImageToWorldRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4867,22 +5131,23 @@ export const zGetFalAiHunyuanWorldImageToWorldRequestsByRequestIdResponse =
   zHunyuanWorldImageToWorldOutput;
 
 export const zGetFalAiHunyuan3dV2TurboRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4892,13 +5157,13 @@ export const zGetFalAiHunyuan3dV2TurboRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuan3dV2TurboRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4906,11 +5171,12 @@ export const zPutFalAiHunyuan3dV2TurboRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuan3dV2TurboRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4918,8 +5184,8 @@ export const zPutFalAiHunyuan3dV2TurboRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV2TurboData = z.object({
   body: zHunyuan3dV2TurboInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4928,13 +5194,13 @@ export const zPostFalAiHunyuan3dV2TurboData = z.object({
 export const zPostFalAiHunyuan3dV2TurboResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV2TurboRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4945,22 +5211,23 @@ export const zGetFalAiHunyuan3dV2TurboRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4971,13 +5238,13 @@ export const zGetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuan3dV2MiniTurboRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4985,11 +5252,12 @@ export const zPutFalAiHunyuan3dV2MiniTurboRequestsByRequestIdCancelData =
  */
 export const zPutFalAiHunyuan3dV2MiniTurboRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4997,8 +5265,8 @@ export const zPutFalAiHunyuan3dV2MiniTurboRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV2MiniTurboData = z.object({
   body: zHunyuan3dV2MiniTurboInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5007,13 +5275,13 @@ export const zPostFalAiHunyuan3dV2MiniTurboData = z.object({
 export const zPostFalAiHunyuan3dV2MiniTurboResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5023,22 +5291,23 @@ export const zGetFalAiHunyuan3dV2MiniTurboRequestsByRequestIdResponse =
   zHunyuan3dV2MiniTurboOutput;
 
 export const zGetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5048,13 +5317,13 @@ export const zGetFalAiHunyuan3dV2MiniRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5062,11 +5331,12 @@ export const zPutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5074,8 +5344,8 @@ export const zPutFalAiHunyuan3dV2MiniRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV2MiniData = z.object({
   body: zHunyuan3dV2MiniInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5084,13 +5354,13 @@ export const zPostFalAiHunyuan3dV2MiniData = z.object({
 export const zPostFalAiHunyuan3dV2MiniResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV2MiniRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5101,22 +5371,23 @@ export const zGetFalAiHunyuan3dV2MiniRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5127,13 +5398,13 @@ export const zGetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdStatusResponse
 
 export const zPutFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5142,11 +5413,12 @@ export const zPutFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -5154,8 +5426,8 @@ export const zPutFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdCancelResponse
 
 export const zPostFalAiHunyuan3dV2MultiViewTurboData = z.object({
   body: zHunyuan3dV2MultiViewTurboInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5165,13 +5437,13 @@ export const zPostFalAiHunyuan3dV2MultiViewTurboResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5181,22 +5453,23 @@ export const zGetFalAiHunyuan3dV2MultiViewTurboRequestsByRequestIdResponse =
   zHunyuan3dV2MultiViewTurboOutput;
 
 export const zGetFalAiOmnipartRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5205,13 +5478,13 @@ export const zGetFalAiOmnipartRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiOmnipartRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiOmnipartRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5219,11 +5492,12 @@ export const zPutFalAiOmnipartRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiOmnipartRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5231,8 +5505,8 @@ export const zPutFalAiOmnipartRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiOmnipartData = z.object({
   body: zOmnipartInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5241,13 +5515,13 @@ export const zPostFalAiOmnipartData = z.object({
 export const zPostFalAiOmnipartResponse = zQueueStatus;
 
 export const zGetFalAiOmnipartRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5256,22 +5530,23 @@ export const zGetFalAiOmnipartRequestsByRequestIdData = z.object({
 export const zGetFalAiOmnipartRequestsByRequestIdResponse = zOmnipartOutput;
 
 export const zGetFalAiPshumanRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5280,13 +5555,13 @@ export const zGetFalAiPshumanRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiPshumanRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiPshumanRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5294,11 +5569,12 @@ export const zPutFalAiPshumanRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiPshumanRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5306,8 +5582,8 @@ export const zPutFalAiPshumanRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiPshumanData = z.object({
   body: zPshumanInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5316,13 +5592,13 @@ export const zPostFalAiPshumanData = z.object({
 export const zPostFalAiPshumanResponse = zQueueStatus;
 
 export const zGetFalAiPshumanRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5332,22 +5608,23 @@ export const zGetFalAiPshumanRequestsByRequestIdResponse = zPshumanOutput;
 
 export const zGetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5358,13 +5635,13 @@ export const zGetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdStatusResponse 
 
 export const zPutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5373,11 +5650,12 @@ export const zPutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -5385,8 +5663,8 @@ export const zPutFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdCancelResponse 
 
 export const zPostFalAiHunyuan3dV31ProImageTo3dData = z.object({
   body: zHunyuan3dV31ProImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5396,13 +5674,13 @@ export const zPostFalAiHunyuan3dV31ProImageTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5413,22 +5691,23 @@ export const zGetFalAiHunyuan3dV31ProImageTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5439,13 +5718,13 @@ export const zGetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdStatusRespons
 
 export const zPutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5454,11 +5733,12 @@ export const zPutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -5466,8 +5746,8 @@ export const zPutFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdCancelRespons
 
 export const zPostFalAiHunyuan3dV31RapidImageTo3dData = z.object({
   body: zHunyuan3dV31RapidImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5477,13 +5757,13 @@ export const zPostFalAiHunyuan3dV31RapidImageTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5494,22 +5774,23 @@ export const zGetFalAiHunyuan3dV31RapidImageTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5520,13 +5801,13 @@ export const zGetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5534,11 +5815,12 @@ export const zPutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelData =
  */
 export const zPutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5546,8 +5828,8 @@ export const zPutFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV3ImageTo3dData = z.object({
   body: zHunyuan3dV3ImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5556,13 +5838,13 @@ export const zPostFalAiHunyuan3dV3ImageTo3dData = z.object({
 export const zPostFalAiHunyuan3dV3ImageTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5573,22 +5855,23 @@ export const zGetFalAiHunyuan3dV3ImageTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5599,13 +5882,13 @@ export const zGetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5613,11 +5896,12 @@ export const zPutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelData =
  */
 export const zPutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5625,8 +5909,8 @@ export const zPutFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV3SketchTo3dData = z.object({
   body: zHunyuan3dV3SketchTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5635,13 +5919,13 @@ export const zPostFalAiHunyuan3dV3SketchTo3dData = z.object({
 export const zPostFalAiHunyuan3dV3SketchTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5651,22 +5935,23 @@ export const zGetFalAiHunyuan3dV3SketchTo3dRequestsByRequestIdResponse =
   zHunyuan3dV3SketchTo3dOutput;
 
 export const zGetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5676,13 +5961,13 @@ export const zGetFalAiMeshyV6ImageTo3dRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5690,11 +5975,12 @@ export const zPutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5702,8 +5988,8 @@ export const zPutFalAiMeshyV6ImageTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMeshyV6ImageTo3dData = z.object({
   body: zMeshyV6ImageTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5712,13 +5998,13 @@ export const zPostFalAiMeshyV6ImageTo3dData = z.object({
 export const zPostFalAiMeshyV6ImageTo3dResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV6ImageTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5729,22 +6015,23 @@ export const zGetFalAiMeshyV6ImageTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5755,13 +6042,13 @@ export const zGetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5770,11 +6057,12 @@ export const zPutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelData =
 export const zPutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -5782,8 +6070,8 @@ export const zPutFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdCancelResponse =
 
 export const zPostFalAiMeshyV6PreviewTextTo3dData = z.object({
   body: zMeshyV6PreviewTextTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5792,13 +6080,13 @@ export const zPostFalAiMeshyV6PreviewTextTo3dData = z.object({
 export const zPostFalAiMeshyV6PreviewTextTo3dResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5808,22 +6096,23 @@ export const zGetFalAiMeshyV6PreviewTextTo3dRequestsByRequestIdResponse =
   zMeshyV6PreviewTextTo3dOutput;
 
 export const zGetFalAiHunyuanMotionRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5833,13 +6122,13 @@ export const zGetFalAiHunyuanMotionRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiHunyuanMotionRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5847,11 +6136,12 @@ export const zPutFalAiHunyuanMotionRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiHunyuanMotionRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5859,8 +6149,8 @@ export const zPutFalAiHunyuanMotionRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuanMotionData = z.object({
   body: zHunyuanMotionInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5869,13 +6159,13 @@ export const zPostFalAiHunyuanMotionData = z.object({
 export const zPostFalAiHunyuanMotionResponse = zQueueStatus;
 
 export const zGetFalAiHunyuanMotionRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5886,22 +6176,23 @@ export const zGetFalAiHunyuanMotionRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuanMotionFastRequestsByRequestIdStatusData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   },
 );
 
@@ -5913,13 +6204,13 @@ export const zGetFalAiHunyuanMotionFastRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuanMotionFastRequestsByRequestIdCancelData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   },
 );
 
@@ -5928,11 +6219,12 @@ export const zPutFalAiHunyuanMotionFastRequestsByRequestIdCancelData = z.object(
  */
 export const zPutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5940,8 +6232,8 @@ export const zPutFalAiHunyuanMotionFastRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuanMotionFastData = z.object({
   body: zHunyuanMotionFastInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5950,13 +6242,13 @@ export const zPostFalAiHunyuanMotionFastData = z.object({
 export const zPostFalAiHunyuanMotionFastResponse = zQueueStatus;
 
 export const zGetFalAiHunyuanMotionFastRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5967,22 +6259,23 @@ export const zGetFalAiHunyuanMotionFastRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5993,13 +6286,13 @@ export const zGetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6008,11 +6301,12 @@ export const zPutFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -6020,8 +6314,8 @@ export const zPutFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdCancelResponse =
 
 export const zPostFalAiHunyuan3dV31ProTextTo3dData = z.object({
   body: zHunyuan3dV31ProTextTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6031,13 +6325,13 @@ export const zPostFalAiHunyuan3dV31ProTextTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdData = z.object(
   {
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   },
 );
 
@@ -6049,22 +6343,23 @@ export const zGetFalAiHunyuan3dV31ProTextTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6075,13 +6370,13 @@ export const zGetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdStatusResponse
 
 export const zPutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6090,11 +6385,12 @@ export const zPutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelData =
 export const zPutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -6102,8 +6398,8 @@ export const zPutFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdCancelResponse
 
 export const zPostFalAiHunyuan3dV31RapidTextTo3dData = z.object({
   body: zHunyuan3dV31RapidTextTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6113,13 +6409,13 @@ export const zPostFalAiHunyuan3dV31RapidTextTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6130,22 +6426,23 @@ export const zGetFalAiHunyuan3dV31RapidTextTo3dRequestsByRequestIdResponse =
 
 export const zGetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6156,13 +6453,13 @@ export const zGetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiHunyuan3dV3TextTo3dRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6170,11 +6467,12 @@ export const zPutFalAiHunyuan3dV3TextTo3dRequestsByRequestIdCancelData =
  */
 export const zPutFalAiHunyuan3dV3TextTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6182,8 +6480,8 @@ export const zPutFalAiHunyuan3dV3TextTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiHunyuan3dV3TextTo3dData = z.object({
   body: zHunyuan3dV3TextTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6192,13 +6490,13 @@ export const zPostFalAiHunyuan3dV3TextTo3dData = z.object({
 export const zPostFalAiHunyuan3dV3TextTo3dResponse = zQueueStatus;
 
 export const zGetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6208,22 +6506,23 @@ export const zGetFalAiHunyuan3dV3TextTo3dRequestsByRequestIdResponse =
   zHunyuan3dV3TextTo3dOutput;
 
 export const zGetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6233,13 +6532,13 @@ export const zGetFalAiMeshyV6TextTo3dRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6247,11 +6546,12 @@ export const zPutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6259,8 +6559,8 @@ export const zPutFalAiMeshyV6TextTo3dRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMeshyV6TextTo3dData = z.object({
   body: zMeshyV6TextTo3dInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6269,13 +6569,13 @@ export const zPostFalAiMeshyV6TextTo3dData = z.object({
 export const zPostFalAiMeshyV6TextTo3dResponse = zQueueStatus;
 
 export const zGetFalAiMeshyV6TextTo3dRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**

@@ -1856,15 +1856,7 @@ export type LightingType2 = {
    * The direction of the lighting in the image to be generated.
    */
   direction?: string | unknown;
-  [key: string]:
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | undefined;
+  [key: string]: unknown;
 };
 
 /**
@@ -1895,17 +1887,7 @@ export type PhotographicCharacteristicsType2 = {
    * The depth of field in the image to be generated.
    */
   depth_of_field?: string | unknown;
-  [key: string]:
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | undefined;
+  [key: string]: unknown;
 };
 
 /**
@@ -1942,19 +1924,7 @@ export type AestheticsType2 = {
    * The color scheme of the image to be generated.
    */
   color_scheme?: string | unknown;
-  [key: string]:
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | string
-    | unknown
-    | undefined;
+  [key: string]: unknown;
 };
 
 /**
@@ -2744,7 +2714,7 @@ export type FooocusUpscaleOrVaryInput = {
    *
    * The image to upscale or vary.
    */
-  uov_image_url: string;
+  uov_image_url: string | Blob | File;
   /**
    * Performance
    *
@@ -3310,7 +3280,7 @@ export type FastFooocusSdxlImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -4095,7 +4065,7 @@ export type DiffusionEdgeInput = {
    *
    * The text prompt you would like to convert to speech.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -5064,7 +5034,7 @@ export type GuidanceInput = {
    *
    * The image that should be used as guidance, in base64 format, with the method defined in guidance_method_1. Accepted formats are jpeg, jpg, png, webp. Maximum file size 12MB. If more then one guidance method is used, all guidance images must be of the same aspect ratio, and this will be the aspect ratio of the generated results. If guidance_method_1 is selected, an image must be provided.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -5390,7 +5360,7 @@ export type DreamoInput = {
    *
    * URL of first reference image to use for generation.
    */
-  first_image_url?: string;
+  first_image_url?: string | Blob | File;
   /**
    * Image Size
    *
@@ -5409,7 +5379,7 @@ export type DreamoInput = {
    *
    * URL of second reference image to use for generation.
    */
-  second_image_url?: string;
+  second_image_url?: string | Blob | File;
   /**
    * Second Reference Task
    *
@@ -6248,7 +6218,7 @@ export type LcmInput = {
    * The url of the lora server to use for image generation.
    *
    */
-  lora_url?: string;
+  lora_url?: string | Blob | File;
   /**
    * Guidance scale (CFG)
    *
@@ -6303,7 +6273,7 @@ export type LcmInput = {
    * pixels, the image will be resized to 1024 pixels while keeping the aspect ratio.
    *
    */
-  image_url?: string;
+  image_url?: string | Blob | File;
   /**
    * Strength
    *
@@ -6360,7 +6330,7 @@ export type LcmInput = {
    * The mask must have the same dimensions as the image passed as `image_url`.
    *
    */
-  mask_url?: string;
+  mask_url?: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -7321,7 +7291,7 @@ export type SdxlControlnetUnionInput = {
    *
    * The URL of the control image.
    */
-  normal_image_url?: string;
+  normal_image_url?: string | Blob | File;
   /**
    * Embeddings
    *
@@ -7333,7 +7303,7 @@ export type SdxlControlnetUnionInput = {
    *
    * The URL of the control image.
    */
-  teed_image_url?: string;
+  teed_image_url?: string | Blob | File;
   /**
    * Loras
    *
@@ -7354,7 +7324,7 @@ export type SdxlControlnetUnionInput = {
    *
    * The URL of the control image.
    */
-  canny_image_url?: string;
+  canny_image_url?: string | Blob | File;
   /**
    * Segmentation Preprocess
    *
@@ -7396,13 +7366,13 @@ export type SdxlControlnetUnionInput = {
    *
    * The URL of the control image.
    */
-  segmentation_image_url?: string;
+  segmentation_image_url?: string | Blob | File;
   /**
    * Openpose Image Url
    *
    * The URL of the control image.
    */
-  openpose_image_url?: string;
+  openpose_image_url?: string | Blob | File;
   /**
    * Canny Preprocess
    *
@@ -7420,7 +7390,7 @@ export type SdxlControlnetUnionInput = {
    *
    * The URL of the control image.
    */
-  depth_image_url?: string;
+  depth_image_url?: string | Blob | File;
   /**
    * Normal Preprocess
    *
@@ -7777,7 +7747,7 @@ export type IllusionDiffusionInput = {
    *
    * Input image url.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Scheduler
    *
@@ -7969,7 +7939,7 @@ export type FluxControlLoraCannyInput = {
    * The image to use for control lora. This is used to control the style of the generated image.
    *
    */
-  control_lora_image_url: string;
+  control_lora_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -8133,7 +8103,7 @@ export type FastSdxlControlnetCannyInput = {
    *
    * The URL of the control image.
    */
-  control_image_url: string;
+  control_image_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -9404,7 +9374,7 @@ export type FluxControlLoraDepthInput = {
    * The image to use for control lora. This is used to control the style of the generated image.
    *
    */
-  control_lora_image_url: string;
+  control_lora_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -9858,7 +9828,7 @@ export type FluxSubjectInput = {
    *
    * URL of image of the subject
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -12099,7 +12069,7 @@ export type FooocusInpaintInput = {
    *
    * The image to use as a reference for inpainting.
    */
-  inpaint_image_url: string;
+  inpaint_image_url: string | Blob | File;
   /**
    * Outpaint Direction
    *
@@ -15803,7 +15773,7 @@ export type FluxLoraInpaintingInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -15829,7 +15799,7 @@ export type FluxLoraInpaintingInput = {
    * The mask to area to Inpaint in.
    *
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -18516,7 +18486,7 @@ export type FluxGeneralInput = {
    *
    * URL of Image for Reference-Only
    */
-  reference_image_url?: string;
+  reference_image_url?: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -18727,13 +18697,13 @@ export type ControlNetUnionInput = {
    *
    * URL of the mask for the control image.
    */
-  mask_image_url?: string | null;
+  mask_image_url?: string | Blob | File | null;
   /**
    * Control Image Url
    *
    * URL of the image to be used as the control image.
    */
-  control_image_url: string;
+  control_image_url: string | Blob | File;
   /**
    * Control Mode
    *
@@ -23926,7 +23896,7 @@ export type PostProcessingParabolizeInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -23970,7 +23940,7 @@ export type PostProcessingDodgeBurnInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -24018,7 +23988,7 @@ export type PhotaEnhanceInput = {
    *
    * URL/Base64 data URI of the image to enhance.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -24112,7 +24082,7 @@ export type ObjectRemovalInput = {
    *
    * The URL of the image to remove objects from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -24163,7 +24133,7 @@ export type Nextstep1Input = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -24200,7 +24170,7 @@ export type ImagePreprocessorsPidiInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -24449,7 +24419,7 @@ export type FluxDifferentialDiffusionInput = {
    *
    * URL of image to use as initial image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -24479,7 +24449,7 @@ export type FluxDifferentialDiffusionInput = {
    *
    * URL of change map.
    */
-  change_map_image_url: string;
+  change_map_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -24561,7 +24531,7 @@ export type Flux2KleinRealtimeInput = {
    *
    * Base64-encoded image data URI for editing. CDN URLs are not supported for realtime. For optimal performance, use 704x704 JPEG images with 50% quality. Other sizes will be resized automatically.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Interpolation
    *
@@ -25553,7 +25523,7 @@ export type FastLcmDiffusionInpaintingInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -25592,7 +25562,7 @@ export type FastLcmDiffusionInpaintingInput = {
    *
    * The URL of the mask to use for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -25642,7 +25612,7 @@ export type DocresDewarpInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -25706,7 +25676,7 @@ export type ChronoEditLoraGalleryPaintbrushInput = {
    *
    * The image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Turbo Mode
    *
@@ -25796,7 +25766,7 @@ export type CrystalUpscalerInput = {
    *
    * URL to the input image
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Scale Factor
    *
@@ -25843,7 +25813,7 @@ export type UpscaleCreativeInput = {
   /**
    * Image Url
    */
-  image_url?: string;
+  image_url?: string | Blob | File;
 };
 
 /**
@@ -25873,13 +25843,13 @@ export type PostProcessingDissolveInput = {
    *
    * URL of second image for dissolve
    */
-  dissolve_image_url: string;
+  dissolve_image_url: string | Blob | File;
   /**
    * Image Url
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -25928,7 +25898,7 @@ export type InvisibleWatermarkInput = {
    *
    * URL of image to be watermarked or decoded
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -25958,7 +25928,7 @@ export type PostProcessingVignetteInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -25982,7 +25952,7 @@ export type PostProcessingDesaturateInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Desaturate Factor
    *
@@ -26054,7 +26024,7 @@ export type PostProcessingColorTintInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26073,7 +26043,7 @@ export type ImagePreprocessorsSamInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26141,7 +26111,7 @@ export type Florence2LargeRegionProposalInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26177,7 +26147,7 @@ export type MixDehazeNetInput = {
    *
    * URL of image to be used for image enhancement
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26231,7 +26201,7 @@ export type ImageEditingTimeOfDayInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -26315,7 +26285,7 @@ export type ImageEditingWeatherEffectInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -26471,7 +26441,7 @@ export type Swin2SrInput = {
    *
    * URL of image to be used for image enhancement
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -26502,7 +26472,7 @@ export type ImagePreprocessorsTeedInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26565,7 +26535,7 @@ export type GenfocusInput = {
    *
    * The URL of the image to refocus.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -26640,7 +26610,7 @@ export type FiboEditReplaceObjectByTextInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26679,7 +26649,7 @@ export type FiboEditAddObjectByTextInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26733,7 +26703,7 @@ export type PostProcessingChromaticAberrationInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Green Shift
    *
@@ -26917,7 +26887,7 @@ export type ChainOfZoomInput = {
    *
    * Input image to zoom into
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26974,7 +26944,7 @@ export type GenfocusAllInFocusInput = {
    *
    * The URL of the image to deblur and restore to all-in-focus.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -27038,7 +27008,7 @@ export type ImageEditingBroccoliHaircutInput = {
    *
    * URL of the image to apply broccoli haircut style.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -27153,7 +27123,7 @@ export type FluxProV1FillFinetunedInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -27180,7 +27150,7 @@ export type FluxProV1FillFinetunedInput = {
    *
    * The mask URL to inpaint the image. Needs to match the dimensions of the input image.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Enhance Prompt
    *
@@ -27217,7 +27187,7 @@ export type ImagePreprocessorsMlsdInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27268,7 +27238,7 @@ export type FloweditInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Source Prompt
    *
@@ -27362,7 +27332,7 @@ export type ObjectRemovalBboxInput = {
    *
    * The URL of the image to remove objects from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Box Prompts
    *
@@ -27425,7 +27395,7 @@ export type ImageAppsV2TextureTransformInput = {
    *
    * Image URL for texture transformation
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27564,7 +27534,7 @@ export type PlaygroundV25InpaintingInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -27600,7 +27570,7 @@ export type PlaygroundV25InpaintingInput = {
    *
    * The URL of the mask to use for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -27689,7 +27659,7 @@ export type Florence2LargeRegionToSegmentationInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27728,7 +27698,7 @@ export type DocresInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27761,7 +27731,7 @@ export type FiboEditReseasonInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Season
    *
@@ -27810,7 +27780,7 @@ export type LucidfluxInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Target Width
    *
@@ -27942,7 +27912,7 @@ export type FastSdxlControlnetCannyInpaintingInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -27964,7 +27934,7 @@ export type FastSdxlControlnetCannyInpaintingInput = {
    *
    * The URL of the control image.
    */
-  control_image_url: string;
+  control_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -27979,7 +27949,7 @@ export type FastSdxlControlnetCannyInpaintingInput = {
    *
    * The URL of the mask to use for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -28016,7 +27986,7 @@ export type ImagePreprocessorsScribbleInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28116,7 +28086,7 @@ export type FastLightningSdxlInpaintingInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -28155,7 +28125,7 @@ export type FastLightningSdxlInpaintingInput = {
    *
    * The URL of the mask to use for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -28196,7 +28166,7 @@ export type ImagePreprocessorsMidasInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28248,7 +28218,7 @@ export type ChronoEditLoraGalleryUpscalerInput = {
    *
    * The image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -28365,7 +28335,7 @@ export type BriaReimagineInput = {
    *
    * The URL of the structure reference image. Use "" to leave empty. Accepted formats are jpeg, jpg, png, webp.
    */
-  structure_image_url?: string;
+  structure_image_url?: string | Blob | File;
 };
 
 /**
@@ -28734,7 +28704,7 @@ export type FiboEditRewriteTextInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28799,7 +28769,7 @@ export type ImageAppsV2CityTeleportInput = {
    *
    * Person photo URL
    */
-  person_image_url: string;
+  person_image_url: string | Blob | File;
 };
 
 /**
@@ -28819,7 +28789,7 @@ export type Florence2LargeDenseRegionCaptionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28949,7 +28919,7 @@ export type Sd15DepthControlnetInput = {
    *
    * The URL of the control image.
    */
-  control_image_url: string;
+  control_image_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -29120,7 +29090,7 @@ export type ChronoEditLoraInput = {
    *
    * The image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Prompt Expansion
    *
@@ -29180,7 +29150,7 @@ export type LumaPhotonFlashModifyInput = {
    *
    * URL of the input image to reframe
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -29257,7 +29227,7 @@ export type SdxlControlnetUnionInpaintingInput = {
    *
    * The URL of the control image.
    */
-  normal_image_url?: string;
+  normal_image_url?: string | Blob | File;
   /**
    * Embeddings
    *
@@ -29269,7 +29239,7 @@ export type SdxlControlnetUnionInpaintingInput = {
    *
    * The URL of the control image.
    */
-  teed_image_url?: string;
+  teed_image_url?: string | Blob | File;
   /**
    * Loras
    *
@@ -29290,7 +29260,7 @@ export type SdxlControlnetUnionInpaintingInput = {
    *
    * The URL of the control image.
    */
-  canny_image_url?: string;
+  canny_image_url?: string | Blob | File;
   /**
    * Segmentation Preprocess
    *
@@ -29308,7 +29278,7 @@ export type SdxlControlnetUnionInpaintingInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -29338,19 +29308,19 @@ export type SdxlControlnetUnionInpaintingInput = {
    *
    * The URL of the mask to use for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Segmentation Image Url
    *
    * The URL of the control image.
    */
-  segmentation_image_url?: string;
+  segmentation_image_url?: string | Blob | File;
   /**
    * Openpose Image Url
    *
    * The URL of the control image.
    */
-  openpose_image_url?: string;
+  openpose_image_url?: string | Blob | File;
   /**
    * Canny Preprocess
    *
@@ -29368,7 +29338,7 @@ export type SdxlControlnetUnionInpaintingInput = {
    *
    * The URL of the control image.
    */
-  depth_image_url?: string;
+  depth_image_url?: string | Blob | File;
   /**
    * Normal Preprocess
    *
@@ -29463,7 +29433,7 @@ export type ImagePreprocessorsHedInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -29532,7 +29502,7 @@ export type PlushifyInput = {
    *
    * URL of the image to apply cartoon style to
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Scale
    *
@@ -29598,7 +29568,7 @@ export type Era3dInput = {
    *
    * URL of the image to remove background from
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Background Removal
    *
@@ -29710,7 +29680,7 @@ export type FluxKreaReduxInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -29785,7 +29755,7 @@ export type FiboEditBlendInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -29849,13 +29819,13 @@ export type RifeInput = {
    *
    * The URL of the second image to use as the ending point for interpolation.
    */
-  end_image_url: string;
+  end_image_url: string | Blob | File;
   /**
    * Start Image URL
    *
    * The URL of the first image to use as the starting point for interpolation.
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * Output Type
    *
@@ -29891,7 +29861,7 @@ export type PostProcessingSolarizeInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -29936,7 +29906,7 @@ export type ImageAppsV2PhotographyEffectsInput = {
    *
    * Image URL for photography effects
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30012,7 +29982,7 @@ export type ZImageTurboInpaintLoraInput = {
    *
    * URL of Mask for Inpaint generation.
    */
-  mask_image_url: string;
+  mask_image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -30054,7 +30024,7 @@ export type ZImageTurboInpaintLoraInput = {
    *
    * URL of Image for Inpaint generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -30112,7 +30082,7 @@ export type ImagePreprocessorsZoeInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30158,7 +30128,7 @@ export type IdeogramV2TurboEditInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -30176,7 +30146,7 @@ export type IdeogramV2TurboEditInput = {
    *
    * The mask URL to inpaint the image. Needs to match the dimensions of the input image.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
 };
 
 /**
@@ -30369,7 +30339,7 @@ export type FluxGeneralRfInversionInput = {
    *
    * URL of image to be edited
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * NAG scale
    *
@@ -30393,7 +30363,7 @@ export type FluxGeneralRfInversionInput = {
    *
    * URL of Image for Reference-Only
    */
-  reference_image_url?: string;
+  reference_image_url?: string | Blob | File;
   /**
    * Reverse Guidance End
    *
@@ -30516,13 +30486,13 @@ export type ImageAppsV2ProductHoldingInput = {
    *
    * Image URL of the product to be held by the person
    */
-  product_image_url: string;
+  product_image_url: string | Blob | File;
   /**
    * Person Image Url
    *
    * Image URL of the person who will hold the product
    */
-  person_image_url: string;
+  person_image_url: string | Blob | File;
 };
 
 /**
@@ -30564,7 +30534,7 @@ export type LumaPhotonModifyInput = {
    *
    * URL of the input image to reframe
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30747,7 +30717,7 @@ export type FluxGeneralDifferentialDiffusionInput = {
    *
    * URL of image to use as initial image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * NAG scale
    *
@@ -30762,7 +30732,7 @@ export type FluxGeneralDifferentialDiffusionInput = {
    *
    * URL of Image for Reference-Only
    */
-  reference_image_url?: string;
+  reference_image_url?: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -30802,7 +30772,7 @@ export type FluxGeneralDifferentialDiffusionInput = {
    *
    * URL of change map.
    */
-  change_map_image_url: string;
+  change_map_image_url: string | Blob | File;
   /**
    * Num Images
    *
@@ -30929,7 +30899,7 @@ export type TheraInput = {
    *
    * URL of image to be used for upscaling
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30972,7 +30942,7 @@ export type FiboEditColorizeInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31086,7 +31056,7 @@ export type FastSdxlControlnetCannyImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -31108,7 +31078,7 @@ export type FastSdxlControlnetCannyImageToImageInput = {
    *
    * The URL of the control image.
    */
-  control_image_url: string;
+  control_image_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -31327,7 +31297,7 @@ export type Flux1KreaReduxInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -31417,7 +31387,7 @@ export type ImageEditingSceneCompositionInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -31481,7 +31451,7 @@ export type WorkflowUtilitiesExtractNthFrameInput = {
    *
    * URL of the video file to extract frames from
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Max Frames
    *
@@ -31617,7 +31587,7 @@ export type FluxControlLoraCannyImageToImageInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -31643,7 +31613,7 @@ export type FluxControlLoraCannyImageToImageInput = {
    * The image to use for control lora. This is used to control the style of the generated image.
    *
    */
-  control_lora_image_url: string;
+  control_lora_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -31727,7 +31697,7 @@ export type Flux1SrpoImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -31868,7 +31838,7 @@ export type StepxEdit2Input = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -31945,7 +31915,7 @@ export type ImageEditingWojakStyleInput = {
    *
    * URL of the image to convert to wojak style.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -32018,7 +31988,7 @@ export type FinegrainEraserInput = {
    *
    * URL of the image to edit
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32109,7 +32079,7 @@ export type OnerewardInput = {
    *
    * URL of the source image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -32133,7 +32103,7 @@ export type OnerewardInput = {
    *
    * URL of the mask image. White pixels indicate the area to fill or modify; black pixels preserve the original content.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Negative Prompt
    *
@@ -32170,7 +32140,7 @@ export type HunyuanWorldInput = {
    *
    * The URL of the image to convert to a panorama.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32239,7 +32209,7 @@ export type JuggernautFluxBaseImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -32314,7 +32284,7 @@ export type FiboEditEraseByTextInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Object Name
    *
@@ -32383,7 +32353,7 @@ export type IdeogramV2aRemixInput = {
    *
    * The image URL to remix
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -32465,7 +32435,7 @@ export type Emu35ImageEditImageInput = {
    *
    * The image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -32595,7 +32565,7 @@ export type FluxControlLoraDepthImageToImageInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -32621,7 +32591,7 @@ export type FluxControlLoraDepthImageToImageInput = {
    * The image to use for control lora. This is used to control the style of the generated image.
    *
    */
-  control_lora_image_url: string;
+  control_lora_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -32656,7 +32626,7 @@ export type Florence2LargeReferringExpressionSegmentationInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32687,7 +32657,7 @@ export type ImageAppsV2ObjectRemovalInput = {
    *
    * Image URL containing object to remove
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32823,7 +32793,7 @@ export type FilmInput = {
    *
    * The URL of the second image to use as the ending point for interpolation.
    */
-  end_image_url: string;
+  end_image_url: string | Blob | File;
   /**
    * Image Format
    *
@@ -32835,7 +32805,7 @@ export type FilmInput = {
    *
    * The URL of the first image to use as the starting point for interpolation.
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
 };
 
 /**
@@ -32898,7 +32868,7 @@ export type IdeogramV2TurboRemixInput = {
    *
    * The image URL to remix
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -32989,7 +32959,7 @@ export type FinegrainEraserBboxInput = {
    *
    * URL of the image to edit
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33033,7 +33003,7 @@ export type PasdInput = {
    *
    * Input image to super-resolve
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Steps
    *
@@ -33351,7 +33321,7 @@ export type Flux1DevReduxInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -33506,7 +33476,7 @@ export type FiboEditRestoreInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33548,7 +33518,7 @@ export type PostProcessingBlurInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33627,7 +33597,7 @@ export type ImageEditingExpressionChangeInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -33690,7 +33660,7 @@ export type FiboEditSketchToColoredImageInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33739,7 +33709,7 @@ export type ImageAppsV2ExpressionChangeInput = {
    *
    * Portrait image URL for expression change
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33764,7 +33734,7 @@ export type ImageAppsV2ProductPhotographyInput = {
    *
    * Image URL of the product to create professional studio photography
    */
-  product_image_url: string;
+  product_image_url: string | Blob | File;
 };
 
 /**
@@ -33816,7 +33786,7 @@ export type FiboEditRestyleInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33850,7 +33820,7 @@ export type ImageEditingPlushieStyleInput = {
    *
    * URL of the image to convert to plushie style.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -33905,7 +33875,7 @@ export type OmniZeroInput = {
    *
    * Identity image url.
    */
-  identity_image_url: string;
+  identity_image_url: string | Blob | File;
   /**
    * Identity Strength
    *
@@ -33941,7 +33911,7 @@ export type OmniZeroInput = {
    *
    * Composition image url.
    */
-  composition_image_url: string;
+  composition_image_url: string | Blob | File;
   /**
    * Depth Strength
    *
@@ -33959,7 +33929,7 @@ export type OmniZeroInput = {
    *
    * Input image url.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Face Strength
    *
@@ -33971,7 +33941,7 @@ export type OmniZeroInput = {
    *
    * Style image url.
    */
-  style_image_url: string;
+  style_image_url: string | Blob | File;
   /**
    * Style Strength
    *
@@ -34065,7 +34035,7 @@ export type JuggernautFluxLoraInpaintingInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -34113,7 +34083,7 @@ export type JuggernautFluxLoraInpaintingInput = {
    * The mask to area to Inpaint in.
    *
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -34240,7 +34210,7 @@ export type FluxKreaLoraInpaintingInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -34266,7 +34236,7 @@ export type FluxKreaLoraInpaintingInput = {
    * The mask to area to Inpaint in.
    *
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -34338,7 +34308,7 @@ export type IdeogramV2aTurboRemixInput = {
    *
    * The image URL to remix
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -34431,7 +34401,7 @@ export type Flux1KreaImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -34598,7 +34568,7 @@ export type FastSdxlInpaintingInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -34637,7 +34607,7 @@ export type FastSdxlInpaintingInput = {
    *
    * The URL of the mask to use for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -34696,7 +34666,7 @@ export type ImageEditingBabyVersionInput = {
    *
    * URL of the image to transform into a baby version.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -34801,7 +34771,7 @@ export type QwenImageLayeredLoraInput = {
    *
    * The URL of the input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -34886,7 +34856,7 @@ export type StarVectorInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -34928,7 +34898,7 @@ export type BriaGenfillInput = {
    *
    * Input Image to erase from
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -34949,7 +34919,7 @@ export type BriaGenfillInput = {
    *
    * The URL of the binary mask image that represents the area that will be cleaned.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Negative Prompt
    *
@@ -35150,7 +35120,7 @@ export type HidreamI1FullImageToImageInput = {
    *
    * The image URL to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -35292,7 +35262,7 @@ export type HidreamE11Input = {
    *
    * URL of an input image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -35484,7 +35454,7 @@ export type PlaygroundV25ImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -35588,7 +35558,7 @@ export type Florence2LargeOcrWithRegionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35849,7 +35819,7 @@ export type ZImageTurboControlnetLoraInput = {
    *
    * URL of Image for ControlNet generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -35932,7 +35902,7 @@ export type ImageAppsV2MakeupApplicationInput = {
    *
    * Portrait image URL for makeup application
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35963,7 +35933,7 @@ export type LeffaPoseTransferInput = {
    *
    * Url for the human image.
    */
-  pose_image_url: string;
+  pose_image_url: string | Blob | File;
   /**
    * Output Format
    *
@@ -36011,7 +35981,7 @@ export type LeffaPoseTransferInput = {
    *
    * Url to the garment image.
    */
-  person_image_url: string;
+  person_image_url: string | Blob | File;
 };
 
 /**
@@ -36041,7 +36011,7 @@ export type NafnetDenoiseInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -36130,7 +36100,7 @@ export type QwenImageEditLoraInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -36221,7 +36191,7 @@ export type ImageEditingYoutubeThumbnailsInput = {
    *
    * URL of the image to convert to YouTube thumbnail style.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -36279,13 +36249,13 @@ export type ObjectRemovalMaskInput = {
    *
    * The URL of the image to remove objects from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Mask Url
    *
    * The URL of the mask image. White pixels (255) indicate areas to remove.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Mask Expansion
    *
@@ -36337,7 +36307,7 @@ export type IdeogramV2EditInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -36355,7 +36325,7 @@ export type IdeogramV2EditInput = {
    *
    * The mask URL to inpaint the image. Needs to match the dimensions of the input image.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
 };
 
 /**
@@ -36413,7 +36383,7 @@ export type FiboEditRelightInput = {
    *
    * The source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -36590,7 +36560,7 @@ export type SdxlControlnetUnionImageToImageInput = {
    *
    * The URL of the control image.
    */
-  normal_image_url?: string;
+  normal_image_url?: string | Blob | File;
   /**
    * Embeddings
    *
@@ -36602,7 +36572,7 @@ export type SdxlControlnetUnionImageToImageInput = {
    *
    * The URL of the control image.
    */
-  teed_image_url?: string;
+  teed_image_url?: string | Blob | File;
   /**
    * Loras
    *
@@ -36623,7 +36593,7 @@ export type SdxlControlnetUnionImageToImageInput = {
    *
    * The URL of the control image.
    */
-  canny_image_url?: string;
+  canny_image_url?: string | Blob | File;
   /**
    * Segmentation Preprocess
    *
@@ -36641,7 +36611,7 @@ export type SdxlControlnetUnionImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -36671,13 +36641,13 @@ export type SdxlControlnetUnionImageToImageInput = {
    *
    * The URL of the control image.
    */
-  segmentation_image_url?: string;
+  segmentation_image_url?: string | Blob | File;
   /**
    * Openpose Image Url
    *
    * The URL of the control image.
    */
-  openpose_image_url?: string;
+  openpose_image_url?: string | Blob | File;
   /**
    * Canny Preprocess
    *
@@ -36695,7 +36665,7 @@ export type SdxlControlnetUnionImageToImageInput = {
    *
    * The URL of the control image.
    */
-  depth_image_url?: string;
+  depth_image_url?: string | Blob | File;
   /**
    * Normal Preprocess
    *
@@ -36834,7 +36804,7 @@ export type PostProcessingColorCorrectionInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -36897,7 +36867,7 @@ export type Step1xEditInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -37083,7 +37053,7 @@ export type FastLcmDiffusionImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -37319,7 +37289,7 @@ export type PhysicEditInput = {
    *
    * URL of the image to edit with physics-aware transformations.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -37430,7 +37400,7 @@ export type FluxSrpoImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -37497,7 +37467,7 @@ export type ImageAppsV2PortraitEnhanceInput = {
    *
    * Portrait image URL to enhance
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37582,7 +37552,7 @@ export type ImageEditingAgeProgressionInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -37641,7 +37611,7 @@ export type ImageAppsV2HeadshotPhotoInput = {
    *
    * Portrait image URL to convert to professional headshot
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37675,7 +37645,7 @@ export type BenV2ImageInput = {
    *
    * URL of image to be used for background removal
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37700,7 +37670,7 @@ export type ImagePreprocessorsLineartInput = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37829,7 +37799,7 @@ export type LumaPhotonReframeInput = {
    *
    * URL of the input image to reframe
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37859,7 +37829,7 @@ export type NafnetDeblurInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37934,7 +37904,7 @@ export type BagelEditInput = {
    *
    * The image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37982,7 +37952,7 @@ export type PostProcessingGrainInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -38057,7 +38027,7 @@ export type LongcatImageEditInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -38121,13 +38091,13 @@ export type LeffaVirtualTryonInput = {
    *
    * Url to the garment image.
    */
-  garment_image_url: string;
+  garment_image_url: string | Blob | File;
   /**
    * Human Image Url
    *
    * Url for the human image.
    */
-  human_image_url: string;
+  human_image_url: string | Blob | File;
   /**
    * Output Format
    *
@@ -38232,7 +38202,7 @@ export type CartoonifyInput = {
    *
    * URL of the image to apply Pixar style to
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -38346,7 +38316,7 @@ export type FaceToStickerInput = {
    *
    * URL of the video.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Upscale steps
    *
@@ -38502,7 +38472,7 @@ export type WanV22A14bImageToImageInput = {
    *
    * URL of the input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -38726,7 +38696,7 @@ export type Flux1SchnellReduxInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -38787,7 +38757,7 @@ export type ImageEditingRetouchInput = {
    *
    * URL of the image to retouch.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -38865,7 +38835,7 @@ export type ImageEditingColorCorrectionInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -38933,7 +38903,7 @@ export type ImageAppsV2PerspectiveInput = {
    *
    * Image URL for perspective change
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -39041,7 +39011,7 @@ export type Image2PixelInput = {
    *
    * The image URL to process into improved pixel art
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -39110,7 +39080,7 @@ export type ImageEditingRealismInput = {
    *
    * URL of the image to enhance with realism details.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -39222,7 +39192,7 @@ export type KolorsImageToImageInput = {
    *
    * URL of image to use for image to image
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -39337,7 +39307,7 @@ export type ImageEditingProfessionalPhotoInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -39393,7 +39363,7 @@ export type Florence2LargeOpenVocabularyDetectionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -39484,7 +39454,7 @@ export type LcmSd15I2iInput = {
    *
    * The image to use as a base.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -39603,7 +39573,7 @@ export type ImageEditingStyleTransferInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -39769,7 +39739,7 @@ export type ImageAppsV2AgeModifyInput = {
    *
    * Portrait image URL for age modification
    */
-  image_url: string;
+  image_url: string | Blob | File;
   aspect_ratio?: AspectRatio;
   /**
    * Preserve Identity
@@ -39995,7 +39965,7 @@ export type ZImageTurboControlnetInput = {
    *
    * URL of Image for ControlNet generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -40064,7 +40034,7 @@ export type DdcolorInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -40100,7 +40070,7 @@ export type MoondreamNextDetectionInput = {
    *
    * Image URL to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Task Type
    *
@@ -40360,7 +40330,7 @@ export type LivePortraitImageInput = {
    *
    * URL of the image to be animated
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Woo
    *
@@ -40416,7 +40386,7 @@ export type Florence2LargeCaptionToPhraseGroundingInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -40498,7 +40468,7 @@ export type FluxSchnellReduxInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -40562,7 +40532,7 @@ export type ImageutilsMarigoldDepthInput = {
    *
    * Input image url.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -40722,7 +40692,7 @@ export type ImageEditingCartoonifyInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -40834,7 +40804,7 @@ export type FluxDevReduxInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -41051,7 +41021,7 @@ export type JuggernautFluxProImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -41269,7 +41239,7 @@ export type PostProcessingSharpenInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Smart Sharpen Strength
    *
@@ -41452,7 +41422,7 @@ export type Moondream3PreviewSegmentInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -41500,7 +41470,7 @@ export type ImageEditingFaceEnhancementInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -41582,7 +41552,7 @@ export type IdeogramUpscaleInput = {
    *
    * The image URL to upscale
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -41654,7 +41624,7 @@ export type CcsrInput = {
    *
    * The URL or data URI of the image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Tile Diffusion Stride
    *
@@ -41760,7 +41730,7 @@ export type ChronoEditInput = {
    *
    * The image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Turbo Mode
    *
@@ -41869,7 +41839,7 @@ export type ImageAppsV2StyleTransferInput = {
    *
    * Image URL for style transfer
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -41932,7 +41902,7 @@ export type IdeogramV2RemixInput = {
    *
    * The image URL to remix
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -42358,7 +42328,7 @@ export type ImageAppsV2RelightingInput = {
    *
    * Image URL for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -42412,7 +42382,7 @@ export type ImageEditingHairChangeInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -42473,7 +42443,7 @@ export type GhiblifyInput = {
    *
    * The URL of the image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -42625,7 +42595,7 @@ export type PostProcessingInput = {
    *
    * URL of second image for dissolve
    */
-  dissolve_image_url?: string;
+  dissolve_image_url?: string | Blob | File;
   /**
    * Blur Type
    *
@@ -42673,7 +42643,7 @@ export type PostProcessingInput = {
    *
    * URL of image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Dissolve
    *
@@ -43101,7 +43071,7 @@ export type CatVtonInput = {
    *
    * Url to the garment image.
    */
-  garment_image_url: string;
+  garment_image_url: string | Blob | File;
   /**
    * Image Size
    *
@@ -43120,7 +43090,7 @@ export type CatVtonInput = {
    *
    * Url for the human image.
    */
-  human_image_url: string;
+  human_image_url: string | Blob | File;
   /**
    * Cloth Type
    *
@@ -43198,7 +43168,7 @@ export type InpaintInput = {
    *
    * Input image for img2img or inpaint mode
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Model Name
    *
@@ -43228,7 +43198,7 @@ export type InpaintInput = {
    *
    * Input mask for inpaint mode. Black areas will be preserved, white areas will be inpainted.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Negative Prompt
    *
@@ -43343,7 +43313,7 @@ export type IdeogramCharacterRemixInput = {
    *
    * The image URL to remix
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -43425,7 +43395,7 @@ export type ImageEditingBackgroundChangeInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -43543,7 +43513,7 @@ export type FluxKreaLoraImageToImageInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -43663,7 +43633,7 @@ export type ImageAppsV2HairChangeInput = {
    *
    * Portrait image URL for hair change
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -43865,7 +43835,7 @@ export type StableDiffusionV3MediumImageToImageInput = {
    *
    * The image URL to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -43950,7 +43920,7 @@ export type DwposeInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -44010,7 +43980,7 @@ export type Image2SvgInput = {
    *
    * The image to convert to SVG
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Mode
    *
@@ -44161,7 +44131,7 @@ export type FastLightningSdxlImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -44552,7 +44522,7 @@ export type ZImageTurboInpaintInput = {
    *
    * URL of Mask for Inpaint generation.
    */
-  mask_image_url: string;
+  mask_image_url: string | Blob | File;
   /**
    * Control End
    *
@@ -44588,7 +44558,7 @@ export type ZImageTurboInpaintInput = {
    *
    * URL of Image for Inpaint generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -44803,7 +44773,7 @@ export type FluxLoraCannyInput = {
    *
    * URL of image to use for canny input
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -44872,7 +44842,7 @@ export type Florence2LargeObjectDetectionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -44960,7 +44930,7 @@ export type FluxLoraDepthInput = {
    *
    * URL of image to use for depth input
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -45080,7 +45050,7 @@ export type FluxKreaImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -45153,7 +45123,7 @@ export type RetoucherInput = {
    *
    * The URL of the image to be retouched.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -45190,7 +45160,7 @@ export type ImageAppsV2PhotoRestorationInput = {
    *
    * Old or damaged photo URL to restore
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -45327,7 +45297,7 @@ export type IdeogramV3ReplaceBackgroundInput = {
    *
    * The image URL whose background needs to be replaced
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Style Codes
    *
@@ -45542,7 +45512,7 @@ export type Flux1DevImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -45662,13 +45632,13 @@ export type PhotomakerInput = {
    *
    * The URL of the image archive containing the images you want to use.
    */
-  image_archive_url: string;
+  image_archive_url: string | Blob | File;
   /**
    * Initial Image Url
    *
    * Optional initial image for img2img
    */
-  initial_image_url?: string;
+  initial_image_url?: string | Blob | File;
   /**
    * Number of inference steps
    *
@@ -45824,7 +45794,7 @@ export type QwenImageImageToImageInput = {
    *
    * The reference image to guide the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -45902,7 +45872,7 @@ export type FluxVisionUpscalerInput = {
    *
    * The URL of the image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Upscale Factor
    *
@@ -45951,7 +45921,7 @@ export type DrctSuperResolutionInput = {
    *
    * URL of the image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -46039,7 +46009,7 @@ export type ZImageTurboImageToImageLoraInput = {
    *
    * URL of Image for Image-to-Image generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46134,7 +46104,7 @@ export type ImageEditingTextRemovalInput = {
    *
    * URL of the image containing text to be removed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46236,7 +46206,7 @@ export type LumaPhotonFlashReframeInput = {
    *
    * URL of the input image to reframe
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -46325,7 +46295,7 @@ export type QwenImageEditImageToImageInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46461,7 +46431,7 @@ export type InstantCharacterInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46563,7 +46533,7 @@ export type MinimaxImage01SubjectReferenceInput = {
    *
    * URL of the subject reference image to use for consistent character appearance
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -46626,7 +46596,7 @@ export type FluxKontextLoraInpaintInput = {
    *
    * The URL of the reference image for inpainting.
    */
-  reference_image_url: string;
+  reference_image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -46668,7 +46638,7 @@ export type FluxKontextLoraInpaintInput = {
    *
    * The URL of the image to be inpainted.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46695,7 +46665,7 @@ export type FluxKontextLoraInpaintInput = {
    *
    * The URL of the mask for inpainting.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -46755,7 +46725,7 @@ export type ImageEditingObjectRemovalInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46828,7 +46798,7 @@ export type Sam2AutoSegmentInput = {
    *
    * URL of the image to be automatically segmented
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -46875,13 +46845,13 @@ export type ImageAppsV2VirtualTryOnInput = {
    *
    * Clothing photo URL
    */
-  clothing_image_url: string;
+  clothing_image_url: string | Blob | File;
   /**
    * Person Image Url
    *
    * Person photo URL
    */
-  person_image_url: string;
+  person_image_url: string | Blob | File;
 };
 
 /**
@@ -46918,7 +46888,7 @@ export type ImageutilsDepthInput = {
    *
    * Input image url.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -47089,7 +47059,7 @@ export type GeminiFlashEditInput = {
    *
    * Optional URL of an input image for editing. If not provided, generates a new image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -47262,7 +47232,7 @@ export type FluxProV11UltraReduxInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -47377,7 +47347,7 @@ export type FluxProV11ReduxInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -47466,7 +47436,7 @@ export type ImageEditingReframeInput = {
    *
    * URL of the old or damaged photo to restore.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -47520,7 +47490,7 @@ export type BriaProductShotInput = {
    *
    * The URL of the reference image to be used for generating the new scene or background for the product shot. Use "" to leave empty.Either ref_image_url or scene_description has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp.
    */
-  ref_image_url?: string;
+  ref_image_url?: string | Blob | File;
   /**
    * Manual Placement Selection
    *
@@ -47554,7 +47524,7 @@ export type BriaProductShotInput = {
    *
    * The URL of the product shot to be placed in a lifestyle shot. If both image_url and image_file are provided, image_url will be used. Accepted formats are jpeg, jpg, png, webp. Maximum file size 12MB.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -47642,7 +47612,7 @@ export type BriaBackgroundReplaceInput = {
    *
    * The URL of the reference image to be used for generating the new background. Use "" to leave empty. Either ref_image_url or bg_prompt has to be provided but not both. If both ref_image_url and ref_image_file are provided, ref_image_url will be used. Accepted formats are jpeg, jpg, png, webp.
    */
-  ref_image_url?: string;
+  ref_image_url?: string | Blob | File;
   /**
    * Refine Prompt
    *
@@ -47654,7 +47624,7 @@ export type BriaBackgroundReplaceInput = {
    *
    * Input Image to erase from
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -47700,7 +47670,7 @@ export type RembgEnhanceInput = {
    *
    * URL of the input image
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -47737,13 +47707,13 @@ export type FinegrainEraserMaskInput = {
    *
    * URL of the mask image. Should be a binary mask where white (255) indicates areas to erase
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Image Url
    *
    * URL of the image to edit
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -47874,7 +47844,7 @@ export type IdeogramV3EditInput = {
    *
    * The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Style Codes
    *
@@ -47898,7 +47868,7 @@ export type IdeogramV3EditInput = {
    *
    * The mask URL to inpaint the image. MUST have the exact same dimensions (width and height) as the input image.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
 };
 
 /**
@@ -48044,7 +48014,7 @@ export type FastSdxlImageToImageInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -48136,7 +48106,7 @@ export type ImageEditingPhotoRestorationInput = {
    *
    * URL of the old or damaged photo to restore.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -48266,7 +48236,7 @@ export type CodeformerInput = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Upscale Factor
    *
@@ -48390,7 +48360,7 @@ export type Sam3ImageRleInput = {
    *
    * URL of the image to be segmented
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -48724,7 +48694,7 @@ export type IclightV2Input = {
    *
    * URL of mask to be used for ic-light conditioning image
    */
-  mask_image_url?: string;
+  mask_image_url?: string | Blob | File;
   /**
    * Guidance scale (CFG)
    *
@@ -48773,7 +48743,7 @@ export type IclightV2Input = {
    *
    * URL of image to be used for relighting
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -48950,7 +48920,7 @@ export type FluxLoraFillInput = {
    *
    * URL of image to use for fill operation
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -48964,7 +48934,7 @@ export type FluxLoraFillInput = {
    * The mask to area to Inpaint in.
    *
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Seed
    *
@@ -49107,7 +49077,7 @@ export type QwenImageEditInpaintInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -49134,7 +49104,7 @@ export type QwenImageEditInpaintInput = {
    *
    * The URL of the mask for inpainting
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -49326,7 +49296,7 @@ export type RecraftUpscaleCreativeInput = {
    *
    * The URL of the image to be upscaled. Must be in PNG format.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -49410,7 +49380,7 @@ export type IdeogramV3RemixInput = {
    *
    * The image URL to remix
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -49565,7 +49535,7 @@ export type RecraftV3ImageToImageInput = {
    *
    * The URL of the image to modify. Must be less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength
    *
@@ -49703,7 +49673,7 @@ export type EvfSamInput = {
    *
    * URL of the input image
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -49727,7 +49697,7 @@ export type KlingV15KolorsVirtualTryOnInput = {
    *
    * Url to the garment image.
    */
-  garment_image_url: string;
+  garment_image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -49739,7 +49709,7 @@ export type KlingV15KolorsVirtualTryOnInput = {
    *
    * Url for the human image.
    */
-  human_image_url: string;
+  human_image_url: string | Blob | File;
 };
 
 /**
@@ -49788,7 +49758,7 @@ export type Sam2ImageInput = {
    *
    * URL of the image to be segmented
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -50039,13 +50009,13 @@ export type FluxGeneralInpaintingInput = {
    * The mask to area to Inpaint in.
    *
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Image Url
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * NAG scale
    *
@@ -50060,7 +50030,7 @@ export type FluxGeneralInpaintingInput = {
    *
    * URL of Image for Reference-Only
    */
-  reference_image_url?: string;
+  reference_image_url?: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -50194,7 +50164,7 @@ export type ImagePreprocessorsDepthAnythingV2Input = {
    *
    * URL of the image to process
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -50388,7 +50358,7 @@ export type ImageAppsV2OutpaintInput = {
    *
    * Image URL to outpaint
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -50486,7 +50456,7 @@ export type IdeogramCharacterEditInput = {
    *
    * The image URL to generate an image from. MUST have the exact same dimensions (width and height) as the mask image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Reference Image Urls
    *
@@ -50510,7 +50480,7 @@ export type IdeogramCharacterEditInput = {
    *
    * The mask URL to inpaint the image. MUST have the exact same dimensions (width and height) as the input image.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Style Codes
    *
@@ -50699,7 +50669,7 @@ export type FluxGeneralImageToImageInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * NAG scale
    *
@@ -50714,7 +50684,7 @@ export type FluxGeneralImageToImageInput = {
    *
    * URL of Image for Reference-Only
    */
-  reference_image_url?: string;
+  reference_image_url?: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -51526,7 +51496,7 @@ export type KlingImageV3ImageToImageInput = {
    *
    * Reference image for image-to-image generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -51583,7 +51553,7 @@ export type CreativeUpscalerInput = {
    *
    * The URL to the additional embeddings to use for the upscaling. Default is None
    */
-  additional_embedding_url?: string;
+  additional_embedding_url?: string | Blob | File;
   /**
    * Enable Safety Checks
    *
@@ -51599,7 +51569,7 @@ export type CreativeUpscalerInput = {
    *
    * The URL to the additional LORA model to use for the upscaling. Default is None
    */
-  additional_lora_url?: string;
+  additional_lora_url?: string | Blob | File;
   /**
    * Guidance scale (CFG)
    *
@@ -51651,13 +51621,13 @@ export type CreativeUpscalerInput = {
    *
    * The URL to the base model to use for the upscaling
    */
-  base_model_url?: string;
+  base_model_url?: string | Blob | File;
   /**
    * Image Url
    *
    * The image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Creativity
    *
@@ -51740,13 +51710,13 @@ export type BriaEraserInput = {
    *
    * The URL of the binary mask image that represents the area that will be cleaned.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Image Url
    *
    * Input Image to erase from
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -52080,7 +52050,7 @@ export type IdeogramV3ReframeInput = {
    *
    * The image URL to reframe
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -52167,7 +52137,7 @@ export type BriaExpandInput = {
    *
    * The URL of the input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -52235,7 +52205,7 @@ export type BackgroundRemovalInput = {
    *
    * Input image (JPEG or PNG)
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -52387,7 +52357,7 @@ export type QwenImageLayeredInput = {
    *
    * The URL of the input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -52515,7 +52485,7 @@ export type QwenImageEditInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -52688,7 +52658,7 @@ export type RecraftVectorizeInput = {
    *
    * The URL of the image to be vectorized. Must be in PNG, JPG or WEBP format, less than 5 MB in size, have resolution less than 16 MP and max dimension less than 4096 pixels, min dimension more than 256 pixels.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -52871,7 +52841,7 @@ export type FluxKontextLoraInput = {
    *
    * Max width: 14142px, Max height: 14142px, Timeout: 20s
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -52967,7 +52937,7 @@ export type SeedvrUpscaleImageSeamlessInput = {
    *
    * The input image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -53013,7 +52983,7 @@ export type FfmpegApiExtractFrameInput = {
    *
    * URL of the video file to use as the video track
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Frame Type
    *
@@ -53107,7 +53077,7 @@ export type ZImageTurboImageToImageInput = {
    *
    * URL of Image for Image-to-Image generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -53355,7 +53325,7 @@ export type FluxLoraImageToImageInput = {
    *
    * URL of image to use for inpainting. or img2img
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -53545,7 +53515,7 @@ export type AuraSrInput = {
    *
    * URL of the image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -54072,7 +54042,7 @@ export type FluxPulidInput = {
    *
    * URL of image to use for inpainting.
    */
-  reference_image_url: string;
+  reference_image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -54335,7 +54305,7 @@ export type FluxKontextDevInput = {
    *
    * The URL of the image to edit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -54408,7 +54378,7 @@ export type RecraftUpscaleCrispInput = {
    *
    * The URL of the image to be upscaled. Must be in PNG format.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -54477,7 +54447,7 @@ export type FluxProV1FillInput = {
    *
    * The image URL to generate an image from. Needs to match the dimensions of the mask.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -54504,7 +54474,7 @@ export type FluxProV1FillInput = {
    *
    * The mask URL to inpaint the image. Needs to match the dimensions of the input image.
    */
-  mask_url: string;
+  mask_url: string | Blob | File;
   /**
    * Enhance Prompt
    *
@@ -54672,7 +54642,7 @@ export type Sam3ImageInput = {
    *
    * URL of the image to be segmented
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -54960,7 +54930,7 @@ export type ImageutilsRembgInput = {
    *
    * Input image url.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Crop To Bbox
    *
@@ -55097,7 +55067,7 @@ export type FluxProKontextMaxInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -55306,7 +55276,7 @@ export type ClarityUpscalerInput = {
    *
    * The URL of the image to upscale.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Creativity
    *
@@ -55392,7 +55362,7 @@ export type BirefnetInput = {
    *
    * URL of the image to remove background from
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Model
    *
@@ -55482,7 +55452,7 @@ export type EsrganInput = {
    *
    * Url to input image
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -55647,7 +55617,7 @@ export type FluxDevImageToImageInput = {
    *
    * The URL of the image to generate an image from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -55800,7 +55770,7 @@ export type TopazUpscaleImageInput = {
    *
    * Url of the image to be upscaled
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Autoprompt
    *
@@ -55853,7 +55823,7 @@ export type BirefnetV2Input = {
    *
    * URL of the image to remove background from
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Model
    *
@@ -56013,7 +55983,7 @@ export type BriaBackgroundRemoveInput = {
    *
    * Input Image to erase from
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -56239,7 +56209,7 @@ export type SeedvrUpscaleImageInput = {
    *
    * The input image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -56422,7 +56392,7 @@ export type FluxProKontextInput = {
    *
    * Image prompt for the omni model.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *

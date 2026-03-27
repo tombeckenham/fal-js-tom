@@ -59,7 +59,7 @@ export type WanTrainerI2V720pInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -105,7 +105,7 @@ export type WanTrainerFlf2V720pInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -175,7 +175,7 @@ export type QwenImageEditPlusTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -239,7 +239,7 @@ export type QwenImageEdit2509TrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -275,7 +275,7 @@ export type PhotaCreateProfileInput = {
    *
    * URL to a ZIP archive containing the profile images.
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
 };
 
 /**
@@ -303,7 +303,7 @@ export type WanTrainerT2V14bInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -366,7 +366,7 @@ export type QwenImageEditTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -428,7 +428,7 @@ export type Flux2TrainerV2EditInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -476,7 +476,7 @@ export type HunyuanVideoLoraTrainingInput = {
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
    *
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Steps
    *
@@ -528,7 +528,7 @@ export type WanTrainerT2vInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -598,7 +598,7 @@ export type QwenImageLayeredTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -677,7 +677,7 @@ export type LtxVideoTrainerInput = {
    *
    * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Split Input Duration Threshold
    *
@@ -789,7 +789,7 @@ export type FluxKreaTrainerInput = {
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
    *
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Is Input Format Already Preprocessed
    *
@@ -867,7 +867,7 @@ export type QwenImage2512TrainerInput = {
    * If no default_caption is provided and a text file is missing, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -907,7 +907,7 @@ export type WanTrainerInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -965,7 +965,7 @@ export type QwenImageTrainerV2Input = {
    * If no default_caption is provided and a text file is missing, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1027,7 +1027,7 @@ export type Flux2TrainerEditInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1069,7 +1069,7 @@ export type RecraftV3CreateStyleInput = {
    *
    * URL to zip archive with images, use PNG format. Maximum 5 images are allowed.
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Base Style
    *
@@ -1188,7 +1188,7 @@ export type Wan22TrainerT2vA14bInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -1234,7 +1234,7 @@ export type Wan22TrainerI2vA14bInput = {
    *
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Trigger Phrase
    *
@@ -1293,7 +1293,7 @@ export type Flux2Klein4bBaseTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1347,7 +1347,7 @@ export type QwenImage2512TrainerV2Input = {
    * If no text file is provided for an image, the default_caption will be used.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1409,7 +1409,7 @@ export type Flux2Klein4bBaseTrainerEditInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1479,7 +1479,7 @@ export type QwenImageEdit2511TrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1523,7 +1523,7 @@ export type QwenImageTrainerInput = {
    * Try to use at least 10 images, although more is better.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1571,7 +1571,7 @@ export type ZImageBaseTrainerInput = {
    * If no text file is provided for an image, the default_caption will be used.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1664,7 +1664,7 @@ export type Ltx2VideoTrainerInput = {
    *
    * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Debug Dataset
    *
@@ -1811,7 +1811,7 @@ export type FluxKontextTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    */
@@ -1868,7 +1868,7 @@ export type Flux2TrainerV2Input = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1936,7 +1936,7 @@ export type Flux2Klein9bBaseTrainerEditInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -1999,7 +1999,7 @@ export type Wan22ImageTrainerInput = {
    *
    * URL to the training data.
    */
-  training_data_url: string;
+  training_data_url: string | Blob | File;
   /**
    * Number of Steps
    *
@@ -2064,7 +2064,7 @@ export type Flux2Klein9bBaseTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -2104,7 +2104,7 @@ export type TurboFluxTrainerInput = {
    * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
    *
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Steps
    *
@@ -2175,7 +2175,7 @@ export type ZImageTrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Training Type
    *
@@ -2229,7 +2229,7 @@ export type ZImageTurboTrainerV2Input = {
    * If no text file is provided for an image, the default_caption will be used.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -2280,7 +2280,7 @@ export type Flux2TrainerInput = {
    * If no default_caption is provided, the training will fail.
    *
    */
-  image_data_url: string;
+  image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
@@ -2324,7 +2324,7 @@ export type FluxLoraPortraitTrainerInput = {
    * The captions can include a special string `[trigger]`. If a trigger_word is specified, it will replace `[trigger]` in the captions.
    *
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Multiresolution Training
    *
@@ -2402,7 +2402,7 @@ export type FluxLoraFastTrainingInput = {
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
    *
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Is Input Format Already Preprocessed
    *

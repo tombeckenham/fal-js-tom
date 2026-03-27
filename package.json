@@ -10,7 +10,7 @@
     "docs:typedoc": "typedoc --tsconfig libs/client/tsconfig.lib.json",
     "prepare": "husky install",
     "fetch-openapi-models": "npx tsx --env-file=.env.local scripts/fetch-openapi-models.ts",
-    "generate-types": "npx @hey-api/openapi-ts",
+    "generate-types": "npx @hey-api/openapi-ts --file openapi-ts.config.ts",
     "generate-endpoint-maps": "npx tsx scripts/generate-endpoint-maps.ts",
     "update-types": "npm run fetch-openapi-models && npm run generate-types && npm run generate-endpoint-maps"
   },

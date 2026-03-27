@@ -6,9 +6,9 @@ import * as z from "zod";
  * File
  */
 export const zFile = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
@@ -26,11 +26,11 @@ export const zSamAudioVisualSeparateOutput = z
       description: "Duration of the output audio in seconds.",
     }),
     sample_rate: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description: "Sample rate of the output audio in Hz.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description: "Sample rate of the output audio in Hz.",
+      })
+      .optional()
       .default(48000),
     residual: zFile,
   })
@@ -46,48 +46,56 @@ export const zSamAudioVisualSeparateOutput = z
 export const zSamAudioVisualSeparateInput = z
   .object({
     prompt: z
-      .optional(
-        z.string().register(z.globalRegistry, {
-          description:
-            "Text prompt to assist with separation. Use natural language to describe the target sound.",
-        }),
-      )
+      .string()
+      .register(z.globalRegistry, {
+        description:
+          "Text prompt to assist with separation. Use natural language to describe the target sound.",
+      })
+      .optional()
       .default(""),
     video_url: z.union([z.string(), z.string()]),
-    acceleration: z.optional(
-      z.enum(["fast", "balanced", "quality"]).register(z.globalRegistry, {
+    acceleration: z
+      .enum(["fast", "balanced", "quality"])
+      .register(z.globalRegistry, {
         description: "The acceleration level to use.",
-      }),
-    ),
+      })
+      .optional(),
     chunk_overlap: z
-      .optional(
-        z.number().gte(0).lte(30).register(z.globalRegistry, {
-          description:
-            "Overlap duration (in seconds) between chunks for crossfade blending.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(30)
+      .register(z.globalRegistry, {
+        description:
+          "Overlap duration (in seconds) between chunks for crossfade blending.",
+      })
+      .optional()
       .default(5),
-    output_format: z.optional(
-      z.enum(["wav", "mp3"]).register(z.globalRegistry, {
+    output_format: z
+      .enum(["wav", "mp3"])
+      .register(z.globalRegistry, {
         description: "Output audio format.",
-      }),
-    ),
+      })
+      .optional(),
     max_chunk_duration: z
-      .optional(
-        z.number().gte(10).lte(60).register(z.globalRegistry, {
-          description:
-            "Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.",
-        }),
-      )
+      .number()
+      .gte(10)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description:
+          "Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.",
+      })
+      .optional()
       .default(60),
-    mask_video_url: z.optional(z.union([z.string(), z.unknown()])),
+    mask_video_url: z.union([z.string(), z.unknown()]).optional(),
     reranking_candidates: z
-      .optional(
-        z.int().gte(1).lte(4).register(z.globalRegistry, {
-          description:
-            "Number of candidates to generate and rank. Higher improves quality but increases latency and cost.",
-        }),
-      )
+      .int()
+      .gte(1)
+      .lte(4)
+      .register(z.globalRegistry, {
+        description:
+          "Number of candidates to generate and rank. Higher improves quality but increases latency and cost.",
+      })
+      .optional()
       .default(1),
   })
   .register(z.globalRegistry, {
@@ -98,9 +106,9 @@ export const zSamAudioVisualSeparateInput = z
  * Audio
  */
 export const zAudio = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
@@ -119,11 +127,11 @@ export const zSfxV1VideoToAudioOutput = z.object({
  * Input
  */
 export const zSfxV1VideoToAudioInput = z.object({
-  num_samples: z.optional(z.union([z.int().gte(2).lte(8), z.unknown()])),
+  num_samples: z.union([z.int().gte(2).lte(8), z.unknown()]).optional(),
   video_url: z.union([z.string(), z.string()]),
-  duration: z.optional(z.union([z.number().gte(1).lte(10), z.unknown()])),
-  seed: z.optional(z.union([z.int().gte(1), z.unknown()])),
-  text_prompt: z.optional(z.union([z.string(), z.unknown()])),
+  duration: z.union([z.number().gte(1).lte(10), z.unknown()]).optional(),
+  seed: z.union([z.int().gte(1), z.unknown()]).optional(),
+  text_prompt: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -138,28 +146,28 @@ export const zKlingVideoVideoToAudioOutput = z.object({
  * VideoToAudioInput
  */
 export const zKlingVideoVideoToAudioInput = z.object({
-  background_music_prompt: z.optional(
-    z.union([z.string().max(200), z.unknown()]),
-  ),
+  background_music_prompt: z
+    .union([z.string().max(200), z.unknown()])
+    .optional(),
   asmr_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Enable ASMR mode. This mode enhances detailed sound effects and is suitable for highly immersive content scenarios.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable ASMR mode. This mode enhances detailed sound effects and is suitable for highly immersive content scenarios.",
+    })
+    .optional()
     .default(false),
   video_url: z.union([z.string(), z.string()]),
-  sound_effect_prompt: z.optional(z.union([z.string().max(200), z.unknown()])),
+  sound_effect_prompt: z.union([z.string().max(200), z.unknown()]).optional(),
 });
 
 /**
  * Audio
  */
 export const zAudioOutput = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
@@ -178,12 +186,12 @@ export const zSfxV15VideoToAudioOutput = z.object({
  * Input
  */
 export const zSfxV15VideoToAudioInput = z.object({
-  num_samples: z.optional(z.union([z.int().gte(2).lte(8), z.unknown()])),
-  duration: z.optional(z.union([z.number().gte(1).lte(10), z.unknown()])),
-  start_offset: z.optional(z.union([z.number().gte(0), z.unknown()])),
+  num_samples: z.union([z.int().gte(2).lte(8), z.unknown()]).optional(),
+  duration: z.union([z.number().gte(1).lte(10), z.unknown()]).optional(),
+  start_offset: z.union([z.number().gte(0), z.unknown()]).optional(),
   video_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int().gte(1), z.unknown()])),
-  text_prompt: z.optional(z.union([z.string(), z.unknown()])),
+  seed: z.union([z.int().gte(1), z.unknown()]).optional(),
+  text_prompt: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -217,36 +225,42 @@ export const zSoundEffectGenerationInput = z
       description: "Describe the sound effect you want to generate",
     }),
     duration: z
-      .optional(
-        z.number().gte(1).lte(35).register(z.globalRegistry, {
-          description: "Length of the generated sound effect in seconds",
-        }),
-      )
+      .number()
+      .gte(1)
+      .lte(35)
+      .register(z.globalRegistry, {
+        description: "Length of the generated sound effect in seconds",
+      })
+      .optional()
       .default(5),
     refinement: z
-      .optional(
-        z.int().gte(10).lte(200).register(z.globalRegistry, {
-          description:
-            "Refinement level - Higher values may improve quality but take longer",
-        }),
-      )
+      .int()
+      .gte(10)
+      .lte(200)
+      .register(z.globalRegistry, {
+        description:
+          "Refinement level - Higher values may improve quality but take longer",
+      })
+      .optional()
       .default(40),
-    seed: z.optional(z.union([z.int().gte(0).lte(2147483647), z.unknown()])),
+    seed: z.union([z.int().gte(0).lte(2147483647), z.unknown()]).optional(),
     negative_prompt: z
-      .optional(
-        z.string().register(z.globalRegistry, {
-          description:
-            "Describe the types of sounds you don't want to generate in the output, avoid double-negatives, compare with positive prompts",
-        }),
-      )
+      .string()
+      .register(z.globalRegistry, {
+        description:
+          "Describe the types of sounds you don't want to generate in the output, avoid double-negatives, compare with positive prompts",
+      })
+      .optional()
       .default(""),
     creativity: z
-      .optional(
-        z.number().gte(1).lte(20).register(z.globalRegistry, {
-          description:
-            "Creativity level - higher values allow more creative interpretation of the prompt",
-        }),
-      )
+      .number()
+      .gte(1)
+      .lte(20)
+      .register(z.globalRegistry, {
+        description:
+          "Creativity level - higher values allow more creative interpretation of the prompt",
+      })
+      .optional()
       .default(16),
   })
   .register(z.globalRegistry, {
@@ -285,36 +299,42 @@ export const zMusicGenerationInput = z
       description: "Describe the music you want to generate",
     }),
     duration: z
-      .optional(
-        z.number().gte(5).lte(150).register(z.globalRegistry, {
-          description: "Length of the generated music in seconds",
-        }),
-      )
+      .number()
+      .gte(5)
+      .lte(150)
+      .register(z.globalRegistry, {
+        description: "Length of the generated music in seconds",
+      })
+      .optional()
       .default(90),
     refinement: z
-      .optional(
-        z.int().gte(10).lte(200).register(z.globalRegistry, {
-          description:
-            "Refinement level - higher values may improve quality but take longer",
-        }),
-      )
+      .int()
+      .gte(10)
+      .lte(200)
+      .register(z.globalRegistry, {
+        description:
+          "Refinement level - higher values may improve quality but take longer",
+      })
+      .optional()
       .default(100),
-    seed: z.optional(z.union([z.int().gte(0).lte(2147483647), z.unknown()])),
+    seed: z.union([z.int().gte(0).lte(2147483647), z.unknown()]).optional(),
     negative_prompt: z
-      .optional(
-        z.string().register(z.globalRegistry, {
-          description:
-            "Describe what you want to avoid in the music (instruments, styles, moods). Leave blank for none.",
-        }),
-      )
+      .string()
+      .register(z.globalRegistry, {
+        description:
+          "Describe what you want to avoid in the music (instruments, styles, moods). Leave blank for none.",
+      })
+      .optional()
       .default(""),
     creativity: z
-      .optional(
-        z.number().gte(1).lte(20).register(z.globalRegistry, {
-          description:
-            "Creativity level - higher values allow more creative interpretation of the prompt",
-        }),
-      )
+      .number()
+      .gte(1)
+      .lte(20)
+      .register(z.globalRegistry, {
+        description:
+          "Creativity level - higher values allow more creative interpretation of the prompt",
+      })
+      .optional()
       .default(16),
   })
   .register(z.globalRegistry, {
@@ -334,11 +354,13 @@ export const zKokoroItalianOutput = z.object({
  */
 export const zKokoroItalianInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z.enum(["if_sara", "im_nicola"]).register(z.globalRegistry, {
     description: "Voice ID for the desired voice.",
@@ -358,11 +380,13 @@ export const zKokoroMandarinChineseOutput = z.object({
  */
 export const zKokoroMandarinChineseInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z
     .enum([
@@ -397,38 +421,43 @@ export const zDiffrhythmInput = z.object({
       "The prompt to generate the song from. Must have two sections. Sections start with either [chorus] or a [verse].",
   }),
   cfg_strength: z
-    .optional(
-      z.number().gte(1).lte(10).register(z.globalRegistry, {
-        description: "The CFG strength to use for the music generation.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "The CFG strength to use for the music generation.",
+    })
+    .optional()
     .default(4),
-  reference_audio_url: z.optional(z.union([z.string(), z.string()])),
-  music_duration: z.optional(
-    z.enum(["95s", "285s"]).register(z.globalRegistry, {
+  reference_audio_url: z.union([z.string(), z.string()]).optional(),
+  music_duration: z
+    .enum(["95s", "285s"])
+    .register(z.globalRegistry, {
       description: "The duration of the music to generate.",
-    }),
-  ),
-  scheduler: z.optional(
-    z
-      .enum(["euler", "midpoint", "rk4", "implicit_adams"])
-      .register(z.globalRegistry, {
-        description: "The scheduler to use for the music generation.",
-      }),
-  ),
+    })
+    .optional(),
+  scheduler: z
+    .enum(["euler", "midpoint", "rk4", "implicit_adams"])
+    .register(z.globalRegistry, {
+      description: "The scheduler to use for the music generation.",
+    })
+    .optional(),
   num_inference_steps: z
-    .optional(
-      z.int().gte(10).lte(100).register(z.globalRegistry, {
-        description:
-          "The number of inference steps to use for the music generation.",
-      }),
-    )
+    .int()
+    .gte(10)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description:
+        "The number of inference steps to use for the music generation.",
+    })
+    .optional()
     .default(32),
-  style_prompt: z.optional(
-    z.string().register(z.globalRegistry, {
+  style_prompt: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The style prompt to use for the music generation.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -462,11 +491,12 @@ export const zCsm1bInput = z.object({
   scene: z.array(zTurn).register(z.globalRegistry, {
     description: "The text to generate an audio from.",
   }),
-  context: z.optional(
-    z.array(zSpeaker).register(z.globalRegistry, {
+  context: z
+    .array(zSpeaker)
+    .register(z.globalRegistry, {
       description: "The context to generate an audio from.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -481,11 +511,13 @@ export const zKokoroBrazilianPortugueseOutput = z.object({
  */
 export const zKokoroBrazilianPortugueseInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z.enum(["pf_dora", "pm_alex", "pm_santa"]).register(z.globalRegistry, {
     description: "Voice ID for the desired voice.",
@@ -526,91 +558,102 @@ export const zV2InpaintInput = z.object({
     description:
       "The lyrics sung in the generated song. An empty string will generate an instrumental track.",
   }),
-  tags: z.optional(
-    z.array(z.string()).register(z.globalRegistry, {
+  tags: z
+    .array(z.string())
+    .register(z.globalRegistry, {
       description:
         "Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.",
-    }),
-  ),
+    })
+    .optional(),
   prompt_strength: z
-    .optional(
-      z.number().gte(1.4).lte(3.1).register(z.globalRegistry, {
-        description:
-          "Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
-      }),
-    )
+    .number()
+    .gte(1.4)
+    .lte(3.1)
+    .register(z.globalRegistry, {
+      description:
+        "Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
+    })
+    .optional()
     .default(2),
-  output_bit_rate: z.optional(
-    z.union([
+  output_bit_rate: z
+    .union([
       z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
   num_songs: z
-    .optional(
-      z.int().gte(1).lte(2).register(z.globalRegistry, {
-        description:
-          "Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
+    })
+    .optional()
     .default(1),
-  output_format: z.optional(z.enum(["flac", "mp3", "wav", "ogg", "m4a"])),
+  output_format: z.enum(["flac", "mp3", "wav", "ogg", "m4a"]).optional(),
   selection_crop: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Crop to the selected region",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Crop to the selected region",
+    })
+    .optional()
     .default(false),
   sections: z.array(zInpaintSection).register(z.globalRegistry, {
     description:
       "List of sections to inpaint. Currently, only one section is supported so the list length must be 1.",
   }),
   balance_strength: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
+    })
+    .optional()
     .default(0.7),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(
-    z.union([
+  seed: z
+    .union([
       z.int().gte(-9223372036854776000).lte(9223372036854776000),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
 });
 
 /**
  * File
  */
 export const zFileType2 = z.object({
-  file_size: z.optional(
-    z.int().register(z.globalRegistry, {
+  file_size: z
+    .int()
+    .register(z.globalRegistry, {
       description: "The size of the file in bytes.",
-    }),
-  ),
-  file_name: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  file_name: z
+    .string()
+    .register(z.globalRegistry, {
       description:
         "The name of the file. It will be auto-generated if not provided.",
-    }),
-  ),
-  content_type: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  content_type: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The mime type of the file.",
-    }),
-  ),
+    })
+    .optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
-  file_data: z.optional(
-    z.string().register(z.globalRegistry, {
+  file_data: z
+    .string()
+    .register(z.globalRegistry, {
       description: "File data",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 /**
@@ -642,11 +685,13 @@ export const zKokoroJapaneseOutput = z.object({
  */
 export const zKokoroJapaneseInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z
     .enum(["jf_alpha", "jf_gongitsune", "jf_nezumi", "jf_tebukuro", "jm_kumo"])
@@ -668,11 +713,13 @@ export const zKokoroHindiOutput = z.object({
  */
 export const zKokoroHindiInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z
     .enum(["hf_alpha", "hf_beta", "hm_omega", "hm_psi"])
@@ -715,11 +762,13 @@ export const zKokoroSpanishOutput = z.object({
  */
 export const zKokoroSpanishInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z.enum(["ef_dora", "em_alex", "em_santa"]).register(z.globalRegistry, {
     description: "Voice ID for the desired voice.",
@@ -739,11 +788,13 @@ export const zKokoroFrenchOutput = z.object({
  */
 export const zKokoroFrenchInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z.string().register(z.globalRegistry, {
     description: "Voice ID for the desired voice.",
@@ -763,11 +814,13 @@ export const zKokoroBritishEnglishOutput = z.object({
  */
 export const zKokoroBritishEnglishInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
   voice: z
     .enum([
@@ -797,37 +850,36 @@ export const zMinimaxMusicV15Output = z.object({
  * AudioSetting
  */
 export const zAudioSetting = z.object({
-  format: z.optional(
-    z.enum(["mp3", "pcm", "flac"]).register(z.globalRegistry, {
+  format: z
+    .enum(["mp3", "pcm", "flac"])
+    .register(z.globalRegistry, {
       description: "Audio format",
-    }),
-  ),
-  sample_rate: z.optional(
-    z
-      .union([
-        z.literal(8000),
-        z.literal(16000),
-        z.literal(22050),
-        z.literal(24000),
-        z.literal(32000),
-        z.literal(44100),
-      ])
-      .register(z.globalRegistry, {
-        description: "Sample rate of generated audio",
-      }),
-  ),
-  bitrate: z.optional(
-    z
-      .union([
-        z.literal(32000),
-        z.literal(64000),
-        z.literal(128000),
-        z.literal(256000),
-      ])
-      .register(z.globalRegistry, {
-        description: "Bitrate of generated audio",
-      }),
-  ),
+    })
+    .optional(),
+  sample_rate: z
+    .union([
+      z.literal(8000),
+      z.literal(16000),
+      z.literal(22050),
+      z.literal(24000),
+      z.literal(32000),
+      z.literal(44100),
+    ])
+    .register(z.globalRegistry, {
+      description: "Sample rate of generated audio",
+    })
+    .optional(),
+  bitrate: z
+    .union([
+      z.literal(32000),
+      z.literal(64000),
+      z.literal(128000),
+      z.literal(256000),
+    ])
+    .register(z.globalRegistry, {
+      description: "Bitrate of generated audio",
+    })
+    .optional(),
 });
 
 /**
@@ -841,7 +893,7 @@ export const zMinimaxMusicV15Input = z.object({
   lyrics_prompt: z.string().min(10).max(3000).register(z.globalRegistry, {
     description: "Control music generation. 10-3000 characters.",
   }),
-  audio_setting: z.optional(zAudioSetting),
+  audio_setting: zAudioSetting.optional(),
 });
 
 /**
@@ -883,94 +935,112 @@ export const zAceStepPromptToAudioOutput = z.object({
  */
 export const zAceStepPromptToAudioInput = z.object({
   number_of_steps: z
-    .optional(
-      z.int().gte(3).lte(60).register(z.globalRegistry, {
-        description: "Number of steps to generate the audio.",
-      }),
-    )
+    .int()
+    .gte(3)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description: "Number of steps to generate the audio.",
+    })
+    .optional()
     .default(27),
   duration: z
-    .optional(
-      z.number().gte(5).lte(240).register(z.globalRegistry, {
-        description: "The duration of the generated audio in seconds.",
-      }),
-    )
+    .number()
+    .gte(5)
+    .lte(240)
+    .register(z.globalRegistry, {
+      description: "The duration of the generated audio in seconds.",
+    })
+    .optional()
     .default(60),
   prompt: z.string().register(z.globalRegistry, {
     description:
       "Prompt to control the style of the generated audio. This will be used to generate tags and lyrics.",
   }),
   minimum_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description:
-          "Minimum guidance scale for the generation after the decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Minimum guidance scale for the generation after the decay.",
+    })
+    .optional()
     .default(3),
   tag_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Tag guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Tag guidance scale for the generation.",
+    })
+    .optional()
     .default(5),
-  scheduler: z.optional(
-    z.enum(["euler", "heun"]).register(z.globalRegistry, {
+  scheduler: z
+    .enum(["euler", "heun"])
+    .register(z.globalRegistry, {
       description: "Scheduler to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description: "Guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the generation.",
+    })
+    .optional()
     .default(15),
-  guidance_type: z.optional(
-    z.enum(["cfg", "apg", "cfg_star"]).register(z.globalRegistry, {
+  guidance_type: z
+    .enum(["cfg", "apg", "cfg_star"])
+    .register(z.globalRegistry, {
       description: "Type of CFG to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   instrumental: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Whether to generate an instrumental version of the audio.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to generate an instrumental version of the audio.",
+    })
+    .optional()
     .default(false),
   lyric_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Lyric guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Lyric guidance scale for the generation.",
+    })
+    .optional()
     .default(1.5),
   guidance_interval: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
+    })
+    .optional()
     .default(0.5),
   guidance_interval_decay: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
+    })
+    .optional()
     .default(0),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   granularity_scale: z
-    .optional(
-      z.int().gte(-100).lte(100).register(z.globalRegistry, {
-        description:
-          "Granularity scale for the generation process. Higher values can reduce artifacts.",
-      }),
-    )
+    .int()
+    .gte(-100)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description:
+        "Granularity scale for the generation process. Higher values can reduce artifacts.",
+    })
+    .optional()
     .default(10),
 });
 
@@ -995,94 +1065,113 @@ export const zAceStepOutput = z.object({
  */
 export const zAceStepInput = z.object({
   number_of_steps: z
-    .optional(
-      z.int().gte(3).lte(60).register(z.globalRegistry, {
-        description: "Number of steps to generate the audio.",
-      }),
-    )
+    .int()
+    .gte(3)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description: "Number of steps to generate the audio.",
+    })
+    .optional()
     .default(27),
   duration: z
-    .optional(
-      z.number().gte(5).lte(240).register(z.globalRegistry, {
-        description: "The duration of the generated audio in seconds.",
-      }),
-    )
+    .number()
+    .gte(5)
+    .lte(240)
+    .register(z.globalRegistry, {
+      description: "The duration of the generated audio in seconds.",
+    })
+    .optional()
     .default(60),
   tags: z.string().register(z.globalRegistry, {
     description:
       "Comma-separated list of genre tags to control the style of the generated audio.",
   }),
   minimum_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description:
-          "Minimum guidance scale for the generation after the decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Minimum guidance scale for the generation after the decay.",
+    })
+    .optional()
     .default(3),
   lyrics: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
+    })
+    .optional()
     .default(""),
   tag_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Tag guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Tag guidance scale for the generation.",
+    })
+    .optional()
     .default(5),
-  scheduler: z.optional(
-    z.enum(["euler", "heun"]).register(z.globalRegistry, {
+  scheduler: z
+    .enum(["euler", "heun"])
+    .register(z.globalRegistry, {
       description: "Scheduler to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description: "Guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the generation.",
+    })
+    .optional()
     .default(15),
-  guidance_type: z.optional(
-    z.enum(["cfg", "apg", "cfg_star"]).register(z.globalRegistry, {
+  guidance_type: z
+    .enum(["cfg", "apg", "cfg_star"])
+    .register(z.globalRegistry, {
       description: "Type of CFG to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   lyric_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Lyric guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Lyric guidance scale for the generation.",
+    })
+    .optional()
     .default(1.5),
   guidance_interval: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
+    })
+    .optional()
     .default(0.5),
   guidance_interval_decay: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
+    })
+    .optional()
     .default(0),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   granularity_scale: z
-    .optional(
-      z.int().gte(-100).lte(100).register(z.globalRegistry, {
-        description:
-          "Granularity scale for the generation process. Higher values can reduce artifacts.",
-      }),
-    )
+    .int()
+    .gte(-100)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description:
+        "Granularity scale for the generation process. Higher values can reduce artifacts.",
+    })
+    .optional()
     .default(10),
 });
 
@@ -1127,40 +1216,46 @@ export const zMmaudioV2TextToAudioInput = z.object({
     description: "The prompt to generate the audio for.",
   }),
   num_steps: z
-    .optional(
-      z.int().gte(4).lte(50).register(z.globalRegistry, {
-        description: "The number of steps to generate the audio for.",
-      }),
-    )
+    .int()
+    .gte(4)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "The number of steps to generate the audio for.",
+    })
+    .optional()
     .default(25),
   duration: z
-    .optional(
-      z.number().gte(1).lte(30).register(z.globalRegistry, {
-        description: "The duration of the audio to generate.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(30)
+    .register(z.globalRegistry, {
+      description: "The duration of the audio to generate.",
+    })
+    .optional()
     .default(8),
   cfg_strength: z
-    .optional(
-      z.number().gte(0).lte(20).register(z.globalRegistry, {
-        description: "The strength of Classifier Free Guidance.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "The strength of Classifier Free Guidance.",
+    })
+    .optional()
     .default(4.5),
-  seed: z.optional(z.union([z.int().gte(0).lte(65535), z.unknown()])),
+  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
   mask_away_clip: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to mask away the clip.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to mask away the clip.",
+    })
+    .optional()
     .default(false),
   negative_prompt: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "The negative prompt to generate the audio for.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "The negative prompt to generate the audio for.",
+    })
+    .optional()
     .default(""),
 });
 
@@ -1168,11 +1263,12 @@ export const zMmaudioV2TextToAudioInput = z.object({
  * AudioFile
  */
 export const zAudioFileType3 = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
   file_name: z
-    .optional(z.string())
+    .string()
+    .optional()
     .default("8535dd59e911496a947daa35c07e67a3_tmplkcy6tut.wav"),
-  content_type: z.optional(z.string()).default("audio/wav"),
+  content_type: z.string().optional().default("audio/wav"),
   url: z.string(),
 });
 
@@ -1188,19 +1284,19 @@ export const zF5TtsOutput = z.object({
  */
 export const zF5TtsInput = z.object({
   ref_text: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.",
+    })
+    .optional()
     .default(""),
   remove_silence: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to remove the silence from the audio file.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to remove the silence from the audio file.",
+    })
+    .optional()
     .default(true),
   gen_text: z.string().register(z.globalRegistry, {
     description: "The text to be converted to speech.",
@@ -1288,64 +1384,63 @@ export const zGeminiTtsInput = z
       description:
         "The text to convert to speech. Gemini TTS supports natural-language prompting for style, pace, accent, and emotional expression — include delivery instructions inline with the text (e.g. 'Say cheerfully: Have a wonderful day!'). For multi-speaker synthesis, prefix lines with speaker aliases defined in the speakers field (e.g. 'Alice: Hello!\\nBob: Hi!'). Supports inline pace/style markers like [slowly], [whispering], [excited], [extremely fast].",
     }),
-    speakers: z.optional(
-      z.union([z.array(zSpeakerConfig).min(2).max(10), z.unknown()]),
-    ),
-    output_format: z.optional(
-      z.enum(["wav", "mp3", "ogg_opus"]).register(z.globalRegistry, {
+    speakers: z
+      .union([z.array(zSpeakerConfig).min(2).max(10), z.unknown()])
+      .optional(),
+    output_format: z
+      .enum(["wav", "mp3", "ogg_opus"])
+      .register(z.globalRegistry, {
         description:
           "Audio output format. mp3: compressed, small file size (recommended). wav: uncompressed PCM wrapped in WAV (24 kHz, 16-bit mono). ogg_opus: Ogg container with Opus codec, good quality-to-size ratio.",
-      }),
-    ),
-    model: z.optional(
-      z
-        .enum(["gemini-2.5-flash-tts", "gemini-2.5-pro-tts"])
-        .register(z.globalRegistry, {
-          description:
-            "Which Gemini TTS model to use. gemini-2.5-flash-tts: low latency, cost-efficient for everyday applications (recommended). gemini-2.5-pro-tts: highest quality, best for structured workflows like podcasts, audiobooks, and customer support.",
-        }),
-    ),
-    voice: z.optional(
-      z
-        .enum([
-          "Achernar",
-          "Achird",
-          "Algenib",
-          "Algieba",
-          "Alnilam",
-          "Aoede",
-          "Autonoe",
-          "Callirrhoe",
-          "Charon",
-          "Despina",
-          "Enceladus",
-          "Erinome",
-          "Fenrir",
-          "Gacrux",
-          "Iapetus",
-          "Kore",
-          "Laomedeia",
-          "Leda",
-          "Orus",
-          "Pulcherrima",
-          "Puck",
-          "Rasalgethi",
-          "Sadachbia",
-          "Sadaltager",
-          "Schedar",
-          "Sulafat",
-          "Umbriel",
-          "Vindemiatrix",
-          "Zephyr",
-          "Zubenelgenubi",
-        ])
-        .register(z.globalRegistry, {
-          description:
-            "Voice preset for single-speaker synthesis. 30 distinct voices are available. Ignored when speakers is set. Popular choices: Kore (strong, firm female), Puck (upbeat, lively male), Charon (calm, professional male), Zephyr (bright, clear female), Aoede (warm, melodic female).",
-        }),
-    ),
-    language_code: z.optional(
-      z.union([
+      })
+      .optional(),
+    model: z
+      .enum(["gemini-2.5-flash-tts", "gemini-2.5-pro-tts"])
+      .register(z.globalRegistry, {
+        description:
+          "Which Gemini TTS model to use. gemini-2.5-flash-tts: low latency, cost-efficient for everyday applications (recommended). gemini-2.5-pro-tts: highest quality, best for structured workflows like podcasts, audiobooks, and customer support.",
+      })
+      .optional(),
+    voice: z
+      .enum([
+        "Achernar",
+        "Achird",
+        "Algenib",
+        "Algieba",
+        "Alnilam",
+        "Aoede",
+        "Autonoe",
+        "Callirrhoe",
+        "Charon",
+        "Despina",
+        "Enceladus",
+        "Erinome",
+        "Fenrir",
+        "Gacrux",
+        "Iapetus",
+        "Kore",
+        "Laomedeia",
+        "Leda",
+        "Orus",
+        "Pulcherrima",
+        "Puck",
+        "Rasalgethi",
+        "Sadachbia",
+        "Sadaltager",
+        "Schedar",
+        "Sulafat",
+        "Umbriel",
+        "Vindemiatrix",
+        "Zephyr",
+        "Zubenelgenubi",
+      ])
+      .register(z.globalRegistry, {
+        description:
+          "Voice preset for single-speaker synthesis. 30 distinct voices are available. Ignored when speakers is set. Popular choices: Kore (strong, firm female), Puck (upbeat, lively male), Charon (calm, professional male), Zephyr (bright, clear female), Aoede (warm, melodic female).",
+      })
+      .optional(),
+    language_code: z
+      .union([
         z.enum([
           "Arabic (Egypt)",
           "Bangla (Bangladesh)",
@@ -1436,19 +1531,19 @@ export const zGeminiTtsInput = z
           "Urdu (Pakistan)",
         ]),
         z.unknown(),
-      ]),
-    ),
+      ])
+      .optional(),
     temperature: z
-      .optional(
-        z.number().gte(0).lte(2).register(z.globalRegistry, {
-          description:
-            "Controls the randomness of the speech output. Higher values produce more creative and varied delivery, while lower values make the output more predictable and focused.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Controls the randomness of the speech output. Higher values produce more creative and varied delivery, while lower values make the output more predictable and focused.",
+      })
+      .optional()
       .default(1),
-    style_instructions: z.optional(
-      z.union([z.string().max(4000), z.unknown()]),
-    ),
+    style_instructions: z.union([z.string().max(4000), z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
     description: "Input for Gemini text-to-speech generation.",
@@ -1472,35 +1567,41 @@ export const zStableAudio25TextToAudioInput = z.object({
     description: "The prompt to generate audio from",
   }),
   sync_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    })
+    .optional()
     .default(false),
   seconds_total: z
-    .optional(
-      z.int().gte(1).lte(190).register(z.globalRegistry, {
-        description: "The duration of the audio clip to generate",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(190)
+    .register(z.globalRegistry, {
+      description: "The duration of the audio clip to generate",
+    })
+    .optional()
     .default(190),
   num_inference_steps: z
-    .optional(
-      z.int().gte(4).lte(8).register(z.globalRegistry, {
-        description: "The number of steps to denoise the audio for",
-      }),
-    )
+    .int()
+    .gte(4)
+    .lte(8)
+    .register(z.globalRegistry, {
+      description: "The number of steps to denoise the audio for",
+    })
+    .optional()
     .default(8),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   guidance_scale: z
-    .optional(
-      z.number().gte(1).lte(25).register(z.globalRegistry, {
-        description:
-          "How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(25)
+    .register(z.globalRegistry, {
+      description:
+        "How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).",
+    })
+    .optional()
     .default(1),
 });
 
@@ -1518,14 +1619,13 @@ export const zLyria2Input = z.object({
   prompt: z.string().min(1).max(2000).register(z.globalRegistry, {
     description: "The text prompt describing the music you want to generate",
   }),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   negative_prompt: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "A description of what to exclude from the generated audio",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "A description of what to exclude from the generated audio",
+    })
+    .optional()
     .default("low quality"),
 });
 
@@ -1533,12 +1633,12 @@ export const zLyria2Input = z.object({
  * GenerateOutput
  */
 export const zV2TextToMusicOutput = z.object({
-  tags: z.optional(z.union([z.array(z.string()), z.unknown()])),
+  tags: z.union([z.array(z.string()), z.unknown()]).optional(),
   seed: z.int().register(z.globalRegistry, {
     description:
       "The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.",
   }),
-  lyrics: z.optional(z.union([z.string(), z.unknown()])),
+  lyrics: z.union([z.string(), z.unknown()]).optional(),
   audio: z.array(zFile).register(z.globalRegistry, {
     description: "The generated audio files.",
   }),
@@ -1548,47 +1648,53 @@ export const zV2TextToMusicOutput = z.object({
  * GenerateInput
  */
 export const zV2TextToMusicInput = z.object({
-  prompt: z.optional(z.union([z.string(), z.unknown()])),
-  lyrics_prompt: z.optional(z.union([z.string(), z.unknown()])),
-  tags: z.optional(z.union([z.array(z.string()), z.unknown()])),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  lyrics_prompt: z.union([z.string(), z.unknown()]).optional(),
+  tags: z.union([z.array(z.string()), z.unknown()]).optional(),
   prompt_strength: z
-    .optional(
-      z.number().gte(1.4).lte(3.1).register(z.globalRegistry, {
-        description:
-          "Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
-      }),
-    )
+    .number()
+    .gte(1.4)
+    .lte(3.1)
+    .register(z.globalRegistry, {
+      description:
+        "Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
+    })
+    .optional()
     .default(2),
-  output_bit_rate: z.optional(
-    z.union([
+  output_bit_rate: z
+    .union([
       z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
   num_songs: z
-    .optional(
-      z.int().gte(1).lte(2).register(z.globalRegistry, {
-        description:
-          "Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
+    })
+    .optional()
     .default(1),
-  output_format: z.optional(z.enum(["flac", "mp3", "wav", "ogg", "m4a"])),
-  bpm: z.optional(z.union([z.int(), z.string(), z.unknown()])),
+  output_format: z.enum(["flac", "mp3", "wav", "ogg", "m4a"]).optional(),
+  bpm: z.union([z.int(), z.string(), z.unknown()]).optional(),
   balance_strength: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
+    })
+    .optional()
     .default(0.7),
-  seed: z.optional(
-    z.union([
+  seed: z
+    .union([
       z.int().gte(-9223372036854776000).lte(9223372036854776000),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
 });
 
 /**
@@ -1603,49 +1709,50 @@ export const zKokoroAmericanEnglishOutput = z.object({
  */
 export const zKokoroAmericanEnglishInput = z.object({
   speed: z
-    .optional(
-      z.number().gte(0.1).lte(5).register(z.globalRegistry, {
-        description: "Speed of the generated audio. Default is 1.0.",
-      }),
-    )
+    .number()
+    .gte(0.1)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description: "Speed of the generated audio. Default is 1.0.",
+    })
+    .optional()
     .default(1),
-  voice: z.optional(
-    z
-      .enum([
-        "af_heart",
-        "af_alloy",
-        "af_aoede",
-        "af_bella",
-        "af_jessica",
-        "af_kore",
-        "af_nicole",
-        "af_nova",
-        "af_river",
-        "af_sarah",
-        "af_sky",
-        "am_adam",
-        "am_echo",
-        "am_eric",
-        "am_fenrir",
-        "am_liam",
-        "am_michael",
-        "am_onyx",
-        "am_puck",
-        "am_santa",
-      ])
-      .register(z.globalRegistry, {
-        description: "Voice ID for the desired voice.",
-      }),
-  ),
-  prompt: z.optional(z.string()).default(""),
+  voice: z
+    .enum([
+      "af_heart",
+      "af_alloy",
+      "af_aoede",
+      "af_bella",
+      "af_jessica",
+      "af_kore",
+      "af_nicole",
+      "af_nova",
+      "af_river",
+      "af_sarah",
+      "af_sky",
+      "am_adam",
+      "am_echo",
+      "am_eric",
+      "am_fenrir",
+      "am_liam",
+      "am_michael",
+      "am_onyx",
+      "am_puck",
+      "am_santa",
+    ])
+    .register(z.globalRegistry, {
+      description: "Voice ID for the desired voice.",
+    })
+    .optional(),
+  prompt: z.string().optional().default(""),
 });
 
 /**
  * PronunciationDictionaryLocator
  */
 export const zPronunciationDictionaryLocator = z.object({
-  version_id: z.optional(z.union([z.string(), z.unknown()])),
-  pronunciation_dictionary_id: z.optional(z.union([z.string(), z.unknown()])),
+  version_id: z.union([z.string(), z.unknown()]).optional(),
+  pronunciation_dictionary_id: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -1675,21 +1782,21 @@ export const zElevenlabsTextToDialogueElevenV3Output = z.object({
  * TextToDialogueRequest
  */
 export const zElevenlabsTextToDialogueElevenV3Input = z.object({
-  stability: z.optional(z.union([z.number().gte(0).lte(1), z.unknown()])),
+  stability: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
   inputs: z.array(zDialogueBlock).register(z.globalRegistry, {
     description:
       "A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.",
   }),
-  language_code: z.optional(z.union([z.string(), z.unknown()])),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
-  use_speaker_boost: z.optional(z.union([z.boolean(), z.unknown()])),
+  language_code: z.union([z.string(), z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  use_speaker_boost: z.union([z.boolean(), z.unknown()]).optional(),
   pronunciation_dictionary_locators: z
-    .optional(
-      z.array(zPronunciationDictionaryLocator).register(z.globalRegistry, {
-        description:
-          "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-      }),
-    )
+    .array(zPronunciationDictionaryLocator)
+    .register(z.globalRegistry, {
+      description:
+        "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
+    })
+    .optional()
     .default([]),
 });
 
@@ -1734,25 +1841,31 @@ export const zStableAudioInput = z.object({
     description: "The prompt to generate audio from",
   }),
   steps: z
-    .optional(
-      z.int().gte(1).lte(1000).register(z.globalRegistry, {
-        description: "The number of steps to denoise the audio for",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to denoise the audio for",
+    })
+    .optional()
     .default(100),
   seconds_total: z
-    .optional(
-      z.int().gte(0).lte(47).register(z.globalRegistry, {
-        description: "The duration of the audio clip to generate",
-      }),
-    )
+    .int()
+    .gte(0)
+    .lte(47)
+    .register(z.globalRegistry, {
+      description: "The duration of the audio clip to generate",
+    })
+    .optional()
     .default(30),
   seconds_start: z
-    .optional(
-      z.int().gte(0).lte(47).register(z.globalRegistry, {
-        description: "The start point of the audio clip to generate",
-      }),
-    )
+    .int()
+    .gte(0)
+    .lte(47)
+    .register(z.globalRegistry, {
+      description: "The start point of the audio clip to generate",
+    })
+    .optional()
     .default(0),
 });
 
@@ -1809,54 +1922,53 @@ export const zElevenlabsMusicOutput = z.object({
  */
 export const zElevenlabsMusicInput = z
   .object({
-    prompt: z.optional(z.union([z.string(), z.unknown()])),
-    composition_plan: z.optional(z.union([zMusicCompositionPlan, z.unknown()])),
-    music_length_ms: z.optional(
-      z.union([z.int().gte(3000).lte(600000), z.unknown()]),
-    ),
-    output_format: z.optional(
-      z
-        .enum([
-          "mp3_22050_32",
-          "mp3_44100_32",
-          "mp3_44100_64",
-          "mp3_44100_96",
-          "mp3_44100_128",
-          "mp3_44100_192",
-          "pcm_8000",
-          "pcm_16000",
-          "pcm_22050",
-          "pcm_24000",
-          "pcm_44100",
-          "pcm_48000",
-          "ulaw_8000",
-          "alaw_8000",
-          "opus_48000_32",
-          "opus_48000_64",
-          "opus_48000_96",
-          "opus_48000_128",
-          "opus_48000_192",
-        ])
-        .register(z.globalRegistry, {
-          description:
-            "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
-        }),
-    ),
+    prompt: z.union([z.string(), z.unknown()]).optional(),
+    composition_plan: z.union([zMusicCompositionPlan, z.unknown()]).optional(),
+    music_length_ms: z
+      .union([z.int().gte(3000).lte(600000), z.unknown()])
+      .optional(),
+    output_format: z
+      .enum([
+        "mp3_22050_32",
+        "mp3_44100_32",
+        "mp3_44100_64",
+        "mp3_44100_96",
+        "mp3_44100_128",
+        "mp3_44100_192",
+        "pcm_8000",
+        "pcm_16000",
+        "pcm_22050",
+        "pcm_24000",
+        "pcm_44100",
+        "pcm_48000",
+        "ulaw_8000",
+        "alaw_8000",
+        "opus_48000_32",
+        "opus_48000_64",
+        "opus_48000_96",
+        "opus_48000_128",
+        "opus_48000_192",
+      ])
+      .register(z.globalRegistry, {
+        description:
+          "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+      })
+      .optional(),
     respect_sections_durations: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Controls how strictly section durations in the composition_plan are enforced. It will only have an effect if it is used with composition_plan. When set to true, the model will precisely respect each section's duration_ms from the plan. When set to false, the model may adjust individual section durations which will generally lead to better generation quality and improved latency, while always preserving the total song duration from the plan.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Controls how strictly section durations in the composition_plan are enforced. It will only have an effect if it is used with composition_plan. When set to true, the model will precisely respect each section's duration_ms from the plan. When set to false, the model may adjust individual section durations which will generally lead to better generation quality and improved latency, while always preserving the total song duration from the plan.",
+      })
+      .optional()
       .default(true),
     force_instrumental: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "If true, guarantees that the generated song will be instrumental. If false, the song may or may not be instrumental depending on the prompt. Can only be used with prompt.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If true, guarantees that the generated song will be instrumental. If false, the song may or may not be instrumental depending on the prompt. Can only be used with prompt.",
+      })
+      .optional()
       .default(false),
   })
   .register(z.globalRegistry, {
@@ -1884,51 +1996,52 @@ export const zElevenlabsSoundEffectsV2Input = z.object({
     description: "The text describing the sound effect to generate",
   }),
   loop: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to create a sound effect that loops smoothly.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to create a sound effect that loops smoothly.",
+    })
+    .optional()
     .default(false),
   prompt_influence: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "How closely to follow the prompt (0-1). Higher values mean less variation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "How closely to follow the prompt (0-1). Higher values mean less variation.",
+    })
+    .optional()
     .default(0.3),
-  output_format: z.optional(
-    z
-      .enum([
-        "mp3_22050_32",
-        "mp3_44100_32",
-        "mp3_44100_64",
-        "mp3_44100_96",
-        "mp3_44100_128",
-        "mp3_44100_192",
-        "pcm_8000",
-        "pcm_16000",
-        "pcm_22050",
-        "pcm_24000",
-        "pcm_44100",
-        "pcm_48000",
-        "ulaw_8000",
-        "alaw_8000",
-        "opus_48000_32",
-        "opus_48000_64",
-        "opus_48000_96",
-        "opus_48000_128",
-        "opus_48000_192",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "Output format of the generated audio. Formatted as codec_sample_rate_bitrate.",
-      }),
-  ),
-  duration_seconds: z.optional(
-    z.union([z.number().gte(0.5).lte(22), z.unknown()]),
-  ),
+  output_format: z
+    .enum([
+      "mp3_22050_32",
+      "mp3_44100_32",
+      "mp3_44100_64",
+      "mp3_44100_96",
+      "mp3_44100_128",
+      "mp3_44100_192",
+      "pcm_8000",
+      "pcm_16000",
+      "pcm_22050",
+      "pcm_24000",
+      "pcm_44100",
+      "pcm_48000",
+      "ulaw_8000",
+      "alaw_8000",
+      "opus_48000_32",
+      "opus_48000_64",
+      "opus_48000_96",
+      "opus_48000_128",
+      "opus_48000_192",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "Output format of the generated audio. Formatted as codec_sample_rate_bitrate.",
+    })
+    .optional(),
+  duration_seconds: z
+    .union([z.number().gte(0.5).lte(22), z.unknown()])
+    .optional(),
 });
 
 /**
@@ -1936,7 +2049,7 @@ export const zElevenlabsSoundEffectsV2Input = z.object({
  */
 export const zElevenlabsTtsMultilingualV2Output = z.object({
   audio: zFile,
-  timestamps: z.optional(z.union([z.array(z.unknown()), z.unknown()])),
+  timestamps: z.union([z.array(z.unknown()), z.unknown()]).optional(),
 });
 
 /**
@@ -1944,61 +2057,70 @@ export const zElevenlabsTtsMultilingualV2Output = z.object({
  */
 export const zElevenlabsTtsMultilingualV2Input = z.object({
   stability: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description: "Voice stability (0-1)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Voice stability (0-1)",
+    })
+    .optional()
     .default(0.5),
-  next_text: z.optional(z.union([z.string(), z.unknown()])),
+  next_text: z.union([z.string(), z.unknown()]).optional(),
   speed: z
-    .optional(
-      z.number().gte(0.7).lte(1.2).register(z.globalRegistry, {
-        description:
-          "Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
-      }),
-    )
+    .number()
+    .gte(0.7)
+    .lte(1.2)
+    .register(z.globalRegistry, {
+      description:
+        "Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
+    })
+    .optional()
     .default(1),
   style: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description: "Style exaggeration (0-1)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Style exaggeration (0-1)",
+    })
+    .optional()
     .default(0),
   text: z.string().min(1).register(z.globalRegistry, {
     description: "The text to convert to speech",
   }),
   timestamps: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "Whether to return timestamps for each word in the generated speech",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to return timestamps for each word in the generated speech",
+    })
+    .optional()
     .default(false),
   similarity_boost: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description: "Similarity boost (0-1)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Similarity boost (0-1)",
+    })
+    .optional()
     .default(0.75),
   voice: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "The voice to use for speech generation",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "The voice to use for speech generation",
+    })
+    .optional()
     .default("Rachel"),
-  language_code: z.optional(z.union([z.string(), z.unknown()])),
-  apply_text_normalization: z.optional(
-    z.enum(["auto", "on", "off"]).register(z.globalRegistry, {
+  language_code: z.union([z.string(), z.unknown()]).optional(),
+  apply_text_normalization: z
+    .enum(["auto", "on", "off"])
+    .register(z.globalRegistry, {
       description:
         "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
-    }),
-  ),
-  previous_text: z.optional(z.union([z.string(), z.unknown()])),
+    })
+    .optional(),
+  previous_text: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -2020,7 +2142,7 @@ export const zMinimaxMusicV2Input = z.object({
     description:
       "Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.",
   }),
-  audio_setting: z.optional(zAudioSetting),
+  audio_setting: zAudioSetting.optional(),
 });
 
 /**
@@ -2028,7 +2150,7 @@ export const zMinimaxMusicV2Input = z.object({
  */
 export const zElevenlabsTtsElevenV3Output = z.object({
   audio: zFile,
-  timestamps: z.optional(z.union([z.array(z.unknown()), z.unknown()])),
+  timestamps: z.union([z.array(z.unknown()), z.unknown()]).optional(),
 });
 
 /**
@@ -2042,33 +2164,36 @@ export const zElevenlabsTtsElevenV3Input = z
       description: "The text to convert to speech",
     }),
     voice: z
-      .optional(
-        z.string().register(z.globalRegistry, {
-          description: "The voice to use for speech generation",
-        }),
-      )
+      .string()
+      .register(z.globalRegistry, {
+        description: "The voice to use for speech generation",
+      })
+      .optional()
       .default("Rachel"),
-    language_code: z.optional(z.union([z.string(), z.unknown()])),
+    language_code: z.union([z.string(), z.unknown()]).optional(),
     stability: z
-      .optional(
-        z.number().gte(0).lte(1).register(z.globalRegistry, {
-          description: "Voice stability (0-1)",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description: "Voice stability (0-1)",
+      })
+      .optional()
       .default(0.5),
-    apply_text_normalization: z.optional(
-      z.enum(["auto", "on", "off"]).register(z.globalRegistry, {
+    apply_text_normalization: z
+      .enum(["auto", "on", "off"])
+      .register(z.globalRegistry, {
         description:
           "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
-      }),
-    ),
+      })
+      .optional(),
     timestamps: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to return timestamps for each word in the generated speech",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to return timestamps for each word in the generated speech",
+      })
+      .optional()
       .default(false),
   })
   .register(z.globalRegistry, {
@@ -2122,49 +2247,58 @@ export const zWorkflowUtilitiesImpulseResponseInput = z
   .object({
     impulse_response_url: z.union([z.string(), z.string()]),
     loudness_tp: z
-      .optional(
-        z.number().gte(-10).lte(0).register(z.globalRegistry, {
-          description: "Maximum true peak in dBTP (typically -2 to -1)",
-        }),
-      )
+      .number()
+      .gte(-10)
+      .lte(0)
+      .register(z.globalRegistry, {
+        description: "Maximum true peak in dBTP (typically -2 to -1)",
+      })
+      .optional()
       .default(-1.5),
     loudness_lra: z
-      .optional(
-        z.number().gte(1).lte(50).register(z.globalRegistry, {
-          description: "Loudness Range target in LU (typically 5-15)",
-        }),
-      )
+      .number()
+      .gte(1)
+      .lte(50)
+      .register(z.globalRegistry, {
+        description: "Loudness Range target in LU (typically 5-15)",
+      })
+      .optional()
       .default(8),
     dry_level: z
-      .optional(
-        z.number().gte(0).lte(1).register(z.globalRegistry, {
-          description:
-            "Level of the original (dry) signal in the mix (0.0-1.0)",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description: "Level of the original (dry) signal in the mix (0.0-1.0)",
+      })
+      .optional()
       .default(0.7),
     loudness_i: z
-      .optional(
-        z.number().gte(-70).lte(0).register(z.globalRegistry, {
-          description:
-            "Target integrated loudness in LUFS (typically -24 to -14)",
-        }),
-      )
+      .number()
+      .gte(-70)
+      .lte(0)
+      .register(z.globalRegistry, {
+        description:
+          "Target integrated loudness in LUFS (typically -24 to -14)",
+      })
+      .optional()
       .default(-18),
     audio_url: z.union([z.string(), z.string()]),
     wet_level: z
-      .optional(
-        z.number().gte(0).lte(1).register(z.globalRegistry, {
-          description:
-            "Level of the processed (wet) signal in the mix (0.0-1.0)",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description: "Level of the processed (wet) signal in the mix (0.0-1.0)",
+      })
+      .optional()
       .default(0.3),
-    output_bitrate: z.optional(
-      z.enum(["128k", "192k", "256k", "320k"]).register(z.globalRegistry, {
+    output_bitrate: z
+      .enum(["128k", "192k", "256k", "320k"])
+      .register(z.globalRegistry, {
         description: "Output audio bitrate",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description:
@@ -2190,43 +2324,51 @@ export const zStableAudio25InpaintInput = z.object({
   }),
   audio_url: z.union([z.string(), z.string()]),
   mask_end: z
-    .optional(
-      z.int().gte(0).lte(190).register(z.globalRegistry, {
-        description: "The end point of the audio mask",
-      }),
-    )
+    .int()
+    .gte(0)
+    .lte(190)
+    .register(z.globalRegistry, {
+      description: "The end point of the audio mask",
+    })
+    .optional()
     .default(190),
   sync_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    })
+    .optional()
     .default(false),
   guidance_scale: z
-    .optional(
-      z.number().gte(1).lte(25).register(z.globalRegistry, {
-        description:
-          "How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt). ",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(25)
+    .register(z.globalRegistry, {
+      description:
+        "How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt). ",
+    })
+    .optional()
     .default(1),
   num_inference_steps: z
-    .optional(
-      z.int().gte(4).lte(8).register(z.globalRegistry, {
-        description: "The number of steps to denoise the audio for",
-      }),
-    )
+    .int()
+    .gte(4)
+    .lte(8)
+    .register(z.globalRegistry, {
+      description: "The number of steps to denoise the audio for",
+    })
+    .optional()
     .default(8),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
-  seconds_total: z.optional(z.union([z.int().gte(1).lte(190), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  seconds_total: z.union([z.int().gte(1).lte(190), z.unknown()]).optional(),
   mask_start: z
-    .optional(
-      z.int().gte(0).lte(190).register(z.globalRegistry, {
-        description: "The start point of the audio mask",
-      }),
-    )
+    .int()
+    .gte(0)
+    .lte(190)
+    .register(z.globalRegistry, {
+      description: "The start point of the audio mask",
+    })
+    .optional()
     .default(30),
 });
 
@@ -2238,11 +2380,11 @@ export const zStableAudio25InpaintInput = z.object({
 export const zPersonaplexRealtimeOutput = z
   .object({
     text: z
-      .optional(
-        z.string().register(z.globalRegistry, {
-          description: "Generated text tokens for this chunk.",
-        }),
-      )
+      .string()
+      .register(z.globalRegistry, {
+        description: "Generated text tokens for this chunk.",
+      })
+      .optional()
       .default(""),
     audio: z.string().register(z.globalRegistry, {
       description:
@@ -2261,74 +2403,81 @@ export const zPersonaplexRealtimeOutput = z
 export const zPersonaplexRealtimeInput = z
   .object({
     prompt: z
-      .optional(
-        z.string().register(z.globalRegistry, {
-          description:
-            "Text prompt describing the AI persona and conversation context.",
-        }),
-      )
+      .string()
+      .register(z.globalRegistry, {
+        description:
+          "Text prompt describing the AI persona and conversation context.",
+      })
+      .optional()
       .default(
         "You are a wise and friendly teacher. Answer questions or provide advice in a clear and engaging way.",
       ),
     top_k_text: z
-      .optional(
-        z.int().gte(1).lte(1000).register(z.globalRegistry, {
-          description: "Top-K sampling for text tokens.",
-        }),
-      )
+      .int()
+      .gte(1)
+      .lte(1000)
+      .register(z.globalRegistry, {
+        description: "Top-K sampling for text tokens.",
+      })
+      .optional()
       .default(25),
-    voice: z.optional(
-      z
-        .enum([
-          "NATF0",
-          "NATF1",
-          "NATF2",
-          "NATF3",
-          "NATM0",
-          "NATM1",
-          "NATM2",
-          "NATM3",
-          "VARF0",
-          "VARF1",
-          "VARF2",
-          "VARF3",
-          "VARF4",
-          "VARM0",
-          "VARM1",
-          "VARM2",
-          "VARM3",
-          "VARM4",
-        ])
-        .register(z.globalRegistry, {
-          description:
-            "Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.",
-        }),
-    ),
+    voice: z
+      .enum([
+        "NATF0",
+        "NATF1",
+        "NATF2",
+        "NATF3",
+        "NATM0",
+        "NATM1",
+        "NATM2",
+        "NATM3",
+        "VARF0",
+        "VARF1",
+        "VARF2",
+        "VARF3",
+        "VARF4",
+        "VARM0",
+        "VARM1",
+        "VARM2",
+        "VARM3",
+        "VARM4",
+      ])
+      .register(z.globalRegistry, {
+        description:
+          "Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.",
+      })
+      .optional(),
     temperature_text: z
-      .optional(
-        z.number().gte(0).lte(2).register(z.globalRegistry, {
-          description:
-            "Text sampling temperature. Higher values produce more diverse outputs.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Text sampling temperature. Higher values produce more diverse outputs.",
+      })
+      .optional()
       .default(0.7),
-    voice_audio_url: z.optional(z.union([z.string(), z.unknown()])),
-    seed: z.optional(z.union([z.int(), z.unknown()])),
+    voice_audio_url: z.union([z.string(), z.unknown()]).optional(),
+    seed: z.union([z.int(), z.unknown()]).optional(),
     top_k_audio: z
-      .optional(
-        z.int().gte(1).lte(2048).register(z.globalRegistry, {
-          description: "Top-K sampling for audio tokens.",
-        }),
-      )
+      .int()
+      .gte(1)
+      .lte(2048)
+      .register(z.globalRegistry, {
+        description: "Top-K sampling for audio tokens.",
+      })
+      .optional()
       .default(250),
     audio: z.union([z.string(), z.string()]),
     temperature_audio: z
-      .optional(
-        z.number().gte(0).lte(2).register(z.globalRegistry, {
-          description:
-            "Audio sampling temperature. Higher values produce more diverse outputs.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Audio sampling temperature. Higher values produce more diverse outputs.",
+      })
+      .optional()
       .default(0.8),
   })
   .register(z.globalRegistry, {
@@ -2357,102 +2506,123 @@ export const zAceStepAudioOutpaintOutput = z.object({
  */
 export const zAceStepAudioOutpaintInput = z.object({
   number_of_steps: z
-    .optional(
-      z.int().gte(3).lte(60).register(z.globalRegistry, {
-        description: "Number of steps to generate the audio.",
-      }),
-    )
+    .int()
+    .gte(3)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description: "Number of steps to generate the audio.",
+    })
+    .optional()
     .default(27),
   tags: z.string().register(z.globalRegistry, {
     description:
       "Comma-separated list of genre tags to control the style of the generated audio.",
   }),
   minimum_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description:
-          "Minimum guidance scale for the generation after the decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Minimum guidance scale for the generation after the decay.",
+    })
+    .optional()
     .default(3),
   extend_after_duration: z
-    .optional(
-      z.number().gte(0).lte(240).register(z.globalRegistry, {
-        description: "Duration in seconds to extend the audio from the end.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(240)
+    .register(z.globalRegistry, {
+      description: "Duration in seconds to extend the audio from the end.",
+    })
+    .optional()
     .default(30),
   lyrics: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
+    })
+    .optional()
     .default(""),
   tag_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Tag guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Tag guidance scale for the generation.",
+    })
+    .optional()
     .default(5),
-  scheduler: z.optional(
-    z.enum(["euler", "heun"]).register(z.globalRegistry, {
+  scheduler: z
+    .enum(["euler", "heun"])
+    .register(z.globalRegistry, {
       description: "Scheduler to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description: "Guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the generation.",
+    })
+    .optional()
     .default(15),
-  guidance_type: z.optional(
-    z.enum(["cfg", "apg", "cfg_star"]).register(z.globalRegistry, {
+  guidance_type: z
+    .enum(["cfg", "apg", "cfg_star"])
+    .register(z.globalRegistry, {
       description: "Type of CFG to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   extend_before_duration: z
-    .optional(
-      z.number().gte(0).lte(240).register(z.globalRegistry, {
-        description: "Duration in seconds to extend the audio from the start.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(240)
+    .register(z.globalRegistry, {
+      description: "Duration in seconds to extend the audio from the start.",
+    })
+    .optional()
     .default(0),
   lyric_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Lyric guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Lyric guidance scale for the generation.",
+    })
+    .optional()
     .default(1.5),
   guidance_interval: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
+    })
+    .optional()
     .default(0.5),
   guidance_interval_decay: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
+    })
+    .optional()
     .default(0),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   granularity_scale: z
-    .optional(
-      z.int().gte(-100).lte(100).register(z.globalRegistry, {
-        description:
-          "Granularity scale for the generation process. Higher values can reduce artifacts.",
-      }),
-    )
+    .int()
+    .gte(-100)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description:
+        "Granularity scale for the generation process. Higher values can reduce artifacts.",
+    })
+    .optional()
     .default(10),
 });
 
@@ -2475,16 +2645,16 @@ export const zLavaSrTimings = z.object({
  * AudioFile
  */
 export const zAudioFile = z.object({
-  file_size: z.optional(z.union([z.int(), z.unknown()])),
-  duration: z.optional(z.union([z.number(), z.unknown()])),
-  channels: z.optional(z.union([z.int(), z.unknown()])),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  duration: z.union([z.number(), z.unknown()]).optional(),
+  channels: z.union([z.int(), z.unknown()]).optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
-  file_name: z.optional(z.union([z.string(), z.unknown()])),
-  sample_rate: z.optional(z.union([z.int(), z.unknown()])),
-  content_type: z.optional(z.union([z.string(), z.unknown()])),
-  bitrate: z.optional(z.union([z.string(), z.int(), z.unknown()])),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  sample_rate: z.union([z.int(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
+  bitrate: z.union([z.string(), z.int(), z.unknown()]).optional(),
 });
 
 /**
@@ -2500,36 +2670,35 @@ export const zLavaSrOutput = z.object({
  */
 export const zLavaSrInput = z.object({
   sync_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    })
+    .optional()
     .default(false),
   bitrate: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "The bitrate of the output audio.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "The bitrate of the output audio.",
+    })
+    .optional()
     .default("192k"),
   audio_url: z.union([z.string(), z.string()]),
   denoise: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, applies UL-UNAS noise filtering before bandwidth extension.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, applies UL-UNAS noise filtering before bandwidth extension.",
+    })
+    .optional()
     .default(false),
-  audio_format: z.optional(
-    z
-      .enum(["mp3", "aac", "m4a", "ogg", "opus", "flac", "wav"])
-      .register(z.globalRegistry, {
-        description: "The format for the output audio.",
-      }),
-  ),
+  audio_format: z
+    .enum(["mp3", "aac", "m4a", "ogg", "opus", "flac", "wav"])
+    .register(z.globalRegistry, {
+      description: "The format for the output audio.",
+    })
+    .optional(),
 });
 
 /**
@@ -2543,93 +2712,109 @@ export const zTada1bTextToSpeechOutput = z.object({
  * Input
  */
 export const zTada1bTextToSpeechInput = z.object({
-  language: z.optional(
-    z
-      .enum(["en", "ar", "ch", "de", "es", "fr", "it", "ja", "pl", "pt"])
-      .register(z.globalRegistry, {
-        description:
-          "Language for text alignment. Use the appropriate code for non-English synthesis.",
-      }),
-  ),
+  language: z
+    .enum(["en", "ar", "ch", "de", "es", "fr", "it", "ja", "pl", "pt"])
+    .register(z.globalRegistry, {
+      description:
+        "Language for text alignment. Use the appropriate code for non-English synthesis.",
+    })
+    .optional(),
   repetition_penalty: z
-    .optional(
-      z.number().gte(1).lte(2).register(z.globalRegistry, {
-        description: "Penalty applied to repeated tokens during generation.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description: "Penalty applied to repeated tokens during generation.",
+    })
+    .optional()
     .default(1.1),
   num_extra_steps: z
-    .optional(
-      z.int().gte(0).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.",
-      }),
-    )
+    .int()
+    .gte(0)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.",
+    })
+    .optional()
     .default(0),
   top_p: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description: "Top-p (nucleus) sampling parameter for text generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Top-p (nucleus) sampling parameter for text generation.",
+    })
+    .optional()
     .default(0.9),
   prompt: z.string().register(z.globalRegistry, {
     description:
       "The text to synthesize into speech using the reference speaker's voice.",
   }),
   speed_up_factor: z
-    .optional(
-      z.number().gte(0.5).lte(2).register(z.globalRegistry, {
-        description:
-          "Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.",
-      }),
-    )
+    .number()
+    .gte(0.5)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.",
+    })
+    .optional()
     .default(1),
-  output_format: z.optional(
-    z.enum(["wav", "mp3"]).register(z.globalRegistry, {
+  output_format: z
+    .enum(["wav", "mp3"])
+    .register(z.globalRegistry, {
       description: "The format of the output audio file.",
-    }),
-  ),
+    })
+    .optional(),
   acoustic_cfg_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description:
-          "Classifier-free guidance scale for acoustic feature generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Classifier-free guidance scale for acoustic feature generation.",
+    })
+    .optional()
     .default(1.6),
   noise_temperature: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "Temperature for noise in the flow matching diffusion process.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Temperature for noise in the flow matching diffusion process.",
+    })
+    .optional()
     .default(0.9),
   audio_url: z.union([z.string(), z.string()]),
   temperature: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "Sampling temperature for text token generation. Higher values produce more varied output.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Sampling temperature for text token generation. Higher values produce more varied output.",
+    })
+    .optional()
     .default(0.6),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.",
+    })
+    .optional()
     .default(20),
   transcript: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.",
+    })
+    .optional()
     .default(""),
 });
 
@@ -2654,58 +2839,71 @@ export const zWorkflowUtilitiesAudioCompressorOutput = z
 export const zWorkflowUtilitiesAudioCompressorInput = z
   .object({
     threshold: z
-      .optional(
-        z.number().gte(-60).lte(0).register(z.globalRegistry, {
-          description:
-            "Threshold level in dB above which compression is applied (-60 to 0)",
-        }),
-      )
+      .number()
+      .gte(-60)
+      .lte(0)
+      .register(z.globalRegistry, {
+        description:
+          "Threshold level in dB above which compression is applied (-60 to 0)",
+      })
+      .optional()
       .default(-18),
     ratio: z
-      .optional(
-        z.number().gte(1).lte(20).register(z.globalRegistry, {
-          description:
-            "Compression ratio (1 = no compression, higher = more compression)",
-        }),
-      )
+      .number()
+      .gte(1)
+      .lte(20)
+      .register(z.globalRegistry, {
+        description:
+          "Compression ratio (1 = no compression, higher = more compression)",
+      })
+      .optional()
       .default(3),
     makeup: z
-      .optional(
-        z.number().gte(0).lte(64).register(z.globalRegistry, {
-          description: "Makeup gain in dB to compensate for volume reduction",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(64)
+      .register(z.globalRegistry, {
+        description: "Makeup gain in dB to compensate for volume reduction",
+      })
+      .optional()
       .default(8),
     attack: z
-      .optional(
-        z.number().gte(0.01).lte(2000).register(z.globalRegistry, {
-          description:
-            "Attack time in milliseconds (how fast compression starts)",
-        }),
-      )
+      .number()
+      .gte(0.01)
+      .lte(2000)
+      .register(z.globalRegistry, {
+        description:
+          "Attack time in milliseconds (how fast compression starts)",
+      })
+      .optional()
       .default(5),
     release: z
-      .optional(
-        z.number().gte(0.01).lte(9000).register(z.globalRegistry, {
-          description:
-            "Release time in milliseconds (how fast compression stops)",
-        }),
-      )
+      .number()
+      .gte(0.01)
+      .lte(9000)
+      .register(z.globalRegistry, {
+        description:
+          "Release time in milliseconds (how fast compression stops)",
+      })
+      .optional()
       .default(50),
     knee: z
-      .optional(
-        z.number().gte(1).lte(8).register(z.globalRegistry, {
-          description:
-            "Knee width in dB for soft knee compression (0 = hard knee)",
-        }),
-      )
+      .number()
+      .gte(1)
+      .lte(8)
+      .register(z.globalRegistry, {
+        description:
+          "Knee width in dB for soft knee compression (0 = hard knee)",
+      })
+      .optional()
       .default(2.83),
     audio_url: z.union([z.string(), z.string()]),
-    output_bitrate: z.optional(
-      z.enum(["128k", "192k", "256k", "320k"]).register(z.globalRegistry, {
+    output_bitrate: z
+      .enum(["128k", "192k", "256k", "320k"])
+      .register(z.globalRegistry, {
         description: "Output audio bitrate",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "Input model for audio dynamic range compression",
@@ -2732,74 +2930,81 @@ export const zPersonaplexOutput = z.object({
  */
 export const zPersonaplexInput = z.object({
   prompt: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Text prompt describing the AI persona and conversation context.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Text prompt describing the AI persona and conversation context.",
+    })
+    .optional()
     .default(
       "You are a wise and friendly teacher. Answer questions or provide advice in a clear and engaging way.",
     ),
   top_k_text: z
-    .optional(
-      z.int().gte(1).lte(1000).register(z.globalRegistry, {
-        description: "Top-K sampling for text tokens.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(1000)
+    .register(z.globalRegistry, {
+      description: "Top-K sampling for text tokens.",
+    })
+    .optional()
     .default(25),
-  voice: z.optional(
-    z
-      .enum([
-        "NATF0",
-        "NATF1",
-        "NATF2",
-        "NATF3",
-        "NATM0",
-        "NATM1",
-        "NATM2",
-        "NATM3",
-        "VARF0",
-        "VARF1",
-        "VARF2",
-        "VARF3",
-        "VARF4",
-        "VARM0",
-        "VARM1",
-        "VARM2",
-        "VARM3",
-        "VARM4",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.",
-      }),
-  ),
+  voice: z
+    .enum([
+      "NATF0",
+      "NATF1",
+      "NATF2",
+      "NATF3",
+      "NATM0",
+      "NATM1",
+      "NATM2",
+      "NATM3",
+      "VARF0",
+      "VARF1",
+      "VARF2",
+      "VARF3",
+      "VARF4",
+      "VARM0",
+      "VARM1",
+      "VARM2",
+      "VARM3",
+      "VARM4",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.",
+    })
+    .optional(),
   temperature_text: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "Text sampling temperature. Higher values produce more diverse outputs.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Text sampling temperature. Higher values produce more diverse outputs.",
+    })
+    .optional()
     .default(0.7),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
-  voice_audio_url: z.optional(z.union([z.string(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  voice_audio_url: z.union([z.string(), z.unknown()]).optional(),
   top_k_audio: z
-    .optional(
-      z.int().gte(1).lte(2048).register(z.globalRegistry, {
-        description: "Top-K sampling for audio tokens.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(2048)
+    .register(z.globalRegistry, {
+      description: "Top-K sampling for audio tokens.",
+    })
+    .optional()
     .default(250),
   temperature_audio: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "Audio sampling temperature. Higher values produce more diverse outputs.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Audio sampling temperature. Higher values produce more diverse outputs.",
+    })
+    .optional()
     .default(0.8),
 });
 
@@ -2817,12 +3022,12 @@ export const zAudioTimeSpan = z
       description: "Start time of the span in seconds",
     }),
     include: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Whether to include (True) or exclude (False) sounds in this span",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to include (True) or exclude (False) sounds in this span",
+      })
+      .optional()
       .default(true),
   })
   .register(z.globalRegistry, {
@@ -2841,11 +3046,11 @@ export const zSamAudioSpanSeparateOutput = z
       description: "Duration of the output audio in seconds.",
     }),
     sample_rate: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description: "Sample rate of the output audio in Hz.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description: "Sample rate of the output audio in Hz.",
+      })
+      .optional()
       .default(48000),
     residual: zFile,
   })
@@ -2860,61 +3065,69 @@ export const zSamAudioSpanSeparateOutput = z
  */
 export const zSamAudioSpanSeparateInput = z
   .object({
-    prompt: z.optional(z.union([z.string(), z.unknown()])),
+    prompt: z.union([z.string(), z.unknown()]).optional(),
     chunk_overlap: z
-      .optional(
-        z.number().gte(0).lte(30).register(z.globalRegistry, {
-          description:
-            "Overlap duration (in seconds) between chunks for crossfade blending.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(30)
+      .register(z.globalRegistry, {
+        description:
+          "Overlap duration (in seconds) between chunks for crossfade blending.",
+      })
+      .optional()
       .default(5),
     spans: z.array(zAudioTimeSpan).register(z.globalRegistry, {
       description:
         "Time spans where the target sound occurs which should be isolated.",
     }),
-    acceleration: z.optional(
-      z.enum(["fast", "balanced", "quality"]).register(z.globalRegistry, {
+    acceleration: z
+      .enum(["fast", "balanced", "quality"])
+      .register(z.globalRegistry, {
         description: "The acceleration level to use.",
-      }),
-    ),
+      })
+      .optional(),
     use_sound_activity_ranking: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Use sound activity detection to rank reranking candidates based on how well each candidate's non-silent regions match the provided spans. Enables effective reranking even without a text prompt (span-only separation). Requires reranking_candidates > 1.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Use sound activity detection to rank reranking candidates based on how well each candidate's non-silent regions match the provided spans. Enables effective reranking even without a text prompt (span-only separation). Requires reranking_candidates > 1.",
+      })
+      .optional()
       .default(false),
-    output_format: z.optional(
-      z.enum(["wav", "mp3"]).register(z.globalRegistry, {
+    output_format: z
+      .enum(["wav", "mp3"])
+      .register(z.globalRegistry, {
         description: "Output audio format.",
-      }),
-    ),
+      })
+      .optional(),
     trim_to_span: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.",
+      })
+      .optional()
       .default(false),
     max_chunk_duration: z
-      .optional(
-        z.number().gte(10).lte(60).register(z.globalRegistry, {
-          description:
-            "Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.",
-        }),
-      )
+      .number()
+      .gte(10)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description:
+          "Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.",
+      })
+      .optional()
       .default(60),
     audio_url: z.union([z.string(), z.string()]),
     reranking_candidates: z
-      .optional(
-        z.int().gte(1).lte(7).register(z.globalRegistry, {
-          description:
-            "Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.",
-        }),
-      )
+      .int()
+      .gte(1)
+      .lte(7)
+      .register(z.globalRegistry, {
+        description:
+          "Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.",
+      })
+      .optional()
       .default(1),
   })
   .register(z.globalRegistry, {
@@ -2941,7 +3154,7 @@ export const zDiaTtsVoiceCloneInput = z.object({
  * ExtendOutput
  */
 export const zV2ExtendOutput = z.object({
-  tags: z.optional(z.union([z.array(z.string()), z.unknown()])),
+  tags: z.union([z.array(z.string()), z.unknown()]).optional(),
   seed: z.int().register(z.globalRegistry, {
     description:
       "The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.",
@@ -2952,66 +3165,72 @@ export const zV2ExtendOutput = z.object({
   audio: z.array(zFile).register(z.globalRegistry, {
     description: "The generated audio files.",
   }),
-  lyrics: z.optional(z.union([z.string(), z.unknown()])),
+  lyrics: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
  * ExtendInput
  */
 export const zV2ExtendInput = z.object({
-  prompt: z.optional(z.union([z.string(), z.unknown()])),
-  lyrics_prompt: z.optional(z.union([z.string(), z.unknown()])),
-  tags: z.optional(z.union([z.array(z.string()), z.unknown()])),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  lyrics_prompt: z.union([z.string(), z.unknown()]).optional(),
+  tags: z.union([z.array(z.string()), z.unknown()]).optional(),
   prompt_strength: z
-    .optional(
-      z.number().gte(1.4).lte(3.1).register(z.globalRegistry, {
-        description:
-          "Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
-      }),
-    )
+    .number()
+    .gte(1.4)
+    .lte(3.1)
+    .register(z.globalRegistry, {
+      description:
+        "Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)",
+    })
+    .optional()
     .default(1.8),
-  output_bit_rate: z.optional(
-    z.union([
+  output_bit_rate: z
+    .union([
       z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
   num_songs: z
-    .optional(
-      z.int().gte(1).lte(2).register(z.globalRegistry, {
-        description:
-          "Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.",
+    })
+    .optional()
     .default(1),
-  output_format: z.optional(z.enum(["flac", "mp3", "wav", "ogg", "m4a"])),
+  output_format: z.enum(["flac", "mp3", "wav", "ogg", "m4a"]).optional(),
   side: z.enum(["left", "right"]).register(z.globalRegistry, {
     description: "Add more to the beginning (left) or end (right) of the song",
   }),
   balance_strength: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.",
+    })
+    .optional()
     .default(0.7),
   crop_duration: z
-    .optional(
-      z.number().register(z.globalRegistry, {
-        description:
-          "Duration in seconds to crop from the selected side before extending from that side.",
-      }),
-    )
+    .number()
+    .register(z.globalRegistry, {
+      description:
+        "Duration in seconds to crop from the selected side before extending from that side.",
+    })
+    .optional()
     .default(0),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(
-    z.union([
+  seed: z
+    .union([
       z.int().gte(-9223372036854776000).lte(9223372036854776000),
       z.unknown(),
-    ]),
-  ),
-  extend_duration: z.optional(z.union([z.number().lte(85), z.unknown()])),
+    ])
+    .optional(),
+  extend_duration: z.union([z.number().lte(85), z.unknown()]).optional(),
 });
 
 /**
@@ -3031,11 +3250,11 @@ export const zAudioUnderstandingInput = z.object({
     description: "The question or prompt about the audio content.",
   }),
   detailed_analysis: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description: "Whether to request a more detailed analysis of the audio",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to request a more detailed analysis of the audio",
+    })
+    .optional()
     .default(false),
   audio_url: z.union([z.string(), z.string()]),
 });
@@ -3068,28 +3287,27 @@ export const zNovaSrOutput = z.object({
  */
 export const zNovaSrInput = z.object({
   sync_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    })
+    .optional()
     .default(false),
   bitrate: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "The bitrate of the output audio.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "The bitrate of the output audio.",
+    })
+    .optional()
     .default("192k"),
   audio_url: z.union([z.string(), z.string()]),
-  audio_format: z.optional(
-    z
-      .enum(["mp3", "aac", "m4a", "ogg", "opus", "flac", "wav"])
-      .register(z.globalRegistry, {
-        description: "The format for the output audio.",
-      }),
-  ),
+  audio_format: z
+    .enum(["mp3", "aac", "m4a", "ogg", "opus", "flac", "wav"])
+    .register(z.globalRegistry, {
+      description: "The format for the output audio.",
+    })
+    .optional(),
 });
 
 /**
@@ -3104,7 +3322,7 @@ export const zQwen3TtsCloneVoice06bOutput = z.object({
  */
 export const zQwen3TtsCloneVoice06bInput = z.object({
   audio_url: z.union([z.string(), z.string()]),
-  reference_text: z.optional(z.union([z.string(), z.unknown()])),
+  reference_text: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -3128,122 +3346,147 @@ export const zAceStepAudioInpaintOutput = z.object({
  */
 export const zAceStepAudioInpaintInput = z.object({
   number_of_steps: z
-    .optional(
-      z.int().gte(3).lte(60).register(z.globalRegistry, {
-        description: "Number of steps to generate the audio.",
-      }),
-    )
+    .int()
+    .gte(3)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description: "Number of steps to generate the audio.",
+    })
+    .optional()
     .default(27),
   start_time: z
-    .optional(
-      z.number().gte(0).lte(240).register(z.globalRegistry, {
-        description: "start time in seconds for the inpainting process.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(240)
+    .register(z.globalRegistry, {
+      description: "start time in seconds for the inpainting process.",
+    })
+    .optional()
     .default(0),
   tags: z.string().register(z.globalRegistry, {
     description:
       "Comma-separated list of genre tags to control the style of the generated audio.",
   }),
   minimum_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description:
-          "Minimum guidance scale for the generation after the decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Minimum guidance scale for the generation after the decay.",
+    })
+    .optional()
     .default(3),
   lyrics: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
+    })
+    .optional()
     .default(""),
-  end_time_relative_to: z.optional(
-    z.enum(["start", "end"]).register(z.globalRegistry, {
+  end_time_relative_to: z
+    .enum(["start", "end"])
+    .register(z.globalRegistry, {
       description:
         "Whether the end time is relative to the start or end of the audio.",
-    }),
-  ),
+    })
+    .optional(),
   tag_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Tag guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Tag guidance scale for the generation.",
+    })
+    .optional()
     .default(5),
-  scheduler: z.optional(
-    z.enum(["euler", "heun"]).register(z.globalRegistry, {
+  scheduler: z
+    .enum(["euler", "heun"])
+    .register(z.globalRegistry, {
       description: "Scheduler to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   end_time: z
-    .optional(
-      z.number().gte(0).lte(240).register(z.globalRegistry, {
-        description: "end time in seconds for the inpainting process.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(240)
+    .register(z.globalRegistry, {
+      description: "end time in seconds for the inpainting process.",
+    })
+    .optional()
     .default(30),
-  guidance_type: z.optional(
-    z.enum(["cfg", "apg", "cfg_star"]).register(z.globalRegistry, {
+  guidance_type: z
+    .enum(["cfg", "apg", "cfg_star"])
+    .register(z.globalRegistry, {
       description: "Type of CFG to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description: "Guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the generation.",
+    })
+    .optional()
     .default(15),
   lyric_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Lyric guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Lyric guidance scale for the generation.",
+    })
+    .optional()
     .default(1.5),
   guidance_interval: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
+    })
+    .optional()
     .default(0.5),
   variance: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Variance for the inpainting process. Higher values can lead to more diverse results.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Variance for the inpainting process. Higher values can lead to more diverse results.",
+    })
+    .optional()
     .default(0.5),
   guidance_interval_decay: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
+    })
+    .optional()
     .default(0),
-  start_time_relative_to: z.optional(
-    z.enum(["start", "end"]).register(z.globalRegistry, {
+  start_time_relative_to: z
+    .enum(["start", "end"])
+    .register(z.globalRegistry, {
       description:
         "Whether the start time is relative to the start or end of the audio.",
-    }),
-  ),
+    })
+    .optional(),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   granularity_scale: z
-    .optional(
-      z.int().gte(-100).lte(100).register(z.globalRegistry, {
-        description:
-          "Granularity scale for the generation process. Higher values can reduce artifacts.",
-      }),
-    )
+    .int()
+    .gte(-100)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description:
+        "Granularity scale for the generation process. Higher values can reduce artifacts.",
+    })
+    .optional()
     .default(10),
 });
 
@@ -3265,39 +3508,45 @@ export const zStableAudio25AudioToAudioInput = z.object({
     description: "The prompt to guide the audio generation",
   }),
   sync_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    })
+    .optional()
     .default(false),
   strength: z
-    .optional(
-      z.number().gte(0.01).lte(1).register(z.globalRegistry, {
-        description:
-          "Sometimes referred to as denoising, this parameter controls how much influence the `audio_url` parameter has on the generated audio. A value of 0 would yield audio that is identical to the input. A value of 1 would be as if you passed in no audio at all.",
-      }),
-    )
+    .number()
+    .gte(0.01)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Sometimes referred to as denoising, this parameter controls how much influence the `audio_url` parameter has on the generated audio. A value of 0 would yield audio that is identical to the input. A value of 1 would be as if you passed in no audio at all.",
+    })
+    .optional()
     .default(0.8),
   guidance_scale: z
-    .optional(
-      z.number().gte(1).lte(25).register(z.globalRegistry, {
-        description:
-          "How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt). ",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(25)
+    .register(z.globalRegistry, {
+      description:
+        "How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt). ",
+    })
+    .optional()
     .default(1),
   num_inference_steps: z
-    .optional(
-      z.int().gte(4).lte(8).register(z.globalRegistry, {
-        description: "The number of steps to denoise the audio for",
-      }),
-    )
+    .int()
+    .gte(4)
+    .lte(8)
+    .register(z.globalRegistry, {
+      description: "The number of steps to denoise the audio for",
+    })
+    .optional()
     .default(8),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   audio_url: z.union([z.string(), z.string()]),
-  total_seconds: z.optional(z.union([z.int().gte(1).lte(190), z.unknown()])),
+  total_seconds: z.union([z.int().gte(1).lte(190), z.unknown()]).optional(),
 });
 
 /**
@@ -3311,93 +3560,109 @@ export const zTada3bTextToSpeechOutput = z.object({
  * Input
  */
 export const zTada3bTextToSpeechInput = z.object({
-  language: z.optional(
-    z
-      .enum(["en", "ar", "ch", "de", "es", "fr", "it", "ja", "pl", "pt"])
-      .register(z.globalRegistry, {
-        description:
-          "Language for text alignment. Use the appropriate code for non-English synthesis.",
-      }),
-  ),
+  language: z
+    .enum(["en", "ar", "ch", "de", "es", "fr", "it", "ja", "pl", "pt"])
+    .register(z.globalRegistry, {
+      description:
+        "Language for text alignment. Use the appropriate code for non-English synthesis.",
+    })
+    .optional(),
   repetition_penalty: z
-    .optional(
-      z.number().gte(1).lte(2).register(z.globalRegistry, {
-        description: "Penalty applied to repeated tokens during generation.",
-      }),
-    )
+    .number()
+    .gte(1)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description: "Penalty applied to repeated tokens during generation.",
+    })
+    .optional()
     .default(1.1),
   num_extra_steps: z
-    .optional(
-      z.int().gte(0).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.",
-      }),
-    )
+    .int()
+    .gte(0)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.",
+    })
+    .optional()
     .default(0),
   top_p: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description: "Top-p (nucleus) sampling parameter for text generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Top-p (nucleus) sampling parameter for text generation.",
+    })
+    .optional()
     .default(0.9),
   prompt: z.string().register(z.globalRegistry, {
     description:
       "The text to synthesize into speech using the reference speaker's voice.",
   }),
   speed_up_factor: z
-    .optional(
-      z.number().gte(0.5).lte(2).register(z.globalRegistry, {
-        description:
-          "Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.",
-      }),
-    )
+    .number()
+    .gte(0.5)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.",
+    })
+    .optional()
     .default(1),
-  output_format: z.optional(
-    z.enum(["wav", "mp3"]).register(z.globalRegistry, {
+  output_format: z
+    .enum(["wav", "mp3"])
+    .register(z.globalRegistry, {
       description: "The format of the output audio file.",
-    }),
-  ),
+    })
+    .optional(),
   acoustic_cfg_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description:
-          "Classifier-free guidance scale for acoustic feature generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Classifier-free guidance scale for acoustic feature generation.",
+    })
+    .optional()
     .default(1.6),
   noise_temperature: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "Temperature for noise in the flow matching diffusion process.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Temperature for noise in the flow matching diffusion process.",
+    })
+    .optional()
     .default(0.9),
   audio_url: z.union([z.string(), z.string()]),
   temperature: z
-    .optional(
-      z.number().gte(0).lte(2).register(z.globalRegistry, {
-        description:
-          "Sampling temperature for text token generation. Higher values produce more varied output.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Sampling temperature for text token generation. Higher values produce more varied output.",
+    })
+    .optional()
     .default(0.6),
   num_inference_steps: z
-    .optional(
-      z.int().gte(1).lte(50).register(z.globalRegistry, {
-        description:
-          "Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.",
+    })
+    .optional()
     .default(20),
   transcript: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.",
+    })
+    .optional()
     .default(""),
 });
 
@@ -3422,105 +3687,123 @@ export const zAceStepAudioToAudioOutput = z.object({
  */
 export const zAceStepAudioToAudioInput = z.object({
   number_of_steps: z
-    .optional(
-      z.int().gte(3).lte(60).register(z.globalRegistry, {
-        description: "Number of steps to generate the audio.",
-      }),
-    )
+    .int()
+    .gte(3)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description: "Number of steps to generate the audio.",
+    })
+    .optional()
     .default(27),
   tags: z.string().register(z.globalRegistry, {
     description:
       "Comma-separated list of genre tags to control the style of the generated audio.",
   }),
   minimum_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description:
-          "Minimum guidance scale for the generation after the decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Minimum guidance scale for the generation after the decay.",
+    })
+    .optional()
     .default(3),
   lyrics: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description:
-          "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.",
+    })
+    .optional()
     .default(""),
   tag_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Tag guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Tag guidance scale for the generation.",
+    })
+    .optional()
     .default(5),
   original_lyrics: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "Original lyrics of the audio file.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "Original lyrics of the audio file.",
+    })
+    .optional()
     .default(""),
-  scheduler: z.optional(
-    z.enum(["euler", "heun"]).register(z.globalRegistry, {
+  scheduler: z
+    .enum(["euler", "heun"])
+    .register(z.globalRegistry, {
       description: "Scheduler to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(200).register(z.globalRegistry, {
-        description: "Guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(200)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the generation.",
+    })
+    .optional()
     .default(15),
-  guidance_type: z.optional(
-    z.enum(["cfg", "apg", "cfg_star"]).register(z.globalRegistry, {
+  guidance_type: z
+    .enum(["cfg", "apg", "cfg_star"])
+    .register(z.globalRegistry, {
       description: "Type of CFG to use for the generation process.",
-    }),
-  ),
+    })
+    .optional(),
   lyric_guidance_scale: z
-    .optional(
-      z.number().gte(0).lte(10).register(z.globalRegistry, {
-        description: "Lyric guidance scale for the generation.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Lyric guidance scale for the generation.",
+    })
+    .optional()
     .default(1.5),
   guidance_interval: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)",
+    })
+    .optional()
     .default(0.5),
-  edit_mode: z.optional(
-    z.enum(["lyrics", "remix"]).register(z.globalRegistry, {
+  edit_mode: z
+    .enum(["lyrics", "remix"])
+    .register(z.globalRegistry, {
       description: "Whether to edit the lyrics only or remix the audio.",
-    }),
-  ),
+    })
+    .optional(),
   guidance_interval_decay: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.",
+    })
+    .optional()
     .default(0),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(z.union([z.int(), z.unknown()])),
+  seed: z.union([z.int(), z.unknown()]).optional(),
   granularity_scale: z
-    .optional(
-      z.int().gte(-100).lte(100).register(z.globalRegistry, {
-        description:
-          "Granularity scale for the generation process. Higher values can reduce artifacts.",
-      }),
-    )
+    .int()
+    .gte(-100)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description:
+        "Granularity scale for the generation process. Higher values can reduce artifacts.",
+    })
+    .optional()
     .default(10),
   original_tags: z.string().register(z.globalRegistry, {
     description: "Original tags of the audio file.",
   }),
-  original_seed: z.optional(z.union([z.int(), z.unknown()])),
+  original_seed: z.union([z.int(), z.unknown()]).optional(),
 });
 
 /**
@@ -3551,28 +3834,27 @@ export const zDeepfilternet3Output = z.object({
  */
 export const zDeepfilternet3Input = z.object({
   sync_mode: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If `True`, the media will be returned as a data URI and the output data won't be available in the request history.",
+    })
+    .optional()
     .default(false),
   bitrate: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "The bitrate of the output audio.",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "The bitrate of the output audio.",
+    })
+    .optional()
     .default("192k"),
   audio_url: z.union([z.string(), z.string()]),
-  audio_format: z.optional(
-    z
-      .enum(["mp3", "aac", "m4a", "ogg", "opus", "flac", "wav"])
-      .register(z.globalRegistry, {
-        description: "The format for the output audio.",
-      }),
-  ),
+  audio_format: z
+    .enum(["mp3", "aac", "m4a", "ogg", "opus", "flac", "wav"])
+    .register(z.globalRegistry, {
+      description: "The format for the output audio.",
+    })
+    .optional(),
 });
 
 /**
@@ -3587,11 +3869,11 @@ export const zSamAudioSeparateOutput = z
       description: "Duration of the output audio in seconds.",
     }),
     sample_rate: z
-      .optional(
-        z.int().register(z.globalRegistry, {
-          description: "Sample rate of the output audio in Hz.",
-        }),
-      )
+      .int()
+      .register(z.globalRegistry, {
+        description: "Sample rate of the output audio in Hz.",
+      })
+      .optional()
       .default(48000),
     residual: zFile,
   })
@@ -3610,47 +3892,55 @@ export const zSamAudioSeparateInput = z
       description: "Text prompt describing the sound to isolate.",
     }),
     chunk_overlap: z
-      .optional(
-        z.number().gte(0).lte(30).register(z.globalRegistry, {
-          description:
-            "Overlap duration (in seconds) between chunks for crossfade blending.",
-        }),
-      )
+      .number()
+      .gte(0)
+      .lte(30)
+      .register(z.globalRegistry, {
+        description:
+          "Overlap duration (in seconds) between chunks for crossfade blending.",
+      })
+      .optional()
       .default(5),
-    acceleration: z.optional(
-      z.enum(["fast", "balanced", "quality"]).register(z.globalRegistry, {
+    acceleration: z
+      .enum(["fast", "balanced", "quality"])
+      .register(z.globalRegistry, {
         description: "The acceleration level to use.",
-      }),
-    ),
-    output_format: z.optional(
-      z.enum(["wav", "mp3"]).register(z.globalRegistry, {
+      })
+      .optional(),
+    output_format: z
+      .enum(["wav", "mp3"])
+      .register(z.globalRegistry, {
         description: "Output audio format.",
-      }),
-    ),
+      })
+      .optional(),
     max_chunk_duration: z
-      .optional(
-        z.number().gte(10).lte(60).register(z.globalRegistry, {
-          description:
-            "Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.",
-        }),
-      )
+      .number()
+      .gte(10)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description:
+          "Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.",
+      })
+      .optional()
       .default(60),
     audio_url: z.union([z.string(), z.string()]),
     predict_spans: z
-      .optional(
-        z.boolean().register(z.globalRegistry, {
-          description:
-            "Automatically predict temporal spans where the target sound occurs.",
-        }),
-      )
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically predict temporal spans where the target sound occurs.",
+      })
+      .optional()
       .default(false),
     reranking_candidates: z
-      .optional(
-        z.int().gte(1).lte(7).register(z.globalRegistry, {
-          description:
-            "Number of candidates to generate and rank. Higher improves quality but increases latency and cost.",
-        }),
-      )
+      .int()
+      .gte(1)
+      .lte(7)
+      .register(z.globalRegistry, {
+        description:
+          "Number of candidates to generate and rank. Higher improves quality but increases latency and cost.",
+      })
+      .optional()
       .default(1),
   })
   .register(z.globalRegistry, {
@@ -3672,8 +3962,8 @@ export const zFfmpegApiMergeAudiosInput = z.object({
     description:
       "List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.",
   }),
-  output_format: z.optional(
-    z.union([
+  output_format: z
+    .union([
       z.enum([
         "mp3_22050_32",
         "mp3_44100_32",
@@ -3696,8 +3986,8 @@ export const zFfmpegApiMergeAudiosInput = z.object({
         "opus_48000_192",
       ]),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
 });
 
 /**
@@ -3715,53 +4005,53 @@ export const zElevenlabsVoiceChangerOutput = z.object({
  */
 export const zElevenlabsVoiceChangerInput = z.object({
   voice: z
-    .optional(
-      z.string().register(z.globalRegistry, {
-        description: "The voice to use for speech generation",
-      }),
-    )
+    .string()
+    .register(z.globalRegistry, {
+      description: "The voice to use for speech generation",
+    })
+    .optional()
     .default("Rachel"),
   audio_url: z.union([z.string(), z.string()]),
-  seed: z.optional(
-    z.int().register(z.globalRegistry, {
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
       description: "Random seed for reproducibility.",
-    }),
-  ),
-  output_format: z.optional(
-    z
-      .enum([
-        "mp3_22050_32",
-        "mp3_44100_32",
-        "mp3_44100_64",
-        "mp3_44100_96",
-        "mp3_44100_128",
-        "mp3_44100_192",
-        "pcm_8000",
-        "pcm_16000",
-        "pcm_22050",
-        "pcm_24000",
-        "pcm_44100",
-        "pcm_48000",
-        "ulaw_8000",
-        "alaw_8000",
-        "opus_48000_32",
-        "opus_48000_64",
-        "opus_48000_96",
-        "opus_48000_128",
-        "opus_48000_192",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "Output format of the generated audio. Formatted as codec_sample_rate_bitrate.",
-      }),
-  ),
+    })
+    .optional(),
+  output_format: z
+    .enum([
+      "mp3_22050_32",
+      "mp3_44100_32",
+      "mp3_44100_64",
+      "mp3_44100_96",
+      "mp3_44100_128",
+      "mp3_44100_192",
+      "pcm_8000",
+      "pcm_16000",
+      "pcm_22050",
+      "pcm_24000",
+      "pcm_44100",
+      "pcm_48000",
+      "ulaw_8000",
+      "alaw_8000",
+      "opus_48000_32",
+      "opus_48000_64",
+      "opus_48000_96",
+      "opus_48000_128",
+      "opus_48000_192",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "Output format of the generated audio. Formatted as codec_sample_rate_bitrate.",
+    })
+    .optional(),
   remove_background_noise: z
-    .optional(
-      z.boolean().register(z.globalRegistry, {
-        description:
-          "If set, will remove the background noise from your audio input using our audio isolation model.",
-      }),
-    )
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set, will remove the background noise from your audio input using our audio isolation model.",
+    })
+    .optional()
     .default(false),
 });
 
@@ -3777,69 +4067,73 @@ export const zQwen3TtsCloneVoice17bOutput = z.object({
  */
 export const zQwen3TtsCloneVoice17bInput = z.object({
   audio_url: z.union([z.string(), z.string()]),
-  reference_text: z.optional(z.union([z.string(), z.unknown()])),
+  reference_text: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
  * DemucsOutput
  */
 export const zDemucsOutput = z.object({
-  vocals: z.optional(z.union([zFile, z.unknown()])),
-  guitar: z.optional(z.union([zFile, z.unknown()])),
-  bass: z.optional(z.union([zFile, z.unknown()])),
-  piano: z.optional(z.union([zFile, z.unknown()])),
-  other: z.optional(z.union([zFile, z.unknown()])),
-  drums: z.optional(z.union([zFile, z.unknown()])),
+  vocals: z.union([zFile, z.unknown()]).optional(),
+  guitar: z.union([zFile, z.unknown()]).optional(),
+  bass: z.union([zFile, z.unknown()]).optional(),
+  piano: z.union([zFile, z.unknown()]).optional(),
+  other: z.union([zFile, z.unknown()]).optional(),
+  drums: z.union([zFile, z.unknown()]).optional(),
 });
 
 /**
  * DemucsInput
  */
 export const zDemucsInput = z.object({
-  segment_length: z.optional(z.union([z.int(), z.unknown()])),
-  output_format: z.optional(
-    z.enum(["wav", "mp3"]).register(z.globalRegistry, {
+  segment_length: z.union([z.int(), z.unknown()]).optional(),
+  output_format: z
+    .enum(["wav", "mp3"])
+    .register(z.globalRegistry, {
       description: "Output audio format for the separated stems",
-    }),
-  ),
-  stems: z.optional(
-    z.union([
+    })
+    .optional(),
+  stems: z
+    .union([
       z.array(z.enum(["vocals", "drums", "bass", "other", "guitar", "piano"])),
       z.unknown(),
-    ]),
-  ),
+    ])
+    .optional(),
   overlap: z
-    .optional(
-      z.number().gte(0).lte(1).register(z.globalRegistry, {
-        description:
-          "Overlap between segments (0.0 to 1.0). Higher values may improve quality but increase processing time.",
-      }),
-    )
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Overlap between segments (0.0 to 1.0). Higher values may improve quality but increase processing time.",
+    })
+    .optional()
     .default(0.25),
-  model: z.optional(
-    z
-      .enum([
-        "htdemucs",
-        "htdemucs_ft",
-        "htdemucs_6s",
-        "hdemucs_mmi",
-        "mdx",
-        "mdx_extra",
-        "mdx_q",
-        "mdx_extra_q",
-      ])
-      .register(z.globalRegistry, {
-        description: "Demucs model to use for separation",
-      }),
-  ),
+  model: z
+    .enum([
+      "htdemucs",
+      "htdemucs_ft",
+      "htdemucs_6s",
+      "hdemucs_mmi",
+      "mdx",
+      "mdx_extra",
+      "mdx_q",
+      "mdx_extra_q",
+    ])
+    .register(z.globalRegistry, {
+      description: "Demucs model to use for separation",
+    })
+    .optional(),
   audio_url: z.union([z.string(), z.string()]),
   shifts: z
-    .optional(
-      z.int().gte(1).lte(10).register(z.globalRegistry, {
-        description:
-          "Number of random shifts for equivariant stabilization. Higher values improve quality but increase processing time.",
-      }),
-    )
+    .int()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Number of random shifts for equivariant stabilization. Higher values improve quality but increase processing time.",
+    })
+    .optional()
     .default(1),
 });
 
@@ -3848,15 +4142,15 @@ export const zDemucsInput = z.object({
  */
 export const zElevenlabsAudioIsolationOutput = z.object({
   audio: zFile,
-  timestamps: z.optional(z.union([z.array(z.unknown()), z.unknown()])),
+  timestamps: z.union([z.array(z.unknown()), z.unknown()]).optional(),
 });
 
 /**
  * AudioIsolationRequest
  */
 export const zElevenlabsAudioIsolationInput = z.object({
-  video_url: z.optional(z.union([z.string(), z.unknown()])),
-  audio_url: z.optional(z.union([z.string(), z.unknown()])),
+  video_url: z.union([z.string(), z.unknown()]).optional(),
+  audio_url: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
@@ -3892,56 +4186,63 @@ export const zQueueStatus = z.object({
   request_id: z.string().register(z.globalRegistry, {
     description: "The request id.",
   }),
-  response_url: z.optional(
-    z.string().register(z.globalRegistry, {
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The response url.",
-    }),
-  ),
-  status_url: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The status url.",
-    }),
-  ),
-  cancel_url: z.optional(
-    z.string().register(z.globalRegistry, {
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
       description: "The cancel url.",
-    }),
-  ),
-  logs: z.optional(
-    z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
       description: "The logs.",
-    }),
-  ),
-  metrics: z.optional(
-    z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
       description: "The metrics.",
-    }),
-  ),
-  queue_position: z.optional(
-    z.int().register(z.globalRegistry, {
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
       description: "The queue position.",
-    }),
-  ),
+    })
+    .optional(),
 });
 
 export const zGetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -3952,13 +4253,13 @@ export const zGetFalAiKlingVideoCreateVoiceRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -3966,11 +4267,12 @@ export const zPutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelData =
  */
 export const zPutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -3978,8 +4280,8 @@ export const zPutFalAiKlingVideoCreateVoiceRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKlingVideoCreateVoiceData = z.object({
   body: zKlingVideoCreateVoiceInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -3988,13 +4290,13 @@ export const zPostFalAiKlingVideoCreateVoiceData = z.object({
 export const zPostFalAiKlingVideoCreateVoiceResponse = zQueueStatus;
 
 export const zGetFalAiKlingVideoCreateVoiceRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4005,22 +4307,23 @@ export const zGetFalAiKlingVideoCreateVoiceRequestsByRequestIdResponse =
 
 export const zGetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4031,13 +4334,13 @@ export const zGetFalAiElevenlabsAudioIsolationRequestsByRequestIdStatusResponse 
 
 export const zPutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4046,11 +4349,12 @@ export const zPutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelData =
 export const zPutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -4058,8 +4362,8 @@ export const zPutFalAiElevenlabsAudioIsolationRequestsByRequestIdCancelResponse 
 
 export const zPostFalAiElevenlabsAudioIsolationData = z.object({
   body: zElevenlabsAudioIsolationInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4069,13 +4373,13 @@ export const zPostFalAiElevenlabsAudioIsolationResponse = zQueueStatus;
 
 export const zGetFalAiElevenlabsAudioIsolationRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4085,22 +4389,23 @@ export const zGetFalAiElevenlabsAudioIsolationRequestsByRequestIdResponse =
   zElevenlabsAudioIsolationOutput;
 
 export const zGetFalAiDemucsRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4109,13 +4414,13 @@ export const zGetFalAiDemucsRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiDemucsRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiDemucsRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4123,11 +4428,12 @@ export const zPutFalAiDemucsRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiDemucsRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4135,8 +4441,8 @@ export const zPutFalAiDemucsRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiDemucsData = z.object({
   body: zDemucsInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4145,13 +4451,13 @@ export const zPostFalAiDemucsData = z.object({
 export const zPostFalAiDemucsResponse = zQueueStatus;
 
 export const zGetFalAiDemucsRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4161,22 +4467,23 @@ export const zGetFalAiDemucsRequestsByRequestIdResponse = zDemucsOutput;
 
 export const zGetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4187,13 +4494,13 @@ export const zGetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4201,11 +4508,12 @@ export const zPutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelData =
  */
 export const zPutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4213,8 +4521,8 @@ export const zPutFalAiQwen3TtsCloneVoice17bRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiQwen3TtsCloneVoice17bData = z.object({
   body: zQwen3TtsCloneVoice17bInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4223,13 +4531,13 @@ export const zPostFalAiQwen3TtsCloneVoice17bData = z.object({
 export const zPostFalAiQwen3TtsCloneVoice17bResponse = zQueueStatus;
 
 export const zGetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4240,22 +4548,23 @@ export const zGetFalAiQwen3TtsCloneVoice17bRequestsByRequestIdResponse =
 
 export const zGetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4266,13 +4575,13 @@ export const zGetFalAiElevenlabsVoiceChangerRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4281,11 +4590,12 @@ export const zPutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelData =
 export const zPutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -4293,8 +4603,8 @@ export const zPutFalAiElevenlabsVoiceChangerRequestsByRequestIdCancelResponse =
 
 export const zPostFalAiElevenlabsVoiceChangerData = z.object({
   body: zElevenlabsVoiceChangerInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4303,13 +4613,13 @@ export const zPostFalAiElevenlabsVoiceChangerData = z.object({
 export const zPostFalAiElevenlabsVoiceChangerResponse = zQueueStatus;
 
 export const zGetFalAiElevenlabsVoiceChangerRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4320,22 +4630,23 @@ export const zGetFalAiElevenlabsVoiceChangerRequestsByRequestIdResponse =
 
 export const zGetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4346,13 +4657,13 @@ export const zGetFalAiFfmpegApiMergeAudiosRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4360,11 +4671,12 @@ export const zPutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelData =
  */
 export const zPutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4372,8 +4684,8 @@ export const zPutFalAiFfmpegApiMergeAudiosRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiFfmpegApiMergeAudiosData = z.object({
   body: zFfmpegApiMergeAudiosInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4382,13 +4694,13 @@ export const zPostFalAiFfmpegApiMergeAudiosData = z.object({
 export const zPostFalAiFfmpegApiMergeAudiosResponse = zQueueStatus;
 
 export const zGetFalAiFfmpegApiMergeAudiosRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4398,22 +4710,23 @@ export const zGetFalAiFfmpegApiMergeAudiosRequestsByRequestIdResponse =
   zFfmpegApiMergeAudiosOutput;
 
 export const zGetFalAiSamAudioSeparateRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4423,13 +4736,13 @@ export const zGetFalAiSamAudioSeparateRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiSamAudioSeparateRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4437,11 +4750,12 @@ export const zPutFalAiSamAudioSeparateRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiSamAudioSeparateRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4449,8 +4763,8 @@ export const zPutFalAiSamAudioSeparateRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiSamAudioSeparateData = z.object({
   body: zSamAudioSeparateInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4459,13 +4773,13 @@ export const zPostFalAiSamAudioSeparateData = z.object({
 export const zPostFalAiSamAudioSeparateResponse = zQueueStatus;
 
 export const zGetFalAiSamAudioSeparateRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4475,22 +4789,23 @@ export const zGetFalAiSamAudioSeparateRequestsByRequestIdResponse =
   zSamAudioSeparateOutput;
 
 export const zGetFalAiDeepfilternet3RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4500,13 +4815,13 @@ export const zGetFalAiDeepfilternet3RequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiDeepfilternet3RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4514,11 +4829,12 @@ export const zPutFalAiDeepfilternet3RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiDeepfilternet3RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4526,8 +4842,8 @@ export const zPutFalAiDeepfilternet3RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiDeepfilternet3Data = z.object({
   body: zDeepfilternet3Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4536,13 +4852,13 @@ export const zPostFalAiDeepfilternet3Data = z.object({
 export const zPostFalAiDeepfilternet3Response = zQueueStatus;
 
 export const zGetFalAiDeepfilternet3RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4553,22 +4869,23 @@ export const zGetFalAiDeepfilternet3RequestsByRequestIdResponse =
 
 export const zGetFalAiAceStepAudioToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4579,13 +4896,13 @@ export const zGetFalAiAceStepAudioToAudioRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiAceStepAudioToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4593,11 +4910,12 @@ export const zPutFalAiAceStepAudioToAudioRequestsByRequestIdCancelData =
  */
 export const zPutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4605,8 +4923,8 @@ export const zPutFalAiAceStepAudioToAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiAceStepAudioToAudioData = z.object({
   body: zAceStepAudioToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4615,13 +4933,13 @@ export const zPostFalAiAceStepAudioToAudioData = z.object({
 export const zPostFalAiAceStepAudioToAudioResponse = zQueueStatus;
 
 export const zGetFalAiAceStepAudioToAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4632,22 +4950,23 @@ export const zGetFalAiAceStepAudioToAudioRequestsByRequestIdResponse =
 
 export const zGetFalAiTada3bTextToSpeechRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4658,13 +4977,13 @@ export const zGetFalAiTada3bTextToSpeechRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiTada3bTextToSpeechRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4672,11 +4991,12 @@ export const zPutFalAiTada3bTextToSpeechRequestsByRequestIdCancelData =
  */
 export const zPutFalAiTada3bTextToSpeechRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4684,8 +5004,8 @@ export const zPutFalAiTada3bTextToSpeechRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTada3bTextToSpeechData = z.object({
   body: zTada3bTextToSpeechInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4694,13 +5014,13 @@ export const zPostFalAiTada3bTextToSpeechData = z.object({
 export const zPostFalAiTada3bTextToSpeechResponse = zQueueStatus;
 
 export const zGetFalAiTada3bTextToSpeechRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4711,22 +5031,23 @@ export const zGetFalAiTada3bTextToSpeechRequestsByRequestIdResponse =
 
 export const zGetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4737,13 +5058,13 @@ export const zGetFalAiStableAudio25AudioToAudioRequestsByRequestIdStatusResponse
 
 export const zPutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4752,11 +5073,12 @@ export const zPutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelData =
 export const zPutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -4764,8 +5086,8 @@ export const zPutFalAiStableAudio25AudioToAudioRequestsByRequestIdCancelResponse
 
 export const zPostFalAiStableAudio25AudioToAudioData = z.object({
   body: zStableAudio25AudioToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4775,13 +5097,13 @@ export const zPostFalAiStableAudio25AudioToAudioResponse = zQueueStatus;
 
 export const zGetFalAiStableAudio25AudioToAudioRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4792,22 +5114,23 @@ export const zGetFalAiStableAudio25AudioToAudioRequestsByRequestIdResponse =
 
 export const zGetFalAiAceStepAudioInpaintRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4818,13 +5141,13 @@ export const zGetFalAiAceStepAudioInpaintRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiAceStepAudioInpaintRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4832,11 +5155,12 @@ export const zPutFalAiAceStepAudioInpaintRequestsByRequestIdCancelData =
  */
 export const zPutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4844,8 +5168,8 @@ export const zPutFalAiAceStepAudioInpaintRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiAceStepAudioInpaintData = z.object({
   body: zAceStepAudioInpaintInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4854,13 +5178,13 @@ export const zPostFalAiAceStepAudioInpaintData = z.object({
 export const zPostFalAiAceStepAudioInpaintResponse = zQueueStatus;
 
 export const zGetFalAiAceStepAudioInpaintRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4871,22 +5195,23 @@ export const zGetFalAiAceStepAudioInpaintRequestsByRequestIdResponse =
 
 export const zGetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -4897,13 +5222,13 @@ export const zGetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -4911,11 +5236,12 @@ export const zPutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelData =
  */
 export const zPutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4923,8 +5249,8 @@ export const zPutFalAiQwen3TtsCloneVoice06bRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiQwen3TtsCloneVoice06bData = z.object({
   body: zQwen3TtsCloneVoice06bInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -4933,13 +5259,13 @@ export const zPostFalAiQwen3TtsCloneVoice06bData = z.object({
 export const zPostFalAiQwen3TtsCloneVoice06bResponse = zQueueStatus;
 
 export const zGetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4949,22 +5275,23 @@ export const zGetFalAiQwen3TtsCloneVoice06bRequestsByRequestIdResponse =
   zQwen3TtsCloneVoice06bOutput;
 
 export const zGetFalAiNovaSrRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -4973,13 +5300,13 @@ export const zGetFalAiNovaSrRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiNovaSrRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiNovaSrRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -4987,11 +5314,12 @@ export const zPutFalAiNovaSrRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiNovaSrRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -4999,8 +5327,8 @@ export const zPutFalAiNovaSrRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiNovaSrData = z.object({
   body: zNovaSrInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5009,13 +5337,13 @@ export const zPostFalAiNovaSrData = z.object({
 export const zPostFalAiNovaSrResponse = zQueueStatus;
 
 export const zGetFalAiNovaSrRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5025,22 +5353,23 @@ export const zGetFalAiNovaSrRequestsByRequestIdResponse = zNovaSrOutput;
 
 export const zGetFalAiAudioUnderstandingRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5051,13 +5380,13 @@ export const zGetFalAiAudioUnderstandingRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiAudioUnderstandingRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5065,11 +5394,12 @@ export const zPutFalAiAudioUnderstandingRequestsByRequestIdCancelData =
  */
 export const zPutFalAiAudioUnderstandingRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5077,8 +5407,8 @@ export const zPutFalAiAudioUnderstandingRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiAudioUnderstandingData = z.object({
   body: zAudioUnderstandingInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5087,13 +5417,13 @@ export const zPostFalAiAudioUnderstandingData = z.object({
 export const zPostFalAiAudioUnderstandingResponse = zQueueStatus;
 
 export const zGetFalAiAudioUnderstandingRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5103,22 +5433,23 @@ export const zGetFalAiAudioUnderstandingRequestsByRequestIdResponse =
   zAudioUnderstandingOutput;
 
 export const zGetSonautoV2ExtendRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5128,13 +5459,13 @@ export const zGetSonautoV2ExtendRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutSonautoV2ExtendRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5142,11 +5473,12 @@ export const zPutSonautoV2ExtendRequestsByRequestIdCancelData = z.object({
  */
 export const zPutSonautoV2ExtendRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5154,8 +5486,8 @@ export const zPutSonautoV2ExtendRequestsByRequestIdCancelResponse = z
 
 export const zPostSonautoV2ExtendData = z.object({
   body: zV2ExtendInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5164,13 +5496,13 @@ export const zPostSonautoV2ExtendData = z.object({
 export const zPostSonautoV2ExtendResponse = zQueueStatus;
 
 export const zGetSonautoV2ExtendRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5179,22 +5511,23 @@ export const zGetSonautoV2ExtendRequestsByRequestIdData = z.object({
 export const zGetSonautoV2ExtendRequestsByRequestIdResponse = zV2ExtendOutput;
 
 export const zGetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5204,13 +5537,13 @@ export const zGetFalAiDiaTtsVoiceCloneRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5218,11 +5551,12 @@ export const zPutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5230,8 +5564,8 @@ export const zPutFalAiDiaTtsVoiceCloneRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiDiaTtsVoiceCloneData = z.object({
   body: zDiaTtsVoiceCloneInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5240,13 +5574,13 @@ export const zPostFalAiDiaTtsVoiceCloneData = z.object({
 export const zPostFalAiDiaTtsVoiceCloneResponse = zQueueStatus;
 
 export const zGetFalAiDiaTtsVoiceCloneRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5257,22 +5591,23 @@ export const zGetFalAiDiaTtsVoiceCloneRequestsByRequestIdResponse =
 
 export const zGetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5283,13 +5618,13 @@ export const zGetFalAiSamAudioSpanSeparateRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5297,11 +5632,12 @@ export const zPutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelData =
  */
 export const zPutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5309,8 +5645,8 @@ export const zPutFalAiSamAudioSpanSeparateRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiSamAudioSpanSeparateData = z.object({
   body: zSamAudioSpanSeparateInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5319,13 +5655,13 @@ export const zPostFalAiSamAudioSpanSeparateData = z.object({
 export const zPostFalAiSamAudioSpanSeparateResponse = zQueueStatus;
 
 export const zGetFalAiSamAudioSpanSeparateRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5335,22 +5671,23 @@ export const zGetFalAiSamAudioSpanSeparateRequestsByRequestIdResponse =
   zSamAudioSpanSeparateOutput;
 
 export const zGetFalAiPersonaplexRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5360,13 +5697,13 @@ export const zGetFalAiPersonaplexRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiPersonaplexRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5374,11 +5711,12 @@ export const zPutFalAiPersonaplexRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiPersonaplexRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5386,8 +5724,8 @@ export const zPutFalAiPersonaplexRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiPersonaplexData = z.object({
   body: zPersonaplexInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5396,13 +5734,13 @@ export const zPostFalAiPersonaplexData = z.object({
 export const zPostFalAiPersonaplexResponse = zQueueStatus;
 
 export const zGetFalAiPersonaplexRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5413,22 +5751,23 @@ export const zGetFalAiPersonaplexRequestsByRequestIdResponse =
 
 export const zGetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5439,13 +5778,13 @@ export const zGetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdStatusR
 
 export const zPutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5454,11 +5793,12 @@ export const zPutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelD
 export const zPutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -5466,8 +5806,8 @@ export const zPutFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdCancelR
 
 export const zPostFalAiWorkflowUtilitiesAudioCompressorData = z.object({
   body: zWorkflowUtilitiesAudioCompressorInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5477,13 +5817,13 @@ export const zPostFalAiWorkflowUtilitiesAudioCompressorResponse = zQueueStatus;
 
 export const zGetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5494,22 +5834,23 @@ export const zGetFalAiWorkflowUtilitiesAudioCompressorRequestsByRequestIdRespons
 
 export const zGetFalAiTada1bTextToSpeechRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5520,13 +5861,13 @@ export const zGetFalAiTada1bTextToSpeechRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiTada1bTextToSpeechRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5534,11 +5875,12 @@ export const zPutFalAiTada1bTextToSpeechRequestsByRequestIdCancelData =
  */
 export const zPutFalAiTada1bTextToSpeechRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5546,8 +5888,8 @@ export const zPutFalAiTada1bTextToSpeechRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiTada1bTextToSpeechData = z.object({
   body: zTada1bTextToSpeechInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5556,13 +5898,13 @@ export const zPostFalAiTada1bTextToSpeechData = z.object({
 export const zPostFalAiTada1bTextToSpeechResponse = zQueueStatus;
 
 export const zGetFalAiTada1bTextToSpeechRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5572,22 +5914,23 @@ export const zGetFalAiTada1bTextToSpeechRequestsByRequestIdResponse =
   zTada1bTextToSpeechOutput;
 
 export const zGetFalAiLavaSrRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -5596,13 +5939,13 @@ export const zGetFalAiLavaSrRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiLavaSrRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiLavaSrRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5610,11 +5953,12 @@ export const zPutFalAiLavaSrRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiLavaSrRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5622,8 +5966,8 @@ export const zPutFalAiLavaSrRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiLavaSrData = z.object({
   body: zLavaSrInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5632,13 +5976,13 @@ export const zPostFalAiLavaSrData = z.object({
 export const zPostFalAiLavaSrResponse = zQueueStatus;
 
 export const zGetFalAiLavaSrRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5648,22 +5992,23 @@ export const zGetFalAiLavaSrRequestsByRequestIdResponse = zLavaSrOutput;
 
 export const zGetFalAiAceStepAudioOutpaintRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5674,13 +6019,13 @@ export const zGetFalAiAceStepAudioOutpaintRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiAceStepAudioOutpaintRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5688,11 +6033,12 @@ export const zPutFalAiAceStepAudioOutpaintRequestsByRequestIdCancelData =
  */
 export const zPutFalAiAceStepAudioOutpaintRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5700,8 +6046,8 @@ export const zPutFalAiAceStepAudioOutpaintRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiAceStepAudioOutpaintData = z.object({
   body: zAceStepAudioOutpaintInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5710,13 +6056,13 @@ export const zPostFalAiAceStepAudioOutpaintData = z.object({
 export const zPostFalAiAceStepAudioOutpaintResponse = zQueueStatus;
 
 export const zGetFalAiAceStepAudioOutpaintRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5727,22 +6073,23 @@ export const zGetFalAiAceStepAudioOutpaintRequestsByRequestIdResponse =
 
 export const zGetFalAiPersonaplexRealtimeRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5753,13 +6100,13 @@ export const zGetFalAiPersonaplexRealtimeRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiPersonaplexRealtimeRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5767,11 +6114,12 @@ export const zPutFalAiPersonaplexRealtimeRequestsByRequestIdCancelData =
  */
 export const zPutFalAiPersonaplexRealtimeRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5779,8 +6127,8 @@ export const zPutFalAiPersonaplexRealtimeRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiPersonaplexRealtimeData = z.object({
   body: zPersonaplexRealtimeInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5789,13 +6137,13 @@ export const zPostFalAiPersonaplexRealtimeData = z.object({
 export const zPostFalAiPersonaplexRealtimeResponse = zQueueStatus;
 
 export const zGetFalAiPersonaplexRealtimeRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5806,22 +6154,23 @@ export const zGetFalAiPersonaplexRealtimeRequestsByRequestIdResponse =
 
 export const zGetFalAiStableAudio25InpaintRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5832,13 +6181,13 @@ export const zGetFalAiStableAudio25InpaintRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiStableAudio25InpaintRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5846,11 +6195,12 @@ export const zPutFalAiStableAudio25InpaintRequestsByRequestIdCancelData =
  */
 export const zPutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -5858,8 +6208,8 @@ export const zPutFalAiStableAudio25InpaintRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiStableAudio25InpaintData = z.object({
   body: zStableAudio25InpaintInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5868,13 +6218,13 @@ export const zPostFalAiStableAudio25InpaintData = z.object({
 export const zPostFalAiStableAudio25InpaintResponse = zQueueStatus;
 
 export const zGetFalAiStableAudio25InpaintRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -5885,22 +6235,23 @@ export const zGetFalAiStableAudio25InpaintRequestsByRequestIdResponse =
 
 export const zGetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5911,13 +6262,13 @@ export const zGetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdStatusR
 
 export const zPutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5926,11 +6277,12 @@ export const zPutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelD
 export const zPutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -5938,8 +6290,8 @@ export const zPutFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdCancelR
 
 export const zPostFalAiWorkflowUtilitiesImpulseResponseData = z.object({
   body: zWorkflowUtilitiesImpulseResponseInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -5949,13 +6301,13 @@ export const zPostFalAiWorkflowUtilitiesImpulseResponseResponse = zQueueStatus;
 
 export const zGetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -5966,22 +6318,23 @@ export const zGetFalAiWorkflowUtilitiesImpulseResponseRequestsByRequestIdRespons
 
 export const zGetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -5992,13 +6345,13 @@ export const zGetFalAiElevenlabsTtsElevenV3RequestsByRequestIdStatusResponse =
 
 export const zPutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6006,11 +6359,12 @@ export const zPutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelData =
  */
 export const zPutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6018,8 +6372,8 @@ export const zPutFalAiElevenlabsTtsElevenV3RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiElevenlabsTtsElevenV3Data = z.object({
   body: zElevenlabsTtsElevenV3Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6028,13 +6382,13 @@ export const zPostFalAiElevenlabsTtsElevenV3Data = z.object({
 export const zPostFalAiElevenlabsTtsElevenV3Response = zQueueStatus;
 
 export const zGetFalAiElevenlabsTtsElevenV3RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6044,22 +6398,23 @@ export const zGetFalAiElevenlabsTtsElevenV3RequestsByRequestIdResponse =
   zElevenlabsTtsElevenV3Output;
 
 export const zGetFalAiMinimaxMusicV2RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6069,13 +6424,13 @@ export const zGetFalAiMinimaxMusicV2RequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMinimaxMusicV2RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6083,11 +6438,12 @@ export const zPutFalAiMinimaxMusicV2RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMinimaxMusicV2RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6095,8 +6451,8 @@ export const zPutFalAiMinimaxMusicV2RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMinimaxMusicV2Data = z.object({
   body: zMinimaxMusicV2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6105,13 +6461,13 @@ export const zPostFalAiMinimaxMusicV2Data = z.object({
 export const zPostFalAiMinimaxMusicV2Response = zQueueStatus;
 
 export const zGetFalAiMinimaxMusicV2RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6122,22 +6478,23 @@ export const zGetFalAiMinimaxMusicV2RequestsByRequestIdResponse =
 
 export const zGetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6148,13 +6505,13 @@ export const zGetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdStatusRespon
 
 export const zPutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6163,11 +6520,12 @@ export const zPutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelData =
 export const zPutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -6175,8 +6533,8 @@ export const zPutFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdCancelRespon
 
 export const zPostFalAiElevenlabsTtsMultilingualV2Data = z.object({
   body: zElevenlabsTtsMultilingualV2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6186,13 +6544,13 @@ export const zPostFalAiElevenlabsTtsMultilingualV2Response = zQueueStatus;
 
 export const zGetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6203,22 +6561,23 @@ export const zGetFalAiElevenlabsTtsMultilingualV2RequestsByRequestIdResponse =
 
 export const zGetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6229,13 +6588,13 @@ export const zGetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdStatusResponse 
 
 export const zPutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6244,11 +6603,12 @@ export const zPutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelData =
 export const zPutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -6256,8 +6616,8 @@ export const zPutFalAiElevenlabsSoundEffectsV2RequestsByRequestIdCancelResponse 
 
 export const zPostFalAiElevenlabsSoundEffectsV2Data = z.object({
   body: zElevenlabsSoundEffectsV2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6267,13 +6627,13 @@ export const zPostFalAiElevenlabsSoundEffectsV2Response = zQueueStatus;
 
 export const zGetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6283,22 +6643,23 @@ export const zGetFalAiElevenlabsSoundEffectsV2RequestsByRequestIdResponse =
   zElevenlabsSoundEffectsV2Output;
 
 export const zGetFalAiElevenlabsMusicRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6308,13 +6669,13 @@ export const zGetFalAiElevenlabsMusicRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiElevenlabsMusicRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6322,11 +6683,12 @@ export const zPutFalAiElevenlabsMusicRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiElevenlabsMusicRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6334,8 +6696,8 @@ export const zPutFalAiElevenlabsMusicRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiElevenlabsMusicData = z.object({
   body: zElevenlabsMusicInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6344,13 +6706,13 @@ export const zPostFalAiElevenlabsMusicData = z.object({
 export const zPostFalAiElevenlabsMusicResponse = zQueueStatus;
 
 export const zGetFalAiElevenlabsMusicRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6360,22 +6722,23 @@ export const zGetFalAiElevenlabsMusicRequestsByRequestIdResponse =
   zElevenlabsMusicOutput;
 
 export const zGetFalAiStableAudioRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6385,13 +6748,13 @@ export const zGetFalAiStableAudioRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiStableAudioRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6399,11 +6762,12 @@ export const zPutFalAiStableAudioRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiStableAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6411,8 +6775,8 @@ export const zPutFalAiStableAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiStableAudioData = z.object({
   body: zStableAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6421,13 +6785,13 @@ export const zPostFalAiStableAudioData = z.object({
 export const zPostFalAiStableAudioResponse = zQueueStatus;
 
 export const zGetFalAiStableAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6438,22 +6802,23 @@ export const zGetFalAiStableAudioRequestsByRequestIdResponse =
 
 export const zGetCassetteaiMusicGeneratorRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6464,13 +6829,13 @@ export const zGetCassetteaiMusicGeneratorRequestsByRequestIdStatusResponse =
 
 export const zPutCassetteaiMusicGeneratorRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6478,11 +6843,12 @@ export const zPutCassetteaiMusicGeneratorRequestsByRequestIdCancelData =
  */
 export const zPutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6490,8 +6856,8 @@ export const zPutCassetteaiMusicGeneratorRequestsByRequestIdCancelResponse = z
 
 export const zPostCassetteaiMusicGeneratorData = z.object({
   body: zMusicGeneratorInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6500,13 +6866,13 @@ export const zPostCassetteaiMusicGeneratorData = z.object({
 export const zPostCassetteaiMusicGeneratorResponse = zQueueStatus;
 
 export const zGetCassetteaiMusicGeneratorRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6517,22 +6883,23 @@ export const zGetCassetteaiMusicGeneratorRequestsByRequestIdResponse =
 
 export const zGetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6543,13 +6910,13 @@ export const zGetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdStatusR
 
 export const zPutFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6558,11 +6925,12 @@ export const zPutFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdCancelD
 export const zPutFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -6570,8 +6938,8 @@ export const zPutFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdCancelR
 
 export const zPostFalAiElevenlabsTextToDialogueElevenV3Data = z.object({
   body: zElevenlabsTextToDialogueElevenV3Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6581,13 +6949,13 @@ export const zPostFalAiElevenlabsTextToDialogueElevenV3Response = zQueueStatus;
 
 export const zGetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6598,22 +6966,23 @@ export const zGetFalAiElevenlabsTextToDialogueElevenV3RequestsByRequestIdRespons
 
 export const zGetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6624,13 +6993,13 @@ export const zGetFalAiKokoroAmericanEnglishRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6638,11 +7007,12 @@ export const zPutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelData =
  */
 export const zPutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6650,8 +7020,8 @@ export const zPutFalAiKokoroAmericanEnglishRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroAmericanEnglishData = z.object({
   body: zKokoroAmericanEnglishInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6660,13 +7030,13 @@ export const zPostFalAiKokoroAmericanEnglishData = z.object({
 export const zPostFalAiKokoroAmericanEnglishResponse = zQueueStatus;
 
 export const zGetFalAiKokoroAmericanEnglishRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6676,22 +7046,23 @@ export const zGetFalAiKokoroAmericanEnglishRequestsByRequestIdResponse =
   zKokoroAmericanEnglishOutput;
 
 export const zGetSonautoV2TextToMusicRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6701,13 +7072,13 @@ export const zGetSonautoV2TextToMusicRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutSonautoV2TextToMusicRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6715,11 +7086,12 @@ export const zPutSonautoV2TextToMusicRequestsByRequestIdCancelData = z.object({
  */
 export const zPutSonautoV2TextToMusicRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6727,8 +7099,8 @@ export const zPutSonautoV2TextToMusicRequestsByRequestIdCancelResponse = z
 
 export const zPostSonautoV2TextToMusicData = z.object({
   body: zV2TextToMusicInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6737,13 +7109,13 @@ export const zPostSonautoV2TextToMusicData = z.object({
 export const zPostSonautoV2TextToMusicResponse = zQueueStatus;
 
 export const zGetSonautoV2TextToMusicRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6753,22 +7125,23 @@ export const zGetSonautoV2TextToMusicRequestsByRequestIdResponse =
   zV2TextToMusicOutput;
 
 export const zGetFalAiLyria2RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6777,13 +7150,13 @@ export const zGetFalAiLyria2RequestsByRequestIdStatusData = z.object({
 export const zGetFalAiLyria2RequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiLyria2RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6791,11 +7164,12 @@ export const zPutFalAiLyria2RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiLyria2RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6803,8 +7177,8 @@ export const zPutFalAiLyria2RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiLyria2Data = z.object({
   body: zLyria2Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6813,13 +7187,13 @@ export const zPostFalAiLyria2Data = z.object({
 export const zPostFalAiLyria2Response = zQueueStatus;
 
 export const zGetFalAiLyria2RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6829,22 +7203,23 @@ export const zGetFalAiLyria2RequestsByRequestIdResponse = zLyria2Output;
 
 export const zGetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -6855,13 +7230,13 @@ export const zGetFalAiStableAudio25TextToAudioRequestsByRequestIdStatusResponse 
 
 export const zPutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6870,11 +7245,12 @@ export const zPutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelData =
 export const zPutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -6882,8 +7258,8 @@ export const zPutFalAiStableAudio25TextToAudioRequestsByRequestIdCancelResponse 
 
 export const zPostFalAiStableAudio25TextToAudioData = z.object({
   body: zStableAudio25TextToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6893,13 +7269,13 @@ export const zPostFalAiStableAudio25TextToAudioResponse = zQueueStatus;
 
 export const zGetFalAiStableAudio25TextToAudioRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -6909,22 +7285,23 @@ export const zGetFalAiStableAudio25TextToAudioRequestsByRequestIdResponse =
   zStableAudio25TextToAudioOutput;
 
 export const zGetFalAiGeminiTtsRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -6933,13 +7310,13 @@ export const zGetFalAiGeminiTtsRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiGeminiTtsRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiGeminiTtsRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6947,11 +7324,12 @@ export const zPutFalAiGeminiTtsRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiGeminiTtsRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -6959,8 +7337,8 @@ export const zPutFalAiGeminiTtsRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiGeminiTtsData = z.object({
   body: zGeminiTtsInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -6969,13 +7347,13 @@ export const zPostFalAiGeminiTtsData = z.object({
 export const zPostFalAiGeminiTtsResponse = zQueueStatus;
 
 export const zGetFalAiGeminiTtsRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -6984,22 +7362,23 @@ export const zGetFalAiGeminiTtsRequestsByRequestIdData = z.object({
 export const zGetFalAiGeminiTtsRequestsByRequestIdResponse = zGeminiTtsOutput;
 
 export const zGetFalAiF5TtsRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7008,13 +7387,13 @@ export const zGetFalAiF5TtsRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiF5TtsRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiF5TtsRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7022,11 +7401,12 @@ export const zPutFalAiF5TtsRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiF5TtsRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7034,8 +7414,8 @@ export const zPutFalAiF5TtsRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiF5TtsData = z.object({
   body: zF5TtsInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7044,13 +7424,13 @@ export const zPostFalAiF5TtsData = z.object({
 export const zPostFalAiF5TtsResponse = zQueueStatus;
 
 export const zGetFalAiF5TtsRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7060,22 +7440,23 @@ export const zGetFalAiF5TtsRequestsByRequestIdResponse = zF5TtsOutput;
 
 export const zGetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -7086,13 +7467,13 @@ export const zGetFalAiMmaudioV2TextToAudioRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -7100,11 +7481,12 @@ export const zPutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelData =
  */
 export const zPutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7112,8 +7494,8 @@ export const zPutFalAiMmaudioV2TextToAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMmaudioV2TextToAudioData = z.object({
   body: zMmaudioV2TextToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7122,13 +7504,13 @@ export const zPostFalAiMmaudioV2TextToAudioData = z.object({
 export const zPostFalAiMmaudioV2TextToAudioResponse = zQueueStatus;
 
 export const zGetFalAiMmaudioV2TextToAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7139,22 +7521,23 @@ export const zGetFalAiMmaudioV2TextToAudioRequestsByRequestIdResponse =
 
 export const zGetCassetteaiSoundEffectsGeneratorRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -7165,13 +7548,13 @@ export const zGetCassetteaiSoundEffectsGeneratorRequestsByRequestIdStatusRespons
 
 export const zPutCassetteaiSoundEffectsGeneratorRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -7180,11 +7563,12 @@ export const zPutCassetteaiSoundEffectsGeneratorRequestsByRequestIdCancelData =
 export const zPutCassetteaiSoundEffectsGeneratorRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -7192,8 +7576,8 @@ export const zPutCassetteaiSoundEffectsGeneratorRequestsByRequestIdCancelRespons
 
 export const zPostCassetteaiSoundEffectsGeneratorData = z.object({
   body: zSoundEffectsGeneratorInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7203,13 +7587,13 @@ export const zPostCassetteaiSoundEffectsGeneratorResponse = zQueueStatus;
 
 export const zGetCassetteaiSoundEffectsGeneratorRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -7219,22 +7603,23 @@ export const zGetCassetteaiSoundEffectsGeneratorRequestsByRequestIdResponse =
   zSoundEffectsGeneratorOutput;
 
 export const zGetFalAiAceStepRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7243,13 +7628,13 @@ export const zGetFalAiAceStepRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiAceStepRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiAceStepRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7257,11 +7642,12 @@ export const zPutFalAiAceStepRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiAceStepRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7269,8 +7655,8 @@ export const zPutFalAiAceStepRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiAceStepData = z.object({
   body: zAceStepInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7279,13 +7665,13 @@ export const zPostFalAiAceStepData = z.object({
 export const zPostFalAiAceStepResponse = zQueueStatus;
 
 export const zGetFalAiAceStepRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7295,22 +7681,23 @@ export const zGetFalAiAceStepRequestsByRequestIdResponse = zAceStepOutput;
 
 export const zGetFalAiAceStepPromptToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -7321,13 +7708,13 @@ export const zGetFalAiAceStepPromptToAudioRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiAceStepPromptToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -7335,11 +7722,12 @@ export const zPutFalAiAceStepPromptToAudioRequestsByRequestIdCancelData =
  */
 export const zPutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7347,8 +7735,8 @@ export const zPutFalAiAceStepPromptToAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiAceStepPromptToAudioData = z.object({
   body: zAceStepPromptToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7357,13 +7745,13 @@ export const zPostFalAiAceStepPromptToAudioData = z.object({
 export const zPostFalAiAceStepPromptToAudioResponse = zQueueStatus;
 
 export const zGetFalAiAceStepPromptToAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7373,22 +7761,23 @@ export const zGetFalAiAceStepPromptToAudioRequestsByRequestIdResponse =
   zAceStepPromptToAudioOutput;
 
 export const zGetFalAiMinimaxMusicRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7398,13 +7787,13 @@ export const zGetFalAiMinimaxMusicRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMinimaxMusicRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7412,11 +7801,12 @@ export const zPutFalAiMinimaxMusicRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMinimaxMusicRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7424,8 +7814,8 @@ export const zPutFalAiMinimaxMusicRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMinimaxMusicData = z.object({
   body: zMinimaxMusicInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7434,13 +7824,13 @@ export const zPostFalAiMinimaxMusicData = z.object({
 export const zPostFalAiMinimaxMusicResponse = zQueueStatus;
 
 export const zGetFalAiMinimaxMusicRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7450,22 +7840,23 @@ export const zGetFalAiMinimaxMusicRequestsByRequestIdResponse =
   zMinimaxMusicOutput;
 
 export const zGetFalAiMinimaxMusicV15RequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7475,13 +7866,13 @@ export const zGetFalAiMinimaxMusicV15RequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiMinimaxMusicV15RequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7489,11 +7880,12 @@ export const zPutFalAiMinimaxMusicV15RequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7501,8 +7893,8 @@ export const zPutFalAiMinimaxMusicV15RequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiMinimaxMusicV15Data = z.object({
   body: zMinimaxMusicV15Input,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7511,13 +7903,13 @@ export const zPostFalAiMinimaxMusicV15Data = z.object({
 export const zPostFalAiMinimaxMusicV15Response = zQueueStatus;
 
 export const zGetFalAiMinimaxMusicV15RequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7528,22 +7920,23 @@ export const zGetFalAiMinimaxMusicV15RequestsByRequestIdResponse =
 
 export const zGetFalAiKokoroBritishEnglishRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -7554,13 +7947,13 @@ export const zGetFalAiKokoroBritishEnglishRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiKokoroBritishEnglishRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -7568,11 +7961,12 @@ export const zPutFalAiKokoroBritishEnglishRequestsByRequestIdCancelData =
  */
 export const zPutFalAiKokoroBritishEnglishRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7580,8 +7974,8 @@ export const zPutFalAiKokoroBritishEnglishRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroBritishEnglishData = z.object({
   body: zKokoroBritishEnglishInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7590,13 +7984,13 @@ export const zPostFalAiKokoroBritishEnglishData = z.object({
 export const zPostFalAiKokoroBritishEnglishResponse = zQueueStatus;
 
 export const zGetFalAiKokoroBritishEnglishRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7606,22 +8000,23 @@ export const zGetFalAiKokoroBritishEnglishRequestsByRequestIdResponse =
   zKokoroBritishEnglishOutput;
 
 export const zGetFalAiKokoroFrenchRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7631,13 +8026,13 @@ export const zGetFalAiKokoroFrenchRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiKokoroFrenchRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7645,11 +8040,12 @@ export const zPutFalAiKokoroFrenchRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiKokoroFrenchRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7657,8 +8053,8 @@ export const zPutFalAiKokoroFrenchRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroFrenchData = z.object({
   body: zKokoroFrenchInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7667,13 +8063,13 @@ export const zPostFalAiKokoroFrenchData = z.object({
 export const zPostFalAiKokoroFrenchResponse = zQueueStatus;
 
 export const zGetFalAiKokoroFrenchRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7683,22 +8079,23 @@ export const zGetFalAiKokoroFrenchRequestsByRequestIdResponse =
   zKokoroFrenchOutput;
 
 export const zGetFalAiKokoroSpanishRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7708,13 +8105,13 @@ export const zGetFalAiKokoroSpanishRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiKokoroSpanishRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7722,11 +8119,12 @@ export const zPutFalAiKokoroSpanishRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiKokoroSpanishRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7734,8 +8132,8 @@ export const zPutFalAiKokoroSpanishRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroSpanishData = z.object({
   body: zKokoroSpanishInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7744,13 +8142,13 @@ export const zPostFalAiKokoroSpanishData = z.object({
 export const zPostFalAiKokoroSpanishResponse = zQueueStatus;
 
 export const zGetFalAiKokoroSpanishRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7760,22 +8158,23 @@ export const zGetFalAiKokoroSpanishRequestsByRequestIdResponse =
   zKokoroSpanishOutput;
 
 export const zGetFalAiYueRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7784,13 +8183,13 @@ export const zGetFalAiYueRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiYueRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiYueRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7798,11 +8197,12 @@ export const zPutFalAiYueRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiYueRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7810,8 +8210,8 @@ export const zPutFalAiYueRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiYueData = z.object({
   body: zYueInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7820,13 +8220,13 @@ export const zPostFalAiYueData = z.object({
 export const zPostFalAiYueResponse = zQueueStatus;
 
 export const zGetFalAiYueRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7835,22 +8235,23 @@ export const zGetFalAiYueRequestsByRequestIdData = z.object({
 export const zGetFalAiYueRequestsByRequestIdResponse = zYueOutput;
 
 export const zGetFalAiKokoroHindiRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7860,13 +8261,13 @@ export const zGetFalAiKokoroHindiRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiKokoroHindiRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7874,11 +8275,12 @@ export const zPutFalAiKokoroHindiRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiKokoroHindiRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7886,8 +8288,8 @@ export const zPutFalAiKokoroHindiRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroHindiData = z.object({
   body: zKokoroHindiInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7896,13 +8298,13 @@ export const zPostFalAiKokoroHindiData = z.object({
 export const zPostFalAiKokoroHindiResponse = zQueueStatus;
 
 export const zGetFalAiKokoroHindiRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7912,22 +8314,23 @@ export const zGetFalAiKokoroHindiRequestsByRequestIdResponse =
   zKokoroHindiOutput;
 
 export const zGetFalAiKokoroJapaneseRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -7937,13 +8340,13 @@ export const zGetFalAiKokoroJapaneseRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiKokoroJapaneseRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7951,11 +8354,12 @@ export const zPutFalAiKokoroJapaneseRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiKokoroJapaneseRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -7963,8 +8367,8 @@ export const zPutFalAiKokoroJapaneseRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroJapaneseData = z.object({
   body: zKokoroJapaneseInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -7973,13 +8377,13 @@ export const zPostFalAiKokoroJapaneseData = z.object({
 export const zPostFalAiKokoroJapaneseResponse = zQueueStatus;
 
 export const zGetFalAiKokoroJapaneseRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -7989,22 +8393,23 @@ export const zGetFalAiKokoroJapaneseRequestsByRequestIdResponse =
   zKokoroJapaneseOutput;
 
 export const zGetFalAiZonosRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -8013,13 +8418,13 @@ export const zGetFalAiZonosRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiZonosRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiZonosRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8027,11 +8432,12 @@ export const zPutFalAiZonosRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiZonosRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8039,8 +8445,8 @@ export const zPutFalAiZonosRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiZonosData = z.object({
   body: zZonosInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8049,13 +8455,13 @@ export const zPostFalAiZonosData = z.object({
 export const zPostFalAiZonosResponse = zQueueStatus;
 
 export const zGetFalAiZonosRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8064,22 +8470,23 @@ export const zGetFalAiZonosRequestsByRequestIdData = z.object({
 export const zGetFalAiZonosRequestsByRequestIdResponse = zZonosOutput;
 
 export const zGetSonautoV2InpaintRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -8089,13 +8496,13 @@ export const zGetSonautoV2InpaintRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutSonautoV2InpaintRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8103,11 +8510,12 @@ export const zPutSonautoV2InpaintRequestsByRequestIdCancelData = z.object({
  */
 export const zPutSonautoV2InpaintRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8115,8 +8523,8 @@ export const zPutSonautoV2InpaintRequestsByRequestIdCancelResponse = z
 
 export const zPostSonautoV2InpaintData = z.object({
   body: zV2InpaintInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8125,13 +8533,13 @@ export const zPostSonautoV2InpaintData = z.object({
 export const zPostSonautoV2InpaintResponse = zQueueStatus;
 
 export const zGetSonautoV2InpaintRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8141,22 +8549,23 @@ export const zGetSonautoV2InpaintRequestsByRequestIdResponse = zV2InpaintOutput;
 
 export const zGetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8167,13 +8576,13 @@ export const zGetFalAiKokoroBrazilianPortugueseRequestsByRequestIdStatusResponse
 
 export const zPutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8182,11 +8591,12 @@ export const zPutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelData =
 export const zPutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -8194,8 +8604,8 @@ export const zPutFalAiKokoroBrazilianPortugueseRequestsByRequestIdCancelResponse
 
 export const zPostFalAiKokoroBrazilianPortugueseData = z.object({
   body: zKokoroBrazilianPortugueseInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8205,13 +8615,13 @@ export const zPostFalAiKokoroBrazilianPortugueseResponse = zQueueStatus;
 
 export const zGetFalAiKokoroBrazilianPortugueseRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8221,22 +8631,23 @@ export const zGetFalAiKokoroBrazilianPortugueseRequestsByRequestIdResponse =
   zKokoroBrazilianPortugueseOutput;
 
 export const zGetFalAiCsm1bRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -8245,13 +8656,13 @@ export const zGetFalAiCsm1bRequestsByRequestIdStatusData = z.object({
 export const zGetFalAiCsm1bRequestsByRequestIdStatusResponse = zQueueStatus;
 
 export const zPutFalAiCsm1bRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8259,11 +8670,12 @@ export const zPutFalAiCsm1bRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiCsm1bRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8271,8 +8683,8 @@ export const zPutFalAiCsm1bRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiCsm1bData = z.object({
   body: zCsm1bInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8281,13 +8693,13 @@ export const zPostFalAiCsm1bData = z.object({
 export const zPostFalAiCsm1bResponse = zQueueStatus;
 
 export const zGetFalAiCsm1bRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8296,22 +8708,23 @@ export const zGetFalAiCsm1bRequestsByRequestIdData = z.object({
 export const zGetFalAiCsm1bRequestsByRequestIdResponse = zCsm1bOutput;
 
 export const zGetFalAiDiffrhythmRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -8321,13 +8734,13 @@ export const zGetFalAiDiffrhythmRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiDiffrhythmRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8335,11 +8748,12 @@ export const zPutFalAiDiffrhythmRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiDiffrhythmRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8347,8 +8761,8 @@ export const zPutFalAiDiffrhythmRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiDiffrhythmData = z.object({
   body: zDiffrhythmInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8357,13 +8771,13 @@ export const zPostFalAiDiffrhythmData = z.object({
 export const zPostFalAiDiffrhythmResponse = zQueueStatus;
 
 export const zGetFalAiDiffrhythmRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8373,22 +8787,23 @@ export const zGetFalAiDiffrhythmRequestsByRequestIdResponse = zDiffrhythmOutput;
 
 export const zGetFalAiKokoroMandarinChineseRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8399,13 +8814,13 @@ export const zGetFalAiKokoroMandarinChineseRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiKokoroMandarinChineseRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8413,11 +8828,12 @@ export const zPutFalAiKokoroMandarinChineseRequestsByRequestIdCancelData =
  */
 export const zPutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8425,8 +8841,8 @@ export const zPutFalAiKokoroMandarinChineseRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroMandarinChineseData = z.object({
   body: zKokoroMandarinChineseInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8435,13 +8851,13 @@ export const zPostFalAiKokoroMandarinChineseData = z.object({
 export const zPostFalAiKokoroMandarinChineseResponse = zQueueStatus;
 
 export const zGetFalAiKokoroMandarinChineseRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8451,22 +8867,23 @@ export const zGetFalAiKokoroMandarinChineseRequestsByRequestIdResponse =
   zKokoroMandarinChineseOutput;
 
 export const zGetFalAiKokoroItalianRequestsByRequestIdStatusData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(
-    z.object({
-      logs: z.optional(
-        z.number().register(z.globalRegistry, {
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
           description:
             "Whether to include logs (`1`) in the response or not (`0`).",
-        }),
-      ),
-    }),
-  ),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -8476,13 +8893,13 @@ export const zGetFalAiKokoroItalianRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
 export const zPutFalAiKokoroItalianRequestsByRequestIdCancelData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8490,11 +8907,12 @@ export const zPutFalAiKokoroItalianRequestsByRequestIdCancelData = z.object({
  */
 export const zPutFalAiKokoroItalianRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8502,8 +8920,8 @@ export const zPutFalAiKokoroItalianRequestsByRequestIdCancelResponse = z
 
 export const zPostFalAiKokoroItalianData = z.object({
   body: zKokoroItalianInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8512,13 +8930,13 @@ export const zPostFalAiKokoroItalianData = z.object({
 export const zPostFalAiKokoroItalianResponse = zQueueStatus;
 
 export const zGetFalAiKokoroItalianRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8529,22 +8947,23 @@ export const zGetFalAiKokoroItalianRequestsByRequestIdResponse =
 
 export const zGetBeatovenMusicGenerationRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8555,13 +8974,13 @@ export const zGetBeatovenMusicGenerationRequestsByRequestIdStatusResponse =
 
 export const zPutBeatovenMusicGenerationRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8569,11 +8988,12 @@ export const zPutBeatovenMusicGenerationRequestsByRequestIdCancelData =
  */
 export const zPutBeatovenMusicGenerationRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8581,8 +9001,8 @@ export const zPutBeatovenMusicGenerationRequestsByRequestIdCancelResponse = z
 
 export const zPostBeatovenMusicGenerationData = z.object({
   body: zMusicGenerationInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8591,13 +9011,13 @@ export const zPostBeatovenMusicGenerationData = z.object({
 export const zPostBeatovenMusicGenerationResponse = zQueueStatus;
 
 export const zGetBeatovenMusicGenerationRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8608,22 +9028,23 @@ export const zGetBeatovenMusicGenerationRequestsByRequestIdResponse =
 
 export const zGetBeatovenSoundEffectGenerationRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8634,13 +9055,13 @@ export const zGetBeatovenSoundEffectGenerationRequestsByRequestIdStatusResponse 
 
 export const zPutBeatovenSoundEffectGenerationRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8649,11 +9070,12 @@ export const zPutBeatovenSoundEffectGenerationRequestsByRequestIdCancelData =
 export const zPutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -8661,8 +9083,8 @@ export const zPutBeatovenSoundEffectGenerationRequestsByRequestIdCancelResponse 
 
 export const zPostBeatovenSoundEffectGenerationData = z.object({
   body: zSoundEffectGenerationInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8672,13 +9094,13 @@ export const zPostBeatovenSoundEffectGenerationResponse = zQueueStatus;
 
 export const zGetBeatovenSoundEffectGenerationRequestsByRequestIdData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8689,22 +9111,23 @@ export const zGetBeatovenSoundEffectGenerationRequestsByRequestIdResponse =
 
 export const zGetMireloAiSfxV15VideoToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8715,13 +9138,13 @@ export const zGetMireloAiSfxV15VideoToAudioRequestsByRequestIdStatusResponse =
 
 export const zPutMireloAiSfxV15VideoToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8729,11 +9152,12 @@ export const zPutMireloAiSfxV15VideoToAudioRequestsByRequestIdCancelData =
  */
 export const zPutMireloAiSfxV15VideoToAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8741,8 +9165,8 @@ export const zPutMireloAiSfxV15VideoToAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostMireloAiSfxV15VideoToAudioData = z.object({
   body: zSfxV15VideoToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8751,13 +9175,13 @@ export const zPostMireloAiSfxV15VideoToAudioData = z.object({
 export const zPostMireloAiSfxV15VideoToAudioResponse = zQueueStatus;
 
 export const zGetMireloAiSfxV15VideoToAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8768,22 +9192,23 @@ export const zGetMireloAiSfxV15VideoToAudioRequestsByRequestIdResponse =
 
 export const zGetFalAiKlingVideoVideoToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8794,13 +9219,13 @@ export const zGetFalAiKlingVideoVideoToAudioRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiKlingVideoVideoToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8809,11 +9234,12 @@ export const zPutFalAiKlingVideoVideoToAudioRequestsByRequestIdCancelData =
 export const zPutFalAiKlingVideoVideoToAudioRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -8821,8 +9247,8 @@ export const zPutFalAiKlingVideoVideoToAudioRequestsByRequestIdCancelResponse =
 
 export const zPostFalAiKlingVideoVideoToAudioData = z.object({
   body: zKlingVideoVideoToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8831,13 +9257,13 @@ export const zPostFalAiKlingVideoVideoToAudioData = z.object({
 export const zPostFalAiKlingVideoVideoToAudioResponse = zQueueStatus;
 
 export const zGetFalAiKlingVideoVideoToAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8848,22 +9274,23 @@ export const zGetFalAiKlingVideoVideoToAudioRequestsByRequestIdResponse =
 
 export const zGetMireloAiSfxV1VideoToAudioRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8874,13 +9301,13 @@ export const zGetMireloAiSfxV1VideoToAudioRequestsByRequestIdStatusResponse =
 
 export const zPutMireloAiSfxV1VideoToAudioRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8888,11 +9315,12 @@ export const zPutMireloAiSfxV1VideoToAudioRequestsByRequestIdCancelData =
  */
 export const zPutMireloAiSfxV1VideoToAudioRequestsByRequestIdCancelResponse = z
   .object({
-    success: z.optional(
-      z.boolean().register(z.globalRegistry, {
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
         description: "Whether the request was cancelled successfully.",
-      }),
-    ),
+      })
+      .optional(),
   })
   .register(z.globalRegistry, {
     description: "The request was cancelled.",
@@ -8900,8 +9328,8 @@ export const zPutMireloAiSfxV1VideoToAudioRequestsByRequestIdCancelResponse = z
 
 export const zPostMireloAiSfxV1VideoToAudioData = z.object({
   body: zSfxV1VideoToAudioInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8910,13 +9338,13 @@ export const zPostMireloAiSfxV1VideoToAudioData = z.object({
 export const zPostMireloAiSfxV1VideoToAudioResponse = zQueueStatus;
 
 export const zGetMireloAiSfxV1VideoToAudioRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**
@@ -8927,22 +9355,23 @@ export const zGetMireloAiSfxV1VideoToAudioRequestsByRequestIdResponse =
 
 export const zGetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(
-      z.object({
-        logs: z.optional(
-          z.number().register(z.globalRegistry, {
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
             description:
               "Whether to include logs (`1`) in the response or not (`0`).",
-          }),
-        ),
-      }),
-    ),
+          })
+          .optional(),
+      })
+      .optional(),
   });
 
 /**
@@ -8953,13 +9382,13 @@ export const zGetFalAiSamAudioVisualSeparateRequestsByRequestIdStatusResponse =
 
 export const zPutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelData =
   z.object({
-    body: z.optional(z.never()),
+    body: z.never().optional(),
     path: z.object({
       request_id: z.string().register(z.globalRegistry, {
         description: "Request ID",
       }),
     }),
-    query: z.optional(z.never()),
+    query: z.never().optional(),
   });
 
 /**
@@ -8968,11 +9397,12 @@ export const zPutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelData =
 export const zPutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponse =
   z
     .object({
-      success: z.optional(
-        z.boolean().register(z.globalRegistry, {
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
           description: "Whether the request was cancelled successfully.",
-        }),
-      ),
+        })
+        .optional(),
     })
     .register(z.globalRegistry, {
       description: "The request was cancelled.",
@@ -8980,8 +9410,8 @@ export const zPutFalAiSamAudioVisualSeparateRequestsByRequestIdCancelResponse =
 
 export const zPostFalAiSamAudioVisualSeparateData = z.object({
   body: zSamAudioVisualSeparateInput,
-  path: z.optional(z.never()),
-  query: z.optional(z.never()),
+  path: z.never().optional(),
+  query: z.never().optional(),
 });
 
 /**
@@ -8990,13 +9420,13 @@ export const zPostFalAiSamAudioVisualSeparateData = z.object({
 export const zPostFalAiSamAudioVisualSeparateResponse = zQueueStatus;
 
 export const zGetFalAiSamAudioVisualSeparateRequestsByRequestIdData = z.object({
-  body: z.optional(z.never()),
+  body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
       description: "Request ID",
     }),
   }),
-  query: z.optional(z.never()),
+  query: z.never().optional(),
 });
 
 /**

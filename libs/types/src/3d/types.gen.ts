@@ -937,7 +937,7 @@ export type MeshyV6ImageTo3dInput = {
    *
    * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Topology
    *
@@ -999,7 +999,7 @@ export type Hunyuan3dV3SketchTo3dInput = {
    *
    * URL of sketch or line art image to transform into a 3D model. Image resolution must be between 128x128 and 5000x5000 pixels.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Face Count
    *
@@ -1071,7 +1071,7 @@ export type Hunyuan3dV3ImageTo3dInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Generate Type
    *
@@ -1124,7 +1124,7 @@ export type Hunyuan3dV31RapidImageTo3dInput = {
    *
    * Front view image URL. Resolution: 128-5000px, max 8MB (recommended ≤6MB for base64 encoding), formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Enable Geometry
    *
@@ -1160,7 +1160,7 @@ export type Hunyuan3dV31ProImageTo3dInput = {
    *
    * Front view image URL. Resolution: 128-5000px, max 8MB, formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Enable Pbr
    *
@@ -1252,7 +1252,7 @@ export type PshumanInput = {
    *
    * A direct URL to the input image of a person.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1279,7 +1279,7 @@ export type OmnipartInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Parts
    *
@@ -1331,7 +1331,7 @@ export type Hunyuan3dV2MultiViewTurboInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  front_image_url: string;
+  front_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -1343,7 +1343,7 @@ export type Hunyuan3dV2MultiViewTurboInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  back_image_url: string;
+  back_image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -1376,7 +1376,7 @@ export type Hunyuan3dV2MultiViewTurboInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  left_image_url: string;
+  left_image_url: string | Blob | File;
 };
 
 /**
@@ -1401,7 +1401,7 @@ export type Hunyuan3dV2MiniInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -1459,7 +1459,7 @@ export type Hunyuan3dV2MiniTurboInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -1517,7 +1517,7 @@ export type Hunyuan3dV2TurboInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -1593,7 +1593,7 @@ export type HunyuanWorldImageToWorldInput = {
    *
    * The URL of the image to convert to a world.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1636,13 +1636,13 @@ export type Trellis2RetextureInput = {
    *
    * URL of the reference image for texturing
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Mesh Url
    *
    * URL of the untextured 3D mesh to retexture. Supports GLB, OBJ, PLY, and STL formats.
    */
-  mesh_url: string;
+  mesh_url: string | Blob | File;
   /**
    * Seed
    *
@@ -1843,7 +1843,7 @@ export type Hunyuan3dV2MultiViewInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  front_image_url: string;
+  front_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -1855,7 +1855,7 @@ export type Hunyuan3dV2MultiViewInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  back_image_url: string;
+  back_image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -1888,7 +1888,7 @@ export type Hunyuan3dV2MultiViewInput = {
    *
    * URL of image to use while generating the 3D model.
    */
-  left_image_url: string;
+  left_image_url: string | Blob | File;
 };
 
 /**
@@ -1979,7 +1979,7 @@ export type Sam33dBodyInput = {
    *
    * URL of the image containing humans
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Include 3D Keypoints
    *
@@ -2022,7 +2022,7 @@ export type Hunyuan3dV2Input = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -2145,7 +2145,7 @@ export type TripoV25MultiviewTo3dInput = {
    *
    * Right view image of the object.
    */
-  right_image_url?: string;
+  right_image_url?: string | Blob | File;
   /**
    * Style
    *
@@ -2173,7 +2173,7 @@ export type TripoV25MultiviewTo3dInput = {
    *
    * Front view image of the object.
    */
-  front_image_url: string;
+  front_image_url: string | Blob | File;
   /**
    * Texture Seed
    *
@@ -2185,7 +2185,7 @@ export type TripoV25MultiviewTo3dInput = {
    *
    * Back view image of the object.
    */
-  back_image_url?: string;
+  back_image_url?: string | Blob | File;
   /**
    * Pbr
    *
@@ -2227,7 +2227,7 @@ export type TripoV25MultiviewTo3dInput = {
    *
    * Left view image of the object.
    */
-  left_image_url?: string;
+  left_image_url?: string | Blob | File;
 };
 
 /**
@@ -2282,7 +2282,7 @@ export type TriposrInput = {
    *
    * Path for the image file to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -2312,7 +2312,7 @@ export type Hunyuan3dV21Input = {
    *
    * URL of image to use while generating the 3D model.
    */
-  input_image_url: string;
+  input_image_url: string | Blob | File;
   /**
    * Octree Resolution
    *
@@ -2742,7 +2742,7 @@ export type TripoV25ImageTo3dInput = {
    *
    * URL of the image to use for model generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Texture
    *
@@ -2954,7 +2954,7 @@ export type Sam33dObjectsInput = {
    *
    * URL of the image to reconstruct in 3D
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Mask Urls
    *
@@ -3011,7 +3011,7 @@ export type TrellisInput = {
    *
    * URL of the input image to convert to 3D
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Slat Guidance Strength
    *
@@ -3173,7 +3173,7 @@ export type MeshyV6PreviewImageTo3dInput = {
    *
    * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Topology
    *
@@ -3308,7 +3308,7 @@ export type Trellis2Input = {
    *
    * URL of the input image to convert to 3D
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -3408,7 +3408,7 @@ export type HunyuanPartInput = {
    *
    * URL of the 3D model file (.glb or .obj) to process for segmentation.
    */
-  model_file_url: string;
+  model_file_url: string | Blob | File;
   /**
    * Seed
    *
@@ -3448,7 +3448,7 @@ export type Hunyuan3dV31SmartTopologyInput = {
    *
    * URL of GLB or OBJ file to optimize topology. Max size: 200MB.
    */
-  input_file_url?: string;
+  input_file_url?: string | Blob | File;
   /**
    * Input File Type
    *
@@ -3478,7 +3478,7 @@ export type Hunyuan3dV31PartInput = {
    *
    * URL of FBX file to split into parts. ONLY FBX format supported. Max size: 100MB, face count ≤30,000. Recommended: AIGC-generated models.
    */
-  input_file_url: string;
+  input_file_url: string | Blob | File;
 };
 
 /**
@@ -3548,13 +3548,13 @@ export type Sam33dAlignInput = {
    *
    * URL of the original image used for MoGe depth estimation
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Body Mesh Url
    *
    * URL of the SAM-3D Body mesh file (.ply or .glb) to align
    */
-  body_mesh_url: string;
+  body_mesh_url: string | Blob | File;
   /**
    * Object Mesh Url
    *
@@ -3609,7 +3609,7 @@ export type UltrashapeInput = {
    *
    * URL of the coarse mesh (.glb or .obj) to refine.
    */
-  model_url: string;
+  model_url: string | Blob | File;
   /**
    * Seed
    *
@@ -3621,7 +3621,7 @@ export type UltrashapeInput = {
    *
    * URL of the reference image for mesh refinement.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -3691,7 +3691,7 @@ export type MeshyV5RetextureInput = {
    *
    * URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
    */
-  model_url: string;
+  model_url: string | Blob | File;
   /**
    * Image Style Url
    *
@@ -3742,7 +3742,7 @@ export type MeshyV5RemeshInput = {
    *
    * URL or base64 data URI of a 3D model to remesh. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
    */
-  model_url: string;
+  model_url: string | Blob | File;
   /**
    * Topology
    *

@@ -132,7 +132,7 @@ export type Moondream2PointObjectDetectionInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -157,7 +157,7 @@ export type Florence2LargeRegionToDescriptionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -212,7 +212,7 @@ export type Florence2LargeRegionToCategoryInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -332,7 +332,7 @@ export type Sa2Va8bVideoInput = {
    *
    * The URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Num Frames To Sample
    *
@@ -374,7 +374,7 @@ export type Sa2Va4bVideoInput = {
    *
    * The URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Num Frames To Sample
    *
@@ -416,7 +416,7 @@ export type Sa2Va4bImageInput = {
    *
    * Url for the Input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -488,7 +488,7 @@ export type Sam3ImageEmbedInput = {
    *
    * URL of the image to embed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -524,7 +524,7 @@ export type Sa2Va8bImageInput = {
    *
    * Url for the Input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -667,7 +667,7 @@ export type Moondream3PreviewPointInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -691,7 +691,7 @@ export type Florence2LargeOcrInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -823,7 +823,7 @@ export type MoondreamNextBatchInput = {
    *
    * List of image URLs to be processed (maximum 32 images)
    */
-  images_data_url: string;
+  images_data_url: string | Blob | File;
   /**
    * Max Tokens
    *
@@ -889,7 +889,7 @@ export type Moondream2Input = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -975,7 +975,7 @@ export type Isaac01Input = {
    *
    * Image URL to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1005,7 +1005,7 @@ export type Moondream2VisualQueryInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1082,7 +1082,7 @@ export type Moondream3PreviewDetectInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1124,7 +1124,7 @@ export type MoondreamNextInput = {
    *
    * Image URL to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1178,7 +1178,7 @@ export type LlavaNextInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1211,7 +1211,7 @@ export type Moondream2ObjectDetectionInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1235,7 +1235,7 @@ export type Florence2LargeDetailedCaptionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1259,7 +1259,7 @@ export type Florence2LargeCaptionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1308,7 +1308,7 @@ export type Moondream3PreviewCaptionInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1356,7 +1356,7 @@ export type Florence2LargeMoreDetailedCaptionInput = {
    *
    * The URL of the image to be processed.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1417,7 +1417,7 @@ export type Moondream3PreviewQueryInput = {
    *
    * URL of the image to be processed
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1447,7 +1447,7 @@ export type VideoUnderstandingInput = {
    *
    * URL of the video to analyze
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Detailed Analysis
    *
@@ -1477,7 +1477,7 @@ export type ImageutilsNsfwInput = {
    *
    * Input image url.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**

@@ -73,7 +73,7 @@ export type SamAudioVisualSeparateInput = {
    *
    * URL of the video file to process (MP4, MOV, etc.)
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -169,7 +169,7 @@ export type SfxV1VideoToAudioInput = {
    *
    * A video url that can accessed from the API to process and add sound effects
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -219,7 +219,7 @@ export type KlingVideoVideoToAudioInput = {
    *
    * The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Sound Effect Prompt
    *
@@ -297,7 +297,7 @@ export type SfxV15VideoToAudioInput = {
    *
    * A video url that can accessed from the API to process and add sound effects
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -540,7 +540,7 @@ export type DiffrhythmInput = {
    *
    * The URL of the reference audio to use for the music generation.
    */
-  reference_audio_url?: string;
+  reference_audio_url?: string | Blob | File;
   /**
    * Music Duration
    *
@@ -755,7 +755,7 @@ export type V2InpaintInput = {
    *
    * The URL of the audio file to alter. Must be a valid publicly accessible URL.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -827,7 +827,7 @@ export type ZonosInput = {
    *
    * The reference audio.
    */
-  reference_audio_url: string;
+  reference_audio_url: string | Blob | File;
 };
 
 /**
@@ -1080,7 +1080,7 @@ export type MinimaxMusicInput = {
    *
    * Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.
    */
-  reference_audio_url: string;
+  reference_audio_url: string | Blob | File;
 };
 
 /**
@@ -1459,7 +1459,7 @@ export type F5TtsInput = {
    *
    * The URL of the reference audio file.
    */
-  ref_audio_url: string;
+  ref_audio_url: string | Blob | File;
 };
 
 /**
@@ -2489,7 +2489,7 @@ export type WorkflowUtilitiesImpulseResponseInput = {
    *
    * URL of the impulse response WAV file (reverb/effect profile)
    */
-  impulse_response_url: string;
+  impulse_response_url: string | Blob | File;
   /**
    * Loudness Tp
    *
@@ -2519,7 +2519,7 @@ export type WorkflowUtilitiesImpulseResponseInput = {
    *
    * URL of the main audio file to process
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Wet Level
    *
@@ -2562,7 +2562,7 @@ export type StableAudio25InpaintInput = {
    *
    * The audio clip to inpaint
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Mask End
    *
@@ -2696,7 +2696,7 @@ export type PersonaplexRealtimeInput = {
    *
    * Input audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
    */
-  audio: string;
+  audio: string | Blob | File;
   /**
    * Temperature Audio
    *
@@ -2817,7 +2817,7 @@ export type AceStepAudioOutpaintInput = {
    *
    * URL of the audio file to be outpainted.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -2939,7 +2939,7 @@ export type LavaSrInput = {
    *
    * The URL of the audio file to enhance.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Denoise
    *
@@ -3034,7 +3034,7 @@ export type Tada1bTextToSpeechInput = {
    *
    * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Temperature
    *
@@ -3111,7 +3111,7 @@ export type WorkflowUtilitiesAudioCompressorInput = {
    *
    * URL of the audio file to compress
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Output Bitrate
    *
@@ -3196,7 +3196,7 @@ export type PersonaplexInput = {
    *
    * URL to the input audio file (user's speech).
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -3330,7 +3330,7 @@ export type SamAudioSpanSeparateInput = {
    *
    * URL of the audio file to process.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Reranking Candidates
    *
@@ -3461,7 +3461,7 @@ export type V2ExtendInput = {
    *
    * The URL of the audio file to alter. Must be a valid publicly accessible URL.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -3509,7 +3509,7 @@ export type AudioUnderstandingInput = {
    *
    * URL of the audio file to analyze
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -3565,7 +3565,7 @@ export type NovaSrInput = {
    *
    * The URL of the audio file to enhance.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Audio Format
    *
@@ -3590,7 +3590,7 @@ export type Qwen3TtsCloneVoice06bInput = {
    *
    * URL to the reference audio file used for voice cloning.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Reference Text
    *
@@ -3729,7 +3729,7 @@ export type AceStepAudioInpaintInput = {
    *
    * URL of the audio file to be inpainted.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -3800,7 +3800,7 @@ export type StableAudio25AudioToAudioInput = {
    *
    * The audio clip to transform
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Total Seconds
    *
@@ -3889,7 +3889,7 @@ export type Tada3bTextToSpeechInput = {
    *
    * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Temperature
    *
@@ -4022,7 +4022,7 @@ export type AceStepAudioToAudioInput = {
    *
    * URL of the audio file to be outpainted.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -4102,7 +4102,7 @@ export type Deepfilternet3Input = {
    *
    * The URL of the audio to enhance.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Audio Format
    *
@@ -4174,7 +4174,7 @@ export type SamAudioSeparateInput = {
    *
    * URL of the audio file to process (WAV, MP3, FLAC supported)
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Predict Spans
    *
@@ -4262,7 +4262,7 @@ export type ElevenlabsVoiceChangerInput = {
    *
    * The input audio file
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -4318,7 +4318,7 @@ export type Qwen3TtsCloneVoice17bInput = {
    *
    * URL to the reference audio file used for voice cloning.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Reference Text
    *
@@ -4406,7 +4406,7 @@ export type DemucsInput = {
    *
    * URL of the audio file to separate into stems
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Shifts
    *
@@ -4471,7 +4471,7 @@ export type KlingVideoCreateVoiceInput = {
    *
    * URL of the voice audio file. Supports .mp3/.wav audio or .mp4/.mov video. Duration must be 5-30 seconds with clean, single-voice audio.
    */
-  voice_url: string;
+  voice_url: string | Blob | File;
 };
 
 export type QueueStatus = {

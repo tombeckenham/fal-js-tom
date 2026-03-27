@@ -86,7 +86,7 @@ export type GrokImagineVideoExtendVideoInput = {
    *
    * URL of the source video to extend. Must be MP4 format (H.264, H.265, or AV1 codec), 2-15 seconds long.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -117,7 +117,7 @@ export type GrokImagineVideoEditVideoInput = {
    *
    * URL of the input video to edit. The video will be resized to a maximum area of 854x480 pixels and truncated to 8 seconds.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -384,7 +384,7 @@ export type WanMotionInput = {
    *
    * URL of the driving video (provides the motion).
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -408,7 +408,7 @@ export type WanMotionInput = {
    *
    * URL of the reference image (provides the character appearance).
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -451,7 +451,7 @@ export type SeedvrUpscaleVideoInput = {
    *
    * The input video to be processed
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Noise Scale
    *
@@ -649,7 +649,7 @@ export type ExtendVideoConditioningInput = {
    *
    * URL of video to use as conditioning
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Start Frame Number
    *
@@ -1061,7 +1061,7 @@ export type VideoConditioningInput = {
    *
    * URL of video to use as conditioning
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Start Frame Number
    *
@@ -1139,7 +1139,7 @@ export type ImageConditioningInput = {
    *
    * URL of image to use as conditioning
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1292,7 +1292,7 @@ export type CrystalVideoUpscalerInput = {
    *
    * URL to the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Scale Factor
    *
@@ -1318,7 +1318,7 @@ export type VideoErasePromptInput = {
    *
    * Input video to erase object from. duration must be less than 5s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Preserve Audio
    *
@@ -1367,7 +1367,7 @@ export type VideoEraseMaskInput = {
    *
    * Input video to erase object from. duration must be less than 5s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Container And Codec
    *
@@ -1390,7 +1390,7 @@ export type VideoEraseMaskInput = {
    *
    * Input video to mask erase object from. duration must be less than 5s.
    */
-  mask_video_url: string;
+  mask_video_url: string | Blob | File;
   /**
    * Auto Trim
    *
@@ -1416,7 +1416,7 @@ export type VideoEraseKeypointsInput = {
    *
    * Input video to erase object from. duration must be less than 5s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Container And Codec
    *
@@ -1476,7 +1476,7 @@ export type MagiDistilledExtendVideoInput = {
    *
    * URL of the input video to represent the beginning of the video. If the input video does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Aspect Ratio
    *
@@ -1868,7 +1868,7 @@ export type LucyEditDevInput = {
    *
    * URL of the video to edit
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -1916,7 +1916,7 @@ export type WanVace13bInput = {
    *
    * URL to the source video file. If provided, the model will use this video as a reference.
    */
-  video_url?: string;
+  video_url?: string | Blob | File;
   /**
    * Prompt
    *
@@ -1928,7 +1928,7 @@ export type WanVace13bInput = {
    *
    * URL to the guiding mask file. If provided, the model will use this mask as a reference to create masked video. If provided mask video url will be ignored.
    */
-  mask_image_url?: string;
+  mask_image_url?: string | Blob | File;
   /**
    * Task
    *
@@ -1982,7 +1982,7 @@ export type WanVace13bInput = {
    *
    * URL to the source mask file. If provided, the model will use this mask as a reference.
    */
-  mask_video_url?: string;
+  mask_video_url?: string | Blob | File;
   /**
    * Seed
    *
@@ -2078,7 +2078,7 @@ export type LightxRecameraInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Camera trajectory parameters (required for recamera mode).
    */
@@ -2143,7 +2143,7 @@ export type Ltx219bDistilledExtendVideoLoraInput = {
    *
    * The URL of the video to extend.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -2388,7 +2388,7 @@ export type Ltx219bDistilledVideoToVideoLoraInput = {
    *
    * The URL of the video to generate the video from.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -2662,7 +2662,7 @@ export type VideoConditioningInputType2 = {
    *
    * URL of video to be extended
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Start Frame Num
    *
@@ -2705,7 +2705,7 @@ export type FastAnimatediffTurboVideoToVideoInput = {
    *
    * URL of the video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Fps
    *
@@ -2773,7 +2773,7 @@ export type PixverseExtendFastInput = {
    *
    * URL of the input video to extend
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -2834,7 +2834,7 @@ export type MagiExtendVideoInput = {
    *
    * URL of the input video to represent the beginning of the video. If the input video does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -2922,7 +2922,7 @@ export type HunyuanVideoLoraVideoToVideoInput = {
    *
    * URL of the video
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Loras
    *
@@ -3019,7 +3019,7 @@ export type Ltx219bExtendVideoLoraInput = {
    *
    * The URL of the video to extend.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -3220,7 +3220,7 @@ export type ViduQ2VideoExtensionProInput = {
    *
    * URL of the video to extend
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -3305,7 +3305,7 @@ export type WanFunControlInput = {
    *
    * The URL of the control video to use as a reference for the video generation.
    */
-  control_video_url: string;
+  control_video_url: string | Blob | File;
   /**
    * Negative Prompt
    *
@@ -3426,7 +3426,7 @@ export type ImageConditioningInputType2 = {
    *
    * URL of image to use as conditioning
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -3456,7 +3456,7 @@ export type DubbingInput = {
    *
    * Input video URL to be dubbed.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Target Language
    *
@@ -3503,7 +3503,7 @@ export type CosmosPredict25VideoToVideoInput = {
    *
    * URL of the input video to use as conditioning.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -3576,7 +3576,7 @@ export type VideoAsPromptInput = {
    *
    * reference video to generate effect video from.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Aspect Ratio
    *
@@ -3594,7 +3594,7 @@ export type VideoAsPromptInput = {
    *
    * Input image to generate the effect video for.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Description
    *
@@ -3661,7 +3661,7 @@ export type Ltx219bVideoToVideoLoraInput = {
    *
    * The URL of the video to generate the video from.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -3914,7 +3914,7 @@ export type WanVace14bPoseInput = {
    *
    * URL to the source video file. Required for pose task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -4125,7 +4125,7 @@ export type FastAnimatediffVideoToVideoInput = {
    *
    * URL of the video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Fps
    *
@@ -4220,7 +4220,7 @@ export type WanVace14bDepthInput = {
    *
    * URL to the source video file. Required for depth task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -4469,7 +4469,7 @@ export type LightxRelightInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Relighting parameters (required for relight_condition_type='ic'). Not used for 'bg' (which expects a background image URL instead).
    */
@@ -4520,13 +4520,13 @@ export type WorkflowUtilitiesBlendVideoInput = {
    *
    * URL of the bottom layer video
    */
-  bottom_video_url: string;
+  bottom_video_url: string | Blob | File;
   /**
    * Top Video Url
    *
    * URL of the top layer video
    */
-  top_video_url: string;
+  top_video_url: string | Blob | File;
   /**
    * Opacity
    *
@@ -4592,7 +4592,7 @@ export type OneToAllAnimation14bInput = {
    *
    * The URL of the video to use as a reference for the video generation.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Image Guidance Scale
    *
@@ -4616,7 +4616,7 @@ export type OneToAllAnimation14bInput = {
    *
    * The URL of the image to use as a reference for the video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -4648,7 +4648,7 @@ export type BriaVideoEraserEraseKeypointsInput = {
    *
    * Input video to erase object from. duration must be less than 5s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Container And Codec
    *
@@ -4705,7 +4705,7 @@ export type ControlnextInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Fps
    *
@@ -4759,7 +4759,7 @@ export type ControlnextInput = {
    *
    * URL of the reference image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Decode Chunk Size
    *
@@ -4812,7 +4812,7 @@ export type LucyRestyleInput = {
    *
    * URL of the video to edit
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -4856,7 +4856,7 @@ export type BriaVideoEraserEraseMaskInput = {
    *
    * Input video to erase object from. duration must be less than 5s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Container And Codec
    *
@@ -4879,7 +4879,7 @@ export type BriaVideoEraserEraseMaskInput = {
    *
    * Input video to mask erase object from. duration must be less than 5s.
    */
-  mask_video_url: string;
+  mask_video_url: string | Blob | File;
   /**
    * Auto Trim
    *
@@ -5031,7 +5031,7 @@ export type MareyPoseTransferInput = {
    *
    * The URL of the video to use as the control video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -5086,7 +5086,7 @@ export type InfinitalkVideoToVideoInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -5104,7 +5104,7 @@ export type InfinitalkVideoToVideoInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Number of Frames
    *
@@ -5159,7 +5159,7 @@ export type WanVisionEnhancerInput = {
    *
    * The URL of the video to enhance with Wan Video. Maximum 200MB file size. Videos longer than 500 frames will have only the first 500 frames processed (~8-21 seconds depending on fps).
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -5229,7 +5229,7 @@ export type Cogvideox5bVideoToVideoInput = {
    *
    * The video to generate the video from.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Use Rife
    *
@@ -5335,7 +5335,7 @@ export type Ltx219bDistilledVideoToVideoInput = {
    *
    * The URL of the video to generate the video from.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -5560,7 +5560,7 @@ export type ScailInput = {
    *
    * The URL of the video to use as a reference for the video generation.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -5578,7 +5578,7 @@ export type ScailInput = {
    *
    * The URL of the image to use as a reference for the video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -5613,7 +5613,7 @@ export type LucyEditFastInput = {
    *
    * URL of the video to edit
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -5655,7 +5655,7 @@ export type AutoCaptionInput = {
    *
    * URL to the .mp4 video with audio. Only videos of size <400MB are allowed.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Top Align
    *
@@ -5873,7 +5873,7 @@ export type Ltx219bDistilledExtendVideoInput = {
    *
    * The URL of the video to extend.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -6305,7 +6305,7 @@ export type Wan22VaceFunA14bInpaintingInput = {
    *
    * URL to the source video file. Required for inpainting.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -6514,7 +6514,7 @@ export type WorkflowUtilitiesReverseVideoInput = {
    *
    * URL of the video file to reverse
    */
-  video_url: string;
+  video_url: string | Blob | File;
 };
 
 /**
@@ -6539,7 +6539,7 @@ export type OneToAllAnimation13bInput = {
    *
    * The URL of the video to use as a reference for the video generation.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Image Guidance Scale
    *
@@ -6563,7 +6563,7 @@ export type OneToAllAnimation13bInput = {
    *
    * The URL of the image to use as a reference for the video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -6600,7 +6600,7 @@ export type Ltx2ExtendVideoInput = {
    *
    * The URL of the video to extend
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Context
    *
@@ -6643,7 +6643,7 @@ export type MareyMotionTransferInput = {
    *
    * The URL of the video to use as the control video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -6691,7 +6691,7 @@ export type DwposeVideoInput = {
    *
    * URL of video to be used for pose estimation
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Draw Mode
    *
@@ -6745,7 +6745,7 @@ export type WanVace14bOutpaintingInput = {
    *
    * URL to the source video file. Required for outpainting.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -6974,7 +6974,7 @@ export type ThinksoundAudioInput = {
    *
    * The URL of the video to generate the audio for.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Inference Steps
    *
@@ -7017,7 +7017,7 @@ export type PixverseSoundEffectsInput = {
    *
    * URL of the input video to add sound effects to
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Original Sound Switch
    *
@@ -7051,7 +7051,7 @@ export type BenV2VideoInput = {
    *
    * URL of video to be used for background removal.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -7088,7 +7088,7 @@ export type AmtInterpolationInput = {
    *
    * URL of the video to be processed
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Recursive Interpolation Passes
    *
@@ -7125,7 +7125,7 @@ export type KreaWan14bVideoToVideoInput = {
    *
    * URL of the input video. Currently, only outputs of 16:9 aspect ratio and 480p resolution are supported. Video duration should be less than 1000 frames at 16fps, and output frames will be 6 plus a multiple of 12, for example 18, 30, 42, etc.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Strength
    *
@@ -7163,7 +7163,7 @@ export type BriaVideoEraserErasePromptInput = {
    *
    * Input video to erase object from. duration must be less than 5s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Preserve Audio
    *
@@ -7233,7 +7233,7 @@ export type Wan22VaceFunA14bDepthInput = {
    *
    * URL to the source video file. Required for depth task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -7461,7 +7461,7 @@ export type VideoIncreaseResolutionInput = {
    *
    * Input video to increase resolution. Size should be less than 7680,4320 and duration less than 30s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Container And Codec
    *
@@ -7509,7 +7509,7 @@ export type HeygenV2TranslateSpeedInput = {
    *
    * URL of the video to translate.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Speaker Num
    *
@@ -7730,7 +7730,7 @@ export type WanVaceAppsLongReframeInput = {
    *
    * URL to the source video file. This video will be used as a reference for the reframe task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Zoom Factor
    *
@@ -7897,7 +7897,7 @@ export type LucyEditProInput = {
    *
    * URL of the video to edit
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -7956,7 +7956,7 @@ export type EdittoInput = {
    *
    * URL to the source video file. Required for inpainting.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -8102,7 +8102,7 @@ export type VideoBackgroundRemovalGreenScreenInput = {
   /**
    * Video Url
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Codec
    *
@@ -8143,7 +8143,7 @@ export type PikaV2PikadditionsInput = {
    *
    * URL of the input video
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -8161,7 +8161,7 @@ export type PikaV2PikadditionsInput = {
    *
    * URL of the image to add
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -8202,7 +8202,7 @@ export type SteadyDancerInput = {
    *
    * URL of the driving pose video. The motion from this video will be transferred to the reference image.
    */
-  video_url?: string;
+  video_url?: string | Blob | File;
   /**
    * Acceleration
    *
@@ -8286,7 +8286,7 @@ export type SteadyDancerInput = {
    *
    * URL of the reference image to animate. This is the person/character whose appearance will be preserved.
    */
-  image_url?: string;
+  image_url?: string | Blob | File;
   /**
    * Preserve Audio
    *
@@ -8369,7 +8369,7 @@ export type WorkflowUtilitiesScaleVideoInput = {
    *
    * URL of the video file to scale/resize. Height and Width of the video must be even numbers for compatibility with video codecs.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Width
    *
@@ -8416,7 +8416,7 @@ export type Sam2VideoInput = {
    *
    * The URL of the video to be segmented.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompts
    *
@@ -8553,7 +8553,7 @@ export type Wan22VaceFunA14bOutpaintingInput = {
    *
    * URL to the source video file. Required for outpainting.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -8792,7 +8792,7 @@ export type Wan22VaceFunA14bReframeInput = {
    *
    * URL to the source video file. This video will be used as a reference for the reframe task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -8997,7 +8997,7 @@ export type HunyuanVideoVideoToVideoInput = {
    *
    * URL of the video input.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Aspect Ratio (W:H)
    *
@@ -9080,7 +9080,7 @@ export type Wan22VaceFunA14bPoseInput = {
    *
    * URL to the source video file. Required for pose task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -9284,7 +9284,7 @@ export type SfxV1VideoToVideoInput = {
    *
    * A video url that can accessed from the API to process and add sound effects
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -9409,7 +9409,7 @@ export type Sam3VideoRleInput = {
    *
    * The URL of the video to be segmented.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Detection Threshold
    *
@@ -9492,7 +9492,7 @@ export type WanVace14bReframeInput = {
    *
    * URL to the source video file. This video will be used as a reference for the reframe task.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -9709,7 +9709,7 @@ export type LumaDreamMachineRay2ReframeInput = {
    *
    * URL of the input video to reframe
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Y End
    *
@@ -9780,7 +9780,7 @@ export type WanVace14bInpaintingInput = {
    *
    * URL to the source video file. Required for inpainting.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -9999,7 +9999,7 @@ export type DepthAnythingVideoInput = {
    *
    * URL of the input video to estimate depth for.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Colormap
    *
@@ -10066,7 +10066,7 @@ export type ThinksoundInput = {
    *
    * The URL of the video to generate the audio for.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Inference Steps
    *
@@ -10127,7 +10127,7 @@ export type PixverseExtendInput = {
    *
    * URL of the input video to extend
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Model
    *
@@ -10182,7 +10182,7 @@ export type Ltx219bExtendVideoInput = {
    *
    * The URL of the video to extend.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -10377,7 +10377,7 @@ export type LumaDreamMachineRay2FlashModifyInput = {
    *
    * URL of the input video to modify
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Mode
    *
@@ -10417,7 +10417,7 @@ export type HunyuanVideoFoleyInput = {
    *
    * The URL of the video to generate audio for.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -10490,13 +10490,13 @@ export type InfinitalkInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Audio URL
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Number of Frames
    *
@@ -10591,7 +10591,7 @@ export type HeygenV2TranslatePrecisionInput = {
    *
    * URL of the video to translate.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Speaker Num
    *
@@ -10812,7 +10812,7 @@ export type Ltx2RetakeVideoInput = {
    *
    * The URL of the video to retake
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -10954,7 +10954,7 @@ export type WanV22A14bVideoToVideoInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Number of Interpolated Frames
    *
@@ -11123,7 +11123,7 @@ export type LumaDreamMachineRay2FlashReframeInput = {
    *
    * URL of the input video to reframe
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Y End
    *
@@ -11200,7 +11200,7 @@ export type WanVaceAppsVideoEditInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -11261,7 +11261,7 @@ export type LumaDreamMachineRay2ModifyInput = {
    *
    * URL of the input video to modify
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Mode
    *
@@ -11319,7 +11319,7 @@ export type Ltx219bVideoToVideoInput = {
    *
    * The URL of the video to generate the video from.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Prompt
    *
@@ -11550,7 +11550,7 @@ export type FilmVideoInput = {
    *
    * The URL of the video to use for interpolation.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Use Calculated FPS
    *
@@ -11621,7 +11621,7 @@ export type BirefnetV2VideoInput = {
    *
    * URL of the video to remove background from
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Video Output Type
    *
@@ -11715,7 +11715,7 @@ export type SyncLipsyncReact1Input = {
    *
    * URL to the input video. Must be **15 seconds or shorter**.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Lipsync Mode
    *
@@ -11727,7 +11727,7 @@ export type SyncLipsyncReact1Input = {
    *
    * URL to the input audio. Must be **15 seconds or shorter**.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Temperature
    *
@@ -11761,7 +11761,7 @@ export type RifeVideoInput = {
    *
    * The URL of the video to use for interpolation.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Use Scene Detection
    *
@@ -11898,7 +11898,7 @@ export type Sam3VideoInput = {
    *
    * The URL of the video to be segmented.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Box Prompts
    *
@@ -11949,7 +11949,7 @@ export type Ltx23RetakeVideoInput = {
    *
    * The URL of the video to retake
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Start Time
    *
@@ -11996,7 +11996,7 @@ export type KlingVideoO1StandardVideoToVideoReferenceInput = {
    *
    * Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -12046,7 +12046,7 @@ export type OmniVideoElementInput = {
    *
    * Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s
    */
-  frontal_image_url: string;
+  frontal_image_url: string | Blob | File;
 };
 
 /**
@@ -12071,7 +12071,7 @@ export type Ltx23ExtendVideoInput = {
    *
    * The URL of the video to extend
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Context
    *
@@ -12130,7 +12130,7 @@ export type WorkflowUtilitiesTrimVideoInput = {
    *
    * URL of the video file to trim
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * End Time
    *
@@ -12185,7 +12185,7 @@ export type Veo31FastExtendVideoInput = {
    *
    * URL of the video to extend. The video should be 720p or 1080p resolution in 16:9 or 9:16 aspect ratio.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -12234,7 +12234,7 @@ export type VideoUpscalerInput = {
    *
    * The URL of the video to upscale
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Scale
    *
@@ -12272,7 +12272,7 @@ export type VideoBackgroundRemovalInputType2 = {
   /**
    * Video Url
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Subject Is Person
    *
@@ -12302,7 +12302,7 @@ export type VideoBackgroundRemovalInput = {
    *
    * Input video to remove background from. Size should be less than 4000x4000 and duration less than 30s.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Output Container And Codec
    *
@@ -12359,7 +12359,7 @@ export type KlingVideoO3StandardVideoToVideoReferenceInput = {
    *
    * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Aspect Ratio
    *
@@ -12456,7 +12456,7 @@ export type KlingVideoO1StandardVideoToVideoEditInput = {
    *
    * Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Elements
    *
@@ -12493,7 +12493,7 @@ export type BytedanceDreamactorV2Input = {
    *
    * The URL of the driving template video providing motion, facial expressions, and lip movement reference. Max duration: 30 seconds. Format: mp4, mov or webm. Resolution: between 200x200 and 2048x1440. Supports full face and body driving.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Trim First Second
    *
@@ -12505,7 +12505,7 @@ export type BytedanceDreamactorV2Input = {
    *
    * The URL of the reference image to animate. Supports real people, animation, pets, etc. Format: jpeg, jpg or png. Max size: 4.7 MB. Resolution: between 480x480 and 1920x1080 (larger images will be proportionally reduced).
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -12530,7 +12530,7 @@ export type FlashvsrUpscaleVideoInput = {
    *
    * The input video to be upscaled
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Acceleration
    *
@@ -12623,7 +12623,7 @@ export type KlingVideoO1VideoToVideoReferenceInput = {
    *
    * Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Duration
    *
@@ -12696,7 +12696,7 @@ export type Veo31ExtendVideoInput = {
    *
    * URL of the video to extend. The video should be 720p or 1080p resolution in 16:9 or 9:16 aspect ratio.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -12798,7 +12798,7 @@ export type SfxV15VideoToVideoInput = {
    *
    * A video url that can accessed from the API to process and add sound effects
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -12830,7 +12830,7 @@ export type VideoBackgroundRemovalFastInput = {
   /**
    * Video Url
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Subject Is Person
    *
@@ -12867,7 +12867,7 @@ export type LatentsyncInput = {
    *
    * The URL of the video to generate the lip sync for.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -12885,7 +12885,7 @@ export type LatentsyncInput = {
    *
    * The URL of the audio to generate the lip sync for.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Loop Mode
    *
@@ -12916,7 +12916,7 @@ export type SyncLipsyncInput = {
    *
    * URL of the input video
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Model
    *
@@ -12928,7 +12928,7 @@ export type SyncLipsyncInput = {
    *
    * URL of the input audio
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -12987,7 +12987,7 @@ export type WanV2214bAnimateMoveInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Enable Output Safety Checker
    *
@@ -12999,7 +12999,7 @@ export type WanV2214bAnimateMoveInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -13060,7 +13060,7 @@ export type PixverseLipsyncInput = {
    *
    * URL of the input video
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Voice Id
    *
@@ -13104,11 +13104,11 @@ export type LipsyncInput = {
   /**
    * Video Url
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Audio Url
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -13133,7 +13133,7 @@ export type KlingVideoO3ProVideoToVideoReferenceInput = {
    *
    * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Aspect Ratio
    *
@@ -13208,7 +13208,7 @@ export type KlingVideoO3StandardVideoToVideoEditInput = {
    *
    * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Elements
    *
@@ -13263,7 +13263,7 @@ export type BytedanceUpscalerUpscaleVideoInput = {
    *
    * The URL of the video to upscale.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Target Resolution
    *
@@ -13348,7 +13348,7 @@ export type WorkflowUtilitiesAutoSubtitleInput = {
    *
    * URL of the video file to add automatic subtitles to
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Font Weight
    *
@@ -13511,7 +13511,7 @@ export type SyncLipsyncV2Input = {
    *
    * URL of the input video
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Model
    *
@@ -13523,7 +13523,7 @@ export type SyncLipsyncV2Input = {
    *
    * URL of the input audio
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -13548,13 +13548,13 @@ export type SyncLipsyncV2ProInput = {
    *
    * URL of the input video
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Audio Url
    *
    * URL of the input audio
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -13613,7 +13613,7 @@ export type WanV2214bAnimateReplaceInput = {
    *
    * URL of the input video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Enable Output Safety Checker
    *
@@ -13625,7 +13625,7 @@ export type WanV2214bAnimateReplaceInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -13690,7 +13690,7 @@ export type KlingVideoO1VideoToVideoEditInput = {
    *
    * Max file size: 200.0MB, Min width: 720px, Min height: 720px, Max width: 2160px, Max height: 2160px, Min duration: 3.0s, Max duration: 10.05s, Min FPS: 24.0, Max FPS: 60.0, Timeout: 30.0s
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Elements
    *
@@ -13745,7 +13745,7 @@ export type MmaudioV2Input = {
    *
    * The URL of the video to generate the audio for.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Cfg Strength
    *
@@ -13788,7 +13788,7 @@ export type FfmpegApiMergeAudioVideoInput = {
    *
    * URL of the video file to use as the video track
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Start Offset
    *
@@ -13800,7 +13800,7 @@ export type FfmpegApiMergeAudioVideoInput = {
    *
    * URL of the audio file to use as the audio track
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -13823,7 +13823,7 @@ export type KlingVideoV3StandardMotionControlInput = {
    *
    * Reference video URL. The character actions in the generated video will be consistent with this reference video. Should contain a realistic style character with entire body or upper body visible, including head, without obstruction. Duration limit depends on character_orientation: 10s max for 'image', 30s max for 'video'.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Character Orientation
    *
@@ -13847,7 +13847,7 @@ export type KlingVideoV3StandardMotionControlInput = {
    *
    * Reference image URL. The characters, backgrounds, and other elements in the generated video are based on this reference image. Characters should have clear body proportions, avoid occlusion, and occupy more than 5% of the image area.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -13950,7 +13950,7 @@ export type KlingVideoO3ProVideoToVideoEditInput = {
    *
    * Reference video URL. Only .mp4/.mov formats, 3-10s duration, 720-2160px resolution, max 200MB.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Elements
    *
@@ -13997,7 +13997,7 @@ export type KlingVideoV3ProMotionControlInput = {
    *
    * Reference video URL. The character actions in the generated video will be consistent with this reference video. Should contain a realistic style character with entire body or upper body visible, including head, without obstruction. Duration limit depends on character_orientation: 10s max for 'image', 30s max for 'video'.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Character Orientation
    *
@@ -14021,7 +14021,7 @@ export type KlingVideoV3ProMotionControlInput = {
    *
    * Reference image URL. The characters, backgrounds, and other elements in the generated video are based on this reference image. Characters should have clear body proportions, avoid occlusion, and occupy more than 5% of the image area.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -14048,7 +14048,7 @@ export type KlingVideoV26ProMotionControlInput = {
    *
    * Reference video URL. The character actions in the generated video will be consistent with this reference video. Should contain a realistic style character with entire body or upper body visible, including head, without obstruction. Duration limit depends on character_orientation: 10s max for 'image', 30s max for 'video'.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Character Orientation
    *
@@ -14066,7 +14066,7 @@ export type KlingVideoV26ProMotionControlInput = {
    *
    * Reference image URL. The characters, backgrounds, and other elements in the generated video are based on this reference image. Characters should have clear body proportions, avoid occlusion, and occupy more than 5% of the image area.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -14138,7 +14138,7 @@ export type TopazUpscaleVideoInput = {
    *
    * URL of the video to upscale
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * H264 Output
    *
@@ -14223,7 +14223,7 @@ export type KlingVideoV26StandardMotionControlInput = {
    *
    * Reference video URL. The character actions in the generated video will be consistent with this reference video. Should contain a realistic style character with entire body or upper body visible, including head, without obstruction. Duration limit depends on character_orientation: 10s max for 'image', 30s max for 'video'.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Character Orientation
    *
@@ -14241,7 +14241,7 @@ export type KlingVideoV26StandardMotionControlInput = {
    *
    * Reference image URL. The characters, backgrounds, and other elements in the generated video are based on this reference image. Characters should have clear body proportions, avoid occlusion, and occupy more than 5% of the image area.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -14570,7 +14570,7 @@ export type AnimatediffSparsectrlLcmInput = {
    *
    * The URL of the second keyframe to use for the generation.
    */
-  keyframe_1_image_url?: string | null;
+  keyframe_1_image_url?: string | Blob | File | null;
   /**
    * Keyframe 1 Index
    *
@@ -14594,7 +14594,7 @@ export type AnimatediffSparsectrlLcmInput = {
    *
    * The URL of the third keyframe to use for the generation.
    */
-  keyframe_2_image_url?: string | null;
+  keyframe_2_image_url?: string | Blob | File | null;
   /**
    * Negative Prompt
    *
@@ -14608,7 +14608,7 @@ export type AnimatediffSparsectrlLcmInput = {
    *
    * The URL of the first keyframe to use for the generation.
    */
-  keyframe_0_image_url?: string | null;
+  keyframe_0_image_url?: string | Blob | File | null;
 };
 
 /**
@@ -17470,7 +17470,7 @@ export type InfinitalkSingleTextInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Voice
    *
@@ -19079,7 +19079,7 @@ export type KlingVideoLipsyncTextToVideoInput = {
    *
    * The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2-60s, 720p/1080p only, width/height 720–1920px. If validation fails, an error is returned.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Voice Id
    *
@@ -22133,7 +22133,7 @@ export type Fabric10TextInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -24768,13 +24768,13 @@ export type KlingVideoLipsyncAudioToVideoInput = {
    *
    * The URL of the video to generate the lip sync for. Supports .mp4/.mov, ≤100MB, 2–10s, 720p/1080p only, width/height 720–1920px.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Audio Url
    *
    * The URL of the audio to generate the lip sync for. Minimum duration is 2s and maximum duration is 60s. Maximum file size is 5MB.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -25999,7 +25999,7 @@ export type GrokImagineVideoImageToVideoInput = {
    *
    * URL of the input image for video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26058,7 +26058,7 @@ export type V26ImageToVideoFlashInput = {
    *
    * URL of the image to use as the first frame. Must be publicly accessible or base64 data URI. Image dimensions must be between 240 and 7680.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Prompt Expansion
    *
@@ -26157,7 +26157,7 @@ export type V26ImageToVideoInput = {
    *
    * URL of the image to use as the first frame. Must be publicly accessible or base64 data URI. Image dimensions must be between 240 and 7680.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Prompt Expansion
    *
@@ -26221,7 +26221,7 @@ export type HunyuanPortraitInput = {
    *
    * The URL of the driving video.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
@@ -26239,7 +26239,7 @@ export type HunyuanPortraitInput = {
    *
    * The URL of the source image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26349,7 +26349,7 @@ export type LynxInput = {
    *
    * The URL of the subject image to be used for video generation
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -26442,7 +26442,7 @@ export type LtxVideoLoraImageToVideoInput = {
    *
    * The URL of the image to use as input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -26526,7 +26526,7 @@ export type HunyuanVideoImg2VidLoraInput = {
    *
    * The URL to the image to generate the video from. The image must be 960x544 or it will get cropped and resized to that size.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26665,7 +26665,7 @@ export type PixverseV35EffectsInput = {
    *
    * Optional URL of the image to use as the first frame. If not provided, generates from text
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -26727,7 +26727,7 @@ export type PixverseV4ImageToVideoFastInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -26785,7 +26785,7 @@ export type MagiDistilledImageToVideoInput = {
    *
    * URL of the input image to represent the first frame of the video. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -26864,7 +26864,7 @@ export type HunyuanCustomInput = {
    *
    * URL of the image input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Frames per second
    *
@@ -26943,13 +26943,13 @@ export type AiAvatarMultiInput = {
    *
    * The URL of the Person 1 audio file.
    */
-  first_audio_url: string;
+  first_audio_url: string | Blob | File;
   /**
    * Image URL
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Second Audio URL
    *
@@ -26993,7 +26993,7 @@ export type BytedanceVideoStylizeInput = {
    *
    * URL of the image to make the stylized video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27023,19 +27023,19 @@ export type SadtalkerReferenceInput = {
    *
    * URL of the source image
    */
-  source_image_url: string;
+  source_image_url: string | Blob | File;
   /**
    * Reference Pose Video Url
    *
    * URL of the reference video
    */
-  reference_pose_video_url: string;
+  reference_pose_video_url: string | Blob | File;
   /**
    * Driven Audio Url
    *
    * URL of the driven audio
    */
-  driven_audio_url: string;
+  driven_audio_url: string | Blob | File;
   /**
    * Face Enhancer
    *
@@ -27110,7 +27110,7 @@ export type WanAtiInput = {
    *
    * URL of the input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Track
    *
@@ -27184,7 +27184,7 @@ export type PixverseV35ImageToVideoFastInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27246,7 +27246,7 @@ export type PixverseV45ImageToVideoFastInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -27316,7 +27316,7 @@ export type FramepackFlf2vInput = {
    *
    * URL of the image input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Strength of last frame
    *
@@ -27340,7 +27340,7 @@ export type FramepackFlf2vInput = {
    *
    * URL of the end image input.
    */
-  end_image_url: string;
+  end_image_url: string | Blob | File;
   /**
    * Negative Prompt
    *
@@ -27395,7 +27395,7 @@ export type MagiImageToVideoInput = {
    *
    * URL of the input image to represent the first frame of the video. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -27456,7 +27456,7 @@ export type SkyreelsI2vInput = {
    *
    * URL of the image input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -27607,7 +27607,7 @@ export type LtxVideo13bDevImageToVideoInput = {
    *
    * Image URL for Image-to-Video task
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Constant Rate Factor
    *
@@ -27663,7 +27663,7 @@ export type WanMoveInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -27728,7 +27728,7 @@ export type CosmosPredict25ImageToVideoInput = {
    *
    * URL of the input image to use as first frame.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -27815,7 +27815,7 @@ export type PikaV21ImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27864,7 +27864,7 @@ export type AiAvatarMultiTextInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * First Text Input
    *
@@ -27971,7 +27971,7 @@ export type ViduImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -27990,7 +27990,7 @@ export type PixverseV35TransitionInput = {
    *
    * URL of the image to use as the first frame
    */
-  first_image_url: string;
+  first_image_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -28066,7 +28066,7 @@ export type HunyuanAvatarInput = {
    *
    * The URL of the reference image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Turbo Mode
    *
@@ -28078,7 +28078,7 @@ export type HunyuanAvatarInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Num Inference Steps
    *
@@ -28243,7 +28243,7 @@ export type Ltx219bDistilledImageToVideoLoraInput = {
    *
    * The URL of the image to generate the video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -28320,7 +28320,7 @@ export type PixverseV35ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -28488,7 +28488,7 @@ export type Ltx219bImageToVideoLoraInput = {
    *
    * The URL of the image to generate the video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -28561,7 +28561,7 @@ export type MinimaxVideo01DirectorImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28598,7 +28598,7 @@ export type ViduQ1ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28680,7 +28680,7 @@ export type LongcatVideoDistilledImageToVideo720pInput = {
    *
    * The URL of the image to generate a video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -28849,7 +28849,7 @@ export type PixverseV4EffectsInput = {
    *
    * Optional URL of the image to use as the first frame. If not provided, generates from text
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -28943,7 +28943,7 @@ export type LongcatVideoImageToVideo480pInput = {
    *
    * The URL of the image to generate a video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -29022,7 +29022,7 @@ export type FramepackF1Input = {
    *
    * URL of the image input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -29097,7 +29097,7 @@ export type PikaV2TurboImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -29188,7 +29188,7 @@ export type WanI2vLoraInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Prompt Expansion
    *
@@ -29335,7 +29335,7 @@ export type MareyI2vInput = {
    *
    * The URL of the image to use as the first frame of the video.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Dimensions
    *
@@ -29434,7 +29434,7 @@ export type LongcatVideoDistilledImageToVideo480pInput = {
    *
    * The URL of the image to generate a video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -29522,7 +29522,7 @@ export type Cogvideox5bImageToVideoInput = {
    *
    * The URL to the image to generate the video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Loras
    *
@@ -29604,13 +29604,13 @@ export type ViduStartEndToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * End Image Url
    *
    * URL of the image to use as the last frame
    */
-  end_image_url: string;
+  end_image_url: string | Blob | File;
   /**
    * Movement Amplitude
    *
@@ -29880,7 +29880,7 @@ export type FastSvdLcmInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Steps
    *
@@ -29945,7 +29945,7 @@ export type MinimaxVideo01SubjectReferenceInput = {
    *
    * URL of the subject reference image to use for consistent subject appearance
    */
-  subject_reference_image_url: string;
+  subject_reference_image_url: string | Blob | File;
 };
 
 /**
@@ -29970,13 +29970,13 @@ export type ViduQ1StartEndToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * End Image Url
    *
    * URL of the image to use as the last frame
    */
-  end_image_url: string;
+  end_image_url: string | Blob | File;
   /**
    * Movement Amplitude
    *
@@ -30102,7 +30102,7 @@ export type LiveAvatarInput = {
    *
    * The URL of the reference image for avatar generation. The character in this image will be animated.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Number of Clips
    *
@@ -30114,7 +30114,7 @@ export type LiveAvatarInput = {
    *
    * The URL of the driving audio file (WAV or MP3). The avatar will be animated to match this audio.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -30200,7 +30200,7 @@ export type PixverseV4ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -30315,7 +30315,7 @@ export type LongcatVideoImageToVideo720pInput = {
    *
    * The URL of the image to generate a video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Sync Mode
    *
@@ -30453,13 +30453,13 @@ export type AiAvatarInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Audio URL
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -30513,7 +30513,7 @@ export type LucyI2vInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30576,7 +30576,7 @@ export type PikaV15PikaffectsInput = {
    *
    * URL of the input image
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30770,7 +30770,7 @@ export type FramepackInput = {
    *
    * URL of the image input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -30837,7 +30837,7 @@ export type ViduQ2ImageToVideoTurboInput = {
    *
    * URL of the image to use as the starting frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Bgm
    *
@@ -30919,7 +30919,7 @@ export type OviImageToVideoInput = {
    *
    * The image URL to guide video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -30956,7 +30956,7 @@ export type ViduQ2ImageToVideoProInput = {
    *
    * URL of the image to use as the starting frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Bgm
    *
@@ -31029,7 +31029,7 @@ export type AiAvatarSingleTextInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Voice
    *
@@ -31086,7 +31086,7 @@ export type PixverseV55TransitionInput = {
    *
    * URL of the image to use as the first frame
    */
-  first_image_url: string;
+  first_image_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -31168,7 +31168,7 @@ export type PixverseV56TransitionInput = {
    *
    * URL of the image to use as the first frame
    */
-  first_image_url: string;
+  first_image_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -31296,7 +31296,7 @@ export type StableVideoInput = {
    *
    * The URL of the image to use as a starting point for the generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31339,7 +31339,7 @@ export type HunyuanVideoV15ImageToVideoInput = {
    *
    * URL of the reference image for image-to-video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Prompt Expansion
    *
@@ -31400,13 +31400,13 @@ export type KlingVideoV1ProAiAvatarInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    *
    * The URL of the image to use as your avatar
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31449,7 +31449,7 @@ export type HunyuanVideoImageToVideoInput = {
    *
    * URL of the image input.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -31492,13 +31492,13 @@ export type BytedanceOmnihumanInput = {
    *
    * The URL of the audio file to generate the video. Audio must be under 30s long.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    *
    * The URL of the image used to generate the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31517,7 +31517,7 @@ export type PixverseV45TransitionInput = {
    *
    * URL of the image to use as the first frame
    */
-  first_image_url: string;
+  first_image_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -31605,7 +31605,7 @@ export type WanProImageToVideoInput = {
    *
    * The URL of the image to generate the video from
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31684,7 +31684,7 @@ export type GoalForceInput = {
    *
    * URL of the input image (first frame). The image will be resized to 832x480.
    */
-  image_url?: string;
+  image_url?: string | Blob | File;
   /**
    * Indirect goal force applied to a target object. The model generates physics-plausible interactions to move the target in the specified direction. Specify either this, projectile_force, or both.
    */
@@ -31768,7 +31768,7 @@ export type Kandinsky5ProImageToVideoInput = {
    *
    * The URL of the image to use as a reference for the video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31907,7 +31907,7 @@ export type PixverseV5EffectsInput = {
    *
    * Optional URL of the image to use as the first frame. If not provided, generates from text
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -31997,7 +31997,7 @@ export type WanEffectsInput = {
    *
    * URL of the input image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Turbo Mode
    *
@@ -32074,7 +32074,7 @@ export type PixverseV56ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Generate Audio Switch
    *
@@ -32222,7 +32222,7 @@ export type Ltxv13B098DistilledImageToVideoInput = {
    *
    * Image URL for Image-to-Video task
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Constant Rate Factor
    *
@@ -32373,7 +32373,7 @@ export type PixverseV45EffectsInput = {
    *
    * Optional URL of the image to use as the first frame. If not provided, generates from text
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32476,7 +32476,7 @@ export type WanV225bImageToVideoInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -32543,13 +32543,13 @@ export type KlingVideoV1StandardAiAvatarInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    *
    * The URL of the image to use as your avatar
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32694,7 +32694,7 @@ export type PixverseV55EffectsInput = {
    *
    * Optional URL of the image to use as the first frame. If not provided, generates from text
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -32772,7 +32772,7 @@ export type LivePortraitInput = {
    *
    * URL of the video to drive the lip syncing.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Flag Stitching
    *
@@ -32856,7 +32856,7 @@ export type LivePortraitInput = {
    *
    * URL of the image to be animated
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Flag Relative
    *
@@ -32986,7 +32986,7 @@ export type LtxVideoImageToVideoInput = {
    *
    * The URL of the image to generate the video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33015,7 +33015,7 @@ export type MinimaxVideo01ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33107,13 +33107,13 @@ export type MusetalkInput = {
    *
    * URL of the audio
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Source Video Url
    *
    * URL of the source video
    */
-  source_video_url: string;
+  source_video_url: string | Blob | File;
 };
 
 /**
@@ -33192,7 +33192,7 @@ export type Sora2CharactersInput = {
    *
    * URL of an MP4 video (minimum 720p, max ~2.67:1 aspect ratio) to define the character. Videos exceeding 1080p are automatically scaled down. Non-standard aspect ratios are automatically padded to 16:9 (landscape) or 9:16 (portrait). Videos longer than 4 seconds are trimmed to the first 4 seconds.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Name
    *
@@ -33266,7 +33266,7 @@ export type PixverseV45ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -33330,7 +33330,7 @@ export type Ltx2ImageToVideoInput = {
    *
    * URL of the image to generate the video from. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33385,13 +33385,13 @@ export type WanFlf2vInput = {
    *
    * URL of the starting image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * End Image Url
    *
    * URL of the ending image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  end_image_url: string;
+  end_image_url: string | Blob | File;
   /**
    * Negative Prompt
    *
@@ -33580,7 +33580,7 @@ export type Ltx219bDistilledImageToVideoInput = {
    *
    * The URL of the image to generate the video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -33645,7 +33645,7 @@ export type MinimaxVideo01LiveImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -33772,7 +33772,7 @@ export type LtxVideo13bDistilledImageToVideoInput = {
    *
    * Image URL for Image-to-Video task
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Constant Rate Factor
    *
@@ -33803,7 +33803,7 @@ export type PixverseSwapInput = {
    *
    * URL of the external video to swap
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -33815,7 +33815,7 @@ export type PixverseSwapInput = {
    *
    * URL of the target image for swapping
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Original Sound Switch
    *
@@ -33876,7 +33876,7 @@ export type KlingVideoV15ProImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Static Mask Url
    *
@@ -33988,7 +33988,7 @@ export type Ltx2ImageToVideoFastInput = {
    *
    * URL of the image to generate the video from. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -34025,7 +34025,7 @@ export type ViduQ3ImageToVideoTurboInput = {
    *
    * URL or base64 image to use as the starting frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -34074,7 +34074,7 @@ export type Veo2ImageToVideoInput = {
    *
    * URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -34097,11 +34097,11 @@ export type Fabric10FastInput = {
   /**
    * Audio Url
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -34173,7 +34173,7 @@ export type PixverseV5TransitionInput = {
    *
    * URL of the image to use as the first frame
    */
-  first_image_url: string;
+  first_image_url: string | Blob | File;
   /**
    * Resolution
    *
@@ -34371,7 +34371,7 @@ export type Ltx219bImageToVideoInput = {
    *
    * The URL of the image to generate the video from.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -34443,13 +34443,13 @@ export type SadtalkerInput = {
    *
    * URL of the source image
    */
-  source_image_url: string;
+  source_image_url: string | Blob | File;
   /**
    * Driven Audio Url
    *
    * URL of the driven audio
    */
-  driven_audio_url: string;
+  driven_audio_url: string | Blob | File;
   /**
    * Face Enhancer
    *
@@ -34520,7 +34520,7 @@ export type PixverseV5ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -34566,7 +34566,7 @@ export type MinimaxHailuo23FastProImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -34617,7 +34617,7 @@ export type PikaV22ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -34744,7 +34744,7 @@ export type WanV22A14bImageToVideoLoraInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -34821,7 +34821,7 @@ export type KlingVideoO1StandardImageToVideoInput = {
    *
    * Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * End Image Url
    *
@@ -34889,7 +34889,7 @@ export type HeygenAvatar4ImageToVideoInput = {
    *
    * URL of the image to animate. The image should contain a clear face.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Voice
    *
@@ -35068,7 +35068,7 @@ export type PixverseV55ImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Generate Audio Switch
    *
@@ -35124,7 +35124,7 @@ export type KlingVideoV1StandardImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Static Mask Url
    *
@@ -35233,7 +35233,7 @@ export type ViduQ3ImageToVideoInput = {
    *
    * URL or base64 image to use as the starting frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Seed
    *
@@ -35288,7 +35288,7 @@ export type MinimaxHailuo23FastStandardImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35317,7 +35317,7 @@ export type KlingVideoV21MasterImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -35361,13 +35361,13 @@ export type KlingVideoAiAvatarV2StandardInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    *
    * The URL of the image to use as your avatar
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35404,7 +35404,7 @@ export type MinimaxHailuo23StandardImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35435,7 +35435,7 @@ export type CreatifyAuroraInput = {
    *
    * The URL of the audio file to be used for video generation.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Audio Guidance Scale
    *
@@ -35453,7 +35453,7 @@ export type CreatifyAuroraInput = {
    *
    * The URL of the image file to be used for video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35496,13 +35496,13 @@ export type BytedanceOmnihumanV15Input = {
    *
    * The URL of the audio file to generate the video. Audio must be under 30s long for 1080p generation and under 60s long for 720p generation.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    *
    * The URL of the image used to generate the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35581,7 +35581,7 @@ export type WanI2vInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Prompt Expansion
    *
@@ -35636,7 +35636,7 @@ export type MinimaxHailuo23ProImageToVideoInput = {
    *
    * URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35691,7 +35691,7 @@ export type Veo3ImageToVideoInput = {
    *
    * URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Safety Tolerance
    *
@@ -35742,7 +35742,7 @@ export type MinimaxHailuo02FastImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35773,13 +35773,13 @@ export type KlingVideoAiAvatarV2ProInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    *
    * The URL of the image to use as your avatar
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -35808,7 +35808,7 @@ export type KlingVideoV2MasterImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -35936,7 +35936,7 @@ export type WanV22A14bImageToVideoInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -36011,7 +36011,7 @@ export type MinimaxHailuo02ProImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -36078,7 +36078,7 @@ export type WanV22A14bImageToVideoTurboInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -36279,7 +36279,7 @@ export type Ltx23ImageToVideoInput = {
    *
    * The URL of the start image to use for the generated video.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * End Image URL
    *
@@ -36395,7 +36395,7 @@ export type BytedanceSeedanceV1ProFastImageToVideoInput = {
    *
    * The URL of the image used to generate video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -36454,7 +36454,7 @@ export type KlingVideoO1ImageToVideoInput = {
    *
    * Max file size: 10.0MB, Min width: 300px, Min height: 300px, Min aspect ratio: 0.40, Max aspect ratio: 2.50, Timeout: 20.0s
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * End Image Url
    *
@@ -36515,7 +36515,7 @@ export type Ltx23ImageToVideoFastInput = {
    *
    * URL of the image to generate the video from. Must be publicly accessible or base64 data URI. Supports PNG, JPEG, WebP, AVIF, and HEIF formats.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * End Image URL
    *
@@ -36558,7 +36558,7 @@ export type KlingVideoV16ProImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Tail Image Url
    *
@@ -36628,7 +36628,7 @@ export type Veo3FastImageToVideoInput = {
    *
    * URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Safety Tolerance
    *
@@ -36695,7 +36695,7 @@ export type BytedanceSeedanceV1LiteImageToVideoInput = {
    *
    * The URL of the image used to generate video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -36748,11 +36748,11 @@ export type Fabric10Input = {
   /**
    * Audio Url
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -36781,7 +36781,7 @@ export type KlingVideoV21ProImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -36829,7 +36829,7 @@ export type KlingVideoV25TurboStandardImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -36897,7 +36897,7 @@ export type Veo31FirstLastFrameToVideoInput = {
    *
    * URL of the first frame of the video
    */
-  first_frame_url: string;
+  first_frame_url: string | Blob | File;
   /**
    * Safety Tolerance
    *
@@ -36921,7 +36921,7 @@ export type Veo31FirstLastFrameToVideoInput = {
    *
    * URL of the last frame of the video
    */
-  last_frame_url: string;
+  last_frame_url: string | Blob | File;
 };
 
 /**
@@ -37034,7 +37034,7 @@ export type KlingVideoV16StandardImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -37102,7 +37102,7 @@ export type Veo31FastFirstLastFrameToVideoInput = {
    *
    * URL of the first frame of the video
    */
-  first_frame_url: string;
+  first_frame_url: string | Blob | File;
   /**
    * Safety Tolerance
    *
@@ -37126,7 +37126,7 @@ export type Veo31FastFirstLastFrameToVideoInput = {
    *
    * URL of the last frame of the video
    */
-  last_frame_url: string;
+  last_frame_url: string | Blob | File;
 };
 
 /**
@@ -37189,7 +37189,7 @@ export type Sora2ImageToVideoProInput = {
    *
    * The URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Delete Video
    *
@@ -37254,7 +37254,7 @@ export type Wan25PreviewImageToVideoInput = {
    *
    * URL of the image to use as the first frame. Must be publicly accessible or base64 data URI.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -37339,7 +37339,7 @@ export type MinimaxHailuo02StandardImageToVideoInput = {
   /**
    * Image Url
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -37368,7 +37368,7 @@ export type KlingVideoV21StandardImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -37430,7 +37430,7 @@ export type BytedanceSeedanceV1ProImageToVideoInput = {
    *
    * The URL of the image used to generate video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -37516,7 +37516,7 @@ export type KlingVideoO3ProImageToVideoInput = {
    *
    * URL of the start frame image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Shot Type
    *
@@ -37591,7 +37591,7 @@ export type Sora2ImageToVideoInput = {
    *
    * The URL of the image to use as the first frame
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Model
    *
@@ -37665,7 +37665,7 @@ export type KlingVideoO3StandardImageToVideoInput = {
    *
    * URL of the start frame image.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Shot Type
    *
@@ -37732,7 +37732,7 @@ export type Veo31ImageToVideoInput = {
    *
    * URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Safety Tolerance
    *
@@ -37794,7 +37794,7 @@ export type KlingVideoV3StandardImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * Generate Audio
    *
@@ -37892,7 +37892,7 @@ export type BytedanceSeedanceV15ProImageToVideoInput = {
    *
    * The URL of the image used to generate video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Enable Safety Checker
    *
@@ -37971,7 +37971,7 @@ export type Veo31FastImageToVideoInput = {
    *
    * URL of the input image to animate. Should be 720p or higher resolution in 16:9 or 9:16 aspect ratio. If the image is not in 16:9 or 9:16 aspect ratio, it will be cropped to fit.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Safety Tolerance
    *
@@ -38018,7 +38018,7 @@ export type KlingVideoV25TurboProImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Negative Prompt
    */
@@ -38078,7 +38078,7 @@ export type KlingVideoV26ProImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * End Image Url
    *
@@ -38132,7 +38132,7 @@ export type KlingVideoV3ProImageToVideoInput = {
    *
    * URL of the image to be used for the video
    */
-  start_image_url: string;
+  start_image_url: string | Blob | File;
   /**
    * Generate Audio
    *
@@ -38239,7 +38239,7 @@ export type LongcatSingleAvatarAudioToVideoInput = {
    *
    * The URL of the audio file to drive the avatar.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Number of Inference Steps
    *
@@ -38288,7 +38288,7 @@ export type Ltx2AudioToVideoInput = {
    *
    * URL of the audio file to generate a video from. Duration must be between 2 and 20 seconds. Must be publicly accessible or base64 data URI.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -38374,7 +38374,7 @@ export type AvatarsAudioToVideoInputType2 = {
   /**
    * Audio Url
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -38384,7 +38384,7 @@ export type AvatarsAudioToVideoInput = {
   /**
    * Audio Url
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Avatar Id
    *
@@ -38449,13 +38449,13 @@ export type EchomimicV3Input = {
    *
    * The URL of the image to use as a reference for the video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Audio URL
    *
    * The URL of the audio to use as a reference for the video generation.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -38596,7 +38596,7 @@ export type LongcatMultiAvatarImageAudioToVideoInput = {
    *
    * The URL of the image containing two speakers.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Audio URL Person 1
    *
@@ -38795,7 +38795,7 @@ export type Ltx219bDistilledAudioToVideoLoraInput = {
    *
    * The URL of the audio to generate the video from.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -38856,7 +38856,7 @@ export type StableAvatarInput = {
    *
    * The URL of the image to use as a reference for the video generation.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Guidance Scale
    *
@@ -38874,7 +38874,7 @@ export type StableAvatarInput = {
    *
    * The URL of the audio to use as a reference for the video generation.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Number of Inference Steps
    *
@@ -39069,7 +39069,7 @@ export type Ltx219bAudioToVideoLoraInput = {
    *
    * The URL of the audio to generate the video from.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -39157,13 +39157,13 @@ export type LongcatSingleAvatarImageAudioToVideoInput = {
    *
    * The URL of the image to animate.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Audio URL
    *
    * The URL of the audio file to drive the avatar.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Number of Inference Steps
    *
@@ -39407,7 +39407,7 @@ export type Ltx219bDistilledAudioToVideoInput = {
    *
    * The URL of the audio to generate the video from.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -39510,7 +39510,7 @@ export type WanV2214bSpeechToVideoInput = {
    *
    * URL of the input image. If the input image does not match the chosen aspect ratio, it is resized and center cropped.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Video Quality
    *
@@ -39522,7 +39522,7 @@ export type WanV2214bSpeechToVideoInput = {
    *
    * The URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Number of Inference Steps
    *
@@ -39711,7 +39711,7 @@ export type Ltx219bAudioToVideoInput = {
    *
    * The URL of the audio to generate the video from.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
@@ -39760,7 +39760,7 @@ export type Ltx23AudioToVideoInput = {
    *
    * URL of the audio file to generate a video from. Duration must be between 2 and 20 seconds. Must be publicly accessible or base64 data URI.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Guidance Scale
    *

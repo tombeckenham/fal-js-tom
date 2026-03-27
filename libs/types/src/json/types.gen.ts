@@ -812,7 +812,7 @@ export type OmnilottieVideoToLottieInput = {
    *
    * URL of the video to convert into a Lottie animation.
    */
-  video_url: string;
+  video_url: string | Blob | File;
   /**
    * Top P
    *
@@ -890,7 +890,7 @@ export type FfmpegApiWaveformInput = {
    *
    * URL of the audio file to analyze
    */
-  media_url: string;
+  media_url: string | Blob | File;
   /**
    * Precision
    *
@@ -1039,7 +1039,7 @@ export type FfmpegApiLoudnormInput = {
    *
    * URL of the audio file to normalize
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Integrated Loudness
    *
@@ -1119,7 +1119,7 @@ export type OmnilottieImageToLottieInput = {
    *
    * URL of the reference image to animate.
    */
-  image_url: string;
+  image_url: string | Blob | File;
   /**
    * Top P
    *
@@ -1437,7 +1437,7 @@ export type FfmpegApiMetadataInput = {
    *
    * URL of the media file (video or audio) to analyze
    */
-  media_url: string;
+  media_url: string | Blob | File;
 };
 
 /**
@@ -1493,7 +1493,7 @@ export type BagelUnderstandInput = {
    *
    * The image for the query.
    */
-  image_url: string;
+  image_url: string | Blob | File;
 };
 
 export type QueueStatus = {

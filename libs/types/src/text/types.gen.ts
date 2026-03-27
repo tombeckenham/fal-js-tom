@@ -165,7 +165,7 @@ export type SpeechToTextTurboStreamInput = {
    *
    * Local filesystem path (or remote URL) to a long audio file
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Use Punctuation/Capitalization (PnC)
    *
@@ -185,7 +185,7 @@ export type SpeechToTextStreamInput = {
    *
    * Local filesystem path (or remote URL) to a long audio file
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Use Punctuation/Capitalization (PnC)
    *
@@ -229,7 +229,7 @@ export type SmartTurnInput = {
    *
    * The URL of the audio file to be processed.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -259,7 +259,7 @@ export type SpeechToTextInput = {
    *
    * Local filesystem path (or remote URL) to a long audio file
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Use Punctuation/Capitalization (PnC)
    *
@@ -295,7 +295,7 @@ export type SpeechToTextTurboInput = {
    *
    * Local filesystem path (or remote URL) to a long audio file
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Use Punctuation/Capitalization (PnC)
    *
@@ -385,7 +385,7 @@ export type ElevenlabsSpeechToTextInput = {
    *
    * URL of the audio file to transcribe
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Diarize
    *
@@ -445,7 +445,7 @@ export type ElevenlabsSpeechToTextScribeV2Input = {
    *
    * URL of the audio file to transcribe
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Diarize
    *
@@ -753,7 +753,7 @@ export type WizperInput = {
    *
    * URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Merge Chunks
    *
@@ -1088,7 +1088,7 @@ export type WhisperInput = {
    *
    * URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Diarize
    *
@@ -1114,7 +1114,7 @@ export type NemotronAsrStreamInput = {
    *
    * URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -1150,7 +1150,7 @@ export type NemotronAsrInput = {
    *
    * URL of the audio file.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 /**
@@ -1198,7 +1198,7 @@ export type SileroVadInput = {
    *
    * The URL of the audio to get speech timestamps from.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
 };
 
 export type QueueStatus = {

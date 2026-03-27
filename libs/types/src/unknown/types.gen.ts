@@ -128,7 +128,7 @@ export type RouterAudioInput = {
    *
    * URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.
    */
-  audio_url: string;
+  audio_url: string | Blob | File;
   /**
    * Temperature
    *
