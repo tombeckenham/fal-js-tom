@@ -606,6 +606,7 @@ export default [
             exclude: ["/get .*/"],
           },
           orphans: false,
+          preserveOrder: true,
         },
       },
     };

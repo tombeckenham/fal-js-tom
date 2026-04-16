@@ -5,15 +5,332 @@ export type ClientOptions = {
 };
 
 /**
- * OutputModel
+ * Seed2MiniInput
  */
-export type VideoPromptGeneratorOutput = {
+export type BytedanceSeedV2MiniInput = {
+  /**
+   * Reasoning Effort
+   *
+   * Controls the depth of reasoning before the model responds. Only applicable when `thinking` is `enabled` or `auto`. `minimal` for immediate response, `low` for faster response with light reasoning, `medium` for balanced speed and depth, `high` for deep analysis of complex issues.
+   */
+  reasoning_effort?: "minimal" | "low" | "medium" | "high" | unknown;
+  /**
+   * Thinking
+   *
+   * Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.
+   */
+  thinking?: "enabled" | "disabled" | "auto";
+  /**
+   * System Prompt
+   *
+   * Optional system prompt to guide the model's behavior.
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Image Urls
+   *
+   * URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.
+   */
+  image_urls?: Array<string>;
+  /**
+   * Temperature
+   *
+   * Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.
+   */
+  temperature?: number;
+  /**
+   * Max Completion Tokens
+   *
+   * Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.
+   */
+  max_completion_tokens?: number;
+  /**
+   * Video Urls
+   *
+   * URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.
+   */
+  video_urls?: Array<string>;
+  /**
+   * Messages
+   *
+   * Optional prior conversation history for multi-turn conversations. Pass back the `messages` field from a previous response to provide context. The current `prompt`, `image_urls`, `video_urls`, and `system_prompt` are always appended as the latest user turn.
+   */
+  messages?: Array<Seed2MiniMessage> | unknown;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.
+   */
+  top_p?: number;
   /**
    * Prompt
    *
-   * Generated video prompt
+   * The text prompt or question for the model.
    */
   prompt: string;
+};
+
+/**
+ * Seed2MiniOutput
+ */
+export type BytedanceSeedV2MiniOutput = {
+  /**
+   * Output
+   *
+   * The model's text response.
+   */
+  output: string;
+  /**
+   * Messages
+   *
+   * The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.
+   */
+  messages: Array<Seed2MiniMessage>;
+  /**
+   * Reasoning Content
+   *
+   * The model's chain-of-thought reasoning content. Only present when `thinking` is `enabled` or `auto`.
+   */
+  reasoning_content?: string | unknown;
+};
+
+/**
+ * PromptTokensDetails
+ */
+export type PromptTokensDetails = {
+  /**
+   * Cached Tokens
+   */
+  cached_tokens?: number;
+  /**
+   * Cache Write Tokens
+   */
+  cache_write_tokens?: number;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
+};
+
+/**
+ * Qwen3GuardInput
+ */
+export type Qwen3GuardInput = {
+  /**
+   * Prompt
+   *
+   * The input text to be classified
+   */
+  prompt: string;
+};
+
+/**
+ * Qwen3GuardOutput
+ */
+export type Qwen3GuardOutput = {
+  /**
+   * Label
+   *
+   * The classification label
+   */
+  label: "Safe" | "Unsafe" | "Controversial";
+  /**
+   * Categories
+   *
+   * The confidence score of the classification
+   */
+  categories: Array<
+    | "Violent"
+    | "Non-violent Illegal Acts"
+    | "Sexual Content or Sexual Acts"
+    | "PII"
+    | "Suicide & Self-Harm"
+    | "Unethical Acts"
+    | "Politically Sensitive Topics"
+    | "Copyright Violation"
+    | "Jailbreak"
+    | "None"
+  >;
+};
+
+/**
+ * ChatInput
+ */
+export type RouterInput = {
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
+   * Max Tokens
+   *
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
+   */
+  max_tokens?: number | unknown;
+  /**
+   * Reasoning
+   *
+   * Should reasoning be the part of the final answer.
+   */
+  reasoning?: boolean;
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the chat completion
+   */
+  prompt: string;
+  /**
+   * Temperature
+   *
+   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+   */
+  temperature?: number;
+};
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export type RouterOpenaiV1ChatCompletionsInput = {
+  [key: string]: unknown;
+};
+
+export type RouterOpenaiV1ChatCompletionsOutput = unknown;
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export type RouterOpenaiV1EmbeddingsInput = {
+  [key: string]: unknown;
+};
+
+export type RouterOpenaiV1EmbeddingsOutput = unknown;
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export type RouterOpenaiV1ResponsesInput = {
+  [key: string]: unknown;
+};
+
+export type RouterOpenaiV1ResponsesOutput = unknown;
+
+/**
+ * ChatOutput
+ */
+export type RouterOutput = {
+  /**
+   * Output
+   *
+   * Generated output
+   */
+  output: string;
+  /**
+   * Partial
+   *
+   * Whether the output is partial
+   */
+  partial?: boolean;
+  /**
+   * Reasoning
+   *
+   * Generated reasoning for the final answer
+   */
+  reasoning?: string | unknown;
+  /**
+   * Error
+   *
+   * Error message if an error occurred
+   */
+  error?: string | unknown;
+  /**
+   * Token usage information
+   */
+  usage?: UsageInfo | unknown;
+};
+
+/**
+ * Seed2MiniMessage
+ */
+export type Seed2MiniMessage = {
+  /**
+   * Role
+   *
+   * The role of the message author.
+   */
+  role: "system" | "user" | "assistant";
+  /**
+   * Content
+   *
+   * The content of the message. Can be a string for text-only messages, or a list of content parts for multimodal messages (e.g. with images).
+   */
+  content:
+    | string
+    | Array<{
+        [key: string]: unknown;
+      }>;
+};
+
+/**
+ * UsageInfo
+ */
+export type UsageInfo = {
+  /**
+   * Total Tokens
+   */
+  total_tokens?: number;
+  /**
+   * Completion Tokens
+   */
+  completion_tokens?: number | unknown;
+  /**
+   * Prompt Tokens
+   */
+  prompt_tokens?: number | unknown;
+  prompt_tokens_details?: PromptTokensDetails | unknown;
+  /**
+   * Cost
+   */
+  cost: number;
 };
 
 /**
@@ -185,330 +502,13 @@ export type VideoPromptGeneratorInput = {
 };
 
 /**
- * UsageInfo
+ * OutputModel
  */
-export type UsageInfo = {
-  /**
-   * Total Tokens
-   */
-  total_tokens?: number;
-  /**
-   * Completion Tokens
-   */
-  completion_tokens?: number | unknown;
-  /**
-   * Prompt Tokens
-   */
-  prompt_tokens?: number | unknown;
-  prompt_tokens_details?: PromptTokensDetails | unknown;
-  /**
-   * Cost
-   */
-  cost: number;
-};
-
-/**
- * PromptTokensDetails
- */
-export type PromptTokensDetails = {
-  /**
-   * Cached Tokens
-   */
-  cached_tokens?: number;
-  /**
-   * Cache Write Tokens
-   */
-  cache_write_tokens?: number;
-};
-
-/**
- * Seed2MiniMessage
- */
-export type Seed2MiniMessage = {
-  /**
-   * Role
-   *
-   * The role of the message author.
-   */
-  role: "system" | "user" | "assistant";
-  /**
-   * Content
-   *
-   * The content of the message. Can be a string for text-only messages, or a list of content parts for multimodal messages (e.g. with images).
-   */
-  content:
-    | string
-    | Array<{
-        [key: string]: unknown;
-      }>;
-};
-
-/**
- * ChatOutput
- */
-export type RouterOutput = {
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-  /**
-   * Partial
-   *
-   * Whether the output is partial
-   */
-  partial?: boolean;
-  /**
-   * Reasoning
-   *
-   * Generated reasoning for the final answer
-   */
-  reasoning?: string | unknown;
-  /**
-   * Error
-   *
-   * Error message if an error occurred
-   */
-  error?: string | unknown;
-  /**
-   * Token usage information
-   */
-  usage?: UsageInfo | unknown;
-};
-
-export type RouterOpenaiV1ResponsesOutput = unknown;
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export type RouterOpenaiV1ResponsesInput = {
-  [key: string]: unknown;
-};
-
-export type RouterOpenaiV1EmbeddingsOutput = unknown;
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export type RouterOpenaiV1EmbeddingsInput = {
-  [key: string]: unknown;
-};
-
-export type RouterOpenaiV1ChatCompletionsOutput = unknown;
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export type RouterOpenaiV1ChatCompletionsInput = {
-  [key: string]: unknown;
-};
-
-/**
- * ChatInput
- */
-export type RouterInput = {
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
-  /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
-   * Max Tokens
-   *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
-   */
-  max_tokens?: number | unknown;
-  /**
-   * Reasoning
-   *
-   * Should reasoning be the part of the final answer.
-   */
-  reasoning?: boolean;
+export type VideoPromptGeneratorOutput = {
   /**
    * Prompt
    *
-   * Prompt to be used for the chat completion
-   */
-  prompt: string;
-  /**
-   * Temperature
-   *
-   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
-   */
-  temperature?: number;
-};
-
-/**
- * Qwen3GuardOutput
- */
-export type Qwen3GuardOutput = {
-  /**
-   * Label
-   *
-   * The classification label
-   */
-  label: "Safe" | "Unsafe" | "Controversial";
-  /**
-   * Categories
-   *
-   * The confidence score of the classification
-   */
-  categories: Array<
-    | "Violent"
-    | "Non-violent Illegal Acts"
-    | "Sexual Content or Sexual Acts"
-    | "PII"
-    | "Suicide & Self-Harm"
-    | "Unethical Acts"
-    | "Politically Sensitive Topics"
-    | "Copyright Violation"
-    | "Jailbreak"
-    | "None"
-  >;
-};
-
-/**
- * Qwen3GuardInput
- */
-export type Qwen3GuardInput = {
-  /**
-   * Prompt
-   *
-   * The input text to be classified
-   */
-  prompt: string;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-/**
- * Seed2MiniOutput
- */
-export type BytedanceSeedV2MiniOutput = {
-  /**
-   * Output
-   *
-   * The model's text response.
-   */
-  output: string;
-  /**
-   * Messages
-   *
-   * The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.
-   */
-  messages: Array<Seed2MiniMessage>;
-  /**
-   * Reasoning Content
-   *
-   * The model's chain-of-thought reasoning content. Only present when `thinking` is `enabled` or `auto`.
-   */
-  reasoning_content?: string | unknown;
-};
-
-/**
- * Seed2MiniInput
- */
-export type BytedanceSeedV2MiniInput = {
-  /**
-   * Reasoning Effort
-   *
-   * Controls the depth of reasoning before the model responds. Only applicable when `thinking` is `enabled` or `auto`. `minimal` for immediate response, `low` for faster response with light reasoning, `medium` for balanced speed and depth, `high` for deep analysis of complex issues.
-   */
-  reasoning_effort?: "minimal" | "low" | "medium" | "high" | unknown;
-  /**
-   * Thinking
-   *
-   * Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.
-   */
-  thinking?: "enabled" | "disabled" | "auto";
-  /**
-   * System Prompt
-   *
-   * Optional system prompt to guide the model's behavior.
-   */
-  system_prompt?: string | unknown;
-  /**
-   * Image Urls
-   *
-   * URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.
-   */
-  image_urls?: Array<string>;
-  /**
-   * Temperature
-   *
-   * Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.
-   */
-  temperature?: number;
-  /**
-   * Max Completion Tokens
-   *
-   * Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.
-   */
-  max_completion_tokens?: number;
-  /**
-   * Video Urls
-   *
-   * URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.
-   */
-  video_urls?: Array<string>;
-  /**
-   * Messages
-   *
-   * Optional prior conversation history for multi-turn conversations. Pass back the `messages` field from a previous response to provide context. The current `prompt`, `image_urls`, `video_urls`, and `system_prompt` are always appended as the latest user turn.
-   */
-  messages?: Array<Seed2MiniMessage> | unknown;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.
-   */
-  top_p?: number;
-  /**
-   * Prompt
-   *
-   * The text prompt or question for the model.
+   * Generated video prompt
    */
   prompt: string;
 };

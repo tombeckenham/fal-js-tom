@@ -5,144 +5,27 @@ export type ClientOptions = {
 };
 
 /**
- * VoiceSetting
+ * Audio
  */
-export type VoiceSetting = {
+export type Audio = {
   /**
-   * Pitch
+   * File Size
    *
-   * Voice pitch (-12 to 12)
+   * The size of the file in bytes.
    */
-  pitch?: number;
+  file_size?: number;
   /**
-   * Voice Id
+   * File Name
    *
-   * Predefined voice ID to use for synthesis
+   * The name of the file. It will be auto-generated if not provided.
    */
-  voice_id?: string;
+  file_name?: string;
   /**
-   * English Normalization
+   * Content Type
    *
-   * Enables English text normalization to improve number reading performance, with a slight increase in latency
+   * The mime type of the file.
    */
-  english_normalization?: boolean;
-  /**
-   * Emotion
-   *
-   * Emotion of the generated speech
-   */
-  emotion?:
-    | "happy"
-    | "sad"
-    | "angry"
-    | "fearful"
-    | "disgusted"
-    | "surprised"
-    | "neutral"
-    | unknown;
-  /**
-   * Vol
-   *
-   * Volume (0-10)
-   */
-  vol?: number;
-  /**
-   * Speed
-   *
-   * Speech speed (0.5-2.0)
-   */
-  speed?: number;
-};
-
-/**
- * VoiceModify
- *
- * Voice modification settings for Speech 2.8 models.
- */
-export type VoiceModify = {
-  /**
-   * Pitch
-   *
-   * Pitch adjustment in semitones. Range: -100 to 100. Positive values raise pitch, negative values lower it.
-   */
-  pitch?: number;
-  /**
-   * Timbre
-   *
-   * Timbre adjustment. Range: -100 to 100. Affects the tonal quality of the voice.
-   */
-  timbre?: number;
-  /**
-   * Intensity
-   *
-   * Intensity/energy of the voice. Range: -100 to 100. Higher values create more energetic speech.
-   */
-  intensity?: number;
-};
-
-/**
- * VibeVoiceSpeaker
- */
-export type VibeVoiceSpeaker = {
-  /**
-   * Audio URL
-   *
-   * URL to a voice sample audio file. If provided, `preset` will be ignored.
-   */
-  audio_url?: string | unknown;
-  /**
-   * Preset
-   *
-   * Default voice preset to use for the speaker. Not used if `audio_url` is provided.
-   */
-  preset?:
-    | "Alice [EN]"
-    | "Carter [EN]"
-    | "Frank [EN]"
-    | "Mary [EN] (Background Music)"
-    | "Maya [EN]"
-    | "Anchen [ZH] (Background Music)"
-    | "Bowen [ZH]"
-    | "Xinran [ZH]";
-};
-
-/**
- * VibeVoiceOutput
- *
- * Output schema for VibeVoice TTS generation
- */
-export type VibevoiceOutput = {
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  audio: File;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: number;
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-};
-
-/**
- * File
- */
-export type File = {
+  content_type?: string;
   /**
    * Url
    *
@@ -150,275 +33,11 @@ export type File = {
    */
   url: string;
   /**
-   * File Size
+   * File Data
    *
-   * The size of the file in bytes.
+   * File data
    */
-  file_size?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-};
-
-/**
- * VibeVoiceInput
- *
- * Input schema for VibeVoice TTS generation
- */
-export type VibevoiceInput = {
-  /**
-   * Speakers
-   *
-   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
-   */
-  speakers: Array<VibeVoiceSpeaker>;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number | unknown;
-  /**
-   * CFG Scale
-   *
-   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
-   */
-  cfg_scale?: number;
-  /**
-   * Script
-   *
-   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
-   */
-  script: string;
-};
-
-/**
- * VibeVoiceOutput
- *
- * Output schema for VibeVoice TTS generation
- */
-export type Vibevoice7bOutput = {
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  audio: File;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: number;
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-};
-
-/**
- * VibeVoice7bInput
- *
- * Input schema for VibeVoice-7b TTS generation
- */
-export type Vibevoice7bInput = {
-  /**
-   * Speakers
-   *
-   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
-   */
-  speakers: Array<VibeVoiceSpeaker>;
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number | unknown;
-  /**
-   * CFG Scale
-   *
-   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
-   */
-  cfg_scale?: number;
-  /**
-   * Script
-   *
-   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
-   */
-  script: string;
-};
-
-/**
- * VibeVoice_0_5BOutput
- *
- * Output schema for VibeVoice-0.5b TTS generation
- */
-export type Vibevoice05bOutput = {
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  audio: File;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: number;
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-};
-
-/**
- * VibeVoice0_5bInput
- *
- * Input schema for VibeVoice-0.5b TTS generation
- */
-export type Vibevoice05bInput = {
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number | unknown;
-  /**
-   * CFG Scale
-   *
-   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
-   */
-  cfg_scale?: number;
-  /**
-   * Speaker
-   *
-   * Voice to use for speaking.
-   */
-  speaker: "Frank" | "Wayne" | "Carter" | "Emma" | "Grace" | "Mike";
-  /**
-   * Script
-   *
-   * The script to convert to speech.
-   */
-  script: string;
-};
-
-/**
- * XAITTSOutput
- *
- * Output for xAI text-to-speech generation.
- */
-export type TtsV1Output = {
-  audio: File;
-};
-
-/**
- * XAITTSInput
- *
- * Input for xAI text-to-speech generation.
- */
-export type TtsV1Input = {
-  /**
-   * Voice
-   *
-   * Voice to use for synthesis. eve: energetic, upbeat. ara: warm, friendly. rex: confident, clear. sal: smooth, balanced. leo: authoritative, strong.
-   */
-  voice?: "eve" | "ara" | "rex" | "sal" | "leo";
-  /**
-   * Text
-   *
-   * The text to convert to speech. Maximum 15,000 characters. Supports speech tags for expressive delivery: inline tags like [laugh], [pause], [sigh] and wrapping tags like <whisper>text</whisper>, <slow>text</slow>.
-   */
-  text: string;
-  /**
-   * Language
-   *
-   * BCP-47 language code or 'auto' for automatic detection. Supported: en, zh, fr, de, hi, id, it, ja, ko, pt-BR, pt-PT, ru, es-MX, es-ES, tr, vi, bn, ar-EG, ar-SA, ar-AE.
-   */
-  language?:
-    | "auto"
-    | "en"
-    | "ar-EG"
-    | "ar-SA"
-    | "ar-AE"
-    | "bn"
-    | "zh"
-    | "fr"
-    | "de"
-    | "hi"
-    | "id"
-    | "it"
-    | "ja"
-    | "ko"
-    | "pt-BR"
-    | "pt-PT"
-    | "ru"
-    | "es-MX"
-    | "es-ES"
-    | "tr"
-    | "vi";
-  output_format?: OutputFormat;
-};
-
-/**
- * OutputFormat
- *
- * Output format configuration for the TTS API.
- */
-export type OutputFormat = {
-  /**
-   * Sample Rate
-   *
-   * Sample rate in Hz.
-   */
-  sample_rate?: 8000 | 16000 | 22050 | 24000 | 44100 | 48000;
-  /**
-   * Codec
-   *
-   * Audio codec. Supported: mp3, wav, pcm, mulaw, alaw.
-   */
-  codec?: "mp3" | "wav" | "pcm" | "mulaw" | "alaw";
-  /**
-   * Bit Rate
-   *
-   * Bit rate in bps. Only applicable for MP3 codec. Defaults to 128000 for MP3.
-   */
-  bit_rate?: 32000 | 64000 | 96000 | 128000 | 192000 | unknown;
-};
-
-/**
- * Qwen3DesignVoiceOutput
- */
-export type Qwen3TtsVoiceDesign17bOutput = {
-  audio: AudioFile;
+  file_data?: Blob | File;
 };
 
 /**
@@ -476,647 +95,6 @@ export type AudioFile = {
 };
 
 /**
- * Qwen3DesignVoiceInput
- */
-export type Qwen3TtsVoiceDesign17bInput = {
-  /**
-   * Language
-   *
-   * The language of the voice to be designed.
-   */
-  language?:
-    | "Auto"
-    | "English"
-    | "Chinese"
-    | "Spanish"
-    | "French"
-    | "German"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Portuguese"
-    | "Russian";
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number | unknown;
-  /**
-   * Subtalker Top P
-   *
-   * Top-p for sub-talker sampling.
-   */
-  subtalker_top_p?: number | unknown;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty to reduce repeated tokens/codes.
-   */
-  repetition_penalty?: number | unknown;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
-   * Max New Tokens
-   *
-   * Maximum number of new codec tokens to generate.
-   */
-  max_new_tokens?: number | unknown;
-  /**
-   * Top P
-   *
-   * Top-p sampling parameter.
-   */
-  top_p?: number | unknown;
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number | unknown;
-  /**
-   * Prompt
-   *
-   * Optional prompt to guide the style of the generated speech.
-   */
-  prompt: string;
-  /**
-   * Temperature
-   *
-   * Sampling temperature; higher => more random.
-   */
-  temperature?: number | unknown;
-  /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number | unknown;
-  /**
-   * Subtalker Dosample
-   *
-   * Sampling switch for the sub-talker.
-   */
-  subtalker_dosample?: boolean | unknown;
-};
-
-/**
- * Qwen3TTSOutput
- */
-export type Qwen3TtsTextToSpeech17bOutput = {
-  audio: AudioFile;
-};
-
-/**
- * Qwen3TTSInput
- */
-export type Qwen3TtsTextToSpeech17bInput = {
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number | unknown;
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string | unknown;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty to reduce repeated tokens/codes.
-   */
-  repetition_penalty?: number | unknown;
-  /**
-   * Top P
-   *
-   * Top-p sampling parameter.
-   */
-  top_p?: number | unknown;
-  /**
-   * Max New Tokens
-   *
-   * Maximum number of new codec tokens to generate.
-   */
-  max_new_tokens?: number | unknown;
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number | unknown;
-  /**
-   * Subtalker Dosample
-   *
-   * Sampling switch for the sub-talker.
-   */
-  subtalker_dosample?: boolean | unknown;
-  /**
-   * Voice
-   *
-   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
-   */
-  voice?:
-    | "Vivian"
-    | "Serena"
-    | "Uncle_Fu"
-    | "Dylan"
-    | "Eric"
-    | "Ryan"
-    | "Aiden"
-    | "Ono_Anna"
-    | "Sohee"
-    | unknown;
-  /**
-   * Subtalker Top P
-   *
-   * Top-p for sub-talker sampling.
-   */
-  subtalker_top_p?: number | unknown;
-  /**
-   * Speaker Voice Embedding File Url
-   *
-   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
-   */
-  speaker_voice_embedding_file_url?: string | unknown;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
-   * Prompt
-   *
-   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
-   */
-  prompt?: string | unknown;
-  /**
-   * Temperature
-   *
-   * Sampling temperature; higher => more random.
-   */
-  temperature?: number | unknown;
-  /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number | unknown;
-  /**
-   * Language
-   *
-   * The language of the voice.
-   */
-  language?:
-    | "Auto"
-    | "English"
-    | "Chinese"
-    | "Spanish"
-    | "French"
-    | "German"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Portuguese"
-    | "Russian";
-};
-
-/**
- * Qwen3TTSOutput06b
- */
-export type Qwen3TtsTextToSpeech06bOutput = {
-  audio: AudioFile;
-};
-
-/**
- * Qwen3TTSInput06b
- */
-export type Qwen3TtsTextToSpeech06bInput = {
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number | unknown;
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string | unknown;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty to reduce repeated tokens/codes.
-   */
-  repetition_penalty?: number | unknown;
-  /**
-   * Top P
-   *
-   * Top-p sampling parameter.
-   */
-  top_p?: number | unknown;
-  /**
-   * Max New Tokens
-   *
-   * Maximum number of new codec tokens to generate.
-   */
-  max_new_tokens?: number | unknown;
-  /**
-   * Subtalker Top K
-   *
-   * Top-k for sub-talker sampling.
-   */
-  subtalker_top_k?: number | unknown;
-  /**
-   * Subtalker Dosample
-   *
-   * Sampling switch for the sub-talker.
-   */
-  subtalker_dosample?: boolean | unknown;
-  /**
-   * Voice
-   *
-   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
-   */
-  voice?:
-    | "Vivian"
-    | "Serena"
-    | "Uncle_Fu"
-    | "Dylan"
-    | "Eric"
-    | "Ryan"
-    | "Aiden"
-    | "Ono_Anna"
-    | "Sohee"
-    | unknown;
-  /**
-   * Subtalker Top P
-   *
-   * Top-p for sub-talker sampling.
-   */
-  subtalker_top_p?: number | unknown;
-  /**
-   * Speaker Voice Embedding File Url
-   *
-   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice/0.6b` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
-   */
-  speaker_voice_embedding_file_url?: string | unknown;
-  /**
-   * Text
-   *
-   * The text to be converted to speech.
-   */
-  text: string;
-  /**
-   * Prompt
-   *
-   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
-   */
-  prompt?: string | unknown;
-  /**
-   * Temperature
-   *
-   * Sampling temperature; higher => more random.
-   */
-  temperature?: number | unknown;
-  /**
-   * Subtalker Temperature
-   *
-   * Temperature for sub-talker sampling.
-   */
-  subtalker_temperature?: number | unknown;
-  /**
-   * Language
-   *
-   * The language of the voice.
-   */
-  language?:
-    | "Auto"
-    | "English"
-    | "Chinese"
-    | "Spanish"
-    | "French"
-    | "German"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Portuguese"
-    | "Russian";
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-/**
- * PronunciationDict
- */
-export type PronunciationDict = {
-  /**
-   * Tone List
-   *
-   * List of pronunciation replacements in format ['text/(pronunciation)', ...]. For Chinese, tones are 1-5. Example: ['燕少飞/(yan4)(shao3)(fei1)']
-   */
-  tone_list?: Array<string>;
-};
-
-/**
- * OrpheusOutput
- */
-export type OrpheusTtsOutput = {
-  audio: File;
-};
-
-/**
- * OrpheusRequest
- */
-export type OrpheusTtsInput = {
-  /**
-   * Text
-   *
-   * The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
-   */
-  text: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice?: "tara" | "leah" | "jess" | "leo" | "dan" | "mia" | "zac" | "zoe";
-  /**
-   * Repetition Penalty
-   *
-   * Repetition penalty (>= 1.1 required for stable generations).
-   */
-  repetition_penalty?: number;
-  /**
-   * Temperature
-   *
-   * Temperature for generation (higher = more creative).
-   */
-  temperature?: number;
-};
-
-/**
- * VoiceDesignOutput
- */
-export type MinimaxVoiceDesignOutput = {
-  audio: File;
-  /**
-   * Custom Voice Id
-   *
-   * The voice_id of the generated voice
-   */
-  custom_voice_id: string;
-};
-
-/**
- * VoiceDesignRequest
- */
-export type MinimaxVoiceDesignInput = {
-  /**
-   * Preview Text
-   *
-   * Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.
-   */
-  preview_text: string;
-  /**
-   * Prompt
-   *
-   * Voice description prompt for generating a personalized voice
-   */
-  prompt: string;
-};
-
-/**
- * VoiceCloneOutput
- */
-export type MinimaxVoiceCloneOutput = {
-  /**
-   * Preview audio generated with the cloned voice (if requested)
-   */
-  audio?: File | unknown;
-  /**
-   * Custom Voice Id
-   *
-   * The cloned voice ID for use with TTS
-   */
-  custom_voice_id: string;
-};
-
-/**
- * VoiceCloneRequest
- */
-export type MinimaxVoiceCloneInput = {
-  /**
-   * Text
-   *
-   * Text to generate a TTS preview with the cloned voice (optional)
-   */
-  text?: string | unknown;
-  /**
-   * Audio Url
-   *
-   *
-   * URL of the input audio file for voice cloning. Should be at least 10 seconds
-   * long. To retain the voice permanently, use it with a TTS (text-to-speech)
-   * endpoint at least once within 7 days. Otherwise, it will be
-   * automatically deleted.
-   *
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Need Volume Normalization
-   *
-   * Enable volume normalization for the cloned voice
-   */
-  need_volume_normalization?: boolean;
-  /**
-   * Noise Reduction
-   *
-   * Enable noise reduction for the cloned voice
-   */
-  noise_reduction?: boolean;
-  /**
-   * Model
-   *
-   * TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo
-   */
-  model?:
-    | "speech-02-hd"
-    | "speech-02-turbo"
-    | "speech-01-hd"
-    | "speech-01-turbo";
-  /**
-   * Accuracy
-   *
-   * Text validation accuracy threshold (0-1)
-   */
-  accuracy?: number | unknown;
-};
-
-/**
- * TextToSpeechTurbo28Output
- *
- * Output model for Speech 2.8 Turbo.
- */
-export type MinimaxSpeech28TurboOutput = {
-  audio: File;
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechTurbo28Request
- *
- * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
- */
-export type MinimaxSpeech28TurboInput = {
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Voice modification settings to adjust pitch, intensity, and timbre.
-   */
-  voice_modify?: VoiceModify | unknown;
-  audio_setting?: AudioSetting;
-  normalization_setting?: LoudnessNormalizationSetting;
-  /**
-   * Prompt
-   *
-   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
-   */
-  prompt: string;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  voice_setting?: VoiceSetting;
-};
-
-/**
- * LoudnessNormalizationSetting
- */
-export type LoudnessNormalizationSetting = {
-  /**
-   * Target Peak
-   *
-   * Target peak level in dBTP (default -0.5).
-   */
-  target_peak?: number;
-  /**
-   * Target Loudness
-   *
-   * Target loudness in LUFS (default -18.0)
-   */
-  target_loudness?: number;
-  /**
-   * Target Range
-   *
-   * Target loudness range in LU (default 8.0)
-   */
-  target_range?: number;
-  /**
-   * Enabled
-   *
-   * Enable loudness normalization for the audio
-   */
-  enabled?: boolean;
-};
-
-/**
  * AudioSetting
  */
 export type AudioSetting = {
@@ -1147,977 +125,526 @@ export type AudioSetting = {
 };
 
 /**
- * TextToSpeechHD28Output
+ * STSInput
  *
- * Output model for Speech 2.8 HD.
+ * Input parameters for the speech-to-speech request.
  */
-export type MinimaxSpeech28HdOutput = {
-  audio: File;
+export type ChatterboxhdSpeechToSpeechInput = {
   /**
-   * Duration Ms
+   * High Quality Audio
    *
-   * Duration of the audio in milliseconds
+   * If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.
    */
-  duration_ms: number;
+  high_quality_audio?: boolean;
+  /**
+   * Target Voice Audio Url
+   *
+   * URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.
+   */
+  target_voice_audio_url?: string | Blob | File;
+  /**
+   * Source Audio Url
+   *
+   * URL to the source audio file to be voice-converted.
+   */
+  source_audio_url: string | Blob | File;
+  /**
+   * Target Voice
+   *
+   * The voice to use for the speech-to-speech request. If neither target_voice nor target_voice_audio_url are provided, a random target voice will be used.
+   */
+  target_voice?:
+    | "Aurora"
+    | "Blade"
+    | "Britney"
+    | "Carl"
+    | "Cliff"
+    | "Richard"
+    | "Rico"
+    | "Siobhan"
+    | "Vicky";
 };
 
 /**
- * TextToSpeechHD28Request
+ * STSOutput
  *
- * Request model for Speech 2.8 HD - highest quality speech synthesis.
+ * Output parameters for the speech-to-speech request.
  */
-export type MinimaxSpeech28HdInput = {
+export type ChatterboxhdSpeechToSpeechOutput = {
   /**
-   * Language Boost
+   * Audio
    *
-   * Enhance recognition of specified languages and dialects
+   * The generated voice-converted audio file.
    */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Voice modification settings to adjust pitch, intensity, and timbre.
-   */
-  voice_modify?: VoiceModify | unknown;
-  audio_setting?: AudioSetting;
-  normalization_setting?: LoudnessNormalizationSetting;
-  /**
-   * Prompt
-   *
-   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
-   */
-  prompt: string;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  voice_setting?: VoiceSetting;
+  audio: Audio;
 };
 
 /**
- * TextToSpeechTurbo26Output
+ * TTSInput
+ *
+ * Input parameters for the TTS request.
  */
-export type MinimaxSpeech26TurboOutput = {
-  audio: File;
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechTurbo26Request
- */
-export type MinimaxSpeech26TurboInput = {
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  audio_setting?: AudioSetting;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  normalization_setting?: LoudnessNormalizationSetting;
-  /**
-   * Prompt
-   *
-   * Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.
-   */
-  prompt: string;
-  voice_setting?: VoiceSetting;
-};
-
-/**
- * TextToSpeechHD26Output
- */
-export type MinimaxSpeech26HdOutput = {
-  audio: File;
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechHD26Request
- */
-export type MinimaxSpeech26HdInput = {
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  audio_setting?: AudioSetting;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  normalization_setting?: LoudnessNormalizationSetting;
-  /**
-   * Prompt
-   *
-   * Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.
-   */
-  prompt: string;
-  voice_setting?: VoiceSetting;
-};
-
-/**
- * TextToSpeechOutput
- */
-export type MinimaxSpeech02TurboOutput = {
-  audio: File;
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechTurboRequest
- */
-export type MinimaxSpeech02TurboInput = {
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
+export type ChatterboxhdTextToSpeechInput = {
   /**
    * Text
    *
-   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
+   * Text to synthesize into speech.
    */
-  text: string;
-  audio_setting?: AudioSetting;
+  text?: string;
   /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  /**
-   * Output Format
+   * Exaggeration
    *
-   * Format of the output content (non-streaming only)
+   * Controls emotion exaggeration. Range typically 0.25 to 2.0.
    */
-  output_format?: "url" | "hex";
-  voice_setting?: VoiceSetting;
-};
-
-/**
- * TextToSpeechOutput
- */
-export type MinimaxSpeech02HdOutput = {
-  audio: File;
+  exaggeration?: number;
   /**
-   * Duration Ms
+   * High Quality Audio
    *
-   * Duration of the audio in milliseconds
+   * If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.
    */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechHDRequest
- */
-export type MinimaxSpeech02HdInput = {
+  high_quality_audio?: boolean;
   /**
-   * Language Boost
+   * Voice
    *
-   * Enhance recognition of specified languages and dialects
+   * The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.
    */
-  language_boost?:
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Text
-   *
-   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
-   */
-  text: string;
-  audio_setting?: AudioSetting;
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  voice_setting?: VoiceSetting;
-};
-
-/**
- * TextToSpeechOutput
- */
-export type MinimaxPreviewSpeech25TurboOutput = {
-  audio: File;
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechTurbov25Request
- */
-export type MinimaxPreviewSpeech25TurboInput = {
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Persian"
-    | "Filipino"
-    | "Tamil"
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Text
-   *
-   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
-   */
-  text: string;
-  audio_setting?: AudioSetting;
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  voice_setting?: VoiceSetting;
-};
-
-/**
- * TextToSpeechOutput
- */
-export type MinimaxPreviewSpeech25HdOutput = {
-  audio: File;
-  /**
-   * Duration Ms
-   *
-   * Duration of the audio in milliseconds
-   */
-  duration_ms: number;
-};
-
-/**
- * TextToSpeechHDv25Request
- */
-export type MinimaxPreviewSpeech25HdInput = {
-  /**
-   * Language Boost
-   *
-   * Enhance recognition of specified languages and dialects
-   */
-  language_boost?:
-    | "Persian"
-    | "Filipino"
-    | "Tamil"
-    | "Chinese"
-    | "Chinese,Yue"
-    | "English"
-    | "Arabic"
-    | "Russian"
-    | "Spanish"
-    | "French"
-    | "Portuguese"
-    | "German"
-    | "Turkish"
-    | "Dutch"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Indonesian"
-    | "Japanese"
-    | "Italian"
-    | "Korean"
-    | "Thai"
-    | "Polish"
-    | "Romanian"
-    | "Greek"
-    | "Czech"
-    | "Finnish"
-    | "Hindi"
-    | "Bulgarian"
-    | "Danish"
-    | "Hebrew"
-    | "Malay"
-    | "Slovak"
-    | "Swedish"
-    | "Croatian"
-    | "Hungarian"
-    | "Norwegian"
-    | "Slovenian"
-    | "Catalan"
-    | "Nynorsk"
-    | "Afrikaans"
-    | "auto"
-    | unknown;
-  /**
-   * Text
-   *
-   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
-   */
-  text: string;
-  audio_setting?: AudioSetting;
-  /**
-   * Custom pronunciation dictionary for text replacement
-   */
-  pronunciation_dict?: PronunciationDict | unknown;
-  /**
-   * Output Format
-   *
-   * Format of the output content (non-streaming only)
-   */
-  output_format?: "url" | "hex";
-  voice_setting?: VoiceSetting;
-};
-
-export type MayaStreamOutput = unknown;
-
-/**
- * MayaVoiceStreamingInput
- *
- * Input schema for Maya-1-Voice streaming TTS generation
- */
-export type MayaStreamInput = {
-  /**
-   * Temperature
-   *
-   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
-   */
-  temperature?: number;
-  /**
-   * Text
-   *
-   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
-   */
-  text: string;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
-   */
-  repetition_penalty?: number;
-  /**
-   * Sample Rate
-   *
-   * Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).
-   */
-  sample_rate?: "48 kHz" | "24 kHz";
-  /**
-   * Max Tokens
-   *
-   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
-   */
-  max_tokens?: number;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter. Controls diversity of token selection.
-   */
-  top_p?: number;
-  /**
-   * Output Format
-   *
-   * Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).
-   */
-  output_format?: "mp3" | "wav" | "pcm";
-  /**
-   * Prompt
-   *
-   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
-   */
-  prompt: string;
-};
-
-/**
- * MayaVoiceOutput
- *
- * Output schema for Maya-1-Voice TTS generation
- */
-export type MayaOutput = {
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the generated audio
-   */
-  sample_rate: string;
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds
-   */
-  duration: number;
-  audio: File;
-  /**
-   * Rtf
-   *
-   * Real-time factor (generation_time / audio_duration). Lower is better.
-   */
-  rtf: number;
-  /**
-   * Generation Time
-   *
-   * Time taken to generate the audio in seconds
-   */
-  generation_time: number;
-};
-
-/**
- * MayaVoiceInput
- *
- * Input schema for Maya-1-Voice TTS generation
- */
-export type MayaInput = {
-  /**
-   * Temperature
-   *
-   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
-   */
-  temperature?: number;
-  /**
-   * Text
-   *
-   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
-   */
-  text: string;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
-   */
-  repetition_penalty?: number;
-  /**
-   * Sample Rate
-   *
-   * Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.
-   */
-  sample_rate?: "48 kHz" | "24 kHz";
-  /**
-   * Max Tokens
-   *
-   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
-   */
-  max_tokens?: number;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter. Controls diversity of token selection.
-   */
-  top_p?: number;
-  /**
-   * Output Format
-   *
-   * Output audio format for the generated speech
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Prompt
-   *
-   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
-   */
-  prompt: string;
-};
-
-/**
- * MayaVoiceBatchOutput
- *
- * Output schema for batch Maya-1-Voice TTS generation
- */
-export type MayaBatchOutput = {
-  /**
-   * Average Rtf
-   *
-   * Average real-time factor across all generations
-   */
-  average_rtf: number;
-  /**
-   * Durations
-   *
-   * Duration of each generated audio in seconds
-   */
-  durations: Array<number>;
-  /**
-   * Audios
-   *
-   * List of generated audio files
-   */
-  audios: Array<File>;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of all generated audio files
-   */
-  sample_rate: string;
-  /**
-   * Total Generation Time
-   *
-   * Total time taken to generate all audio files in seconds
-   */
-  total_generation_time: number;
-};
-
-/**
- * MayaVoiceBatchInput
- *
- * Input schema for batch Maya-1-Voice TTS generation
- */
-export type MayaBatchInput = {
-  /**
-   * Temperature
-   *
-   * Sampling temperature for all generations.
-   */
-  temperature?: number;
-  /**
-   * Repetition Penalty
-   *
-   * Repetition penalty for all generations.
-   */
-  repetition_penalty?: number;
-  /**
-   * Sample Rate
-   *
-   * Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.
-   */
-  sample_rate?: "48 kHz" | "24 kHz";
-  /**
-   * Max Tokens
-   *
-   * Maximum SNAC tokens per generation.
-   */
-  max_tokens?: number;
-  /**
-   * Texts
-   *
-   * List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.
-   */
-  texts: Array<string>;
-  /**
-   * Top P
-   *
-   * Nucleus sampling parameter for all generations.
-   */
-  top_p?: number;
-  /**
-   * Prompts
-   *
-   * List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.
-   */
-  prompts: Array<string>;
-  /**
-   * Output Format
-   *
-   * Output audio format for all generated speech files
-   */
-  output_format?: "wav" | "mp3";
-};
-
-/**
- * Output
- */
-export type LuxTtsOutput = {
-  /**
-   * Timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  /**
-   * Seed
-   */
-  seed: number;
-  audio: File;
-};
-
-/**
- * Input
- */
-export type LuxTtsInput = {
-  /**
-   * Prompt
-   *
-   * The text to be converted to speech.
-   */
-  prompt: string;
+  voice?:
+    | "Aurora"
+    | "Blade"
+    | "Britney"
+    | "Carl"
+    | "Cliff"
+    | "Richard"
+    | "Rico"
+    | "Siobhan"
+    | "Vicky";
   /**
    * Audio Url
    *
-   * URL of the reference audio file for voice cloning. The model will mimic the voice characteristics from this audio.
+   * URL to the audio sample to use as a voice prompt for zero-shot TTS voice cloning. Providing a audio sample will override the voice setting. If neither voice nor audio_url are provided, a random voice will be used.
    */
-  audio_url: string | Blob | File;
+  audio_url?: string | Blob | File;
   /**
-   * Num Inference Steps
+   * Temperature
    *
-   * Number of flow-matching inference steps. 4 is recommended for best efficiency.
+   * Controls the randomness of generation. Range typically 0.05 to 5.
    */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Classifier-free guidance scale. Higher values increase adherence to the reference voice at the cost of diversity.
-   */
-  guidance_scale?: number;
-  /**
-   * Max Ref Length
-   *
-   * Maximum length of the reference audio to use for voice encoding, in seconds. Longer durations capture more voice characteristics but increase processing time.
-   */
-  max_ref_length?: number;
+  temperature?: number;
   /**
    * Seed
    *
-   * Random seed for reproducibility.
+   * Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed.
+   */
+  seed?: number;
+  /**
+   * Cfg
+   *
+   * Classifier-free guidance scale (CFG) controls the conditioning factor. Range typically 0.2 to 1.0. For expressive or dramatic speech, try lower cfg values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher. If the reference speaker has a fast speaking style, lowering cfg to around 0.3 can improve pacing.
+   */
+  cfg?: number;
+};
+
+/**
+ * TTSOutput
+ *
+ * Output parameters for the TTS request.
+ */
+export type ChatterboxhdTextToSpeechOutput = {
+  /**
+   * Audio
+   *
+   * The generated audio file.
+   */
+  audio: Audio;
+};
+
+/**
+ * ChatterboxVCRequest
+ */
+export type ChatterboxSpeechToSpeechInput = {
+  /**
+   * Target Voice Audio Url
+   *
+   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
+   */
+  target_voice_audio_url?: string | unknown;
+  /**
+   * Source Audio Url
+   */
+  source_audio_url: string | Blob | File;
+};
+
+/**
+ * ChatterboxOutput
+ */
+export type ChatterboxSpeechToSpeechOutput = {
+  audio: File;
+};
+
+/**
+ * ChatterboxRequest
+ */
+export type ChatterboxTextToSpeechInput = {
+  /**
+   * Temperature
+   *
+   * Temperature for generation (higher = more creative).
+   */
+  temperature?: number;
+  /**
+   * Audio Url
+   *
+   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
+   */
+  audio_url?: string | unknown;
+  /**
+   * Seed
+   *
+   * Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed..
    */
   seed?: number | unknown;
+  /**
+   * Exaggeration
+   *
+   * Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).
+   */
+  exaggeration?: number;
+  /**
+   * Cfg
+   */
+  cfg?: number;
+  /**
+   * Text
+   *
+   * The text to be converted to speech (maximum 5000 characters). You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
+   */
+  text: string;
+};
+
+/**
+ * ChatterboxMultilingualRequest
+ */
+export type ChatterboxTextToSpeechMultilingualInput = {
+  /**
+   * CFG Scale
+   *
+   * Configuration/pace weight controlling generation guidance (0.0-1.0). Use 0.0 for language transfer to mitigate accent inheritance.
+   */
+  cfg_scale?: number;
+  /**
+   * Voice
+   *
+   * Language code for synthesis. In case using custom please provide audio url and select custom_audio_language.
+   */
+  voice?: string;
+  /**
+   * Temperature
+   *
+   * Controls randomness and variation in generation (0.05-5.0). Higher values create more varied speech patterns.
+   */
+  temperature?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducible results. Set to 0 for random generation, or provide a specific number for consistent outputs.
+   */
+  seed?: number | unknown;
+  /**
+   * Exaggeration
+   *
+   * Controls speech expressiveness and emotional intensity (0.25-2.0). 0.5 is neutral, higher values increase expressiveness. Extreme values may be unstable.
+   */
+  exaggeration?: number;
+  /**
+   * Custom Audio Language
+   *
+   * If using a custom audio URL, specify the language of the audio here. Ignored if voice is not a custom url.
+   */
+  custom_audio_language?:
+    | "english"
+    | "arabic"
+    | "danish"
+    | "german"
+    | "greek"
+    | "spanish"
+    | "finnish"
+    | "french"
+    | "hebrew"
+    | "hindi"
+    | "italian"
+    | "japanese"
+    | "korean"
+    | "malay"
+    | "dutch"
+    | "norwegian"
+    | "polish"
+    | "portuguese"
+    | "russian"
+    | "swedish"
+    | "swahili"
+    | "turkish"
+    | "chinese"
+    | unknown;
+  /**
+   * Text
+   *
+   * The text to be converted to speech (maximum 300 characters). Supports 23 languages including English, French, German, Spanish, Italian, Portuguese, Hindi, Arabic, Chinese, Japanese, Korean, and more.
+   */
+  text: string;
+};
+
+/**
+ * ChatterboxMultilingualOutput
+ */
+export type ChatterboxTextToSpeechMultilingualOutput = {
+  audio: File;
+};
+
+/**
+ * ChatterboxOutput
+ */
+export type ChatterboxTextToSpeechOutput = {
+  audio: File;
+};
+
+/**
+ * DiaRequest
+ */
+export type DiaTtsInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+};
+
+/**
+ * DiaOutput
+ */
+export type DiaTtsOutput = {
+  audio: File;
+};
+
+/**
+ * TextToSpeechRequest
+ */
+export type ElevenlabsTtsTurboV25Input = {
+  /**
+   * Timestamps
+   *
+   * Whether to return timestamps for each word in the generated speech
+   */
+  timestamps?: boolean;
+  /**
+   * Speed
+   *
+   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
+   */
+  speed?: number;
+  /**
+   * Previous Text
+   *
+   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  previous_text?: string | unknown;
+  /**
+   * Next Text
+   *
+   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  next_text?: string | unknown;
+  /**
+   * Style
+   *
+   * Style exaggeration (0-1)
+   */
+  style?: number;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Stability
+   *
+   * Voice stability (0-1)
+   */
+  stability?: number;
+  /**
+   * Text
+   *
+   * The text to convert to speech
+   */
+  text: string;
+  /**
+   * Apply Text Normalization
+   *
+   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+   */
+  apply_text_normalization?: "auto" | "on" | "off";
+  /**
+   * Similarity Boost
+   *
+   * Similarity boost (0-1)
+   */
+  similarity_boost?: number;
 };
 
 /**
  * TTSOutput
  */
-export type KlingVideoV1TtsOutput = {
+export type ElevenlabsTtsTurboV25Output = {
+  /**
+   * Timestamps
+   *
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   */
+  timestamps?: Array<unknown> | unknown;
   audio: File;
 };
 
 /**
- * TTSInput
+ * EmotionalStrengths
  */
-export type KlingVideoV1TtsInput = {
+export type EmotionalStrengths = {
   /**
-   * Voice Id
+   * Disgusted
    *
-   * The voice ID to use for speech synthesis
+   * Strength of disgust emotion
    */
-  voice_id?:
-    | "genshin_vindi2"
-    | "zhinen_xuesheng"
-    | "AOT"
-    | "ai_shatang"
-    | "genshin_klee2"
-    | "genshin_kirara"
-    | "ai_kaiya"
-    | "oversea_male1"
-    | "ai_chenjiahao_712"
-    | "girlfriend_4_speech02"
-    | "chat1_female_new-3"
-    | "chat_0407_5-1"
-    | "cartoon-boy-07"
-    | "uk_boy1"
-    | "cartoon-girl-01"
-    | "PeppaPig_platform"
-    | "ai_huangzhong_712"
-    | "ai_huangyaoshi_712"
-    | "ai_laoguowang_712"
-    | "chengshu_jiejie"
-    | "you_pingjing"
-    | "calm_story1"
-    | "uk_man2"
-    | "laopopo_speech02"
-    | "heainainai_speech02"
-    | "reader_en_m-v1"
-    | "commercial_lady_en_f-v1"
-    | "tiyuxi_xuedi"
-    | "tiexin_nanyou"
-    | "girlfriend_1_speech02"
-    | "girlfriend_2_speech02"
-    | "zhuxi_speech02"
-    | "uk_oldman3"
-    | "dongbeilaotie_speech02"
-    | "chongqingxiaohuo_speech02"
-    | "chuanmeizi_speech02"
-    | "chaoshandashu_speech02"
-    | "ai_taiwan_man2_speech02"
-    | "xianzhanggui_speech02"
-    | "tianjinjiejie_speech02"
-    | "diyinnansang_DB_CN_M_04-v2"
-    | "yizhipiannan-v1"
-    | "guanxiaofang-v2"
-    | "tianmeixuemei-v1"
-    | "daopianyansang-v1"
-    | "mengwa-v1";
+  disgusted?: number;
   /**
-   * Voice Speed
+   * Happy
    *
-   * Rate of speech
+   * Strength of happiness emotion
    */
-  voice_speed?: number;
+  happy?: number;
   /**
-   * Text
+   * Afraid
    *
-   * The text to be converted to speech
+   * Strength of fear emotion
    */
-  text: string;
+  afraid?: number;
+  /**
+   * Sad
+   *
+   * Strength of sadness emotion
+   */
+  sad?: number;
+  /**
+   * Angry
+   *
+   * Strength of anger emotion
+   */
+  angry?: number;
+  /**
+   * Melancholic
+   *
+   * Strength of melancholic emotion
+   */
+  melancholic?: number;
+  /**
+   * Calm
+   *
+   * Strength of calm emotion
+   */
+  calm?: number;
+  /**
+   * Surprised
+   *
+   * Strength of surprise emotion
+   */
+  surprised?: number;
 };
 
 /**
- * Output
+ * File
  */
-export type InworldTtsOutput = {
+export type File = {
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+};
+
+/**
+ * IndexTTS2Input
+ */
+export type IndexTts2TextToSpeechInput = {
+  /**
+   * Emotion Prompt
+   *
+   * The emotional prompt to influence the emotional style. Must be used together with should_use_prompt_for_emotion.
+   */
+  emotion_prompt?: string | unknown;
+  /**
+   * Audio Url
+   *
+   * The audio file to generate the speech from.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Should Use Prompt For Emotion
+   *
+   * Whether to use the `prompt` to calculate emotional strengths, if enabled it will overwrite the `emotional_strengths` values. If `emotion_prompt` is provided, it will be used to instead of `prompt` to extract the emotional style.
+   */
+  should_use_prompt_for_emotion?: boolean;
+  /**
+   * Prompt
+   *
+   * The speech prompt to generate
+   */
+  prompt: string;
+  /**
+   * The strengths of individual emotions for fine-grained control.
+   */
+  emotional_strengths?: EmotionalStrengths | unknown;
+  /**
+   * Strength
+   *
+   * The strength of the emotional style transfer. Higher values result in stronger emotional influence.
+   */
+  strength?: number;
+  /**
+   * Emotional Audio Url
+   *
+   * The emotional reference audio file to extract the style from.
+   */
+  emotional_audio_url?: string | unknown;
+};
+
+/**
+ * IndexTTS2Output
+ */
+export type IndexTts2TextToSpeechOutput = {
   audio: File;
 };
 
@@ -2259,533 +786,2006 @@ export type InworldTtsInput = {
 };
 
 /**
- * IndexTTS2Output
+ * Output
  */
-export type IndexTts2TextToSpeechOutput = {
+export type InworldTtsOutput = {
   audio: File;
 };
 
 /**
- * IndexTTS2Input
+ * TTSInput
  */
-export type IndexTts2TextToSpeechInput = {
+export type KlingVideoV1TtsInput = {
   /**
-   * Emotion Prompt
+   * Voice Id
    *
-   * The emotional prompt to influence the emotional style. Must be used together with should_use_prompt_for_emotion.
+   * The voice ID to use for speech synthesis
    */
-  emotion_prompt?: string | unknown;
+  voice_id?:
+    | "genshin_vindi2"
+    | "zhinen_xuesheng"
+    | "AOT"
+    | "ai_shatang"
+    | "genshin_klee2"
+    | "genshin_kirara"
+    | "ai_kaiya"
+    | "oversea_male1"
+    | "ai_chenjiahao_712"
+    | "girlfriend_4_speech02"
+    | "chat1_female_new-3"
+    | "chat_0407_5-1"
+    | "cartoon-boy-07"
+    | "uk_boy1"
+    | "cartoon-girl-01"
+    | "PeppaPig_platform"
+    | "ai_huangzhong_712"
+    | "ai_huangyaoshi_712"
+    | "ai_laoguowang_712"
+    | "chengshu_jiejie"
+    | "you_pingjing"
+    | "calm_story1"
+    | "uk_man2"
+    | "laopopo_speech02"
+    | "heainainai_speech02"
+    | "reader_en_m-v1"
+    | "commercial_lady_en_f-v1"
+    | "tiyuxi_xuedi"
+    | "tiexin_nanyou"
+    | "girlfriend_1_speech02"
+    | "girlfriend_2_speech02"
+    | "zhuxi_speech02"
+    | "uk_oldman3"
+    | "dongbeilaotie_speech02"
+    | "chongqingxiaohuo_speech02"
+    | "chuanmeizi_speech02"
+    | "chaoshandashu_speech02"
+    | "ai_taiwan_man2_speech02"
+    | "xianzhanggui_speech02"
+    | "tianjinjiejie_speech02"
+    | "diyinnansang_DB_CN_M_04-v2"
+    | "yizhipiannan-v1"
+    | "guanxiaofang-v2"
+    | "tianmeixuemei-v1"
+    | "daopianyansang-v1"
+    | "mengwa-v1";
   /**
-   * Audio Url
+   * Voice Speed
    *
-   * The audio file to generate the speech from.
+   * Rate of speech
    */
-  audio_url: string | Blob | File;
+  voice_speed?: number;
   /**
-   * Should Use Prompt For Emotion
+   * Text
    *
-   * Whether to use the `prompt` to calculate emotional strengths, if enabled it will overwrite the `emotional_strengths` values. If `emotion_prompt` is provided, it will be used to instead of `prompt` to extract the emotional style.
+   * The text to be converted to speech
    */
-  should_use_prompt_for_emotion?: boolean;
-  /**
-   * Prompt
-   *
-   * The speech prompt to generate
-   */
-  prompt: string;
-  /**
-   * The strengths of individual emotions for fine-grained control.
-   */
-  emotional_strengths?: EmotionalStrengths | unknown;
-  /**
-   * Strength
-   *
-   * The strength of the emotional style transfer. Higher values result in stronger emotional influence.
-   */
-  strength?: number;
-  /**
-   * Emotional Audio Url
-   *
-   * The emotional reference audio file to extract the style from.
-   */
-  emotional_audio_url?: string | unknown;
-};
-
-/**
- * EmotionalStrengths
- */
-export type EmotionalStrengths = {
-  /**
-   * Disgusted
-   *
-   * Strength of disgust emotion
-   */
-  disgusted?: number;
-  /**
-   * Happy
-   *
-   * Strength of happiness emotion
-   */
-  happy?: number;
-  /**
-   * Afraid
-   *
-   * Strength of fear emotion
-   */
-  afraid?: number;
-  /**
-   * Sad
-   *
-   * Strength of sadness emotion
-   */
-  sad?: number;
-  /**
-   * Angry
-   *
-   * Strength of anger emotion
-   */
-  angry?: number;
-  /**
-   * Melancholic
-   *
-   * Strength of melancholic emotion
-   */
-  melancholic?: number;
-  /**
-   * Calm
-   *
-   * Strength of calm emotion
-   */
-  calm?: number;
-  /**
-   * Surprised
-   *
-   * Strength of surprise emotion
-   */
-  surprised?: number;
+  text: string;
 };
 
 /**
  * TTSOutput
  */
-export type ElevenlabsTtsTurboV25Output = {
-  /**
-   * Timestamps
-   *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
-   */
-  timestamps?: Array<unknown> | unknown;
+export type KlingVideoV1TtsOutput = {
   audio: File;
 };
 
 /**
- * TextToSpeechRequest
+ * LoudnessNormalizationSetting
  */
-export type ElevenlabsTtsTurboV25Input = {
+export type LoudnessNormalizationSetting = {
   /**
-   * Timestamps
+   * Target Peak
    *
-   * Whether to return timestamps for each word in the generated speech
+   * Target peak level in dBTP (default -0.5).
    */
-  timestamps?: boolean;
+  target_peak?: number;
   /**
-   * Speed
+   * Target Loudness
    *
-   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
+   * Target loudness in LUFS (default -18.0)
    */
-  speed?: number;
+  target_loudness?: number;
   /**
-   * Previous Text
+   * Target Range
    *
-   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   * Target loudness range in LU (default 8.0)
    */
-  previous_text?: string | unknown;
+  target_range?: number;
   /**
-   * Next Text
+   * Enabled
    *
-   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   * Enable loudness normalization for the audio
    */
-  next_text?: string | unknown;
-  /**
-   * Style
-   *
-   * Style exaggeration (0-1)
-   */
-  style?: number;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Stability
-   *
-   * Voice stability (0-1)
-   */
-  stability?: number;
-  /**
-   * Text
-   *
-   * The text to convert to speech
-   */
-  text: string;
-  /**
-   * Apply Text Normalization
-   *
-   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-   */
-  apply_text_normalization?: "auto" | "on" | "off";
-  /**
-   * Similarity Boost
-   *
-   * Similarity boost (0-1)
-   */
-  similarity_boost?: number;
+  enabled?: boolean;
 };
 
 /**
- * DiaOutput
+ * Input
  */
-export type DiaTtsOutput = {
-  audio: File;
-};
-
-/**
- * DiaRequest
- */
-export type DiaTtsInput = {
+export type LuxTtsInput = {
   /**
-   * Text
+   * Prompt
    *
    * The text to be converted to speech.
    */
-  text: string;
-};
-
-/**
- * ChatterboxOutput
- */
-export type ChatterboxTextToSpeechOutput = {
-  audio: File;
-};
-
-/**
- * ChatterboxMultilingualOutput
- */
-export type ChatterboxTextToSpeechMultilingualOutput = {
-  audio: File;
-};
-
-/**
- * ChatterboxMultilingualRequest
- */
-export type ChatterboxTextToSpeechMultilingualInput = {
+  prompt: string;
   /**
-   * CFG Scale
+   * Audio Url
    *
-   * Configuration/pace weight controlling generation guidance (0.0-1.0). Use 0.0 for language transfer to mitigate accent inheritance.
+   * URL of the reference audio file for voice cloning. The model will mimic the voice characteristics from this audio.
    */
-  cfg_scale?: number;
+  audio_url: string | Blob | File;
   /**
-   * Voice
+   * Num Inference Steps
    *
-   * Language code for synthesis. In case using custom please provide audio url and select custom_audio_language.
+   * Number of flow-matching inference steps. 4 is recommended for best efficiency.
    */
-  voice?: string;
+  num_inference_steps?: number;
   /**
-   * Temperature
+   * Guidance Scale
    *
-   * Controls randomness and variation in generation (0.05-5.0). Higher values create more varied speech patterns.
+   * Classifier-free guidance scale. Higher values increase adherence to the reference voice at the cost of diversity.
    */
-  temperature?: number;
+  guidance_scale?: number;
+  /**
+   * Max Ref Length
+   *
+   * Maximum length of the reference audio to use for voice encoding, in seconds. Longer durations capture more voice characteristics but increase processing time.
+   */
+  max_ref_length?: number;
   /**
    * Seed
    *
-   * Random seed for reproducible results. Set to 0 for random generation, or provide a specific number for consistent outputs.
+   * Random seed for reproducibility.
    */
   seed?: number | unknown;
+};
+
+/**
+ * Output
+ */
+export type LuxTtsOutput = {
   /**
-   * Exaggeration
-   *
-   * Controls speech expressiveness and emotional intensity (0.25-2.0). 0.5 is neutral, higher values increase expressiveness. Extreme values may be unstable.
+   * Timings
    */
-  exaggeration?: number;
+  timings: {
+    [key: string]: number;
+  };
   /**
-   * Custom Audio Language
-   *
-   * If using a custom audio URL, specify the language of the audio here. Ignored if voice is not a custom url.
+   * Seed
    */
-  custom_audio_language?:
-    | "english"
-    | "arabic"
-    | "danish"
-    | "german"
-    | "greek"
-    | "spanish"
-    | "finnish"
-    | "french"
-    | "hebrew"
-    | "hindi"
-    | "italian"
-    | "japanese"
-    | "korean"
-    | "malay"
-    | "dutch"
-    | "norwegian"
-    | "polish"
-    | "portuguese"
-    | "russian"
-    | "swedish"
-    | "swahili"
-    | "turkish"
-    | "chinese"
+  seed: number;
+  audio: File;
+};
+
+/**
+ * MayaVoiceBatchInput
+ *
+ * Input schema for batch Maya-1-Voice TTS generation
+ */
+export type MayaBatchInput = {
+  /**
+   * Temperature
+   *
+   * Sampling temperature for all generations.
+   */
+  temperature?: number;
+  /**
+   * Repetition Penalty
+   *
+   * Repetition penalty for all generations.
+   */
+  repetition_penalty?: number;
+  /**
+   * Sample Rate
+   *
+   * Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.
+   */
+  sample_rate?: "48 kHz" | "24 kHz";
+  /**
+   * Max Tokens
+   *
+   * Maximum SNAC tokens per generation.
+   */
+  max_tokens?: number;
+  /**
+   * Texts
+   *
+   * List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.
+   */
+  texts: Array<string>;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter for all generations.
+   */
+  top_p?: number;
+  /**
+   * Prompts
+   *
+   * List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.
+   */
+  prompts: Array<string>;
+  /**
+   * Output Format
+   *
+   * Output audio format for all generated speech files
+   */
+  output_format?: "wav" | "mp3";
+};
+
+/**
+ * MayaVoiceBatchOutput
+ *
+ * Output schema for batch Maya-1-Voice TTS generation
+ */
+export type MayaBatchOutput = {
+  /**
+   * Average Rtf
+   *
+   * Average real-time factor across all generations
+   */
+  average_rtf: number;
+  /**
+   * Durations
+   *
+   * Duration of each generated audio in seconds
+   */
+  durations: Array<number>;
+  /**
+   * Audios
+   *
+   * List of generated audio files
+   */
+  audios: Array<File>;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of all generated audio files
+   */
+  sample_rate: string;
+  /**
+   * Total Generation Time
+   *
+   * Total time taken to generate all audio files in seconds
+   */
+  total_generation_time: number;
+};
+
+/**
+ * MayaVoiceInput
+ *
+ * Input schema for Maya-1-Voice TTS generation
+ */
+export type MayaInput = {
+  /**
+   * Temperature
+   *
+   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
+   */
+  temperature?: number;
+  /**
+   * Text
+   *
+   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
+   */
+  text: string;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
+   */
+  repetition_penalty?: number;
+  /**
+   * Sample Rate
+   *
+   * Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.
+   */
+  sample_rate?: "48 kHz" | "24 kHz";
+  /**
+   * Max Tokens
+   *
+   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
+   */
+  max_tokens?: number;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter. Controls diversity of token selection.
+   */
+  top_p?: number;
+  /**
+   * Output Format
+   *
+   * Output audio format for the generated speech
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Prompt
+   *
+   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
+   */
+  prompt: string;
+};
+
+/**
+ * MayaVoiceOutput
+ *
+ * Output schema for Maya-1-Voice TTS generation
+ */
+export type MayaOutput = {
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: string;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
+  audio: File;
+  /**
+   * Rtf
+   *
+   * Real-time factor (generation_time / audio_duration). Lower is better.
+   */
+  rtf: number;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+};
+
+/**
+ * MayaVoiceStreamingInput
+ *
+ * Input schema for Maya-1-Voice streaming TTS generation
+ */
+export type MayaStreamInput = {
+  /**
+   * Temperature
+   *
+   * Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.
+   */
+  temperature?: number;
+  /**
+   * Text
+   *
+   * The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'
+   */
+  text: string;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty for repeating tokens. Higher values reduce repetition artifacts.
+   */
+  repetition_penalty?: number;
+  /**
+   * Sample Rate
+   *
+   * Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).
+   */
+  sample_rate?: "48 kHz" | "24 kHz";
+  /**
+   * Max Tokens
+   *
+   * Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.
+   */
+  max_tokens?: number;
+  /**
+   * Top P
+   *
+   * Nucleus sampling parameter. Controls diversity of token selection.
+   */
+  top_p?: number;
+  /**
+   * Output Format
+   *
+   * Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).
+   */
+  output_format?: "mp3" | "wav" | "pcm";
+  /**
+   * Prompt
+   *
+   * Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.
+   */
+  prompt: string;
+};
+
+export type MayaStreamOutput = unknown;
+
+/**
+ * TextToSpeechHDv25Request
+ */
+export type MinimaxPreviewSpeech25HdInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Persian"
+    | "Filipino"
+    | "Tamil"
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
     | unknown;
   /**
    * Text
    *
-   * The text to be converted to speech (maximum 300 characters). Supports 23 languages including English, French, German, Spanish, Italian, Portuguese, Hindi, Arabic, Chinese, Japanese, Korean, and more.
+   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
    */
   text: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  voice_setting?: VoiceSetting;
 };
 
 /**
- * ChatterboxRequest
+ * TextToSpeechOutput
  */
-export type ChatterboxTextToSpeechInput = {
+export type MinimaxPreviewSpeech25HdOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechTurbov25Request
+ */
+export type MinimaxPreviewSpeech25TurboInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Persian"
+    | "Filipino"
+    | "Tamil"
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Text
+   *
+   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
+   */
+  text: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechOutput
+ */
+export type MinimaxPreviewSpeech25TurboOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechHDRequest
+ */
+export type MinimaxSpeech02HdInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Text
+   *
+   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
+   */
+  text: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechOutput
+ */
+export type MinimaxSpeech02HdOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechTurboRequest
+ */
+export type MinimaxSpeech02TurboInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Text
+   *
+   * Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)
+   */
+  text: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechOutput
+ */
+export type MinimaxSpeech02TurboOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechHD26Request
+ */
+export type MinimaxSpeech26HdInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  audio_setting?: AudioSetting;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  normalization_setting?: LoudnessNormalizationSetting;
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.
+   */
+  prompt: string;
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechHD26Output
+ */
+export type MinimaxSpeech26HdOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechTurbo26Request
+ */
+export type MinimaxSpeech26TurboInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  audio_setting?: AudioSetting;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  normalization_setting?: LoudnessNormalizationSetting;
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.
+   */
+  prompt: string;
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechTurbo26Output
+ */
+export type MinimaxSpeech26TurboOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechHD28Request
+ *
+ * Request model for Speech 2.8 HD - highest quality speech synthesis.
+ */
+export type MinimaxSpeech28HdInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Voice modification settings to adjust pitch, intensity, and timbre.
+   */
+  voice_modify?: VoiceModify | unknown;
+  audio_setting?: AudioSetting;
+  normalization_setting?: LoudnessNormalizationSetting;
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
+   */
+  prompt: string;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechHD28Output
+ *
+ * Output model for Speech 2.8 HD.
+ */
+export type MinimaxSpeech28HdOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * TextToSpeechTurbo28Request
+ *
+ * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
+ */
+export type MinimaxSpeech28TurboInput = {
+  /**
+   * Language Boost
+   *
+   * Enhance recognition of specified languages and dialects
+   */
+  language_boost?:
+    | "Chinese"
+    | "Chinese,Yue"
+    | "English"
+    | "Arabic"
+    | "Russian"
+    | "Spanish"
+    | "French"
+    | "Portuguese"
+    | "German"
+    | "Turkish"
+    | "Dutch"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Indonesian"
+    | "Japanese"
+    | "Italian"
+    | "Korean"
+    | "Thai"
+    | "Polish"
+    | "Romanian"
+    | "Greek"
+    | "Czech"
+    | "Finnish"
+    | "Hindi"
+    | "Bulgarian"
+    | "Danish"
+    | "Hebrew"
+    | "Malay"
+    | "Slovak"
+    | "Swedish"
+    | "Croatian"
+    | "Hungarian"
+    | "Norwegian"
+    | "Slovenian"
+    | "Catalan"
+    | "Nynorsk"
+    | "Afrikaans"
+    | "auto"
+    | unknown;
+  /**
+   * Voice modification settings to adjust pitch, intensity, and timbre.
+   */
+  voice_modify?: VoiceModify | unknown;
+  audio_setting?: AudioSetting;
+  normalization_setting?: LoudnessNormalizationSetting;
+  /**
+   * Prompt
+   *
+   * Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.
+   */
+  prompt: string;
+  /**
+   * Output Format
+   *
+   * Format of the output content (non-streaming only)
+   */
+  output_format?: "url" | "hex";
+  /**
+   * Custom pronunciation dictionary for text replacement
+   */
+  pronunciation_dict?: PronunciationDict | unknown;
+  voice_setting?: VoiceSetting;
+};
+
+/**
+ * TextToSpeechTurbo28Output
+ *
+ * Output model for Speech 2.8 Turbo.
+ */
+export type MinimaxSpeech28TurboOutput = {
+  audio: File;
+  /**
+   * Duration Ms
+   *
+   * Duration of the audio in milliseconds
+   */
+  duration_ms: number;
+};
+
+/**
+ * VoiceCloneRequest
+ */
+export type MinimaxVoiceCloneInput = {
+  /**
+   * Text
+   *
+   * Text to generate a TTS preview with the cloned voice (optional)
+   */
+  text?: string | unknown;
+  /**
+   * Audio Url
+   *
+   *
+   * URL of the input audio file for voice cloning. Should be at least 10 seconds
+   * long. To retain the voice permanently, use it with a TTS (text-to-speech)
+   * endpoint at least once within 7 days. Otherwise, it will be
+   * automatically deleted.
+   *
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Need Volume Normalization
+   *
+   * Enable volume normalization for the cloned voice
+   */
+  need_volume_normalization?: boolean;
+  /**
+   * Noise Reduction
+   *
+   * Enable noise reduction for the cloned voice
+   */
+  noise_reduction?: boolean;
+  /**
+   * Model
+   *
+   * TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo
+   */
+  model?:
+    | "speech-02-hd"
+    | "speech-02-turbo"
+    | "speech-01-hd"
+    | "speech-01-turbo";
+  /**
+   * Accuracy
+   *
+   * Text validation accuracy threshold (0-1)
+   */
+  accuracy?: number | unknown;
+};
+
+/**
+ * VoiceCloneOutput
+ */
+export type MinimaxVoiceCloneOutput = {
+  /**
+   * Preview audio generated with the cloned voice (if requested)
+   */
+  audio?: File | unknown;
+  /**
+   * Custom Voice Id
+   *
+   * The cloned voice ID for use with TTS
+   */
+  custom_voice_id: string;
+};
+
+/**
+ * VoiceDesignRequest
+ */
+export type MinimaxVoiceDesignInput = {
+  /**
+   * Preview Text
+   *
+   * Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.
+   */
+  preview_text: string;
+  /**
+   * Prompt
+   *
+   * Voice description prompt for generating a personalized voice
+   */
+  prompt: string;
+};
+
+/**
+ * VoiceDesignOutput
+ */
+export type MinimaxVoiceDesignOutput = {
+  audio: File;
+  /**
+   * Custom Voice Id
+   *
+   * The voice_id of the generated voice
+   */
+  custom_voice_id: string;
+};
+
+/**
+ * OrpheusRequest
+ */
+export type OrpheusTtsInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
+   */
+  text: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice?: "tara" | "leah" | "jess" | "leo" | "dan" | "mia" | "zac" | "zoe";
+  /**
+   * Repetition Penalty
+   *
+   * Repetition penalty (>= 1.1 required for stable generations).
+   */
+  repetition_penalty?: number;
   /**
    * Temperature
    *
    * Temperature for generation (higher = more creative).
    */
   temperature?: number;
-  /**
-   * Audio Url
-   *
-   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
-   */
-  audio_url?: string | unknown;
-  /**
-   * Seed
-   *
-   * Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed..
-   */
-  seed?: number | unknown;
-  /**
-   * Exaggeration
-   *
-   * Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).
-   */
-  exaggeration?: number;
-  /**
-   * Cfg
-   */
-  cfg?: number;
-  /**
-   * Text
-   *
-   * The text to be converted to speech (maximum 5000 characters). You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>
-   */
-  text: string;
 };
 
 /**
- * ChatterboxOutput
+ * OrpheusOutput
  */
-export type ChatterboxSpeechToSpeechOutput = {
+export type OrpheusTtsOutput = {
   audio: File;
 };
 
 /**
- * ChatterboxVCRequest
- */
-export type ChatterboxSpeechToSpeechInput = {
-  /**
-   * Target Voice Audio Url
-   *
-   * Optional URL to an audio file to use as a reference for the generated speech. If provided, the model will try to match the style and tone of the reference audio.
-   */
-  target_voice_audio_url?: string | unknown;
-  /**
-   * Source Audio Url
-   */
-  source_audio_url: string | Blob | File;
-};
-
-/**
- * TTSOutput
+ * OutputFormat
  *
- * Output parameters for the TTS request.
+ * Output format configuration for the TTS API.
  */
-export type ChatterboxhdTextToSpeechOutput = {
+export type OutputFormat = {
   /**
-   * Audio
+   * Sample Rate
    *
-   * The generated audio file.
+   * Sample rate in Hz.
    */
-  audio: Audio;
+  sample_rate?: 8000 | 16000 | 22050 | 24000 | 44100 | 48000;
+  /**
+   * Codec
+   *
+   * Audio codec. Supported: mp3, wav, pcm, mulaw, alaw.
+   */
+  codec?: "mp3" | "wav" | "pcm" | "mulaw" | "alaw";
+  /**
+   * Bit Rate
+   *
+   * Bit rate in bps. Only applicable for MP3 codec. Defaults to 128000 for MP3.
+   */
+  bit_rate?: 32000 | 64000 | 96000 | 128000 | 192000 | unknown;
 };
 
 /**
- * Audio
+ * PronunciationDict
  */
-export type Audio = {
+export type PronunciationDict = {
   /**
-   * File Size
+   * Tone List
    *
-   * The size of the file in bytes.
+   * List of pronunciation replacements in format ['text/(pronunciation)', ...]. For Chinese, tones are 1-5. Example: ['燕少飞/(yan4)(shao3)(fei1)']
    */
-  file_size?: number;
+  tone_list?: Array<string>;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
   /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
+   * The request id.
    */
-  file_name?: string;
+  request_id: string;
   /**
-   * Content Type
-   *
-   * The mime type of the file.
+   * The response url.
    */
-  content_type?: string;
+  response_url?: string;
   /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
+   * The status url.
    */
-  url: string;
+  status_url?: string;
   /**
-   * File Data
-   *
-   * File data
+   * The cancel url.
    */
-  file_data?: Blob | File;
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
 };
 
 /**
- * TTSInput
- *
- * Input parameters for the TTS request.
+ * Qwen3TTSInput06b
  */
-export type ChatterboxhdTextToSpeechInput = {
+export type Qwen3TtsTextToSpeech06bInput = {
   /**
-   * Text
+   * Top K
    *
-   * Text to synthesize into speech.
+   * Top-k sampling parameter.
    */
-  text?: string;
+  top_k?: number | unknown;
   /**
-   * Exaggeration
+   * Reference Text
    *
-   * Controls emotion exaggeration. Range typically 0.25 to 2.0.
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
    */
-  exaggeration?: number;
+  reference_text?: string | unknown;
   /**
-   * High Quality Audio
+   * Repetition Penalty
    *
-   * If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.
+   * Penalty to reduce repeated tokens/codes.
    */
-  high_quality_audio?: boolean;
+  repetition_penalty?: number | unknown;
+  /**
+   * Top P
+   *
+   * Top-p sampling parameter.
+   */
+  top_p?: number | unknown;
+  /**
+   * Max New Tokens
+   *
+   * Maximum number of new codec tokens to generate.
+   */
+  max_new_tokens?: number | unknown;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number | unknown;
+  /**
+   * Subtalker Dosample
+   *
+   * Sampling switch for the sub-talker.
+   */
+  subtalker_dosample?: boolean | unknown;
   /**
    * Voice
    *
-   * The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.
+   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
    */
   voice?:
-    | "Aurora"
-    | "Blade"
-    | "Britney"
-    | "Carl"
-    | "Cliff"
-    | "Richard"
-    | "Rico"
-    | "Siobhan"
-    | "Vicky";
+    | "Vivian"
+    | "Serena"
+    | "Uncle_Fu"
+    | "Dylan"
+    | "Eric"
+    | "Ryan"
+    | "Aiden"
+    | "Ono_Anna"
+    | "Sohee"
+    | unknown;
   /**
-   * Audio Url
+   * Subtalker Top P
    *
-   * URL to the audio sample to use as a voice prompt for zero-shot TTS voice cloning. Providing a audio sample will override the voice setting. If neither voice nor audio_url are provided, a random voice will be used.
+   * Top-p for sub-talker sampling.
    */
-  audio_url?: string | Blob | File;
+  subtalker_top_p?: number | unknown;
+  /**
+   * Speaker Voice Embedding File Url
+   *
+   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice/0.6b` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
+   */
+  speaker_voice_embedding_file_url?: string | unknown;
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Prompt
+   *
+   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
+   */
+  prompt?: string | unknown;
   /**
    * Temperature
    *
-   * Controls the randomness of generation. Range typically 0.05 to 5.
+   * Sampling temperature; higher => more random.
    */
-  temperature?: number;
+  temperature?: number | unknown;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number | unknown;
+  /**
+   * Language
+   *
+   * The language of the voice.
+   */
+  language?:
+    | "Auto"
+    | "English"
+    | "Chinese"
+    | "Spanish"
+    | "French"
+    | "German"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Portuguese"
+    | "Russian";
+};
+
+/**
+ * Qwen3TTSOutput06b
+ */
+export type Qwen3TtsTextToSpeech06bOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Qwen3TTSInput
+ */
+export type Qwen3TtsTextToSpeech17bInput = {
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number | unknown;
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty to reduce repeated tokens/codes.
+   */
+  repetition_penalty?: number | unknown;
+  /**
+   * Top P
+   *
+   * Top-p sampling parameter.
+   */
+  top_p?: number | unknown;
+  /**
+   * Max New Tokens
+   *
+   * Maximum number of new codec tokens to generate.
+   */
+  max_new_tokens?: number | unknown;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number | unknown;
+  /**
+   * Subtalker Dosample
+   *
+   * Sampling switch for the sub-talker.
+   */
+  subtalker_dosample?: boolean | unknown;
+  /**
+   * Voice
+   *
+   * The voice to be used for speech synthesis, will be ignored if a speaker embedding is provided. Check out the **[documentation](https://github.com/QwenLM/Qwen3-TTS/tree/main?tab=readme-ov-file#custom-voice-generate)** for each voice's details and which language they primarily support.
+   */
+  voice?:
+    | "Vivian"
+    | "Serena"
+    | "Uncle_Fu"
+    | "Dylan"
+    | "Eric"
+    | "Ryan"
+    | "Aiden"
+    | "Ono_Anna"
+    | "Sohee"
+    | unknown;
+  /**
+   * Subtalker Top P
+   *
+   * Top-p for sub-talker sampling.
+   */
+  subtalker_top_p?: number | unknown;
+  /**
+   * Speaker Voice Embedding File Url
+   *
+   * URL to a speaker embedding file in safetensors format, from `fal-ai/qwen-3-tts/clone-voice` endpoint. If provided, the TTS model will use the cloned voice for synthesis instead of the predefined voices.
+   */
+  speaker_voice_embedding_file_url?: string | unknown;
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Prompt
+   *
+   * Optional prompt to guide the style of the generated speech. This prompt will be ignored if a speaker embedding is provided.
+   */
+  prompt?: string | unknown;
+  /**
+   * Temperature
+   *
+   * Sampling temperature; higher => more random.
+   */
+  temperature?: number | unknown;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number | unknown;
+  /**
+   * Language
+   *
+   * The language of the voice.
+   */
+  language?:
+    | "Auto"
+    | "English"
+    | "Chinese"
+    | "Spanish"
+    | "French"
+    | "German"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Portuguese"
+    | "Russian";
+};
+
+/**
+ * Qwen3TTSOutput
+ */
+export type Qwen3TtsTextToSpeech17bOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Qwen3DesignVoiceInput
+ */
+export type Qwen3TtsVoiceDesign17bInput = {
+  /**
+   * Language
+   *
+   * The language of the voice to be designed.
+   */
+  language?:
+    | "Auto"
+    | "English"
+    | "Chinese"
+    | "Spanish"
+    | "French"
+    | "German"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Portuguese"
+    | "Russian";
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number | unknown;
+  /**
+   * Subtalker Top P
+   *
+   * Top-p for sub-talker sampling.
+   */
+  subtalker_top_p?: number | unknown;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty to reduce repeated tokens/codes.
+   */
+  repetition_penalty?: number | unknown;
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
+  /**
+   * Max New Tokens
+   *
+   * Maximum number of new codec tokens to generate.
+   */
+  max_new_tokens?: number | unknown;
+  /**
+   * Top P
+   *
+   * Top-p sampling parameter.
+   */
+  top_p?: number | unknown;
+  /**
+   * Subtalker Top K
+   *
+   * Top-k for sub-talker sampling.
+   */
+  subtalker_top_k?: number | unknown;
+  /**
+   * Prompt
+   *
+   * Optional prompt to guide the style of the generated speech.
+   */
+  prompt: string;
+  /**
+   * Temperature
+   *
+   * Sampling temperature; higher => more random.
+   */
+  temperature?: number | unknown;
+  /**
+   * Subtalker Temperature
+   *
+   * Temperature for sub-talker sampling.
+   */
+  subtalker_temperature?: number | unknown;
+  /**
+   * Subtalker Dosample
+   *
+   * Sampling switch for the sub-talker.
+   */
+  subtalker_dosample?: boolean | unknown;
+};
+
+/**
+ * Qwen3DesignVoiceOutput
+ */
+export type Qwen3TtsVoiceDesign17bOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * XAITTSInput
+ *
+ * Input for xAI text-to-speech generation.
+ */
+export type TtsV1Input = {
+  /**
+   * Voice
+   *
+   * Voice to use for synthesis. eve: energetic, upbeat. ara: warm, friendly. rex: confident, clear. sal: smooth, balanced. leo: authoritative, strong.
+   */
+  voice?: "eve" | "ara" | "rex" | "sal" | "leo";
+  /**
+   * Text
+   *
+   * The text to convert to speech. Maximum 15,000 characters. Supports speech tags for expressive delivery: inline tags like [laugh], [pause], [sigh] and wrapping tags like <whisper>text</whisper>, <slow>text</slow>.
+   */
+  text: string;
+  /**
+   * Language
+   *
+   * BCP-47 language code or 'auto' for automatic detection. Supported: en, zh, fr, de, hi, id, it, ja, ko, pt-BR, pt-PT, ru, es-MX, es-ES, tr, vi, bn, ar-EG, ar-SA, ar-AE.
+   */
+  language?:
+    | "auto"
+    | "en"
+    | "ar-EG"
+    | "ar-SA"
+    | "ar-AE"
+    | "bn"
+    | "zh"
+    | "fr"
+    | "de"
+    | "hi"
+    | "id"
+    | "it"
+    | "ja"
+    | "ko"
+    | "pt-BR"
+    | "pt-PT"
+    | "ru"
+    | "es-MX"
+    | "es-ES"
+    | "tr"
+    | "vi";
+  output_format?: OutputFormat;
+};
+
+/**
+ * XAITTSOutput
+ *
+ * Output for xAI text-to-speech generation.
+ */
+export type TtsV1Output = {
+  audio: File;
+};
+
+/**
+ * VibeVoice0_5bInput
+ *
+ * Input schema for VibeVoice-0.5b TTS generation
+ */
+export type Vibevoice05bInput = {
   /**
    * Seed
    *
-   * Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed.
+   * Random seed for reproducible generation.
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Cfg
+   * CFG Scale
    *
-   * Classifier-free guidance scale (CFG) controls the conditioning factor. Range typically 0.2 to 1.0. For expressive or dramatic speech, try lower cfg values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher. If the reference speaker has a fast speaking style, lowering cfg to around 0.3 can improve pacing.
+   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
    */
-  cfg?: number;
+  cfg_scale?: number;
+  /**
+   * Speaker
+   *
+   * Voice to use for speaking.
+   */
+  speaker: "Frank" | "Wayne" | "Carter" | "Emma" | "Grace" | "Mike";
+  /**
+   * Script
+   *
+   * The script to convert to speech.
+   */
+  script: string;
 };
 
 /**
- * STSOutput
+ * VibeVoice_0_5BOutput
  *
- * Output parameters for the speech-to-speech request.
+ * Output schema for VibeVoice-0.5b TTS generation
  */
-export type ChatterboxhdSpeechToSpeechOutput = {
+export type Vibevoice05bOutput = {
   /**
-   * Audio
+   * Rtf
    *
-   * The generated voice-converted audio file.
+   * Real-time factor (generation_time / audio_duration). Lower is better.
    */
-  audio: Audio;
+  rtf: number;
+  audio: File;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: number;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
 };
 
 /**
- * STSInput
+ * VibeVoice7bInput
  *
- * Input parameters for the speech-to-speech request.
+ * Input schema for VibeVoice-7b TTS generation
  */
-export type ChatterboxhdSpeechToSpeechInput = {
+export type Vibevoice7bInput = {
   /**
-   * High Quality Audio
+   * Speakers
    *
-   * If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz.
+   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
    */
-  high_quality_audio?: boolean;
+  speakers: Array<VibeVoiceSpeaker>;
   /**
-   * Target Voice Audio Url
+   * Seed
    *
-   * URL to the audio file which represents the voice of the output audio. If provided, this will override the target_voice setting. If neither target_voice nor target_voice_audio_url are provided, the default target voice will be used.
+   * Random seed for reproducible generation.
    */
-  target_voice_audio_url?: string | Blob | File;
+  seed?: number | unknown;
   /**
-   * Source Audio Url
+   * CFG Scale
    *
-   * URL to the source audio file to be voice-converted.
+   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
    */
-  source_audio_url: string | Blob | File;
+  cfg_scale?: number;
   /**
-   * Target Voice
+   * Script
    *
-   * The voice to use for the speech-to-speech request. If neither target_voice nor target_voice_audio_url are provided, a random target voice will be used.
+   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
    */
-  target_voice?:
-    | "Aurora"
-    | "Blade"
-    | "Britney"
-    | "Carl"
-    | "Cliff"
-    | "Richard"
-    | "Rico"
-    | "Siobhan"
-    | "Vicky";
+  script: string;
+};
+
+/**
+ * VibeVoiceOutput
+ *
+ * Output schema for VibeVoice TTS generation
+ */
+export type Vibevoice7bOutput = {
+  /**
+   * Rtf
+   *
+   * Real-time factor (generation_time / audio_duration). Lower is better.
+   */
+  rtf: number;
+  audio: File;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: number;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
+};
+
+/**
+ * VibeVoiceInput
+ *
+ * Input schema for VibeVoice TTS generation
+ */
+export type VibevoiceInput = {
+  /**
+   * Speakers
+   *
+   * List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.
+   */
+  speakers: Array<VibeVoiceSpeaker>;
+  /**
+   * Seed
+   *
+   * Random seed for reproducible generation.
+   */
+  seed?: number | unknown;
+  /**
+   * CFG Scale
+   *
+   * CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.
+   */
+  cfg_scale?: number;
+  /**
+   * Script
+   *
+   * The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.
+   */
+  script: string;
+};
+
+/**
+ * VibeVoiceOutput
+ *
+ * Output schema for VibeVoice TTS generation
+ */
+export type VibevoiceOutput = {
+  /**
+   * Rtf
+   *
+   * Real-time factor (generation_time / audio_duration). Lower is better.
+   */
+  rtf: number;
+  audio: File;
+  /**
+   * Generation Time
+   *
+   * Time taken to generate the audio in seconds
+   */
+  generation_time: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the generated audio
+   */
+  sample_rate: number;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds
+   */
+  duration: number;
+};
+
+/**
+ * VibeVoiceSpeaker
+ */
+export type VibeVoiceSpeaker = {
+  /**
+   * Audio URL
+   *
+   * URL to a voice sample audio file. If provided, `preset` will be ignored.
+   */
+  audio_url?: string | unknown;
+  /**
+   * Preset
+   *
+   * Default voice preset to use for the speaker. Not used if `audio_url` is provided.
+   */
+  preset?:
+    | "Alice [EN]"
+    | "Carter [EN]"
+    | "Frank [EN]"
+    | "Mary [EN] (Background Music)"
+    | "Maya [EN]"
+    | "Anchen [ZH] (Background Music)"
+    | "Bowen [ZH]"
+    | "Xinran [ZH]";
+};
+
+/**
+ * VoiceModify
+ *
+ * Voice modification settings for Speech 2.8 models.
+ */
+export type VoiceModify = {
+  /**
+   * Pitch
+   *
+   * Pitch adjustment in semitones. Range: -100 to 100. Positive values raise pitch, negative values lower it.
+   */
+  pitch?: number;
+  /**
+   * Timbre
+   *
+   * Timbre adjustment. Range: -100 to 100. Affects the tonal quality of the voice.
+   */
+  timbre?: number;
+  /**
+   * Intensity
+   *
+   * Intensity/energy of the voice. Range: -100 to 100. Higher values create more energetic speech.
+   */
+  intensity?: number;
+};
+
+/**
+ * VoiceSetting
+ */
+export type VoiceSetting = {
+  /**
+   * Pitch
+   *
+   * Voice pitch (-12 to 12)
+   */
+  pitch?: number;
+  /**
+   * Voice Id
+   *
+   * Predefined voice ID to use for synthesis
+   */
+  voice_id?: string;
+  /**
+   * English Normalization
+   *
+   * Enables English text normalization to improve number reading performance, with a slight increase in latency
+   */
+  english_normalization?: boolean;
+  /**
+   * Emotion
+   *
+   * Emotion of the generated speech
+   */
+  emotion?:
+    | "happy"
+    | "sad"
+    | "angry"
+    | "fearful"
+    | "disgusted"
+    | "surprised"
+    | "neutral"
+    | unknown;
+  /**
+   * Vol
+   *
+   * Volume (0-10)
+   */
+  vol?: number;
+  /**
+   * Speed
+   *
+   * Speech speed (0.5-2.0)
+   */
+  speed?: number;
 };
 
 export type PostFalAiChatterboxSpeechToSpeechData = {

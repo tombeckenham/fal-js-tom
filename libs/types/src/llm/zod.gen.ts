@@ -3,12 +3,281 @@
 import * as z from "zod";
 
 /**
- * OutputModel
+ * PromptTokensDetails
  */
-export const zVideoPromptGeneratorOutput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Generated video prompt",
+export const zPromptTokensDetails = z.object({
+  cached_tokens: z.int().optional().default(0),
+  cache_write_tokens: z.int().optional().default(0),
+});
+
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
   }),
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
+});
+
+/**
+ * Qwen3GuardInput
+ */
+export const zQwen3GuardInput = z.object({
+  prompt: z.string().max(131072).register(z.globalRegistry, {
+    description: "The input text to be classified",
+  }),
+});
+
+/**
+ * Qwen3GuardOutput
+ */
+export const zQwen3GuardOutput = z.object({
+  label: z
+    .enum(["Safe", "Unsafe", "Controversial"])
+    .register(z.globalRegistry, {
+      description: "The classification label",
+    }),
+  categories: z
+    .array(
+      z.enum([
+        "Violent",
+        "Non-violent Illegal Acts",
+        "Sexual Content or Sexual Acts",
+        "PII",
+        "Suicide & Self-Harm",
+        "Unethical Acts",
+        "Politically Sensitive Topics",
+        "Copyright Violation",
+        "Jailbreak",
+        "None",
+      ]),
+    )
+    .register(z.globalRegistry, {
+      description: "The confidence score of the classification",
+    }),
+});
+
+/**
+ * ChatInput
+ */
+export const zRouterInput = z.object({
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  model: z.string().register(z.globalRegistry, {
+    description:
+      "Name of the model to use. Charged based on actual token usage.",
+  }),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
+    .default(false),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the chat completion",
+  }),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
+    })
+    .optional()
+    .default(1),
+});
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export const zRouterOpenaiV1ChatCompletionsInput = z
+  .record(z.string(), z.unknown())
+  .register(z.globalRegistry, {
+    description:
+      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
+  });
+
+export const zRouterOpenaiV1ChatCompletionsOutput = z.unknown();
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export const zRouterOpenaiV1EmbeddingsInput = z
+  .record(z.string(), z.unknown())
+  .register(z.globalRegistry, {
+    description:
+      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
+  });
+
+export const zRouterOpenaiV1EmbeddingsOutput = z.unknown();
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export const zRouterOpenaiV1ResponsesInput = z
+  .record(z.string(), z.unknown())
+  .register(z.globalRegistry, {
+    description:
+      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
+  });
+
+export const zRouterOpenaiV1ResponsesOutput = z.unknown();
+
+/**
+ * Seed2MiniMessage
+ */
+export const zSeed2MiniMessage = z.object({
+  role: z.enum(["system", "user", "assistant"]).register(z.globalRegistry, {
+    description: "The role of the message author.",
+  }),
+  content: z.union([z.string(), z.array(z.record(z.string(), z.unknown()))]),
+});
+
+/**
+ * Seed2MiniInput
+ */
+export const zBytedanceSeedV2MiniInput = z.object({
+  reasoning_effort: z
+    .union([z.enum(["minimal", "low", "medium", "high"]), z.unknown()])
+    .optional(),
+  thinking: z
+    .enum(["enabled", "disabled", "auto"])
+    .register(z.globalRegistry, {
+      description:
+        "Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.",
+    })
+    .optional(),
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.",
+    })
+    .optional(),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.",
+    })
+    .optional()
+    .default(1),
+  max_completion_tokens: z
+    .int()
+    .gte(1)
+    .lte(65536)
+    .register(z.globalRegistry, {
+      description:
+        "Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.",
+    })
+    .optional()
+    .default(4096),
+  video_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.",
+    })
+    .optional(),
+  messages: z.union([z.array(zSeed2MiniMessage), z.unknown()]).optional(),
+  top_p: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.",
+    })
+    .optional()
+    .default(0.7),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The text prompt or question for the model.",
+  }),
+});
+
+/**
+ * Seed2MiniOutput
+ */
+export const zBytedanceSeedV2MiniOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "The model's text response.",
+  }),
+  messages: z.array(zSeed2MiniMessage).register(z.globalRegistry, {
+    description:
+      "The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.",
+  }),
+  reasoning_content: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * UsageInfo
+ */
+export const zUsageInfo = z.object({
+  total_tokens: z.int().optional().default(0),
+  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens_details: z
+    .union([zPromptTokensDetails, z.unknown()])
+    .optional(),
+  cost: z.number(),
+});
+
+/**
+ * ChatOutput
+ */
+export const zRouterOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
+  }),
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether the output is partial",
+    })
+    .optional()
+    .default(false),
+  reasoning: z.union([z.string(), z.unknown()]).optional(),
+  error: z.union([z.string(), z.unknown()]).optional(),
+  usage: z.union([zUsageInfo, z.unknown()]).optional(),
 });
 
 /**
@@ -179,280 +448,11 @@ export const zVideoPromptGeneratorInput = z.object({
 });
 
 /**
- * PromptTokensDetails
+ * OutputModel
  */
-export const zPromptTokensDetails = z.object({
-  cached_tokens: z.int().optional().default(0),
-  cache_write_tokens: z.int().optional().default(0),
-});
-
-/**
- * UsageInfo
- */
-export const zUsageInfo = z.object({
-  total_tokens: z.int().optional().default(0),
-  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens_details: z
-    .union([zPromptTokensDetails, z.unknown()])
-    .optional(),
-  cost: z.number(),
-});
-
-/**
- * Seed2MiniMessage
- */
-export const zSeed2MiniMessage = z.object({
-  role: z.enum(["system", "user", "assistant"]).register(z.globalRegistry, {
-    description: "The role of the message author.",
-  }),
-  content: z.union([z.string(), z.array(z.record(z.string(), z.unknown()))]),
-});
-
-/**
- * ChatOutput
- */
-export const zRouterOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
-  }),
-  partial: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether the output is partial",
-    })
-    .optional()
-    .default(false),
-  reasoning: z.union([z.string(), z.unknown()]).optional(),
-  error: z.union([z.string(), z.unknown()]).optional(),
-  usage: z.union([zUsageInfo, z.unknown()]).optional(),
-});
-
-export const zRouterOpenaiV1ResponsesOutput = z.unknown();
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export const zRouterOpenaiV1ResponsesInput = z
-  .record(z.string(), z.unknown())
-  .register(z.globalRegistry, {
-    description:
-      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
-  });
-
-export const zRouterOpenaiV1EmbeddingsOutput = z.unknown();
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export const zRouterOpenaiV1EmbeddingsInput = z
-  .record(z.string(), z.unknown())
-  .register(z.globalRegistry, {
-    description:
-      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
-  });
-
-export const zRouterOpenaiV1ChatCompletionsOutput = z.unknown();
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export const zRouterOpenaiV1ChatCompletionsInput = z
-  .record(z.string(), z.unknown())
-  .register(z.globalRegistry, {
-    description:
-      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
-  });
-
-/**
- * ChatInput
- */
-export const zRouterInput = z.object({
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  model: z.string().register(z.globalRegistry, {
-    description:
-      "Name of the model to use. Charged based on actual token usage.",
-  }),
-  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
-  reasoning: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Should reasoning be the part of the final answer.",
-    })
-    .optional()
-    .default(false),
+export const zVideoPromptGeneratorOutput = z.object({
   prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the chat completion",
-  }),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    })
-    .optional()
-    .default(1),
-});
-
-/**
- * Qwen3GuardOutput
- */
-export const zQwen3GuardOutput = z.object({
-  label: z
-    .enum(["Safe", "Unsafe", "Controversial"])
-    .register(z.globalRegistry, {
-      description: "The classification label",
-    }),
-  categories: z
-    .array(
-      z.enum([
-        "Violent",
-        "Non-violent Illegal Acts",
-        "Sexual Content or Sexual Acts",
-        "PII",
-        "Suicide & Self-Harm",
-        "Unethical Acts",
-        "Politically Sensitive Topics",
-        "Copyright Violation",
-        "Jailbreak",
-        "None",
-      ]),
-    )
-    .register(z.globalRegistry, {
-      description: "The confidence score of the classification",
-    }),
-});
-
-/**
- * Qwen3GuardInput
- */
-export const zQwen3GuardInput = z.object({
-  prompt: z.string().max(131072).register(z.globalRegistry, {
-    description: "The input text to be classified",
-  }),
-});
-
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
-    .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
-/**
- * Seed2MiniOutput
- */
-export const zBytedanceSeedV2MiniOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "The model's text response.",
-  }),
-  messages: z.array(zSeed2MiniMessage).register(z.globalRegistry, {
-    description:
-      "The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.",
-  }),
-  reasoning_content: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Seed2MiniInput
- */
-export const zBytedanceSeedV2MiniInput = z.object({
-  reasoning_effort: z
-    .union([z.enum(["minimal", "low", "medium", "high"]), z.unknown()])
-    .optional(),
-  thinking: z
-    .enum(["enabled", "disabled", "auto"])
-    .register(z.globalRegistry, {
-      description:
-        "Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.",
-    })
-    .optional(),
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  image_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.",
-    })
-    .optional(),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.",
-    })
-    .optional()
-    .default(1),
-  max_completion_tokens: z
-    .int()
-    .gte(1)
-    .lte(65536)
-    .register(z.globalRegistry, {
-      description:
-        "Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.",
-    })
-    .optional()
-    .default(4096),
-  video_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.",
-    })
-    .optional(),
-  messages: z.union([z.array(zSeed2MiniMessage), z.unknown()]).optional(),
-  top_p: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.",
-    })
-    .optional()
-    .default(0.7),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The text prompt or question for the model.",
+    description: "Generated video prompt",
   }),
 });
 

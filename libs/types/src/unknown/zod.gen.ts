@@ -15,95 +15,11 @@ export const zFile = z.object({
 });
 
 /**
- * InterleaveVideoOutput
- *
- * Output model for interleaved video
- */
-export const zWorkflowUtilitiesInterleaveVideoOutput = z
-  .object({
-    video: zFile,
-  })
-  .register(z.globalRegistry, {
-    description: "Output model for interleaved video",
-  });
-
-/**
- * InterleaveVideoInput
- *
- * Input model for interleaving multiple videos
- */
-export const zWorkflowUtilitiesInterleaveVideoInput = z
-  .object({
-    video_urls: z.array(z.string()).register(z.globalRegistry, {
-      description: "List of video URLs to interleave in order",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Input model for interleaving multiple videos",
-  });
-
-/**
  * PromptTokensDetails
  */
 export const zPromptTokensDetails = z.object({
   cached_tokens: z.int().optional().default(0),
   cache_write_tokens: z.int().optional().default(0),
-});
-
-/**
- * UsageInfo
- */
-export const zUsageInfo = z.object({
-  total_tokens: z.int().optional().default(0),
-  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens_details: z
-    .union([zPromptTokensDetails, z.unknown()])
-    .optional(),
-  cost: z.number(),
-});
-
-/**
- * AudioOutput
- */
-export const zRouterAudioOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output from audio processing",
-  }),
-  usage: z.union([zUsageInfo, z.unknown()]),
-});
-
-/**
- * AudioInput
- */
-export const zRouterAudioInput = z.object({
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  model: z.string().register(z.globalRegistry, {
-    description:
-      "Name of the model to use. Charged based on actual token usage.",
-  }),
-  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    })
-    .optional()
-    .default(1),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the audio processing",
-  }),
-  audio_url: z.union([z.string(), z.string()]),
-  reasoning: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Should reasoning be the part of the final answer.",
-    })
-    .optional()
-    .default(false),
 });
 
 export const zQueueStatus = z.object({
@@ -148,6 +64,90 @@ export const zQueueStatus = z.object({
     })
     .optional(),
 });
+
+/**
+ * AudioInput
+ */
+export const zRouterAudioInput = z.object({
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  model: z.string().register(z.globalRegistry, {
+    description:
+      "Name of the model to use. Charged based on actual token usage.",
+  }),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
+    })
+    .optional()
+    .default(1),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the audio processing",
+  }),
+  audio_url: z.union([z.string(), z.string()]),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * UsageInfo
+ */
+export const zUsageInfo = z.object({
+  total_tokens: z.int().optional().default(0),
+  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens_details: z
+    .union([zPromptTokensDetails, z.unknown()])
+    .optional(),
+  cost: z.number(),
+});
+
+/**
+ * AudioOutput
+ */
+export const zRouterAudioOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output from audio processing",
+  }),
+  usage: z.union([zUsageInfo, z.unknown()]),
+});
+
+/**
+ * InterleaveVideoInput
+ *
+ * Input model for interleaving multiple videos
+ */
+export const zWorkflowUtilitiesInterleaveVideoInput = z
+  .object({
+    video_urls: z.array(z.string()).register(z.globalRegistry, {
+      description: "List of video URLs to interleave in order",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Input model for interleaving multiple videos",
+  });
+
+/**
+ * InterleaveVideoOutput
+ *
+ * Output model for interleaved video
+ */
+export const zWorkflowUtilitiesInterleaveVideoOutput = z
+  .object({
+    video: zFile,
+  })
+  .register(z.globalRegistry, {
+    description: "Output model for interleaved video",
+  });
 
 export const zPostFalAiWorkflowUtilitiesInterleaveVideoData = z.object({
   body: zWorkflowUtilitiesInterleaveVideoInput,

@@ -3,6 +3,17 @@
 import * as z from "zod";
 
 /**
+ * BoxPromptBase
+ */
+export const zBoxPromptBase = z.object({
+  object_id: z.union([z.int(), z.unknown()]).optional(),
+  y_min: z.union([z.int(), z.unknown()]).optional(),
+  x_min: z.union([z.int(), z.unknown()]).optional(),
+  x_max: z.union([z.int(), z.unknown()]).optional(),
+  y_max: z.union([z.int(), z.unknown()]).optional(),
+});
+
+/**
  * File
  */
 export const zFile = z.object({
@@ -15,51 +26,22 @@ export const zFile = z.object({
 });
 
 /**
- * UltraShapeResponse
+ * BasicAnimations
+ *
+ * Basic animation files included with the rigging result
  */
-export const zUltrashapeOutput = z.object({
-  model_glb: zFile,
-});
-
-/**
- * UltraShapeRequest
- */
-export const zUltrashapeInput = z.object({
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "Random seed.",
-    })
-    .optional()
-    .default(42),
-  remove_background: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Remove image background.",
-    })
-    .optional()
-    .default(true),
-  model_url: z.union([z.string(), z.string()]),
-  octree_resolution: z
-    .int()
-    .gte(128)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Marching cubes resolution.",
-    })
-    .optional()
-    .default(1024),
-  image_url: z.union([z.string(), z.string()]),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Diffusion steps.",
-    })
-    .optional()
-    .default(50),
-});
+export const zBasicAnimations = z
+  .object({
+    running_fbx: z.union([zFile, z.unknown()]).optional(),
+    walking_fbx: z.union([zFile, z.unknown()]).optional(),
+    walking_glb: z.union([zFile, z.unknown()]).optional(),
+    running_glb: z.union([zFile, z.unknown()]).optional(),
+    running_armature_glb: z.union([zFile, z.unknown()]).optional(),
+    walking_armature_glb: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Basic animation files included with the rigging result",
+  });
 
 /**
  * File
@@ -96,806 +78,1896 @@ export const zFileType2 = z.object({
 });
 
 /**
- * Tripo3dOutput
+ * ImageToWorldRequest
  */
-export const zTripoV25MultiviewTo3dOutput = z.object({
-  base_model: zFileType2.optional(),
-  task_id: z.string().register(z.globalRegistry, {
-    description: "The task id of the 3D model generation.",
+export const zHunyuanWorldImageToWorldInput = z.object({
+  labels_fg1: z.string().register(z.globalRegistry, {
+    description: "Labels for the first foreground object.",
   }),
-  rendered_image: zFileType2.optional(),
-  model_mesh: zFileType2.optional(),
-  pbr_model: zFileType2.optional(),
-});
-
-/**
- * MultiviewTo3dInput
- */
-export const zTripoV25MultiviewTo3dInput = z.object({
-  face_limit: z
-    .int()
-    .register(z.globalRegistry, {
-      description:
-        "Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
-    })
-    .optional(),
-  right_image_url: z.union([z.string(), z.string()]).optional(),
-  style: z
-    .enum([
-      "person:person2cartoon",
-      "object:clay",
-      "object:steampunk",
-      "animal:venom",
-      "object:barbie",
-      "object:christmas",
-      "gold",
-      "ancient_bronze",
-    ])
-    .register(z.globalRegistry, {
-      description:
-        "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
-    })
-    .optional(),
-  quad: z
+  export_drc: z
     .boolean()
     .register(z.globalRegistry, {
-      description:
-        "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
+      description: "Whether to export DRC (Dynamic Resource Configuration).",
     })
     .optional()
     .default(false),
-  front_image_url: z.union([z.string(), z.string()]),
-  texture_seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description:
-        "This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
-    })
-    .optional(),
-  back_image_url: z.union([z.string(), z.string()]).optional(),
-  pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
-    })
-    .optional()
-    .default(false),
-  texture_alignment: z
-    .enum(["original_image", "geometry"])
-    .register(z.globalRegistry, {
-      description:
-        "Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
-    })
-    .optional(),
-  texture: z
-    .enum(["no", "standard", "HD"])
-    .register(z.globalRegistry, {
-      description:
-        "An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.",
-    })
-    .optional(),
-  auto_size: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
-    })
-    .optional()
-    .default(false),
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description:
-        "This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.",
-    })
-    .optional(),
-  orientation: z
-    .enum(["default", "align_image"])
-    .register(z.globalRegistry, {
-      description:
-        "Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
-    })
-    .optional(),
-  left_image_url: z.union([z.string(), z.string()]).optional(),
-});
-
-/**
- * Tripo3dOutput
- */
-export const zTripoV25ImageTo3dOutput = z.object({
-  base_model: zFileType2.optional(),
-  task_id: z.string().register(z.globalRegistry, {
-    description: "The task id of the 3D model generation.",
+  classes: z.string().register(z.globalRegistry, {
+    description: "Classes to use for the world generation.",
   }),
-  rendered_image: zFileType2.optional(),
-  model_mesh: zFileType2.optional(),
-  pbr_model: zFileType2.optional(),
-});
-
-/**
- * ImageTo3dInput
- */
-export const zTripoV25ImageTo3dInput = z.object({
-  face_limit: z
-    .int()
-    .register(z.globalRegistry, {
-      description:
-        "Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
-    })
-    .optional(),
-  style: z
-    .enum([
-      "person:person2cartoon",
-      "object:clay",
-      "object:steampunk",
-      "animal:venom",
-      "object:barbie",
-      "object:christmas",
-      "gold",
-      "ancient_bronze",
-    ])
-    .register(z.globalRegistry, {
-      description:
-        "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
-    })
-    .optional(),
-  pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
-    })
-    .optional()
-    .default(false),
-  texture_alignment: z
-    .enum(["original_image", "geometry"])
-    .register(z.globalRegistry, {
-      description:
-        "Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
-    })
-    .optional(),
+  labels_fg2: z.string().register(z.globalRegistry, {
+    description: "Labels for the second foreground object.",
+  }),
   image_url: z.union([z.string(), z.string()]),
-  texture: z
-    .enum(["no", "standard", "HD"])
-    .register(z.globalRegistry, {
-      description:
-        "An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.",
-    })
-    .optional(),
-  auto_size: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
-    })
-    .optional()
-    .default(false),
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description:
-        "This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.",
-    })
-    .optional(),
-  quad: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
-    })
-    .optional()
-    .default(false),
-  orientation: z
-    .enum(["default", "align_image"])
-    .register(z.globalRegistry, {
-      description:
-        "Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
-    })
-    .optional(),
-  texture_seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description:
-        "This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
-    })
-    .optional(),
 });
 
 /**
- * ObjectOutput
+ * ImageToWorldResponse
  */
-export const zTriposrOutput = z.object({
-  remeshing_dir: z.union([zFile, z.unknown()]).optional(),
-  timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
-    description: "Inference timings.",
-  }),
-  model_mesh: zFile,
+export const zHunyuanWorldImageToWorldOutput = z.object({
+  world_file: zFile,
 });
 
 /**
- * TripoSRInput
+ * Hunyuan3DInput
  */
-export const zTriposrInput = z.object({
-  output_format: z
-    .enum(["glb", "obj"])
-    .register(z.globalRegistry, {
-      description: "Output format for the 3D model.",
-    })
-    .optional(),
-  image_url: z.union([z.string(), z.string()]),
-  foreground_ratio: z
-    .number()
-    .gte(0.5)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Ratio of the foreground image to the original image.",
-    })
-    .optional()
-    .default(0.9),
-  do_remove_background: z
+export const zHunyuan3dV2Input = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  textured_mesh: z
     .boolean()
     .register(z.globalRegistry, {
-      description: "Whether to remove the background from the input image.",
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
     })
     .optional()
-    .default(true),
-  mc_resolution: z
+    .default(false),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  octree_resolution: z
     .int()
-    .gte(32)
+    .gte(1)
     .lte(1024)
     .register(z.globalRegistry, {
-      description:
-        "Resolution of the marching cubes. Above 512 is not recommended.",
+      description: "Octree resolution for the model.",
     })
     .optional()
     .default(256),
-});
-
-/**
- * ObjectOutput
- */
-export const zTrellisOutput = z.object({
-  timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
-    description: "Processing timings",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * ObjectOutput
- */
-export const zTrellisMultiOutput = z.object({
-  timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
-    description: "Processing timings",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * MultiImageInputModel
- */
-export const zTrellisMultiInput = z.object({
-  multiimage_algo: z
-    .enum(["stochastic", "multidiffusion"])
-    .register(z.globalRegistry, {
-      description: "Algorithm for multi-image generation",
-    })
-    .optional(),
-  slat_sampling_steps: z
+  num_inference_steps: z
     .int()
     .gte(1)
     .lte(50)
     .register(z.globalRegistry, {
-      description: "Sampling steps for structured latent generation",
+      description: "Number of inference steps to perform.",
     })
     .optional()
-    .default(12),
-  mesh_simplify: z
-    .number()
-    .gte(0.9)
-    .lte(0.98)
-    .register(z.globalRegistry, {
-      description: "Mesh simplification factor",
-    })
-    .optional()
-    .default(0.95),
-  ss_guidance_strength: z
+    .default(50),
+  guidance_scale: z
     .number()
     .gte(0)
-    .lte(10)
+    .lte(20)
     .register(z.globalRegistry, {
-      description: "Guidance strength for sparse structure generation",
+      description: "Guidance scale for the model.",
     })
     .optional()
     .default(7.5),
-  slat_guidance_strength: z
-    .number()
-    .gte(0)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description: "Guidance strength for structured latent generation",
-    })
-    .optional()
-    .default(3),
-  ss_sampling_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Sampling steps for sparse structure generation",
-    })
-    .optional()
-    .default(12),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  image_urls: z.array(z.string()).register(z.globalRegistry, {
-    description: "List of URLs of input images to convert to 3D",
-  }),
-  texture_size: z
-    .union([z.literal(512), z.literal(1024), z.literal(2048)])
-    .register(z.globalRegistry, {
-      description: "Texture resolution",
-    })
-    .optional(),
 });
 
 /**
- * InputModel
+ * Hunyuan3DInput
  */
-export const zTrellisInput = z.object({
-  ss_guidance_strength: z
-    .number()
-    .gte(0)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description: "Guidance strength for sparse structure generation",
-    })
-    .optional()
-    .default(7.5),
-  mesh_simplify: z
-    .number()
-    .gte(0.9)
-    .lte(0.98)
-    .register(z.globalRegistry, {
-      description: "Mesh simplification factor",
-    })
-    .optional()
-    .default(0.95),
-  image_url: z.union([z.string(), z.string()]),
-  slat_guidance_strength: z
-    .number()
-    .gte(0)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description: "Guidance strength for structured latent generation",
-    })
-    .optional()
-    .default(3),
-  slat_sampling_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Sampling steps for structured latent generation",
-    })
-    .optional()
-    .default(12),
-  ss_sampling_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Sampling steps for sparse structure generation",
-    })
-    .optional()
-    .default(12),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  texture_size: z
-    .union([z.literal(512), z.literal(1024), z.literal(2048)])
-    .register(z.globalRegistry, {
-      description: "Texture resolution",
-    })
-    .optional(),
-});
-
-/**
- * ObjectOutput
- */
-export const zTrellis2RetextureOutput = z.object({
-  model_glb: zFile,
-});
-
-/**
- * RetextureInputModel
- */
-export const zTrellis2RetextureInput = z.object({
-  texture_size: z
-    .union([z.literal(1024), z.literal(2048), z.literal(4096)])
-    .register(z.globalRegistry, {
-      description:
-        "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
-    })
-    .optional(),
-  image_url: z.union([z.string(), z.string()]),
-  resolution: z
-    .union([z.literal(512), z.literal(1024)])
-    .register(z.globalRegistry, {
-      description:
-        "Internal resolution for texture generation. Higher produces finer texture details but is slower.",
-    })
-    .optional(),
-  tex_slat_sampling_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description:
-        "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
-    })
-    .optional()
-    .default(12),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  tex_slat_guidance_rescale: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
-    })
-    .optional()
-    .default(0),
-  tex_slat_guidance_strength: z
-    .number()
-    .gte(0)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description:
-        "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
-    })
-    .optional()
-    .default(1),
-  tex_slat_rescale_t: z
-    .number()
-    .gte(1)
-    .lte(6)
-    .register(z.globalRegistry, {
-      description:
-        "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
-    })
-    .optional()
-    .default(3),
-  mesh_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * ObjectOutput
- */
-export const zTrellis2Output = z.object({
-  model_glb: zFile,
-});
-
-/**
- * SingleImageInputModel
- */
-export const zTrellis2Input = z.object({
-  texture_size: z
-    .union([z.literal(1024), z.literal(2048), z.literal(4096)])
-    .register(z.globalRegistry, {
-      description:
-        "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
-    })
-    .optional(),
-  shape_slat_guidance_strength: z
-    .number()
-    .gte(0)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description:
-        "How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.",
-    })
-    .optional()
-    .default(7.5),
-  shape_slat_rescale_t: z
-    .number()
-    .gte(1)
-    .lte(6)
-    .register(z.globalRegistry, {
-      description:
-        "Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.",
-    })
-    .optional()
-    .default(3),
-  resolution: z
-    .union([z.literal(512), z.literal(1024), z.literal(1536)])
-    .register(z.globalRegistry, {
-      description: "Output resolution; higher is slower but more detailed",
-    })
-    .optional(),
-  tex_slat_sampling_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description:
-        "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
-    })
-    .optional()
-    .default(12),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  ss_rescale_t: z
-    .number()
-    .gte(1)
-    .lte(6)
-    .register(z.globalRegistry, {
-      description:
-        "Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.",
-    })
-    .optional()
-    .default(5),
-  tex_slat_guidance_strength: z
-    .number()
-    .gte(0)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description:
-        "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
-    })
-    .optional()
-    .default(1),
-  remesh: z
+export const zHunyuan3dV2MiniInput = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  textured_mesh: z
     .boolean()
     .register(z.globalRegistry, {
       description:
-        "Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).",
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
     })
     .optional()
-    .default(true),
-  shape_slat_sampling_steps: z
+    .default(false),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  octree_resolution: z
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
+    .default(256),
+  num_inference_steps: z
     .int()
     .gte(1)
     .lte(50)
     .register(z.globalRegistry, {
-      description:
-        "Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.",
+      description: "Number of inference steps to perform.",
     })
     .optional()
-    .default(12),
-  ss_guidance_strength: z
+    .default(50),
+  guidance_scale: z
     .number()
     .gte(0)
-    .lte(10)
+    .lte(20)
     .register(z.globalRegistry, {
-      description:
-        "How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.",
+      description: "Guidance scale for the model.",
     })
     .optional()
     .default(7.5),
-  ss_guidance_rescale: z
-    .number()
-    .gte(0)
-    .lte(1)
+});
+
+/**
+ * ObjectOutput
+ */
+export const zHunyuan3dV2MiniOutput = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * Hunyuan3DInput
+ */
+export const zHunyuan3dV2MiniTurboInput = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  textured_mesh: z
+    .boolean()
     .register(z.globalRegistry, {
       description:
-        "Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.",
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
     })
     .optional()
-    .default(0.7),
-  ss_sampling_steps: z
+    .default(false),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  octree_resolution: z
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
+    .default(256),
+  num_inference_steps: z
     .int()
     .gte(1)
     .lte(50)
     .register(z.globalRegistry, {
-      description:
-        "Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.",
+      description: "Number of inference steps to perform.",
     })
     .optional()
-    .default(12),
-  shape_slat_guidance_rescale: z
+    .default(50),
+  guidance_scale: z
     .number()
     .gte(0)
-    .lte(1)
+    .lte(20)
     .register(z.globalRegistry, {
-      description:
-        "Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.",
+      description: "Guidance scale for the model.",
     })
     .optional()
-    .default(0.5),
-  decimation_target: z
-    .int()
-    .gte(5000)
-    .lte(2000000)
+    .default(7.5),
+});
+
+/**
+ * ObjectOutput
+ */
+export const zHunyuan3dV2MiniTurboOutput = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * Hunyuan3DInputMultiView
+ */
+export const zHunyuan3dV2MultiViewInput = z.object({
+  textured_mesh: z
+    .boolean()
     .register(z.globalRegistry, {
       description:
-        "Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.",
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
+    .default(false),
+  left_image_url: z.union([z.string(), z.string()]),
+  octree_resolution: z
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
+    .default(256),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  back_image_url: z.union([z.string(), z.string()]),
+  front_image_url: z.union([z.string(), z.string()]),
+  num_inference_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
+    .default(50),
+  guidance_scale: z
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
+    .default(7.5),
+});
+
+/**
+ * MultiViewObjectOutput
+ */
+export const zHunyuan3dV2MultiViewOutput = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * Hunyuan3DInputMultiView
+ */
+export const zHunyuan3dV2MultiViewTurboInput = z.object({
+  textured_mesh: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
+    .default(false),
+  left_image_url: z.union([z.string(), z.string()]),
+  octree_resolution: z
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
+    .default(256),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  back_image_url: z.union([z.string(), z.string()]),
+  front_image_url: z.union([z.string(), z.string()]),
+  num_inference_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
+    .default(50),
+  guidance_scale: z
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
+    .default(7.5),
+});
+
+/**
+ * MultiViewObjectOutput
+ */
+export const zHunyuan3dV2MultiViewTurboOutput = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * ObjectOutput
+ */
+export const zHunyuan3dV2Output = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * Hunyuan3DInput
+ */
+export const zHunyuan3dV2TurboInput = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  textured_mesh: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
+    })
+    .optional()
+    .default(false),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  octree_resolution: z
+    .int()
+    .gte(1)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Octree resolution for the model.",
+    })
+    .optional()
+    .default(256),
+  num_inference_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Number of inference steps to perform.",
+    })
+    .optional()
+    .default(50),
+  guidance_scale: z
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
+    .default(7.5),
+});
+
+/**
+ * ObjectOutput
+ */
+export const zHunyuan3dV2TurboOutput = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * PartInput
+ */
+export const zHunyuan3dV31PartInput = z.object({
+  input_file_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * PartOutput
+ */
+export const zHunyuan3dV31PartOutput = z.object({
+  result_files: z.array(zFile).register(z.globalRegistry, {
+    description: "List of generated part files in FBX format",
+  }),
+});
+
+/**
+ * ProImageTo3DInput
+ */
+export const zHunyuan3dV31ProImageTo3dInput = z.object({
+  left_image_url: z.union([z.string(), z.unknown()]).optional(),
+  input_image_url: z.union([z.string(), z.string()]),
+  right_front_image_url: z.union([z.string(), z.unknown()]).optional(),
+  right_image_url: z.union([z.string(), z.unknown()]).optional(),
+  top_image_url: z.union([z.string(), z.unknown()]).optional(),
+  bottom_image_url: z.union([z.string(), z.unknown()]).optional(),
+  face_count: z
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description:
+        "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
     })
     .optional()
     .default(500000),
-  remesh_band: z
-    .number()
-    .gte(0)
-    .lte(4)
+  back_image_url: z.union([z.string(), z.unknown()]).optional(),
+  generate_type: z
+    .enum(["Normal", "Geometry"])
     .register(z.globalRegistry, {
       description:
-        "Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.",
+        "Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.",
     })
-    .optional()
-    .default(1),
-  image_url: z.union([z.string(), z.string()]),
-  tex_slat_guidance_rescale: z
-    .number()
-    .gte(0)
-    .lte(1)
+    .optional(),
+  left_front_image_url: z.union([z.string(), z.unknown()]).optional(),
+  enable_pbr: z
+    .boolean()
     .register(z.globalRegistry, {
       description:
-        "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
+        "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
     })
     .optional()
-    .default(0),
-  tex_slat_rescale_t: z
+    .default(false),
+});
+
+/**
+ * ProTextTo3DInput
+ */
+export const zHunyuan3dV31ProTextTo3dInput = z.object({
+  prompt: z.string().max(1024).register(z.globalRegistry, {
+    description:
+      "Text description of the 3D content to generate. Max 1024 UTF-8 characters.",
+  }),
+  face_count: z
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description:
+        "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
+    })
+    .optional()
+    .default(500000),
+  generate_type: z
+    .enum(["Normal", "Geometry"])
+    .register(z.globalRegistry, {
+      description:
+        "Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.",
+    })
+    .optional(),
+  enable_pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * RapidImageTo3DInput
+ */
+export const zHunyuan3dV31RapidImageTo3dInput = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  enable_geometry: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
+    })
+    .optional()
+    .default(false),
+  enable_pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * RapidTextTo3DInput
+ */
+export const zHunyuan3dV31RapidTextTo3dInput = z.object({
+  prompt: z.string().max(200).register(z.globalRegistry, {
+    description:
+      "Text description of the 3D content to generate. Max 200 UTF-8 characters.",
+  }),
+  enable_geometry: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
+    })
+    .optional()
+    .default(false),
+  enable_pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * SmartTopologyInput
+ */
+export const zHunyuan3dV31SmartTopologyInput = z.object({
+  face_level: z
+    .enum(["high", "medium", "low"])
+    .register(z.globalRegistry, {
+      description:
+        "Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.",
+    })
+    .optional(),
+  input_file_url: z.union([z.string(), z.string()]).optional(),
+  input_file_type: z
+    .enum(["glb", "obj"])
+    .register(z.globalRegistry, {
+      description: "Input 3D file format.",
+    })
+    .optional(),
+  polygon_type: z
+    .enum(["triangle", "quadrilateral"])
+    .register(z.globalRegistry, {
+      description:
+        "Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.",
+    })
+    .optional(),
+});
+
+/**
+ * ImageTo3DInput
+ */
+export const zHunyuan3dV3ImageTo3dInput = z.object({
+  enable_pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.",
+    })
+    .optional()
+    .default(false),
+  polygon_type: z
+    .enum(["triangle", "quadrilateral"])
+    .register(z.globalRegistry, {
+      description:
+        "Polygon type. Only takes effect when GenerateType is LowPoly.",
+    })
+    .optional(),
+  generate_type: z
+    .enum(["Normal", "LowPoly", "Geometry"])
+    .register(z.globalRegistry, {
+      description:
+        "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
+    })
+    .optional(),
+  right_image_url: z.union([z.string(), z.unknown()]).optional(),
+  left_image_url: z.union([z.string(), z.unknown()]).optional(),
+  input_image_url: z.union([z.string(), z.string()]),
+  face_count: z
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description: "Target face count. Range: 40000-1500000",
+    })
+    .optional()
+    .default(500000),
+  back_image_url: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * SketchTo3DInput
+ */
+export const zHunyuan3dV3SketchTo3dInput = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  prompt: z.string().max(1024).register(z.globalRegistry, {
+    description:
+      "Text prompt describing the 3D content attributes such as color, category, and material.",
+  }),
+  face_count: z
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description: "Target face count. Range: 40000-1500000",
+    })
+    .optional()
+    .default(500000),
+  enable_pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to enable PBR material generation.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * TextTo3DInput
+ */
+export const zHunyuan3dV3TextTo3dInput = z.object({
+  prompt: z.string().max(1024).register(z.globalRegistry, {
+    description:
+      "Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.",
+  }),
+  face_count: z
+    .int()
+    .gte(40000)
+    .lte(1500000)
+    .register(z.globalRegistry, {
+      description: "Target face count. Range: 40000-1500000",
+    })
+    .optional()
+    .default(500000),
+  generate_type: z
+    .enum(["Normal", "LowPoly", "Geometry"])
+    .register(z.globalRegistry, {
+      description:
+        "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
+    })
+    .optional(),
+  enable_pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to enable PBR material generation",
+    })
+    .optional()
+    .default(false),
+  polygon_type: z
+    .enum(["triangle", "quadrilateral"])
+    .register(z.globalRegistry, {
+      description:
+        "Polygon type. Only takes effect when GenerateType is LowPoly.",
+    })
+    .optional(),
+});
+
+/**
+ * HYMotionInput
+ */
+export const zHunyuanMotionFastInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Text prompt describing the motion to generate.",
+  }),
+  guidance_scale: z
     .number()
     .gte(1)
-    .lte(6)
+    .lte(10)
     .register(z.globalRegistry, {
       description:
-        "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
+        "Classifier-free guidance scale. Higher = more faithful to prompt.",
     })
     .optional()
-    .default(3),
-  remesh_project: z
+    .default(5),
+  output_format: z
+    .enum(["fbx", "dict"])
+    .register(z.globalRegistry, {
+      description:
+        "Output format: 'fbx' for animation files, 'dict' for raw JSON.",
+    })
+    .optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  duration: z
     .number()
-    .gte(0)
+    .gte(0.5)
+    .lte(12)
+    .register(z.globalRegistry, {
+      description: "Motion duration in seconds (0.5-12.0).",
+    })
+    .optional()
+    .default(5),
+});
+
+/**
+ * HYMotionOutput
+ */
+export const zHunyuanMotionFastOutput = z.object({
+  fbx_file: z.union([zFile, z.unknown()]).optional(),
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed used for generation.",
+  }),
+  motion_json: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * HYMotionInput
+ */
+export const zHunyuanMotionInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Text prompt describing the motion to generate.",
+  }),
+  guidance_scale: z
+    .number()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Classifier-free guidance scale. Higher = more faithful to prompt.",
+    })
+    .optional()
+    .default(5),
+  output_format: z
+    .enum(["fbx", "dict"])
+    .register(z.globalRegistry, {
+      description:
+        "Output format: 'fbx' for animation files, 'dict' for raw JSON.",
+    })
+    .optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  duration: z
+    .number()
+    .gte(0.5)
+    .lte(12)
+    .register(z.globalRegistry, {
+      description: "Motion duration in seconds (0.5-12.0).",
+    })
+    .optional()
+    .default(5),
+});
+
+/**
+ * HYMotionOutput
+ */
+export const zHunyuanMotionOutput = z.object({
+  fbx_file: z.union([zFile, z.unknown()]).optional(),
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed used for generation.",
+  }),
+  motion_json: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * HunyuanPartInput
+ */
+export const zHunyuanPartInput = z.object({
+  model_file_url: z.union([z.string(), z.string()]),
+  point_prompt_y: z
+    .number()
+    .gte(-1)
     .lte(1)
     .register(z.globalRegistry, {
       description:
-        "How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).",
+        "Y coordinate of the point prompt for segmentation (normalized space -1 to 1).",
     })
     .optional()
     .default(0),
+  point_prompt_x: z
+    .number()
+    .gte(-1)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "X coordinate of the point prompt for segmentation (normalized space -1 to 1).",
+    })
+    .optional()
+    .default(0),
+  noise_std: z
+    .number()
+    .gte(0)
+    .lte(0.02)
+    .register(z.globalRegistry, {
+      description: "Standard deviation of noise to add to sampled points.",
+    })
+    .optional()
+    .default(0),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  point_prompt_z: z
+    .number()
+    .gte(-1)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Z coordinate of the point prompt for segmentation (normalized space -1 to 1).",
+    })
+    .optional()
+    .default(0),
+  use_normal: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to use normal information for segmentation.",
+    })
+    .optional()
+    .default(true),
+  point_num: z
+    .int()
+    .gte(10000)
+    .lte(500000)
+    .register(z.globalRegistry, {
+      description: "Number of points to sample from the mesh.",
+    })
+    .optional()
+    .default(100000),
 });
 
 /**
- * TextureFiles
- *
- * Texture files downloaded and uploaded to CDN
+ * HunyuanPartOutput
  */
-export const zTextureFiles = z
-  .object({
-    normal: z.union([zFile, z.unknown()]).optional(),
-    metallic: z.union([zFile, z.unknown()]).optional(),
-    base_color: zFile,
-    roughness: z.union([zFile, z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Texture files downloaded and uploaded to CDN",
-  });
-
-/**
- * SAM3DObjectMetadata
- *
- * Per-object metadata for 3D reconstruction.
- */
-export const zSam3dObjectMetadata = z
-  .object({
-    camera_pose: z
-      .union([z.array(z.array(z.number())), z.unknown()])
-      .optional(),
-    rotation: z.union([z.array(z.array(z.number())), z.unknown()]).optional(),
-    translation: z
-      .union([z.array(z.array(z.number())), z.unknown()])
-      .optional(),
-    scale: z.union([z.array(z.array(z.number())), z.unknown()]).optional(),
-    object_index: z.int().register(z.globalRegistry, {
-      description: "Index of the object in the scene",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Per-object metadata for 3D reconstruction.",
-  });
-
-/**
- * SAM3DBodyPersonMetadata
- *
- * Per-person metadata for body reconstruction.
- */
-export const zSam3dBodyPersonMetadata = z
-  .object({
-    keypoints_2d: z.array(z.array(z.number())).register(z.globalRegistry, {
-      description: "2D keypoints [[x, y], ...] - 70 body keypoints",
-    }),
-    keypoints_3d: z
-      .union([z.array(z.array(z.number())), z.unknown()])
-      .optional(),
-    person_id: z.int().register(z.globalRegistry, {
-      description: "Index of the person in the scene",
-    }),
-    pred_cam_t: z.array(z.number()).register(z.globalRegistry, {
-      description: "Predicted camera translation [tx, ty, tz]",
-    }),
-    bbox: z.array(z.number()).register(z.globalRegistry, {
-      description: "Bounding box [x_min, y_min, x_max, y_max]",
-    }),
-    focal_length: z.number().register(z.globalRegistry, {
-      description: "Estimated focal length",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Per-person metadata for body reconstruction.",
-  });
-
-/**
- * SAM3DBodyMetadata
- *
- * Metadata for body reconstruction output.
- */
-export const zSam3dBodyMetadata = z
-  .object({
-    people: z.array(zSam3dBodyPersonMetadata).register(z.globalRegistry, {
-      description: "Per-person metadata",
-    }),
-    num_people: z.int().register(z.globalRegistry, {
-      description: "Number of people detected",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Metadata for body reconstruction output.",
-  });
-
-/**
- * SAM3DBodyAlignmentInfo
- *
- * Per-person alignment metadata.
- */
-export const zSam3dBodyAlignmentInfo = z
-  .object({
-    focal_length: z.number().register(z.globalRegistry, {
-      description: "Focal length used",
-    }),
-    scale_factor: z.number().register(z.globalRegistry, {
-      description: "Scale factor applied for alignment",
-    }),
-    target_points_count: z.int().register(z.globalRegistry, {
-      description: "Number of target points for alignment",
-    }),
-    cropped_vertices_count: z.int().register(z.globalRegistry, {
-      description: "Number of cropped vertices",
-    }),
-    translation: z.array(z.number()).register(z.globalRegistry, {
-      description: "Translation [tx, ty, tz]",
-    }),
-    person_id: z.int().register(z.globalRegistry, {
-      description: "Index of the person",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Per-person alignment metadata.",
-  });
-
-/**
- * SAM3DObjectOutput
- */
-export const zSam33dObjectsOutput = z.object({
-  individual_glbs: z
-    .union([z.array(z.union([zFile, z.unknown()])), z.unknown()])
-    .optional(),
-  individual_splats: z.union([z.array(zFile), z.unknown()]).optional(),
-  gaussian_splat: zFile,
-  metadata: z.array(zSam3dObjectMetadata).register(z.globalRegistry, {
-    description: "Per-object metadata (rotation/translation/scale)",
+export const zHunyuanPartOutput = z.object({
+  mask_2_mesh: zFile,
+  mask_3_mesh: zFile,
+  mask_1_mesh: zFile,
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
   }),
-  model_glb: zFile.optional(),
-  artifacts_zip: z.union([zFile, z.unknown()]).optional(),
+  best_mask_index: z.int().register(z.globalRegistry, {
+    description: "Index of the best mask (1, 2, or 3) based on IoU score.",
+  }),
+  iou_scores: z.array(z.number()).register(z.globalRegistry, {
+    description: "IoU scores for each of the three masks.",
+  }),
+  segmented_mesh: zFile,
 });
 
 /**
- * BoxPromptBase
+ * Rodin3DInput
  */
-export const zBoxPromptBase = z.object({
-  object_id: z.union([z.int(), z.unknown()]).optional(),
-  y_min: z.union([z.int(), z.unknown()]).optional(),
-  x_min: z.union([z.int(), z.unknown()]).optional(),
-  x_max: z.union([z.int(), z.unknown()]).optional(),
-  y_max: z.union([z.int(), z.unknown()]).optional(),
+export const zHyper3dRodinInput = z.object({
+  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
+  tier: z
+    .enum(["Regular", "Sketch"])
+    .register(z.globalRegistry, {
+      description:
+        "Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.",
+    })
+    .optional(),
+  use_hyper: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to export the model using hyper mode. Default is false.",
+    })
+    .optional()
+    .default(false),
+  bbox_condition: z.union([z.array(z.int()), z.unknown()]).optional(),
+  prompt: z
+    .string()
+    .max(1024)
+    .register(z.globalRegistry, {
+      description:
+        "A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.",
+    })
+    .optional()
+    .default(""),
+  material: z
+    .enum(["PBR", "Shaded"])
+    .register(z.globalRegistry, {
+      description:
+        "Material type. Possible values: PBR, Shaded. Default is PBR.",
+    })
+    .optional(),
+  geometry_file_format: z
+    .enum(["glb", "usdz", "fbx", "obj", "stl"])
+    .register(z.globalRegistry, {
+      description:
+        "Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.",
+    })
+    .optional(),
+  input_image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.",
+    })
+    .optional(),
+  quality: z
+    .enum(["high", "medium", "low", "extra-low"])
+    .register(z.globalRegistry, {
+      description:
+        "Generation quality. Possible values: high, medium, low, extra-low. Default is medium.",
+    })
+    .optional(),
+  addons: z.union([z.string(), z.unknown()]).optional(),
+  TAPose: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "When generating the human-like model, this parameter control the generation result to T/A Pose.",
+    })
+    .optional()
+    .default(false),
+  condition_mode: z
+    .enum(["fuse", "concat"])
+    .register(z.globalRegistry, {
+      description:
+        "For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)",
+    })
+    .optional(),
+});
+
+/**
+ * RodinGen2Input
+ */
+export const zHyper3dRodinV2Input = z.object({
+  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
+  use_original_alpha: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "When enabled, preserves the transparency channel from input images during 3D generation.",
+    })
+    .optional()
+    .default(false),
+  bbox_condition: z.union([z.array(z.int()), z.unknown()]).optional(),
+  prompt: z
+    .string()
+    .max(1024)
+    .register(z.globalRegistry, {
+      description:
+        "A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.",
+    })
+    .optional()
+    .default(""),
+  material: z
+    .enum(["PBR", "Shaded", "All"])
+    .register(z.globalRegistry, {
+      description:
+        "Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.",
+    })
+    .optional(),
+  quality_mesh_option: z
+    .enum([
+      "4K Quad",
+      "8K Quad",
+      "18K Quad",
+      "50K Quad",
+      "2K Triangle",
+      "20K Triangle",
+      "150K Triangle",
+      "500K Triangle",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.",
+    })
+    .optional(),
+  geometry_file_format: z
+    .enum(["glb", "usdz", "fbx", "obj", "stl"])
+    .register(z.globalRegistry, {
+      description:
+        "Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.",
+    })
+    .optional(),
+  input_image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed.",
+    })
+    .optional(),
+  addons: z.union([z.string(), z.unknown()]).optional(),
+  preview_render: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate a preview render image of the 3D model along with the model files.",
+    })
+    .optional()
+    .default(false),
+  TAPose: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * Image
+ *
+ * Represents an image file.
+ */
+export const zImage = z
+  .object({
+    content_type: z.union([z.string(), z.unknown()]).optional(),
+    file_size: z.union([z.int(), z.unknown()]).optional(),
+    width: z.union([z.int(), z.unknown()]).optional(),
+    url: z.string().register(z.globalRegistry, {
+      description: "The URL where the file can be downloaded from.",
+    }),
+    file_name: z.union([z.string(), z.unknown()]).optional(),
+    height: z.union([z.int(), z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Represents an image file.",
+  });
+
+/**
+ * ObjectOutput
+ */
+export const zHyper3dRodinOutput = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+  textures: z.array(zImage).register(z.globalRegistry, {
+    description: "Generated textures for the 3D object.",
+  }),
+});
+
+/**
+ * ObjectOutputv2
+ */
+export const zHyper3dRodinV2Output = z.object({
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+  textures: z.array(zImage).register(z.globalRegistry, {
+    description: "Generated textures for the 3D object.",
+  }),
+});
+
+/**
+ * MultiImageTo3DInput
+ *
+ * Input for Multi-Image to 3D conversion
+ */
+export const zMeshyV5MultiImageTo3dInput = z
+  .object({
+    target_polycount: z
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
+      .default(30000),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
+        description: "Controls symmetry behavior during model generation.",
+      })
+      .optional(),
+    enable_pbr: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.",
+      })
+      .optional()
+      .default(false),
+    enable_safety_checker: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
+      .default(true),
+    animation_action_id: z
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
+      .default(1001),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
+    enable_animation: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
+      .default(false),
+    should_texture: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.",
+      })
+      .optional()
+      .default(true),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
+    is_a_t_pose: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
+      .default(false),
+    image_urls: z.array(z.string()).register(z.globalRegistry, {
+      description:
+        "1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.",
+    }),
+    rigging_height_meters: z
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
+      .default(1.7),
+    should_remesh: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.",
+      })
+      .optional()
+      .default(true),
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
+        description:
+          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
+      })
+      .optional(),
+    enable_rigging: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
+      .default(false),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
+        description:
+          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for Multi-Image to 3D conversion",
+  });
+
+/**
+ * RemeshInput
+ *
+ * Input for 3D Model Remeshing
+ */
+export const zMeshyV5RemeshInput = z
+  .object({
+    target_polycount: z
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description:
+          "Target number of polygons in the generated model. Actual count may vary based on geometry complexity.",
+      })
+      .optional()
+      .default(30000),
+    model_url: z.union([z.string(), z.string()]),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
+        description:
+          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+      })
+      .optional(),
+    resize_height: z
+      .number()
+      .gte(0)
+      .register(z.globalRegistry, {
+        description:
+          "Resize the model to a certain height measured in meters. Set to 0 for no resizing.",
+      })
+      .optional()
+      .default(0),
+    origin_at: z.union([z.enum(["bottom", "center"]), z.unknown()]).optional(),
+    target_formats: z
+      .array(z.enum(["glb", "fbx", "obj", "usdz", "blend", "stl"]))
+      .register(z.globalRegistry, {
+        description: "List of target formats for the remeshed model.",
+      })
+      .optional()
+      .default(["glb"]),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for 3D Model Remeshing",
+  });
+
+/**
+ * RetextureInput
+ *
+ * Input for 3D Model Retexturing
+ */
+export const zMeshyV5RetextureInput = z
+  .object({
+    enable_original_uv: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.",
+      })
+      .optional()
+      .default(true),
+    image_style_url: z.union([z.string(), z.unknown()]).optional(),
+    text_style_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
+    model_url: z.union([z.string(), z.string()]),
+    enable_safety_checker: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
+      .default(true),
+    enable_pbr: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color.",
+      })
+      .optional()
+      .default(false),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for 3D Model Retexturing",
+  });
+
+/**
+ * ImageTo3DInput
+ *
+ * Input for Image to 3D conversion
+ */
+export const zMeshyV6ImageTo3dInput = z
+  .object({
+    target_polycount: z
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
+      .default(30000),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
+        description:
+          "Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.",
+      })
+      .optional(),
+    enable_pbr: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
+      })
+      .optional()
+      .default(false),
+    image_url: z.union([z.string(), z.string()]),
+    enable_safety_checker: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
+      .default(true),
+    animation_action_id: z
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
+      .default(1001),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
+    enable_animation: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
+      .default(false),
+    should_texture: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to generate textures",
+      })
+      .optional()
+      .default(true),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
+    is_a_t_pose: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
+      .default(false),
+    rigging_height_meters: z
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
+      .default(1.7),
+    should_remesh: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to enable the remesh phase",
+      })
+      .optional()
+      .default(true),
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
+        description:
+          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
+      })
+      .optional(),
+    enable_rigging: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
+      .default(false),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
+        description:
+          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for Image to 3D conversion",
+  });
+
+/**
+ * ImageTo3DInput
+ *
+ * Input for Image to 3D conversion
+ */
+export const zMeshyV6PreviewImageTo3dInput = z
+  .object({
+    target_polycount: z
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
+      .default(30000),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
+        description:
+          "Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.",
+      })
+      .optional(),
+    enable_pbr: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
+      })
+      .optional()
+      .default(false),
+    image_url: z.union([z.string(), z.string()]),
+    enable_safety_checker: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
+      .default(true),
+    animation_action_id: z
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
+      .default(1001),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
+    enable_animation: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
+      .default(false),
+    should_texture: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to generate textures",
+      })
+      .optional()
+      .default(true),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
+    is_a_t_pose: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
+      .default(false),
+    rigging_height_meters: z
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
+      .default(1.7),
+    should_remesh: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to enable the remesh phase",
+      })
+      .optional()
+      .default(true),
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
+        description:
+          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
+      })
+      .optional(),
+    enable_rigging: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
+      .default(false),
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
+        description:
+          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for Image to 3D conversion",
+  });
+
+/**
+ * TextTo3DInput
+ *
+ * Input for Text to 3D conversion
+ */
+export const zMeshyV6PreviewTextTo3dInput = z
+  .object({
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
+        description:
+          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+      })
+      .optional(),
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
+        description:
+          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
+      })
+      .optional(),
+    target_polycount: z
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
+      .default(30000),
+    mode: z
+      .enum(["preview", "full"])
+      .register(z.globalRegistry, {
+        description:
+          "Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
+      })
+      .optional(),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
+        description: "Controls symmetry behavior during model generation.",
+      })
+      .optional(),
+    enable_pbr: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
+      })
+      .optional()
+      .default(false),
+    enable_safety_checker: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
+      .default(true),
+    animation_action_id: z
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
+      .default(1001),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    enable_prompt_expansion: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
+      })
+      .optional()
+      .default(false),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
+    enable_animation: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
+      .default(false),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
+    is_a_t_pose: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
+      .default(false),
+    rigging_height_meters: z
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
+      .default(1.7),
+    should_remesh: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
+      })
+      .optional()
+      .default(true),
+    prompt: z.string().max(600).register(z.globalRegistry, {
+      description:
+        "Describe what kind of object the 3D model is. Maximum 600 characters.",
+    }),
+    enable_rigging: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
+      .default(false),
+    art_style: z
+      .enum(["realistic", "sculpture"])
+      .register(z.globalRegistry, {
+        description:
+          "Desired art style of the object. Note: only 'realistic' is supported for Meshy-6 (latest model); 'sculpture' will be rejected with a 422. For older models, 'sculpture' is supported but enable_pbr should be false when using it.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for Text to 3D conversion",
+  });
+
+/**
+ * TextTo3DInput
+ *
+ * Input for Text to 3D conversion
+ */
+export const zMeshyV6TextTo3dInput = z
+  .object({
+    topology: z
+      .enum(["quad", "triangle"])
+      .register(z.globalRegistry, {
+        description:
+          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+      })
+      .optional(),
+    pose_mode: z
+      .enum(["a-pose", "t-pose", ""])
+      .register(z.globalRegistry, {
+        description:
+          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
+      })
+      .optional(),
+    target_polycount: z
+      .int()
+      .gte(100)
+      .lte(300000)
+      .register(z.globalRegistry, {
+        description: "Target number of polygons in the generated model",
+      })
+      .optional()
+      .default(30000),
+    mode: z
+      .enum(["preview", "full"])
+      .register(z.globalRegistry, {
+        description:
+          "Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
+      })
+      .optional(),
+    symmetry_mode: z
+      .enum(["off", "auto", "on"])
+      .register(z.globalRegistry, {
+        description: "Controls symmetry behavior during model generation.",
+      })
+      .optional(),
+    enable_pbr: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
+      })
+      .optional()
+      .default(false),
+    enable_safety_checker: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If set to true, input data will be checked for safety before processing.",
+      })
+      .optional()
+      .default(true),
+    animation_action_id: z
+      .int()
+      .register(z.globalRegistry, {
+        description:
+          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
+      })
+      .optional()
+      .default(1001),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    enable_prompt_expansion: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
+      })
+      .optional()
+      .default(false),
+    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
+    enable_animation: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
+      })
+      .optional()
+      .default(false),
+    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
+    is_a_t_pose: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
+      })
+      .optional()
+      .default(false),
+    rigging_height_meters: z
+      .number()
+      .register(z.globalRegistry, {
+        description:
+          "Approximate height of the character in meters. Only used when enable_rigging is true.",
+      })
+      .optional()
+      .default(1.7),
+    should_remesh: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
+      })
+      .optional()
+      .default(true),
+    prompt: z.string().max(600).register(z.globalRegistry, {
+      description:
+        "Describe what kind of object the 3D model is. Maximum 600 characters.",
+    }),
+    enable_rigging: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
+      })
+      .optional()
+      .default(false),
+    art_style: z
+      .enum(["realistic", "sculpture"])
+      .register(z.globalRegistry, {
+        description:
+          "Desired art style of the object. Note: only 'realistic' is supported for Meshy-6 (latest model); 'sculpture' will be rejected with a 422. For older models, 'sculpture' is supported but enable_pbr should be false when using it.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for Text to 3D conversion",
+  });
+
+/**
+ * ModelUrls
+ *
+ * 3D model files in various formats
+ */
+export const zModelUrls = z
+  .object({
+    blend: z.union([zFile, z.unknown()]).optional(),
+    glb: z.union([zFile, z.unknown()]).optional(),
+    usdz: z.union([zFile, z.unknown()]).optional(),
+    obj: z.union([zFile, z.unknown()]).optional(),
+    stl: z.union([zFile, z.unknown()]).optional(),
+    fbx: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "3D model files in various formats",
+  });
+
+/**
+ * RemeshOutput
+ *
+ * Output for 3D Model Remeshing
+ */
+export const zMeshyV5RemeshOutput = z
+  .object({
+    model_glb: z.union([zFile, z.unknown()]).optional(),
+    model_urls: zModelUrls,
+  })
+  .register(z.globalRegistry, {
+    description: "Output for 3D Model Remeshing",
+  });
+
+/**
+ * ModelUrls
+ */
+export const zModelUrlsType2 = z.object({
+  glb: z.union([zFile, z.unknown()]).optional(),
+  mtl: z.union([zFile, z.unknown()]).optional(),
+  fbx: z.union([zFile, z.unknown()]).optional(),
+  usdz: z.union([zFile, z.unknown()]).optional(),
+  obj: z.union([zFile, z.unknown()]).optional(),
+  texture: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * ProImageTo3DOutput
+ */
+export const zHunyuan3dV31ProImageTo3dOutput = z.object({
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  model_urls: zModelUrlsType2,
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  model_glb: zFile,
+});
+
+/**
+ * ProTextTo3DOutput
+ */
+export const zHunyuan3dV31ProTextTo3dOutput = z.object({
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  model_urls: zModelUrlsType2,
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  model_glb: zFile,
+});
+
+/**
+ * RapidImageTo3DOutput
+ */
+export const zHunyuan3dV31RapidImageTo3dOutput = z.object({
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  model_urls: zModelUrlsType2,
+  model_glb: z.union([zFile, z.unknown()]).optional(),
+  material_mtl: z.union([zFile, z.unknown()]).optional(),
+  texture: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * RapidTextTo3DOutput
+ */
+export const zHunyuan3dV31RapidTextTo3dOutput = z.object({
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  model_urls: zModelUrlsType2,
+  material_mtl: z.union([zFile, z.unknown()]).optional(),
+  model_obj: z.union([zFile, z.unknown()]).optional(),
+  texture: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * SmartTopologyOutput
+ */
+export const zHunyuan3dV31SmartTopologyOutput = z.object({
+  model_urls: zModelUrlsType2,
+  model_glb: zFile,
+});
+
+/**
+ * ModelUrls
+ */
+export const zModelUrlsType3 = z.object({
+  obj: z.union([zFile, z.unknown()]).optional(),
+  usdz: z.union([zFile, z.unknown()]).optional(),
+  fbx: z.union([zFile, z.unknown()]).optional(),
+  glb: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * ImageTo3DOutput
+ */
+export const zHunyuan3dV3ImageTo3dOutput = z.object({
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  model_urls: zModelUrlsType3,
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  model_glb: zFile,
+});
+
+/**
+ * SketchTo3DOutput
+ */
+export const zHunyuan3dV3SketchTo3dOutput = z.object({
+  model_urls: zModelUrlsType3,
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  model_glb: zFile,
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * TextTo3DOutput
+ */
+export const zHunyuan3dV3TextTo3dOutput = z.object({
+  model_urls: zModelUrlsType3,
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  thumbnail: z.union([zFile, z.unknown()]).optional(),
+  model_glb: zFile,
+});
+
+/**
+ * OmnipartInput
+ */
+export const zOmnipartInput = z.object({
+  input_image_url: z.union([z.string(), z.string()]),
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "\n            The same seed and the same prompt given to the same version of the model\n            will output the same image every time.\n        ",
+    })
+    .optional()
+    .default(765464),
+  minimum_segment_size: z
+    .int()
+    .gte(1)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Minimum segment size (pixels) for the model.",
+    })
+    .optional()
+    .default(2000),
+  parts: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)",
+    })
+    .optional()
+    .default(""),
+  guidance_scale: z
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Guidance scale for the model.",
+    })
+    .optional()
+    .default(7.5),
+});
+
+/**
+ * MultiViewObjectOutput
+ */
+export const zOmnipartOutput = z.object({
+  output_zip: zFile,
+  seed: z.int().register(z.globalRegistry, {
+    description: "Seed value used for generation.",
+  }),
+  model_mesh: zFile,
+  full_model_mesh: zFile,
 });
 
 /**
@@ -911,111 +1983,72 @@ export const zPointPromptBase = z.object({
 });
 
 /**
- * SAM3DObjectInput
+ * PSHumanRequest
  */
-export const zSam33dObjectsInput = z.object({
-  export_textured_glb: z
-    .boolean()
+export const zPshumanInput = z.object({
+  guidance_scale: z
+    .number()
+    .gte(1)
+    .lte(10)
     .register(z.globalRegistry, {
       description:
-        "If True, exports GLB with baked texture and UVs instead of vertex colors.",
+        "Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.",
     })
     .optional()
-    .default(false),
-  point_prompts: z
-    .array(zPointPromptBase)
-    .register(z.globalRegistry, {
-      description: "Point prompts for auto-segmentation when no masks provided",
-    })
-    .optional()
-    .default([]),
-  box_prompts: z
-    .array(zBoxPromptBase)
-    .register(z.globalRegistry, {
-      description:
-        "Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.",
-    })
-    .optional()
-    .default([]),
+    .default(4),
   seed: z.union([z.int(), z.unknown()]).optional(),
-  detection_threshold: z
-    .union([z.number().gte(0.1).lte(1), z.unknown()])
-    .optional(),
   image_url: z.union([z.string(), z.string()]),
-  pointmap_url: z.union([z.string(), z.unknown()]).optional(),
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-  mask_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.",
-    })
-    .optional(),
 });
 
 /**
- * SAM3DBodyOutput
+ * PSHumanResponse
  */
-export const zSam33dBodyOutput = z.object({
-  meshes: z.union([z.array(zFile), z.unknown()]).optional(),
-  visualization: zFile,
-  metadata: zSam3dBodyMetadata,
-  model_glb: zFile,
+export const zPshumanOutput = z.object({
+  model_obj: zFile,
+  preview_image: zFile,
 });
 
-/**
- * SAM3DBodyInput
- */
-export const zSam33dBodyInput = z.object({
-  mask_url: z.union([z.string(), z.unknown()]).optional(),
-  image_url: z.union([z.string(), z.string()]),
-  include_3d_keypoints: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Include 3D keypoint markers (spheres) in the GLB mesh for visualization",
-    })
-    .optional()
-    .default(true),
-  export_meshes: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Export individual mesh files (.ply) per person",
-    })
-    .optional()
-    .default(true),
-});
-
-/**
- * SAM3DAlignmentOutput
- */
-export const zSam33dAlignOutput = z.object({
-  scene_glb: z.union([zFile, z.unknown()]).optional(),
-  visualization: zFile,
-  body_mesh_ply: zFile,
-  model_glb: zFile,
-  metadata: zSam3dBodyAlignmentInfo,
-});
-
-/**
- * SAM3DAlignmentInput
- */
-export const zSam33dAlignInput = z.object({
-  body_mesh_url: z.union([z.string(), z.string()]),
-  image_url: z.union([z.string(), z.string()]),
-  body_mask_url: z.union([z.string(), z.unknown()]).optional(),
-  object_mesh_url: z.union([z.string(), z.unknown()]).optional(),
-  focal_length: z.union([z.number(), z.unknown()]).optional(),
-});
-
-/**
- * ObjectOutput
- */
-export const zReconviagen05Output = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed used for generation.",
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
   }),
-  model_glb: zFile,
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
 });
 
 /**
@@ -1221,350 +2254,354 @@ export const zReconviagen05Input = z.object({
     .optional(),
 });
 
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
-    .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
 /**
- * PSHumanResponse
+ * ObjectOutput
  */
-export const zPshumanOutput = z.object({
-  model_obj: zFile,
-  preview_image: zFile,
-});
-
-/**
- * PSHumanRequest
- */
-export const zPshumanInput = z.object({
-  guidance_scale: z
-    .number()
-    .gte(1)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description:
-        "Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.",
-    })
-    .optional()
-    .default(4),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * MultiViewObjectOutput
- */
-export const zOmnipartOutput = z.object({
-  output_zip: zFile,
+export const zReconviagen05Output = z.object({
   seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
+    description: "Seed used for generation.",
   }),
-  model_mesh: zFile,
-  full_model_mesh: zFile,
+  model_glb: zFile,
 });
 
 /**
- * OmnipartInput
+ * SAM3DAlignmentInput
  */
-export const zOmnipartInput = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  seed: z
-    .int()
+export const zSam33dAlignInput = z.object({
+  body_mesh_url: z.union([z.string(), z.string()]),
+  image_url: z.union([z.string(), z.string()]),
+  body_mask_url: z.union([z.string(), z.unknown()]).optional(),
+  object_mesh_url: z.union([z.string(), z.unknown()]).optional(),
+  focal_length: z.union([z.number(), z.unknown()]).optional(),
+});
+
+/**
+ * SAM3DBodyInput
+ */
+export const zSam33dBodyInput = z.object({
+  mask_url: z.union([z.string(), z.unknown()]).optional(),
+  image_url: z.union([z.string(), z.string()]),
+  include_3d_keypoints: z
+    .boolean()
     .register(z.globalRegistry, {
       description:
-        "\n            The same seed and the same prompt given to the same version of the model\n            will output the same image every time.\n        ",
+        "Include 3D keypoint markers (spheres) in the GLB mesh for visualization",
     })
     .optional()
-    .default(765464),
-  minimum_segment_size: z
-    .int()
-    .gte(1)
-    .lte(10000)
+    .default(true),
+  export_meshes: z
+    .boolean()
     .register(z.globalRegistry, {
-      description: "Minimum segment size (pixels) for the model.",
+      description: "Export individual mesh files (.ply) per person",
     })
     .optional()
-    .default(2000),
-  parts: z
-    .string()
+    .default(true),
+});
+
+/**
+ * SAM3DObjectInput
+ */
+export const zSam33dObjectsInput = z.object({
+  export_textured_glb: z
+    .boolean()
     .register(z.globalRegistry, {
       description:
-        "Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)",
+        "If True, exports GLB with baked texture and UVs instead of vertex colors.",
     })
     .optional()
-    .default(""),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
+    .default(false),
+  point_prompts: z
+    .array(zPointPromptBase)
     .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
+      description: "Point prompts for auto-segmentation when no masks provided",
     })
     .optional()
-    .default(7.5),
+    .default([]),
+  box_prompts: z
+    .array(zBoxPromptBase)
+    .register(z.globalRegistry, {
+      description:
+        "Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.",
+    })
+    .optional()
+    .default([]),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  detection_threshold: z
+    .union([z.number().gte(0.1).lte(1), z.unknown()])
+    .optional(),
+  image_url: z.union([z.string(), z.string()]),
+  pointmap_url: z.union([z.string(), z.unknown()]).optional(),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  mask_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.",
+    })
+    .optional(),
 });
 
 /**
- * ModelUrls
- */
-export const zModelUrlsType3 = z.object({
-  obj: z.union([zFile, z.unknown()]).optional(),
-  usdz: z.union([zFile, z.unknown()]).optional(),
-  fbx: z.union([zFile, z.unknown()]).optional(),
-  glb: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * ModelUrls
- */
-export const zModelUrlsType2 = z.object({
-  glb: z.union([zFile, z.unknown()]).optional(),
-  mtl: z.union([zFile, z.unknown()]).optional(),
-  fbx: z.union([zFile, z.unknown()]).optional(),
-  usdz: z.union([zFile, z.unknown()]).optional(),
-  obj: z.union([zFile, z.unknown()]).optional(),
-  texture: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * ModelUrls
+ * SAM3DBodyAlignmentInfo
  *
- * 3D model files in various formats
+ * Per-person alignment metadata.
  */
-export const zModelUrls = z
+export const zSam3dBodyAlignmentInfo = z
   .object({
-    blend: z.union([zFile, z.unknown()]).optional(),
-    glb: z.union([zFile, z.unknown()]).optional(),
-    usdz: z.union([zFile, z.unknown()]).optional(),
-    obj: z.union([zFile, z.unknown()]).optional(),
-    stl: z.union([zFile, z.unknown()]).optional(),
-    fbx: z.union([zFile, z.unknown()]).optional(),
+    focal_length: z.number().register(z.globalRegistry, {
+      description: "Focal length used",
+    }),
+    scale_factor: z.number().register(z.globalRegistry, {
+      description: "Scale factor applied for alignment",
+    }),
+    target_points_count: z.int().register(z.globalRegistry, {
+      description: "Number of target points for alignment",
+    }),
+    cropped_vertices_count: z.int().register(z.globalRegistry, {
+      description: "Number of cropped vertices",
+    }),
+    translation: z.array(z.number()).register(z.globalRegistry, {
+      description: "Translation [tx, ty, tz]",
+    }),
+    person_id: z.int().register(z.globalRegistry, {
+      description: "Index of the person",
+    }),
   })
   .register(z.globalRegistry, {
-    description: "3D model files in various formats",
+    description: "Per-person alignment metadata.",
   });
 
 /**
- * BasicAnimations
- *
- * Basic animation files included with the rigging result
+ * SAM3DAlignmentOutput
  */
-export const zBasicAnimations = z
+export const zSam33dAlignOutput = z.object({
+  scene_glb: z.union([zFile, z.unknown()]).optional(),
+  visualization: zFile,
+  body_mesh_ply: zFile,
+  model_glb: zFile,
+  metadata: zSam3dBodyAlignmentInfo,
+});
+
+/**
+ * SAM3DBodyPersonMetadata
+ *
+ * Per-person metadata for body reconstruction.
+ */
+export const zSam3dBodyPersonMetadata = z
   .object({
-    running_fbx: z.union([zFile, z.unknown()]).optional(),
-    walking_fbx: z.union([zFile, z.unknown()]).optional(),
-    walking_glb: z.union([zFile, z.unknown()]).optional(),
-    running_glb: z.union([zFile, z.unknown()]).optional(),
-    running_armature_glb: z.union([zFile, z.unknown()]).optional(),
-    walking_armature_glb: z.union([zFile, z.unknown()]).optional(),
+    keypoints_2d: z.array(z.array(z.number())).register(z.globalRegistry, {
+      description: "2D keypoints [[x, y], ...] - 70 body keypoints",
+    }),
+    keypoints_3d: z
+      .union([z.array(z.array(z.number())), z.unknown()])
+      .optional(),
+    person_id: z.int().register(z.globalRegistry, {
+      description: "Index of the person in the scene",
+    }),
+    pred_cam_t: z.array(z.number()).register(z.globalRegistry, {
+      description: "Predicted camera translation [tx, ty, tz]",
+    }),
+    bbox: z.array(z.number()).register(z.globalRegistry, {
+      description: "Bounding box [x_min, y_min, x_max, y_max]",
+    }),
+    focal_length: z.number().register(z.globalRegistry, {
+      description: "Estimated focal length",
+    }),
   })
   .register(z.globalRegistry, {
-    description: "Basic animation files included with the rigging result",
+    description: "Per-person metadata for body reconstruction.",
   });
 
 /**
- * TextTo3DOutput
+ * SAM3DBodyMetadata
  *
- * Output for Text to 3D generation
+ * Metadata for body reconstruction output.
  */
-export const zMeshyV6TextTo3dOutput = z
+export const zSam3dBodyMetadata = z
+  .object({
+    people: z.array(zSam3dBodyPersonMetadata).register(z.globalRegistry, {
+      description: "Per-person metadata",
+    }),
+    num_people: z.int().register(z.globalRegistry, {
+      description: "Number of people detected",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Metadata for body reconstruction output.",
+  });
+
+/**
+ * SAM3DBodyOutput
+ */
+export const zSam33dBodyOutput = z.object({
+  meshes: z.union([z.array(zFile), z.unknown()]).optional(),
+  visualization: zFile,
+  metadata: zSam3dBodyMetadata,
+  model_glb: zFile,
+});
+
+/**
+ * SAM3DObjectMetadata
+ *
+ * Per-object metadata for 3D reconstruction.
+ */
+export const zSam3dObjectMetadata = z
+  .object({
+    camera_pose: z
+      .union([z.array(z.array(z.number())), z.unknown()])
+      .optional(),
+    rotation: z.union([z.array(z.array(z.number())), z.unknown()]).optional(),
+    translation: z
+      .union([z.array(z.array(z.number())), z.unknown()])
+      .optional(),
+    scale: z.union([z.array(z.array(z.number())), z.unknown()]).optional(),
+    object_index: z.int().register(z.globalRegistry, {
+      description: "Index of the object in the scene",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Per-object metadata for 3D reconstruction.",
+  });
+
+/**
+ * SAM3DObjectOutput
+ */
+export const zSam33dObjectsOutput = z.object({
+  individual_glbs: z
+    .union([z.array(z.union([zFile, z.unknown()])), z.unknown()])
+    .optional(),
+  individual_splats: z.union([z.array(zFile), z.unknown()]).optional(),
+  gaussian_splat: zFile,
+  metadata: z.array(zSam3dObjectMetadata).register(z.globalRegistry, {
+    description: "Per-object metadata (rotation/translation/scale)",
+  }),
+  model_glb: zFile.optional(),
+  artifacts_zip: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * TextureFiles
+ *
+ * Texture files downloaded and uploaded to CDN
+ */
+export const zTextureFiles = z
+  .object({
+    normal: z.union([zFile, z.unknown()]).optional(),
+    metallic: z.union([zFile, z.unknown()]).optional(),
+    base_color: zFile,
+    roughness: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Texture files downloaded and uploaded to CDN",
+  });
+
+/**
+ * MultiImageTo3DOutput
+ *
+ * Output for Multi-Image to 3D conversion
+ */
+export const zMeshyV5MultiImageTo3dOutput = z
   .object({
     seed: z.union([z.int(), z.unknown()]).optional(),
-    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
-    animation_fbx: z.union([zFile, z.unknown()]).optional(),
     animation_glb: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
     rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
     model_urls: zModelUrls,
-    actual_prompt: z.union([z.string(), z.unknown()]).optional(),
     model_glb: zFile,
-    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
     basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
-    prompt: z.string().register(z.globalRegistry, {
-      description: "The text prompt used for generation",
-    }),
     texture_urls: z
       .array(zTextureFiles)
       .register(z.globalRegistry, {
         description: "Array of texture file objects",
       })
       .optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
     thumbnail: z.union([zFile, z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
-    description: "Output for Text to 3D generation",
+    description: "Output for Multi-Image to 3D conversion",
   });
 
 /**
- * TextTo3DInput
+ * RetextureOutput
  *
- * Input for Text to 3D conversion
+ * Output for 3D Model Retexturing
  */
-export const zMeshyV6TextTo3dInput = z
+export const zMeshyV5RetextureOutput = z
   .object({
-    topology: z
-      .enum(["quad", "triangle"])
+    image_style_url: z.union([z.string(), z.unknown()]).optional(),
+    model_glb: zFile,
+    text_style_prompt: z.union([z.string(), z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
       .register(z.globalRegistry, {
-        description:
-          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
+        description: "Array of texture file objects",
       })
       .optional(),
-    pose_mode: z
-      .enum(["a-pose", "t-pose", ""])
-      .register(z.globalRegistry, {
-        description:
-          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      })
-      .optional(),
-    target_polycount: z
-      .int()
-      .gte(100)
-      .lte(300000)
-      .register(z.globalRegistry, {
-        description: "Target number of polygons in the generated model",
-      })
-      .optional()
-      .default(30000),
-    mode: z
-      .enum(["preview", "full"])
-      .register(z.globalRegistry, {
-        description:
-          "Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
-      })
-      .optional(),
-    symmetry_mode: z
-      .enum(["off", "auto", "on"])
-      .register(z.globalRegistry, {
-        description: "Controls symmetry behavior during model generation.",
-      })
-      .optional(),
-    enable_pbr: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
-      })
-      .optional()
-      .default(false),
-    enable_safety_checker: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If set to true, input data will be checked for safety before processing.",
-      })
-      .optional()
-      .default(true),
-    animation_action_id: z
-      .int()
-      .register(z.globalRegistry, {
-        description:
-          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-      })
-      .optional()
-      .default(1001),
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    enable_prompt_expansion: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
-      })
-      .optional()
-      .default(false),
-    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
-    enable_animation: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-      })
-      .optional()
-      .default(false),
-    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
-    is_a_t_pose: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-      })
-      .optional()
-      .default(false),
-    rigging_height_meters: z
-      .number()
-      .register(z.globalRegistry, {
-        description:
-          "Approximate height of the character in meters. Only used when enable_rigging is true.",
-      })
-      .optional()
-      .default(1.7),
-    should_remesh: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
-      })
-      .optional()
-      .default(true),
-    prompt: z.string().max(600).register(z.globalRegistry, {
-      description:
-        "Describe what kind of object the 3D model is. Maximum 600 characters.",
-    }),
-    enable_rigging: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-      })
-      .optional()
-      .default(false),
-    art_style: z
-      .enum(["realistic", "sculpture"])
-      .register(z.globalRegistry, {
-        description:
-          "Desired art style of the object. Note: only 'realistic' is supported for Meshy-6 (latest model); 'sculpture' will be rejected with a 422. For older models, 'sculpture' is supported but enable_pbr should be false when using it.",
-      })
-      .optional(),
+    model_urls: zModelUrls,
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
-    description: "Input for Text to 3D conversion",
+    description: "Output for 3D Model Retexturing",
+  });
+
+/**
+ * ImageTo3DOutput
+ *
+ * Output for Image to 3D conversion
+ */
+export const zMeshyV6ImageTo3dOutput = z
+  .object({
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    model_urls: zModelUrls,
+    model_glb: zFile,
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
+        description:
+          "Array of texture file objects, matching Meshy API structure",
+      })
+      .optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Output for Image to 3D conversion",
+  });
+
+/**
+ * ImageTo3DOutput
+ *
+ * Output for Image to 3D conversion
+ */
+export const zMeshyV6PreviewImageTo3dOutput = z
+  .object({
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    model_urls: zModelUrls,
+    model_glb: zFile,
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
+    texture_urls: z
+      .array(zTextureFiles)
+      .register(z.globalRegistry, {
+        description:
+          "Array of texture file objects, matching Meshy API structure",
+      })
+      .optional(),
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    thumbnail: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Output for Image to 3D conversion",
   });
 
 /**
@@ -1600,1778 +2637,741 @@ export const zMeshyV6PreviewTextTo3dOutput = z
   });
 
 /**
- * TextTo3DInput
+ * TextTo3DOutput
  *
- * Input for Text to 3D conversion
+ * Output for Text to 3D generation
  */
-export const zMeshyV6PreviewTextTo3dInput = z
+export const zMeshyV6TextTo3dOutput = z
   .object({
-    topology: z
-      .enum(["quad", "triangle"])
-      .register(z.globalRegistry, {
-        description:
-          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      })
-      .optional(),
-    pose_mode: z
-      .enum(["a-pose", "t-pose", ""])
-      .register(z.globalRegistry, {
-        description:
-          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      })
-      .optional(),
-    target_polycount: z
-      .int()
-      .gte(100)
-      .lte(300000)
-      .register(z.globalRegistry, {
-        description: "Target number of polygons in the generated model",
-      })
-      .optional()
-      .default(30000),
-    mode: z
-      .enum(["preview", "full"])
-      .register(z.globalRegistry, {
-        description:
-          "Generation mode. 'preview' returns untextured geometry only, 'full' returns textured model (preview + refine).",
-      })
-      .optional(),
-    symmetry_mode: z
-      .enum(["off", "auto", "on"])
-      .register(z.globalRegistry, {
-        description: "Controls symmetry behavior during model generation.",
-      })
-      .optional(),
-    enable_pbr: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Should be false for sculpture style.",
-      })
-      .optional()
-      .default(false),
-    enable_safety_checker: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If set to true, input data will be checked for safety before processing.",
-      })
-      .optional()
-      .default(true),
-    animation_action_id: z
-      .int()
-      .register(z.globalRegistry, {
-        description:
-          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-      })
-      .optional()
-      .default(1001),
     seed: z.union([z.int(), z.unknown()]).optional(),
-    enable_prompt_expansion: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Whether to enable prompt expansion. This will use a large language model to expand the prompt with additional details while maintaining the original meaning.",
-      })
-      .optional()
-      .default(false),
-    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
-    enable_animation: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-      })
-      .optional()
-      .default(false),
-    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
-    is_a_t_pose: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-      })
-      .optional()
-      .default(false),
-    rigging_height_meters: z
-      .number()
-      .register(z.globalRegistry, {
-        description:
-          "Approximate height of the character in meters. Only used when enable_rigging is true.",
-      })
-      .optional()
-      .default(1.7),
-    should_remesh: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Whether to enable the remesh phase. When false, returns unprocessed triangular mesh.",
-      })
-      .optional()
-      .default(true),
-    prompt: z.string().max(600).register(z.globalRegistry, {
-      description:
-        "Describe what kind of object the 3D model is. Maximum 600 characters.",
+    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_fbx: z.union([zFile, z.unknown()]).optional(),
+    animation_glb: z.union([zFile, z.unknown()]).optional(),
+    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
+    model_urls: zModelUrls,
+    actual_prompt: z.union([z.string(), z.unknown()]).optional(),
+    model_glb: zFile,
+    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
+    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
+    prompt: z.string().register(z.globalRegistry, {
+      description: "The text prompt used for generation",
     }),
-    enable_rigging: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-      })
-      .optional()
-      .default(false),
-    art_style: z
-      .enum(["realistic", "sculpture"])
-      .register(z.globalRegistry, {
-        description:
-          "Desired art style of the object. Note: only 'realistic' is supported for Meshy-6 (latest model); 'sculpture' will be rejected with a 422. For older models, 'sculpture' is supported but enable_pbr should be false when using it.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for Text to 3D conversion",
-  });
-
-/**
- * ImageTo3DOutput
- *
- * Output for Image to 3D conversion
- */
-export const zMeshyV6PreviewImageTo3dOutput = z
-  .object({
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    animation_glb: z.union([zFile, z.unknown()]).optional(),
-    animation_fbx: z.union([zFile, z.unknown()]).optional(),
-    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
-    model_urls: zModelUrls,
-    model_glb: zFile,
-    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
-    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
-    texture_urls: z
-      .array(zTextureFiles)
-      .register(z.globalRegistry, {
-        description:
-          "Array of texture file objects, matching Meshy API structure",
-      })
-      .optional(),
-    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
-    thumbnail: z.union([zFile, z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Output for Image to 3D conversion",
-  });
-
-/**
- * ImageTo3DInput
- *
- * Input for Image to 3D conversion
- */
-export const zMeshyV6PreviewImageTo3dInput = z
-  .object({
-    target_polycount: z
-      .int()
-      .gte(100)
-      .lte(300000)
-      .register(z.globalRegistry, {
-        description: "Target number of polygons in the generated model",
-      })
-      .optional()
-      .default(30000),
-    symmetry_mode: z
-      .enum(["off", "auto", "on"])
-      .register(z.globalRegistry, {
-        description:
-          "Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.",
-      })
-      .optional(),
-    enable_pbr: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
-      })
-      .optional()
-      .default(false),
-    image_url: z.union([z.string(), z.string()]),
-    enable_safety_checker: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If set to true, input data will be checked for safety before processing.",
-      })
-      .optional()
-      .default(true),
-    animation_action_id: z
-      .int()
-      .register(z.globalRegistry, {
-        description:
-          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-      })
-      .optional()
-      .default(1001),
-    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
-    enable_animation: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-      })
-      .optional()
-      .default(false),
-    should_texture: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether to generate textures",
-      })
-      .optional()
-      .default(true),
-    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
-    is_a_t_pose: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-      })
-      .optional()
-      .default(false),
-    rigging_height_meters: z
-      .number()
-      .register(z.globalRegistry, {
-        description:
-          "Approximate height of the character in meters. Only used when enable_rigging is true.",
-      })
-      .optional()
-      .default(1.7),
-    should_remesh: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether to enable the remesh phase",
-      })
-      .optional()
-      .default(true),
-    pose_mode: z
-      .enum(["a-pose", "t-pose", ""])
-      .register(z.globalRegistry, {
-        description:
-          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      })
-      .optional(),
-    enable_rigging: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-      })
-      .optional()
-      .default(false),
-    topology: z
-      .enum(["quad", "triangle"])
-      .register(z.globalRegistry, {
-        description:
-          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for Image to 3D conversion",
-  });
-
-/**
- * ImageTo3DOutput
- *
- * Output for Image to 3D conversion
- */
-export const zMeshyV6ImageTo3dOutput = z
-  .object({
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    animation_glb: z.union([zFile, z.unknown()]).optional(),
-    animation_fbx: z.union([zFile, z.unknown()]).optional(),
-    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
-    model_urls: zModelUrls,
-    model_glb: zFile,
-    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
-    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
-    texture_urls: z
-      .array(zTextureFiles)
-      .register(z.globalRegistry, {
-        description:
-          "Array of texture file objects, matching Meshy API structure",
-      })
-      .optional(),
-    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
-    thumbnail: z.union([zFile, z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Output for Image to 3D conversion",
-  });
-
-/**
- * ImageTo3DInput
- *
- * Input for Image to 3D conversion
- */
-export const zMeshyV6ImageTo3dInput = z
-  .object({
-    target_polycount: z
-      .int()
-      .gte(100)
-      .lte(300000)
-      .register(z.globalRegistry, {
-        description: "Target number of polygons in the generated model",
-      })
-      .optional()
-      .default(30000),
-    symmetry_mode: z
-      .enum(["off", "auto", "on"])
-      .register(z.globalRegistry, {
-        description:
-          "Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.",
-      })
-      .optional(),
-    enable_pbr: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Generate PBR Maps (metallic, roughness, normal) in addition to base color",
-      })
-      .optional()
-      .default(false),
-    image_url: z.union([z.string(), z.string()]),
-    enable_safety_checker: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If set to true, input data will be checked for safety before processing.",
-      })
-      .optional()
-      .default(true),
-    animation_action_id: z
-      .int()
-      .register(z.globalRegistry, {
-        description:
-          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-      })
-      .optional()
-      .default(1001),
-    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
-    enable_animation: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-      })
-      .optional()
-      .default(false),
-    should_texture: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether to generate textures",
-      })
-      .optional()
-      .default(true),
-    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
-    is_a_t_pose: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-      })
-      .optional()
-      .default(false),
-    rigging_height_meters: z
-      .number()
-      .register(z.globalRegistry, {
-        description:
-          "Approximate height of the character in meters. Only used when enable_rigging is true.",
-      })
-      .optional()
-      .default(1.7),
-    should_remesh: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether to enable the remesh phase",
-      })
-      .optional()
-      .default(true),
-    pose_mode: z
-      .enum(["a-pose", "t-pose", ""])
-      .register(z.globalRegistry, {
-        description:
-          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      })
-      .optional(),
-    enable_rigging: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-      })
-      .optional()
-      .default(false),
-    topology: z
-      .enum(["quad", "triangle"])
-      .register(z.globalRegistry, {
-        description:
-          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for Image to 3D conversion",
-  });
-
-/**
- * RetextureOutput
- *
- * Output for 3D Model Retexturing
- */
-export const zMeshyV5RetextureOutput = z
-  .object({
-    image_style_url: z.union([z.string(), z.unknown()]).optional(),
-    model_glb: zFile,
-    text_style_prompt: z.union([z.string(), z.unknown()]).optional(),
     texture_urls: z
       .array(zTextureFiles)
       .register(z.globalRegistry, {
         description: "Array of texture file objects",
       })
       .optional(),
-    model_urls: zModelUrls,
     thumbnail: z.union([zFile, z.unknown()]).optional(),
   })
   .register(z.globalRegistry, {
-    description: "Output for 3D Model Retexturing",
+    description: "Output for Text to 3D generation",
   });
 
 /**
- * RetextureInput
- *
- * Input for 3D Model Retexturing
+ * SingleImageInputModel
  */
-export const zMeshyV5RetextureInput = z
-  .object({
-    enable_original_uv: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.",
-      })
-      .optional()
-      .default(true),
-    image_style_url: z.union([z.string(), z.unknown()]).optional(),
-    text_style_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
-    model_url: z.union([z.string(), z.string()]),
-    enable_safety_checker: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If set to true, input data will be checked for safety before processing.",
-      })
-      .optional()
-      .default(true),
-    enable_pbr: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Generate PBR Maps (metallic, roughness, normal) in addition to base color.",
-      })
-      .optional()
-      .default(false),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for 3D Model Retexturing",
-  });
-
-/**
- * RemeshOutput
- *
- * Output for 3D Model Remeshing
- */
-export const zMeshyV5RemeshOutput = z
-  .object({
-    model_glb: z.union([zFile, z.unknown()]).optional(),
-    model_urls: zModelUrls,
-  })
-  .register(z.globalRegistry, {
-    description: "Output for 3D Model Remeshing",
-  });
-
-/**
- * RemeshInput
- *
- * Input for 3D Model Remeshing
- */
-export const zMeshyV5RemeshInput = z
-  .object({
-    target_polycount: z
-      .int()
-      .gte(100)
-      .lte(300000)
-      .register(z.globalRegistry, {
-        description:
-          "Target number of polygons in the generated model. Actual count may vary based on geometry complexity.",
-      })
-      .optional()
-      .default(30000),
-    model_url: z.union([z.string(), z.string()]),
-    topology: z
-      .enum(["quad", "triangle"])
-      .register(z.globalRegistry, {
-        description:
-          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      })
-      .optional(),
-    resize_height: z
-      .number()
-      .gte(0)
-      .register(z.globalRegistry, {
-        description:
-          "Resize the model to a certain height measured in meters. Set to 0 for no resizing.",
-      })
-      .optional()
-      .default(0),
-    origin_at: z.union([z.enum(["bottom", "center"]), z.unknown()]).optional(),
-    target_formats: z
-      .array(z.enum(["glb", "fbx", "obj", "usdz", "blend", "stl"]))
-      .register(z.globalRegistry, {
-        description: "List of target formats for the remeshed model.",
-      })
-      .optional()
-      .default(["glb"]),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for 3D Model Remeshing",
-  });
-
-/**
- * MultiImageTo3DOutput
- *
- * Output for Multi-Image to 3D conversion
- */
-export const zMeshyV5MultiImageTo3dOutput = z
-  .object({
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    animation_glb: z.union([zFile, z.unknown()]).optional(),
-    animation_fbx: z.union([zFile, z.unknown()]).optional(),
-    rigged_character_glb: z.union([zFile, z.unknown()]).optional(),
-    model_urls: zModelUrls,
-    model_glb: zFile,
-    rigged_character_fbx: z.union([zFile, z.unknown()]).optional(),
-    basic_animations: z.union([zBasicAnimations, z.unknown()]).optional(),
-    texture_urls: z
-      .array(zTextureFiles)
-      .register(z.globalRegistry, {
-        description: "Array of texture file objects",
-      })
-      .optional(),
-    rig_task_id: z.union([z.string(), z.unknown()]).optional(),
-    thumbnail: z.union([zFile, z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Output for Multi-Image to 3D conversion",
-  });
-
-/**
- * MultiImageTo3DInput
- *
- * Input for Multi-Image to 3D conversion
- */
-export const zMeshyV5MultiImageTo3dInput = z
-  .object({
-    target_polycount: z
-      .int()
-      .gte(100)
-      .lte(300000)
-      .register(z.globalRegistry, {
-        description: "Target number of polygons in the generated model",
-      })
-      .optional()
-      .default(30000),
-    symmetry_mode: z
-      .enum(["off", "auto", "on"])
-      .register(z.globalRegistry, {
-        description: "Controls symmetry behavior during model generation.",
-      })
-      .optional(),
-    enable_pbr: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.",
-      })
-      .optional()
-      .default(false),
-    enable_safety_checker: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If set to true, input data will be checked for safety before processing.",
-      })
-      .optional()
-      .default(true),
-    animation_action_id: z
-      .int()
-      .register(z.globalRegistry, {
-        description:
-          "Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.",
-      })
-      .optional()
-      .default(1001),
-    texture_image_url: z.union([z.string(), z.unknown()]).optional(),
-    enable_animation: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Apply an animation preset to the rigged model. Requires enable_rigging to be true.",
-      })
-      .optional()
-      .default(false),
-    should_texture: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.",
-      })
-      .optional()
-      .default(true),
-    texture_prompt: z.union([z.string().max(600), z.unknown()]).optional(),
-    is_a_t_pose: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Deprecated: use pose_mode instead. When true, generates a T-pose model.",
-      })
-      .optional()
-      .default(false),
-    image_urls: z.array(z.string()).register(z.globalRegistry, {
-      description:
-        "1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.",
-    }),
-    rigging_height_meters: z
-      .number()
-      .register(z.globalRegistry, {
-        description:
-          "Approximate height of the character in meters. Only used when enable_rigging is true.",
-      })
-      .optional()
-      .default(1.7),
-    should_remesh: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.",
-      })
-      .optional()
-      .default(true),
-    pose_mode: z
-      .enum(["a-pose", "t-pose", ""])
-      .register(z.globalRegistry, {
-        description:
-          "Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.",
-      })
-      .optional(),
-    enable_rigging: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.",
-      })
-      .optional()
-      .default(false),
-    topology: z
-      .enum(["quad", "triangle"])
-      .register(z.globalRegistry, {
-        description:
-          "Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for Multi-Image to 3D conversion",
-  });
-
-/**
- * Image
- *
- * Represents an image file.
- */
-export const zImage = z
-  .object({
-    content_type: z.union([z.string(), z.unknown()]).optional(),
-    file_size: z.union([z.int(), z.unknown()]).optional(),
-    width: z.union([z.int(), z.unknown()]).optional(),
-    url: z.string().register(z.globalRegistry, {
-      description: "The URL where the file can be downloaded from.",
-    }),
-    file_name: z.union([z.string(), z.unknown()]).optional(),
-    height: z.union([z.int(), z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Represents an image file.",
-  });
-
-/**
- * ObjectOutputv2
- */
-export const zHyper3dRodinV2Output = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-  textures: z.array(zImage).register(z.globalRegistry, {
-    description: "Generated textures for the 3D object.",
-  }),
-});
-
-/**
- * RodinGen2Input
- */
-export const zHyper3dRodinV2Input = z.object({
-  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
-  use_original_alpha: z
-    .boolean()
+export const zTrellis2Input = z.object({
+  texture_size: z
+    .union([z.literal(1024), z.literal(2048), z.literal(4096)])
     .register(z.globalRegistry, {
       description:
-        "When enabled, preserves the transparency channel from input images during 3D generation.",
-    })
-    .optional()
-    .default(false),
-  bbox_condition: z.union([z.array(z.int()), z.unknown()]).optional(),
-  prompt: z
-    .string()
-    .max(1024)
-    .register(z.globalRegistry, {
-      description:
-        "A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.",
-    })
-    .optional()
-    .default(""),
-  material: z
-    .enum(["PBR", "Shaded", "All"])
-    .register(z.globalRegistry, {
-      description:
-        "Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.",
+        "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
     })
     .optional(),
-  quality_mesh_option: z
-    .enum([
-      "4K Quad",
-      "8K Quad",
-      "18K Quad",
-      "50K Quad",
-      "2K Triangle",
-      "20K Triangle",
-      "150K Triangle",
-      "500K Triangle",
-    ])
-    .register(z.globalRegistry, {
-      description:
-        "Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.",
-    })
-    .optional(),
-  geometry_file_format: z
-    .enum(["glb", "usdz", "fbx", "obj", "stl"])
-    .register(z.globalRegistry, {
-      description:
-        "Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.",
-    })
-    .optional(),
-  input_image_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed.",
-    })
-    .optional(),
-  addons: z.union([z.string(), z.unknown()]).optional(),
-  preview_render: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Generate a preview render image of the 3D model along with the model files.",
-    })
-    .optional()
-    .default(false),
-  TAPose: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * ObjectOutput
- */
-export const zHyper3dRodinOutput = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-  textures: z.array(zImage).register(z.globalRegistry, {
-    description: "Generated textures for the 3D object.",
-  }),
-});
-
-/**
- * Rodin3DInput
- */
-export const zHyper3dRodinInput = z.object({
-  seed: z.union([z.int().gte(0).lte(65535), z.unknown()]).optional(),
-  tier: z
-    .enum(["Regular", "Sketch"])
-    .register(z.globalRegistry, {
-      description:
-        "Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.",
-    })
-    .optional(),
-  use_hyper: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to export the model using hyper mode. Default is false.",
-    })
-    .optional()
-    .default(false),
-  bbox_condition: z.union([z.array(z.int()), z.unknown()]).optional(),
-  prompt: z
-    .string()
-    .max(1024)
-    .register(z.globalRegistry, {
-      description:
-        "A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.",
-    })
-    .optional()
-    .default(""),
-  material: z
-    .enum(["PBR", "Shaded"])
-    .register(z.globalRegistry, {
-      description:
-        "Material type. Possible values: PBR, Shaded. Default is PBR.",
-    })
-    .optional(),
-  geometry_file_format: z
-    .enum(["glb", "usdz", "fbx", "obj", "stl"])
-    .register(z.globalRegistry, {
-      description:
-        "Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.",
-    })
-    .optional(),
-  input_image_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.",
-    })
-    .optional(),
-  quality: z
-    .enum(["high", "medium", "low", "extra-low"])
-    .register(z.globalRegistry, {
-      description:
-        "Generation quality. Possible values: high, medium, low, extra-low. Default is medium.",
-    })
-    .optional(),
-  addons: z.union([z.string(), z.unknown()]).optional(),
-  TAPose: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "When generating the human-like model, this parameter control the generation result to T/A Pose.",
-    })
-    .optional()
-    .default(false),
-  condition_mode: z
-    .enum(["fuse", "concat"])
-    .register(z.globalRegistry, {
-      description:
-        "For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)",
-    })
-    .optional(),
-});
-
-/**
- * HunyuanPartOutput
- */
-export const zHunyuanPartOutput = z.object({
-  mask_2_mesh: zFile,
-  mask_3_mesh: zFile,
-  mask_1_mesh: zFile,
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  best_mask_index: z.int().register(z.globalRegistry, {
-    description: "Index of the best mask (1, 2, or 3) based on IoU score.",
-  }),
-  iou_scores: z.array(z.number()).register(z.globalRegistry, {
-    description: "IoU scores for each of the three masks.",
-  }),
-  segmented_mesh: zFile,
-});
-
-/**
- * HunyuanPartInput
- */
-export const zHunyuanPartInput = z.object({
-  model_file_url: z.union([z.string(), z.string()]),
-  point_prompt_y: z
-    .number()
-    .gte(-1)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "Y coordinate of the point prompt for segmentation (normalized space -1 to 1).",
-    })
-    .optional()
-    .default(0),
-  point_prompt_x: z
-    .number()
-    .gte(-1)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "X coordinate of the point prompt for segmentation (normalized space -1 to 1).",
-    })
-    .optional()
-    .default(0),
-  noise_std: z
+  shape_slat_guidance_strength: z
     .number()
     .gte(0)
-    .lte(0.02)
-    .register(z.globalRegistry, {
-      description: "Standard deviation of noise to add to sampled points.",
-    })
-    .optional()
-    .default(0),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  point_prompt_z: z
-    .number()
-    .gte(-1)
-    .lte(1)
+    .lte(10)
     .register(z.globalRegistry, {
       description:
-        "Z coordinate of the point prompt for segmentation (normalized space -1 to 1).",
+        "How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.",
     })
     .optional()
-    .default(0),
-  use_normal: z
+    .default(7.5),
+  shape_slat_rescale_t: z
+    .number()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.",
+    })
+    .optional()
+    .default(3),
+  resolution: z
+    .union([z.literal(512), z.literal(1024), z.literal(1536)])
+    .register(z.globalRegistry, {
+      description: "Output resolution; higher is slower but more detailed",
+    })
+    .optional(),
+  tex_slat_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
+    })
+    .optional()
+    .default(12),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  ss_rescale_t: z
+    .number()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.",
+    })
+    .optional()
+    .default(5),
+  tex_slat_guidance_strength: z
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
+    })
+    .optional()
+    .default(1),
+  remesh: z
     .boolean()
     .register(z.globalRegistry, {
-      description: "Whether to use normal information for segmentation.",
+      description:
+        "Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).",
     })
     .optional()
     .default(true),
-  point_num: z
+  shape_slat_sampling_steps: z
     .int()
-    .gte(10000)
-    .lte(500000)
+    .gte(1)
+    .lte(50)
     .register(z.globalRegistry, {
-      description: "Number of points to sample from the mesh.",
+      description:
+        "Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.",
     })
     .optional()
-    .default(100000),
-});
-
-/**
- * HYMotionOutput
- */
-export const zHunyuanMotionOutput = z.object({
-  fbx_file: z.union([zFile, z.unknown()]).optional(),
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed used for generation.",
-  }),
-  motion_json: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * HYMotionInput
- */
-export const zHunyuanMotionInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Text prompt describing the motion to generate.",
-  }),
-  guidance_scale: z
+    .default(12),
+  ss_guidance_strength: z
     .number()
-    .gte(1)
+    .gte(0)
     .lte(10)
     .register(z.globalRegistry, {
       description:
-        "Classifier-free guidance scale. Higher = more faithful to prompt.",
+        "How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.",
     })
     .optional()
-    .default(5),
-  output_format: z
-    .enum(["fbx", "dict"])
+    .default(7.5),
+  ss_guidance_rescale: z
+    .number()
+    .gte(0)
+    .lte(1)
     .register(z.globalRegistry, {
       description:
-        "Output format: 'fbx' for animation files, 'dict' for raw JSON.",
-    })
-    .optional(),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  duration: z
-    .number()
-    .gte(0.5)
-    .lte(12)
-    .register(z.globalRegistry, {
-      description: "Motion duration in seconds (0.5-12.0).",
+        "Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.",
     })
     .optional()
-    .default(5),
-});
-
-/**
- * HYMotionOutput
- */
-export const zHunyuanMotionFastOutput = z.object({
-  fbx_file: z.union([zFile, z.unknown()]).optional(),
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed used for generation.",
-  }),
-  motion_json: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * HYMotionInput
- */
-export const zHunyuanMotionFastInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Text prompt describing the motion to generate.",
-  }),
-  guidance_scale: z
+    .default(0.7),
+  ss_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.",
+    })
+    .optional()
+    .default(12),
+  shape_slat_guidance_rescale: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.",
+    })
+    .optional()
+    .default(0.5),
+  decimation_target: z
+    .int()
+    .gte(5000)
+    .lte(2000000)
+    .register(z.globalRegistry, {
+      description:
+        "Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.",
+    })
+    .optional()
+    .default(500000),
+  remesh_band: z
+    .number()
+    .gte(0)
+    .lte(4)
+    .register(z.globalRegistry, {
+      description:
+        "Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.",
+    })
+    .optional()
+    .default(1),
+  image_url: z.union([z.string(), z.string()]),
+  tex_slat_guidance_rescale: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
+    })
+    .optional()
+    .default(0),
+  tex_slat_rescale_t: z
     .number()
     .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
+    })
+    .optional()
+    .default(3),
+  remesh_project: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).",
+    })
+    .optional()
+    .default(0),
+});
+
+/**
+ * ObjectOutput
+ */
+export const zTrellis2Output = z.object({
+  model_glb: zFile,
+});
+
+/**
+ * RetextureInputModel
+ */
+export const zTrellis2RetextureInput = z.object({
+  texture_size: z
+    .union([z.literal(1024), z.literal(2048), z.literal(4096)])
+    .register(z.globalRegistry, {
+      description:
+        "Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.",
+    })
+    .optional(),
+  image_url: z.union([z.string(), z.string()]),
+  resolution: z
+    .union([z.literal(512), z.literal(1024)])
+    .register(z.globalRegistry, {
+      description:
+        "Internal resolution for texture generation. Higher produces finer texture details but is slower.",
+    })
+    .optional(),
+  tex_slat_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description:
+        "Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.",
+    })
+    .optional()
+    .default(12),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  tex_slat_guidance_rescale: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.",
+    })
+    .optional()
+    .default(0),
+  tex_slat_guidance_strength: z
+    .number()
+    .gte(0)
     .lte(10)
     .register(z.globalRegistry, {
       description:
-        "Classifier-free guidance scale. Higher = more faithful to prompt.",
+        "How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.",
     })
     .optional()
-    .default(5),
-  output_format: z
-    .enum(["fbx", "dict"])
-    .register(z.globalRegistry, {
-      description:
-        "Output format: 'fbx' for animation files, 'dict' for raw JSON.",
-    })
-    .optional(),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  duration: z
+    .default(1),
+  tex_slat_rescale_t: z
     .number()
-    .gte(0.5)
-    .lte(12)
+    .gte(1)
+    .lte(6)
     .register(z.globalRegistry, {
-      description: "Motion duration in seconds (0.5-12.0).",
+      description:
+        "Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.",
     })
     .optional()
-    .default(5),
+    .default(3),
+  mesh_url: z.union([z.string(), z.string()]),
 });
 
 /**
- * TextTo3DOutput
+ * ObjectOutput
  */
-export const zHunyuan3dV3TextTo3dOutput = z.object({
-  model_urls: zModelUrlsType3,
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
+export const zTrellis2RetextureOutput = z.object({
   model_glb: zFile,
 });
 
 /**
- * TextTo3DInput
+ * InputModel
  */
-export const zHunyuan3dV3TextTo3dInput = z.object({
-  prompt: z.string().max(1024).register(z.globalRegistry, {
-    description:
-      "Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.",
+export const zTrellisInput = z.object({
+  ss_guidance_strength: z
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for sparse structure generation",
+    })
+    .optional()
+    .default(7.5),
+  mesh_simplify: z
+    .number()
+    .gte(0.9)
+    .lte(0.98)
+    .register(z.globalRegistry, {
+      description: "Mesh simplification factor",
+    })
+    .optional()
+    .default(0.95),
+  image_url: z.union([z.string(), z.string()]),
+  slat_guidance_strength: z
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for structured latent generation",
+    })
+    .optional()
+    .default(3),
+  slat_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for structured latent generation",
+    })
+    .optional()
+    .default(12),
+  ss_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for sparse structure generation",
+    })
+    .optional()
+    .default(12),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  texture_size: z
+    .union([z.literal(512), z.literal(1024), z.literal(2048)])
+    .register(z.globalRegistry, {
+      description: "Texture resolution",
+    })
+    .optional(),
+});
+
+/**
+ * MultiImageInputModel
+ */
+export const zTrellisMultiInput = z.object({
+  multiimage_algo: z
+    .enum(["stochastic", "multidiffusion"])
+    .register(z.globalRegistry, {
+      description: "Algorithm for multi-image generation",
+    })
+    .optional(),
+  slat_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for structured latent generation",
+    })
+    .optional()
+    .default(12),
+  mesh_simplify: z
+    .number()
+    .gte(0.9)
+    .lte(0.98)
+    .register(z.globalRegistry, {
+      description: "Mesh simplification factor",
+    })
+    .optional()
+    .default(0.95),
+  ss_guidance_strength: z
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for sparse structure generation",
+    })
+    .optional()
+    .default(7.5),
+  slat_guidance_strength: z
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Guidance strength for structured latent generation",
+    })
+    .optional()
+    .default(3),
+  ss_sampling_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Sampling steps for sparse structure generation",
+    })
+    .optional()
+    .default(12),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  image_urls: z.array(z.string()).register(z.globalRegistry, {
+    description: "List of URLs of input images to convert to 3D",
   }),
-  face_count: z
-    .int()
-    .gte(40000)
-    .lte(1500000)
+  texture_size: z
+    .union([z.literal(512), z.literal(1024), z.literal(2048)])
     .register(z.globalRegistry, {
-      description: "Target face count. Range: 40000-1500000",
-    })
-    .optional()
-    .default(500000),
-  generate_type: z
-    .enum(["Normal", "LowPoly", "Geometry"])
-    .register(z.globalRegistry, {
-      description:
-        "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
-    })
-    .optional(),
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to enable PBR material generation",
-    })
-    .optional()
-    .default(false),
-  polygon_type: z
-    .enum(["triangle", "quadrilateral"])
-    .register(z.globalRegistry, {
-      description:
-        "Polygon type. Only takes effect when GenerateType is LowPoly.",
+      description: "Texture resolution",
     })
     .optional(),
 });
 
 /**
- * SketchTo3DOutput
+ * ObjectOutput
  */
-export const zHunyuan3dV3SketchTo3dOutput = z.object({
-  model_urls: zModelUrlsType3,
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  model_glb: zFile,
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * SketchTo3DInput
- */
-export const zHunyuan3dV3SketchTo3dInput = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  prompt: z.string().max(1024).register(z.globalRegistry, {
-    description:
-      "Text prompt describing the 3D content attributes such as color, category, and material.",
+export const zTrellisMultiOutput = z.object({
+  timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
+    description: "Processing timings",
   }),
-  face_count: z
-    .int()
-    .gte(40000)
-    .lte(1500000)
-    .register(z.globalRegistry, {
-      description: "Target face count. Range: 40000-1500000",
-    })
-    .optional()
-    .default(500000),
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to enable PBR material generation.",
-    })
-    .optional()
-    .default(false),
+  model_mesh: zFile,
 });
 
 /**
- * ImageTo3DOutput
+ * ObjectOutput
  */
-export const zHunyuan3dV3ImageTo3dOutput = z.object({
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
-  model_urls: zModelUrlsType3,
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  model_glb: zFile,
+export const zTrellisOutput = z.object({
+  timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
+    description: "Processing timings",
+  }),
+  model_mesh: zFile,
 });
 
 /**
- * ImageTo3DInput
+ * TripoSRInput
  */
-export const zHunyuan3dV3ImageTo3dInput = z.object({
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.",
-    })
-    .optional()
-    .default(false),
-  polygon_type: z
-    .enum(["triangle", "quadrilateral"])
-    .register(z.globalRegistry, {
-      description:
-        "Polygon type. Only takes effect when GenerateType is LowPoly.",
-    })
-    .optional(),
-  generate_type: z
-    .enum(["Normal", "LowPoly", "Geometry"])
-    .register(z.globalRegistry, {
-      description:
-        "Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.",
-    })
-    .optional(),
-  right_image_url: z.union([z.string(), z.unknown()]).optional(),
-  left_image_url: z.union([z.string(), z.unknown()]).optional(),
-  input_image_url: z.union([z.string(), z.string()]),
-  face_count: z
-    .int()
-    .gte(40000)
-    .lte(1500000)
-    .register(z.globalRegistry, {
-      description: "Target face count. Range: 40000-1500000",
-    })
-    .optional()
-    .default(500000),
-  back_image_url: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * SmartTopologyOutput
- */
-export const zHunyuan3dV31SmartTopologyOutput = z.object({
-  model_urls: zModelUrlsType2,
-  model_glb: zFile,
-});
-
-/**
- * SmartTopologyInput
- */
-export const zHunyuan3dV31SmartTopologyInput = z.object({
-  face_level: z
-    .enum(["high", "medium", "low"])
-    .register(z.globalRegistry, {
-      description:
-        "Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.",
-    })
-    .optional(),
-  input_file_url: z.union([z.string(), z.string()]).optional(),
-  input_file_type: z
+export const zTriposrInput = z.object({
+  output_format: z
     .enum(["glb", "obj"])
     .register(z.globalRegistry, {
-      description: "Input 3D file format.",
+      description: "Output format for the 3D model.",
     })
     .optional(),
-  polygon_type: z
-    .enum(["triangle", "quadrilateral"])
-    .register(z.globalRegistry, {
-      description:
-        "Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.",
-    })
-    .optional(),
-});
-
-/**
- * RapidTextTo3DOutput
- */
-export const zHunyuan3dV31RapidTextTo3dOutput = z.object({
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
-  model_urls: zModelUrlsType2,
-  material_mtl: z.union([zFile, z.unknown()]).optional(),
-  model_obj: z.union([zFile, z.unknown()]).optional(),
-  texture: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * RapidTextTo3DInput
- */
-export const zHunyuan3dV31RapidTextTo3dInput = z.object({
-  prompt: z.string().max(200).register(z.globalRegistry, {
-    description:
-      "Text description of the 3D content to generate. Max 200 UTF-8 characters.",
-  }),
-  enable_geometry: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
-    })
-    .optional()
-    .default(false),
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * RapidImageTo3DOutput
- */
-export const zHunyuan3dV31RapidImageTo3dOutput = z.object({
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
-  model_urls: zModelUrlsType2,
-  model_glb: z.union([zFile, z.unknown()]).optional(),
-  material_mtl: z.union([zFile, z.unknown()]).optional(),
-  texture: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * RapidImageTo3DInput
- */
-export const zHunyuan3dV31RapidImageTo3dInput = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  enable_geometry: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).",
-    })
-    .optional()
-    .default(false),
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * ProTextTo3DOutput
- */
-export const zHunyuan3dV31ProTextTo3dOutput = z.object({
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
-  model_urls: zModelUrlsType2,
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  model_glb: zFile,
-});
-
-/**
- * ProTextTo3DInput
- */
-export const zHunyuan3dV31ProTextTo3dInput = z.object({
-  prompt: z.string().max(1024).register(z.globalRegistry, {
-    description:
-      "Text description of the 3D content to generate. Max 1024 UTF-8 characters.",
-  }),
-  face_count: z
-    .int()
-    .gte(40000)
-    .lte(1500000)
-    .register(z.globalRegistry, {
-      description:
-        "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
-    })
-    .optional()
-    .default(500000),
-  generate_type: z
-    .enum(["Normal", "Geometry"])
-    .register(z.globalRegistry, {
-      description:
-        "Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.",
-    })
-    .optional(),
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * ProImageTo3DOutput
- */
-export const zHunyuan3dV31ProImageTo3dOutput = z.object({
-  thumbnail: z.union([zFile, z.unknown()]).optional(),
-  model_urls: zModelUrlsType2,
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  model_glb: zFile,
-});
-
-/**
- * ProImageTo3DInput
- */
-export const zHunyuan3dV31ProImageTo3dInput = z.object({
-  left_image_url: z.union([z.string(), z.unknown()]).optional(),
-  input_image_url: z.union([z.string(), z.string()]),
-  right_front_image_url: z.union([z.string(), z.unknown()]).optional(),
-  right_image_url: z.union([z.string(), z.unknown()]).optional(),
-  top_image_url: z.union([z.string(), z.unknown()]).optional(),
-  bottom_image_url: z.union([z.string(), z.unknown()]).optional(),
-  face_count: z
-    .int()
-    .gte(40000)
-    .lte(1500000)
-    .register(z.globalRegistry, {
-      description:
-        "Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.",
-    })
-    .optional()
-    .default(500000),
-  back_image_url: z.union([z.string(), z.unknown()]).optional(),
-  generate_type: z
-    .enum(["Normal", "Geometry"])
-    .register(z.globalRegistry, {
-      description:
-        "Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.",
-    })
-    .optional(),
-  left_front_image_url: z.union([z.string(), z.unknown()]).optional(),
-  enable_pbr: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * PartOutput
- */
-export const zHunyuan3dV31PartOutput = z.object({
-  result_files: z.array(zFile).register(z.globalRegistry, {
-    description: "List of generated part files in FBX format",
-  }),
-});
-
-/**
- * PartInput
- */
-export const zHunyuan3dV31PartInput = z.object({
-  input_file_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * ObjectOutput
- */
-export const zHunyuan3dV2TurboOutput = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * Hunyuan3DInput
- */
-export const zHunyuan3dV2TurboInput = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  textured_mesh: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-    })
-    .optional()
-    .default(false),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  octree_resolution: z
-    .int()
-    .gte(1)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Octree resolution for the model.",
-    })
-    .optional()
-    .default(256),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Number of inference steps to perform.",
-    })
-    .optional()
-    .default(50),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
-    })
-    .optional()
-    .default(7.5),
-});
-
-/**
- * ObjectOutput
- */
-export const zHunyuan3dV2Output = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * MultiViewObjectOutput
- */
-export const zHunyuan3dV2MultiViewTurboOutput = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * Hunyuan3DInputMultiView
- */
-export const zHunyuan3dV2MultiViewTurboInput = z.object({
-  textured_mesh: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-    })
-    .optional()
-    .default(false),
-  left_image_url: z.union([z.string(), z.string()]),
-  octree_resolution: z
-    .int()
-    .gte(1)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Octree resolution for the model.",
-    })
-    .optional()
-    .default(256),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  back_image_url: z.union([z.string(), z.string()]),
-  front_image_url: z.union([z.string(), z.string()]),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Number of inference steps to perform.",
-    })
-    .optional()
-    .default(50),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
-    })
-    .optional()
-    .default(7.5),
-});
-
-/**
- * MultiViewObjectOutput
- */
-export const zHunyuan3dV2MultiViewOutput = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * Hunyuan3DInputMultiView
- */
-export const zHunyuan3dV2MultiViewInput = z.object({
-  textured_mesh: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-    })
-    .optional()
-    .default(false),
-  left_image_url: z.union([z.string(), z.string()]),
-  octree_resolution: z
-    .int()
-    .gte(1)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Octree resolution for the model.",
-    })
-    .optional()
-    .default(256),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  back_image_url: z.union([z.string(), z.string()]),
-  front_image_url: z.union([z.string(), z.string()]),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Number of inference steps to perform.",
-    })
-    .optional()
-    .default(50),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
-    })
-    .optional()
-    .default(7.5),
-});
-
-/**
- * ObjectOutput
- */
-export const zHunyuan3dV2MiniTurboOutput = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * Hunyuan3DInput
- */
-export const zHunyuan3dV2MiniTurboInput = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  textured_mesh: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-    })
-    .optional()
-    .default(false),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  octree_resolution: z
-    .int()
-    .gte(1)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Octree resolution for the model.",
-    })
-    .optional()
-    .default(256),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Number of inference steps to perform.",
-    })
-    .optional()
-    .default(50),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
-    })
-    .optional()
-    .default(7.5),
-});
-
-/**
- * ObjectOutput
- */
-export const zHunyuan3dV2MiniOutput = z.object({
-  seed: z.int().register(z.globalRegistry, {
-    description: "Seed value used for generation.",
-  }),
-  model_mesh: zFile,
-});
-
-/**
- * Hunyuan3DInput
- */
-export const zHunyuan3dV2MiniInput = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  textured_mesh: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-    })
-    .optional()
-    .default(false),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  octree_resolution: z
-    .int()
-    .gte(1)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Octree resolution for the model.",
-    })
-    .optional()
-    .default(256),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Number of inference steps to perform.",
-    })
-    .optional()
-    .default(50),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
-    })
-    .optional()
-    .default(7.5),
-});
-
-/**
- * Hunyuan3DInput
- */
-export const zHunyuan3dV2Input = z.object({
-  input_image_url: z.union([z.string(), z.string()]),
-  textured_mesh: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.",
-    })
-    .optional()
-    .default(false),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  octree_resolution: z
-    .int()
-    .gte(1)
-    .lte(1024)
-    .register(z.globalRegistry, {
-      description: "Octree resolution for the model.",
-    })
-    .optional()
-    .default(256),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(50)
-    .register(z.globalRegistry, {
-      description: "Number of inference steps to perform.",
-    })
-    .optional()
-    .default(50),
-  guidance_scale: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Guidance scale for the model.",
-    })
-    .optional()
-    .default(7.5),
-});
-
-/**
- * ImageToWorldResponse
- */
-export const zHunyuanWorldImageToWorldOutput = z.object({
-  world_file: zFile,
-});
-
-/**
- * ImageToWorldRequest
- */
-export const zHunyuanWorldImageToWorldInput = z.object({
-  labels_fg1: z.string().register(z.globalRegistry, {
-    description: "Labels for the first foreground object.",
-  }),
-  export_drc: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to export DRC (Dynamic Resource Configuration).",
-    })
-    .optional()
-    .default(false),
-  classes: z.string().register(z.globalRegistry, {
-    description: "Classes to use for the world generation.",
-  }),
-  labels_fg2: z.string().register(z.globalRegistry, {
-    description: "Labels for the second foreground object.",
-  }),
   image_url: z.union([z.string(), z.string()]),
+  foreground_ratio: z
+    .number()
+    .gte(0.5)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Ratio of the foreground image to the original image.",
+    })
+    .optional()
+    .default(0.9),
+  do_remove_background: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to remove the background from the input image.",
+    })
+    .optional()
+    .default(true),
+  mc_resolution: z
+    .int()
+    .gte(32)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description:
+        "Resolution of the marching cubes. Above 512 is not recommended.",
+    })
+    .optional()
+    .default(256),
+});
+
+/**
+ * ObjectOutput
+ */
+export const zTriposrOutput = z.object({
+  remeshing_dir: z.union([zFile, z.unknown()]).optional(),
+  timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
+    description: "Inference timings.",
+  }),
+  model_mesh: zFile,
+});
+
+/**
+ * ImageTo3dInput
+ */
+export const zTripoV25ImageTo3dInput = z.object({
+  face_limit: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
+    })
+    .optional(),
+  style: z
+    .enum([
+      "person:person2cartoon",
+      "object:clay",
+      "object:steampunk",
+      "animal:venom",
+      "object:barbie",
+      "object:christmas",
+      "gold",
+      "ancient_bronze",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
+    })
+    .optional(),
+  pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
+    })
+    .optional()
+    .default(false),
+  texture_alignment: z
+    .enum(["original_image", "geometry"])
+    .register(z.globalRegistry, {
+      description:
+        "Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
+    })
+    .optional(),
+  image_url: z.union([z.string(), z.string()]),
+  texture: z
+    .enum(["no", "standard", "HD"])
+    .register(z.globalRegistry, {
+      description:
+        "An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.",
+    })
+    .optional(),
+  auto_size: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
+    })
+    .optional()
+    .default(false),
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.",
+    })
+    .optional(),
+  quad: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
+    })
+    .optional()
+    .default(false),
+  orientation: z
+    .enum(["default", "align_image"])
+    .register(z.globalRegistry, {
+      description:
+        "Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
+    })
+    .optional(),
+  texture_seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
+    })
+    .optional(),
+});
+
+/**
+ * Tripo3dOutput
+ */
+export const zTripoV25ImageTo3dOutput = z.object({
+  base_model: zFileType2.optional(),
+  task_id: z.string().register(z.globalRegistry, {
+    description: "The task id of the 3D model generation.",
+  }),
+  rendered_image: zFileType2.optional(),
+  model_mesh: zFileType2.optional(),
+  pbr_model: zFileType2.optional(),
+});
+
+/**
+ * MultiviewTo3dInput
+ */
+export const zTripoV25MultiviewTo3dInput = z.object({
+  face_limit: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.",
+    })
+    .optional(),
+  right_image_url: z.union([z.string(), z.string()]).optional(),
+  style: z
+    .enum([
+      "person:person2cartoon",
+      "object:clay",
+      "object:steampunk",
+      "animal:venom",
+      "object:barbie",
+      "object:christmas",
+      "gold",
+      "ancient_bronze",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "[DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.",
+    })
+    .optional(),
+  quad: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.",
+    })
+    .optional()
+    .default(false),
+  front_image_url: z.union([z.string(), z.string()]),
+  texture_seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.",
+    })
+    .optional(),
+  back_image_url: z.union([z.string(), z.string()]).optional(),
+  pbr: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.",
+    })
+    .optional()
+    .default(false),
+  texture_alignment: z
+    .enum(["original_image", "geometry"])
+    .register(z.globalRegistry, {
+      description:
+        "Determines the prioritization of texture alignment in the 3D model. The default value is original_image.",
+    })
+    .optional(),
+  texture: z
+    .enum(["no", "standard", "HD"])
+    .register(z.globalRegistry, {
+      description:
+        "An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.",
+    })
+    .optional(),
+  auto_size: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.",
+    })
+    .optional()
+    .default(false),
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description:
+        "This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.",
+    })
+    .optional(),
+  orientation: z
+    .enum(["default", "align_image"])
+    .register(z.globalRegistry, {
+      description:
+        "Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.",
+    })
+    .optional(),
+  left_image_url: z.union([z.string(), z.string()]).optional(),
+});
+
+/**
+ * Tripo3dOutput
+ */
+export const zTripoV25MultiviewTo3dOutput = z.object({
+  base_model: zFileType2.optional(),
+  task_id: z.string().register(z.globalRegistry, {
+    description: "The task id of the 3D model generation.",
+  }),
+  rendered_image: zFileType2.optional(),
+  model_mesh: zFileType2.optional(),
+  pbr_model: zFileType2.optional(),
+});
+
+/**
+ * UltraShapeRequest
+ */
+export const zUltrashapeInput = z.object({
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "Random seed.",
+    })
+    .optional()
+    .default(42),
+  remove_background: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Remove image background.",
+    })
+    .optional()
+    .default(true),
+  model_url: z.union([z.string(), z.string()]),
+  octree_resolution: z
+    .int()
+    .gte(128)
+    .lte(1024)
+    .register(z.globalRegistry, {
+      description: "Marching cubes resolution.",
+    })
+    .optional()
+    .default(1024),
+  image_url: z.union([z.string(), z.string()]),
+  num_inference_steps: z
+    .int()
+    .gte(1)
+    .lte(50)
+    .register(z.globalRegistry, {
+      description: "Diffusion steps.",
+    })
+    .optional()
+    .default(50),
+});
+
+/**
+ * UltraShapeResponse
+ */
+export const zUltrashapeOutput = z.object({
+  model_glb: zFile,
 });
 
 export const zPostFalAiHunyuanWorldImageToWorldData = z.object({

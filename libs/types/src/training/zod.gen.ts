@@ -3,6 +3,30 @@
 import * as z from "zod";
 
 /**
+ * Input
+ */
+export const zErnieImageTrainerInput = z.object({
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate.",
+    })
+    .optional()
+    .default(0.0005),
+  steps: z
+    .int()
+    .gte(10)
+    .lte(40000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(2000),
+  image_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
  * File
  */
 export const zFile = z.object({
@@ -17,55 +41,15 @@ export const zFile = z.object({
 /**
  * Output
  */
-export const zZImageTurboTrainerV2Output = z.object({
-  diffusers_lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zZImageTurboTrainerV2Input = z.object({
-  steps: z
-    .int()
-    .gte(10)
-    .lte(40000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(2000),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate.",
-    })
-    .optional()
-    .default(0.0005),
-  image_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zZImageTrainerOutput = z.object({
+export const zErnieImageTrainerOutput = z.object({
   config_file: zFile,
   diffusers_lora_file: zFile,
 });
 
 /**
- * Input
+ * InputEditV2
  */
-export const zZImageTrainerInput = z.object({
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate applied to trainable parameters.",
-    })
-    .optional()
-    .default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
+export const zFlux2Klein4bBaseTrainerEditInput = z.object({
   steps: z
     .int()
     .gte(100)
@@ -76,11 +60,18 @@ export const zZImageTrainerInput = z.object({
     .optional()
     .default(1000),
   image_data_url: z.union([z.string(), z.string()]),
-  training_type: z
-    .enum(["content", "style", "balanced"])
+  learning_rate: z
+    .number()
     .register(z.globalRegistry, {
-      description:
-        "Type of training to perform. Use 'content' to focus on the content of the images, 'style' to focus on the style of the images, and 'balanced' to focus on a combination of both.",
+      description: "Learning rate applied to trainable parameters.",
+    })
+    .optional()
+    .default(0.00005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  output_lora_format: z
+    .enum(["fal", "comfy"])
+    .register(z.globalRegistry, {
+      description: "Dictates the naming scheme for the output weights",
     })
     .optional(),
 });
@@ -88,15 +79,669 @@ export const zZImageTrainerInput = z.object({
 /**
  * Output
  */
-export const zZImageBaseTrainerOutput = z.object({
-  diffusers_lora_file: zFile,
+export const zFlux2Klein4bBaseTrainerEditOutput = z.object({
   config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
+ */
+export const zFlux2Klein4bBaseTrainerInput = z
+  .object({
+    steps: z
+      .int()
+      .gte(100)
+      .lte(10000)
+      .register(z.globalRegistry, {
+        description: "Total number of training steps.",
+      })
+      .optional()
+      .default(1000),
+    image_data_url: z.union([z.string(), z.string()]),
+    learning_rate: z
+      .number()
+      .register(z.globalRegistry, {
+        description: "Learning rate applied to trainable parameters.",
+      })
+      .optional()
+      .default(0.00005),
+    default_caption: z.union([z.string(), z.unknown()]).optional(),
+    output_lora_format: z
+      .enum(["fal", "comfy"])
+      .register(z.globalRegistry, {
+        description: "Dictates the naming scheme for the output weights",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "V2 input with multi-resolution bucketing.",
+  });
+
+/**
+ * Output
+ */
+export const zFlux2Klein4bBaseTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputEditV2
+ */
+export const zFlux2Klein9bBaseTrainerEditInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Total number of training steps.",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate applied to trainable parameters.",
+    })
+    .optional()
+    .default(0.00005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  output_lora_format: z
+    .enum(["fal", "comfy"])
+    .register(z.globalRegistry, {
+      description: "Dictates the naming scheme for the output weights",
+    })
+    .optional(),
+});
+
+/**
+ * Output
+ */
+export const zFlux2Klein9bBaseTrainerEditOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
+ */
+export const zFlux2Klein9bBaseTrainerInput = z
+  .object({
+    steps: z
+      .int()
+      .gte(100)
+      .lte(10000)
+      .register(z.globalRegistry, {
+        description: "Total number of training steps.",
+      })
+      .optional()
+      .default(1000),
+    image_data_url: z.union([z.string(), z.string()]),
+    learning_rate: z
+      .number()
+      .register(z.globalRegistry, {
+        description: "Learning rate applied to trainable parameters.",
+      })
+      .optional()
+      .default(0.00005),
+    default_caption: z.union([z.string(), z.unknown()]).optional(),
+    output_lora_format: z
+      .enum(["fal", "comfy"])
+      .register(z.globalRegistry, {
+        description: "Dictates the naming scheme for the output weights",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "V2 input with multi-resolution bucketing.",
+  });
+
+/**
+ * Output
+ */
+export const zFlux2Klein9bBaseTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputEdit
+ */
+export const zFlux2TrainerEditInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Total number of training steps.",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate applied to trainable parameters.",
+    })
+    .optional()
+    .default(0.00005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  output_lora_format: z
+    .enum(["fal", "comfy"])
+    .register(z.globalRegistry, {
+      description: "Dictates the naming scheme for the output weights",
+    })
+    .optional(),
+});
+
+/**
+ * Output
+ */
+export const zFlux2TrainerEditOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputT2I
+ */
+export const zFlux2TrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Total number of training steps.",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate applied to trainable parameters.",
+    })
+    .optional()
+    .default(0.00005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  output_lora_format: z
+    .enum(["fal", "comfy"])
+    .register(z.globalRegistry, {
+      description: "Dictates the naming scheme for the output weights",
+    })
+    .optional(),
+});
+
+/**
+ * Output
+ */
+export const zFlux2TrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputEditV2
+ */
+export const zFlux2TrainerV2EditInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Total number of training steps.",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate applied to trainable parameters.",
+    })
+    .optional()
+    .default(0.00005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  output_lora_format: z
+    .enum(["fal", "comfy"])
+    .register(z.globalRegistry, {
+      description: "Dictates the naming scheme for the output weights",
+    })
+    .optional(),
+});
+
+/**
+ * Output
+ */
+export const zFlux2TrainerV2EditOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
+ */
+export const zFlux2TrainerV2Input = z
+  .object({
+    steps: z
+      .int()
+      .gte(100)
+      .lte(10000)
+      .register(z.globalRegistry, {
+        description: "Total number of training steps.",
+      })
+      .optional()
+      .default(1000),
+    image_data_url: z.union([z.string(), z.string()]),
+    learning_rate: z
+      .number()
+      .register(z.globalRegistry, {
+        description: "Learning rate applied to trainable parameters.",
+      })
+      .optional()
+      .default(0.00005),
+    default_caption: z.union([z.string(), z.unknown()]).optional(),
+    output_lora_format: z
+      .enum(["fal", "comfy"])
+      .register(z.globalRegistry, {
+        description: "Dictates the naming scheme for the output weights",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "V2 input with multi-resolution bucketing.",
+  });
+
+/**
+ * Output
+ */
+export const zFlux2TrainerV2Output = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
 });
 
 /**
  * Input
  */
-export const zZImageBaseTrainerInput = z.object({
+export const zFluxKontextTrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(2)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z.number().optional().default(0.0001),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  output_lora_format: z
+    .enum(["fal", "comfy"])
+    .register(z.globalRegistry, {
+      description: "Dictates the naming scheme for the output weights",
+    })
+    .optional(),
+});
+
+/**
+ * Output
+ */
+export const zFluxKontextTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * PublicInput
+ */
+export const zFluxKreaTrainerInput = z.object({
+  images_data_url: z.union([z.string(), z.string()]),
+  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
+  steps: z.union([z.int().gte(1).lte(10000), z.unknown()]).optional(),
+  is_style: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.",
+    })
+    .optional()
+    .default(false),
+  create_masks: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.",
+    })
+    .optional()
+    .default(true),
+  trigger_word: z.union([z.string(), z.unknown()]).nullish(),
+  is_input_format_already_preprocessed: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * Output
+ */
+export const zFluxKreaTrainerOutput = z.object({
+  debug_preprocessed_output: z.union([zFile, z.unknown()]).optional(),
+  diffusers_lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * PublicInput
+ */
+export const zFluxLoraFastTrainingInput = z.object({
+  is_input_format_already_preprocessed: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.",
+    })
+    .optional()
+    .default(false),
+  steps: z.union([z.int().gte(1).lte(10000), z.unknown()]).optional(),
+  is_style: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.",
+    })
+    .optional()
+    .default(false),
+  images_data_url: z.union([z.string(), z.string()]),
+  trigger_word: z.union([z.string(), z.unknown()]).nullish(),
+  create_masks: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.",
+    })
+    .optional()
+    .default(true),
+  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
+});
+
+/**
+ * Output
+ */
+export const zFluxLoraFastTrainingOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+  debug_preprocessed_output: z.union([zFile, z.unknown()]).optional(),
+});
+
+/**
+ * PublicInput
+ */
+export const zFluxLoraPortraitTrainerInput = z.object({
+  trigger_phrase: z.union([z.string(), z.unknown()]).nullish(),
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(0.001)
+    .register(z.globalRegistry, {
+      description: "Learning rate to use for training.",
+    })
+    .optional()
+    .default(0.00009),
+  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
+  create_masks: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "If True, masks will be created for the subject.",
+    })
+    .optional()
+    .default(false),
+  images_data_url: z.union([z.string(), z.string()]),
+  steps: z
+    .int()
+    .gte(1)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train the LoRA on.",
+    })
+    .optional()
+    .default(2500),
+  subject_crop: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "If True, the subject will be cropped from the image.",
+    })
+    .optional()
+    .default(true),
+  multiresolution_training: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "If True, multiresolution training will be used.",
+    })
+    .optional()
+    .default(true),
+  resume_from_checkpoint: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "URL to a checkpoint to resume training from.",
+    })
+    .optional()
+    .default(""),
+});
+
+/**
+ * Output
+ */
+export const zFluxLoraPortraitTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * PublicInput
+ */
+export const zHunyuanVideoLoraTrainingInput = z.object({
+  steps: z.int().gte(1).lte(5000).register(z.globalRegistry, {
+    description: "Number of steps to train the LoRA on.",
+  }),
+  images_data_url: z.union([z.string(), z.string()]),
+  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
+  do_caption: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to generate captions for the images.",
+    })
+    .optional()
+    .default(true),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate to use for training.",
+    })
+    .optional()
+    .default(0.0001),
+  trigger_word: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The trigger word to use.",
+    })
+    .optional()
+    .default(""),
+});
+
+/**
+ * Output
+ */
+export const zHunyuanVideoLoraTrainingOutput = z.object({
+  diffusers_lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * LTX23V2VOutput
+ *
+ * Output from LTX-2.3 video-to-video training.
+ */
+export const zLtx23V2vTrainerOutput = z
+  .object({
+    lora_file: zFile,
+    config_file: zFile,
+    video: z.union([zFile, z.unknown()]).optional(),
+    debug_dataset: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Output from LTX-2.3 video-to-video training.",
+  });
+
+/**
+ * LTX23Output
+ *
+ * Output from LTX-2.3 training.
+ */
+export const zLtx23VideoTrainerOutput = z
+  .object({
+    lora_file: zFile,
+    config_file: zFile,
+    debug_dataset: z.union([zFile, z.unknown()]).optional(),
+    video: z.union([zFile, z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Output from LTX-2.3 training.",
+  });
+
+/**
+ * LTX2Output
+ *
+ * Output from LTX-2 training.
+ */
+export const zLtx2VideoTrainerOutput = z
+  .object({
+    debug_dataset: z.union([zFile, z.unknown()]).optional(),
+    video: z.union([zFile, z.unknown()]).optional(),
+    config_file: zFile,
+    lora_file: zFile,
+  })
+  .register(z.globalRegistry, {
+    description: "Output from LTX-2 training.",
+  });
+
+/**
+ * TrainingOutput
+ */
+export const zLtxVideoTrainerOutput = z.object({
+  video: z.union([zFile, z.unknown()]).optional(),
+  lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * PhotaProfileCreateInput
+ */
+export const zPhotaCreateProfileInput = z.object({
+  image_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * PhotaProfileOutput
+ */
+export const zPhotaCreateProfileOutput = z.object({
+  profile_id: z.string().register(z.globalRegistry, {
+    description: "The Photalabs profile ID.",
+  }),
+});
+
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
+  }),
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
+});
+
+/**
+ * InputImage
+ */
+export const zQwenImage2512TrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(30000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate for LoRA parameters.",
+    })
+    .optional()
+    .default(0.0005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zQwenImage2512TrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zQwenImage2512TrainerV2Input = z.object({
+  image_data_url: z.union([z.string(), z.string()]),
   steps: z
     .int()
     .gte(10)
@@ -106,6 +751,7 @@ export const zZImageBaseTrainerInput = z.object({
     })
     .optional()
     .default(2000),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
   learning_rate: z
     .number()
     .register(z.globalRegistry, {
@@ -113,517 +759,248 @@ export const zZImageBaseTrainerInput = z.object({
     })
     .optional()
     .default(0.0005),
+});
+
+/**
+ * Output
+ */
+export const zQwenImage2512TrainerV2Output = z.object({
+  diffusers_lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * InputPlus
+ */
+export const zQwenImageEdit2509TrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(30000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate for LoRA parameters.",
+    })
+    .optional()
+    .default(0.0001),
   default_caption: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zQwenImageEdit2509TrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * Input2511
+ */
+export const zQwenImageEdit2511TrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(30000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate for LoRA parameters.",
+    })
+    .optional()
+    .default(0.0001),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zQwenImageEdit2511TrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputPlus
+ */
+export const zQwenImageEditPlusTrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(30000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate for LoRA parameters.",
+    })
+    .optional()
+    .default(0.0001),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zQwenImageEditPlusTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * InputEdit
+ */
+export const zQwenImageEditTrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(30000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate for LoRA parameters.",
+    })
+    .optional()
+    .default(0.0001),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zQwenImageEditTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zQwenImageLayeredTrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(100)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate for LoRA parameters.",
+    })
+    .optional()
+    .default(0.0001),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zQwenImageLayeredTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * PublicInput
+ */
+export const zQwenImageTrainerInput = z.object({
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Default caption to use for images that don't have corresponding text files. If provided, missing .txt files will be created automatically.",
+    })
+    .optional()
+    .default(""),
+  steps: z
+    .int()
+    .gte(1)
+    .lte(8000)
+    .register(z.globalRegistry, {
+      description:
+        "Total number of training steps to perform. Default is 4000.",
+    })
+    .optional()
+    .default(1000),
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(0.01)
+    .register(z.globalRegistry, {
+      description: "Learning rate for training. Default is 5e-4",
+    })
+    .optional()
+    .default(0.0005),
   image_data_url: z.union([z.string(), z.string()]),
 });
 
 /**
  * Output
  */
-export const zWanTrainerT2vOutput = z.object({
+export const zQwenImageTrainerOutput = z.object({
   lora_file: zFile,
   config_file: zFile,
 });
 
 /**
- * Input
+ * InputImage
  */
-export const zWanTrainerT2vInput = z.object({
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zWanTrainerT2V14bOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zWanTrainerT2V14bInput = z.object({
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zWanTrainerOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zWanTrainerInput = z.object({
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zWanTrainerI2V720pOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zWanTrainerI2V720pInput = z.object({
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zWanTrainerFlf2V720pOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zWanTrainerFlf2V720pInput = z.object({
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zWan22TrainerT2vA14bOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zWan22TrainerT2vA14bInput = z.object({
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zWan22TrainerI2vA14bOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zWan22TrainerI2vA14bInput = z.object({
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(400),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
-    })
-    .optional()
-    .default(false),
-  training_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * WanTrainerResponse
- */
-export const zWan22ImageTrainerOutput = z.object({
-  diffusers_lora_file: zFile,
-  config_file: zFile,
-  high_noise_lora: zFile,
-});
-
-/**
- * BasicInput
- */
-export const zWan22ImageTrainerInput = z.object({
+export const zQwenImageTrainerV2Input = z.object({
   steps: z
     .int()
-    .gte(10)
-    .lte(6000)
+    .gte(100)
+    .lte(30000)
     .register(z.globalRegistry, {
-      description: "Number of training steps.",
+      description: "Number of steps to train for",
     })
     .optional()
     .default(1000),
-  use_face_detection: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use face detection for the training data. When enabled, images will use the center of the face as the center of the image when resizing.",
-    })
-    .optional()
-    .default(true),
-  trigger_phrase: z.string().register(z.globalRegistry, {
-    description: "Trigger phrase for the model.",
-  }),
-  use_masks: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to use masks for the training data.",
-    })
-    .optional()
-    .default(true),
+  image_data_url: z.union([z.string(), z.string()]),
   learning_rate: z
     .number()
-    .gte(0.000001)
-    .lte(0.1)
     .register(z.globalRegistry, {
-      description: "Learning rate for training.",
+      description: "Learning rate for LoRA parameters.",
     })
     .optional()
-    .default(0.0007),
-  training_data_url: z.union([z.string(), z.string()]),
-  use_face_cropping: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use face cropping for the training data. When enabled, images will be cropped to the face before resizing.",
-    })
-    .optional()
-    .default(false),
-  include_synthetic_captions: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to include synthetic captions.",
-    })
-    .optional()
-    .default(false),
-  is_style: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether the training data is style data. If true, face specific options like masking and face detection will be disabled.",
-    })
-    .optional()
-    .default(false),
+    .default(0.0005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
 });
-
-/**
- * Validation
- */
-export const zValidation = z.object({
-  image_url: z.union([z.string(), z.unknown()]).optional(),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The prompt to use for validation.",
-  }),
-});
-
-/**
- * V2VValidation
- *
- * Validation input for video-to-video training.
- */
-export const zV2vValidation = z
-  .object({
-    reference_video_url: z.string().min(1).register(z.globalRegistry, {
-      description:
-        "URL to reference video for IC-LoRA validation. This is the input video that will be transformed.",
-    }),
-    prompt: z.string().register(z.globalRegistry, {
-      description: "The prompt to use for validation.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Validation input for video-to-video training.",
-  });
 
 /**
  * Output
  */
-export const zTurboFluxTrainerOutput = z.object({
-  diffusers_lora_file: zFile,
+export const zQwenImageTrainerV2Output = z.object({
   config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zTurboFluxTrainerInput = z.object({
-  trigger_phrase: z.union([z.string(), z.unknown()]).optional(),
-  steps: z
-    .int()
-    .gte(1)
-    .lte(10000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train the LoRA on.",
-    })
-    .optional()
-    .default(1000),
-  learning_rate: z
-    .number()
-    .gte(1e-7)
-    .lte(0.01)
-    .register(z.globalRegistry, {
-      description: "Learning rate for the training.",
-    })
-    .optional()
-    .default(0.00115),
-  images_data_url: z.union([z.string(), z.string()]),
-  training_style: z
-    .union([z.enum(["subject", "style"]), z.unknown()])
-    .optional(),
-  face_crop: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to try to detect the face and crop the images to the face.",
-    })
-    .optional()
-    .default(true),
-});
-
-/**
- * StyleReferenceOutput
- */
-export const zRecraftV3CreateStyleOutput = z.object({
-  style_id: z.string().register(z.globalRegistry, {
-    description:
-      "The ID of the created style, this ID can be used to reference the style in the future.",
-  }),
+  diffusers_lora_file: zFile,
 });
 
 /**
@@ -727,535 +1104,486 @@ export const zRecraftV3CreateStyleInput = z.object({
 });
 
 /**
- * Output
+ * StyleReferenceOutput
  */
-export const zQwenImageTrainerV2Output = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
+export const zRecraftV3CreateStyleOutput = z.object({
+  style_id: z.string().register(z.globalRegistry, {
+    description:
+      "The ID of the created style, this ID can be used to reference the style in the future.",
+  }),
 });
 
 /**
- * InputImage
+ * Input
  */
-export const zQwenImageTrainerV2Input = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(30000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
-    })
-    .optional()
-    .default(0.0005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Output
- */
-export const zQwenImageTrainerOutput = z.object({
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * PublicInput
- */
-export const zQwenImageTrainerInput = z.object({
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "Default caption to use for images that don't have corresponding text files. If provided, missing .txt files will be created automatically.",
-    })
-    .optional()
-    .default(""),
+export const zTurboFluxTrainerInput = z.object({
+  trigger_phrase: z.union([z.string(), z.unknown()]).optional(),
   steps: z
     .int()
     .gte(1)
-    .lte(8000)
-    .register(z.globalRegistry, {
-      description:
-        "Total number of training steps to perform. Default is 4000.",
-    })
-    .optional()
-    .default(1000),
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(0.01)
-    .register(z.globalRegistry, {
-      description: "Learning rate for training. Default is 5e-4",
-    })
-    .optional()
-    .default(0.0005),
-  image_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Output
- */
-export const zQwenImageLayeredTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * Input
- */
-export const zQwenImageLayeredTrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
     .lte(10000)
     .register(z.globalRegistry, {
-      description: "Number of steps to train for",
+      description: "Number of steps to train the LoRA on.",
     })
     .optional()
     .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
   learning_rate: z
     .number()
+    .gte(1e-7)
+    .lte(0.01)
     .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
+      description: "Learning rate for the training.",
     })
     .optional()
-    .default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Output
- */
-export const zQwenImageEditTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputEdit
- */
-export const zQwenImageEditTrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(30000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
-    })
-    .optional()
-    .default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Output
- */
-export const zQwenImageEditPlusTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputPlus
- */
-export const zQwenImageEditPlusTrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(30000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
-    })
-    .optional()
-    .default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Output
- */
-export const zQwenImageEdit2511TrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * Input2511
- */
-export const zQwenImageEdit2511TrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(30000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
-    })
-    .optional()
-    .default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Output
- */
-export const zQwenImageEdit2509TrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputPlus
- */
-export const zQwenImageEdit2509TrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(30000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
-    })
-    .optional()
-    .default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Output
- */
-export const zQwenImage2512TrainerV2Output = z.object({
-  diffusers_lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zQwenImage2512TrainerV2Input = z.object({
-  image_data_url: z.union([z.string(), z.string()]),
-  steps: z
-    .int()
-    .gte(10)
-    .lte(40000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(2000),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate.",
-    })
-    .optional()
-    .default(0.0005),
-});
-
-/**
- * Output
- */
-export const zQwenImage2512TrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputImage
- */
-export const zQwenImage2512TrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(30000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate for LoRA parameters.",
-    })
-    .optional()
-    .default(0.0005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-});
-
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
+    .default(0.00115),
+  images_data_url: z.union([z.string(), z.string()]),
+  training_style: z
+    .union([z.enum(["subject", "style"]), z.unknown()])
     .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
-/**
- * PhotaProfileOutput
- */
-export const zPhotaCreateProfileOutput = z.object({
-  profile_id: z.string().register(z.globalRegistry, {
-    description: "The Photalabs profile ID.",
-  }),
-});
-
-/**
- * PhotaProfileCreateInput
- */
-export const zPhotaCreateProfileInput = z.object({
-  image_data_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * TrainingOutput
- */
-export const zLtxVideoTrainerOutput = z.object({
-  video: z.union([zFile, z.unknown()]).optional(),
-  lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * Input
- */
-export const zLtxVideoTrainerInput = z.object({
-  validation_aspect_ratio: z
-    .enum(["16:9", "1:1", "9:16"])
-    .register(z.globalRegistry, {
-      description: "The aspect ratio to use for validation.",
-    })
-    .optional(),
-  resolution: z
-    .enum(["low", "medium", "high"])
-    .register(z.globalRegistry, {
-      description:
-        "The resolution to use for training. This is the resolution of the video.",
-    })
-    .optional(),
-  aspect_ratio: z
-    .enum(["16:9", "1:1", "9:16"])
-    .register(z.globalRegistry, {
-      description:
-        "The aspect ratio to use for training. This is the aspect ratio of the video.",
-    })
-    .optional(),
-  validation_negative_prompt: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "A negative prompt to use for validation.",
-    })
-    .optional()
-    .default("blurry, low quality, bad quality, out of focus"),
-  number_of_frames: z
-    .int()
-    .gte(25)
-    .lte(121)
-    .register(z.globalRegistry, {
-      description:
-        "The number of frames to use for training. This is the number of frames per second multiplied by the number of seconds.",
-    })
-    .optional()
-    .default(81),
-  validation: z
-    .array(zValidation)
-    .max(2)
-    .register(z.globalRegistry, {
-      description:
-        "A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.",
-    })
-    .optional()
-    .default([]),
-  split_input_into_scenes: z
+  face_crop: z
     .boolean()
     .register(z.globalRegistry, {
       description:
-        "If true, videos above a certain duration threshold will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned. This option has no effect on image datasets.",
+        "Whether to try to detect the face and crop the images to the face.",
     })
     .optional()
     .default(true),
-  validation_reverse: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, the validation videos will be reversed. This is useful for effects that are learned in reverse and then applied in reverse.",
-    })
-    .optional()
-    .default(false),
-  validation_resolution: z
-    .enum(["low", "medium", "high"])
-    .register(z.globalRegistry, {
-      description: "The resolution to use for validation.",
-    })
-    .optional(),
-  training_data_url: z.union([z.string(), z.string()]),
-  rank: z
-    .union([
-      z.literal(8),
-      z.literal(16),
-      z.literal(32),
-      z.literal(64),
-      z.literal(128),
-    ])
-    .register(z.globalRegistry, {
-      description: "The rank of the LoRA.",
-    })
-    .optional(),
-  frame_rate: z
-    .int()
-    .gte(8)
-    .lte(60)
-    .register(z.globalRegistry, {
-      description: "The target frames per second for the video.",
-    })
-    .optional()
-    .default(25),
-  trigger_phrase: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The phrase that will trigger the model to generate an image.",
-    })
-    .optional()
-    .default(""),
-  auto_scale_input: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.",
-    })
-    .optional()
-    .default(false),
-  number_of_steps: z
-    .int()
-    .gte(100)
-    .lte(20000)
-    .register(z.globalRegistry, {
-      description: "The number of steps to train for.",
-    })
-    .optional()
-    .default(1000),
-  split_input_duration_threshold: z
-    .number()
-    .gte(1)
-    .lte(60)
-    .register(z.globalRegistry, {
-      description:
-        "The duration threshold in seconds. If a video is longer than this, it will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned.",
-    })
-    .optional()
-    .default(30),
-  validation_number_of_frames: z
-    .int()
-    .gte(8)
-    .lte(121)
-    .register(z.globalRegistry, {
-      description: "The number of frames to use for validation.",
-    })
-    .optional()
-    .default(81),
-  learning_rate: z
-    .number()
-    .gte(0.000001)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
-    })
-    .optional()
-    .default(0.0002),
 });
 
 /**
- * LTX2Output
- *
- * Output from LTX-2 training.
+ * Output
  */
-export const zLtx2VideoTrainerOutput = z
+export const zTurboFluxTrainerOutput = z.object({
+  diffusers_lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * V2VValidation
+ *
+ * Validation input for video-to-video training.
+ */
+export const zV2vValidation = z
   .object({
-    debug_dataset: z.union([zFile, z.unknown()]).optional(),
-    video: z.union([zFile, z.unknown()]).optional(),
-    config_file: zFile,
-    lora_file: zFile,
+    reference_video_url: z.string().min(1).register(z.globalRegistry, {
+      description:
+        "URL to reference video for IC-LoRA validation. This is the input video that will be transformed.",
+    }),
+    prompt: z.string().register(z.globalRegistry, {
+      description: "The prompt to use for validation.",
+    }),
   })
   .register(z.globalRegistry, {
-    description: "Output from LTX-2 training.",
+    description: "Validation input for video-to-video training.",
+  });
+
+/**
+ * LTX23V2VInput
+ *
+ * Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.
+ */
+export const zLtx23V2vTrainerInput = z
+  .object({
+    first_frame_conditioning_p: z
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description:
+          "Probability of conditioning on the first frame during training. Lower values work better for video-to-video transformation.",
+      })
+      .optional()
+      .default(0.1),
+    stg_scale: z
+      .number()
+      .gte(0)
+      .lte(3)
+      .register(z.globalRegistry, {
+        description:
+          "STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.",
+      })
+      .optional()
+      .default(1),
+    resolution: z
+      .enum(["low", "medium", "high"])
+      .register(z.globalRegistry, {
+        description:
+          "Resolution to use for training. Higher resolutions require more memory.",
+      })
+      .optional(),
+    validation_negative_prompt: z
+      .string()
+      .register(z.globalRegistry, {
+        description: "A negative prompt to use for validation.",
+      })
+      .optional()
+      .default(
+        "worst quality, inconsistent motion, blurry, jittery, distorted",
+      ),
+    number_of_steps: z
+      .int()
+      .gte(100)
+      .lte(20000)
+      .register(z.globalRegistry, {
+        description: "The number of training steps.",
+      })
+      .optional()
+      .default(2000),
+    split_input_into_scenes: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If true, videos above a certain duration threshold will be split into scenes.",
+      })
+      .optional()
+      .default(true),
+    validation_aspect_ratio: z
+      .enum(["16:9", "1:1", "9:16"])
+      .register(z.globalRegistry, {
+        description: "The aspect ratio to use for validation.",
+      })
+      .optional(),
+    frame_rate: z
+      .int()
+      .gte(8)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description: "Target frames per second for the video.",
+      })
+      .optional()
+      .default(25),
+    trigger_phrase: z
+      .string()
+      .register(z.globalRegistry, {
+        description:
+          "A phrase that will trigger the LoRA style. Will be prepended to captions during training.",
+      })
+      .optional()
+      .default(""),
+    learning_rate: z
+      .number()
+      .gte(0.000001)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description:
+          "Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.",
+      })
+      .optional()
+      .default(0.0002),
+    debug_dataset: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.",
+      })
+      .optional()
+      .default(false),
+    split_input_duration_threshold: z
+      .number()
+      .gte(1)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description:
+          "The duration threshold in seconds. If a video is longer than this, it will be split into scenes.",
+      })
+      .optional()
+      .default(30),
+    auto_scale_input: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.",
+      })
+      .optional()
+      .default(false),
+    validation_resolution: z
+      .enum(["low", "medium", "high"])
+      .register(z.globalRegistry, {
+        description: "The resolution to use for validation.",
+      })
+      .optional(),
+    rank: z
+      .union([
+        z.literal(8),
+        z.literal(16),
+        z.literal(32),
+        z.literal(64),
+        z.literal(128),
+      ])
+      .register(z.globalRegistry, {
+        description:
+          "The rank of the LoRA adaptation. Higher values increase capacity but use more memory.",
+      })
+      .optional(),
+    training_data_url: z.union([z.string(), z.string()]),
+    aspect_ratio: z
+      .enum(["16:9", "1:1", "9:16"])
+      .register(z.globalRegistry, {
+        description: "Aspect ratio to use for training.",
+      })
+      .optional(),
+    validation: z
+      .array(zV2vValidation)
+      .max(2)
+      .register(z.globalRegistry, {
+        description:
+          "A list of validation inputs with prompts and reference videos.",
+      })
+      .optional()
+      .default([]),
+    validation_number_of_frames: z
+      .int()
+      .gte(9)
+      .lte(121)
+      .register(z.globalRegistry, {
+        description: "The number of frames in validation videos.",
+      })
+      .optional()
+      .default(89),
+    validation_frame_rate: z
+      .int()
+      .gte(8)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description: "Target frames per second for validation videos.",
+      })
+      .optional()
+      .default(25),
+    number_of_frames: z
+      .int()
+      .gte(9)
+      .lte(121)
+      .register(z.globalRegistry, {
+        description:
+          "Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).",
+      })
+      .optional()
+      .default(89),
+  })
+  .register(z.globalRegistry, {
+    description:
+      "Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.",
+  });
+
+/**
+ * Validation
+ */
+export const zValidation = z.object({
+  image_url: z.union([z.string(), z.unknown()]).optional(),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The prompt to use for validation.",
+  }),
+});
+
+/**
+ * LTX23Input
+ *
+ * Input configuration for LTX-2.3 text-to-video training.
+ */
+export const zLtx23VideoTrainerInput = z
+  .object({
+    number_of_steps: z
+      .int()
+      .gte(100)
+      .lte(20000)
+      .register(z.globalRegistry, {
+        description: "The number of training steps.",
+      })
+      .optional()
+      .default(2000),
+    audio_preserve_pitch: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "When audio duration doesn't match video duration, stretch/compress audio without changing pitch. If disabled, audio is trimmed or padded with silence.",
+      })
+      .optional()
+      .default(true),
+    frame_rate: z
+      .int()
+      .gte(8)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description: "Target frames per second for the video.",
+      })
+      .optional()
+      .default(25),
+    audio_normalize: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "Normalize audio peak amplitude to a consistent level. Recommended for consistent audio levels across the dataset.",
+      })
+      .optional()
+      .default(true),
+    learning_rate: z
+      .number()
+      .gte(0.000001)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description:
+          "Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.",
+      })
+      .optional()
+      .default(0.0002),
+    validation: z
+      .array(zValidation)
+      .max(2)
+      .register(z.globalRegistry, {
+        description:
+          "A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.",
+      })
+      .optional()
+      .default([]),
+    number_of_frames: z
+      .int()
+      .gte(9)
+      .lte(121)
+      .register(z.globalRegistry, {
+        description:
+          "Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).",
+      })
+      .optional()
+      .default(89),
+    training_data_url: z.union([z.string(), z.string()]),
+    debug_dataset: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.",
+      })
+      .optional()
+      .default(false),
+    split_input_duration_threshold: z
+      .number()
+      .gte(1)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description:
+          "The duration threshold in seconds. If a video is longer than this, it will be split into scenes.",
+      })
+      .optional()
+      .default(30),
+    rank: z
+      .union([
+        z.literal(8),
+        z.literal(16),
+        z.literal(32),
+        z.literal(64),
+        z.literal(128),
+      ])
+      .register(z.globalRegistry, {
+        description:
+          "The rank of the LoRA adaptation. Higher values increase capacity but use more memory.",
+      })
+      .optional(),
+    stg_scale: z
+      .number()
+      .gte(0)
+      .lte(3)
+      .register(z.globalRegistry, {
+        description:
+          "STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.",
+      })
+      .optional()
+      .default(1),
+    first_frame_conditioning_p: z
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description:
+          "Probability of conditioning on the first frame during training. Higher values improve image-to-video performance.",
+      })
+      .optional()
+      .default(0.5),
+    resolution: z
+      .enum(["low", "medium", "high"])
+      .register(z.globalRegistry, {
+        description:
+          "Resolution to use for training. Higher resolutions require more memory.",
+      })
+      .optional(),
+    with_audio: z.union([z.boolean(), z.unknown()]).optional(),
+    aspect_ratio: z
+      .enum(["16:9", "1:1", "9:16"])
+      .register(z.globalRegistry, {
+        description: "Aspect ratio to use for training.",
+      })
+      .optional(),
+    validation_frame_rate: z
+      .int()
+      .gte(8)
+      .lte(60)
+      .register(z.globalRegistry, {
+        description: "Target frames per second for validation videos.",
+      })
+      .optional()
+      .default(25),
+    trigger_phrase: z
+      .string()
+      .register(z.globalRegistry, {
+        description:
+          "A phrase that will trigger the LoRA style. Will be prepended to captions during training.",
+      })
+      .optional()
+      .default(""),
+    split_input_into_scenes: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If true, videos above a certain duration threshold will be split into scenes.",
+      })
+      .optional()
+      .default(true),
+    generate_audio_in_validation: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether to generate audio in validation samples.",
+      })
+      .optional()
+      .default(true),
+    validation_resolution: z
+      .enum(["low", "medium", "high"])
+      .register(z.globalRegistry, {
+        description: "The resolution to use for validation.",
+      })
+      .optional(),
+    validation_number_of_frames: z
+      .int()
+      .gte(9)
+      .lte(121)
+      .register(z.globalRegistry, {
+        description: "The number of frames in validation videos.",
+      })
+      .optional()
+      .default(89),
+    validation_aspect_ratio: z
+      .enum(["16:9", "1:1", "9:16"])
+      .register(z.globalRegistry, {
+        description: "The aspect ratio to use for validation.",
+      })
+      .optional(),
+    validation_negative_prompt: z
+      .string()
+      .register(z.globalRegistry, {
+        description: "A negative prompt to use for validation.",
+      })
+      .optional()
+      .default(
+        "worst quality, inconsistent motion, blurry, jittery, distorted",
+      ),
+    auto_scale_input: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.",
+      })
+      .optional()
+      .default(false),
+  })
+  .register(z.globalRegistry, {
+    description: "Input configuration for LTX-2.3 text-to-video training.",
   });
 
 /**
@@ -1470,999 +1798,584 @@ export const zLtx2VideoTrainerInput = z
   });
 
 /**
- * LTX23Output
- *
- * Output from LTX-2.3 training.
+ * Input
  */
-export const zLtx23VideoTrainerOutput = z
-  .object({
-    lora_file: zFile,
-    config_file: zFile,
-    debug_dataset: z.union([zFile, z.unknown()]).optional(),
-    video: z.union([zFile, z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Output from LTX-2.3 training.",
-  });
-
-/**
- * LTX23Input
- *
- * Input configuration for LTX-2.3 text-to-video training.
- */
-export const zLtx23VideoTrainerInput = z
-  .object({
-    number_of_steps: z
-      .int()
-      .gte(100)
-      .lte(20000)
-      .register(z.globalRegistry, {
-        description: "The number of training steps.",
-      })
-      .optional()
-      .default(2000),
-    audio_preserve_pitch: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "When audio duration doesn't match video duration, stretch/compress audio without changing pitch. If disabled, audio is trimmed or padded with silence.",
-      })
-      .optional()
-      .default(true),
-    frame_rate: z
-      .int()
-      .gte(8)
-      .lte(60)
-      .register(z.globalRegistry, {
-        description: "Target frames per second for the video.",
-      })
-      .optional()
-      .default(25),
-    audio_normalize: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "Normalize audio peak amplitude to a consistent level. Recommended for consistent audio levels across the dataset.",
-      })
-      .optional()
-      .default(true),
-    learning_rate: z
-      .number()
-      .gte(0.000001)
-      .lte(1)
-      .register(z.globalRegistry, {
-        description:
-          "Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.",
-      })
-      .optional()
-      .default(0.0002),
-    validation: z
-      .array(zValidation)
-      .max(2)
-      .register(z.globalRegistry, {
-        description:
-          "A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.",
-      })
-      .optional()
-      .default([]),
-    number_of_frames: z
-      .int()
-      .gte(9)
-      .lte(121)
-      .register(z.globalRegistry, {
-        description:
-          "Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).",
-      })
-      .optional()
-      .default(89),
-    training_data_url: z.union([z.string(), z.string()]),
-    debug_dataset: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.",
-      })
-      .optional()
-      .default(false),
-    split_input_duration_threshold: z
-      .number()
-      .gte(1)
-      .lte(60)
-      .register(z.globalRegistry, {
-        description:
-          "The duration threshold in seconds. If a video is longer than this, it will be split into scenes.",
-      })
-      .optional()
-      .default(30),
-    rank: z
-      .union([
-        z.literal(8),
-        z.literal(16),
-        z.literal(32),
-        z.literal(64),
-        z.literal(128),
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "The rank of the LoRA adaptation. Higher values increase capacity but use more memory.",
-      })
-      .optional(),
-    stg_scale: z
-      .number()
-      .gte(0)
-      .lte(3)
-      .register(z.globalRegistry, {
-        description:
-          "STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.",
-      })
-      .optional()
-      .default(1),
-    first_frame_conditioning_p: z
-      .number()
-      .gte(0)
-      .lte(1)
-      .register(z.globalRegistry, {
-        description:
-          "Probability of conditioning on the first frame during training. Higher values improve image-to-video performance.",
-      })
-      .optional()
-      .default(0.5),
-    resolution: z
-      .enum(["low", "medium", "high"])
-      .register(z.globalRegistry, {
-        description:
-          "Resolution to use for training. Higher resolutions require more memory.",
-      })
-      .optional(),
-    with_audio: z.union([z.boolean(), z.unknown()]).optional(),
-    aspect_ratio: z
-      .enum(["16:9", "1:1", "9:16"])
-      .register(z.globalRegistry, {
-        description: "Aspect ratio to use for training.",
-      })
-      .optional(),
-    validation_frame_rate: z
-      .int()
-      .gte(8)
-      .lte(60)
-      .register(z.globalRegistry, {
-        description: "Target frames per second for validation videos.",
-      })
-      .optional()
-      .default(25),
-    trigger_phrase: z
-      .string()
-      .register(z.globalRegistry, {
-        description:
-          "A phrase that will trigger the LoRA style. Will be prepended to captions during training.",
-      })
-      .optional()
-      .default(""),
-    split_input_into_scenes: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If true, videos above a certain duration threshold will be split into scenes.",
-      })
-      .optional()
-      .default(true),
-    generate_audio_in_validation: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether to generate audio in validation samples.",
-      })
-      .optional()
-      .default(true),
-    validation_resolution: z
-      .enum(["low", "medium", "high"])
-      .register(z.globalRegistry, {
-        description: "The resolution to use for validation.",
-      })
-      .optional(),
-    validation_number_of_frames: z
-      .int()
-      .gte(9)
-      .lte(121)
-      .register(z.globalRegistry, {
-        description: "The number of frames in validation videos.",
-      })
-      .optional()
-      .default(89),
-    validation_aspect_ratio: z
-      .enum(["16:9", "1:1", "9:16"])
-      .register(z.globalRegistry, {
-        description: "The aspect ratio to use for validation.",
-      })
-      .optional(),
-    validation_negative_prompt: z
-      .string()
-      .register(z.globalRegistry, {
-        description: "A negative prompt to use for validation.",
-      })
-      .optional()
-      .default(
-        "worst quality, inconsistent motion, blurry, jittery, distorted",
-      ),
-    auto_scale_input: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.",
-      })
-      .optional()
-      .default(false),
-  })
-  .register(z.globalRegistry, {
-    description: "Input configuration for LTX-2.3 text-to-video training.",
-  });
-
-/**
- * LTX23V2VOutput
- *
- * Output from LTX-2.3 video-to-video training.
- */
-export const zLtx23V2vTrainerOutput = z
-  .object({
-    lora_file: zFile,
-    config_file: zFile,
-    video: z.union([zFile, z.unknown()]).optional(),
-    debug_dataset: z.union([zFile, z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Output from LTX-2.3 video-to-video training.",
-  });
-
-/**
- * LTX23V2VInput
- *
- * Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.
- */
-export const zLtx23V2vTrainerInput = z
-  .object({
-    first_frame_conditioning_p: z
-      .number()
-      .gte(0)
-      .lte(1)
-      .register(z.globalRegistry, {
-        description:
-          "Probability of conditioning on the first frame during training. Lower values work better for video-to-video transformation.",
-      })
-      .optional()
-      .default(0.1),
-    stg_scale: z
-      .number()
-      .gte(0)
-      .lte(3)
-      .register(z.globalRegistry, {
-        description:
-          "STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.",
-      })
-      .optional()
-      .default(1),
-    resolution: z
-      .enum(["low", "medium", "high"])
-      .register(z.globalRegistry, {
-        description:
-          "Resolution to use for training. Higher resolutions require more memory.",
-      })
-      .optional(),
-    validation_negative_prompt: z
-      .string()
-      .register(z.globalRegistry, {
-        description: "A negative prompt to use for validation.",
-      })
-      .optional()
-      .default(
-        "worst quality, inconsistent motion, blurry, jittery, distorted",
-      ),
-    number_of_steps: z
-      .int()
-      .gte(100)
-      .lte(20000)
-      .register(z.globalRegistry, {
-        description: "The number of training steps.",
-      })
-      .optional()
-      .default(2000),
-    split_input_into_scenes: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If true, videos above a certain duration threshold will be split into scenes.",
-      })
-      .optional()
-      .default(true),
-    validation_aspect_ratio: z
-      .enum(["16:9", "1:1", "9:16"])
-      .register(z.globalRegistry, {
-        description: "The aspect ratio to use for validation.",
-      })
-      .optional(),
-    frame_rate: z
-      .int()
-      .gte(8)
-      .lte(60)
-      .register(z.globalRegistry, {
-        description: "Target frames per second for the video.",
-      })
-      .optional()
-      .default(25),
-    trigger_phrase: z
-      .string()
-      .register(z.globalRegistry, {
-        description:
-          "A phrase that will trigger the LoRA style. Will be prepended to captions during training.",
-      })
-      .optional()
-      .default(""),
-    learning_rate: z
-      .number()
-      .gte(0.000001)
-      .lte(1)
-      .register(z.globalRegistry, {
-        description:
-          "Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.",
-      })
-      .optional()
-      .default(0.0002),
-    debug_dataset: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.",
-      })
-      .optional()
-      .default(false),
-    split_input_duration_threshold: z
-      .number()
-      .gte(1)
-      .lte(60)
-      .register(z.globalRegistry, {
-        description:
-          "The duration threshold in seconds. If a video is longer than this, it will be split into scenes.",
-      })
-      .optional()
-      .default(30),
-    auto_scale_input: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.",
-      })
-      .optional()
-      .default(false),
-    validation_resolution: z
-      .enum(["low", "medium", "high"])
-      .register(z.globalRegistry, {
-        description: "The resolution to use for validation.",
-      })
-      .optional(),
-    rank: z
-      .union([
-        z.literal(8),
-        z.literal(16),
-        z.literal(32),
-        z.literal(64),
-        z.literal(128),
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "The rank of the LoRA adaptation. Higher values increase capacity but use more memory.",
-      })
-      .optional(),
-    training_data_url: z.union([z.string(), z.string()]),
-    aspect_ratio: z
-      .enum(["16:9", "1:1", "9:16"])
-      .register(z.globalRegistry, {
-        description: "Aspect ratio to use for training.",
-      })
-      .optional(),
-    validation: z
-      .array(zV2vValidation)
-      .max(2)
-      .register(z.globalRegistry, {
-        description:
-          "A list of validation inputs with prompts and reference videos.",
-      })
-      .optional()
-      .default([]),
-    validation_number_of_frames: z
-      .int()
-      .gte(9)
-      .lte(121)
-      .register(z.globalRegistry, {
-        description: "The number of frames in validation videos.",
-      })
-      .optional()
-      .default(89),
-    validation_frame_rate: z
-      .int()
-      .gte(8)
-      .lte(60)
-      .register(z.globalRegistry, {
-        description: "Target frames per second for validation videos.",
-      })
-      .optional()
-      .default(25),
-    number_of_frames: z
-      .int()
-      .gte(9)
-      .lte(121)
-      .register(z.globalRegistry, {
-        description:
-          "Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).",
-      })
-      .optional()
-      .default(89),
-  })
-  .register(z.globalRegistry, {
-    description:
-      "Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.",
-  });
-
-/**
- * Output
- */
-export const zHunyuanVideoLoraTrainingOutput = z.object({
-  diffusers_lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * PublicInput
- */
-export const zHunyuanVideoLoraTrainingInput = z.object({
-  steps: z.int().gte(1).lte(5000).register(z.globalRegistry, {
-    description: "Number of steps to train the LoRA on.",
-  }),
-  images_data_url: z.union([z.string(), z.string()]),
-  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
-  do_caption: z
+export const zLtxVideoTrainerInput = z.object({
+  validation_aspect_ratio: z
+    .enum(["16:9", "1:1", "9:16"])
+    .register(z.globalRegistry, {
+      description: "The aspect ratio to use for validation.",
+    })
+    .optional(),
+  resolution: z
+    .enum(["low", "medium", "high"])
+    .register(z.globalRegistry, {
+      description:
+        "The resolution to use for training. This is the resolution of the video.",
+    })
+    .optional(),
+  aspect_ratio: z
+    .enum(["16:9", "1:1", "9:16"])
+    .register(z.globalRegistry, {
+      description:
+        "The aspect ratio to use for training. This is the aspect ratio of the video.",
+    })
+    .optional(),
+  validation_negative_prompt: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "A negative prompt to use for validation.",
+    })
+    .optional()
+    .default("blurry, low quality, bad quality, out of focus"),
+  number_of_frames: z
+    .int()
+    .gte(25)
+    .lte(121)
+    .register(z.globalRegistry, {
+      description:
+        "The number of frames to use for training. This is the number of frames per second multiplied by the number of seconds.",
+    })
+    .optional()
+    .default(81),
+  validation: z
+    .array(zValidation)
+    .max(2)
+    .register(z.globalRegistry, {
+      description:
+        "A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.",
+    })
+    .optional()
+    .default([]),
+  split_input_into_scenes: z
     .boolean()
     .register(z.globalRegistry, {
-      description: "Whether to generate captions for the images.",
+      description:
+        "If true, videos above a certain duration threshold will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned. This option has no effect on image datasets.",
     })
     .optional()
     .default(true),
-  learning_rate: z
-    .number()
+  validation_reverse: z
+    .boolean()
     .register(z.globalRegistry, {
-      description: "Learning rate to use for training.",
+      description:
+        "If true, the validation videos will be reversed. This is useful for effects that are learned in reverse and then applied in reverse.",
     })
     .optional()
-    .default(0.0001),
-  trigger_word: z
+    .default(false),
+  validation_resolution: z
+    .enum(["low", "medium", "high"])
+    .register(z.globalRegistry, {
+      description: "The resolution to use for validation.",
+    })
+    .optional(),
+  training_data_url: z.union([z.string(), z.string()]),
+  rank: z
+    .union([
+      z.literal(8),
+      z.literal(16),
+      z.literal(32),
+      z.literal(64),
+      z.literal(128),
+    ])
+    .register(z.globalRegistry, {
+      description: "The rank of the LoRA.",
+    })
+    .optional(),
+  frame_rate: z
+    .int()
+    .gte(8)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description: "The target frames per second for the video.",
+    })
+    .optional()
+    .default(25),
+  trigger_phrase: z
     .string()
     .register(z.globalRegistry, {
-      description: "The trigger word to use.",
+      description:
+        "The phrase that will trigger the model to generate an image.",
     })
     .optional()
     .default(""),
-});
-
-/**
- * Output
- */
-export const zFluxLoraPortraitTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * PublicInput
- */
-export const zFluxLoraPortraitTrainerInput = z.object({
-  trigger_phrase: z.union([z.string(), z.unknown()]).nullish(),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.",
+    })
+    .optional()
+    .default(false),
+  number_of_steps: z
+    .int()
+    .gte(100)
+    .lte(20000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to train for.",
+    })
+    .optional()
+    .default(1000),
+  split_input_duration_threshold: z
+    .number()
+    .gte(1)
+    .lte(60)
+    .register(z.globalRegistry, {
+      description:
+        "The duration threshold in seconds. If a video is longer than this, it will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned.",
+    })
+    .optional()
+    .default(30),
+  validation_number_of_frames: z
+    .int()
+    .gte(8)
+    .lte(121)
+    .register(z.globalRegistry, {
+      description: "The number of frames to use for validation.",
+    })
+    .optional()
+    .default(81),
   learning_rate: z
     .number()
     .gte(0.000001)
-    .lte(0.001)
+    .lte(1)
     .register(z.globalRegistry, {
-      description: "Learning rate to use for training.",
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
     })
     .optional()
-    .default(0.00009),
-  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
-  create_masks: z
+    .default(0.0002),
+});
+
+/**
+ * BasicInput
+ */
+export const zWan22ImageTrainerInput = z.object({
+  steps: z
+    .int()
+    .gte(10)
+    .lte(6000)
+    .register(z.globalRegistry, {
+      description: "Number of training steps.",
+    })
+    .optional()
+    .default(1000),
+  use_face_detection: z
     .boolean()
     .register(z.globalRegistry, {
-      description: "If True, masks will be created for the subject.",
+      description:
+        "Whether to use face detection for the training data. When enabled, images will use the center of the face as the center of the image when resizing.",
+    })
+    .optional()
+    .default(true),
+  trigger_phrase: z.string().register(z.globalRegistry, {
+    description: "Trigger phrase for the model.",
+  }),
+  use_masks: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to use masks for the training data.",
+    })
+    .optional()
+    .default(true),
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(0.1)
+    .register(z.globalRegistry, {
+      description: "Learning rate for training.",
+    })
+    .optional()
+    .default(0.0007),
+  training_data_url: z.union([z.string(), z.string()]),
+  use_face_cropping: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to use face cropping for the training data. When enabled, images will be cropped to the face before resizing.",
     })
     .optional()
     .default(false),
-  images_data_url: z.union([z.string(), z.string()]),
-  steps: z
+  include_synthetic_captions: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to include synthetic captions.",
+    })
+    .optional()
+    .default(false),
+  is_style: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether the training data is style data. If true, face specific options like masking and face detection will be disabled.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * WanTrainerResponse
+ */
+export const zWan22ImageTrainerOutput = z.object({
+  diffusers_lora_file: zFile,
+  config_file: zFile,
+  high_noise_lora: zFile,
+});
+
+/**
+ * Input
+ */
+export const zWan22TrainerI2vA14bInput = z.object({
+  number_of_steps: z
     .int()
-    .gte(1)
-    .lte(10000)
+    .gte(100)
+    .lte(20000)
     .register(z.globalRegistry, {
-      description: "Number of steps to train the LoRA on.",
+      description: "The number of steps to train for.",
     })
     .optional()
-    .default(2500),
-  subject_crop: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "If True, the subject will be cropped from the image.",
-    })
-    .optional()
-    .default(true),
-  multiresolution_training: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "If True, multiresolution training will be used.",
-    })
-    .optional()
-    .default(true),
-  resume_from_checkpoint: z
+    .default(400),
+  trigger_phrase: z
     .string()
     .register(z.globalRegistry, {
-      description: "URL to a checkpoint to resume training from.",
+      description:
+        "The phrase that will trigger the model to generate an image.",
     })
     .optional()
     .default(""),
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
+    })
+    .optional()
+    .default(0.0002),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
+    })
+    .optional()
+    .default(false),
+  training_data_url: z.union([z.string(), z.string()]),
 });
 
 /**
  * Output
  */
-export const zFluxLoraFastTrainingOutput = z.object({
+export const zWan22TrainerI2vA14bOutput = z.object({
+  lora_file: zFile,
   config_file: zFile,
-  diffusers_lora_file: zFile,
-  debug_preprocessed_output: z.union([zFile, z.unknown()]).optional(),
-});
-
-/**
- * PublicInput
- */
-export const zFluxLoraFastTrainingInput = z.object({
-  is_input_format_already_preprocessed: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.",
-    })
-    .optional()
-    .default(false),
-  steps: z.union([z.int().gte(1).lte(10000), z.unknown()]).optional(),
-  is_style: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.",
-    })
-    .optional()
-    .default(false),
-  images_data_url: z.union([z.string(), z.string()]),
-  trigger_word: z.union([z.string(), z.unknown()]).nullish(),
-  create_masks: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.",
-    })
-    .optional()
-    .default(true),
-  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
-});
-
-/**
- * Output
- */
-export const zFluxKreaTrainerOutput = z.object({
-  debug_preprocessed_output: z.union([zFile, z.unknown()]).optional(),
-  diffusers_lora_file: zFile,
-  config_file: zFile,
-});
-
-/**
- * PublicInput
- */
-export const zFluxKreaTrainerInput = z.object({
-  images_data_url: z.union([z.string(), z.string()]),
-  data_archive_format: z.union([z.string(), z.unknown()]).nullish(),
-  steps: z.union([z.int().gte(1).lte(10000), z.unknown()]).optional(),
-  is_style: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.",
-    })
-    .optional()
-    .default(false),
-  create_masks: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.",
-    })
-    .optional()
-    .default(true),
-  trigger_word: z.union([z.string(), z.unknown()]).nullish(),
-  is_input_format_already_preprocessed: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * Output
- */
-export const zFluxKontextTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
 });
 
 /**
  * Input
  */
-export const zFluxKontextTrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(2)
-    .lte(10000)
-    .register(z.globalRegistry, {
-      description: "Number of steps to train for",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z.number().optional().default(0.0001),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  output_lora_format: z
-    .enum(["fal", "comfy"])
-    .register(z.globalRegistry, {
-      description: "Dictates the naming scheme for the output weights",
-    })
-    .optional(),
-});
-
-/**
- * Output
- */
-export const zFlux2TrainerV2Output = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
- */
-export const zFlux2TrainerV2Input = z
-  .object({
-    steps: z
-      .int()
-      .gte(100)
-      .lte(10000)
-      .register(z.globalRegistry, {
-        description: "Total number of training steps.",
-      })
-      .optional()
-      .default(1000),
-    image_data_url: z.union([z.string(), z.string()]),
-    learning_rate: z
-      .number()
-      .register(z.globalRegistry, {
-        description: "Learning rate applied to trainable parameters.",
-      })
-      .optional()
-      .default(0.00005),
-    default_caption: z.union([z.string(), z.unknown()]).optional(),
-    output_lora_format: z
-      .enum(["fal", "comfy"])
-      .register(z.globalRegistry, {
-        description: "Dictates the naming scheme for the output weights",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "V2 input with multi-resolution bucketing.",
-  });
-
-/**
- * Output
- */
-export const zFlux2TrainerV2EditOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputEditV2
- */
-export const zFlux2TrainerV2EditInput = z.object({
-  steps: z
+export const zWan22TrainerT2vA14bInput = z.object({
+  number_of_steps: z
     .int()
     .gte(100)
-    .lte(10000)
+    .lte(20000)
     .register(z.globalRegistry, {
-      description: "Total number of training steps.",
+      description: "The number of steps to train for.",
     })
     .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
+    .default(400),
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The phrase that will trigger the model to generate an image.",
+    })
+    .optional()
+    .default(""),
   learning_rate: z
     .number()
+    .gte(0.000001)
+    .lte(1)
     .register(z.globalRegistry, {
-      description: "Learning rate applied to trainable parameters.",
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
     })
     .optional()
-    .default(0.00005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  output_lora_format: z
-    .enum(["fal", "comfy"])
+    .default(0.0002),
+  auto_scale_input: z
+    .boolean()
     .register(z.globalRegistry, {
-      description: "Dictates the naming scheme for the output weights",
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
     })
-    .optional(),
+    .optional()
+    .default(false),
+  training_data_url: z.union([z.string(), z.string()]),
 });
 
 /**
  * Output
  */
-export const zFlux2TrainerOutput = z.object({
+export const zWan22TrainerT2vA14bOutput = z.object({
+  lora_file: zFile,
   config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputT2I
- */
-export const zFlux2TrainerInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(10000)
-    .register(z.globalRegistry, {
-      description: "Total number of training steps.",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate applied to trainable parameters.",
-    })
-    .optional()
-    .default(0.00005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  output_lora_format: z
-    .enum(["fal", "comfy"])
-    .register(z.globalRegistry, {
-      description: "Dictates the naming scheme for the output weights",
-    })
-    .optional(),
-});
-
-/**
- * Output
- */
-export const zFlux2TrainerEditOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputEdit
- */
-export const zFlux2TrainerEditInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(10000)
-    .register(z.globalRegistry, {
-      description: "Total number of training steps.",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate applied to trainable parameters.",
-    })
-    .optional()
-    .default(0.00005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  output_lora_format: z
-    .enum(["fal", "comfy"])
-    .register(z.globalRegistry, {
-      description: "Dictates the naming scheme for the output weights",
-    })
-    .optional(),
-});
-
-/**
- * Output
- */
-export const zFlux2Klein9bBaseTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
- */
-export const zFlux2Klein9bBaseTrainerInput = z
-  .object({
-    steps: z
-      .int()
-      .gte(100)
-      .lte(10000)
-      .register(z.globalRegistry, {
-        description: "Total number of training steps.",
-      })
-      .optional()
-      .default(1000),
-    image_data_url: z.union([z.string(), z.string()]),
-    learning_rate: z
-      .number()
-      .register(z.globalRegistry, {
-        description: "Learning rate applied to trainable parameters.",
-      })
-      .optional()
-      .default(0.00005),
-    default_caption: z.union([z.string(), z.unknown()]).optional(),
-    output_lora_format: z
-      .enum(["fal", "comfy"])
-      .register(z.globalRegistry, {
-        description: "Dictates the naming scheme for the output weights",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "V2 input with multi-resolution bucketing.",
-  });
-
-/**
- * Output
- */
-export const zFlux2Klein9bBaseTrainerEditOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputEditV2
- */
-export const zFlux2Klein9bBaseTrainerEditInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(10000)
-    .register(z.globalRegistry, {
-      description: "Total number of training steps.",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate applied to trainable parameters.",
-    })
-    .optional()
-    .default(0.00005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  output_lora_format: z
-    .enum(["fal", "comfy"])
-    .register(z.globalRegistry, {
-      description: "Dictates the naming scheme for the output weights",
-    })
-    .optional(),
-});
-
-/**
- * Output
- */
-export const zFlux2Klein4bBaseTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
- */
-export const zFlux2Klein4bBaseTrainerInput = z
-  .object({
-    steps: z
-      .int()
-      .gte(100)
-      .lte(10000)
-      .register(z.globalRegistry, {
-        description: "Total number of training steps.",
-      })
-      .optional()
-      .default(1000),
-    image_data_url: z.union([z.string(), z.string()]),
-    learning_rate: z
-      .number()
-      .register(z.globalRegistry, {
-        description: "Learning rate applied to trainable parameters.",
-      })
-      .optional()
-      .default(0.00005),
-    default_caption: z.union([z.string(), z.unknown()]).optional(),
-    output_lora_format: z
-      .enum(["fal", "comfy"])
-      .register(z.globalRegistry, {
-        description: "Dictates the naming scheme for the output weights",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "V2 input with multi-resolution bucketing.",
-  });
-
-/**
- * Output
- */
-export const zFlux2Klein4bBaseTrainerEditOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
-});
-
-/**
- * InputEditV2
- */
-export const zFlux2Klein4bBaseTrainerEditInput = z.object({
-  steps: z
-    .int()
-    .gte(100)
-    .lte(10000)
-    .register(z.globalRegistry, {
-      description: "Total number of training steps.",
-    })
-    .optional()
-    .default(1000),
-  image_data_url: z.union([z.string(), z.string()]),
-  learning_rate: z
-    .number()
-    .register(z.globalRegistry, {
-      description: "Learning rate applied to trainable parameters.",
-    })
-    .optional()
-    .default(0.00005),
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
-  output_lora_format: z
-    .enum(["fal", "comfy"])
-    .register(z.globalRegistry, {
-      description: "Dictates the naming scheme for the output weights",
-    })
-    .optional(),
-});
-
-/**
- * Output
- */
-export const zErnieImageTrainerOutput = z.object({
-  config_file: zFile,
-  diffusers_lora_file: zFile,
 });
 
 /**
  * Input
  */
-export const zErnieImageTrainerInput = z.object({
-  default_caption: z.union([z.string(), z.unknown()]).optional(),
+export const zWanTrainerFlf2V720pInput = z.object({
   learning_rate: z
     .number()
+    .gte(0.000001)
+    .lte(1)
     .register(z.globalRegistry, {
-      description: "Learning rate.",
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
     })
     .optional()
-    .default(0.0005),
+    .default(0.0002),
+  number_of_steps: z
+    .int()
+    .gte(100)
+    .lte(20000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to train for.",
+    })
+    .optional()
+    .default(400),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
+    })
+    .optional()
+    .default(false),
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The phrase that will trigger the model to generate an image.",
+    })
+    .optional()
+    .default(""),
+  training_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zWanTrainerFlf2V720pOutput = z.object({
+  lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zWanTrainerI2V720pInput = z.object({
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
+    })
+    .optional()
+    .default(0.0002),
+  number_of_steps: z
+    .int()
+    .gte(100)
+    .lte(20000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to train for.",
+    })
+    .optional()
+    .default(400),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
+    })
+    .optional()
+    .default(false),
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The phrase that will trigger the model to generate an image.",
+    })
+    .optional()
+    .default(""),
+  training_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zWanTrainerI2V720pOutput = z.object({
+  lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zWanTrainerInput = z.object({
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
+    })
+    .optional()
+    .default(0.0002),
+  number_of_steps: z
+    .int()
+    .gte(100)
+    .lte(20000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to train for.",
+    })
+    .optional()
+    .default(400),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
+    })
+    .optional()
+    .default(false),
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The phrase that will trigger the model to generate an image.",
+    })
+    .optional()
+    .default(""),
+  training_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zWanTrainerOutput = z.object({
+  lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zWanTrainerT2V14bInput = z.object({
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
+    })
+    .optional()
+    .default(0.0002),
+  number_of_steps: z
+    .int()
+    .gte(100)
+    .lte(20000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to train for.",
+    })
+    .optional()
+    .default(400),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
+    })
+    .optional()
+    .default(false),
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The phrase that will trigger the model to generate an image.",
+    })
+    .optional()
+    .default(""),
+  training_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zWanTrainerT2V14bOutput = z.object({
+  lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zWanTrainerT2vInput = z.object({
+  learning_rate: z
+    .number()
+    .gte(0.000001)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "The rate at which the model learns. Higher values can lead to faster training, but over-fitting.",
+    })
+    .optional()
+    .default(0.0002),
+  number_of_steps: z
+    .int()
+    .gte(100)
+    .lte(20000)
+    .register(z.globalRegistry, {
+      description: "The number of steps to train for.",
+    })
+    .optional()
+    .default(400),
+  auto_scale_input: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, the input will be automatically scale the video to 81 frames at 16fps.",
+    })
+    .optional()
+    .default(false),
+  trigger_phrase: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "The phrase that will trigger the model to generate an image.",
+    })
+    .optional()
+    .default(""),
+  training_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zWanTrainerT2vOutput = z.object({
+  lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zZImageBaseTrainerInput = z.object({
   steps: z
     .int()
     .gte(10)
@@ -2472,7 +2385,94 @@ export const zErnieImageTrainerInput = z.object({
     })
     .optional()
     .default(2000),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate.",
+    })
+    .optional()
+    .default(0.0005),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
   image_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zZImageBaseTrainerOutput = z.object({
+  diffusers_lora_file: zFile,
+  config_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zZImageTrainerInput = z.object({
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate applied to trainable parameters.",
+    })
+    .optional()
+    .default(0.0001),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  steps: z
+    .int()
+    .gte(100)
+    .lte(10000)
+    .register(z.globalRegistry, {
+      description: "Total number of training steps.",
+    })
+    .optional()
+    .default(1000),
+  image_data_url: z.union([z.string(), z.string()]),
+  training_type: z
+    .enum(["content", "style", "balanced"])
+    .register(z.globalRegistry, {
+      description:
+        "Type of training to perform. Use 'content' to focus on the content of the images, 'style' to focus on the style of the images, and 'balanced' to focus on a combination of both.",
+    })
+    .optional(),
+});
+
+/**
+ * Output
+ */
+export const zZImageTrainerOutput = z.object({
+  config_file: zFile,
+  diffusers_lora_file: zFile,
+});
+
+/**
+ * Input
+ */
+export const zZImageTurboTrainerV2Input = z.object({
+  steps: z
+    .int()
+    .gte(10)
+    .lte(40000)
+    .register(z.globalRegistry, {
+      description: "Number of steps to train for",
+    })
+    .optional()
+    .default(2000),
+  default_caption: z.union([z.string(), z.unknown()]).optional(),
+  learning_rate: z
+    .number()
+    .register(z.globalRegistry, {
+      description: "Learning rate.",
+    })
+    .optional()
+    .default(0.0005),
+  image_data_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zZImageTurboTrainerV2Output = z.object({
+  diffusers_lora_file: zFile,
+  config_file: zFile,
 });
 
 export const zPostFalAiErnieImageTrainerData = z.object({

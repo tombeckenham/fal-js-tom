@@ -3,6 +3,480 @@
 import * as z from "zod";
 
 /**
+ * DiarizationSegment
+ */
+export const zDiarizationSegment = z.object({
+  timestamp: z.tuple([]).register(z.globalRegistry, {
+    description: "Start and end timestamp of the segment",
+  }),
+  speaker: z.string().register(z.globalRegistry, {
+    description: "Speaker ID of the segment",
+  }),
+});
+
+/**
+ * SpeechToTextRequest
+ */
+export const zElevenlabsSpeechToTextInput = z.object({
+  language_code: z.union([z.string(), z.unknown()]).optional(),
+  tag_audio_events: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Tag audio events like laughter, applause, etc.",
+    })
+    .optional()
+    .default(true),
+  audio_url: z.union([z.string(), z.string()]),
+  diarize: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to annotate who is speaking",
+    })
+    .optional()
+    .default(true),
+});
+
+/**
+ * SpeechToTextRequestScribeV2
+ */
+export const zElevenlabsSpeechToTextScribeV2Input = z.object({
+  language_code: z.union([z.string(), z.unknown()]).optional(),
+  keyterms: z
+    .array(z.string())
+    .max(100)
+    .register(z.globalRegistry, {
+      description:
+        "Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.",
+    })
+    .optional()
+    .default([]),
+  tag_audio_events: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Tag audio events like laughter, applause, etc.",
+    })
+    .optional()
+    .default(true),
+  audio_url: z.union([z.string(), z.string()]),
+  diarize: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to annotate who is speaking",
+    })
+    .optional()
+    .default(true),
+});
+
+/**
+ * SpeechInput
+ */
+export const zNemotronAsrInput = z.object({
+  acceleration: z
+    .enum(["none", "low", "medium", "high"])
+    .register(z.globalRegistry, {
+      description:
+        "Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).",
+    })
+    .optional(),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * SpeechOutput
+ */
+export const zNemotronAsrOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "The transcribed text from the audio.",
+  }),
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "True if this is an intermediate result during streaming.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * SpeechInput
+ */
+export const zNemotronAsrStreamInput = z.object({
+  acceleration: z
+    .enum(["none", "low", "medium", "high"])
+    .register(z.globalRegistry, {
+      description:
+        "Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).",
+    })
+    .optional(),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+export const zNemotronAsrStreamOutput = z.unknown();
+
+/**
+ * PromptTokensDetails
+ */
+export const zPromptTokensDetails = z.object({
+  cached_tokens: z.int().optional().default(0),
+  cache_write_tokens: z.int().optional().default(0),
+});
+
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
+  }),
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
+});
+
+/**
+ * VideoEnterpriseInput
+ */
+export const zRouterVideoEnterpriseInput = z.object({
+  video_urls: z.union([z.array(z.string()), z.unknown()]).optional(),
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  model: z.string().register(z.globalRegistry, {
+    description:
+      "Name of the model to use. Charged based on actual token usage.",
+  }),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
+    })
+    .optional()
+    .default(1),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the video processing",
+  }),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * VideoInput
+ */
+export const zRouterVideoInput = z.object({
+  video_urls: z.union([z.array(z.string()), z.unknown()]).optional(),
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  model: z.string().register(z.globalRegistry, {
+    description:
+      "Name of the model to use. Charged based on actual token usage.",
+  }),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
+    })
+    .optional()
+    .default(1),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the video processing",
+  }),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * SileroVADInput
+ */
+export const zSileroVadInput = z.object({
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * SmartTurnInput
+ */
+export const zSmartTurnInput = z.object({
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Output
+ */
+export const zSmartTurnOutput = z.object({
+  prediction: z.int().register(z.globalRegistry, {
+    description: "The predicted turn type. 1 for Complete, 0 for Incomplete.",
+  }),
+  probability: z.number().register(z.globalRegistry, {
+    description: "The probability of the predicted turn type.",
+  }),
+  metrics: z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    description: "The metrics of the inference.",
+  }),
+});
+
+/**
+ * SpeechTimestamp
+ */
+export const zSpeechTimestamp = z.object({
+  start: z.number().register(z.globalRegistry, {
+    description: "The start time of the speech in seconds.",
+  }),
+  end: z.number().register(z.globalRegistry, {
+    description: "The end time of the speech in seconds.",
+  }),
+});
+
+/**
+ * SileroVADOutput
+ */
+export const zSileroVadOutput = z.object({
+  has_speech: z.boolean().register(z.globalRegistry, {
+    description: "Whether the audio has speech.",
+  }),
+  timestamps: z.array(zSpeechTimestamp).register(z.globalRegistry, {
+    description: "The speech timestamps.",
+  }),
+});
+
+/**
+ * SpeechInput
+ */
+export const zSpeechToTextInput = z.object({
+  use_pnc: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to use Canary's built-in punctuation & capitalization",
+    })
+    .optional()
+    .default(true),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * SpeechOutput
+ */
+export const zSpeechToTextOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "The partial or final transcription output from Canary",
+  }),
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Indicates if this is a partial (in-progress) transcript",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * SpeechInput
+ */
+export const zSpeechToTextStreamInput = z.object({
+  use_pnc: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to use Canary's built-in punctuation & capitalization",
+    })
+    .optional()
+    .default(true),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+export const zSpeechToTextStreamOutput = z.unknown();
+
+/**
+ * SpeechInput
+ */
+export const zSpeechToTextTurboInput = z.object({
+  use_pnc: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to use Canary's built-in punctuation & capitalization",
+    })
+    .optional()
+    .default(true),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * SpeechOutput
+ */
+export const zSpeechToTextTurboOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "The partial or final transcription output from Canary",
+  }),
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Indicates if this is a partial (in-progress) transcript",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * SpeechInput
+ */
+export const zSpeechToTextTurboStreamInput = z.object({
+  use_pnc: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to use Canary's built-in punctuation & capitalization",
+    })
+    .optional()
+    .default(true),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+export const zSpeechToTextTurboStreamOutput = z.unknown();
+
+/**
+ * TranscriptionWord
+ */
+export const zTranscriptionWord = z.object({
+  end: z.union([z.number(), z.unknown()]).optional(),
+  text: z.string().register(z.globalRegistry, {
+    description: "The transcribed word or audio event",
+  }),
+  start: z.union([z.number(), z.unknown()]).optional(),
+  type: z.string().register(z.globalRegistry, {
+    description: "Type of element (word, spacing, or audio_event)",
+  }),
+  speaker_id: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * TranscriptionOutput
+ */
+export const zElevenlabsSpeechToTextOutput = z.object({
+  language_code: z.string().register(z.globalRegistry, {
+    description: "Detected or specified language code",
+  }),
+  text: z.string().register(z.globalRegistry, {
+    description: "The full transcribed text",
+  }),
+  language_probability: z.number().register(z.globalRegistry, {
+    description: "Confidence in language detection",
+  }),
+  words: z.array(zTranscriptionWord).register(z.globalRegistry, {
+    description: "Word-level transcription details",
+  }),
+});
+
+/**
+ * TranscriptionOutputV2
+ */
+export const zElevenlabsSpeechToTextScribeV2Output = z.object({
+  language_code: z.string().register(z.globalRegistry, {
+    description: "Detected or specified language code",
+  }),
+  text: z.string().register(z.globalRegistry, {
+    description: "The full transcribed text",
+  }),
+  language_probability: z.number().register(z.globalRegistry, {
+    description: "Confidence in language detection",
+  }),
+  words: z.array(zTranscriptionWord).register(z.globalRegistry, {
+    description: "Word-level transcription details",
+  }),
+});
+
+/**
+ * UsageInfo
+ */
+export const zUsageInfo = z.object({
+  total_tokens: z.int().optional().default(0),
+  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens_details: z
+    .union([zPromptTokensDetails, z.unknown()])
+    .optional(),
+  cost: z.number(),
+});
+
+/**
+ * VideoOutput
+ */
+export const zRouterVideoEnterpriseOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output from video processing",
+  }),
+  usage: z.union([zUsageInfo, z.unknown()]),
+});
+
+/**
+ * VideoOutput
+ */
+export const zRouterVideoOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output from video processing",
+  }),
+  usage: z.union([zUsageInfo, z.unknown()]),
+});
+
+/**
+ * WhisperChunk
+ */
+export const zWhisperChunk = z.object({
+  text: z.string().register(z.globalRegistry, {
+    description: "Transcription of the chunk",
+  }),
+  timestamp: z.tuple([]).register(z.globalRegistry, {
+    description: "Start and end timestamp of the chunk",
+  }),
+  speaker: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
  * WhisperChunk
  */
 export const zWhisperChunkType2 = z.object({
@@ -15,13 +489,154 @@ export const zWhisperChunkType2 = z.object({
 });
 
 /**
+ * WhisperInput
+ */
+export const zWhisperInput = z.object({
+  diarize: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to diarize the audio file. Defaults to false. Setting to true will add costs proportional to diarization inference time.",
+    })
+    .optional()
+    .default(false),
+  language: z
+    .union([
+      z.enum([
+        "af",
+        "am",
+        "ar",
+        "as",
+        "az",
+        "ba",
+        "be",
+        "bg",
+        "bn",
+        "bo",
+        "br",
+        "bs",
+        "ca",
+        "cs",
+        "cy",
+        "da",
+        "de",
+        "el",
+        "en",
+        "es",
+        "et",
+        "eu",
+        "fa",
+        "fi",
+        "fo",
+        "fr",
+        "gl",
+        "gu",
+        "ha",
+        "haw",
+        "he",
+        "hi",
+        "hr",
+        "ht",
+        "hu",
+        "hy",
+        "id",
+        "is",
+        "it",
+        "ja",
+        "jw",
+        "ka",
+        "kk",
+        "km",
+        "kn",
+        "ko",
+        "la",
+        "lb",
+        "ln",
+        "lo",
+        "lt",
+        "lv",
+        "mg",
+        "mi",
+        "mk",
+        "ml",
+        "mn",
+        "mr",
+        "ms",
+        "mt",
+        "my",
+        "ne",
+        "nl",
+        "nn",
+        "no",
+        "oc",
+        "pa",
+        "pl",
+        "ps",
+        "pt",
+        "ro",
+        "ru",
+        "sa",
+        "sd",
+        "si",
+        "sk",
+        "sl",
+        "sn",
+        "so",
+        "sq",
+        "sr",
+        "su",
+        "sv",
+        "sw",
+        "ta",
+        "te",
+        "tg",
+        "th",
+        "tk",
+        "tl",
+        "tr",
+        "tt",
+        "uk",
+        "ur",
+        "uz",
+        "vi",
+        "yi",
+        "yo",
+        "zh",
+      ]),
+      z.unknown(),
+    ])
+    .nullish(),
+  chunk_level: z
+    .enum(["none", "segment", "word"])
+    .register(z.globalRegistry, {
+      description:
+        "Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.",
+    })
+    .optional(),
+  prompt: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "Prompt to use for generation. Defaults to an empty string.",
+    })
+    .optional()
+    .default(""),
+  task: z
+    .enum(["transcribe", "translate"])
+    .register(z.globalRegistry, {
+      description:
+        "Task to perform on the audio file. Either transcribe or translate.",
+    })
+    .optional(),
+  num_speakers: z.union([z.int().gte(1), z.unknown()]).nullish(),
+  batch_size: z.int().gte(1).lte(64).optional().default(64),
+  audio_url: z.union([z.string(), z.string()]),
+});
+
+/**
  * WhisperOutput
  */
-export const zWizperOutput = z.object({
-  text: z.string().register(z.globalRegistry, {
-    description: "Transcription of the audio file",
-  }),
-  languages: z
+export const zWhisperOutput = z.object({
+  inferred_languages: z
     .array(
       z.enum([
         "af",
@@ -129,9 +744,16 @@ export const zWizperOutput = z.object({
       description:
         "List of languages that the audio file is inferred to be. Defaults to null.",
     }),
-  chunks: z.array(zWhisperChunkType2).register(z.globalRegistry, {
-    description: "Timestamp chunks of the audio file",
+  text: z.string().register(z.globalRegistry, {
+    description: "Transcription of the audio file",
   }),
+  chunks: z.union([z.array(zWhisperChunk), z.unknown()]).optional(),
+  diarization_segments: z
+    .array(zDiarizationSegment)
+    .register(z.globalRegistry, {
+      description:
+        "Speaker diarization segments of the audio file. Only present if diarization is enabled.",
+    }),
 });
 
 /**
@@ -288,35 +910,13 @@ export const zWizperInput = z.object({
 });
 
 /**
- * DiarizationSegment
- */
-export const zDiarizationSegment = z.object({
-  timestamp: z.tuple([]).register(z.globalRegistry, {
-    description: "Start and end timestamp of the segment",
-  }),
-  speaker: z.string().register(z.globalRegistry, {
-    description: "Speaker ID of the segment",
-  }),
-});
-
-/**
- * WhisperChunk
- */
-export const zWhisperChunk = z.object({
-  text: z.string().register(z.globalRegistry, {
-    description: "Transcription of the chunk",
-  }),
-  timestamp: z.tuple([]).register(z.globalRegistry, {
-    description: "Start and end timestamp of the chunk",
-  }),
-  speaker: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
  * WhisperOutput
  */
-export const zWhisperOutput = z.object({
-  inferred_languages: z
+export const zWizperOutput = z.object({
+  text: z.string().register(z.globalRegistry, {
+    description: "Transcription of the audio file",
+  }),
+  languages: z
     .array(
       z.enum([
         "af",
@@ -424,609 +1024,9 @@ export const zWhisperOutput = z.object({
       description:
         "List of languages that the audio file is inferred to be. Defaults to null.",
     }),
-  text: z.string().register(z.globalRegistry, {
-    description: "Transcription of the audio file",
+  chunks: z.array(zWhisperChunkType2).register(z.globalRegistry, {
+    description: "Timestamp chunks of the audio file",
   }),
-  chunks: z.union([z.array(zWhisperChunk), z.unknown()]).optional(),
-  diarization_segments: z
-    .array(zDiarizationSegment)
-    .register(z.globalRegistry, {
-      description:
-        "Speaker diarization segments of the audio file. Only present if diarization is enabled.",
-    }),
-});
-
-/**
- * WhisperInput
- */
-export const zWhisperInput = z.object({
-  diarize: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to diarize the audio file. Defaults to false. Setting to true will add costs proportional to diarization inference time.",
-    })
-    .optional()
-    .default(false),
-  language: z
-    .union([
-      z.enum([
-        "af",
-        "am",
-        "ar",
-        "as",
-        "az",
-        "ba",
-        "be",
-        "bg",
-        "bn",
-        "bo",
-        "br",
-        "bs",
-        "ca",
-        "cs",
-        "cy",
-        "da",
-        "de",
-        "el",
-        "en",
-        "es",
-        "et",
-        "eu",
-        "fa",
-        "fi",
-        "fo",
-        "fr",
-        "gl",
-        "gu",
-        "ha",
-        "haw",
-        "he",
-        "hi",
-        "hr",
-        "ht",
-        "hu",
-        "hy",
-        "id",
-        "is",
-        "it",
-        "ja",
-        "jw",
-        "ka",
-        "kk",
-        "km",
-        "kn",
-        "ko",
-        "la",
-        "lb",
-        "ln",
-        "lo",
-        "lt",
-        "lv",
-        "mg",
-        "mi",
-        "mk",
-        "ml",
-        "mn",
-        "mr",
-        "ms",
-        "mt",
-        "my",
-        "ne",
-        "nl",
-        "nn",
-        "no",
-        "oc",
-        "pa",
-        "pl",
-        "ps",
-        "pt",
-        "ro",
-        "ru",
-        "sa",
-        "sd",
-        "si",
-        "sk",
-        "sl",
-        "sn",
-        "so",
-        "sq",
-        "sr",
-        "su",
-        "sv",
-        "sw",
-        "ta",
-        "te",
-        "tg",
-        "th",
-        "tk",
-        "tl",
-        "tr",
-        "tt",
-        "uk",
-        "ur",
-        "uz",
-        "vi",
-        "yi",
-        "yo",
-        "zh",
-      ]),
-      z.unknown(),
-    ])
-    .nullish(),
-  chunk_level: z
-    .enum(["none", "segment", "word"])
-    .register(z.globalRegistry, {
-      description:
-        "Level of the chunks to return. Either none, segment or word. `none` would imply that all of the audio will be transcribed without the timestamp tokens, we suggest to switch to `none` if you are not satisfied with the transcription quality, since it will usually improve the quality of the results. Switching to `none` will also provide minor speed ups in the transcription due to less amount of generated tokens. Notice that setting to none will produce **a single chunk with the whole transcription**.",
-    })
-    .optional(),
-  prompt: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "Prompt to use for generation. Defaults to an empty string.",
-    })
-    .optional()
-    .default(""),
-  task: z
-    .enum(["transcribe", "translate"])
-    .register(z.globalRegistry, {
-      description:
-        "Task to perform on the audio file. Either transcribe or translate.",
-    })
-    .optional(),
-  num_speakers: z.union([z.int().gte(1), z.unknown()]).nullish(),
-  batch_size: z.int().gte(1).lte(64).optional().default(64),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * PromptTokensDetails
- */
-export const zPromptTokensDetails = z.object({
-  cached_tokens: z.int().optional().default(0),
-  cache_write_tokens: z.int().optional().default(0),
-});
-
-/**
- * UsageInfo
- */
-export const zUsageInfo = z.object({
-  total_tokens: z.int().optional().default(0),
-  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens_details: z
-    .union([zPromptTokensDetails, z.unknown()])
-    .optional(),
-  cost: z.number(),
-});
-
-/**
- * TranscriptionWord
- */
-export const zTranscriptionWord = z.object({
-  end: z.union([z.number(), z.unknown()]).optional(),
-  text: z.string().register(z.globalRegistry, {
-    description: "The transcribed word or audio event",
-  }),
-  start: z.union([z.number(), z.unknown()]).optional(),
-  type: z.string().register(z.globalRegistry, {
-    description: "Type of element (word, spacing, or audio_event)",
-  }),
-  speaker_id: z.union([z.string(), z.unknown()]).optional(),
-});
-
-export const zSpeechToTextTurboStreamOutput = z.unknown();
-
-/**
- * SpeechInput
- */
-export const zSpeechToTextTurboStreamInput = z.object({
-  use_pnc: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use Canary's built-in punctuation & capitalization",
-    })
-    .optional()
-    .default(true),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * SpeechOutput
- */
-export const zSpeechToTextTurboOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "The partial or final transcription output from Canary",
-  }),
-  partial: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Indicates if this is a partial (in-progress) transcript",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * SpeechInput
- */
-export const zSpeechToTextTurboInput = z.object({
-  use_pnc: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use Canary's built-in punctuation & capitalization",
-    })
-    .optional()
-    .default(true),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-export const zSpeechToTextStreamOutput = z.unknown();
-
-/**
- * SpeechInput
- */
-export const zSpeechToTextStreamInput = z.object({
-  use_pnc: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use Canary's built-in punctuation & capitalization",
-    })
-    .optional()
-    .default(true),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * SpeechOutput
- */
-export const zSpeechToTextOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "The partial or final transcription output from Canary",
-  }),
-  partial: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Indicates if this is a partial (in-progress) transcript",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * SpeechInput
- */
-export const zSpeechToTextInput = z.object({
-  use_pnc: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use Canary's built-in punctuation & capitalization",
-    })
-    .optional()
-    .default(true),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * SpeechTimestamp
- */
-export const zSpeechTimestamp = z.object({
-  start: z.number().register(z.globalRegistry, {
-    description: "The start time of the speech in seconds.",
-  }),
-  end: z.number().register(z.globalRegistry, {
-    description: "The end time of the speech in seconds.",
-  }),
-});
-
-/**
- * Output
- */
-export const zSmartTurnOutput = z.object({
-  prediction: z.int().register(z.globalRegistry, {
-    description: "The predicted turn type. 1 for Complete, 0 for Incomplete.",
-  }),
-  probability: z.number().register(z.globalRegistry, {
-    description: "The probability of the predicted turn type.",
-  }),
-  metrics: z.record(z.string(), z.unknown()).register(z.globalRegistry, {
-    description: "The metrics of the inference.",
-  }),
-});
-
-/**
- * SmartTurnInput
- */
-export const zSmartTurnInput = z.object({
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * SileroVADOutput
- */
-export const zSileroVadOutput = z.object({
-  has_speech: z.boolean().register(z.globalRegistry, {
-    description: "Whether the audio has speech.",
-  }),
-  timestamps: z.array(zSpeechTimestamp).register(z.globalRegistry, {
-    description: "The speech timestamps.",
-  }),
-});
-
-/**
- * SileroVADInput
- */
-export const zSileroVadInput = z.object({
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * VideoOutput
- */
-export const zRouterVideoOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output from video processing",
-  }),
-  usage: z.union([zUsageInfo, z.unknown()]),
-});
-
-/**
- * VideoInput
- */
-export const zRouterVideoInput = z.object({
-  video_urls: z.union([z.array(z.string()), z.unknown()]).optional(),
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  model: z.string().register(z.globalRegistry, {
-    description:
-      "Name of the model to use. Charged based on actual token usage.",
-  }),
-  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    })
-    .optional()
-    .default(1),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the video processing",
-  }),
-  reasoning: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Should reasoning be the part of the final answer.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * VideoOutput
- */
-export const zRouterVideoEnterpriseOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output from video processing",
-  }),
-  usage: z.union([zUsageInfo, z.unknown()]),
-});
-
-/**
- * VideoEnterpriseInput
- */
-export const zRouterVideoEnterpriseInput = z.object({
-  video_urls: z.union([z.array(z.string()), z.unknown()]).optional(),
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  model: z.string().register(z.globalRegistry, {
-    description:
-      "Name of the model to use. Charged based on actual token usage.",
-  }),
-  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    })
-    .optional()
-    .default(1),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the video processing",
-  }),
-  reasoning: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Should reasoning be the part of the final answer.",
-    })
-    .optional()
-    .default(false),
-});
-
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
-    .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
-export const zNemotronAsrStreamOutput = z.unknown();
-
-/**
- * SpeechInput
- */
-export const zNemotronAsrStreamInput = z.object({
-  acceleration: z
-    .enum(["none", "low", "medium", "high"])
-    .register(z.globalRegistry, {
-      description:
-        "Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).",
-    })
-    .optional(),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * SpeechOutput
- */
-export const zNemotronAsrOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "The transcribed text from the audio.",
-  }),
-  partial: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "True if this is an intermediate result during streaming.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * SpeechInput
- */
-export const zNemotronAsrInput = z.object({
-  acceleration: z
-    .enum(["none", "low", "medium", "high"])
-    .register(z.globalRegistry, {
-      description:
-        "Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).",
-    })
-    .optional(),
-  audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * TranscriptionOutputV2
- */
-export const zElevenlabsSpeechToTextScribeV2Output = z.object({
-  language_code: z.string().register(z.globalRegistry, {
-    description: "Detected or specified language code",
-  }),
-  text: z.string().register(z.globalRegistry, {
-    description: "The full transcribed text",
-  }),
-  language_probability: z.number().register(z.globalRegistry, {
-    description: "Confidence in language detection",
-  }),
-  words: z.array(zTranscriptionWord).register(z.globalRegistry, {
-    description: "Word-level transcription details",
-  }),
-});
-
-/**
- * SpeechToTextRequestScribeV2
- */
-export const zElevenlabsSpeechToTextScribeV2Input = z.object({
-  language_code: z.union([z.string(), z.unknown()]).optional(),
-  keyterms: z
-    .array(z.string())
-    .max(100)
-    .register(z.globalRegistry, {
-      description:
-        "Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.",
-    })
-    .optional()
-    .default([]),
-  tag_audio_events: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Tag audio events like laughter, applause, etc.",
-    })
-    .optional()
-    .default(true),
-  audio_url: z.union([z.string(), z.string()]),
-  diarize: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to annotate who is speaking",
-    })
-    .optional()
-    .default(true),
-});
-
-/**
- * TranscriptionOutput
- */
-export const zElevenlabsSpeechToTextOutput = z.object({
-  language_code: z.string().register(z.globalRegistry, {
-    description: "Detected or specified language code",
-  }),
-  text: z.string().register(z.globalRegistry, {
-    description: "The full transcribed text",
-  }),
-  language_probability: z.number().register(z.globalRegistry, {
-    description: "Confidence in language detection",
-  }),
-  words: z.array(zTranscriptionWord).register(z.globalRegistry, {
-    description: "Word-level transcription details",
-  }),
-});
-
-/**
- * SpeechToTextRequest
- */
-export const zElevenlabsSpeechToTextInput = z.object({
-  language_code: z.union([z.string(), z.unknown()]).optional(),
-  tag_audio_events: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Tag audio events like laughter, applause, etc.",
-    })
-    .optional()
-    .default(true),
-  audio_url: z.union([z.string(), z.string()]),
-  diarize: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to annotate who is speaking",
-    })
-    .optional()
-    .default(true),
 });
 
 export const zPostFalAiElevenlabsSpeechToTextData = z.object({

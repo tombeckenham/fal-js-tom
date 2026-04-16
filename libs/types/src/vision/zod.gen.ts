@@ -3,118 +3,69 @@
 import * as z from "zod";
 
 /**
- * NSFWOutput
+ * MultiMeasurementOutput
  */
-export const zXAilabNsfwOutput = z.object({
-  has_nsfw_concepts: z.array(z.boolean()).register(z.globalRegistry, {
-    description: "List of booleans indicating if the image has an NSFW concept",
-  }),
-});
-
-/**
- * NSFWInput
- */
-export const zXAilabNsfwInput = z.object({
-  image_urls: z.array(z.string()).register(z.globalRegistry, {
-    description:
-      "List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.",
-  }),
-});
-
-/**
- * VideoUnderstandingOutput
- */
-export const zVideoUnderstandingOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "The analysis of the video content based on the prompt",
-  }),
-});
-
-/**
- * VideoUnderstandingInput
- */
-export const zVideoUnderstandingInput = z.object({
-  prompt: z.string().min(1).max(5000).register(z.globalRegistry, {
-    description: "The question or prompt about the video content.",
-  }),
-  video_url: z.union([z.string(), z.string()]),
-  detailed_analysis: z
-    .boolean()
+export const zArbiterImageImageOutput = z.object({
+  values: z
+    .array(
+      z.record(
+        z.string(),
+        z.union([z.number(), z.record(z.string(), z.number())]),
+      ),
+    )
     .register(z.globalRegistry, {
-      description: "Whether to request a more detailed analysis of the video",
+      description: "The values of the measurements.",
     })
-    .optional()
-    .default(false),
-});
-
-/**
- * PromptTokensDetails
- */
-export const zPromptTokensDetails = z.object({
-  cached_tokens: z.int().optional().default(0),
-  cache_write_tokens: z.int().optional().default(0),
-});
-
-/**
- * UsageInfo
- */
-export const zUsageInfoType2 = z.object({
-  total_tokens: z.int().optional().default(0),
-  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
-  prompt_tokens_details: z
-    .union([zPromptTokensDetails, z.unknown()])
     .optional(),
-  cost: z.number(),
 });
 
 /**
- * UsageInfo
+ * MultiMeasurementOutput
  */
-export const zUsageInfo = z.object({
-  output_tokens: z.int().register(z.globalRegistry, {
-    description: "Number of output tokens generated",
-  }),
-  prefill_time_ms: z.number().register(z.globalRegistry, {
-    description: "Time taken for prefill in milliseconds",
-  }),
-  input_tokens: z.int().register(z.globalRegistry, {
-    description: "Number of input tokens processed",
-  }),
-  ttft_ms: z.number().register(z.globalRegistry, {
-    description: "Time to first token in milliseconds",
-  }),
-  decode_time_ms: z.number().register(z.globalRegistry, {
-    description: "Time taken for decoding in milliseconds",
-  }),
+export const zArbiterImageOutput = z.object({
+  values: z
+    .array(
+      z.record(
+        z.string(),
+        z.union([z.number(), z.record(z.string(), z.number())]),
+      ),
+    )
+    .register(z.globalRegistry, {
+      description: "The values of the measurements.",
+    })
+    .optional(),
 });
 
 /**
- * SemanticImageInput
+ * MultiMeasurementOutput
  */
-export const zSemanticImageInput = z.object({
-  hypothesis: z.string().register(z.globalRegistry, {
-    description: "The hypothesis image to use for the measurement.",
-  }),
-  reference: z.string().register(z.globalRegistry, {
-    description: "The text reference to use for the measurement.",
-  }),
+export const zArbiterImageTextOutput = z.object({
+  values: z
+    .array(
+      z.record(
+        z.string(),
+        z.union([z.number(), z.record(z.string(), z.number())]),
+      ),
+    )
+    .register(z.globalRegistry, {
+      description: "The values of the measurements.",
+    })
+    .optional(),
 });
 
 /**
- * SAM3EmbeddingOutput
+ * CompletionUsage
  */
-export const zSam3ImageEmbedOutput = z.object({
-  embedding_b64: z.string().register(z.globalRegistry, {
-    description: "Embedding of the image",
+export const zCompletionUsage = z.object({
+  completion_tokens: z.int().register(z.globalRegistry, {
+    description: "Number of tokens in the completion",
   }),
-});
-
-/**
- * SAM3EmbeddingInput
- */
-export const zSam3ImageEmbedInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
+  total_tokens: z.int().register(z.globalRegistry, {
+    description: "Total tokens used",
+  }),
+  prompt_tokens: z.int().register(z.globalRegistry, {
+    description: "Number of tokens in the prompt",
+  }),
 });
 
 /**
@@ -130,28 +81,121 @@ export const zFile = z.object({
 });
 
 /**
- * VideoChatOutput
+ * ImageInput
  */
-export const zSa2Va8bVideoOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
-  }),
-  masks: z.array(zFile).register(z.globalRegistry, {
-    description: "Dictionary of label: mask video",
+export const zFlorence2LargeCaptionInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * TextOutput
+ */
+export const zFlorence2LargeCaptionOutput = z.object({
+  results: z.string().register(z.globalRegistry, {
+    description: "Results from the model",
   }),
 });
 
 /**
- * VideoInput
+ * ImageInput
  */
-export const zSa2Va8bVideoInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the chat completion",
+export const zFlorence2LargeDetailedCaptionInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * TextOutput
+ */
+export const zFlorence2LargeDetailedCaptionOutput = z.object({
+  results: z.string().register(z.globalRegistry, {
+    description: "Results from the model",
   }),
-  video_url: z.union([z.string(), z.string()]),
-  num_frames_to_sample: z
-    .union([z.int().gte(1).lte(100), z.unknown()])
-    .optional(),
+});
+
+/**
+ * ImageInput
+ */
+export const zFlorence2LargeMoreDetailedCaptionInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * TextOutput
+ */
+export const zFlorence2LargeMoreDetailedCaptionOutput = z.object({
+  results: z.string().register(z.globalRegistry, {
+    description: "Results from the model",
+  }),
+});
+
+/**
+ * ImageInput
+ */
+export const zFlorence2LargeOcrInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * TextOutput
+ */
+export const zFlorence2LargeOcrOutput = z.object({
+  results: z.string().register(z.globalRegistry, {
+    description: "Results from the model",
+  }),
+});
+
+/**
+ * TextOutput
+ */
+export const zFlorence2LargeRegionToCategoryOutput = z.object({
+  results: z.string().register(z.globalRegistry, {
+    description: "Results from the model",
+  }),
+});
+
+/**
+ * TextOutput
+ */
+export const zFlorence2LargeRegionToDescriptionOutput = z.object({
+  results: z.string().register(z.globalRegistry, {
+    description: "Results from the model",
+  }),
+});
+
+/**
+ * ImageInput
+ */
+export const zGotOcrV2Input = z.object({
+  multi_page: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Use provided images to generate a single output.",
+    })
+    .optional()
+    .default(false),
+  input_image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description: "URL of images.",
+    })
+    .optional()
+    .default([]),
+  do_format: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Generate the output in formatted mode.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * ImageChatOutput
+ */
+export const zGotOcrV2Output = z.object({
+  outputs: z.array(z.string()).register(z.globalRegistry, {
+    description: "Generated output",
+  }),
 });
 
 /**
@@ -175,301 +219,300 @@ export const zImage = z
   });
 
 /**
- * ImageChatOutput
+ * ImageFile
  */
-export const zSa2Va8bImageOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
+export const zImageFile = z.object({
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  height: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
+  url: z.string().register(z.globalRegistry, {
+    description: "The URL where the file can be downloaded from.",
   }),
-  masks: z.array(zImage).register(z.globalRegistry, {
-    description: "Dictionary of label: mask image",
-  }),
+  width: z.union([z.int(), z.unknown()]).optional(),
 });
 
 /**
  * ImageInput
  */
-export const zSa2Va8bImageInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the chat completion",
+export const zImageInput = z.object({
+  hypothesis: z.string().register(z.globalRegistry, {
+    description: "The image to use for the measurement.",
   }),
+});
+
+/**
+ * ImageMultiMeasurementInput
+ */
+export const zArbiterImageInput = z.object({
+  inputs: z.array(zImageInput).register(z.globalRegistry, {
+    description: "The inputs to use for the measurement.",
+  }),
+  measurements: z
+    .array(z.enum(["arniqa", "clip_iqa", "musiq", "nima", "lapvar"]))
+    .register(z.globalRegistry, {
+      description: "The measurements to use for the measurement.",
+    }),
+});
+
+/**
+ * NSFWImageDetectionInput
+ */
+export const zImageutilsNsfwInput = z.object({
   image_url: z.union([z.string(), z.string()]),
 });
 
 /**
- * VideoChatOutput
+ * NSFWImageDetectionOutput
  */
-export const zSa2Va4bVideoOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
+export const zImageutilsNsfwOutput = z.object({
+  nsfw_probability: z.number().register(z.globalRegistry, {
+    description: "The probability of the image being NSFW.",
   }),
-  masks: z.array(zFile).register(z.globalRegistry, {
-    description: "Dictionary of label: mask video",
-  }),
-});
-
-/**
- * VideoInput
- */
-export const zSa2Va4bVideoInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the chat completion",
-  }),
-  video_url: z.union([z.string(), z.string()]),
-  num_frames_to_sample: z
-    .union([z.int().gte(1).lte(100), z.unknown()])
-    .optional(),
-});
-
-/**
- * ImageChatOutput
- */
-export const zSa2Va4bImageOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
-  }),
-  masks: z.array(zImage).register(z.globalRegistry, {
-    description: "Dictionary of label: mask image",
-  }),
-});
-
-/**
- * ImageInput
- */
-export const zSa2Va4bImageInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the chat completion",
-  }),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * VisionOutput
- */
-export const zRouterVisionOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
-  }),
-  usage: z.union([zUsageInfoType2, z.unknown()]),
 });
 
 /**
  * VisionInput
  */
-export const zRouterVisionInput = z.object({
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  model: z.string().register(z.globalRegistry, {
-    description:
-      "Name of the model to use. Charged based on actual token usage.",
-  }),
-  image_urls: z.array(z.string()).register(z.globalRegistry, {
-    description: "List of image URLs to be processed",
-  }),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
-    })
-    .optional()
-    .default(1),
+export const zIsaac01Input = z.object({
   prompt: z.string().register(z.globalRegistry, {
     description: "Prompt to be used for the image",
   }),
-  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
-  reasoning: z
-    .boolean()
+  response_style: z
+    .enum(["text", "box", "point", "polygon"])
     .register(z.globalRegistry, {
-      description: "Should reasoning be the part of the final answer.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * Region
- */
-export const zRegion = z.object({
-  x1: z.int().gte(0).lte(999).register(z.globalRegistry, {
-    description: "X-coordinate of the top-left corner",
-  }),
-  x2: z.int().gte(0).lte(999).register(z.globalRegistry, {
-    description: "X-coordinate of the bottom-right corner",
-  }),
-  y2: z.int().gte(0).lte(999).register(z.globalRegistry, {
-    description: "Y-coordinate of the bottom-right corner",
-  }),
-  y1: z.int().gte(0).lte(999).register(z.globalRegistry, {
-    description: "Y-coordinate of the top-left corner",
-  }),
-});
-
-/**
- * ReferenceImageInput
- */
-export const zReferenceImageInput = z.object({
-  hypothesis: z.string().register(z.globalRegistry, {
-    description: "The hypothesis image to use for the measurement.",
-  }),
-  reference: z.string().register(z.globalRegistry, {
-    description: "The image to use for the measurement.",
-  }),
-});
-
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
-    .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
-/**
- * Point
- */
-export const zPoint = z.object({
-  y: z.number().register(z.globalRegistry, {
-    description: "Y coordinate of the point in normalized format (0 to 1)",
-  }),
-  x: z.number().register(z.globalRegistry, {
-    description: "X coordinate of the point in normalized format (0 to 1)",
-  }),
-});
-
-/**
- * Object
- */
-export const zObject = z.object({
-  y_min: z.number().register(z.globalRegistry, {
-    description: "Top boundary of detection box in normalized format (0 to 1)",
-  }),
-  x_max: z.number().register(z.globalRegistry, {
-    description:
-      "Right boundary of detection box in normalized format (0 to 1)",
-  }),
-  x_min: z.number().register(z.globalRegistry, {
-    description: "Left boundary of detection box in normalized format (0 to 1)",
-  }),
-  y_max: z.number().register(z.globalRegistry, {
-    description:
-      "Bottom boundary of detection box in normalized format (0 to 1)",
-  }),
-});
-
-/**
- * MoonDreamOutput
- */
-export const zMoondreamNextOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Response from the model",
-  }),
-});
-
-/**
- * QueryInput
- */
-export const zMoondreamNextInput = z.object({
-  task_type: z
-    .enum(["caption", "query"])
-    .register(z.globalRegistry, {
-      description: "Type of task to perform",
+      description:
+        "\nResponse style to be used for the image.\n\n- text: Model will output text. Good for descriptions and captioning.\n- box: Model will output a combination of text and bounding boxes. Good for\nlocalization.\n- point: Model will output a combination of text and points. Good for counting many\nobjects.\n- polygon: Model will output a combination of text and polygons. Good for granular\nsegmentation.\n",
     })
     .optional(),
   image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export const zIsaac01OpenaiV1ChatCompletionsInput = z
+  .record(z.string(), z.unknown())
+  .register(z.globalRegistry, {
+    description:
+      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
+  });
+
+export const zIsaac01OpenaiV1ChatCompletionsOutput = z.unknown();
+
+/**
+ * ChatOutput
+ */
+export const zIsaac01Output = z.object({
+  usage: z.union([zCompletionUsage, z.unknown()]).optional(),
+  error: z.union([z.string(), z.unknown()]).optional(),
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether the output is partial",
+    })
+    .optional()
+    .default(false),
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
+  }),
+});
+
+/**
+ * LLavaInput
+ */
+export const zLlavaNextInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+  temperature: z
+    .number()
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Temperature for sampling",
+    })
+    .optional()
+    .default(0.2),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the image",
+  }),
   max_tokens: z
     .int()
-    .gte(1)
-    .lte(512)
     .register(z.globalRegistry, {
       description: "Maximum number of tokens to generate",
     })
     .optional()
     .default(64),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt for query task",
-  }),
-});
-
-/**
- * BatchMoonDreamOutput
- */
-export const zMoondreamNextBatchOutput = z.object({
-  captions_file: zFile,
-  outputs: z.array(z.string()).register(z.globalRegistry, {
-    description: "List of generated captions",
-  }),
-});
-
-/**
- * BatchQueryInput
- */
-export const zMoondreamNextBatchInput = z.object({
-  max_tokens: z
-    .int()
-    .gte(1)
-    .lte(512)
+  top_p: z
+    .number()
+    .gte(0)
+    .lte(1)
     .register(z.globalRegistry, {
-      description: "Maximum number of tokens to generate",
+      description: "Top P for sampling",
     })
     .optional()
-    .default(64),
-  images_data_url: z.union([z.string(), z.string()]),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Single prompt to apply to all images",
+    .default(1),
+});
+
+/**
+ * LLavaOutput
+ */
+export const zLlavaNextOutput = z.object({
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether the output is partial",
+    })
+    .optional()
+    .default(false),
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
   }),
 });
 
 /**
- * MoondreamInputParam
+ * MoondreamInput
  */
-export const zMoondreamInputParam = z.object({
-  prompt: z
-    .string()
+export const zMoondream2Input = z.object({
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamObjectInput
+ */
+export const zMoondream2ObjectDetectionInput = z.object({
+  object: z.string().register(z.globalRegistry, {
+    description: "Object to be detected in the image",
+  }),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamObjectOutput
+ */
+export const zMoondream2ObjectDetectionOutput = z.object({
+  image: zImage,
+  objects: z
+    .array(z.record(z.string(), z.unknown()))
     .register(z.globalRegistry, {
-      description: "Prompt to be used for the image",
+      description: "Objects detected in the image",
+    }),
+});
+
+/**
+ * MoondreamOutput
+ */
+export const zMoondream2Output = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Output for the given query",
+  }),
+});
+
+/**
+ * MoondreamObjectInput
+ */
+export const zMoondream2PointObjectDetectionInput = z.object({
+  object: z.string().register(z.globalRegistry, {
+    description: "Object to be detected in the image",
+  }),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamObjectOutput
+ */
+export const zMoondream2PointObjectDetectionOutput = z.object({
+  image: zImage,
+  objects: z
+    .array(z.record(z.string(), z.unknown()))
+    .register(z.globalRegistry, {
+      description: "Objects detected in the image",
+    }),
+});
+
+/**
+ * MoondreamQueryInput
+ */
+export const zMoondream2VisualQueryInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Query to be asked in the image",
+  }),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamOutput
+ */
+export const zMoondream2VisualQueryOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Output for the given query",
+  }),
+});
+
+/**
+ * MoondreamCaptionInput
+ */
+export const zMoondream3PreviewCaptionInput = z.object({
+  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  length: z
+    .enum(["short", "normal", "long"])
+    .register(z.globalRegistry, {
+      description: "Length of the caption to generate",
+    })
+    .optional(),
+  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamDetectInput
+ */
+export const zMoondream3PreviewDetectInput = z.object({
+  prompt: z.string().min(1).register(z.globalRegistry, {
+    description: "Object to be detected in the image",
+  }),
+  preview: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to preview the output",
     })
     .optional()
-    .default("Describe this image."),
-  image_url: z.string().register(z.globalRegistry, {
-    description: "URL of the image to be processed",
+    .default(false),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamPointInput
+ */
+export const zMoondream3PreviewPointInput = z.object({
+  prompt: z.string().min(1).register(z.globalRegistry, {
+    description: "Object to be located in the image",
   }),
+  preview: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to preview the output",
+    })
+    .optional()
+    .default(false),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * MoondreamQueryInput
+ */
+export const zMoondream3PreviewQueryInput = z.object({
+  prompt: z.string().min(1).register(z.globalRegistry, {
+    description: "Query to be asked in the image",
+  }),
+  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether to include detailed reasoning behind the answer",
+    })
+    .optional()
+    .default(true),
+  image_url: z.union([z.string(), z.string()]),
 });
 
 /**
@@ -489,6 +532,22 @@ export const zMoondreamBatchedOutput = z.object({
     .default(false),
   timings: z.record(z.string(), z.number()).register(z.globalRegistry, {
     description: "Timings for different parts of the process",
+  }),
+});
+
+/**
+ * MoondreamInputParam
+ */
+export const zMoondreamInputParam = z.object({
+  prompt: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "Prompt to be used for the image",
+    })
+    .optional()
+    .default("Describe this image."),
+  image_url: z.string().register(z.globalRegistry, {
+    description: "URL of the image to be processed",
   }),
 });
 
@@ -543,81 +602,412 @@ export const zMoondreamBatchedInput = z.object({
 });
 
 /**
- * MoondreamQueryOutput
+ * BatchQueryInput
  */
-export const zMoondream3PreviewQueryOutput = z.object({
+export const zMoondreamNextBatchInput = z.object({
+  max_tokens: z
+    .int()
+    .gte(1)
+    .lte(512)
+    .register(z.globalRegistry, {
+      description: "Maximum number of tokens to generate",
+    })
+    .optional()
+    .default(64),
+  images_data_url: z.union([z.string(), z.string()]),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Single prompt to apply to all images",
+  }),
+});
+
+/**
+ * BatchMoonDreamOutput
+ */
+export const zMoondreamNextBatchOutput = z.object({
+  captions_file: zFile,
+  outputs: z.array(z.string()).register(z.globalRegistry, {
+    description: "List of generated captions",
+  }),
+});
+
+/**
+ * QueryInput
+ */
+export const zMoondreamNextInput = z.object({
+  task_type: z
+    .enum(["caption", "query"])
+    .register(z.globalRegistry, {
+      description: "Type of task to perform",
+    })
+    .optional(),
+  image_url: z.union([z.string(), z.string()]),
+  max_tokens: z
+    .int()
+    .gte(1)
+    .lte(512)
+    .register(z.globalRegistry, {
+      description: "Maximum number of tokens to generate",
+    })
+    .optional()
+    .default(64),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt for query task",
+  }),
+});
+
+/**
+ * MoonDreamOutput
+ */
+export const zMoondreamNextOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Response from the model",
+  }),
+});
+
+/**
+ * Object
+ */
+export const zObject = z.object({
+  y_min: z.number().register(z.globalRegistry, {
+    description: "Top boundary of detection box in normalized format (0 to 1)",
+  }),
+  x_max: z.number().register(z.globalRegistry, {
+    description:
+      "Right boundary of detection box in normalized format (0 to 1)",
+  }),
+  x_min: z.number().register(z.globalRegistry, {
+    description: "Left boundary of detection box in normalized format (0 to 1)",
+  }),
+  y_max: z.number().register(z.globalRegistry, {
+    description:
+      "Bottom boundary of detection box in normalized format (0 to 1)",
+  }),
+});
+
+/**
+ * Point
+ */
+export const zPoint = z.object({
+  y: z.number().register(z.globalRegistry, {
+    description: "Y coordinate of the point in normalized format (0 to 1)",
+  }),
+  x: z.number().register(z.globalRegistry, {
+    description: "X coordinate of the point in normalized format (0 to 1)",
+  }),
+});
+
+/**
+ * PromptTokensDetails
+ */
+export const zPromptTokensDetails = z.object({
+  cached_tokens: z.int().optional().default(0),
+  cache_write_tokens: z.int().optional().default(0),
+});
+
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
+  }),
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
+});
+
+/**
+ * ReferenceImageInput
+ */
+export const zReferenceImageInput = z.object({
+  hypothesis: z.string().register(z.globalRegistry, {
+    description: "The hypothesis image to use for the measurement.",
+  }),
+  reference: z.string().register(z.globalRegistry, {
+    description: "The image to use for the measurement.",
+  }),
+});
+
+/**
+ * ImageReferenceMeasurementInput
+ */
+export const zArbiterImageImageInput = z.object({
+  inputs: z.array(zReferenceImageInput).register(z.globalRegistry, {
+    description: "The inputs to use for the measurement.",
+  }),
+  measurements: z
+    .array(z.enum(["dists", "mse", "lpips", "sdi", "ssim"]))
+    .register(z.globalRegistry, {
+      description: "The measurements to use for the measurement.",
+    }),
+});
+
+/**
+ * Region
+ */
+export const zRegion = z.object({
+  x1: z.int().gte(0).lte(999).register(z.globalRegistry, {
+    description: "X-coordinate of the top-left corner",
+  }),
+  x2: z.int().gte(0).lte(999).register(z.globalRegistry, {
+    description: "X-coordinate of the bottom-right corner",
+  }),
+  y2: z.int().gte(0).lte(999).register(z.globalRegistry, {
+    description: "Y-coordinate of the bottom-right corner",
+  }),
+  y1: z.int().gte(0).lte(999).register(z.globalRegistry, {
+    description: "Y-coordinate of the top-left corner",
+  }),
+});
+
+/**
+ * ImageWithUserCoordinatesInput
+ */
+export const zFlorence2LargeRegionToCategoryInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+  region: zRegion,
+});
+
+/**
+ * ImageWithUserCoordinatesInput
+ */
+export const zFlorence2LargeRegionToDescriptionInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+  region: zRegion,
+});
+
+/**
+ * VisionInput
+ */
+export const zRouterVisionInput = z.object({
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  model: z.string().register(z.globalRegistry, {
+    description:
+      "Name of the model to use. Charged based on actual token usage.",
+  }),
+  image_urls: z.array(z.string()).register(z.globalRegistry, {
+    description: "List of image URLs to be processed",
+  }),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.",
+    })
+    .optional()
+    .default(1),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the image",
+  }),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
+    .default(false),
+});
+
+/**
+ * ImageInput
+ */
+export const zSa2Va4bImageInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the chat completion",
+  }),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * ImageChatOutput
+ */
+export const zSa2Va4bImageOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
+  }),
+  masks: z.array(zImage).register(z.globalRegistry, {
+    description: "Dictionary of label: mask image",
+  }),
+});
+
+/**
+ * VideoInput
+ */
+export const zSa2Va4bVideoInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the chat completion",
+  }),
+  video_url: z.union([z.string(), z.string()]),
+  num_frames_to_sample: z
+    .union([z.int().gte(1).lte(100), z.unknown()])
+    .optional(),
+});
+
+/**
+ * VideoChatOutput
+ */
+export const zSa2Va4bVideoOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
+  }),
+  masks: z.array(zFile).register(z.globalRegistry, {
+    description: "Dictionary of label: mask video",
+  }),
+});
+
+/**
+ * ImageInput
+ */
+export const zSa2Va8bImageInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the chat completion",
+  }),
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * ImageChatOutput
+ */
+export const zSa2Va8bImageOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
+  }),
+  masks: z.array(zImage).register(z.globalRegistry, {
+    description: "Dictionary of label: mask image",
+  }),
+});
+
+/**
+ * VideoInput
+ */
+export const zSa2Va8bVideoInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Prompt to be used for the chat completion",
+  }),
+  video_url: z.union([z.string(), z.string()]),
+  num_frames_to_sample: z
+    .union([z.int().gte(1).lte(100), z.unknown()])
+    .optional(),
+});
+
+/**
+ * VideoChatOutput
+ */
+export const zSa2Va8bVideoOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "Generated output",
+  }),
+  masks: z.array(zFile).register(z.globalRegistry, {
+    description: "Dictionary of label: mask video",
+  }),
+});
+
+/**
+ * SAM3EmbeddingInput
+ */
+export const zSam3ImageEmbedInput = z.object({
+  image_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * SAM3EmbeddingOutput
+ */
+export const zSam3ImageEmbedOutput = z.object({
+  embedding_b64: z.string().register(z.globalRegistry, {
+    description: "Embedding of the image",
+  }),
+});
+
+/**
+ * SemanticImageInput
+ */
+export const zSemanticImageInput = z.object({
+  hypothesis: z.string().register(z.globalRegistry, {
+    description: "The hypothesis image to use for the measurement.",
+  }),
+  reference: z.string().register(z.globalRegistry, {
+    description: "The text reference to use for the measurement.",
+  }),
+});
+
+/**
+ * SemanticImageMeasurementInput
+ */
+export const zArbiterImageTextInput = z.object({
+  inputs: z.array(zSemanticImageInput).register(z.globalRegistry, {
+    description: "The inputs to use for the measurement.",
+  }),
+  measurements: z.array(z.string()).register(z.globalRegistry, {
+    description: "The measurements to use for the measurement.",
+  }),
+});
+
+/**
+ * UsageInfo
+ */
+export const zUsageInfo = z.object({
+  output_tokens: z.int().register(z.globalRegistry, {
+    description: "Number of output tokens generated",
+  }),
+  prefill_time_ms: z.number().register(z.globalRegistry, {
+    description: "Time taken for prefill in milliseconds",
+  }),
+  input_tokens: z.int().register(z.globalRegistry, {
+    description: "Number of input tokens processed",
+  }),
+  ttft_ms: z.number().register(z.globalRegistry, {
+    description: "Time to first token in milliseconds",
+  }),
+  decode_time_ms: z.number().register(z.globalRegistry, {
+    description: "Time taken for decoding in milliseconds",
+  }),
+});
+
+/**
+ * MoondreamCaptionOutput
+ */
+export const zMoondream3PreviewCaptionOutput = z.object({
   finish_reason: z.string().register(z.globalRegistry, {
     description: "Reason for finishing the output generation",
   }),
   output: z.string().register(z.globalRegistry, {
-    description: "Answer to the query about the image",
-  }),
-  reasoning: z.union([z.string(), z.unknown()]).optional(),
-  usage_info: zUsageInfo,
-});
-
-/**
- * MoondreamQueryInput
- */
-export const zMoondream3PreviewQueryInput = z.object({
-  prompt: z.string().min(1).register(z.globalRegistry, {
-    description: "Query to be asked in the image",
-  }),
-  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  reasoning: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to include detailed reasoning behind the answer",
-    })
-    .optional()
-    .default(true),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * ImageFile
- */
-export const zImageFile = z.object({
-  file_size: z.union([z.int(), z.unknown()]).optional(),
-  height: z.union([z.int(), z.unknown()]).optional(),
-  file_name: z.union([z.string(), z.unknown()]).optional(),
-  content_type: z.union([z.string(), z.unknown()]).optional(),
-  url: z.string().register(z.globalRegistry, {
-    description: "The URL where the file can be downloaded from.",
-  }),
-  width: z.union([z.int(), z.unknown()]).optional(),
-});
-
-/**
- * MoondreamPointOutput
- */
-export const zMoondream3PreviewPointOutput = z.object({
-  points: z.array(zPoint).register(z.globalRegistry, {
-    description: "List of points marking the detected objects",
-  }),
-  image: z.union([zImageFile, z.unknown()]).optional(),
-  finish_reason: z.string().register(z.globalRegistry, {
-    description: "Reason for finishing the output generation",
+    description: "Generated caption for the image",
   }),
   usage_info: zUsageInfo,
-});
-
-/**
- * MoondreamPointInput
- */
-export const zMoondream3PreviewPointInput = z.object({
-  prompt: z.string().min(1).register(z.globalRegistry, {
-    description: "Object to be located in the image",
-  }),
-  preview: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to preview the output",
-    })
-    .optional()
-    .default(false),
-  image_url: z.union([z.string(), z.string()]),
 });
 
 /**
@@ -635,489 +1025,99 @@ export const zMoondream3PreviewDetectOutput = z.object({
 });
 
 /**
- * MoondreamDetectInput
+ * MoondreamPointOutput
  */
-export const zMoondream3PreviewDetectInput = z.object({
-  prompt: z.string().min(1).register(z.globalRegistry, {
-    description: "Object to be detected in the image",
+export const zMoondream3PreviewPointOutput = z.object({
+  points: z.array(zPoint).register(z.globalRegistry, {
+    description: "List of points marking the detected objects",
   }),
-  preview: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether to preview the output",
-    })
-    .optional()
-    .default(false),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * MoondreamCaptionOutput
- */
-export const zMoondream3PreviewCaptionOutput = z.object({
+  image: z.union([zImageFile, z.unknown()]).optional(),
   finish_reason: z.string().register(z.globalRegistry, {
     description: "Reason for finishing the output generation",
-  }),
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated caption for the image",
   }),
   usage_info: zUsageInfo,
 });
 
 /**
- * MoondreamCaptionInput
+ * MoondreamQueryOutput
  */
-export const zMoondream3PreviewCaptionInput = z.object({
-  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  length: z
-    .enum(["short", "normal", "long"])
-    .register(z.globalRegistry, {
-      description: "Length of the caption to generate",
-    })
+export const zMoondream3PreviewQueryOutput = z.object({
+  finish_reason: z.string().register(z.globalRegistry, {
+    description: "Reason for finishing the output generation",
+  }),
+  output: z.string().register(z.globalRegistry, {
+    description: "Answer to the query about the image",
+  }),
+  reasoning: z.union([z.string(), z.unknown()]).optional(),
+  usage_info: zUsageInfo,
+});
+
+/**
+ * UsageInfo
+ */
+export const zUsageInfoType2 = z.object({
+  total_tokens: z.int().optional().default(0),
+  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens_details: z
+    .union([zPromptTokensDetails, z.unknown()])
     .optional(),
-  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  image_url: z.union([z.string(), z.string()]),
+  cost: z.number(),
 });
 
 /**
- * MoondreamOutput
+ * VisionOutput
  */
-export const zMoondream2VisualQueryOutput = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Output for the given query",
-  }),
-});
-
-/**
- * MoondreamQueryInput
- */
-export const zMoondream2VisualQueryInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Query to be asked in the image",
-  }),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * MoondreamObjectOutput
- */
-export const zMoondream2PointObjectDetectionOutput = z.object({
-  image: zImage,
-  objects: z
-    .array(z.record(z.string(), z.unknown()))
-    .register(z.globalRegistry, {
-      description: "Objects detected in the image",
-    }),
-});
-
-/**
- * MoondreamObjectInput
- */
-export const zMoondream2PointObjectDetectionInput = z.object({
-  object: z.string().register(z.globalRegistry, {
-    description: "Object to be detected in the image",
-  }),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * MoondreamOutput
- */
-export const zMoondream2Output = z.object({
-  output: z.string().register(z.globalRegistry, {
-    description: "Output for the given query",
-  }),
-});
-
-/**
- * MoondreamObjectOutput
- */
-export const zMoondream2ObjectDetectionOutput = z.object({
-  image: zImage,
-  objects: z
-    .array(z.record(z.string(), z.unknown()))
-    .register(z.globalRegistry, {
-      description: "Objects detected in the image",
-    }),
-});
-
-/**
- * MoondreamObjectInput
- */
-export const zMoondream2ObjectDetectionInput = z.object({
-  object: z.string().register(z.globalRegistry, {
-    description: "Object to be detected in the image",
-  }),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * MoondreamInput
- */
-export const zMoondream2Input = z.object({
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * LLavaOutput
- */
-export const zLlavaNextOutput = z.object({
-  partial: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether the output is partial",
-    })
-    .optional()
-    .default(false),
+export const zRouterVisionOutput = z.object({
   output: z.string().register(z.globalRegistry, {
     description: "Generated output",
   }),
+  usage: z.union([zUsageInfoType2, z.unknown()]),
 });
 
 /**
- * LLavaInput
+ * VideoUnderstandingInput
  */
-export const zLlavaNextInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-  temperature: z
-    .number()
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Temperature for sampling",
-    })
-    .optional()
-    .default(0.2),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the image",
+export const zVideoUnderstandingInput = z.object({
+  prompt: z.string().min(1).max(5000).register(z.globalRegistry, {
+    description: "The question or prompt about the video content.",
   }),
-  max_tokens: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "Maximum number of tokens to generate",
-    })
-    .optional()
-    .default(64),
-  top_p: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Top P for sampling",
-    })
-    .optional()
-    .default(1),
-});
-
-/**
- * CompletionUsage
- */
-export const zCompletionUsage = z.object({
-  completion_tokens: z.int().register(z.globalRegistry, {
-    description: "Number of tokens in the completion",
-  }),
-  total_tokens: z.int().register(z.globalRegistry, {
-    description: "Total tokens used",
-  }),
-  prompt_tokens: z.int().register(z.globalRegistry, {
-    description: "Number of tokens in the prompt",
-  }),
-});
-
-/**
- * ChatOutput
- */
-export const zIsaac01Output = z.object({
-  usage: z.union([zCompletionUsage, z.unknown()]).optional(),
-  error: z.union([z.string(), z.unknown()]).optional(),
-  partial: z
+  video_url: z.union([z.string(), z.string()]),
+  detailed_analysis: z
     .boolean()
     .register(z.globalRegistry, {
-      description: "Whether the output is partial",
+      description: "Whether to request a more detailed analysis of the video",
     })
     .optional()
     .default(false),
+});
+
+/**
+ * VideoUnderstandingOutput
+ */
+export const zVideoUnderstandingOutput = z.object({
   output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
+    description: "The analysis of the video content based on the prompt",
   }),
 });
 
-export const zIsaac01OpenaiV1ChatCompletionsOutput = z.unknown();
-
 /**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ * NSFWInput
  */
-export const zIsaac01OpenaiV1ChatCompletionsInput = z
-  .record(z.string(), z.unknown())
-  .register(z.globalRegistry, {
+export const zXAilabNsfwInput = z.object({
+  image_urls: z.array(z.string()).register(z.globalRegistry, {
     description:
-      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
-  });
-
-/**
- * VisionInput
- */
-export const zIsaac01Input = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Prompt to be used for the image",
-  }),
-  response_style: z
-    .enum(["text", "box", "point", "polygon"])
-    .register(z.globalRegistry, {
-      description:
-        "\nResponse style to be used for the image.\n\n- text: Model will output text. Good for descriptions and captioning.\n- box: Model will output a combination of text and bounding boxes. Good for\nlocalization.\n- point: Model will output a combination of text and points. Good for counting many\nobjects.\n- polygon: Model will output a combination of text and polygons. Good for granular\nsegmentation.\n",
-    })
-    .optional(),
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * NSFWImageDetectionOutput
- */
-export const zImageutilsNsfwOutput = z.object({
-  nsfw_probability: z.number().register(z.globalRegistry, {
-    description: "The probability of the image being NSFW.",
+      "List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.",
   }),
 });
 
 /**
- * NSFWImageDetectionInput
+ * NSFWOutput
  */
-export const zImageutilsNsfwInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * ImageInput
- */
-export const zImageInput = z.object({
-  hypothesis: z.string().register(z.globalRegistry, {
-    description: "The image to use for the measurement.",
+export const zXAilabNsfwOutput = z.object({
+  has_nsfw_concepts: z.array(z.boolean()).register(z.globalRegistry, {
+    description: "List of booleans indicating if the image has an NSFW concept",
   }),
-});
-
-/**
- * ImageChatOutput
- */
-export const zGotOcrV2Output = z.object({
-  outputs: z.array(z.string()).register(z.globalRegistry, {
-    description: "Generated output",
-  }),
-});
-
-/**
- * ImageInput
- */
-export const zGotOcrV2Input = z.object({
-  multi_page: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Use provided images to generate a single output.",
-    })
-    .optional()
-    .default(false),
-  input_image_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description: "URL of images.",
-    })
-    .optional()
-    .default([]),
-  do_format: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Generate the output in formatted mode.",
-    })
-    .optional()
-    .default(false),
-});
-
-/**
- * TextOutput
- */
-export const zFlorence2LargeRegionToDescriptionOutput = z.object({
-  results: z.string().register(z.globalRegistry, {
-    description: "Results from the model",
-  }),
-});
-
-/**
- * ImageWithUserCoordinatesInput
- */
-export const zFlorence2LargeRegionToDescriptionInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-  region: zRegion,
-});
-
-/**
- * TextOutput
- */
-export const zFlorence2LargeRegionToCategoryOutput = z.object({
-  results: z.string().register(z.globalRegistry, {
-    description: "Results from the model",
-  }),
-});
-
-/**
- * ImageWithUserCoordinatesInput
- */
-export const zFlorence2LargeRegionToCategoryInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-  region: zRegion,
-});
-
-/**
- * TextOutput
- */
-export const zFlorence2LargeOcrOutput = z.object({
-  results: z.string().register(z.globalRegistry, {
-    description: "Results from the model",
-  }),
-});
-
-/**
- * ImageInput
- */
-export const zFlorence2LargeOcrInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * TextOutput
- */
-export const zFlorence2LargeMoreDetailedCaptionOutput = z.object({
-  results: z.string().register(z.globalRegistry, {
-    description: "Results from the model",
-  }),
-});
-
-/**
- * ImageInput
- */
-export const zFlorence2LargeMoreDetailedCaptionInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * TextOutput
- */
-export const zFlorence2LargeDetailedCaptionOutput = z.object({
-  results: z.string().register(z.globalRegistry, {
-    description: "Results from the model",
-  }),
-});
-
-/**
- * ImageInput
- */
-export const zFlorence2LargeDetailedCaptionInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * TextOutput
- */
-export const zFlorence2LargeCaptionOutput = z.object({
-  results: z.string().register(z.globalRegistry, {
-    description: "Results from the model",
-  }),
-});
-
-/**
- * ImageInput
- */
-export const zFlorence2LargeCaptionInput = z.object({
-  image_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * MultiMeasurementOutput
- */
-export const zArbiterImageTextOutput = z.object({
-  values: z
-    .array(
-      z.record(
-        z.string(),
-        z.union([z.number(), z.record(z.string(), z.number())]),
-      ),
-    )
-    .register(z.globalRegistry, {
-      description: "The values of the measurements.",
-    })
-    .optional(),
-});
-
-/**
- * SemanticImageMeasurementInput
- */
-export const zArbiterImageTextInput = z.object({
-  inputs: z.array(zSemanticImageInput).register(z.globalRegistry, {
-    description: "The inputs to use for the measurement.",
-  }),
-  measurements: z.array(z.string()).register(z.globalRegistry, {
-    description: "The measurements to use for the measurement.",
-  }),
-});
-
-/**
- * MultiMeasurementOutput
- */
-export const zArbiterImageOutput = z.object({
-  values: z
-    .array(
-      z.record(
-        z.string(),
-        z.union([z.number(), z.record(z.string(), z.number())]),
-      ),
-    )
-    .register(z.globalRegistry, {
-      description: "The values of the measurements.",
-    })
-    .optional(),
-});
-
-/**
- * ImageMultiMeasurementInput
- */
-export const zArbiterImageInput = z.object({
-  inputs: z.array(zImageInput).register(z.globalRegistry, {
-    description: "The inputs to use for the measurement.",
-  }),
-  measurements: z
-    .array(z.enum(["arniqa", "clip_iqa", "musiq", "nima", "lapvar"]))
-    .register(z.globalRegistry, {
-      description: "The measurements to use for the measurement.",
-    }),
-});
-
-/**
- * MultiMeasurementOutput
- */
-export const zArbiterImageImageOutput = z.object({
-  values: z
-    .array(
-      z.record(
-        z.string(),
-        z.union([z.number(), z.record(z.string(), z.number())]),
-      ),
-    )
-    .register(z.globalRegistry, {
-      description: "The values of the measurements.",
-    })
-    .optional(),
-});
-
-/**
- * ImageReferenceMeasurementInput
- */
-export const zArbiterImageImageInput = z.object({
-  inputs: z.array(zReferenceImageInput).register(z.globalRegistry, {
-    description: "The inputs to use for the measurement.",
-  }),
-  measurements: z
-    .array(z.enum(["dists", "mse", "lpips", "sdi", "ssim"]))
-    .register(z.globalRegistry, {
-      description: "The measurements to use for the measurement.",
-    }),
 });
 
 export const zPostFalAiArbiterImageData = z.object({

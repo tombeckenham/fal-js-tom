@@ -3,160 +3,13 @@
 import * as z from "zod";
 
 /**
- * VideoFormat
+ * Aesthetics
  */
-export const zVideoFormat = z.object({
-  container: z.string().register(z.globalRegistry, {
-    description: "Container format of the video",
-  }),
-  video_codec: z.string().register(z.globalRegistry, {
-    description: "Video codec used (e.g., 'h264')",
-  }),
-  pixel_format: z.string().register(z.globalRegistry, {
-    description: "Pixel format used (e.g., 'yuv420p')",
-  }),
-  profile: z.string().register(z.globalRegistry, {
-    description: "Codec profile (e.g., 'main', 'high')",
-  }),
-  level: z.number().register(z.globalRegistry, {
-    description: "Codec level (e.g., 4.1)",
-  }),
-  bitrate: z.int().register(z.globalRegistry, {
-    description: "Video bitrate in bits per second",
-  }),
+export const zAesthetics = z.object({
+  composition: z.union([z.string(), z.unknown()]).optional(),
+  mood_atmosphere: z.union([z.string(), z.unknown()]).optional(),
+  color_scheme: z.union([z.string(), z.unknown()]).optional(),
 });
-
-/**
- * Resolution
- */
-export const zResolution = z.object({
-  aspect_ratio: z.string().register(z.globalRegistry, {
-    description: "Display aspect ratio (e.g., '16:9')",
-  }),
-  height: z.int().register(z.globalRegistry, {
-    description: "Height of the video in pixels",
-  }),
-  width: z.int().register(z.globalRegistry, {
-    description: "Width of the video in pixels",
-  }),
-});
-
-/**
- * AudioTrack
- */
-export const zAudioTrack = z.object({
-  channels: z.int().register(z.globalRegistry, {
-    description: "Number of audio channels",
-  }),
-  codec: z.string().register(z.globalRegistry, {
-    description: "Audio codec used (e.g., 'aac', 'mp3')",
-  }),
-  bitrate: z.int().register(z.globalRegistry, {
-    description: "Audio bitrate in bits per second",
-  }),
-  sample_rate: z.int().register(z.globalRegistry, {
-    description: "Audio sample rate in Hz",
-  }),
-});
-
-/**
- * Video
- */
-export const zVideo = z.object({
-  file_name: z.string().register(z.globalRegistry, {
-    description: "Original filename of the media",
-  }),
-  duration: z.number().register(z.globalRegistry, {
-    description: "Duration of the media in seconds",
-  }),
-  media_type: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "Type of media (always 'video')",
-    })
-    .optional()
-    .default("video"),
-  bitrate: z.int().register(z.globalRegistry, {
-    description: "Overall bitrate of the media in bits per second",
-  }),
-  codec: z.string().register(z.globalRegistry, {
-    description: "Codec used to encode the media",
-  }),
-  content_type: z.string().register(z.globalRegistry, {
-    description: "MIME type of the media file",
-  }),
-  audio: z.union([zAudioTrack, z.unknown()]).optional(),
-  fps: z.int().register(z.globalRegistry, {
-    description: "Frames per second",
-  }),
-  file_size: z.int().register(z.globalRegistry, {
-    description: "Size of the file in bytes",
-  }),
-  start_frame_url: z.union([z.string(), z.unknown()]).optional(),
-  url: z.string().register(z.globalRegistry, {
-    description: "URL where the media file can be accessed",
-  }),
-  frame_count: z.int().register(z.globalRegistry, {
-    description: "Total number of frames in the video",
-  }),
-  timebase: z.string().register(z.globalRegistry, {
-    description: "Time base used for frame timestamps",
-  }),
-  container: z.string().register(z.globalRegistry, {
-    description: "Container format of the media file (e.g., 'mp4', 'mov')",
-  }),
-  resolution: zResolution,
-  format: zVideoFormat,
-  end_frame_url: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * TextRender
- *
- * Text rendering information in the image.
- */
-export const zTextRender = z
-  .object({
-    text: z.string().register(z.globalRegistry, {
-      description: "The text content.",
-    }),
-    font: z.string().register(z.globalRegistry, {
-      description: "E.g., 'realistic', 'cartoonish', 'minimalist'.",
-    }),
-    color: z.string().register(z.globalRegistry, {
-      description: "E.g., 'red', 'blue', 'green'.",
-    }),
-    location: z.string().register(z.globalRegistry, {
-      description: "E.g., 'center', 'top-left', 'bottom-right foreground'.",
-    }),
-    appearance_details: z.union([z.string(), z.unknown()]).optional(),
-    size: z.string().register(z.globalRegistry, {
-      description: "E.g., 'small', 'medium', 'large within frame'.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Text rendering information in the image.",
-  });
-
-/**
- * LightingDetails
- *
- * Lighting information for the image.
- */
-export const zLightingDetails = z
-  .object({
-    shadows: z.union([z.string(), z.unknown()]).optional(),
-    conditions: z.string().register(z.globalRegistry, {
-      description:
-        "E.g., 'bright daylight', 'dim indoor', 'studio lighting', 'golden hour'.",
-    }),
-    direction: z.string().register(z.globalRegistry, {
-      description: "E.g., 'front-lit', 'backlit', 'side-lit from left'.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Lighting information for the image.",
-  });
 
 /**
  * AestheticsDetails
@@ -188,398 +41,6 @@ export const zAestheticsDetails = z
   });
 
 /**
- * PhotographicCharacteristicsDetails
- *
- * Photographic characteristics of the image.
- */
-export const zPhotographicCharacteristicsDetails = z
-  .object({
-    focus: z.string().register(z.globalRegistry, {
-      description:
-        "E.g., 'sharp focus on subject', 'soft focus', 'motion blur'.",
-    }),
-    lens_focal_length: z.string().register(z.globalRegistry, {
-      description: "E.g., 'wide-angle', 'telephoto', 'macro', 'fisheye'.",
-    }),
-    camera_angle: z.string().register(z.globalRegistry, {
-      description:
-        "E.g., 'eye-level', 'low angle', 'high angle', 'dutch angle'.",
-    }),
-    depth_of_field: z.string().register(z.globalRegistry, {
-      description: "E.g., 'shallow', 'deep', 'bokeh background'.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Photographic characteristics of the image.",
-  });
-
-/**
- * ObjectDescription
- *
- * Detailed object description with all attributes.
- */
-export const zObjectDescription = z
-  .object({
-    relative_size: z.union([z.string(), z.unknown()]).optional(),
-    description: z.string().register(z.globalRegistry, {
-      description: "Short description of the object.",
-    }),
-    skin_tone_and_texture: z.union([z.string(), z.unknown()]).optional(),
-    appearance_details: z.union([z.string(), z.unknown()]).optional(),
-    number_of_objects: z.union([z.int(), z.unknown()]).optional(),
-    expression: z.union([z.string(), z.unknown()]).optional(),
-    pose: z.union([z.string(), z.unknown()]).optional(),
-    shape_and_color: z.union([z.string(), z.unknown()]).optional(),
-    relationship: z.string().register(z.globalRegistry, {
-      description:
-        "Describe the relationship between the object and the other objects in the image.",
-    }),
-    texture: z.union([z.string(), z.unknown()]).optional(),
-    gender: z.union([z.string(), z.unknown()]).optional(),
-    clothing: z.union([z.string(), z.unknown()]).optional(),
-    location: z.string().register(z.globalRegistry, {
-      description: "E.g., 'center', 'top-left', 'bottom-right foreground'.",
-    }),
-    orientation: z.union([z.string(), z.unknown()]).optional(),
-    action: z.union([z.string(), z.unknown()]).optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Detailed object description with all attributes.",
-  });
-
-/**
- * StructuredPrompt
- */
-export const zStructuredPromptType2 = z.object({
-  background_setting: z.string().register(z.globalRegistry, {
-    description:
-      "Describe the overall environment, setting, or background, including any notable background elements.",
-  }),
-  artistic_style: z.string().register(z.globalRegistry, {
-    description: "describe specific artistic characteristics, 3 words maximum.",
-  }),
-  style_medium: z.union([z.string(), z.unknown()]).optional(),
-  text_render: z.union([z.array(zTextRender), z.unknown()]).optional(),
-  subject_emotions: z.union([z.string(), z.unknown()]).optional(),
-  objects: z.array(zObjectDescription).register(z.globalRegistry, {
-    description: "List of prominent foreground/midground objects.",
-  }),
-  photographic_characteristics: z
-    .union([zPhotographicCharacteristicsDetails, z.unknown()])
-    .optional(),
-  aesthetics: zAestheticsDetails,
-  lighting: zLightingDetails,
-  context: z.string().register(z.globalRegistry, {
-    description:
-      "Provide any additional context that helps understand the image better.",
-  }),
-  short_description: z.string().register(z.globalRegistry, {
-    description: "A concise summary of the image content, 200 words maximum.",
-  }),
-});
-
-/**
- * Lighting
- */
-export const zLighting = z.object({
-  shadows: z.union([z.string(), z.unknown()]).optional(),
-  conditions: z.union([z.string(), z.unknown()]).optional(),
-  direction: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * PhotographicCharacteristics
- */
-export const zPhotographicCharacteristics = z.object({
-  focus: z.union([z.string(), z.unknown()]).optional(),
-  lens_focal_length: z.union([z.string(), z.unknown()]).optional(),
-  camera_angle: z.union([z.string(), z.unknown()]).optional(),
-  depth_of_field: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * PromptObject
- */
-export const zPromptObject = z.object({
-  relative_size: z.union([z.string(), z.unknown()]).optional(),
-  description: z.union([z.string(), z.unknown()]).optional(),
-  skin_tone_and_texture: z.union([z.string(), z.unknown()]).optional(),
-  appearance_details: z.union([z.string(), z.unknown()]).optional(),
-  number_of_objects: z.union([z.int(), z.unknown()]).optional(),
-  pose: z.union([z.string(), z.unknown()]).optional(),
-  expression: z.union([z.string(), z.unknown()]).optional(),
-  shape_and_color: z.union([z.string(), z.unknown()]).optional(),
-  relationship: z.string().register(z.globalRegistry, {
-    description:
-      "The relationship of the object to other objects in the image.",
-  }),
-  texture: z.union([z.string(), z.unknown()]).optional(),
-  gender: z.union([z.string(), z.unknown()]).optional(),
-  clothing: z.union([z.string(), z.unknown()]).optional(),
-  location: z.union([z.string(), z.unknown()]).optional(),
-  orientation: z.union([z.string(), z.unknown()]).optional(),
-  action: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * Aesthetics
- */
-export const zAesthetics = z.object({
-  composition: z.union([z.string(), z.unknown()]).optional(),
-  mood_atmosphere: z.union([z.string(), z.unknown()]).optional(),
-  color_scheme: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * StructuredPrompt
- */
-export const zStructuredPrompt = z.object({
-  background_setting: z.union([z.string(), z.unknown()]).optional(),
-  artistic_style: z.union([z.string(), z.unknown()]).optional(),
-  aesthetics: z.union([zAesthetics, z.unknown()]).optional(),
-  text_render: z.union([z.array(z.unknown()), z.unknown()]).optional(),
-  objects: z.union([z.array(zPromptObject), z.unknown()]).optional(),
-  style_medium: z.union([z.string(), z.unknown()]).optional(),
-  photographic_characteristics: z
-    .union([zPhotographicCharacteristics, z.unknown()])
-    .optional(),
-  context: z.union([z.string(), z.unknown()]).optional(),
-  lighting: z.union([zLighting, z.unknown()]).optional(),
-  short_description: z.union([z.string(), z.unknown()]).optional(),
-});
-
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
-    .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
-/**
- * File
- */
-export const zFile = z.object({
-  url: z.string().register(z.globalRegistry, {
-    description: "The URL where the file can be downloaded from.",
-  }),
-  file_size: z.union([z.int(), z.unknown()]).optional(),
-  file_name: z.union([z.string(), z.unknown()]).optional(),
-  content_type: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * LottieOutput
- */
-export const zOmnilottieVideoToLottieOutput = z.object({
-  lottie_file: zFile,
-});
-
-/**
- * VideoToLottieInput
- */
-export const zOmnilottieVideoToLottieInput = z.object({
-  video_url: z.union([z.string(), z.string()]),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description: "Sampling temperature for generation.",
-    })
-    .optional()
-    .default(0.9),
-  top_p: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Nucleus sampling probability threshold.",
-    })
-    .optional()
-    .default(0.25),
-  max_tokens: z
-    .int()
-    .gte(256)
-    .lte(8192)
-    .register(z.globalRegistry, {
-      description: "Maximum number of Lottie tokens to generate.",
-    })
-    .optional()
-    .default(4096),
-  top_k: z
-    .int()
-    .gte(1)
-    .lte(100)
-    .register(z.globalRegistry, {
-      description: "Top-k sampling parameter.",
-    })
-    .optional()
-    .default(5),
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * LottieOutput
- */
-export const zOmnilottieOutput = z.object({
-  lottie_file: zFile,
-});
-
-/**
- * TextToLottieInput
- */
-export const zOmnilottieInput = z.object({
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description: "Sampling temperature for generation.",
-    })
-    .optional()
-    .default(0.9),
-  top_p: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Nucleus sampling probability threshold.",
-    })
-    .optional()
-    .default(0.25),
-  max_tokens: z
-    .int()
-    .gte(256)
-    .lte(8192)
-    .register(z.globalRegistry, {
-      description: "Maximum number of Lottie tokens to generate.",
-    })
-    .optional()
-    .default(4096),
-  top_k: z
-    .int()
-    .gte(1)
-    .lte(100)
-    .register(z.globalRegistry, {
-      description: "Top-k sampling parameter.",
-    })
-    .optional()
-    .default(5),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Text description of the Lottie animation to generate.",
-  }),
-});
-
-/**
- * LottieOutput
- */
-export const zOmnilottieImageToLottieOutput = z.object({
-  lottie_file: zFile,
-});
-
-/**
- * ImageToLottieInput
- */
-export const zOmnilottieImageToLottieInput = z.object({
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description: "Sampling temperature for generation.",
-    })
-    .optional()
-    .default(0.9),
-  image_url: z.union([z.string(), z.string()]),
-  max_tokens: z
-    .int()
-    .gte(256)
-    .lte(8192)
-    .register(z.globalRegistry, {
-      description: "Maximum number of Lottie tokens to generate.",
-    })
-    .optional()
-    .default(4096),
-  top_p: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Nucleus sampling probability threshold.",
-    })
-    .optional()
-    .default(0.25),
-  top_k: z
-    .int()
-    .gte(1)
-    .lte(100)
-    .register(z.globalRegistry, {
-      description: "Top-k sampling parameter.",
-    })
-    .optional()
-    .default(5),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Text description guiding the animation of the image.",
-  }),
-});
-
-/**
- * LoudnormSummary
- */
-export const zLoudnormSummary = z.object({
-  input_true_peak: z.union([z.number(), z.unknown()]).optional(),
-  input_lra: z.union([z.number(), z.unknown()]).optional(),
-  output_lra: z.union([z.number(), z.unknown()]).optional(),
-  output_threshold: z.union([z.number(), z.unknown()]).optional(),
-  normalization_type: z.union([z.string(), z.unknown()]).optional(),
-  output_integrated: z.union([z.number(), z.unknown()]).optional(),
-  target_offset: z.union([z.number(), z.unknown()]).optional(),
-  input_threshold: z.union([z.number(), z.unknown()]).optional(),
-  input_integrated: z.union([z.number(), z.unknown()]).optional(),
-  output_true_peak: z.union([z.number(), z.unknown()]).optional(),
-});
-
-export const zFiboLiteGenerateStructuredPromptOutput = z.unknown();
-
-export const zFiboLiteGenerateStructuredPromptLiteOutput = z.unknown();
-
-/**
  * Aesthetics
  */
 export const zAestheticsType2 = z.object({
@@ -592,158 +53,6 @@ export const zAestheticsType2 = z.object({
     description: "The aesthetic score of the image.",
   }),
   color_scheme: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * StructuredPrompt
- */
-export const zBriaFiboVlmStructuredPrompt = z.object({
-  background_setting: z.union([z.string(), z.unknown()]).optional(),
-  artistic_style: z.union([z.string(), z.unknown()]).optional(),
-  style_medium: z.union([z.string(), z.unknown()]).optional(),
-  text_render: z.union([z.array(z.unknown()), z.unknown()]).optional(),
-  objects: z.union([z.array(zPromptObject), z.unknown()]).optional(),
-  context: z.union([z.string(), z.unknown()]).optional(),
-  photographic_characteristics: z
-    .union([zPhotographicCharacteristics, z.unknown()])
-    .optional(),
-  aesthetics: z.union([zAestheticsType2, z.unknown()]).optional(),
-  lighting: z.union([zLighting, z.unknown()]).optional(),
-  short_description: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * StructuredPromptModel
- */
-export const zFiboLiteGenerateStructuredPromptLiteInput = z.object({
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "Random seed for reproducibility.",
-    })
-    .optional()
-    .default(5555),
-  structured_prompt: z
-    .union([zBriaFiboVlmStructuredPrompt, z.unknown()])
-    .optional(),
-  image_url: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * StructuredPromptInput
- */
-export const zFiboLiteGenerateStructuredPromptInput = z.object({
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "Seed for the random number generator.",
-    })
-    .optional()
-    .default(7),
-  structured_prompt: z.union([zStructuredPromptType2, z.unknown()]).optional(),
-  image_url: z.union([z.string(), z.unknown()]).optional(),
-});
-
-export const zFiboGenerateStructuredPromptOutput = z.unknown();
-
-/**
- * StructuredPromptModel
- */
-export const zFiboGenerateStructuredPromptInput = z.object({
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "Random seed for reproducibility.",
-    })
-    .optional()
-    .default(5555),
-  structured_prompt: z.union([zStructuredPrompt, z.unknown()]).optional(),
-  image_url: z.union([z.string(), z.unknown()]).optional(),
-});
-
-export const zFiboEditEditStructuredInstructionOutput = z.unknown();
-
-/**
- * StructuredInstructionInputModel
- */
-export const zFiboEditEditStructuredInstructionInput = z.object({
-  instruction: z.union([z.string(), z.unknown()]).optional(),
-  seed: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "Random seed for reproducibility.",
-    })
-    .optional()
-    .default(5555),
-  sync_mode: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "If true, returns the image directly in the response (increases latency).",
-    })
-    .optional()
-    .default(false),
-  mask_url: z.union([z.string(), z.unknown()]).optional(),
-  image_url: z.union([z.string(), z.unknown()]).optional(),
-});
-
-/**
- * WaveformOutput
- */
-export const zFfmpegApiWaveformOutput = z.object({
-  duration: z.number().register(z.globalRegistry, {
-    description: "Duration of the audio in seconds",
-  }),
-  precision: z.int().register(z.globalRegistry, {
-    description: "Number of decimal places used in the waveform values",
-  }),
-  points: z.int().register(z.globalRegistry, {
-    description: "Number of points in the waveform data",
-  }),
-  waveform: z.array(z.number()).register(z.globalRegistry, {
-    description:
-      "Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.",
-  }),
-});
-
-/**
- * WaveformInput
- */
-export const zFfmpegApiWaveformInput = z.object({
-  precision: z
-    .int()
-    .gte(1)
-    .lte(6)
-    .register(z.globalRegistry, {
-      description:
-        "Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.",
-    })
-    .optional()
-    .default(2),
-  media_url: z.union([z.string(), z.string()]),
-  smoothing_window: z
-    .int()
-    .gte(1)
-    .lte(21)
-    .register(z.globalRegistry, {
-      description:
-        "Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.",
-    })
-    .optional()
-    .default(3),
-  points_per_second: z
-    .number()
-    .gte(1)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description:
-        "Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.",
-    })
-    .optional()
-    .default(4),
 });
 
 /**
@@ -790,33 +99,55 @@ export const zAudio = z.object({
 });
 
 /**
- * MetadataOutput
+ * AudioTrack
  */
-export const zFfmpegApiMetadataOutput = z.object({
-  media: z.union([zVideo, zAudio]),
+export const zAudioTrack = z.object({
+  channels: z.int().register(z.globalRegistry, {
+    description: "Number of audio channels",
+  }),
+  codec: z.string().register(z.globalRegistry, {
+    description: "Audio codec used (e.g., 'aac', 'mp3')",
+  }),
+  bitrate: z.int().register(z.globalRegistry, {
+    description: "Audio bitrate in bits per second",
+  }),
+  sample_rate: z.int().register(z.globalRegistry, {
+    description: "Audio sample rate in Hz",
+  }),
 });
 
 /**
- * MetadataInput
+ * ImageUnderstandingInput
  */
-export const zFfmpegApiMetadataInput = z.object({
-  extract_frames: z
-    .boolean()
+export const zBagelUnderstandInput = z.object({
+  seed: z
+    .int()
     .register(z.globalRegistry, {
-      description:
-        "Whether to extract the start and end frames for videos. Note that when true the request will be slower.",
+      description: "The seed to use for the generation.",
     })
-    .optional()
-    .default(false),
-  media_url: z.union([z.string(), z.string()]),
+    .optional(),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The prompt to query the image with.",
+  }),
+  image_url: z.union([z.string(), z.string()]),
 });
 
 /**
- * LoudnormOutput
+ * TextOutput
  */
-export const zFfmpegApiLoudnormOutput = z.object({
-  audio: zFile,
-  summary: z.union([zLoudnormSummary, z.unknown()]).optional(),
+export const zBagelUnderstandOutput = z.object({
+  timings: z.record(z.string(), z.unknown()).register(z.globalRegistry, {
+    description: "The timings of the generation.",
+  }),
+  seed: z.int().register(z.globalRegistry, {
+    description: "The seed used for the generation.",
+  }),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The query used for the generation.",
+  }),
+  text: z.string().register(z.globalRegistry, {
+    description: "The answer to the query.",
+  }),
 });
 
 /**
@@ -893,37 +224,706 @@ export const zFfmpegApiLoudnormInput = z.object({
 });
 
 /**
- * TextOutput
+ * MetadataInput
  */
-export const zBagelUnderstandOutput = z.object({
-  timings: z.record(z.string(), z.unknown()).register(z.globalRegistry, {
-    description: "The timings of the generation.",
+export const zFfmpegApiMetadataInput = z.object({
+  extract_frames: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to extract the start and end frames for videos. Note that when true the request will be slower.",
+    })
+    .optional()
+    .default(false),
+  media_url: z.union([z.string(), z.string()]),
+});
+
+/**
+ * WaveformInput
+ */
+export const zFfmpegApiWaveformInput = z.object({
+  precision: z
+    .int()
+    .gte(1)
+    .lte(6)
+    .register(z.globalRegistry, {
+      description:
+        "Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.",
+    })
+    .optional()
+    .default(2),
+  media_url: z.union([z.string(), z.string()]),
+  smoothing_window: z
+    .int()
+    .gte(1)
+    .lte(21)
+    .register(z.globalRegistry, {
+      description:
+        "Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.",
+    })
+    .optional()
+    .default(3),
+  points_per_second: z
+    .number()
+    .gte(1)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.",
+    })
+    .optional()
+    .default(4),
+});
+
+/**
+ * WaveformOutput
+ */
+export const zFfmpegApiWaveformOutput = z.object({
+  duration: z.number().register(z.globalRegistry, {
+    description: "Duration of the audio in seconds",
   }),
-  seed: z.int().register(z.globalRegistry, {
-    description: "The seed used for the generation.",
+  precision: z.int().register(z.globalRegistry, {
+    description: "Number of decimal places used in the waveform values",
   }),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The query used for the generation.",
+  points: z.int().register(z.globalRegistry, {
+    description: "Number of points in the waveform data",
   }),
-  text: z.string().register(z.globalRegistry, {
-    description: "The answer to the query.",
+  waveform: z.array(z.number()).register(z.globalRegistry, {
+    description:
+      "Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.",
   }),
 });
 
 /**
- * ImageUnderstandingInput
+ * StructuredInstructionInputModel
  */
-export const zBagelUnderstandInput = z.object({
+export const zFiboEditEditStructuredInstructionInput = z.object({
+  instruction: z.union([z.string(), z.unknown()]).optional(),
   seed: z
     .int()
     .register(z.globalRegistry, {
-      description: "The seed to use for the generation.",
+      description: "Random seed for reproducibility.",
+    })
+    .optional()
+    .default(5555),
+  sync_mode: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "If true, returns the image directly in the response (increases latency).",
+    })
+    .optional()
+    .default(false),
+  mask_url: z.union([z.string(), z.unknown()]).optional(),
+  image_url: z.union([z.string(), z.unknown()]).optional(),
+});
+
+export const zFiboEditEditStructuredInstructionOutput = z.unknown();
+
+export const zFiboGenerateStructuredPromptOutput = z.unknown();
+
+export const zFiboLiteGenerateStructuredPromptLiteOutput = z.unknown();
+
+export const zFiboLiteGenerateStructuredPromptOutput = z.unknown();
+
+/**
+ * File
+ */
+export const zFile = z.object({
+  url: z.string().register(z.globalRegistry, {
+    description: "The URL where the file can be downloaded from.",
+  }),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Lighting
+ */
+export const zLighting = z.object({
+  shadows: z.union([z.string(), z.unknown()]).optional(),
+  conditions: z.union([z.string(), z.unknown()]).optional(),
+  direction: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * LightingDetails
+ *
+ * Lighting information for the image.
+ */
+export const zLightingDetails = z
+  .object({
+    shadows: z.union([z.string(), z.unknown()]).optional(),
+    conditions: z.string().register(z.globalRegistry, {
+      description:
+        "E.g., 'bright daylight', 'dim indoor', 'studio lighting', 'golden hour'.",
+    }),
+    direction: z.string().register(z.globalRegistry, {
+      description: "E.g., 'front-lit', 'backlit', 'side-lit from left'.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Lighting information for the image.",
+  });
+
+/**
+ * LoudnormSummary
+ */
+export const zLoudnormSummary = z.object({
+  input_true_peak: z.union([z.number(), z.unknown()]).optional(),
+  input_lra: z.union([z.number(), z.unknown()]).optional(),
+  output_lra: z.union([z.number(), z.unknown()]).optional(),
+  output_threshold: z.union([z.number(), z.unknown()]).optional(),
+  normalization_type: z.union([z.string(), z.unknown()]).optional(),
+  output_integrated: z.union([z.number(), z.unknown()]).optional(),
+  target_offset: z.union([z.number(), z.unknown()]).optional(),
+  input_threshold: z.union([z.number(), z.unknown()]).optional(),
+  input_integrated: z.union([z.number(), z.unknown()]).optional(),
+  output_true_peak: z.union([z.number(), z.unknown()]).optional(),
+});
+
+/**
+ * LoudnormOutput
+ */
+export const zFfmpegApiLoudnormOutput = z.object({
+  audio: zFile,
+  summary: z.union([zLoudnormSummary, z.unknown()]).optional(),
+});
+
+/**
+ * ObjectDescription
+ *
+ * Detailed object description with all attributes.
+ */
+export const zObjectDescription = z
+  .object({
+    relative_size: z.union([z.string(), z.unknown()]).optional(),
+    description: z.string().register(z.globalRegistry, {
+      description: "Short description of the object.",
+    }),
+    skin_tone_and_texture: z.union([z.string(), z.unknown()]).optional(),
+    appearance_details: z.union([z.string(), z.unknown()]).optional(),
+    number_of_objects: z.union([z.int(), z.unknown()]).optional(),
+    expression: z.union([z.string(), z.unknown()]).optional(),
+    pose: z.union([z.string(), z.unknown()]).optional(),
+    shape_and_color: z.union([z.string(), z.unknown()]).optional(),
+    relationship: z.string().register(z.globalRegistry, {
+      description:
+        "Describe the relationship between the object and the other objects in the image.",
+    }),
+    texture: z.union([z.string(), z.unknown()]).optional(),
+    gender: z.union([z.string(), z.unknown()]).optional(),
+    clothing: z.union([z.string(), z.unknown()]).optional(),
+    location: z.string().register(z.globalRegistry, {
+      description: "E.g., 'center', 'top-left', 'bottom-right foreground'.",
+    }),
+    orientation: z.union([z.string(), z.unknown()]).optional(),
+    action: z.union([z.string(), z.unknown()]).optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Detailed object description with all attributes.",
+  });
+
+/**
+ * ImageToLottieInput
+ */
+export const zOmnilottieImageToLottieInput = z.object({
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description: "Sampling temperature for generation.",
+    })
+    .optional()
+    .default(0.9),
+  image_url: z.union([z.string(), z.string()]),
+  max_tokens: z
+    .int()
+    .gte(256)
+    .lte(8192)
+    .register(z.globalRegistry, {
+      description: "Maximum number of Lottie tokens to generate.",
+    })
+    .optional()
+    .default(4096),
+  top_p: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Nucleus sampling probability threshold.",
+    })
+    .optional()
+    .default(0.25),
+  top_k: z
+    .int()
+    .gte(1)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description: "Top-k sampling parameter.",
+    })
+    .optional()
+    .default(5),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Text description guiding the animation of the image.",
+  }),
+});
+
+/**
+ * LottieOutput
+ */
+export const zOmnilottieImageToLottieOutput = z.object({
+  lottie_file: zFile,
+});
+
+/**
+ * TextToLottieInput
+ */
+export const zOmnilottieInput = z.object({
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description: "Sampling temperature for generation.",
+    })
+    .optional()
+    .default(0.9),
+  top_p: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Nucleus sampling probability threshold.",
+    })
+    .optional()
+    .default(0.25),
+  max_tokens: z
+    .int()
+    .gte(256)
+    .lte(8192)
+    .register(z.globalRegistry, {
+      description: "Maximum number of Lottie tokens to generate.",
+    })
+    .optional()
+    .default(4096),
+  top_k: z
+    .int()
+    .gte(1)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description: "Top-k sampling parameter.",
+    })
+    .optional()
+    .default(5),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Text description of the Lottie animation to generate.",
+  }),
+});
+
+/**
+ * LottieOutput
+ */
+export const zOmnilottieOutput = z.object({
+  lottie_file: zFile,
+});
+
+/**
+ * VideoToLottieInput
+ */
+export const zOmnilottieVideoToLottieInput = z.object({
+  video_url: z.union([z.string(), z.string()]),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description: "Sampling temperature for generation.",
+    })
+    .optional()
+    .default(0.9),
+  top_p: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Nucleus sampling probability threshold.",
+    })
+    .optional()
+    .default(0.25),
+  max_tokens: z
+    .int()
+    .gte(256)
+    .lte(8192)
+    .register(z.globalRegistry, {
+      description: "Maximum number of Lottie tokens to generate.",
+    })
+    .optional()
+    .default(4096),
+  top_k: z
+    .int()
+    .gte(1)
+    .lte(100)
+    .register(z.globalRegistry, {
+      description: "Top-k sampling parameter.",
+    })
+    .optional()
+    .default(5),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * LottieOutput
+ */
+export const zOmnilottieVideoToLottieOutput = z.object({
+  lottie_file: zFile,
+});
+
+/**
+ * PhotographicCharacteristics
+ */
+export const zPhotographicCharacteristics = z.object({
+  focus: z.union([z.string(), z.unknown()]).optional(),
+  lens_focal_length: z.union([z.string(), z.unknown()]).optional(),
+  camera_angle: z.union([z.string(), z.unknown()]).optional(),
+  depth_of_field: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * PhotographicCharacteristicsDetails
+ *
+ * Photographic characteristics of the image.
+ */
+export const zPhotographicCharacteristicsDetails = z
+  .object({
+    focus: z.string().register(z.globalRegistry, {
+      description:
+        "E.g., 'sharp focus on subject', 'soft focus', 'motion blur'.",
+    }),
+    lens_focal_length: z.string().register(z.globalRegistry, {
+      description: "E.g., 'wide-angle', 'telephoto', 'macro', 'fisheye'.",
+    }),
+    camera_angle: z.string().register(z.globalRegistry, {
+      description:
+        "E.g., 'eye-level', 'low angle', 'high angle', 'dutch angle'.",
+    }),
+    depth_of_field: z.string().register(z.globalRegistry, {
+      description: "E.g., 'shallow', 'deep', 'bokeh background'.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Photographic characteristics of the image.",
+  });
+
+/**
+ * PromptObject
+ */
+export const zPromptObject = z.object({
+  relative_size: z.union([z.string(), z.unknown()]).optional(),
+  description: z.union([z.string(), z.unknown()]).optional(),
+  skin_tone_and_texture: z.union([z.string(), z.unknown()]).optional(),
+  appearance_details: z.union([z.string(), z.unknown()]).optional(),
+  number_of_objects: z.union([z.int(), z.unknown()]).optional(),
+  pose: z.union([z.string(), z.unknown()]).optional(),
+  expression: z.union([z.string(), z.unknown()]).optional(),
+  shape_and_color: z.union([z.string(), z.unknown()]).optional(),
+  relationship: z.string().register(z.globalRegistry, {
+    description:
+      "The relationship of the object to other objects in the image.",
+  }),
+  texture: z.union([z.string(), z.unknown()]).optional(),
+  gender: z.union([z.string(), z.unknown()]).optional(),
+  clothing: z.union([z.string(), z.unknown()]).optional(),
+  location: z.union([z.string(), z.unknown()]).optional(),
+  orientation: z.union([z.string(), z.unknown()]).optional(),
+  action: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * StructuredPrompt
+ */
+export const zBriaFiboVlmStructuredPrompt = z.object({
+  background_setting: z.union([z.string(), z.unknown()]).optional(),
+  artistic_style: z.union([z.string(), z.unknown()]).optional(),
+  style_medium: z.union([z.string(), z.unknown()]).optional(),
+  text_render: z.union([z.array(z.unknown()), z.unknown()]).optional(),
+  objects: z.union([z.array(zPromptObject), z.unknown()]).optional(),
+  context: z.union([z.string(), z.unknown()]).optional(),
+  photographic_characteristics: z
+    .union([zPhotographicCharacteristics, z.unknown()])
+    .optional(),
+  aesthetics: z.union([zAestheticsType2, z.unknown()]).optional(),
+  lighting: z.union([zLighting, z.unknown()]).optional(),
+  short_description: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * StructuredPromptModel
+ */
+export const zFiboLiteGenerateStructuredPromptLiteInput = z.object({
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "Random seed for reproducibility.",
+    })
+    .optional()
+    .default(5555),
+  structured_prompt: z
+    .union([zBriaFiboVlmStructuredPrompt, z.unknown()])
+    .optional(),
+  image_url: z.union([z.string(), z.unknown()]).optional(),
+});
+
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
+  }),
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
     })
     .optional(),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The prompt to query the image with.",
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
+});
+
+/**
+ * Resolution
+ */
+export const zResolution = z.object({
+  aspect_ratio: z.string().register(z.globalRegistry, {
+    description: "Display aspect ratio (e.g., '16:9')",
   }),
-  image_url: z.union([z.string(), z.string()]),
+  height: z.int().register(z.globalRegistry, {
+    description: "Height of the video in pixels",
+  }),
+  width: z.int().register(z.globalRegistry, {
+    description: "Width of the video in pixels",
+  }),
+});
+
+/**
+ * StructuredPrompt
+ */
+export const zStructuredPrompt = z.object({
+  background_setting: z.union([z.string(), z.unknown()]).optional(),
+  artistic_style: z.union([z.string(), z.unknown()]).optional(),
+  aesthetics: z.union([zAesthetics, z.unknown()]).optional(),
+  text_render: z.union([z.array(z.unknown()), z.unknown()]).optional(),
+  objects: z.union([z.array(zPromptObject), z.unknown()]).optional(),
+  style_medium: z.union([z.string(), z.unknown()]).optional(),
+  photographic_characteristics: z
+    .union([zPhotographicCharacteristics, z.unknown()])
+    .optional(),
+  context: z.union([z.string(), z.unknown()]).optional(),
+  lighting: z.union([zLighting, z.unknown()]).optional(),
+  short_description: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * StructuredPromptModel
+ */
+export const zFiboGenerateStructuredPromptInput = z.object({
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "Random seed for reproducibility.",
+    })
+    .optional()
+    .default(5555),
+  structured_prompt: z.union([zStructuredPrompt, z.unknown()]).optional(),
+  image_url: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * TextRender
+ *
+ * Text rendering information in the image.
+ */
+export const zTextRender = z
+  .object({
+    text: z.string().register(z.globalRegistry, {
+      description: "The text content.",
+    }),
+    font: z.string().register(z.globalRegistry, {
+      description: "E.g., 'realistic', 'cartoonish', 'minimalist'.",
+    }),
+    color: z.string().register(z.globalRegistry, {
+      description: "E.g., 'red', 'blue', 'green'.",
+    }),
+    location: z.string().register(z.globalRegistry, {
+      description: "E.g., 'center', 'top-left', 'bottom-right foreground'.",
+    }),
+    appearance_details: z.union([z.string(), z.unknown()]).optional(),
+    size: z.string().register(z.globalRegistry, {
+      description: "E.g., 'small', 'medium', 'large within frame'.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Text rendering information in the image.",
+  });
+
+/**
+ * StructuredPrompt
+ */
+export const zStructuredPromptType2 = z.object({
+  background_setting: z.string().register(z.globalRegistry, {
+    description:
+      "Describe the overall environment, setting, or background, including any notable background elements.",
+  }),
+  artistic_style: z.string().register(z.globalRegistry, {
+    description: "describe specific artistic characteristics, 3 words maximum.",
+  }),
+  style_medium: z.union([z.string(), z.unknown()]).optional(),
+  text_render: z.union([z.array(zTextRender), z.unknown()]).optional(),
+  subject_emotions: z.union([z.string(), z.unknown()]).optional(),
+  objects: z.array(zObjectDescription).register(z.globalRegistry, {
+    description: "List of prominent foreground/midground objects.",
+  }),
+  photographic_characteristics: z
+    .union([zPhotographicCharacteristicsDetails, z.unknown()])
+    .optional(),
+  aesthetics: zAestheticsDetails,
+  lighting: zLightingDetails,
+  context: z.string().register(z.globalRegistry, {
+    description:
+      "Provide any additional context that helps understand the image better.",
+  }),
+  short_description: z.string().register(z.globalRegistry, {
+    description: "A concise summary of the image content, 200 words maximum.",
+  }),
+});
+
+/**
+ * StructuredPromptInput
+ */
+export const zFiboLiteGenerateStructuredPromptInput = z.object({
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  seed: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "Seed for the random number generator.",
+    })
+    .optional()
+    .default(7),
+  structured_prompt: z.union([zStructuredPromptType2, z.unknown()]).optional(),
+  image_url: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * VideoFormat
+ */
+export const zVideoFormat = z.object({
+  container: z.string().register(z.globalRegistry, {
+    description: "Container format of the video",
+  }),
+  video_codec: z.string().register(z.globalRegistry, {
+    description: "Video codec used (e.g., 'h264')",
+  }),
+  pixel_format: z.string().register(z.globalRegistry, {
+    description: "Pixel format used (e.g., 'yuv420p')",
+  }),
+  profile: z.string().register(z.globalRegistry, {
+    description: "Codec profile (e.g., 'main', 'high')",
+  }),
+  level: z.number().register(z.globalRegistry, {
+    description: "Codec level (e.g., 4.1)",
+  }),
+  bitrate: z.int().register(z.globalRegistry, {
+    description: "Video bitrate in bits per second",
+  }),
+});
+
+/**
+ * Video
+ */
+export const zVideo = z.object({
+  file_name: z.string().register(z.globalRegistry, {
+    description: "Original filename of the media",
+  }),
+  duration: z.number().register(z.globalRegistry, {
+    description: "Duration of the media in seconds",
+  }),
+  media_type: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "Type of media (always 'video')",
+    })
+    .optional()
+    .default("video"),
+  bitrate: z.int().register(z.globalRegistry, {
+    description: "Overall bitrate of the media in bits per second",
+  }),
+  codec: z.string().register(z.globalRegistry, {
+    description: "Codec used to encode the media",
+  }),
+  content_type: z.string().register(z.globalRegistry, {
+    description: "MIME type of the media file",
+  }),
+  audio: z.union([zAudioTrack, z.unknown()]).optional(),
+  fps: z.int().register(z.globalRegistry, {
+    description: "Frames per second",
+  }),
+  file_size: z.int().register(z.globalRegistry, {
+    description: "Size of the file in bytes",
+  }),
+  start_frame_url: z.union([z.string(), z.unknown()]).optional(),
+  url: z.string().register(z.globalRegistry, {
+    description: "URL where the media file can be accessed",
+  }),
+  frame_count: z.int().register(z.globalRegistry, {
+    description: "Total number of frames in the video",
+  }),
+  timebase: z.string().register(z.globalRegistry, {
+    description: "Time base used for frame timestamps",
+  }),
+  container: z.string().register(z.globalRegistry, {
+    description: "Container format of the media file (e.g., 'mp4', 'mov')",
+  }),
+  resolution: zResolution,
+  format: zVideoFormat,
+  end_frame_url: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * MetadataOutput
+ */
+export const zFfmpegApiMetadataOutput = z.object({
+  media: z.union([zVideo, zAudio]),
 });
 
 export const zPostBriaFiboEditEditStructuredInstructionData = z.object({

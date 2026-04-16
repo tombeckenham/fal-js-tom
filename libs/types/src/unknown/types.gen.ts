@@ -5,15 +5,6 @@ export type ClientOptions = {
 };
 
 /**
- * InterleaveVideoOutput
- *
- * Output model for interleaved video
- */
-export type WorkflowUtilitiesInterleaveVideoOutput = {
-  video: File;
-};
-
-/**
  * File
  */
 export type File = {
@@ -44,43 +35,6 @@ export type File = {
 };
 
 /**
- * InterleaveVideoInput
- *
- * Input model for interleaving multiple videos
- */
-export type WorkflowUtilitiesInterleaveVideoInput = {
-  /**
-   * Video Urls
-   *
-   * List of video URLs to interleave in order
-   */
-  video_urls: Array<string>;
-};
-
-/**
- * UsageInfo
- */
-export type UsageInfo = {
-  /**
-   * Total Tokens
-   */
-  total_tokens?: number;
-  /**
-   * Completion Tokens
-   */
-  completion_tokens?: number | unknown;
-  /**
-   * Prompt Tokens
-   */
-  prompt_tokens?: number | unknown;
-  prompt_tokens_details?: PromptTokensDetails | unknown;
-  /**
-   * Cost
-   */
-  cost: number;
-};
-
-/**
  * PromptTokensDetails
  */
 export type PromptTokensDetails = {
@@ -94,20 +48,40 @@ export type PromptTokensDetails = {
   cache_write_tokens?: number;
 };
 
-/**
- * AudioOutput
- */
-export type RouterAudioOutput = {
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
   /**
-   * Output
-   *
-   * Generated output from audio processing
+   * The request id.
    */
-  output: string;
+  request_id: string;
   /**
-   * Token usage information
+   * The response url.
    */
-  usage: UsageInfo | unknown;
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
 };
 
 /**
@@ -158,40 +132,66 @@ export type RouterAudioInput = {
   reasoning?: boolean;
 };
 
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+/**
+ * AudioOutput
+ */
+export type RouterAudioOutput = {
   /**
-   * The request id.
+   * Output
+   *
+   * Generated output from audio processing
    */
-  request_id: string;
+  output: string;
   /**
-   * The response url.
+   * Token usage information
    */
-  response_url?: string;
+  usage: UsageInfo | unknown;
+};
+
+/**
+ * UsageInfo
+ */
+export type UsageInfo = {
   /**
-   * The status url.
+   * Total Tokens
    */
-  status_url?: string;
+  total_tokens?: number;
   /**
-   * The cancel url.
+   * Completion Tokens
    */
-  cancel_url?: string;
+  completion_tokens?: number | unknown;
   /**
-   * The logs.
+   * Prompt Tokens
    */
-  logs?: {
-    [key: string]: unknown;
-  };
+  prompt_tokens?: number | unknown;
+  prompt_tokens_details?: PromptTokensDetails | unknown;
   /**
-   * The metrics.
+   * Cost
    */
-  metrics?: {
-    [key: string]: unknown;
-  };
+  cost: number;
+};
+
+/**
+ * InterleaveVideoInput
+ *
+ * Input model for interleaving multiple videos
+ */
+export type WorkflowUtilitiesInterleaveVideoInput = {
   /**
-   * The queue position.
+   * Video Urls
+   *
+   * List of video URLs to interleave in order
    */
-  queue_position?: number;
+  video_urls: Array<string>;
+};
+
+/**
+ * InterleaveVideoOutput
+ *
+ * Output model for interleaved video
+ */
+export type WorkflowUtilitiesInterleaveVideoOutput = {
+  video: File;
 };
 
 export type PostFalAiWorkflowUtilitiesInterleaveVideoData = {

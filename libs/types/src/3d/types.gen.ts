@@ -5,1028 +5,35 @@ export type ClientOptions = {
 };
 
 /**
- * UltraShapeResponse
- */
-export type UltrashapeOutput = {
-  model_glb: File;
-};
-
-/**
- * File
- */
-export type File = {
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-};
-
-/**
- * UltraShapeRequest
- */
-export type UltrashapeInput = {
-  /**
-   * Seed
-   *
-   * Random seed.
-   */
-  seed?: number;
-  /**
-   * Remove Background
-   *
-   * Remove image background.
-   */
-  remove_background?: boolean;
-  /**
-   * Model Url
-   *
-   * URL of the coarse mesh (.glb or .obj) to refine.
-   */
-  model_url: string | Blob | File;
-  /**
-   * Octree Resolution
-   *
-   * Marching cubes resolution.
-   */
-  octree_resolution?: number;
-  /**
-   * Image Url
-   *
-   * URL of the reference image for mesh refinement.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * Diffusion steps.
-   */
-  num_inference_steps?: number;
-};
-
-/**
- * Tripo3dOutput
- */
-export type TripoV25MultiviewTo3dOutput = {
-  /**
-   * Base Model
-   *
-   * Base model
-   */
-  base_model?: FileType2;
-  /**
-   * Task Id
-   *
-   * The task id of the 3D model generation.
-   */
-  task_id: string;
-  /**
-   * Rendered Image
-   *
-   * A preview image of the model
-   */
-  rendered_image?: FileType2;
-  /**
-   * Model Mesh
-   *
-   * Model
-   */
-  model_mesh?: FileType2;
-  /**
-   * Pbr Model
-   *
-   * Pbr model
-   */
-  pbr_model?: FileType2;
-};
-
-/**
- * File
- */
-export type FileType2 = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
-};
-
-/**
- * MultiviewTo3dInput
- */
-export type TripoV25MultiviewTo3dInput = {
-  /**
-   * Face Limit
-   *
-   * Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.
-   */
-  face_limit?: number;
-  /**
-   * Right Image Url
-   *
-   * Right view image of the object.
-   */
-  right_image_url?: string | Blob | File;
-  /**
-   * Style
-   *
-   * [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
-   *
-   * @deprecated
-   */
-  style?:
-    | "person:person2cartoon"
-    | "object:clay"
-    | "object:steampunk"
-    | "animal:venom"
-    | "object:barbie"
-    | "object:christmas"
-    | "gold"
-    | "ancient_bronze";
-  /**
-   * Quad
-   *
-   * Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.
-   */
-  quad?: boolean;
-  /**
-   * Front Image Url
-   *
-   * Front view image of the object.
-   */
-  front_image_url: string | Blob | File;
-  /**
-   * Texture Seed
-   *
-   * This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.
-   */
-  texture_seed?: number;
-  /**
-   * Back Image Url
-   *
-   * Back view image of the object.
-   */
-  back_image_url?: string | Blob | File;
-  /**
-   * Pbr
-   *
-   * A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.
-   */
-  pbr?: boolean;
-  /**
-   * Texture Alignment
-   *
-   * Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
-   */
-  texture_alignment?: "original_image" | "geometry";
-  /**
-   * Texture
-   *
-   * An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
-   */
-  texture?: "no" | "standard" | "HD";
-  /**
-   * Auto Size
-   *
-   * Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.
-   */
-  auto_size?: boolean;
-  /**
-   * Seed
-   *
-   * This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.
-   */
-  seed?: number;
-  /**
-   * Orientation
-   *
-   * Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
-   */
-  orientation?: "default" | "align_image";
-  /**
-   * Left Image Url
-   *
-   * Left view image of the object.
-   */
-  left_image_url?: string | Blob | File;
-};
-
-/**
- * Tripo3dOutput
- */
-export type TripoV25ImageTo3dOutput = {
-  /**
-   * Base Model
-   *
-   * Base model
-   */
-  base_model?: FileType2;
-  /**
-   * Task Id
-   *
-   * The task id of the 3D model generation.
-   */
-  task_id: string;
-  /**
-   * Rendered Image
-   *
-   * A preview image of the model
-   */
-  rendered_image?: FileType2;
-  /**
-   * Model Mesh
-   *
-   * Model
-   */
-  model_mesh?: FileType2;
-  /**
-   * Pbr Model
-   *
-   * Pbr model
-   */
-  pbr_model?: FileType2;
-};
-
-/**
- * ImageTo3dInput
- */
-export type TripoV25ImageTo3dInput = {
-  /**
-   * Face Limit
-   *
-   * Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.
-   */
-  face_limit?: number;
-  /**
-   * Style
-   *
-   * [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
-   *
-   * @deprecated
-   */
-  style?:
-    | "person:person2cartoon"
-    | "object:clay"
-    | "object:steampunk"
-    | "animal:venom"
-    | "object:barbie"
-    | "object:christmas"
-    | "gold"
-    | "ancient_bronze";
-  /**
-   * Pbr
-   *
-   * A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.
-   */
-  pbr?: boolean;
-  /**
-   * Texture Alignment
-   *
-   * Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
-   */
-  texture_alignment?: "original_image" | "geometry";
-  /**
-   * Image Url
-   *
-   * URL of the image to use for model generation.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Texture
-   *
-   * An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
-   */
-  texture?: "no" | "standard" | "HD";
-  /**
-   * Auto Size
-   *
-   * Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.
-   */
-  auto_size?: boolean;
-  /**
-   * Seed
-   *
-   * This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.
-   */
-  seed?: number;
-  /**
-   * Quad
-   *
-   * Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.
-   */
-  quad?: boolean;
-  /**
-   * Orientation
-   *
-   * Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
-   */
-  orientation?: "default" | "align_image";
-  /**
-   * Texture Seed
-   *
-   * This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.
-   */
-  texture_seed?: number;
-};
-
-/**
- * ObjectOutput
- */
-export type TriposrOutput = {
-  /**
-   * Directory containing textures for the remeshed model.
-   */
-  remeshing_dir?: File | unknown;
-  /**
-   * Timings
-   *
-   * Inference timings.
-   */
-  timings: {
-    [key: string]: number;
-  };
-  model_mesh: File;
-};
-
-/**
- * TripoSRInput
- */
-export type TriposrInput = {
-  /**
-   * Output Format
-   *
-   * Output format for the 3D model.
-   */
-  output_format?: "glb" | "obj";
-  /**
-   * Image Url
-   *
-   * Path for the image file to be processed.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Foreground Ratio
-   *
-   * Ratio of the foreground image to the original image.
-   */
-  foreground_ratio?: number;
-  /**
-   * Do Remove Background
-   *
-   * Whether to remove the background from the input image.
-   */
-  do_remove_background?: boolean;
-  /**
-   * Mc Resolution
-   *
-   * Resolution of the marching cubes. Above 512 is not recommended.
-   */
-  mc_resolution?: number;
-};
-
-/**
- * ObjectOutput
- */
-export type TrellisOutput = {
-  /**
-   * Timings
-   *
-   * Processing timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  model_mesh: File;
-};
-
-/**
- * ObjectOutput
- */
-export type TrellisMultiOutput = {
-  /**
-   * Timings
-   *
-   * Processing timings
-   */
-  timings: {
-    [key: string]: number;
-  };
-  model_mesh: File;
-};
-
-/**
- * MultiImageInputModel
- */
-export type TrellisMultiInput = {
-  /**
-   * Multiimage Algo
-   *
-   * Algorithm for multi-image generation
-   */
-  multiimage_algo?: "stochastic" | "multidiffusion";
-  /**
-   * Slat Sampling Steps
-   *
-   * Sampling steps for structured latent generation
-   */
-  slat_sampling_steps?: number;
-  /**
-   * Mesh Simplify
-   *
-   * Mesh simplification factor
-   */
-  mesh_simplify?: number;
-  /**
-   * Ss Guidance Strength
-   *
-   * Guidance strength for sparse structure generation
-   */
-  ss_guidance_strength?: number;
-  /**
-   * Slat Guidance Strength
-   *
-   * Guidance strength for structured latent generation
-   */
-  slat_guidance_strength?: number;
-  /**
-   * Ss Sampling Steps
-   *
-   * Sampling steps for sparse structure generation
-   */
-  ss_sampling_steps?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Image Urls
-   *
-   * List of URLs of input images to convert to 3D
-   */
-  image_urls: Array<string>;
-  /**
-   * Texture Size
-   *
-   * Texture resolution
-   */
-  texture_size?: 512 | 1024 | 2048;
-};
-
-/**
- * InputModel
- */
-export type TrellisInput = {
-  /**
-   * Ss Guidance Strength
-   *
-   * Guidance strength for sparse structure generation
-   */
-  ss_guidance_strength?: number;
-  /**
-   * Mesh Simplify
-   *
-   * Mesh simplification factor
-   */
-  mesh_simplify?: number;
-  /**
-   * Image Url
-   *
-   * URL of the input image to convert to 3D
-   */
-  image_url: string | Blob | File;
-  /**
-   * Slat Guidance Strength
-   *
-   * Guidance strength for structured latent generation
-   */
-  slat_guidance_strength?: number;
-  /**
-   * Slat Sampling Steps
-   *
-   * Sampling steps for structured latent generation
-   */
-  slat_sampling_steps?: number;
-  /**
-   * Ss Sampling Steps
-   *
-   * Sampling steps for sparse structure generation
-   */
-  ss_sampling_steps?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Texture Size
-   *
-   * Texture resolution
-   */
-  texture_size?: 512 | 1024 | 2048;
-};
-
-/**
- * ObjectOutput
- */
-export type Trellis2RetextureOutput = {
-  model_glb: File;
-};
-
-/**
- * RetextureInputModel
- */
-export type Trellis2RetextureInput = {
-  /**
-   * Texture Size
-   *
-   * Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.
-   */
-  texture_size?: 1024 | 2048 | 4096;
-  /**
-   * Image Url
-   *
-   * URL of the reference image for texturing
-   */
-  image_url: string | Blob | File;
-  /**
-   * Resolution
-   *
-   * Internal resolution for texture generation. Higher produces finer texture details but is slower.
-   */
-  resolution?: 512 | 1024;
-  /**
-   * Tex Slat Sampling Steps
-   *
-   * Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.
-   */
-  tex_slat_sampling_steps?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Tex Slat Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.
-   */
-  tex_slat_guidance_rescale?: number;
-  /**
-   * Tex Slat Guidance Strength
-   *
-   * How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.
-   */
-  tex_slat_guidance_strength?: number;
-  /**
-   * Tex Slat Rescale T
-   *
-   * Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.
-   */
-  tex_slat_rescale_t?: number;
-  /**
-   * Mesh Url
-   *
-   * URL of the untextured 3D mesh to retexture. Supports GLB, OBJ, PLY, and STL formats.
-   */
-  mesh_url: string | Blob | File;
-};
-
-/**
- * ObjectOutput
- */
-export type Trellis2Output = {
-  model_glb: File;
-};
-
-/**
- * SingleImageInputModel
- */
-export type Trellis2Input = {
-  /**
-   * Texture Size
-   *
-   * Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.
-   */
-  texture_size?: 1024 | 2048 | 4096;
-  /**
-   * Shape Slat Guidance Strength
-   *
-   * How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.
-   */
-  shape_slat_guidance_strength?: number;
-  /**
-   * Shape Slat Rescale T
-   *
-   * Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.
-   */
-  shape_slat_rescale_t?: number;
-  /**
-   * Resolution
-   *
-   * Output resolution; higher is slower but more detailed
-   */
-  resolution?: 512 | 1024 | 1536;
-  /**
-   * Tex Slat Sampling Steps
-   *
-   * Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.
-   */
-  tex_slat_sampling_steps?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Ss Rescale T
-   *
-   * Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.
-   */
-  ss_rescale_t?: number;
-  /**
-   * Tex Slat Guidance Strength
-   *
-   * How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.
-   */
-  tex_slat_guidance_strength?: number;
-  /**
-   * Remesh
-   *
-   * Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).
-   */
-  remesh?: boolean;
-  /**
-   * Shape Slat Sampling Steps
-   *
-   * Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.
-   */
-  shape_slat_sampling_steps?: number;
-  /**
-   * Ss Guidance Strength
-   *
-   * How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.
-   */
-  ss_guidance_strength?: number;
-  /**
-   * Ss Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.
-   */
-  ss_guidance_rescale?: number;
-  /**
-   * Ss Sampling Steps
-   *
-   * Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.
-   */
-  ss_sampling_steps?: number;
-  /**
-   * Shape Slat Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.
-   */
-  shape_slat_guidance_rescale?: number;
-  /**
-   * Decimation Target
-   *
-   * Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.
-   */
-  decimation_target?: number;
-  /**
-   * Remesh Band
-   *
-   * Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.
-   */
-  remesh_band?: number;
-  /**
-   * Image Url
-   *
-   * URL of the input image to convert to 3D
-   */
-  image_url: string | Blob | File;
-  /**
-   * Tex Slat Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.
-   */
-  tex_slat_guidance_rescale?: number;
-  /**
-   * Tex Slat Rescale T
-   *
-   * Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.
-   */
-  tex_slat_rescale_t?: number;
-  /**
-   * Remesh Project
-   *
-   * How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).
-   */
-  remesh_project?: number;
-};
-
-/**
- * TextureFiles
+ * BasicAnimations
  *
- * Texture files downloaded and uploaded to CDN
+ * Basic animation files included with the rigging result
  */
-export type TextureFiles = {
+export type BasicAnimations = {
   /**
-   * Normal texture (PBR)
+   * Running animation in FBX format
    */
-  normal?: File | unknown;
+  running_fbx?: File | unknown;
   /**
-   * Metallic texture (PBR)
+   * Walking animation in FBX format
    */
-  metallic?: File | unknown;
-  base_color: File;
+  walking_fbx?: File | unknown;
   /**
-   * Roughness texture (PBR)
+   * Walking animation in GLB format
    */
-  roughness?: File | unknown;
-};
-
-/**
- * SAM3DObjectMetadata
- *
- * Per-object metadata for 3D reconstruction.
- */
-export type Sam3dObjectMetadata = {
+  walking_glb?: File | unknown;
   /**
-   * Camera Pose
-   *
-   * Camera pose matrix
+   * Running animation in GLB format
    */
-  camera_pose?: Array<Array<number>> | unknown;
+  running_glb?: File | unknown;
   /**
-   * Rotation
-   *
-   * Rotation quaternion [x, y, z, w]
+   * Running armature only in GLB format
    */
-  rotation?: Array<Array<number>> | unknown;
+  running_armature_glb?: File | unknown;
   /**
-   * Translation
-   *
-   * Translation [tx, ty, tz]
+   * Walking armature only in GLB format
    */
-  translation?: Array<Array<number>> | unknown;
-  /**
-   * Scale
-   *
-   * Scale factors [sx, sy, sz]
-   */
-  scale?: Array<Array<number>> | unknown;
-  /**
-   * Object Index
-   *
-   * Index of the object in the scene
-   */
-  object_index: number;
-};
-
-/**
- * SAM3DBodyPersonMetadata
- *
- * Per-person metadata for body reconstruction.
- */
-export type Sam3dBodyPersonMetadata = {
-  /**
-   * Keypoints 2D
-   *
-   * 2D keypoints [[x, y], ...] - 70 body keypoints
-   */
-  keypoints_2d: Array<Array<number>>;
-  /**
-   * Keypoints 3D
-   *
-   * 3D keypoints [[x, y, z], ...] - 70 body keypoints in camera space
-   */
-  keypoints_3d?: Array<Array<number>> | unknown;
-  /**
-   * Person Id
-   *
-   * Index of the person in the scene
-   */
-  person_id: number;
-  /**
-   * Pred Cam T
-   *
-   * Predicted camera translation [tx, ty, tz]
-   */
-  pred_cam_t: Array<number>;
-  /**
-   * Bbox
-   *
-   * Bounding box [x_min, y_min, x_max, y_max]
-   */
-  bbox: Array<number>;
-  /**
-   * Focal Length
-   *
-   * Estimated focal length
-   */
-  focal_length: number;
-};
-
-/**
- * SAM3DBodyMetadata
- *
- * Metadata for body reconstruction output.
- */
-export type Sam3dBodyMetadata = {
-  /**
-   * People
-   *
-   * Per-person metadata
-   */
-  people: Array<Sam3dBodyPersonMetadata>;
-  /**
-   * Num People
-   *
-   * Number of people detected
-   */
-  num_people: number;
-};
-
-/**
- * SAM3DBodyAlignmentInfo
- *
- * Per-person alignment metadata.
- */
-export type Sam3dBodyAlignmentInfo = {
-  /**
-   * Focal Length
-   *
-   * Focal length used
-   */
-  focal_length: number;
-  /**
-   * Scale Factor
-   *
-   * Scale factor applied for alignment
-   */
-  scale_factor: number;
-  /**
-   * Target Points Count
-   *
-   * Number of target points for alignment
-   */
-  target_points_count: number;
-  /**
-   * Cropped Vertices Count
-   *
-   * Number of cropped vertices
-   */
-  cropped_vertices_count: number;
-  /**
-   * Translation
-   *
-   * Translation [tx, ty, tz]
-   */
-  translation: Array<number>;
-  /**
-   * Person Id
-   *
-   * Index of the person
-   */
-  person_id: number;
-};
-
-/**
- * SAM3DObjectOutput
- */
-export type Sam33dObjectsOutput = {
-  /**
-   * Individual Glbs
-   *
-   * Individual GLB mesh files per object (only for multi-object scenes)
-   */
-  individual_glbs?: Array<File | unknown> | unknown;
-  /**
-   * Individual Splats
-   *
-   * Individual Gaussian splat files per object (only for multi-object scenes)
-   */
-  individual_splats?: Array<File> | unknown;
-  gaussian_splat: File;
-  /**
-   * Metadata
-   *
-   * Per-object metadata (rotation/translation/scale)
-   */
-  metadata: Array<Sam3dObjectMetadata>;
-  model_glb?: File;
-  /**
-   * Zip bundle containing all artifacts and metadata
-   */
-  artifacts_zip?: File | unknown;
-};
-
-/**
- * SAM3DObjectInput
- */
-export type Sam33dObjectsInput = {
-  /**
-   * Export Textured Glb
-   *
-   * If True, exports GLB with baked texture and UVs instead of vertex colors.
-   */
-  export_textured_glb?: boolean;
-  /**
-   * Point Prompts
-   *
-   * Point prompts for auto-segmentation when no masks provided
-   */
-  point_prompts?: Array<PointPromptBase>;
-  /**
-   * Box Prompts
-   *
-   * Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.
-   */
-  box_prompts?: Array<BoxPromptBase>;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Detection Threshold
-   *
-   * Detection confidence threshold (0.1-1.0). Lower = more detections but less precise. If not set, uses the model's default.
-   */
-  detection_threshold?: number | unknown;
-  /**
-   * Image Url
-   *
-   * URL of the image to reconstruct in 3D
-   */
-  image_url: string | Blob | File;
-  /**
-   * Pointmap Url
-   *
-   * Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation
-   */
-  pointmap_url?: string | unknown;
-  /**
-   * Prompt
-   *
-   * Text prompt for auto-segmentation when no masks provided (e.g., 'chair', 'lamp')
-   */
-  prompt?: string | unknown;
-  /**
-   * Mask Urls
-   *
-   * Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.
-   */
-  mask_urls?: Array<string>;
+  walking_armature_glb?: File | unknown;
 };
 
 /**
@@ -1066,386 +73,130 @@ export type BoxPromptBase = {
 };
 
 /**
- * PointPromptBase
+ * File
  */
-export type PointPromptBase = {
+export type File = {
   /**
-   * Object Id
+   * File Name
    *
-   * Optional object identifier. Prompts sharing an object id refine the same object.
+   * The name of the file. It will be auto-generated if not provided.
    */
-  object_id?: number | unknown;
+  file_name?: string | unknown;
   /**
-   * X
+   * Content Type
    *
-   * X Coordinate of the prompt
+   * The mime type of the file.
    */
-  x?: number | unknown;
+  content_type?: string | unknown;
   /**
-   * Y
+   * File Size
    *
-   * Y Coordinate of the prompt
+   * The size of the file in bytes.
    */
-  y?: number | unknown;
+  file_size?: number | unknown;
   /**
-   * Label
+   * Url
    *
-   * 1 for foreground, 0 for background
+   * The URL where the file can be downloaded from.
    */
-  label?: 0 | 1 | unknown;
+  url: string;
 };
 
 /**
- * SAM3DBodyOutput
+ * File
  */
-export type Sam33dBodyOutput = {
+export type FileType2 = {
   /**
-   * Meshes
+   * File Size
    *
-   * Individual mesh files (.ply), one per detected person (when export_meshes=True)
+   * The size of the file in bytes.
    */
-  meshes?: Array<File> | unknown;
-  visualization: File;
-  metadata: Sam3dBodyMetadata;
-  model_glb: File;
+  file_size?: number;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Data
+   *
+   * File data
+   */
+  file_data?: Blob | File;
 };
 
 /**
- * SAM3DBodyInput
+ * ImageToWorldRequest
  */
-export type Sam33dBodyInput = {
+export type HunyuanWorldImageToWorldInput = {
   /**
-   * Mask Url
+   * Labels Fg1
    *
-   * Optional URL of a binary mask image (white=person, black=background). When provided, skips auto human detection and uses this mask instead. Bbox is auto-computed from the mask.
+   * Labels for the first foreground object.
    */
-  mask_url?: string | unknown;
+  labels_fg1: string;
+  /**
+   * Export Drc
+   *
+   * Whether to export DRC (Dynamic Resource Configuration).
+   */
+  export_drc?: boolean;
+  /**
+   * Classes
+   *
+   * Classes to use for the world generation.
+   */
+  classes: string;
+  /**
+   * Labels Fg2
+   *
+   * Labels for the second foreground object.
+   */
+  labels_fg2: string;
   /**
    * Image Url
    *
-   * URL of the image containing humans
-   */
-  image_url: string | Blob | File;
-  /**
-   * Include 3D Keypoints
-   *
-   * Include 3D keypoint markers (spheres) in the GLB mesh for visualization
-   */
-  include_3d_keypoints?: boolean;
-  /**
-   * Export Meshes
-   *
-   * Export individual mesh files (.ply) per person
-   */
-  export_meshes?: boolean;
-};
-
-/**
- * SAM3DAlignmentOutput
- */
-export type Sam33dAlignOutput = {
-  /**
-   * Combined scene with body + object meshes in GLB format (only when object_mesh_url provided)
-   */
-  scene_glb?: File | unknown;
-  visualization: File;
-  body_mesh_ply: File;
-  model_glb: File;
-  metadata: Sam3dBodyAlignmentInfo;
-};
-
-/**
- * SAM3DAlignmentInput
- */
-export type Sam33dAlignInput = {
-  /**
-   * Body Mesh Url
-   *
-   * URL of the SAM-3D Body mesh file (.ply or .glb) to align
-   */
-  body_mesh_url: string | Blob | File;
-  /**
-   * Image Url
-   *
-   * URL of the original image used for MoGe depth estimation
-   */
-  image_url: string | Blob | File;
-  /**
-   * Body Mask Url
-   *
-   * URL of the human mask image. If not provided, uses full image.
-   */
-  body_mask_url?: string | unknown;
-  /**
-   * Object Mesh Url
-   *
-   * Optional URL of SAM-3D Object mesh (.glb) to create combined scene
-   */
-  object_mesh_url?: string | unknown;
-  /**
-   * Focal Length
-   *
-   * Focal length from SAM-3D Body metadata. If not provided, estimated from MoGe.
-   */
-  focal_length?: number | unknown;
-};
-
-/**
- * ObjectOutput
- */
-export type Reconviagen05Output = {
-  /**
-   * Seed
-   *
-   * Seed used for generation.
-   */
-  seed: number;
-  model_glb: File;
-};
-
-/**
- * ImageInput
- */
-export type Reconviagen05Input = {
-  /**
-   * Shape SLat Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in the shape stage.
-   */
-  shape_slat_guidance_rescale?: number;
-  /**
-   * Image URLs
-   *
-   * One or more views of the same object. Multiple views yield higher-quality 3D reconstruction.
-   */
-  image_urls: Array<string>;
-  /**
-   * Sparse Structure Guidance Strength
-   *
-   * How closely the initial 3D structure follows the input. Higher values produce more faithful but potentially noisier results.
-   */
-  ss_guidance_strength?: number;
-  /**
-   * Decimation Target
-   *
-   * Target number of vertices in the final mesh.
-   */
-  decimation_target?: number;
-  /**
-   * SLat Guidance Strength
-   *
-   * Guidance strength for SLat stage (only used when ss_source='mesh').
-   */
-  slat_guidance_strength?: number;
-  /**
-   * SLat Rescale T
-   *
-   * Rescale T for SLat stage (only used when ss_source='mesh').
-   */
-  slat_rescale_t?: number;
-  /**
-   * Texture SLat Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in the texture stage.
-   */
-  tex_slat_guidance_rescale?: number;
-  /**
-   * Shape SLat Sampling Steps
-   *
-   * Number of denoising steps for shape refinement.
-   */
-  shape_slat_sampling_steps?: number;
-  /**
-   * Sparse Structure Guidance Rescale
-   *
-   * Dampens artifacts from high guidance in stage 1.
-   */
-  ss_guidance_rescale?: number;
-  /**
-   * SLat Sampling Steps
-   *
-   * Sampling steps for SLat stage (only used when ss_source='mesh').
-   */
-  slat_sampling_steps?: number;
-  /**
-   * SLat Guidance Rescale
-   *
-   * Guidance rescale for SLat stage (only used when ss_source='mesh').
-   */
-  slat_guidance_rescale?: number;
-  /**
-   * Texture SLat Guidance Strength
-   *
-   * How closely the texture follows the input colors.
-   */
-  tex_slat_guidance_strength?: number;
-  /**
-   * Sparse Structure Sampling Steps
-   *
-   * Number of denoising steps for the initial structure.
-   */
-  ss_sampling_steps?: number;
-  /**
-   * Shape SLat Guidance Strength
-   *
-   * How closely the detailed geometry follows the input.
-   */
-  shape_slat_guidance_strength?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility
-   */
-  seed?: number | unknown;
-  /**
-   * Multi Image Strategy
-   *
-   * Strategy for combining multi-view conditioning. 'adaptive_guidance_weight' works best in most cases. Only used when more than one image is provided.
-   */
-  multi_image_strategy?:
-    | "average_right"
-    | "weighted_average"
-    | "sequential"
-    | "average"
-    | "adaptive_guidance_weight"
-    | "fixed_guidance_rescale";
-  /**
-   * Texture Size
-   *
-   * Resolution of the texture image baked onto the mesh.
-   */
-  texture_size?: 1024 | 2048 | 4096;
-  /**
-   * Sparse Structure Source
-   *
-   * Sparse structure source. 'mesh' gives best quality, 'direct' is fastest, 'mvtrellis2' uses multi-view TRELLIS.2.
-   */
-  ss_source?: "direct" | "mesh" | "mvtrellis2";
-  /**
-   * Shape SLat Rescale T
-   *
-   * Controls noise schedule sharpness for shape refinement.
-   */
-  shape_slat_rescale_t?: number;
-  /**
-   * Texture SLat Sampling Steps
-   *
-   * Number of denoising steps for texture generation.
-   */
-  tex_slat_sampling_steps?: number;
-  /**
-   * Texture SLat Rescale T
-   *
-   * Controls noise schedule sharpness for texture generation.
-   */
-  tex_slat_rescale_t?: number;
-  /**
-   * Sparse Structure Rescale T
-   *
-   * Controls noise schedule sharpness for structure generation.
-   */
-  ss_rescale_t?: number;
-  /**
-   * Resolution
-   *
-   * Output resolution; higher is slower but more detailed
-   */
-  resolution?: 512 | 1024 | 1536;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-/**
- * PSHumanResponse
- */
-export type PshumanOutput = {
-  model_obj: File;
-  preview_image: File;
-};
-
-/**
- * PSHumanRequest
- */
-export type PshumanInput = {
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.
-   */
-  guidance_scale?: number;
-  /**
-   * Seed
-   *
-   * Seed for reproducibility. If None, a random seed will be used.
-   */
-  seed?: number | unknown;
-  /**
-   * Image Url
-   *
-   * A direct URL to the input image of a person.
+   * The URL of the image to convert to a world.
    */
   image_url: string | Blob | File;
 };
 
 /**
- * MultiViewObjectOutput
+ * ImageToWorldResponse
  */
-export type OmnipartOutput = {
-  output_zip: File;
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-  full_model_mesh: File;
+export type HunyuanWorldImageToWorldOutput = {
+  world_file: File;
 };
 
 /**
- * OmnipartInput
+ * Hunyuan3DInput
  */
-export type OmnipartInput = {
+export type Hunyuan3dV2Input = {
   /**
    * Input Image Url
    *
    * URL of image to use while generating the 3D model.
    */
   input_image_url: string | Blob | File;
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
   /**
    * Seed
    *
@@ -1454,19 +205,19 @@ export type OmnipartInput = {
    * will output the same image every time.
    *
    */
-  seed?: number;
+  seed?: number | unknown;
   /**
-   * Minimum Segment Size
+   * Octree Resolution
    *
-   * Minimum segment size (pixels) for the model.
+   * Octree resolution for the model.
    */
-  minimum_segment_size?: number;
+  octree_resolution?: number;
   /**
-   * Parts
+   * Num Inference Steps
    *
-   * Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)
+   * Number of inference steps to perform.
    */
-  parts?: string;
+  num_inference_steps?: number;
   /**
    * Guidance Scale
    *
@@ -1476,147 +227,740 @@ export type OmnipartInput = {
 };
 
 /**
- * ModelUrls
+ * Hunyuan3DInput
  */
-export type ModelUrlsType3 = {
+export type Hunyuan3dV2MiniInput = {
   /**
-   * OBJ format 3D model
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
    */
-  obj?: File | unknown;
+  input_image_url: string | Blob | File;
   /**
-   * USDZ format 3D model
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
    */
-  usdz?: File | unknown;
+  textured_mesh?: boolean;
   /**
-   * FBX format 3D model
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
    */
-  fbx?: File | unknown;
+  seed?: number | unknown;
   /**
-   * GLB format 3D model
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
    */
-  glb?: File | unknown;
+  octree_resolution?: number;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
 };
 
 /**
- * ModelUrls
+ * ObjectOutput
  */
-export type ModelUrlsType2 = {
+export type Hunyuan3dV2MiniOutput = {
   /**
-   * GLB format 3D model
+   * Seed
+   *
+   * Seed value used for generation.
    */
-  glb?: File | unknown;
-  /**
-   * MTL material file for OBJ model
-   */
-  mtl?: File | unknown;
-  /**
-   * FBX format 3D model
-   */
-  fbx?: File | unknown;
-  /**
-   * USDZ format 3D model
-   */
-  usdz?: File | unknown;
-  /**
-   * OBJ format 3D model
-   */
-  obj?: File | unknown;
-  /**
-   * Texture image for the 3D model
-   */
-  texture?: File | unknown;
+  seed: number;
+  model_mesh: File;
 };
 
 /**
- * ModelUrls
- *
- * 3D model files in various formats
+ * Hunyuan3DInput
  */
-export type ModelUrls = {
+export type Hunyuan3dV2MiniTurboInput = {
   /**
-   * Blender format 3D model
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
    */
-  blend?: File | unknown;
+  input_image_url: string | Blob | File;
   /**
-   * GLB format 3D model
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
    */
-  glb?: File | unknown;
+  textured_mesh?: boolean;
   /**
-   * USDZ format 3D model
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
    */
-  usdz?: File | unknown;
+  seed?: number | unknown;
   /**
-   * OBJ format 3D model
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
    */
-  obj?: File | unknown;
+  octree_resolution?: number;
   /**
-   * STL format 3D model
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
    */
-  stl?: File | unknown;
+  num_inference_steps?: number;
   /**
-   * FBX format 3D model
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
    */
-  fbx?: File | unknown;
+  guidance_scale?: number;
 };
 
 /**
- * TextTo3DOutput
- *
- * Output for Text to 3D generation
+ * ObjectOutput
  */
-export type MeshyV6TextTo3dOutput = {
+export type Hunyuan3dV2MiniTurboOutput = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+};
+
+/**
+ * Hunyuan3DInputMultiView
+ */
+export type Hunyuan3dV2MultiViewInput = {
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
+  /**
+   * Left Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  left_image_url: string | Blob | File;
+  /**
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
+   */
+  octree_resolution?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
+   * Back Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  back_image_url: string | Blob | File;
+  /**
+   * Front Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  front_image_url: string | Blob | File;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
+};
+
+/**
+ * MultiViewObjectOutput
+ */
+export type Hunyuan3dV2MultiViewOutput = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+};
+
+/**
+ * Hunyuan3DInputMultiView
+ */
+export type Hunyuan3dV2MultiViewTurboInput = {
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
+  /**
+   * Left Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  left_image_url: string | Blob | File;
+  /**
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
+   */
+  octree_resolution?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
+   * Back Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  back_image_url: string | Blob | File;
+  /**
+   * Front Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  front_image_url: string | Blob | File;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
+};
+
+/**
+ * MultiViewObjectOutput
+ */
+export type Hunyuan3dV2MultiViewTurboOutput = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Hunyuan3dV2Output = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+};
+
+/**
+ * Hunyuan3DInput
+ */
+export type Hunyuan3dV2TurboInput = {
+  /**
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string | Blob | File;
+  /**
+   * Textured Mesh
+   *
+   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
+   */
+  textured_mesh?: boolean;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number | unknown;
+  /**
+   * Octree Resolution
+   *
+   * Octree resolution for the model.
+   */
+  octree_resolution?: number;
+  /**
+   * Num Inference Steps
+   *
+   * Number of inference steps to perform.
+   */
+  num_inference_steps?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Hunyuan3dV2TurboOutput = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+};
+
+/**
+ * PartInput
+ */
+export type Hunyuan3dV31PartInput = {
+  /**
+   * Input File Url
+   *
+   * URL of FBX file to split into parts. ONLY FBX format supported. Max size: 100MB, face count ≤30,000. Recommended: AIGC-generated models.
+   */
+  input_file_url: string | Blob | File;
+};
+
+/**
+ * PartOutput
+ */
+export type Hunyuan3dV31PartOutput = {
+  /**
+   * Result Files
+   *
+   * List of generated part files in FBX format
+   */
+  result_files: Array<File>;
+};
+
+/**
+ * ProImageTo3DInput
+ */
+export type Hunyuan3dV31ProImageTo3dInput = {
+  /**
+   * Left Image Url
+   *
+   * Optional left side view image URL (JPG/PNG recommended).
+   */
+  left_image_url?: string | unknown;
+  /**
+   * Input Image Url
+   *
+   * Front view image URL. Resolution: 128-5000px, max 8MB, formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
+   */
+  input_image_url: string | Blob | File;
+  /**
+   * Right Front Image Url
+   *
+   * Optional right-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  right_front_image_url?: string | unknown;
+  /**
+   * Right Image Url
+   *
+   * Optional right side view image URL (JPG/PNG recommended).
+   */
+  right_image_url?: string | unknown;
+  /**
+   * Top Image Url
+   *
+   * Optional top view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  top_image_url?: string | unknown;
+  /**
+   * Bottom Image Url
+   *
+   * Optional bottom view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  bottom_image_url?: string | unknown;
+  /**
+   * Face Count
+   *
+   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
+   */
+  face_count?: number;
+  /**
+   * Back Image Url
+   *
+   * Optional back/rear view image URL (JPG/PNG recommended).
+   */
+  back_image_url?: string | unknown;
+  /**
+   * Generate Type
+   *
+   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
+   */
+  generate_type?: "Normal" | "Geometry";
+  /**
+   * Left Front Image Url
+   *
+   * Optional left-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
+   */
+  left_front_image_url?: string | unknown;
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
+   */
+  enable_pbr?: boolean;
+};
+
+/**
+ * ProImageTo3DOutput
+ */
+export type Hunyuan3dV31ProImageTo3dOutput = {
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  model_urls: ModelUrlsType2;
   /**
    * Seed
    *
    * The seed used for generation
    */
   seed?: number | unknown;
-  /**
-   * Rigged character in FBX format. Only present when enable_rigging is true.
-   */
-  rigged_character_fbx?: File | unknown;
-  /**
-   * Animated 3D model in FBX format. Only present when enable_animation is true.
-   */
-  animation_fbx?: File | unknown;
-  /**
-   * Animated 3D model in GLB format. Only present when enable_animation is true.
-   */
-  animation_glb?: File | unknown;
-  /**
-   * Rigged character in GLB format. Only present when enable_rigging is true.
-   */
-  rigged_character_glb?: File | unknown;
-  model_urls: ModelUrls;
-  /**
-   * Actual Prompt
-   *
-   * The actual prompt used if prompt expansion was enabled
-   */
-  actual_prompt?: string | unknown;
   model_glb: File;
-  /**
-   * Rig Task Id
-   *
-   * Rigging task ID. Only present when enable_rigging is true.
-   */
-  rig_task_id?: string | unknown;
-  /**
-   * Basic walking and running animations. Only present when enable_rigging is true.
-   */
-  basic_animations?: BasicAnimations | unknown;
+};
+
+/**
+ * ProTextTo3DInput
+ */
+export type Hunyuan3dV31ProTextTo3dInput = {
   /**
    * Prompt
    *
-   * The text prompt used for generation
+   * Text description of the 3D content to generate. Max 1024 UTF-8 characters.
    */
   prompt: string;
   /**
-   * Texture Urls
+   * Face Count
    *
-   * Array of texture file objects
+   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
    */
-  texture_urls?: Array<TextureFiles>;
+  face_count?: number;
+  /**
+   * Generate Type
+   *
+   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
+   */
+  generate_type?: "Normal" | "Geometry";
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
+   */
+  enable_pbr?: boolean;
+};
+
+/**
+ * ProTextTo3DOutput
+ */
+export type Hunyuan3dV31ProTextTo3dOutput = {
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  model_urls: ModelUrlsType2;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed?: number | unknown;
+  model_glb: File;
+};
+
+/**
+ * RapidImageTo3DInput
+ */
+export type Hunyuan3dV31RapidImageTo3dInput = {
+  /**
+   * Input Image Url
+   *
+   * Front view image URL. Resolution: 128-5000px, max 8MB (recommended ≤6MB for base64 encoding), formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
+   */
+  input_image_url: string | Blob | File;
+  /**
+   * Enable Geometry
+   *
+   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
+   */
+  enable_geometry?: boolean;
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
+   */
+  enable_pbr?: boolean;
+};
+
+/**
+ * RapidImageTo3DOutput
+ */
+export type Hunyuan3dV31RapidImageTo3dOutput = {
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  model_urls: ModelUrlsType2;
+  /**
+   * Generated 3D model file. Contains GLB if available, otherwise OBJ.
+   */
+  model_glb?: File | unknown;
+  /**
+   * MTL material file for the OBJ model.
+   */
+  material_mtl?: File | unknown;
+  /**
+   * Texture image for the 3D model.
+   */
+  texture?: File | unknown;
+};
+
+/**
+ * RapidTextTo3DInput
+ */
+export type Hunyuan3dV31RapidTextTo3dInput = {
+  /**
+   * Prompt
+   *
+   * Text description of the 3D content to generate. Max 200 UTF-8 characters.
+   */
+  prompt: string;
+  /**
+   * Enable Geometry
+   *
+   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
+   */
+  enable_geometry?: boolean;
+  /**
+   * Enable Pbr
+   *
+   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
+   */
+  enable_pbr?: boolean;
+};
+
+/**
+ * RapidTextTo3DOutput
+ */
+export type Hunyuan3dV31RapidTextTo3dOutput = {
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  model_urls: ModelUrlsType2;
+  /**
+   * MTL material file for the OBJ model.
+   */
+  material_mtl?: File | unknown;
+  /**
+   * Generated 3D model in OBJ format.
+   */
+  model_obj?: File | unknown;
+  /**
+   * Texture image for the 3D model.
+   */
+  texture?: File | unknown;
+};
+
+/**
+ * SmartTopologyInput
+ */
+export type Hunyuan3dV31SmartTopologyInput = {
+  /**
+   * Face Level
+   *
+   * Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.
+   */
+  face_level?: "high" | "medium" | "low";
+  /**
+   * Input File Url
+   *
+   * URL of GLB or OBJ file to optimize topology. Max size: 200MB.
+   */
+  input_file_url?: string | Blob | File;
+  /**
+   * Input File Type
+   *
+   * Input 3D file format.
+   */
+  input_file_type?: "glb" | "obj";
+  /**
+   * Polygon Type
+   *
+   * Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.
+   */
+  polygon_type?: "triangle" | "quadrilateral";
+};
+
+/**
+ * SmartTopologyOutput
+ */
+export type Hunyuan3dV31SmartTopologyOutput = {
+  model_urls: ModelUrlsType2;
+  model_glb: File;
+};
+
+/**
+ * ImageTo3DInput
+ */
+export type Hunyuan3dV3ImageTo3dInput = {
+  /**
+   * Enable Pbr
+   *
+   * Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Polygon Type
+   *
+   * Polygon type. Only takes effect when GenerateType is LowPoly.
+   */
+  polygon_type?: "triangle" | "quadrilateral";
+  /**
+   * Generate Type
+   *
+   * Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
+   */
+  generate_type?: "Normal" | "LowPoly" | "Geometry";
+  /**
+   * Right Image Url
+   *
+   * Optional right view image URL for better 3D reconstruction.
+   */
+  right_image_url?: string | unknown;
+  /**
+   * Left Image Url
+   *
+   * Optional left view image URL for better 3D reconstruction.
+   */
+  left_image_url?: string | unknown;
+  /**
+   * Input Image Url
+   *
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string | Blob | File;
+  /**
+   * Face Count
+   *
+   * Target face count. Range: 40000-1500000
+   */
+  face_count?: number;
+  /**
+   * Back Image Url
+   *
+   * Optional back view image URL for better 3D reconstruction.
+   */
+  back_image_url?: string | unknown;
+};
+
+/**
+ * ImageTo3DOutput
+ */
+export type Hunyuan3dV3ImageTo3dOutput = {
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  model_urls: ModelUrlsType3;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed?: number | unknown;
+  model_glb: File;
+};
+
+/**
+ * SketchTo3DInput
+ */
+export type Hunyuan3dV3SketchTo3dInput = {
+  /**
+   * Input Image Url
+   *
+   * URL of sketch or line art image to transform into a 3D model. Image resolution must be between 128x128 and 5000x5000 pixels.
+   */
+  input_image_url: string | Blob | File;
+  /**
+   * Prompt
+   *
+   * Text prompt describing the 3D content attributes such as color, category, and material.
+   */
+  prompt: string;
+  /**
+   * Face Count
+   *
+   * Target face count. Range: 40000-1500000
+   */
+  face_count?: number;
+  /**
+   * Enable Pbr
+   *
+   * Whether to enable PBR material generation.
+   */
+  enable_pbr?: boolean;
+};
+
+/**
+ * SketchTo3DOutput
+ */
+export type Hunyuan3dV3SketchTo3dOutput = {
+  model_urls: ModelUrlsType3;
+  /**
+   * Seed
+   *
+   * The seed used for generation
+   */
+  seed?: number | unknown;
+  model_glb: File;
   /**
    * Preview thumbnail of the generated model
    */
@@ -1624,35 +968,1100 @@ export type MeshyV6TextTo3dOutput = {
 };
 
 /**
- * BasicAnimations
- *
- * Basic animation files included with the rigging result
+ * TextTo3DInput
  */
-export type BasicAnimations = {
+export type Hunyuan3dV3TextTo3dInput = {
   /**
-   * Running animation in FBX format
+   * Prompt
+   *
+   * Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.
    */
-  running_fbx?: File | unknown;
+  prompt: string;
   /**
-   * Walking animation in FBX format
+   * Face Count
+   *
+   * Target face count. Range: 40000-1500000
    */
-  walking_fbx?: File | unknown;
+  face_count?: number;
   /**
-   * Walking animation in GLB format
+   * Generate Type
+   *
+   * Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
    */
-  walking_glb?: File | unknown;
+  generate_type?: "Normal" | "LowPoly" | "Geometry";
   /**
-   * Running animation in GLB format
+   * Enable Pbr
+   *
+   * Whether to enable PBR material generation
    */
-  running_glb?: File | unknown;
+  enable_pbr?: boolean;
   /**
-   * Running armature only in GLB format
+   * Polygon Type
+   *
+   * Polygon type. Only takes effect when GenerateType is LowPoly.
    */
-  running_armature_glb?: File | unknown;
+  polygon_type?: "triangle" | "quadrilateral";
+};
+
+/**
+ * TextTo3DOutput
+ */
+export type Hunyuan3dV3TextTo3dOutput = {
+  model_urls: ModelUrlsType3;
   /**
-   * Walking armature only in GLB format
+   * Seed
+   *
+   * The seed used for generation
    */
-  walking_armature_glb?: File | unknown;
+  seed?: number | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+  model_glb: File;
+};
+
+/**
+ * HYMotionInput
+ */
+export type HunyuanMotionFastInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the motion to generate.
+   */
+  prompt: string;
+  /**
+   * Guidance Scale
+   *
+   * Classifier-free guidance scale. Higher = more faithful to prompt.
+   */
+  guidance_scale?: number;
+  /**
+   * Output Format
+   *
+   * Output format: 'fbx' for animation files, 'dict' for raw JSON.
+   */
+  output_format?: "fbx" | "dict";
+  /**
+   * Seed
+   *
+   * Random seed for reproducible generation.
+   */
+  seed?: number | unknown;
+  /**
+   * Duration
+   *
+   * Motion duration in seconds (0.5-12.0).
+   */
+  duration?: number;
+};
+
+/**
+ * HYMotionOutput
+ */
+export type HunyuanMotionFastOutput = {
+  /**
+   * Generated FBX animation file.
+   */
+  fbx_file?: File | unknown;
+  /**
+   * Seed
+   *
+   * Seed used for generation.
+   */
+  seed: number;
+  /**
+   * Generated motion data as JSON.
+   */
+  motion_json?: File | unknown;
+};
+
+/**
+ * HYMotionInput
+ */
+export type HunyuanMotionInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the motion to generate.
+   */
+  prompt: string;
+  /**
+   * Guidance Scale
+   *
+   * Classifier-free guidance scale. Higher = more faithful to prompt.
+   */
+  guidance_scale?: number;
+  /**
+   * Output Format
+   *
+   * Output format: 'fbx' for animation files, 'dict' for raw JSON.
+   */
+  output_format?: "fbx" | "dict";
+  /**
+   * Seed
+   *
+   * Random seed for reproducible generation.
+   */
+  seed?: number | unknown;
+  /**
+   * Duration
+   *
+   * Motion duration in seconds (0.5-12.0).
+   */
+  duration?: number;
+};
+
+/**
+ * HYMotionOutput
+ */
+export type HunyuanMotionOutput = {
+  /**
+   * Generated FBX animation file.
+   */
+  fbx_file?: File | unknown;
+  /**
+   * Seed
+   *
+   * Seed used for generation.
+   */
+  seed: number;
+  /**
+   * Generated motion data as JSON.
+   */
+  motion_json?: File | unknown;
+};
+
+/**
+ * HunyuanPartInput
+ */
+export type HunyuanPartInput = {
+  /**
+   * Model File Url
+   *
+   * URL of the 3D model file (.glb or .obj) to process for segmentation.
+   */
+  model_file_url: string | Blob | File;
+  /**
+   * Point Prompt Y
+   *
+   * Y coordinate of the point prompt for segmentation (normalized space -1 to 1).
+   */
+  point_prompt_y?: number;
+  /**
+   * Point Prompt X
+   *
+   * X coordinate of the point prompt for segmentation (normalized space -1 to 1).
+   */
+  point_prompt_x?: number;
+  /**
+   * Noise Std
+   *
+   * Standard deviation of noise to add to sampled points.
+   */
+  noise_std?: number;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and input will produce the same segmentation results.
+   *
+   */
+  seed?: number | unknown;
+  /**
+   * Point Prompt Z
+   *
+   * Z coordinate of the point prompt for segmentation (normalized space -1 to 1).
+   */
+  point_prompt_z?: number;
+  /**
+   * Use Normal
+   *
+   * Whether to use normal information for segmentation.
+   */
+  use_normal?: boolean;
+  /**
+   * Point Num
+   *
+   * Number of points to sample from the mesh.
+   */
+  point_num?: number;
+};
+
+/**
+ * HunyuanPartOutput
+ */
+export type HunyuanPartOutput = {
+  mask_2_mesh: File;
+  mask_3_mesh: File;
+  mask_1_mesh: File;
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  /**
+   * Best Mask Index
+   *
+   * Index of the best mask (1, 2, or 3) based on IoU score.
+   */
+  best_mask_index: number;
+  /**
+   * Iou Scores
+   *
+   * IoU scores for each of the three masks.
+   */
+  iou_scores: Array<number>;
+  segmented_mesh: File;
+};
+
+/**
+ * Rodin3DInput
+ */
+export type Hyper3dRodinInput = {
+  /**
+   * Seed
+   *
+   * Seed value for randomization, ranging from 0 to 65535. Optional.
+   */
+  seed?: number | unknown;
+  /**
+   * Tier
+   *
+   * Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.
+   */
+  tier?: "Regular" | "Sketch";
+  /**
+   * Use Hyper
+   *
+   * Whether to export the model using hyper mode. Default is false.
+   */
+  use_hyper?: boolean;
+  /**
+   * Bbox Condition
+   *
+   * An array that specifies the dimensions and scaling factor of the bounding box. Typically, this array contains 3 elements, Length(X-axis), Width(Y-axis) and Height(Z-axis).
+   */
+  bbox_condition?: Array<number> | unknown;
+  /**
+   * Prompt
+   *
+   * A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.
+   */
+  prompt?: string;
+  /**
+   * Material
+   *
+   * Material type. Possible values: PBR, Shaded. Default is PBR.
+   */
+  material?: "PBR" | "Shaded";
+  /**
+   * Geometry File Format
+   *
+   * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
+   */
+  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.
+   */
+  input_image_urls?: Array<string>;
+  /**
+   * Quality
+   *
+   * Generation quality. Possible values: high, medium, low, extra-low. Default is medium.
+   */
+  quality?: "high" | "medium" | "low" | "extra-low";
+  /**
+   * Addons
+   *
+   * Generation add-on features. Default is []. Possible values are HighPack. The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost triple the billable units.
+   */
+  addons?: string | unknown;
+  /**
+   * T/A Pose
+   *
+   * When generating the human-like model, this parameter control the generation result to T/A Pose.
+   */
+  TAPose?: boolean;
+  /**
+   * Condition Mode
+   *
+   * For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)
+   */
+  condition_mode?: "fuse" | "concat";
+};
+
+/**
+ * ObjectOutput
+ */
+export type Hyper3dRodinOutput = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+  /**
+   * Textures
+   *
+   * Generated textures for the 3D object.
+   */
+  textures: Array<Image>;
+};
+
+/**
+ * RodinGen2Input
+ */
+export type Hyper3dRodinV2Input = {
+  /**
+   * Seed
+   *
+   * Seed value for randomization, ranging from 0 to 65535. Optional.
+   */
+  seed?: number | unknown;
+  /**
+   * Use Original Alpha
+   *
+   * When enabled, preserves the transparency channel from input images during 3D generation.
+   */
+  use_original_alpha?: boolean;
+  /**
+   * Bbox Condition
+   *
+   * An array that specifies the bounding box dimensions [width, height, length].
+   */
+  bbox_condition?: Array<number> | unknown;
+  /**
+   * Prompt
+   *
+   * A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.
+   */
+  prompt?: string;
+  /**
+   * Material
+   *
+   * Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.
+   */
+  material?: "PBR" | "Shaded" | "All";
+  /**
+   * Quality Mesh Option
+   *
+   * Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.
+   */
+  quality_mesh_option?:
+    | "4K Quad"
+    | "8K Quad"
+    | "18K Quad"
+    | "50K Quad"
+    | "2K Triangle"
+    | "20K Triangle"
+    | "150K Triangle"
+    | "500K Triangle";
+  /**
+   * Geometry File Format
+   *
+   * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
+   */
+  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
+  /**
+   * Input Image Urls
+   *
+   * URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed.
+   */
+  input_image_urls?: Array<string>;
+  /**
+   * Addons
+   *
+   * The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost **triple the billable units**.
+   */
+  addons?: string | unknown;
+  /**
+   * Preview Render
+   *
+   * Generate a preview render image of the 3D model along with the model files.
+   */
+  preview_render?: boolean;
+  /**
+   * T/A Pose
+   *
+   * Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.
+   */
+  TAPose?: boolean;
+};
+
+/**
+ * ObjectOutputv2
+ */
+export type Hyper3dRodinV2Output = {
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+  /**
+   * Textures
+   *
+   * Generated textures for the 3D object.
+   */
+  textures: Array<Image>;
+};
+
+/**
+ * Image
+ *
+ * Represents an image file.
+ */
+export type Image = {
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Width
+   *
+   * The width of the image in pixels.
+   */
+  width?: number | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Height
+   *
+   * The height of the image in pixels.
+   */
+  height?: number | unknown;
+};
+
+/**
+ * MultiImageTo3DInput
+ *
+ * Input for Multi-Image to 3D conversion
+ */
+export type MeshyV5MultiImageTo3dInput = {
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
+  /**
+   * Symmetry Mode
+   *
+   * Controls symmetry behavior during model generation.
+   */
+  symmetry_mode?: "off" | "auto" | "on";
+  /**
+   * Enable Pbr
+   *
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.
+   */
+  enable_pbr?: boolean;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process. Requires should_texture to be true.
+   */
+  texture_image_url?: string | unknown;
+  /**
+   * Enable Animation
+   *
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
+   */
+  enable_animation?: boolean;
+  /**
+   * Should Texture
+   *
+   * Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.
+   */
+  should_texture?: boolean;
+  /**
+   * Texture Prompt
+   *
+   * Text prompt to guide the texturing process. Requires should_texture to be true.
+   */
+  texture_prompt?: string | unknown;
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Image Urls
+   *
+   * 1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.
+   */
+  image_urls: Array<string>;
+  /**
+   * Rigging Height Meters
+   *
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   */
+  rigging_height_meters?: number;
+  /**
+   * Should Remesh
+   *
+   * Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.
+   */
+  should_remesh?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
+  /**
+   * Enable Rigging
+   *
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
+   */
+  enable_rigging?: boolean;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+};
+
+/**
+ * MultiImageTo3DOutput
+ *
+ * Output for Multi-Image to 3D conversion
+ */
+export type MeshyV5MultiImageTo3dOutput = {
+  /**
+   * Seed
+   *
+   * The seed used for generation (if available)
+   */
+  seed?: number | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Rigged character in GLB format. Only present when enable_rigging is true.
+   */
+  rigged_character_glb?: File | unknown;
+  model_urls: ModelUrls;
+  model_glb: File;
+  /**
+   * Rigged character in FBX format. Only present when enable_rigging is true.
+   */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
+  /**
+   * Texture Urls
+   *
+   * Array of texture file objects
+   */
+  texture_urls?: Array<TextureFiles>;
+  /**
+   * Rig Task Id
+   *
+   * Rigging task ID. Only present when enable_rigging is true.
+   */
+  rig_task_id?: string | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+};
+
+/**
+ * RemeshInput
+ *
+ * Input for 3D Model Remeshing
+ */
+export type MeshyV5RemeshInput = {
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model. Actual count may vary based on geometry complexity.
+   */
+  target_polycount?: number;
+  /**
+   * Model Url
+   *
+   * URL or base64 data URI of a 3D model to remesh. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
+   */
+  model_url: string | Blob | File;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+  /**
+   * Resize Height
+   *
+   * Resize the model to a certain height measured in meters. Set to 0 for no resizing.
+   */
+  resize_height?: number;
+  /**
+   * Origin At
+   *
+   * Position of the origin. None means no effect.
+   */
+  origin_at?: "bottom" | "center" | unknown;
+  /**
+   * Target Formats
+   *
+   * List of target formats for the remeshed model.
+   */
+  target_formats?: Array<"glb" | "fbx" | "obj" | "usdz" | "blend" | "stl">;
+};
+
+/**
+ * RemeshOutput
+ *
+ * Output for 3D Model Remeshing
+ */
+export type MeshyV5RemeshOutput = {
+  /**
+   * Remeshed 3D object in GLB format (if GLB was requested).
+   */
+  model_glb?: File | unknown;
+  model_urls: ModelUrls;
+};
+
+/**
+ * RetextureInput
+ *
+ * Input for 3D Model Retexturing
+ */
+export type MeshyV5RetextureInput = {
+  /**
+   * Enable Original Uv
+   *
+   * Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.
+   */
+  enable_original_uv?: boolean;
+  /**
+   * Image Style Url
+   *
+   * 2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.
+   */
+  image_style_url?: string | unknown;
+  /**
+   * Text Style Prompt
+   *
+   * Describe your desired texture style using text. Maximum 600 characters. Required if image_style_url is not provided.
+   */
+  text_style_prompt?: string | unknown;
+  /**
+   * Model Url
+   *
+   * URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
+   */
+  model_url: string | Blob | File;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Enable Pbr
+   *
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color.
+   */
+  enable_pbr?: boolean;
+};
+
+/**
+ * RetextureOutput
+ *
+ * Output for 3D Model Retexturing
+ */
+export type MeshyV5RetextureOutput = {
+  /**
+   * Image Style Url
+   *
+   * The image URL used for texturing (if provided)
+   */
+  image_style_url?: string | unknown;
+  model_glb: File;
+  /**
+   * Text Style Prompt
+   *
+   * The text prompt used for texturing (if provided)
+   */
+  text_style_prompt?: string | unknown;
+  /**
+   * Texture Urls
+   *
+   * Array of texture file objects
+   */
+  texture_urls?: Array<TextureFiles>;
+  model_urls: ModelUrls;
+  /**
+   * Preview thumbnail of the retextured model
+   */
+  thumbnail?: File | unknown;
+};
+
+/**
+ * ImageTo3DInput
+ *
+ * Input for Image to 3D conversion
+ */
+export type MeshyV6ImageTo3dInput = {
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
+  /**
+   * Symmetry Mode
+   *
+   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
+   */
+  symmetry_mode?: "off" | "auto" | "on";
+  /**
+   * Enable Pbr
+   *
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
+   */
+  enable_pbr?: boolean;
+  /**
+   * Image Url
+   *
+   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
+   */
+  image_url: string | Blob | File;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process
+   */
+  texture_image_url?: string | unknown;
+  /**
+   * Enable Animation
+   *
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
+   */
+  enable_animation?: boolean;
+  /**
+   * Should Texture
+   *
+   * Whether to generate textures
+   */
+  should_texture?: boolean;
+  /**
+   * Texture Prompt
+   *
+   * Text prompt to guide the texturing process
+   */
+  texture_prompt?: string | unknown;
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Rigging Height Meters
+   *
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   */
+  rigging_height_meters?: number;
+  /**
+   * Should Remesh
+   *
+   * Whether to enable the remesh phase
+   */
+  should_remesh?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
+  /**
+   * Enable Rigging
+   *
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
+   */
+  enable_rigging?: boolean;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+};
+
+/**
+ * ImageTo3DOutput
+ *
+ * Output for Image to 3D conversion
+ */
+export type MeshyV6ImageTo3dOutput = {
+  /**
+   * Seed
+   *
+   * The seed used for generation (if available)
+   */
+  seed?: number | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Rigged character in GLB format. Only present when enable_rigging is true.
+   */
+  rigged_character_glb?: File | unknown;
+  model_urls: ModelUrls;
+  model_glb: File;
+  /**
+   * Rigged character in FBX format. Only present when enable_rigging is true.
+   */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
+  /**
+   * Texture Urls
+   *
+   * Array of texture file objects, matching Meshy API structure
+   */
+  texture_urls?: Array<TextureFiles>;
+  /**
+   * Rig Task Id
+   *
+   * Rigging task ID. Only present when enable_rigging is true.
+   */
+  rig_task_id?: string | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
+};
+
+/**
+ * ImageTo3DInput
+ *
+ * Input for Image to 3D conversion
+ */
+export type MeshyV6PreviewImageTo3dInput = {
+  /**
+   * Target Polycount
+   *
+   * Target number of polygons in the generated model
+   */
+  target_polycount?: number;
+  /**
+   * Symmetry Mode
+   *
+   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
+   */
+  symmetry_mode?: "off" | "auto" | "on";
+  /**
+   * Enable Pbr
+   *
+   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
+   */
+  enable_pbr?: boolean;
+  /**
+   * Image Url
+   *
+   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
+   */
+  image_url: string | Blob | File;
+  /**
+   * Enable Safety Checker
+   *
+   * If set to true, input data will be checked for safety before processing.
+   */
+  enable_safety_checker?: boolean;
+  /**
+   * Animation Action Id
+   *
+   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   */
+  animation_action_id?: number;
+  /**
+   * Texture Image Url
+   *
+   * 2D image to guide the texturing process
+   */
+  texture_image_url?: string | unknown;
+  /**
+   * Enable Animation
+   *
+   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
+   */
+  enable_animation?: boolean;
+  /**
+   * Should Texture
+   *
+   * Whether to generate textures
+   */
+  should_texture?: boolean;
+  /**
+   * Texture Prompt
+   *
+   * Text prompt to guide the texturing process
+   */
+  texture_prompt?: string | unknown;
+  /**
+   * Is A T Pose
+   *
+   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
+   *
+   * @deprecated
+   */
+  is_a_t_pose?: boolean;
+  /**
+   * Rigging Height Meters
+   *
+   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   */
+  rigging_height_meters?: number;
+  /**
+   * Should Remesh
+   *
+   * Whether to enable the remesh phase
+   */
+  should_remesh?: boolean;
+  /**
+   * Pose Mode
+   *
+   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   */
+  pose_mode?: "a-pose" | "t-pose" | "";
+  /**
+   * Enable Rigging
+   *
+   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
+   */
+  enable_rigging?: boolean;
+  /**
+   * Topology
+   *
+   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   */
+  topology?: "quad" | "triangle";
+};
+
+/**
+ * ImageTo3DOutput
+ *
+ * Output for Image to 3D conversion
+ */
+export type MeshyV6PreviewImageTo3dOutput = {
+  /**
+   * Seed
+   *
+   * The seed used for generation (if available)
+   */
+  seed?: number | unknown;
+  /**
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
+   */
+  animation_glb?: File | unknown;
+  /**
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
+   */
+  animation_fbx?: File | unknown;
+  /**
+   * Rigged character in GLB format. Only present when enable_rigging is true.
+   */
+  rigged_character_glb?: File | unknown;
+  model_urls: ModelUrls;
+  model_glb: File;
+  /**
+   * Rigged character in FBX format. Only present when enable_rigging is true.
+   */
+  rigged_character_fbx?: File | unknown;
+  /**
+   * Basic walking and running animations. Only present when enable_rigging is true.
+   */
+  basic_animations?: BasicAnimations | unknown;
+  /**
+   * Texture Urls
+   *
+   * Array of texture file objects, matching Meshy API structure
+   */
+  texture_urls?: Array<TextureFiles>;
+  /**
+   * Rig Task Id
+   *
+   * Rigging task ID. Only present when enable_rigging is true.
+   */
+  rig_task_id?: string | unknown;
+  /**
+   * Preview thumbnail of the generated model
+   */
+  thumbnail?: File | unknown;
 };
 
 /**
@@ -1660,7 +2069,7 @@ export type BasicAnimations = {
  *
  * Input for Text to 3D conversion
  */
-export type MeshyV6TextTo3dInput = {
+export type MeshyV6PreviewTextTo3dInput = {
   /**
    * Topology
    *
@@ -1848,7 +2257,7 @@ export type MeshyV6PreviewTextTo3dOutput = {
  *
  * Input for Text to 3D conversion
  */
-export type MeshyV6PreviewTextTo3dInput = {
+export type MeshyV6TextTo3dInput = {
   /**
    * Topology
    *
@@ -1968,45 +2377,41 @@ export type MeshyV6PreviewTextTo3dInput = {
 };
 
 /**
- * ImageTo3DOutput
+ * TextTo3DOutput
  *
- * Output for Image to 3D conversion
+ * Output for Text to 3D generation
  */
-export type MeshyV6PreviewImageTo3dOutput = {
+export type MeshyV6TextTo3dOutput = {
   /**
    * Seed
    *
-   * The seed used for generation (if available)
+   * The seed used for generation
    */
   seed?: number | unknown;
-  /**
-   * Animated 3D model in GLB format. Only present when enable_animation is true.
-   */
-  animation_glb?: File | unknown;
-  /**
-   * Animated 3D model in FBX format. Only present when enable_animation is true.
-   */
-  animation_fbx?: File | unknown;
-  /**
-   * Rigged character in GLB format. Only present when enable_rigging is true.
-   */
-  rigged_character_glb?: File | unknown;
-  model_urls: ModelUrls;
-  model_glb: File;
   /**
    * Rigged character in FBX format. Only present when enable_rigging is true.
    */
   rigged_character_fbx?: File | unknown;
   /**
-   * Basic walking and running animations. Only present when enable_rigging is true.
+   * Animated 3D model in FBX format. Only present when enable_animation is true.
    */
-  basic_animations?: BasicAnimations | unknown;
+  animation_fbx?: File | unknown;
   /**
-   * Texture Urls
-   *
-   * Array of texture file objects, matching Meshy API structure
+   * Animated 3D model in GLB format. Only present when enable_animation is true.
    */
-  texture_urls?: Array<TextureFiles>;
+  animation_glb?: File | unknown;
+  /**
+   * Rigged character in GLB format. Only present when enable_rigging is true.
+   */
+  rigged_character_glb?: File | unknown;
+  model_urls: ModelUrls;
+  /**
+   * Actual Prompt
+   *
+   * The actual prompt used if prompt expansion was enabled
+   */
+  actual_prompt?: string | unknown;
+  model_glb: File;
   /**
    * Rig Task Id
    *
@@ -2014,442 +2419,15 @@ export type MeshyV6PreviewImageTo3dOutput = {
    */
   rig_task_id?: string | unknown;
   /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-};
-
-/**
- * ImageTo3DInput
- *
- * Input for Image to 3D conversion
- */
-export type MeshyV6PreviewImageTo3dInput = {
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
-   * Symmetry Mode
-   *
-   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
-   */
-  symmetry_mode?: "off" | "auto" | "on";
-  /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
-   */
-  enable_pbr?: boolean;
-  /**
-   * Image Url
-   *
-   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
-   */
-  enable_safety_checker?: boolean;
-  /**
-   * Animation Action Id
-   *
-   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
-   */
-  animation_action_id?: number;
-  /**
-   * Texture Image Url
-   *
-   * 2D image to guide the texturing process
-   */
-  texture_image_url?: string | unknown;
-  /**
-   * Enable Animation
-   *
-   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
-   */
-  enable_animation?: boolean;
-  /**
-   * Should Texture
-   *
-   * Whether to generate textures
-   */
-  should_texture?: boolean;
-  /**
-   * Texture Prompt
-   *
-   * Text prompt to guide the texturing process
-   */
-  texture_prompt?: string | unknown;
-  /**
-   * Is A T Pose
-   *
-   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
-   *
-   * @deprecated
-   */
-  is_a_t_pose?: boolean;
-  /**
-   * Rigging Height Meters
-   *
-   * Approximate height of the character in meters. Only used when enable_rigging is true.
-   */
-  rigging_height_meters?: number;
-  /**
-   * Should Remesh
-   *
-   * Whether to enable the remesh phase
-   */
-  should_remesh?: boolean;
-  /**
-   * Pose Mode
-   *
-   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
-   */
-  pose_mode?: "a-pose" | "t-pose" | "";
-  /**
-   * Enable Rigging
-   *
-   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
-   */
-  enable_rigging?: boolean;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-};
-
-/**
- * ImageTo3DOutput
- *
- * Output for Image to 3D conversion
- */
-export type MeshyV6ImageTo3dOutput = {
-  /**
-   * Seed
-   *
-   * The seed used for generation (if available)
-   */
-  seed?: number | unknown;
-  /**
-   * Animated 3D model in GLB format. Only present when enable_animation is true.
-   */
-  animation_glb?: File | unknown;
-  /**
-   * Animated 3D model in FBX format. Only present when enable_animation is true.
-   */
-  animation_fbx?: File | unknown;
-  /**
-   * Rigged character in GLB format. Only present when enable_rigging is true.
-   */
-  rigged_character_glb?: File | unknown;
-  model_urls: ModelUrls;
-  model_glb: File;
-  /**
-   * Rigged character in FBX format. Only present when enable_rigging is true.
-   */
-  rigged_character_fbx?: File | unknown;
-  /**
    * Basic walking and running animations. Only present when enable_rigging is true.
    */
   basic_animations?: BasicAnimations | unknown;
   /**
-   * Texture Urls
+   * Prompt
    *
-   * Array of texture file objects, matching Meshy API structure
+   * The text prompt used for generation
    */
-  texture_urls?: Array<TextureFiles>;
-  /**
-   * Rig Task Id
-   *
-   * Rigging task ID. Only present when enable_rigging is true.
-   */
-  rig_task_id?: string | unknown;
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-};
-
-/**
- * ImageTo3DInput
- *
- * Input for Image to 3D conversion
- */
-export type MeshyV6ImageTo3dInput = {
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
-   */
-  target_polycount?: number;
-  /**
-   * Symmetry Mode
-   *
-   * Controls symmetry behavior during model generation. Off disables symmetry, Auto determines it automatically, On enforces symmetry.
-   */
-  symmetry_mode?: "off" | "auto" | "on";
-  /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color
-   */
-  enable_pbr?: boolean;
-  /**
-   * Image Url
-   *
-   * Image URL or base64 data URI for 3D model creation. Supports .jpg, .jpeg, and .png formats. Also supports AVIF and HEIF formats which will be automatically converted.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
-   */
-  enable_safety_checker?: boolean;
-  /**
-   * Animation Action Id
-   *
-   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
-   */
-  animation_action_id?: number;
-  /**
-   * Texture Image Url
-   *
-   * 2D image to guide the texturing process
-   */
-  texture_image_url?: string | unknown;
-  /**
-   * Enable Animation
-   *
-   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
-   */
-  enable_animation?: boolean;
-  /**
-   * Should Texture
-   *
-   * Whether to generate textures
-   */
-  should_texture?: boolean;
-  /**
-   * Texture Prompt
-   *
-   * Text prompt to guide the texturing process
-   */
-  texture_prompt?: string | unknown;
-  /**
-   * Is A T Pose
-   *
-   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
-   *
-   * @deprecated
-   */
-  is_a_t_pose?: boolean;
-  /**
-   * Rigging Height Meters
-   *
-   * Approximate height of the character in meters. Only used when enable_rigging is true.
-   */
-  rigging_height_meters?: number;
-  /**
-   * Should Remesh
-   *
-   * Whether to enable the remesh phase
-   */
-  should_remesh?: boolean;
-  /**
-   * Pose Mode
-   *
-   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
-   */
-  pose_mode?: "a-pose" | "t-pose" | "";
-  /**
-   * Enable Rigging
-   *
-   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
-   */
-  enable_rigging?: boolean;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-};
-
-/**
- * RetextureOutput
- *
- * Output for 3D Model Retexturing
- */
-export type MeshyV5RetextureOutput = {
-  /**
-   * Image Style Url
-   *
-   * The image URL used for texturing (if provided)
-   */
-  image_style_url?: string | unknown;
-  model_glb: File;
-  /**
-   * Text Style Prompt
-   *
-   * The text prompt used for texturing (if provided)
-   */
-  text_style_prompt?: string | unknown;
-  /**
-   * Texture Urls
-   *
-   * Array of texture file objects
-   */
-  texture_urls?: Array<TextureFiles>;
-  model_urls: ModelUrls;
-  /**
-   * Preview thumbnail of the retextured model
-   */
-  thumbnail?: File | unknown;
-};
-
-/**
- * RetextureInput
- *
- * Input for 3D Model Retexturing
- */
-export type MeshyV5RetextureInput = {
-  /**
-   * Enable Original Uv
-   *
-   * Use the original UV mapping of the model instead of generating new UVs. If the model has no original UV, output quality may be reduced.
-   */
-  enable_original_uv?: boolean;
-  /**
-   * Image Style Url
-   *
-   * 2D image to guide the texturing process. Supports .jpg, .jpeg, and .png formats. Required if text_style_prompt is not provided. If both are provided, image_style_url takes precedence.
-   */
-  image_style_url?: string | unknown;
-  /**
-   * Text Style Prompt
-   *
-   * Describe your desired texture style using text. Maximum 600 characters. Required if image_style_url is not provided.
-   */
-  text_style_prompt?: string | unknown;
-  /**
-   * Model Url
-   *
-   * URL or base64 data URI of a 3D model to texture. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
-   */
-  model_url: string | Blob | File;
-  /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
-   */
-  enable_safety_checker?: boolean;
-  /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color.
-   */
-  enable_pbr?: boolean;
-};
-
-/**
- * RemeshOutput
- *
- * Output for 3D Model Remeshing
- */
-export type MeshyV5RemeshOutput = {
-  /**
-   * Remeshed 3D object in GLB format (if GLB was requested).
-   */
-  model_glb?: File | unknown;
-  model_urls: ModelUrls;
-};
-
-/**
- * RemeshInput
- *
- * Input for 3D Model Remeshing
- */
-export type MeshyV5RemeshInput = {
-  /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model. Actual count may vary based on geometry complexity.
-   */
-  target_polycount?: number;
-  /**
-   * Model Url
-   *
-   * URL or base64 data URI of a 3D model to remesh. Supports .glb, .gltf, .obj, .fbx, .stl formats. Can be a publicly accessible URL or data URI with MIME type application/octet-stream.
-   */
-  model_url: string | Blob | File;
-  /**
-   * Topology
-   *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
-   */
-  topology?: "quad" | "triangle";
-  /**
-   * Resize Height
-   *
-   * Resize the model to a certain height measured in meters. Set to 0 for no resizing.
-   */
-  resize_height?: number;
-  /**
-   * Origin At
-   *
-   * Position of the origin. None means no effect.
-   */
-  origin_at?: "bottom" | "center" | unknown;
-  /**
-   * Target Formats
-   *
-   * List of target formats for the remeshed model.
-   */
-  target_formats?: Array<"glb" | "fbx" | "obj" | "usdz" | "blend" | "stl">;
-};
-
-/**
- * MultiImageTo3DOutput
- *
- * Output for Multi-Image to 3D conversion
- */
-export type MeshyV5MultiImageTo3dOutput = {
-  /**
-   * Seed
-   *
-   * The seed used for generation (if available)
-   */
-  seed?: number | unknown;
-  /**
-   * Animated 3D model in GLB format. Only present when enable_animation is true.
-   */
-  animation_glb?: File | unknown;
-  /**
-   * Animated 3D model in FBX format. Only present when enable_animation is true.
-   */
-  animation_fbx?: File | unknown;
-  /**
-   * Rigged character in GLB format. Only present when enable_rigging is true.
-   */
-  rigged_character_glb?: File | unknown;
-  model_urls: ModelUrls;
-  model_glb: File;
-  /**
-   * Rigged character in FBX format. Only present when enable_rigging is true.
-   */
-  rigged_character_fbx?: File | unknown;
-  /**
-   * Basic walking and running animations. Only present when enable_rigging is true.
-   */
-  basic_animations?: BasicAnimations | unknown;
+  prompt: string;
   /**
    * Texture Urls
    *
@@ -2457,1440 +2435,1462 @@ export type MeshyV5MultiImageTo3dOutput = {
    */
   texture_urls?: Array<TextureFiles>;
   /**
-   * Rig Task Id
-   *
-   * Rigging task ID. Only present when enable_rigging is true.
-   */
-  rig_task_id?: string | unknown;
-  /**
    * Preview thumbnail of the generated model
    */
   thumbnail?: File | unknown;
 };
 
 /**
- * MultiImageTo3DInput
+ * ModelUrls
  *
- * Input for Multi-Image to 3D conversion
+ * 3D model files in various formats
  */
-export type MeshyV5MultiImageTo3dInput = {
+export type ModelUrls = {
   /**
-   * Target Polycount
-   *
-   * Target number of polygons in the generated model
+   * Blender format 3D model
    */
-  target_polycount?: number;
+  blend?: File | unknown;
   /**
-   * Symmetry Mode
-   *
-   * Controls symmetry behavior during model generation.
+   * GLB format 3D model
    */
-  symmetry_mode?: "off" | "auto" | "on";
+  glb?: File | unknown;
   /**
-   * Enable Pbr
-   *
-   * Generate PBR Maps (metallic, roughness, normal) in addition to base color. Requires should_texture to be true.
+   * USDZ format 3D model
    */
-  enable_pbr?: boolean;
+  usdz?: File | unknown;
   /**
-   * Enable Safety Checker
-   *
-   * If set to true, input data will be checked for safety before processing.
+   * OBJ format 3D model
    */
-  enable_safety_checker?: boolean;
+  obj?: File | unknown;
   /**
-   * Animation Action Id
-   *
-   * Animation preset ID from Meshy's library (500+ presets). Only used when enable_animation is true. See https://docs.meshy.ai/en/api/animation-library for available action IDs.
+   * STL format 3D model
    */
-  animation_action_id?: number;
+  stl?: File | unknown;
   /**
-   * Texture Image Url
-   *
-   * 2D image to guide the texturing process. Requires should_texture to be true.
+   * FBX format 3D model
    */
-  texture_image_url?: string | unknown;
+  fbx?: File | unknown;
+};
+
+/**
+ * ModelUrls
+ */
+export type ModelUrlsType2 = {
   /**
-   * Enable Animation
-   *
-   * Apply an animation preset to the rigged model. Requires enable_rigging to be true.
+   * GLB format 3D model
    */
-  enable_animation?: boolean;
+  glb?: File | unknown;
   /**
-   * Should Texture
-   *
-   * Whether to generate textures. False provides mesh without textures for 5 credits, True adds texture generation for additional 10 credits.
+   * MTL material file for OBJ model
    */
-  should_texture?: boolean;
+  mtl?: File | unknown;
   /**
-   * Texture Prompt
-   *
-   * Text prompt to guide the texturing process. Requires should_texture to be true.
+   * FBX format 3D model
    */
-  texture_prompt?: string | unknown;
+  fbx?: File | unknown;
   /**
-   * Is A T Pose
-   *
-   * Deprecated: use pose_mode instead. When true, generates a T-pose model.
-   *
-   * @deprecated
+   * USDZ format 3D model
    */
-  is_a_t_pose?: boolean;
+  usdz?: File | unknown;
   /**
-   * Image Urls
+   * OBJ format 3D model
+   */
+  obj?: File | unknown;
+  /**
+   * Texture image for the 3D model
+   */
+  texture?: File | unknown;
+};
+
+/**
+ * ModelUrls
+ */
+export type ModelUrlsType3 = {
+  /**
+   * OBJ format 3D model
+   */
+  obj?: File | unknown;
+  /**
+   * USDZ format 3D model
+   */
+  usdz?: File | unknown;
+  /**
+   * FBX format 3D model
+   */
+  fbx?: File | unknown;
+  /**
+   * GLB format 3D model
+   */
+  glb?: File | unknown;
+};
+
+/**
+ * OmnipartInput
+ */
+export type OmnipartInput = {
+  /**
+   * Input Image Url
    *
-   * 1 to 4 images for 3D model creation. All images should depict the same object from different angles. Supports .jpg, .jpeg, .png formats, and AVIF/HEIF which will be automatically converted. If more than 4 images are provided, only the first 4 will be used.
+   * URL of image to use while generating the 3D model.
+   */
+  input_image_url: string | Blob | File;
+  /**
+   * Seed
+   *
+   *
+   * The same seed and the same prompt given to the same version of the model
+   * will output the same image every time.
+   *
+   */
+  seed?: number;
+  /**
+   * Minimum Segment Size
+   *
+   * Minimum segment size (pixels) for the model.
+   */
+  minimum_segment_size?: number;
+  /**
+   * Parts
+   *
+   * Specify which segments to merge (e.g., '0,1;3,4' merges segments 0&1 together and 3&4 together)
+   */
+  parts?: string;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the model.
+   */
+  guidance_scale?: number;
+};
+
+/**
+ * MultiViewObjectOutput
+ */
+export type OmnipartOutput = {
+  output_zip: File;
+  /**
+   * Seed
+   *
+   * Seed value used for generation.
+   */
+  seed: number;
+  model_mesh: File;
+  full_model_mesh: File;
+};
+
+/**
+ * PointPromptBase
+ */
+export type PointPromptBase = {
+  /**
+   * Object Id
+   *
+   * Optional object identifier. Prompts sharing an object id refine the same object.
+   */
+  object_id?: number | unknown;
+  /**
+   * X
+   *
+   * X Coordinate of the prompt
+   */
+  x?: number | unknown;
+  /**
+   * Y
+   *
+   * Y Coordinate of the prompt
+   */
+  y?: number | unknown;
+  /**
+   * Label
+   *
+   * 1 for foreground, 0 for background
+   */
+  label?: 0 | 1 | unknown;
+};
+
+/**
+ * PSHumanRequest
+ */
+export type PshumanInput = {
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the diffusion process. Controls how much the output adheres to the generated views.
+   */
+  guidance_scale?: number;
+  /**
+   * Seed
+   *
+   * Seed for reproducibility. If None, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Image Url
+   *
+   * A direct URL to the input image of a person.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * PSHumanResponse
+ */
+export type PshumanOutput = {
+  model_obj: File;
+  preview_image: File;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
+};
+
+/**
+ * ImageInput
+ */
+export type Reconviagen05Input = {
+  /**
+   * Shape SLat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the shape stage.
+   */
+  shape_slat_guidance_rescale?: number;
+  /**
+   * Image URLs
+   *
+   * One or more views of the same object. Multiple views yield higher-quality 3D reconstruction.
    */
   image_urls: Array<string>;
   /**
-   * Rigging Height Meters
+   * Sparse Structure Guidance Strength
    *
-   * Approximate height of the character in meters. Only used when enable_rigging is true.
+   * How closely the initial 3D structure follows the input. Higher values produce more faithful but potentially noisier results.
    */
-  rigging_height_meters?: number;
+  ss_guidance_strength?: number;
   /**
-   * Should Remesh
+   * Decimation Target
    *
-   * Whether to enable the remesh phase. When false, returns triangular mesh ignoring topology and target_polycount.
+   * Target number of vertices in the final mesh.
    */
-  should_remesh?: boolean;
+  decimation_target?: number;
   /**
-   * Pose Mode
+   * SLat Guidance Strength
    *
-   * Pose mode for the generated model. 'a-pose' generates an A-pose, 't-pose' generates a T-pose, empty string for no specific pose.
+   * Guidance strength for SLat stage (only used when ss_source='mesh').
    */
-  pose_mode?: "a-pose" | "t-pose" | "";
+  slat_guidance_strength?: number;
   /**
-   * Enable Rigging
+   * SLat Rescale T
    *
-   * Automatically rig the generated model as a humanoid character. Includes basic walking and running animations. Best results with humanoid characters that have clearly defined limbs.
+   * Rescale T for SLat stage (only used when ss_source='mesh').
    */
-  enable_rigging?: boolean;
+  slat_rescale_t?: number;
   /**
-   * Topology
+   * Texture SLat Guidance Rescale
    *
-   * Specify the topology of the generated model. Quad for smooth surfaces, Triangle for detailed geometry.
+   * Dampens artifacts from high guidance in the texture stage.
    */
-  topology?: "quad" | "triangle";
-};
-
-/**
- * Image
- *
- * Represents an image file.
- */
-export type Image = {
+  tex_slat_guidance_rescale?: number;
   /**
-   * Content Type
+   * Shape SLat Sampling Steps
    *
-   * The mime type of the file.
+   * Number of denoising steps for shape refinement.
    */
-  content_type?: string | unknown;
+  shape_slat_sampling_steps?: number;
   /**
-   * File Size
+   * Sparse Structure Guidance Rescale
    *
-   * The size of the file in bytes.
+   * Dampens artifacts from high guidance in stage 1.
    */
-  file_size?: number | unknown;
+  ss_guidance_rescale?: number;
   /**
-   * Width
+   * SLat Sampling Steps
    *
-   * The width of the image in pixels.
+   * Sampling steps for SLat stage (only used when ss_source='mesh').
    */
-  width?: number | unknown;
+  slat_sampling_steps?: number;
   /**
-   * Url
+   * SLat Guidance Rescale
    *
-   * The URL where the file can be downloaded from.
+   * Guidance rescale for SLat stage (only used when ss_source='mesh').
    */
-  url: string;
+  slat_guidance_rescale?: number;
   /**
-   * File Name
+   * Texture SLat Guidance Strength
    *
-   * The name of the file. It will be auto-generated if not provided.
+   * How closely the texture follows the input colors.
    */
-  file_name?: string | unknown;
+  tex_slat_guidance_strength?: number;
   /**
-   * Height
+   * Sparse Structure Sampling Steps
    *
-   * The height of the image in pixels.
+   * Number of denoising steps for the initial structure.
    */
-  height?: number | unknown;
-};
-
-/**
- * ObjectOutputv2
- */
-export type Hyper3dRodinV2Output = {
+  ss_sampling_steps?: number;
+  /**
+   * Shape SLat Guidance Strength
+   *
+   * How closely the detailed geometry follows the input.
+   */
+  shape_slat_guidance_strength?: number;
   /**
    * Seed
    *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-  /**
-   * Textures
-   *
-   * Generated textures for the 3D object.
-   */
-  textures: Array<Image>;
-};
-
-/**
- * RodinGen2Input
- */
-export type Hyper3dRodinV2Input = {
-  /**
-   * Seed
-   *
-   * Seed value for randomization, ranging from 0 to 65535. Optional.
+   * Random seed for reproducibility
    */
   seed?: number | unknown;
   /**
-   * Use Original Alpha
+   * Multi Image Strategy
    *
-   * When enabled, preserves the transparency channel from input images during 3D generation.
+   * Strategy for combining multi-view conditioning. 'adaptive_guidance_weight' works best in most cases. Only used when more than one image is provided.
    */
-  use_original_alpha?: boolean;
+  multi_image_strategy?:
+    | "average_right"
+    | "weighted_average"
+    | "sequential"
+    | "average"
+    | "adaptive_guidance_weight"
+    | "fixed_guidance_rescale";
   /**
-   * Bbox Condition
+   * Texture Size
    *
-   * An array that specifies the bounding box dimensions [width, height, length].
+   * Resolution of the texture image baked onto the mesh.
    */
-  bbox_condition?: Array<number> | unknown;
+  texture_size?: 1024 | 2048 | 4096;
   /**
-   * Prompt
+   * Sparse Structure Source
    *
-   * A textual prompt to guide model generation. Optional for Image-to-3D mode - if empty, AI will generate a prompt based on your images.
+   * Sparse structure source. 'mesh' gives best quality, 'direct' is fastest, 'mvtrellis2' uses multi-view TRELLIS.2.
    */
-  prompt?: string;
+  ss_source?: "direct" | "mesh" | "mvtrellis2";
   /**
-   * Material
+   * Shape SLat Rescale T
    *
-   * Material type. PBR: Physically-based materials with realistic lighting. Shaded: Simple materials with baked lighting. All: Both types included.
+   * Controls noise schedule sharpness for shape refinement.
    */
-  material?: "PBR" | "Shaded" | "All";
+  shape_slat_rescale_t?: number;
   /**
-   * Quality Mesh Option
+   * Texture SLat Sampling Steps
    *
-   * Combined quality and mesh type selection. Quad = smooth surfaces, Triangle = detailed geometry. These corresponds to `mesh_mode` (if the option contains 'Triangle', mesh_mode is 'Raw', otherwise 'Quad') and `quality_override` (the numeric part of the option) parameters in Hyper3D API.
+   * Number of denoising steps for texture generation.
    */
-  quality_mesh_option?:
-    | "4K Quad"
-    | "8K Quad"
-    | "18K Quad"
-    | "50K Quad"
-    | "2K Triangle"
-    | "20K Triangle"
-    | "150K Triangle"
-    | "500K Triangle";
+  tex_slat_sampling_steps?: number;
   /**
-   * Geometry File Format
+   * Texture SLat Rescale T
    *
-   * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
+   * Controls noise schedule sharpness for texture generation.
    */
-  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
+  tex_slat_rescale_t?: number;
   /**
-   * Input Image Urls
+   * Sparse Structure Rescale T
    *
-   * URL of images to use while generating the 3D model. Required for Image-to-3D mode. Up to 5 images allowed.
+   * Controls noise schedule sharpness for structure generation.
    */
-  input_image_urls?: Array<string>;
+  ss_rescale_t?: number;
   /**
-   * Addons
+   * Resolution
    *
-   * The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost **triple the billable units**.
+   * Output resolution; higher is slower but more detailed
    */
-  addons?: string | unknown;
-  /**
-   * Preview Render
-   *
-   * Generate a preview render image of the 3D model along with the model files.
-   */
-  preview_render?: boolean;
-  /**
-   * T/A Pose
-   *
-   * Generate characters in T-pose or A-pose format, making them easier to rig and animate in 3D software.
-   */
-  TAPose?: boolean;
+  resolution?: 512 | 1024 | 1536;
 };
 
 /**
  * ObjectOutput
  */
-export type Hyper3dRodinOutput = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-  /**
-   * Textures
-   *
-   * Generated textures for the 3D object.
-   */
-  textures: Array<Image>;
-};
-
-/**
- * Rodin3DInput
- */
-export type Hyper3dRodinInput = {
-  /**
-   * Seed
-   *
-   * Seed value for randomization, ranging from 0 to 65535. Optional.
-   */
-  seed?: number | unknown;
-  /**
-   * Tier
-   *
-   * Tier of generation. For Rodin Sketch, set to Sketch. For Rodin Regular, set to Regular.
-   */
-  tier?: "Regular" | "Sketch";
-  /**
-   * Use Hyper
-   *
-   * Whether to export the model using hyper mode. Default is false.
-   */
-  use_hyper?: boolean;
-  /**
-   * Bbox Condition
-   *
-   * An array that specifies the dimensions and scaling factor of the bounding box. Typically, this array contains 3 elements, Length(X-axis), Width(Y-axis) and Height(Z-axis).
-   */
-  bbox_condition?: Array<number> | unknown;
-  /**
-   * Prompt
-   *
-   * A textual prompt to guide model generation. Required for Text-to-3D mode. Optional for Image-to-3D mode.
-   */
-  prompt?: string;
-  /**
-   * Material
-   *
-   * Material type. Possible values: PBR, Shaded. Default is PBR.
-   */
-  material?: "PBR" | "Shaded";
-  /**
-   * Geometry File Format
-   *
-   * Format of the geometry file. Possible values: glb, usdz, fbx, obj, stl. Default is glb.
-   */
-  geometry_file_format?: "glb" | "usdz" | "fbx" | "obj" | "stl";
-  /**
-   * Input Image Urls
-   *
-   * URL of images to use while generating the 3D model. Required for Image-to-3D mode. Optional for Text-to-3D mode.
-   */
-  input_image_urls?: Array<string>;
-  /**
-   * Quality
-   *
-   * Generation quality. Possible values: high, medium, low, extra-low. Default is medium.
-   */
-  quality?: "high" | "medium" | "low" | "extra-low";
-  /**
-   * Addons
-   *
-   * Generation add-on features. Default is []. Possible values are HighPack. The HighPack option will provide 4K resolution textures instead of the default 1K, as well as models with high-poly. It will cost triple the billable units.
-   */
-  addons?: string | unknown;
-  /**
-   * T/A Pose
-   *
-   * When generating the human-like model, this parameter control the generation result to T/A Pose.
-   */
-  TAPose?: boolean;
-  /**
-   * Condition Mode
-   *
-   * For fuse mode, One or more images are required.It will generate a model by extracting and fusing features of objects from multiple images.For concat mode, need to upload multiple multi-view images of the same object and generate the model. (You can upload multi-view images in any order, regardless of the order of view.)
-   */
-  condition_mode?: "fuse" | "concat";
-};
-
-/**
- * HunyuanPartOutput
- */
-export type HunyuanPartOutput = {
-  mask_2_mesh: File;
-  mask_3_mesh: File;
-  mask_1_mesh: File;
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  /**
-   * Best Mask Index
-   *
-   * Index of the best mask (1, 2, or 3) based on IoU score.
-   */
-  best_mask_index: number;
-  /**
-   * Iou Scores
-   *
-   * IoU scores for each of the three masks.
-   */
-  iou_scores: Array<number>;
-  segmented_mesh: File;
-};
-
-/**
- * HunyuanPartInput
- */
-export type HunyuanPartInput = {
-  /**
-   * Model File Url
-   *
-   * URL of the 3D model file (.glb or .obj) to process for segmentation.
-   */
-  model_file_url: string | Blob | File;
-  /**
-   * Point Prompt Y
-   *
-   * Y coordinate of the point prompt for segmentation (normalized space -1 to 1).
-   */
-  point_prompt_y?: number;
-  /**
-   * Point Prompt X
-   *
-   * X coordinate of the point prompt for segmentation (normalized space -1 to 1).
-   */
-  point_prompt_x?: number;
-  /**
-   * Noise Std
-   *
-   * Standard deviation of noise to add to sampled points.
-   */
-  noise_std?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and input will produce the same segmentation results.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Point Prompt Z
-   *
-   * Z coordinate of the point prompt for segmentation (normalized space -1 to 1).
-   */
-  point_prompt_z?: number;
-  /**
-   * Use Normal
-   *
-   * Whether to use normal information for segmentation.
-   */
-  use_normal?: boolean;
-  /**
-   * Point Num
-   *
-   * Number of points to sample from the mesh.
-   */
-  point_num?: number;
-};
-
-/**
- * HYMotionOutput
- */
-export type HunyuanMotionOutput = {
-  /**
-   * Generated FBX animation file.
-   */
-  fbx_file?: File | unknown;
+export type Reconviagen05Output = {
   /**
    * Seed
    *
    * Seed used for generation.
    */
   seed: number;
-  /**
-   * Generated motion data as JSON.
-   */
-  motion_json?: File | unknown;
-};
-
-/**
- * HYMotionInput
- */
-export type HunyuanMotionInput = {
-  /**
-   * Prompt
-   *
-   * Text prompt describing the motion to generate.
-   */
-  prompt: string;
-  /**
-   * Guidance Scale
-   *
-   * Classifier-free guidance scale. Higher = more faithful to prompt.
-   */
-  guidance_scale?: number;
-  /**
-   * Output Format
-   *
-   * Output format: 'fbx' for animation files, 'dict' for raw JSON.
-   */
-  output_format?: "fbx" | "dict";
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number | unknown;
-  /**
-   * Duration
-   *
-   * Motion duration in seconds (0.5-12.0).
-   */
-  duration?: number;
-};
-
-/**
- * HYMotionOutput
- */
-export type HunyuanMotionFastOutput = {
-  /**
-   * Generated FBX animation file.
-   */
-  fbx_file?: File | unknown;
-  /**
-   * Seed
-   *
-   * Seed used for generation.
-   */
-  seed: number;
-  /**
-   * Generated motion data as JSON.
-   */
-  motion_json?: File | unknown;
-};
-
-/**
- * HYMotionInput
- */
-export type HunyuanMotionFastInput = {
-  /**
-   * Prompt
-   *
-   * Text prompt describing the motion to generate.
-   */
-  prompt: string;
-  /**
-   * Guidance Scale
-   *
-   * Classifier-free guidance scale. Higher = more faithful to prompt.
-   */
-  guidance_scale?: number;
-  /**
-   * Output Format
-   *
-   * Output format: 'fbx' for animation files, 'dict' for raw JSON.
-   */
-  output_format?: "fbx" | "dict";
-  /**
-   * Seed
-   *
-   * Random seed for reproducible generation.
-   */
-  seed?: number | unknown;
-  /**
-   * Duration
-   *
-   * Motion duration in seconds (0.5-12.0).
-   */
-  duration?: number;
-};
-
-/**
- * TextTo3DOutput
- */
-export type Hunyuan3dV3TextTo3dOutput = {
-  model_urls: ModelUrlsType3;
-  /**
-   * Seed
-   *
-   * The seed used for generation
-   */
-  seed?: number | unknown;
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
   model_glb: File;
 };
 
 /**
- * TextTo3DInput
+ * SAM3DAlignmentInput
  */
-export type Hunyuan3dV3TextTo3dInput = {
+export type Sam33dAlignInput = {
   /**
-   * Prompt
+   * Body Mesh Url
    *
-   * Text description of the 3D content to generate. Supports up to 1024 UTF-8 characters.
+   * URL of the SAM-3D Body mesh file (.ply or .glb) to align
    */
-  prompt: string;
-  /**
-   * Face Count
-   *
-   * Target face count. Range: 40000-1500000
-   */
-  face_count?: number;
-  /**
-   * Generate Type
-   *
-   * Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
-   */
-  generate_type?: "Normal" | "LowPoly" | "Geometry";
-  /**
-   * Enable Pbr
-   *
-   * Whether to enable PBR material generation
-   */
-  enable_pbr?: boolean;
-  /**
-   * Polygon Type
-   *
-   * Polygon type. Only takes effect when GenerateType is LowPoly.
-   */
-  polygon_type?: "triangle" | "quadrilateral";
-};
-
-/**
- * SketchTo3DOutput
- */
-export type Hunyuan3dV3SketchTo3dOutput = {
-  model_urls: ModelUrlsType3;
-  /**
-   * Seed
-   *
-   * The seed used for generation
-   */
-  seed?: number | unknown;
-  model_glb: File;
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-};
-
-/**
- * SketchTo3DInput
- */
-export type Hunyuan3dV3SketchTo3dInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of sketch or line art image to transform into a 3D model. Image resolution must be between 128x128 and 5000x5000 pixels.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Prompt
-   *
-   * Text prompt describing the 3D content attributes such as color, category, and material.
-   */
-  prompt: string;
-  /**
-   * Face Count
-   *
-   * Target face count. Range: 40000-1500000
-   */
-  face_count?: number;
-  /**
-   * Enable Pbr
-   *
-   * Whether to enable PBR material generation.
-   */
-  enable_pbr?: boolean;
-};
-
-/**
- * ImageTo3DOutput
- */
-export type Hunyuan3dV3ImageTo3dOutput = {
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-  model_urls: ModelUrlsType3;
-  /**
-   * Seed
-   *
-   * The seed used for generation
-   */
-  seed?: number | unknown;
-  model_glb: File;
-};
-
-/**
- * ImageTo3DInput
- */
-export type Hunyuan3dV3ImageTo3dInput = {
-  /**
-   * Enable Pbr
-   *
-   * Whether to enable PBR material generation. Does not take effect when generate_type is Geometry.
-   */
-  enable_pbr?: boolean;
-  /**
-   * Polygon Type
-   *
-   * Polygon type. Only takes effect when GenerateType is LowPoly.
-   */
-  polygon_type?: "triangle" | "quadrilateral";
-  /**
-   * Generate Type
-   *
-   * Generation type. Normal: textured model. LowPoly: polygon reduction. Geometry: white model without texture.
-   */
-  generate_type?: "Normal" | "LowPoly" | "Geometry";
-  /**
-   * Right Image Url
-   *
-   * Optional right view image URL for better 3D reconstruction.
-   */
-  right_image_url?: string | unknown;
-  /**
-   * Left Image Url
-   *
-   * Optional left view image URL for better 3D reconstruction.
-   */
-  left_image_url?: string | unknown;
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Face Count
-   *
-   * Target face count. Range: 40000-1500000
-   */
-  face_count?: number;
-  /**
-   * Back Image Url
-   *
-   * Optional back view image URL for better 3D reconstruction.
-   */
-  back_image_url?: string | unknown;
-};
-
-/**
- * SmartTopologyOutput
- */
-export type Hunyuan3dV31SmartTopologyOutput = {
-  model_urls: ModelUrlsType2;
-  model_glb: File;
-};
-
-/**
- * SmartTopologyInput
- */
-export type Hunyuan3dV31SmartTopologyInput = {
-  /**
-   * Face Level
-   *
-   * Target polygon density. high: more detail/polygons, medium: balanced, low: fewer polygons.
-   */
-  face_level?: "high" | "medium" | "low";
-  /**
-   * Input File Url
-   *
-   * URL of GLB or OBJ file to optimize topology. Max size: 200MB.
-   */
-  input_file_url?: string | Blob | File;
-  /**
-   * Input File Type
-   *
-   * Input 3D file format.
-   */
-  input_file_type?: "glb" | "obj";
-  /**
-   * Polygon Type
-   *
-   * Output polygon type. triangle: triangular faces only. quadrilateral: mixed quad and triangle faces.
-   */
-  polygon_type?: "triangle" | "quadrilateral";
-};
-
-/**
- * RapidTextTo3DOutput
- */
-export type Hunyuan3dV31RapidTextTo3dOutput = {
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-  model_urls: ModelUrlsType2;
-  /**
-   * MTL material file for the OBJ model.
-   */
-  material_mtl?: File | unknown;
-  /**
-   * Generated 3D model in OBJ format.
-   */
-  model_obj?: File | unknown;
-  /**
-   * Texture image for the 3D model.
-   */
-  texture?: File | unknown;
-};
-
-/**
- * RapidTextTo3DInput
- */
-export type Hunyuan3dV31RapidTextTo3dInput = {
-  /**
-   * Prompt
-   *
-   * Text description of the 3D content to generate. Max 200 UTF-8 characters.
-   */
-  prompt: string;
-  /**
-   * Enable Geometry
-   *
-   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
-   */
-  enable_geometry?: boolean;
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
-   */
-  enable_pbr?: boolean;
-};
-
-/**
- * RapidImageTo3DOutput
- */
-export type Hunyuan3dV31RapidImageTo3dOutput = {
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-  model_urls: ModelUrlsType2;
-  /**
-   * Generated 3D model file. Contains GLB if available, otherwise OBJ.
-   */
-  model_glb?: File | unknown;
-  /**
-   * MTL material file for the OBJ model.
-   */
-  material_mtl?: File | unknown;
-  /**
-   * Texture image for the 3D model.
-   */
-  texture?: File | unknown;
-};
-
-/**
- * RapidImageTo3DInput
- */
-export type Hunyuan3dV31RapidImageTo3dInput = {
-  /**
-   * Input Image Url
-   *
-   * Front view image URL. Resolution: 128-5000px, max 8MB (recommended ≤6MB for base64 encoding), formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Enable Geometry
-   *
-   * Generate geometry-only white model without textures. When enabled, enable_pbr is ignored and OBJ is not supported (default output is GLB).
-   */
-  enable_geometry?: boolean;
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Does not take effect when enable_geometry is True.
-   */
-  enable_pbr?: boolean;
-};
-
-/**
- * ProTextTo3DOutput
- */
-export type Hunyuan3dV31ProTextTo3dOutput = {
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-  model_urls: ModelUrlsType2;
-  /**
-   * Seed
-   *
-   * The seed used for generation
-   */
-  seed?: number | unknown;
-  model_glb: File;
-};
-
-/**
- * ProTextTo3DInput
- */
-export type Hunyuan3dV31ProTextTo3dInput = {
-  /**
-   * Prompt
-   *
-   * Text description of the 3D content to generate. Max 1024 UTF-8 characters.
-   */
-  prompt: string;
-  /**
-   * Face Count
-   *
-   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
-   */
-  face_count?: number;
-  /**
-   * Generate Type
-   *
-   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
-   */
-  generate_type?: "Normal" | "Geometry";
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
-   */
-  enable_pbr?: boolean;
-};
-
-/**
- * ProImageTo3DOutput
- */
-export type Hunyuan3dV31ProImageTo3dOutput = {
-  /**
-   * Preview thumbnail of the generated model
-   */
-  thumbnail?: File | unknown;
-  model_urls: ModelUrlsType2;
-  /**
-   * Seed
-   *
-   * The seed used for generation
-   */
-  seed?: number | unknown;
-  model_glb: File;
-};
-
-/**
- * ProImageTo3DInput
- */
-export type Hunyuan3dV31ProImageTo3dInput = {
-  /**
-   * Left Image Url
-   *
-   * Optional left side view image URL (JPG/PNG recommended).
-   */
-  left_image_url?: string | unknown;
-  /**
-   * Input Image Url
-   *
-   * Front view image URL. Resolution: 128-5000px, max 8MB, formats: JPG/PNG/WEBP. Tips: simple background, single object, object >50% of frame.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Right Front Image Url
-   *
-   * Optional right-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  right_front_image_url?: string | unknown;
-  /**
-   * Right Image Url
-   *
-   * Optional right side view image URL (JPG/PNG recommended).
-   */
-  right_image_url?: string | unknown;
-  /**
-   * Top Image Url
-   *
-   * Optional top view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  top_image_url?: string | unknown;
-  /**
-   * Bottom Image Url
-   *
-   * Optional bottom view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  bottom_image_url?: string | unknown;
-  /**
-   * Face Count
-   *
-   * Target polygon face count. Range: 40,000-1,500,000. Default: 500,000.
-   */
-  face_count?: number;
-  /**
-   * Back Image Url
-   *
-   * Optional back/rear view image URL (JPG/PNG recommended).
-   */
-  back_image_url?: string | unknown;
-  /**
-   * Generate Type
-   *
-   * Generation task type. Normal: textured model. Geometry: geometry-only white model (no textures). LowPoly/Sketch are not available in v3.1.
-   */
-  generate_type?: "Normal" | "Geometry";
-  /**
-   * Left Front Image Url
-   *
-   * Optional left-front 45 degree angle view image URL (v3.1 exclusive, JPG/PNG recommended).
-   */
-  left_front_image_url?: string | unknown;
-  /**
-   * Enable Pbr
-   *
-   * Enable PBR material generation (metallic, roughness, normal textures). Ignored when generate_type is Geometry.
-   */
-  enable_pbr?: boolean;
-};
-
-/**
- * PartOutput
- */
-export type Hunyuan3dV31PartOutput = {
-  /**
-   * Result Files
-   *
-   * List of generated part files in FBX format
-   */
-  result_files: Array<File>;
-};
-
-/**
- * PartInput
- */
-export type Hunyuan3dV31PartInput = {
-  /**
-   * Input File Url
-   *
-   * URL of FBX file to split into parts. ONLY FBX format supported. Max size: 100MB, face count ≤30,000. Recommended: AIGC-generated models.
-   */
-  input_file_url: string | Blob | File;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV2TurboOutput = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2TurboInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV2Output = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-};
-
-/**
- * MultiViewObjectOutput
- */
-export type Hunyuan3dV2MultiViewTurboOutput = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-};
-
-/**
- * Hunyuan3DInputMultiView
- */
-export type Hunyuan3dV2MultiViewTurboInput = {
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-  /**
-   * Left Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  left_image_url: string | Blob | File;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Back Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  back_image_url: string | Blob | File;
-  /**
-   * Front Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  front_image_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-};
-
-/**
- * MultiViewObjectOutput
- */
-export type Hunyuan3dV2MultiViewOutput = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-};
-
-/**
- * Hunyuan3DInputMultiView
- */
-export type Hunyuan3dV2MultiViewInput = {
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-  /**
-   * Left Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  left_image_url: string | Blob | File;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Back Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  back_image_url: string | Blob | File;
-  /**
-   * Front Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  front_image_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV2MiniTurboOutput = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2MiniTurboInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-};
-
-/**
- * ObjectOutput
- */
-export type Hunyuan3dV2MiniOutput = {
-  /**
-   * Seed
-   *
-   * Seed value used for generation.
-   */
-  seed: number;
-  model_mesh: File;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2MiniInput = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-};
-
-/**
- * Hunyuan3DInput
- */
-export type Hunyuan3dV2Input = {
-  /**
-   * Input Image Url
-   *
-   * URL of image to use while generating the 3D model.
-   */
-  input_image_url: string | Blob | File;
-  /**
-   * Textured Mesh
-   *
-   * If set true, textured mesh will be generated and the price charged would be 3 times that of white mesh.
-   */
-  textured_mesh?: boolean;
-  /**
-   * Seed
-   *
-   *
-   * The same seed and the same prompt given to the same version of the model
-   * will output the same image every time.
-   *
-   */
-  seed?: number | unknown;
-  /**
-   * Octree Resolution
-   *
-   * Octree resolution for the model.
-   */
-  octree_resolution?: number;
-  /**
-   * Num Inference Steps
-   *
-   * Number of inference steps to perform.
-   */
-  num_inference_steps?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the model.
-   */
-  guidance_scale?: number;
-};
-
-/**
- * ImageToWorldResponse
- */
-export type HunyuanWorldImageToWorldOutput = {
-  world_file: File;
-};
-
-/**
- * ImageToWorldRequest
- */
-export type HunyuanWorldImageToWorldInput = {
-  /**
-   * Labels Fg1
-   *
-   * Labels for the first foreground object.
-   */
-  labels_fg1: string;
-  /**
-   * Export Drc
-   *
-   * Whether to export DRC (Dynamic Resource Configuration).
-   */
-  export_drc?: boolean;
-  /**
-   * Classes
-   *
-   * Classes to use for the world generation.
-   */
-  classes: string;
-  /**
-   * Labels Fg2
-   *
-   * Labels for the second foreground object.
-   */
-  labels_fg2: string;
+  body_mesh_url: string | Blob | File;
   /**
    * Image Url
    *
-   * The URL of the image to convert to a world.
+   * URL of the original image used for MoGe depth estimation
    */
   image_url: string | Blob | File;
+  /**
+   * Body Mask Url
+   *
+   * URL of the human mask image. If not provided, uses full image.
+   */
+  body_mask_url?: string | unknown;
+  /**
+   * Object Mesh Url
+   *
+   * Optional URL of SAM-3D Object mesh (.glb) to create combined scene
+   */
+  object_mesh_url?: string | unknown;
+  /**
+   * Focal Length
+   *
+   * Focal length from SAM-3D Body metadata. If not provided, estimated from MoGe.
+   */
+  focal_length?: number | unknown;
+};
+
+/**
+ * SAM3DAlignmentOutput
+ */
+export type Sam33dAlignOutput = {
+  /**
+   * Combined scene with body + object meshes in GLB format (only when object_mesh_url provided)
+   */
+  scene_glb?: File | unknown;
+  visualization: File;
+  body_mesh_ply: File;
+  model_glb: File;
+  metadata: Sam3dBodyAlignmentInfo;
+};
+
+/**
+ * SAM3DBodyInput
+ */
+export type Sam33dBodyInput = {
+  /**
+   * Mask Url
+   *
+   * Optional URL of a binary mask image (white=person, black=background). When provided, skips auto human detection and uses this mask instead. Bbox is auto-computed from the mask.
+   */
+  mask_url?: string | unknown;
+  /**
+   * Image Url
+   *
+   * URL of the image containing humans
+   */
+  image_url: string | Blob | File;
+  /**
+   * Include 3D Keypoints
+   *
+   * Include 3D keypoint markers (spheres) in the GLB mesh for visualization
+   */
+  include_3d_keypoints?: boolean;
+  /**
+   * Export Meshes
+   *
+   * Export individual mesh files (.ply) per person
+   */
+  export_meshes?: boolean;
+};
+
+/**
+ * SAM3DBodyOutput
+ */
+export type Sam33dBodyOutput = {
+  /**
+   * Meshes
+   *
+   * Individual mesh files (.ply), one per detected person (when export_meshes=True)
+   */
+  meshes?: Array<File> | unknown;
+  visualization: File;
+  metadata: Sam3dBodyMetadata;
+  model_glb: File;
+};
+
+/**
+ * SAM3DObjectInput
+ */
+export type Sam33dObjectsInput = {
+  /**
+   * Export Textured Glb
+   *
+   * If True, exports GLB with baked texture and UVs instead of vertex colors.
+   */
+  export_textured_glb?: boolean;
+  /**
+   * Point Prompts
+   *
+   * Point prompts for auto-segmentation when no masks provided
+   */
+  point_prompts?: Array<PointPromptBase>;
+  /**
+   * Box Prompts
+   *
+   * Box prompts for auto-segmentation when no masks provided. Multiple boxes supported - each produces a separate object mask for 3D reconstruction.
+   */
+  box_prompts?: Array<BoxPromptBase>;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Detection Threshold
+   *
+   * Detection confidence threshold (0.1-1.0). Lower = more detections but less precise. If not set, uses the model's default.
+   */
+  detection_threshold?: number | unknown;
+  /**
+   * Image Url
+   *
+   * URL of the image to reconstruct in 3D
+   */
+  image_url: string | Blob | File;
+  /**
+   * Pointmap Url
+   *
+   * Optional URL to external pointmap/depth data (NPY or NPZ format) for improved 3D reconstruction depth estimation
+   */
+  pointmap_url?: string | unknown;
+  /**
+   * Prompt
+   *
+   * Text prompt for auto-segmentation when no masks provided (e.g., 'chair', 'lamp')
+   */
+  prompt?: string | unknown;
+  /**
+   * Mask Urls
+   *
+   * Optional list of mask URLs (one per object). If not provided, use prompt/point_prompts/box_prompts to auto-segment, or entire image will be used.
+   */
+  mask_urls?: Array<string>;
+};
+
+/**
+ * SAM3DObjectOutput
+ */
+export type Sam33dObjectsOutput = {
+  /**
+   * Individual Glbs
+   *
+   * Individual GLB mesh files per object (only for multi-object scenes)
+   */
+  individual_glbs?: Array<File | unknown> | unknown;
+  /**
+   * Individual Splats
+   *
+   * Individual Gaussian splat files per object (only for multi-object scenes)
+   */
+  individual_splats?: Array<File> | unknown;
+  gaussian_splat: File;
+  /**
+   * Metadata
+   *
+   * Per-object metadata (rotation/translation/scale)
+   */
+  metadata: Array<Sam3dObjectMetadata>;
+  model_glb?: File;
+  /**
+   * Zip bundle containing all artifacts and metadata
+   */
+  artifacts_zip?: File | unknown;
+};
+
+/**
+ * SAM3DBodyAlignmentInfo
+ *
+ * Per-person alignment metadata.
+ */
+export type Sam3dBodyAlignmentInfo = {
+  /**
+   * Focal Length
+   *
+   * Focal length used
+   */
+  focal_length: number;
+  /**
+   * Scale Factor
+   *
+   * Scale factor applied for alignment
+   */
+  scale_factor: number;
+  /**
+   * Target Points Count
+   *
+   * Number of target points for alignment
+   */
+  target_points_count: number;
+  /**
+   * Cropped Vertices Count
+   *
+   * Number of cropped vertices
+   */
+  cropped_vertices_count: number;
+  /**
+   * Translation
+   *
+   * Translation [tx, ty, tz]
+   */
+  translation: Array<number>;
+  /**
+   * Person Id
+   *
+   * Index of the person
+   */
+  person_id: number;
+};
+
+/**
+ * SAM3DBodyMetadata
+ *
+ * Metadata for body reconstruction output.
+ */
+export type Sam3dBodyMetadata = {
+  /**
+   * People
+   *
+   * Per-person metadata
+   */
+  people: Array<Sam3dBodyPersonMetadata>;
+  /**
+   * Num People
+   *
+   * Number of people detected
+   */
+  num_people: number;
+};
+
+/**
+ * SAM3DBodyPersonMetadata
+ *
+ * Per-person metadata for body reconstruction.
+ */
+export type Sam3dBodyPersonMetadata = {
+  /**
+   * Keypoints 2D
+   *
+   * 2D keypoints [[x, y], ...] - 70 body keypoints
+   */
+  keypoints_2d: Array<Array<number>>;
+  /**
+   * Keypoints 3D
+   *
+   * 3D keypoints [[x, y, z], ...] - 70 body keypoints in camera space
+   */
+  keypoints_3d?: Array<Array<number>> | unknown;
+  /**
+   * Person Id
+   *
+   * Index of the person in the scene
+   */
+  person_id: number;
+  /**
+   * Pred Cam T
+   *
+   * Predicted camera translation [tx, ty, tz]
+   */
+  pred_cam_t: Array<number>;
+  /**
+   * Bbox
+   *
+   * Bounding box [x_min, y_min, x_max, y_max]
+   */
+  bbox: Array<number>;
+  /**
+   * Focal Length
+   *
+   * Estimated focal length
+   */
+  focal_length: number;
+};
+
+/**
+ * SAM3DObjectMetadata
+ *
+ * Per-object metadata for 3D reconstruction.
+ */
+export type Sam3dObjectMetadata = {
+  /**
+   * Camera Pose
+   *
+   * Camera pose matrix
+   */
+  camera_pose?: Array<Array<number>> | unknown;
+  /**
+   * Rotation
+   *
+   * Rotation quaternion [x, y, z, w]
+   */
+  rotation?: Array<Array<number>> | unknown;
+  /**
+   * Translation
+   *
+   * Translation [tx, ty, tz]
+   */
+  translation?: Array<Array<number>> | unknown;
+  /**
+   * Scale
+   *
+   * Scale factors [sx, sy, sz]
+   */
+  scale?: Array<Array<number>> | unknown;
+  /**
+   * Object Index
+   *
+   * Index of the object in the scene
+   */
+  object_index: number;
+};
+
+/**
+ * TextureFiles
+ *
+ * Texture files downloaded and uploaded to CDN
+ */
+export type TextureFiles = {
+  /**
+   * Normal texture (PBR)
+   */
+  normal?: File | unknown;
+  /**
+   * Metallic texture (PBR)
+   */
+  metallic?: File | unknown;
+  base_color: File;
+  /**
+   * Roughness texture (PBR)
+   */
+  roughness?: File | unknown;
+};
+
+/**
+ * SingleImageInputModel
+ */
+export type Trellis2Input = {
+  /**
+   * Texture Size
+   *
+   * Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.
+   */
+  texture_size?: 1024 | 2048 | 4096;
+  /**
+   * Shape Slat Guidance Strength
+   *
+   * How closely the detailed geometry follows the input image. Higher values add more detail but may introduce noise.
+   */
+  shape_slat_guidance_strength?: number;
+  /**
+   * Shape Slat Rescale T
+   *
+   * Controls noise schedule sharpness for shape refinement. Higher values produce sharper geometric details.
+   */
+  shape_slat_rescale_t?: number;
+  /**
+   * Resolution
+   *
+   * Output resolution; higher is slower but more detailed
+   */
+  resolution?: 512 | 1024 | 1536;
+  /**
+   * Tex Slat Sampling Steps
+   *
+   * Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.
+   */
+  tex_slat_sampling_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Ss Rescale T
+   *
+   * Controls noise schedule sharpness for structure generation. Higher values produce sharper transitions.
+   */
+  ss_rescale_t?: number;
+  /**
+   * Tex Slat Guidance Strength
+   *
+   * How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.
+   */
+  tex_slat_guidance_strength?: number;
+  /**
+   * Remesh
+   *
+   * Rebuild the mesh topology for cleaner triangles. Slower but usually produces better results for downstream use (animation, 3D printing, etc).
+   */
+  remesh?: boolean;
+  /**
+   * Shape Slat Sampling Steps
+   *
+   * Number of denoising steps for shape refinement. More steps = slower but potentially smoother geometry.
+   */
+  shape_slat_sampling_steps?: number;
+  /**
+   * Ss Guidance Strength
+   *
+   * How closely the initial 3D structure follows the input image. Higher values produce more faithful but potentially noisier results.
+   */
+  ss_guidance_strength?: number;
+  /**
+   * Ss Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in stage 1. Lower values allow stronger guidance effects, higher values stabilize the output.
+   */
+  ss_guidance_rescale?: number;
+  /**
+   * Ss Sampling Steps
+   *
+   * Number of denoising steps for the initial structure. More steps = slower but potentially higher quality.
+   */
+  ss_sampling_steps?: number;
+  /**
+   * Shape Slat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the shape stage. Increase if you see noisy geometry.
+   */
+  shape_slat_guidance_rescale?: number;
+  /**
+   * Decimation Target
+   *
+   * Target number of vertices in the final mesh. Lower values produce smaller files but less detail. 500k is good for most uses, reduce to 20k-50k for web/mobile.
+   */
+  decimation_target?: number;
+  /**
+   * Remesh Band
+   *
+   * Controls how far remeshing can move vertices from the original surface. Higher values allow more smoothing but may lose fine details.
+   */
+  remesh_band?: number;
+  /**
+   * Image Url
+   *
+   * URL of the input image to convert to 3D
+   */
+  image_url: string | Blob | File;
+  /**
+   * Tex Slat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.
+   */
+  tex_slat_guidance_rescale?: number;
+  /**
+   * Tex Slat Rescale T
+   *
+   * Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.
+   */
+  tex_slat_rescale_t?: number;
+  /**
+   * Remesh Project
+   *
+   * How much to project remeshed vertices back onto the original surface. 0 = no projection (smoother), 1 = full projection (preserves detail).
+   */
+  remesh_project?: number;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Trellis2Output = {
+  model_glb: File;
+};
+
+/**
+ * RetextureInputModel
+ */
+export type Trellis2RetextureInput = {
+  /**
+   * Texture Size
+   *
+   * Resolution of the texture image baked onto the mesh. Higher values capture finer surface details but produce larger files.
+   */
+  texture_size?: 1024 | 2048 | 4096;
+  /**
+   * Image Url
+   *
+   * URL of the reference image for texturing
+   */
+  image_url: string | Blob | File;
+  /**
+   * Resolution
+   *
+   * Internal resolution for texture generation. Higher produces finer texture details but is slower.
+   */
+  resolution?: 512 | 1024;
+  /**
+   * Tex Slat Sampling Steps
+   *
+   * Number of denoising steps for texture generation. More steps = slower but potentially cleaner textures.
+   */
+  tex_slat_sampling_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Tex Slat Guidance Rescale
+   *
+   * Dampens artifacts from high guidance in the texture stage. Increase if textures look noisy or have color banding.
+   */
+  tex_slat_guidance_rescale?: number;
+  /**
+   * Tex Slat Guidance Strength
+   *
+   * How closely the texture follows the input image colors. Higher values produce more vivid but potentially oversaturated textures.
+   */
+  tex_slat_guidance_strength?: number;
+  /**
+   * Tex Slat Rescale T
+   *
+   * Controls noise schedule sharpness for texture generation. Higher values produce sharper texture details.
+   */
+  tex_slat_rescale_t?: number;
+  /**
+   * Mesh Url
+   *
+   * URL of the untextured 3D mesh to retexture. Supports GLB, OBJ, PLY, and STL formats.
+   */
+  mesh_url: string | Blob | File;
+};
+
+/**
+ * ObjectOutput
+ */
+export type Trellis2RetextureOutput = {
+  model_glb: File;
+};
+
+/**
+ * InputModel
+ */
+export type TrellisInput = {
+  /**
+   * Ss Guidance Strength
+   *
+   * Guidance strength for sparse structure generation
+   */
+  ss_guidance_strength?: number;
+  /**
+   * Mesh Simplify
+   *
+   * Mesh simplification factor
+   */
+  mesh_simplify?: number;
+  /**
+   * Image Url
+   *
+   * URL of the input image to convert to 3D
+   */
+  image_url: string | Blob | File;
+  /**
+   * Slat Guidance Strength
+   *
+   * Guidance strength for structured latent generation
+   */
+  slat_guidance_strength?: number;
+  /**
+   * Slat Sampling Steps
+   *
+   * Sampling steps for structured latent generation
+   */
+  slat_sampling_steps?: number;
+  /**
+   * Ss Sampling Steps
+   *
+   * Sampling steps for sparse structure generation
+   */
+  ss_sampling_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Texture Size
+   *
+   * Texture resolution
+   */
+  texture_size?: 512 | 1024 | 2048;
+};
+
+/**
+ * MultiImageInputModel
+ */
+export type TrellisMultiInput = {
+  /**
+   * Multiimage Algo
+   *
+   * Algorithm for multi-image generation
+   */
+  multiimage_algo?: "stochastic" | "multidiffusion";
+  /**
+   * Slat Sampling Steps
+   *
+   * Sampling steps for structured latent generation
+   */
+  slat_sampling_steps?: number;
+  /**
+   * Mesh Simplify
+   *
+   * Mesh simplification factor
+   */
+  mesh_simplify?: number;
+  /**
+   * Ss Guidance Strength
+   *
+   * Guidance strength for sparse structure generation
+   */
+  ss_guidance_strength?: number;
+  /**
+   * Slat Guidance Strength
+   *
+   * Guidance strength for structured latent generation
+   */
+  slat_guidance_strength?: number;
+  /**
+   * Ss Sampling Steps
+   *
+   * Sampling steps for sparse structure generation
+   */
+  ss_sampling_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility
+   */
+  seed?: number | unknown;
+  /**
+   * Image Urls
+   *
+   * List of URLs of input images to convert to 3D
+   */
+  image_urls: Array<string>;
+  /**
+   * Texture Size
+   *
+   * Texture resolution
+   */
+  texture_size?: 512 | 1024 | 2048;
+};
+
+/**
+ * ObjectOutput
+ */
+export type TrellisMultiOutput = {
+  /**
+   * Timings
+   *
+   * Processing timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  model_mesh: File;
+};
+
+/**
+ * ObjectOutput
+ */
+export type TrellisOutput = {
+  /**
+   * Timings
+   *
+   * Processing timings
+   */
+  timings: {
+    [key: string]: number;
+  };
+  model_mesh: File;
+};
+
+/**
+ * TripoSRInput
+ */
+export type TriposrInput = {
+  /**
+   * Output Format
+   *
+   * Output format for the 3D model.
+   */
+  output_format?: "glb" | "obj";
+  /**
+   * Image Url
+   *
+   * Path for the image file to be processed.
+   */
+  image_url: string | Blob | File;
+  /**
+   * Foreground Ratio
+   *
+   * Ratio of the foreground image to the original image.
+   */
+  foreground_ratio?: number;
+  /**
+   * Do Remove Background
+   *
+   * Whether to remove the background from the input image.
+   */
+  do_remove_background?: boolean;
+  /**
+   * Mc Resolution
+   *
+   * Resolution of the marching cubes. Above 512 is not recommended.
+   */
+  mc_resolution?: number;
+};
+
+/**
+ * ObjectOutput
+ */
+export type TriposrOutput = {
+  /**
+   * Directory containing textures for the remeshed model.
+   */
+  remeshing_dir?: File | unknown;
+  /**
+   * Timings
+   *
+   * Inference timings.
+   */
+  timings: {
+    [key: string]: number;
+  };
+  model_mesh: File;
+};
+
+/**
+ * ImageTo3dInput
+ */
+export type TripoV25ImageTo3dInput = {
+  /**
+   * Face Limit
+   *
+   * Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.
+   */
+  face_limit?: number;
+  /**
+   * Style
+   *
+   * [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
+   *
+   * @deprecated
+   */
+  style?:
+    | "person:person2cartoon"
+    | "object:clay"
+    | "object:steampunk"
+    | "animal:venom"
+    | "object:barbie"
+    | "object:christmas"
+    | "gold"
+    | "ancient_bronze";
+  /**
+   * Pbr
+   *
+   * A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.
+   */
+  pbr?: boolean;
+  /**
+   * Texture Alignment
+   *
+   * Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
+   */
+  texture_alignment?: "original_image" | "geometry";
+  /**
+   * Image Url
+   *
+   * URL of the image to use for model generation.
+   */
+  image_url: string | Blob | File;
+  /**
+   * Texture
+   *
+   * An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
+   */
+  texture?: "no" | "standard" | "HD";
+  /**
+   * Auto Size
+   *
+   * Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.
+   */
+  auto_size?: boolean;
+  /**
+   * Seed
+   *
+   * This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.
+   */
+  seed?: number;
+  /**
+   * Quad
+   *
+   * Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.
+   */
+  quad?: boolean;
+  /**
+   * Orientation
+   *
+   * Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
+   */
+  orientation?: "default" | "align_image";
+  /**
+   * Texture Seed
+   *
+   * This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.
+   */
+  texture_seed?: number;
+};
+
+/**
+ * Tripo3dOutput
+ */
+export type TripoV25ImageTo3dOutput = {
+  /**
+   * Base Model
+   *
+   * Base model
+   */
+  base_model?: FileType2;
+  /**
+   * Task Id
+   *
+   * The task id of the 3D model generation.
+   */
+  task_id: string;
+  /**
+   * Rendered Image
+   *
+   * A preview image of the model
+   */
+  rendered_image?: FileType2;
+  /**
+   * Model Mesh
+   *
+   * Model
+   */
+  model_mesh?: FileType2;
+  /**
+   * Pbr Model
+   *
+   * Pbr model
+   */
+  pbr_model?: FileType2;
+};
+
+/**
+ * MultiviewTo3dInput
+ */
+export type TripoV25MultiviewTo3dInput = {
+  /**
+   * Face Limit
+   *
+   * Limits the number of faces on the output model. If this option is not set, the face limit will be adaptively determined.
+   */
+  face_limit?: number;
+  /**
+   * Right Image Url
+   *
+   * Right view image of the object.
+   */
+  right_image_url?: string | Blob | File;
+  /**
+   * Style
+   *
+   * [DEPRECATED] Defines the artistic style or transformation to be applied to the 3D model, altering its appearance according to preset options (extra $0.05 per generation). Omit this option to keep the original style and apperance.
+   *
+   * @deprecated
+   */
+  style?:
+    | "person:person2cartoon"
+    | "object:clay"
+    | "object:steampunk"
+    | "animal:venom"
+    | "object:barbie"
+    | "object:christmas"
+    | "gold"
+    | "ancient_bronze";
+  /**
+   * Quad
+   *
+   * Set True to enable quad mesh output (extra $0.05 per generation). If quad=True and face_limit is not set, the default face_limit will be 10000. Note: Enabling this option will force the output to be an FBX model.
+   */
+  quad?: boolean;
+  /**
+   * Front Image Url
+   *
+   * Front view image of the object.
+   */
+  front_image_url: string | Blob | File;
+  /**
+   * Texture Seed
+   *
+   * This is the random seed for texture generation. Using the same seed will produce identical textures. This parameter is an integer and is randomly chosen if not set. If you want a model with different textures, please use same seed and different texture_seed.
+   */
+  texture_seed?: number;
+  /**
+   * Back Image Url
+   *
+   * Back view image of the object.
+   */
+  back_image_url?: string | Blob | File;
+  /**
+   * Pbr
+   *
+   * A boolean option to enable pbr. The default value is True, set False to get a model without pbr. If this option is set to True, texture will be ignored and used as True.
+   */
+  pbr?: boolean;
+  /**
+   * Texture Alignment
+   *
+   * Determines the prioritization of texture alignment in the 3D model. The default value is original_image.
+   */
+  texture_alignment?: "original_image" | "geometry";
+  /**
+   * Texture
+   *
+   * An option to enable texturing. Default is 'standard', set 'no' to get a model without any textures, and set 'HD' to get a model with hd quality textures.
+   */
+  texture?: "no" | "standard" | "HD";
+  /**
+   * Auto Size
+   *
+   * Automatically scale the model to real-world dimensions, with the unit in meters. The default value is False.
+   */
+  auto_size?: boolean;
+  /**
+   * Seed
+   *
+   * This is the random seed for model generation. The seed controls the geometry generation process, ensuring identical models when the same seed is used. This parameter is an integer and is randomly chosen if not set.
+   */
+  seed?: number;
+  /**
+   * Orientation
+   *
+   * Set orientation=align_image to automatically rotate the model to align the original image. The default value is default.
+   */
+  orientation?: "default" | "align_image";
+  /**
+   * Left Image Url
+   *
+   * Left view image of the object.
+   */
+  left_image_url?: string | Blob | File;
+};
+
+/**
+ * Tripo3dOutput
+ */
+export type TripoV25MultiviewTo3dOutput = {
+  /**
+   * Base Model
+   *
+   * Base model
+   */
+  base_model?: FileType2;
+  /**
+   * Task Id
+   *
+   * The task id of the 3D model generation.
+   */
+  task_id: string;
+  /**
+   * Rendered Image
+   *
+   * A preview image of the model
+   */
+  rendered_image?: FileType2;
+  /**
+   * Model Mesh
+   *
+   * Model
+   */
+  model_mesh?: FileType2;
+  /**
+   * Pbr Model
+   *
+   * Pbr model
+   */
+  pbr_model?: FileType2;
+};
+
+/**
+ * UltraShapeRequest
+ */
+export type UltrashapeInput = {
+  /**
+   * Seed
+   *
+   * Random seed.
+   */
+  seed?: number;
+  /**
+   * Remove Background
+   *
+   * Remove image background.
+   */
+  remove_background?: boolean;
+  /**
+   * Model Url
+   *
+   * URL of the coarse mesh (.glb or .obj) to refine.
+   */
+  model_url: string | Blob | File;
+  /**
+   * Octree Resolution
+   *
+   * Marching cubes resolution.
+   */
+  octree_resolution?: number;
+  /**
+   * Image Url
+   *
+   * URL of the reference image for mesh refinement.
+   */
+  image_url: string | Blob | File;
+  /**
+   * Num Inference Steps
+   *
+   * Diffusion steps.
+   */
+  num_inference_steps?: number;
+};
+
+/**
+ * UltraShapeResponse
+ */
+export type UltrashapeOutput = {
+  model_glb: File;
 };
 
 export type PostFalAiHunyuanWorldImageToWorldData = {

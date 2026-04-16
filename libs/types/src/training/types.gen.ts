@@ -5,11 +5,51 @@ export type ClientOptions = {
 };
 
 /**
+ * Input
+ */
+export type ErnieImageTrainerInput = {
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Learning Rate
+   *
+   * Learning rate.
+   */
+  learning_rate?: number;
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images and corresponding captions.
+   *
+   * The images should be named: ROOT.EXT. For example: 001.jpg
+   *
+   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   */
+  image_data_url: string | Blob | File;
+};
+
+/**
  * Output
  */
-export type ZImageTurboTrainerV2Output = {
-  diffusers_lora_file: File;
+export type ErnieImageTrainerOutput = {
   config_file: File;
+  diffusers_lora_file: File;
 };
 
 /**
@@ -43,57 +83,45 @@ export type File = {
 };
 
 /**
- * Input
+ * InputEditV2
  */
-export type ZImageTurboTrainerV2Input = {
+export type Flux2Klein4bBaseTrainerEditInput = {
   /**
    * Steps
    *
-   * Number of steps to train for
+   * Total number of training steps.
    */
   steps?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Learning Rate
-   *
-   * Learning rate.
-   */
-  learning_rate?: number;
   /**
    * Image Data Url
    *
    *
    * URL to the input data zip archive.
    *
-   * The zip should contain pairs of images and corresponding captions.
+   * The zip should contain pairs of images. The images should be named:
    *
-   * The images should be named: ROOT.EXT. For example: 001.jpg
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
    *
-   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
    *
-   * If no text file is provided for an image, the default_caption will be used.
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
    *
    */
   image_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type ZImageTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * Input
- */
-export type ZImageTrainerInput = {
   /**
    * Learning Rate
    *
@@ -106,6 +134,28 @@ export type ZImageTrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
+export type Flux2Klein4bBaseTrainerEditOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
+ */
+export type Flux2Klein4bBaseTrainerInput = {
   /**
    * Steps
    *
@@ -132,35 +182,9 @@ export type ZImageTrainerInput = {
    */
   image_data_url: string | Blob | File;
   /**
-   * Training Type
-   *
-   * Type of training to perform. Use 'content' to focus on the content of the images, 'style' to focus on the style of the images, and 'balanced' to focus on a combination of both.
-   */
-  training_type?: "content" | "style" | "balanced";
-};
-
-/**
- * Output
- */
-export type ZImageBaseTrainerOutput = {
-  diffusers_lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type ZImageBaseTrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
    * Learning Rate
    *
-   * Learning rate.
+   * Learning rate applied to trainable parameters.
    */
   learning_rate?: number;
   /**
@@ -170,733 +194,29 @@ export type ZImageBaseTrainerInput = {
    */
   default_caption?: string | unknown;
   /**
-   * Image Data Url
+   * Output Lora Format
    *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images and corresponding captions.
-   *
-   * The images should be named: ROOT.EXT. For example: 001.jpg
-   *
-   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
-   *
-   * If no text file is provided for an image, the default_caption will be used.
-   *
+   * Dictates the naming scheme for the output weights
    */
-  image_data_url: string | Blob | File;
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type WanTrainerT2vOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type WanTrainerT2vInput = {
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type WanTrainerT2V14bOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type WanTrainerT2V14bInput = {
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type WanTrainerOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type WanTrainerInput = {
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type WanTrainerI2V720pOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type WanTrainerI2V720pInput = {
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type WanTrainerFlf2V720pOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type WanTrainerFlf2V720pInput = {
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type Wan22TrainerT2vA14bOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type Wan22TrainerT2vA14bInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type Wan22TrainerI2vA14bOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type Wan22TrainerI2vA14bInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-};
-
-/**
- * WanTrainerResponse
- */
-export type Wan22ImageTrainerOutput = {
-  diffusers_lora_file: File;
-  config_file: File;
-  high_noise_lora: File;
-};
-
-/**
- * BasicInput
- */
-export type Wan22ImageTrainerInput = {
-  /**
-   * Number of Steps
-   *
-   * Number of training steps.
-   */
-  steps?: number;
-  /**
-   * Use Face Detection
-   *
-   * Whether to use face detection for the training data. When enabled, images will use the center of the face as the center of the image when resizing.
-   */
-  use_face_detection?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * Trigger phrase for the model.
-   */
-  trigger_phrase: string;
-  /**
-   * Use Masks
-   *
-   * Whether to use masks for the training data.
-   */
-  use_masks?: boolean;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for training.
-   */
-  learning_rate?: number;
-  /**
-   * Training Data URL
-   *
-   * URL to the training data.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Use Face Cropping
-   *
-   * Whether to use face cropping for the training data. When enabled, images will be cropped to the face before resizing.
-   */
-  use_face_cropping?: boolean;
-  /**
-   * Include Synthetic Captions
-   *
-   * Whether to include synthetic captions.
-   */
-  include_synthetic_captions?: boolean;
-  /**
-   * Is Style
-   *
-   * Whether the training data is style data. If true, face specific options like masking and face detection will be disabled.
-   */
-  is_style?: boolean;
-};
-
-/**
- * Validation
- */
-export type Validation = {
-  /**
-   * Image Url
-   *
-   * An image to use for image-to-video validation. If provided for one validation, _all_ validation inputs must have an image.
-   */
-  image_url?: string | unknown;
-  /**
-   * Prompt
-   *
-   * The prompt to use for validation.
-   */
-  prompt: string;
-};
-
-/**
- * V2VValidation
- *
- * Validation input for video-to-video training.
- */
-export type V2vValidation = {
-  /**
-   * Reference Video Url
-   *
-   * URL to reference video for IC-LoRA validation. This is the input video that will be transformed.
-   */
-  reference_video_url: string;
-  /**
-   * Prompt
-   *
-   * The prompt to use for validation.
-   */
-  prompt: string;
-};
-
-/**
- * Output
- */
-export type TurboFluxTrainerOutput = {
-  diffusers_lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type TurboFluxTrainerInput = {
-  /**
-   * Trigger Phrase
-   *
-   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
-   *
-   */
-  trigger_phrase?: string | unknown;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for the training.
-   */
-  learning_rate?: number;
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Training Style
-   *
-   * Training style to use.
-   */
-  training_style?: "subject" | "style" | unknown;
-  /**
-   * Face Crop
-   *
-   * Whether to try to detect the face and crop the images to the face.
-   */
-  face_crop?: boolean;
-};
-
-/**
- * StyleReferenceOutput
- */
-export type RecraftV3CreateStyleOutput = {
-  /**
-   * Style Id
-   *
-   * The ID of the created style, this ID can be used to reference the style in the future.
-   */
-  style_id: string;
-};
-
-/**
- * StyleReferenceInput
- */
-export type RecraftV3CreateStyleInput = {
-  /**
-   * Images Data Url
-   *
-   * URL to zip archive with images, use PNG format. Maximum 5 images are allowed.
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Base Style
-   *
-   * The base style of the generated images, this topic is covered above.
-   */
-  base_style?:
-    | "any"
-    | "realistic_image"
-    | "digital_illustration"
-    | "vector_illustration"
-    | "realistic_image/b_and_w"
-    | "realistic_image/hard_flash"
-    | "realistic_image/hdr"
-    | "realistic_image/natural_light"
-    | "realistic_image/studio_portrait"
-    | "realistic_image/enterprise"
-    | "realistic_image/motion_blur"
-    | "realistic_image/evening_light"
-    | "realistic_image/faded_nostalgia"
-    | "realistic_image/forest_life"
-    | "realistic_image/mystic_naturalism"
-    | "realistic_image/natural_tones"
-    | "realistic_image/organic_calm"
-    | "realistic_image/real_life_glow"
-    | "realistic_image/retro_realism"
-    | "realistic_image/retro_snapshot"
-    | "realistic_image/urban_drama"
-    | "realistic_image/village_realism"
-    | "realistic_image/warm_folk"
-    | "digital_illustration/pixel_art"
-    | "digital_illustration/hand_drawn"
-    | "digital_illustration/grain"
-    | "digital_illustration/infantile_sketch"
-    | "digital_illustration/2d_art_poster"
-    | "digital_illustration/handmade_3d"
-    | "digital_illustration/hand_drawn_outline"
-    | "digital_illustration/engraving_color"
-    | "digital_illustration/2d_art_poster_2"
-    | "digital_illustration/antiquarian"
-    | "digital_illustration/bold_fantasy"
-    | "digital_illustration/child_book"
-    | "digital_illustration/child_books"
-    | "digital_illustration/cover"
-    | "digital_illustration/crosshatch"
-    | "digital_illustration/digital_engraving"
-    | "digital_illustration/expressionism"
-    | "digital_illustration/freehand_details"
-    | "digital_illustration/grain_20"
-    | "digital_illustration/graphic_intensity"
-    | "digital_illustration/hard_comics"
-    | "digital_illustration/long_shadow"
-    | "digital_illustration/modern_folk"
-    | "digital_illustration/multicolor"
-    | "digital_illustration/neon_calm"
-    | "digital_illustration/noir"
-    | "digital_illustration/nostalgic_pastel"
-    | "digital_illustration/outline_details"
-    | "digital_illustration/pastel_gradient"
-    | "digital_illustration/pastel_sketch"
-    | "digital_illustration/pop_art"
-    | "digital_illustration/pop_renaissance"
-    | "digital_illustration/street_art"
-    | "digital_illustration/tablet_sketch"
-    | "digital_illustration/urban_glow"
-    | "digital_illustration/urban_sketching"
-    | "digital_illustration/vanilla_dreams"
-    | "digital_illustration/young_adult_book"
-    | "digital_illustration/young_adult_book_2"
-    | "vector_illustration/bold_stroke"
-    | "vector_illustration/chemistry"
-    | "vector_illustration/colored_stencil"
-    | "vector_illustration/contour_pop_art"
-    | "vector_illustration/cosmics"
-    | "vector_illustration/cutout"
-    | "vector_illustration/depressive"
-    | "vector_illustration/editorial"
-    | "vector_illustration/emotional_flat"
-    | "vector_illustration/infographical"
-    | "vector_illustration/marker_outline"
-    | "vector_illustration/mosaic"
-    | "vector_illustration/naivector"
-    | "vector_illustration/roundish_flat"
-    | "vector_illustration/segmented_colors"
-    | "vector_illustration/sharp_contrast"
-    | "vector_illustration/thin"
-    | "vector_illustration/vector_photo"
-    | "vector_illustration/vivid_shapes"
-    | "vector_illustration/engraving"
-    | "vector_illustration/line_art"
-    | "vector_illustration/line_circuit"
-    | "vector_illustration/linocut";
-};
-
-/**
- * Output
- */
-export type QwenImageTrainerV2Output = {
+export type Flux2Klein4bBaseTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * InputImage
+ * InputEditV2
  */
-export type QwenImageTrainerV2Input = {
+export type Flux2Klein9bBaseTrainerEditInput = {
   /**
    * Steps
    *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive for text-to-image training.
-   *
-   * The zip should contain images with their corresponding text captions:
-   *
-   * image.EXT and image.txt
-   * For example:
-   * photo.jpg and photo.txt
-   *
-   * The text file contains the caption/prompt describing the target image.
-   *
-   * If no text file is provided for an image, the default_caption will be used.
-   *
-   * If no default_caption is provided and a text file is missing, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-};
-
-/**
- * Output
- */
-export type QwenImageTrainerOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * PublicInput
- */
-export type QwenImageTrainerInput = {
-  /**
-   * Trigger Phrase
-   *
-   * Default caption to use for images that don't have corresponding text files. If provided, missing .txt files will be created automatically.
-   */
-  trigger_phrase?: string;
-  /**
-   * Steps
-   *
-   * Total number of training steps to perform. Default is 4000.
-   */
-  steps?: number;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for training. Default is 5e-4
-   */
-  learning_rate?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images for training. The archive should contain images and corresponding text files with captions.
-   * Each text file should have the same name as the image file it corresponds to (e.g., image1.jpg and image1.txt).
-   * If text files are missing for some images, you can provide a trigger_phrase to automatically create them.
-   * Supported image formats: PNG, JPG, JPEG, WEBP.
-   * Try to use at least 10 images, although more is better.
-   *
-   */
-  image_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type QwenImageLayeredTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * Input
- */
-export type QwenImageLayeredTrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
+   * Total number of training steps.
    */
   steps?: number;
   /**
@@ -905,25 +225,23 @@ export type QwenImageLayeredTrainerInput = {
    *
    * URL to the input data zip archive.
    *
-   * The zip should contain groups of images. The images should be named:
+   * The zip should contain pairs of images. The images should be named:
    *
-   * ROOT_start.EXT, ROOT_end.EXT, ROOT_end2.EXT, ..., ROOT_endN.EXT
+   * ROOT_start.EXT and ROOT_end.EXT
    * For example:
-   * photo_start.png, photo_end.png, photo_end2.png, ..., photo_endN.png
+   * photo_start.jpg and photo_end.jpg
    *
-   * The start image is the base image that will be decomposed into layers.
-   * The end images are the layers that will be added to the base image.  ROOT_end.EXT is the first layer, ROOT_end2.EXT is the second layer, and so on.
-   * You can have up to 8 layers.
-   * All image groups must have the same number of output layers.
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
    *
-   * The end images can contain transparent regions. Only PNG and WebP images are supported since these are the only formats that support transparency.
-   *
-   * The zip can also contain a text file for each image group. The text file should be named:
+   * The zip can also contain a text file for each image pair. The text file should be named:
    * ROOT.txt
    * For example:
    * photo.txt
    *
-   * This text file can be used to specify a description of the base image.
+   * This text file can be used to specify the edit instructions for the image pair.
    *
    * If no text file is provided, the default_caption will be used.
    *
@@ -934,7 +252,7 @@ export type QwenImageLayeredTrainerInput = {
   /**
    * Learning Rate
    *
-   * Learning rate for LoRA parameters.
+   * Learning rate applied to trainable parameters.
    */
   learning_rate?: number;
   /**
@@ -943,12 +261,77 @@ export type QwenImageLayeredTrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type QwenImageEditTrainerOutput = {
+export type Flux2Klein9bBaseTrainerEditOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
+ */
+export type Flux2Klein9bBaseTrainerInput = {
+  /**
+   * Steps
+   *
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * The zip can also contain a text file for each image. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
+export type Flux2Klein9bBaseTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
@@ -956,11 +339,11 @@ export type QwenImageEditTrainerOutput = {
 /**
  * InputEdit
  */
-export type QwenImageEditTrainerInput = {
+export type Flux2TrainerEditInput = {
   /**
    * Steps
    *
-   * Number of steps to train for
+   * Total number of training steps.
    */
   steps?: number;
   /**
@@ -975,70 +358,11 @@ export type QwenImageEditTrainerInput = {
    * For example:
    * photo_start.jpg and photo_end.jpg
    *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-};
-
-/**
- * Output
- */
-export type QwenImageEditPlusTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputPlus
- */
-export type QwenImageEditPlusTrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
    * For example:
    * photo_start.jpg, photo_start2.jpg, photo_end.jpg
    *
-   * The Reference Image Count field should be set to the number of reference images.
-   *
    * The zip can also contain a text file for each image pair. The text file should be named:
    * ROOT.txt
    * For example:
@@ -1055,7 +379,7 @@ export type QwenImageEditPlusTrainerInput = {
   /**
    * Learning Rate
    *
-   * Learning rate for LoRA parameters.
+   * Learning rate applied to trainable parameters.
    */
   learning_rate?: number;
   /**
@@ -1064,24 +388,87 @@ export type QwenImageEditPlusTrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type QwenImageEdit2511TrainerOutput = {
+export type Flux2TrainerEditOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * Input2511
+ * InputT2I
  */
-export type QwenImageEdit2511TrainerInput = {
+export type Flux2TrainerInput = {
   /**
    * Steps
    *
-   * Number of steps to train for
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * The zip can also contain a text file for each image. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
+export type Flux2TrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputEditV2
+ */
+export type Flux2TrainerV2EditInput = {
+  /**
+   * Steps
+   *
+   * Total number of training steps.
    */
   steps?: number;
   /**
@@ -1096,12 +483,10 @@ export type QwenImageEdit2511TrainerInput = {
    * For example:
    * photo_start.jpg and photo_end.jpg
    *
-   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
    * For example:
    * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The Reference Image Count field should be set to the number of reference images.
    *
    * The zip can also contain a text file for each image pair. The text file should be named:
    * ROOT.txt
@@ -1119,7 +504,7 @@ export type QwenImageEdit2511TrainerInput = {
   /**
    * Learning Rate
    *
-   * Learning rate for LoRA parameters.
+   * Learning rate applied to trainable parameters.
    */
   learning_rate?: number;
   /**
@@ -1128,46 +513,41 @@ export type QwenImageEdit2511TrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type QwenImageEdit2509TrainerOutput = {
+export type Flux2TrainerV2EditOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * InputPlus
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
  */
-export type QwenImageEdit2509TrainerInput = {
+export type Flux2TrainerV2Input = {
   /**
    * Steps
    *
-   * Number of steps to train for
+   * Total number of training steps.
    */
   steps?: number;
   /**
    * Image Data Url
    *
    *
-   * URL to the input data zip archive.
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
    *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The Reference Image Count field should be set to the number of reference images.
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
+   * The zip can also contain a text file for each image. The text file should be named:
    * ROOT.txt
    * For example:
    * photo.txt
@@ -1183,7 +563,7 @@ export type QwenImageEdit2509TrainerInput = {
   /**
    * Learning Rate
    *
-   * Learning rate for LoRA parameters.
+   * Learning rate applied to trainable parameters.
    */
   learning_rate?: number;
   /**
@@ -1192,42 +572,61 @@ export type QwenImageEdit2509TrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type QwenImage2512TrainerV2Output = {
-  diffusers_lora_file: File;
+export type Flux2TrainerV2Output = {
   config_file: File;
+  diffusers_lora_file: File;
 };
 
 /**
  * Input
  */
-export type QwenImage2512TrainerV2Input = {
+export type FluxKontextTrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
   /**
    * Image Data Url
    *
    *
    * URL to the input data zip archive.
    *
-   * The zip should contain pairs of images and corresponding captions.
+   * The zip should contain pairs of images. The images should be named:
    *
-   * The images should be named: ROOT.EXT. For example: 001.jpg
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
    *
-   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
    *
-   * If no text file is provided for an image, the default_caption will be used.
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
    *
    */
   image_data_url: string | Blob | File;
   /**
-   * Steps
-   *
-   * Number of steps to train for
+   * Learning Rate
    */
-  steps?: number;
+  learning_rate?: number;
   /**
    * Default Caption
    *
@@ -1235,415 +634,301 @@ export type QwenImage2512TrainerV2Input = {
    */
   default_caption?: string | unknown;
   /**
-   * Learning Rate
+   * Output Lora Format
    *
-   * Learning rate.
+   * Dictates the naming scheme for the output weights
    */
-  learning_rate?: number;
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type QwenImage2512TrainerOutput = {
+export type FluxKontextTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * InputImage
+ * PublicInput
  */
-export type QwenImage2512TrainerInput = {
+export type FluxKreaTrainerInput = {
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
   /**
    * Steps
    *
-   * Number of steps to train for
+   * Number of steps to train the LoRA on.
+   */
+  steps?: number | unknown;
+  /**
+   * Is Style
+   *
+   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
+   */
+  is_style?: boolean;
+  /**
+   * Create Masks
+   *
+   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
+   */
+  create_masks?: boolean;
+  /**
+   * Trigger Word
+   *
+   * Trigger word to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
+   *
+   */
+  trigger_word?: string | unknown | null;
+  /**
+   * Is Input Format Already Preprocessed
+   *
+   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
+   */
+  is_input_format_already_preprocessed?: boolean;
+};
+
+/**
+ * Output
+ */
+export type FluxKreaTrainerOutput = {
+  /**
+   * URL to the preprocessed images.
+   */
+  debug_preprocessed_output?: File | unknown;
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type FluxLoraFastTrainingInput = {
+  /**
+   * Is Input Format Already Preprocessed
+   *
+   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
+   */
+  is_input_format_already_preprocessed?: boolean;
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps?: number | unknown;
+  /**
+   * Is Style
+   *
+   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
+   */
+  is_style?: boolean;
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Trigger Word
+   *
+   * Trigger word to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
+   *
+   */
+  trigger_word?: string | unknown | null;
+  /**
+   * Create Masks
+   *
+   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
+   */
+  create_masks?: boolean;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+};
+
+/**
+ * Output
+ */
+export type FluxLoraFastTrainingOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+  /**
+   * URL to the preprocessed images.
+   */
+  debug_preprocessed_output?: File | unknown;
+};
+
+/**
+ * PublicInput
+ */
+export type FluxLoraPortraitTrainerInput = {
+  /**
+   * Trigger Phrase
+   *
+   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
+   *
+   */
+  trigger_phrase?: string | unknown | null;
+  /**
+   * Learning Rate
+   *
+   * Learning rate to use for training.
+   */
+  learning_rate?: number;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+  /**
+   * Create Masks
+   *
+   * If True, masks will be created for the subject.
+   */
+  create_masks?: boolean;
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   * The captions can include a special string `[trigger]`. If a trigger_word is specified, it will replace `[trigger]` in the captions.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
    */
   steps?: number;
   /**
-   * Image Data Url
+   * Subject Crop
+   *
+   * If True, the subject will be cropped from the image.
+   */
+  subject_crop?: boolean;
+  /**
+   * Multiresolution Training
+   *
+   * If True, multiresolution training will be used.
+   */
+  multiresolution_training?: boolean;
+  /**
+   * Resume From Checkpoint
+   *
+   * URL to a checkpoint to resume training from.
+   */
+  resume_from_checkpoint?: string;
+};
+
+/**
+ * Output
+ */
+export type FluxLoraPortraitTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type HunyuanVideoLoraTrainingInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps: number;
+  /**
+   * Images Data Url
    *
    *
-   * URL to the input data zip archive for text-to-image training.
+   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
    *
-   * The zip should contain images with their corresponding text captions:
-   *
-   * image.EXT and image.txt
-   * For example:
-   * photo.jpg and photo.txt
-   *
-   * The text file contains the caption/prompt describing the target image.
-   *
-   * If no text file is provided for an image, the default_caption will be used.
-   *
-   * If no default_caption is provided and a text file is missing, the training will fail.
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
    *
    */
-  image_data_url: string | Blob | File;
+  images_data_url: string | Blob | File;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+  /**
+   * Do Caption
+   *
+   * Whether to generate captions for the images.
+   */
+  do_caption?: boolean;
   /**
    * Learning Rate
    *
-   * Learning rate for LoRA parameters.
+   * Learning rate to use for training.
    */
   learning_rate?: number;
   /**
-   * Default Caption
+   * Trigger Word
    *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   * The trigger word to use.
    */
-  default_caption?: string | unknown;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
+  trigger_word?: string;
 };
 
 /**
- * PhotaProfileOutput
+ * Output
  */
-export type PhotaCreateProfileOutput = {
-  /**
-   * Profile Id
-   *
-   * The Photalabs profile ID.
-   */
-  profile_id: string;
-};
-
-/**
- * PhotaProfileCreateInput
- */
-export type PhotaCreateProfileInput = {
-  /**
-   * Image ZIP URL
-   *
-   * URL to a ZIP archive containing the profile images.
-   */
-  image_data_url: string | Blob | File;
-};
-
-/**
- * TrainingOutput
- */
-export type LtxVideoTrainerOutput = {
-  /**
-   * The URL to the validations video.
-   */
-  video?: File | unknown;
-  lora_file: File;
+export type HunyuanVideoLoraTrainingOutput = {
+  diffusers_lora_file: File;
   config_file: File;
 };
 
 /**
- * Input
- */
-export type LtxVideoTrainerInput = {
-  /**
-   * Validation Aspect Ratio
-   *
-   * The aspect ratio to use for validation.
-   */
-  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
-  /**
-   * Resolution
-   *
-   * The resolution to use for training. This is the resolution of the video.
-   */
-  resolution?: "low" | "medium" | "high";
-  /**
-   * Aspect Ratio
-   *
-   * The aspect ratio to use for training. This is the aspect ratio of the video.
-   */
-  aspect_ratio?: "16:9" | "1:1" | "9:16";
-  /**
-   * Validation Negative Prompt
-   *
-   * A negative prompt to use for validation.
-   */
-  validation_negative_prompt?: string;
-  /**
-   * Number Of Frames
-   *
-   * The number of frames to use for training. This is the number of frames per second multiplied by the number of seconds.
-   */
-  number_of_frames?: number;
-  /**
-   * Validation
-   *
-   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
-   */
-  validation?: Array<Validation>;
-  /**
-   * Split Input Into Scenes
-   *
-   * If true, videos above a certain duration threshold will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned. This option has no effect on image datasets.
-   */
-  split_input_into_scenes?: boolean;
-  /**
-   * Validation Reverse
-   *
-   * If true, the validation videos will be reversed. This is useful for effects that are learned in reverse and then applied in reverse.
-   */
-  validation_reverse?: boolean;
-  /**
-   * Validation Resolution
-   *
-   * The resolution to use for validation.
-   */
-  validation_resolution?: "low" | "medium" | "high";
-  /**
-   * Training Data Url
-   *
-   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
-   *
-   * **Supported video formats:** .mp4, .mov, .avi, .mkv
-   * **Supported image formats:** .png, .jpg, .jpeg
-   *
-   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
-   *
-   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Rank
-   *
-   * The rank of the LoRA.
-   */
-  rank?: 8 | 16 | 32 | 64 | 128;
-  /**
-   * Frame Rate
-   *
-   * The target frames per second for the video.
-   */
-  frame_rate?: number;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Auto Scale Input
-   *
-   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Split Input Duration Threshold
-   *
-   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned.
-   */
-  split_input_duration_threshold?: number;
-  /**
-   * Validation Number Of Frames
-   *
-   * The number of frames to use for validation.
-   */
-  validation_number_of_frames?: number;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-};
-
-/**
- * LTX2Output
+ * LTX23V2VInput
  *
- * Output from LTX-2 training.
+ * Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.
  */
-export type Ltx2VideoTrainerOutput = {
-  /**
-   * A downloadable archive containing the preprocessed training data, including decoded videos and audio. Only present when `debug_dataset` is enabled in the input.
-   */
-  debug_dataset?: File | unknown;
-  /**
-   * The URL to the validation videos, if any.
-   */
-  video?: File | unknown;
-  config_file: File;
-  lora_file: File;
-};
-
-/**
- * LTX2Input
- *
- * Input configuration for LTX-2 text-to-video training.
- */
-export type Ltx2VideoTrainerInput = {
-  /**
-   * Audio Normalize
-   *
-   * Normalize audio peak amplitude to a consistent level. Recommended for consistent audio levels across the dataset.
-   */
-  audio_normalize?: boolean;
-  /**
-   * Number Of Steps
-   *
-   * The number of training steps.
-   */
-  number_of_steps?: number;
-  /**
-   * Validation Aspect Ratio
-   *
-   * The aspect ratio to use for validation.
-   */
-  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
-  /**
-   * Validation Frame Rate
-   *
-   * Target frames per second for validation videos.
-   */
-  validation_frame_rate?: number;
-  /**
-   * Frame Rate
-   *
-   * Target frames per second for the video.
-   */
-  frame_rate?: number;
-  /**
-   * Validation Resolution
-   *
-   * The resolution to use for validation.
-   */
-  validation_resolution?: "low" | "medium" | "high";
-  /**
-   * Learning Rate
-   *
-   * Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto Scale Input
-   *
-   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
-   */
-  auto_scale_input?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * A phrase that will trigger the LoRA style. Will be prepended to captions during training.
-   */
-  trigger_phrase?: string;
-  /**
-   * Validation Number Of Frames
-   *
-   * The number of frames in validation videos.
-   */
-  validation_number_of_frames?: number;
-  /**
-   * Audio Preserve Pitch
-   *
-   * When audio duration doesn't match video duration, stretch/compress audio without changing pitch. If disabled, audio is trimmed or padded with silence.
-   */
-  audio_preserve_pitch?: boolean;
-  /**
-   * Training Data Url
-   *
-   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
-   *
-   * **Supported video formats:** .mp4, .mov, .avi, .mkv
-   * **Supported image formats:** .png, .jpg, .jpeg
-   *
-   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
-   *
-   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Debug Dataset
-   *
-   * When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.
-   */
-  debug_dataset?: boolean;
+export type Ltx23V2vTrainerInput = {
   /**
    * First Frame Conditioning P
    *
-   * Probability of conditioning on the first frame during training. Higher values improve image-to-video performance.
+   * Probability of conditioning on the first frame during training. Lower values work better for video-to-video transformation.
    */
   first_frame_conditioning_p?: number;
-  /**
-   * With Audio
-   *
-   * Enable joint audio-video training. If None (default), automatically detects whether input videos have audio. Set to True to force audio training, or False to disable.
-   */
-  with_audio?: boolean | unknown;
-  /**
-   * Generate Audio In Validation
-   *
-   * Whether to generate audio in validation samples.
-   */
-  generate_audio_in_validation?: boolean;
   /**
    * Stg Scale
    *
    * STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.
    */
   stg_scale?: number;
-  /**
-   * Rank
-   *
-   * The rank of the LoRA adaptation. Higher values increase capacity but use more memory.
-   */
-  rank?: 8 | 16 | 32 | 64 | 128;
-  /**
-   * Number Of Frames
-   *
-   * Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).
-   */
-  number_of_frames?: number;
-  /**
-   * Split Input Into Scenes
-   *
-   * If true, videos above a certain duration threshold will be split into scenes.
-   */
-  split_input_into_scenes?: boolean;
-  /**
-   * Aspect Ratio
-   *
-   * Aspect ratio to use for training.
-   */
-  aspect_ratio?: "16:9" | "1:1" | "9:16";
   /**
    * Resolution
    *
@@ -1657,35 +942,132 @@ export type Ltx2VideoTrainerInput = {
    */
   validation_negative_prompt?: string;
   /**
-   * Validation
+   * Number Of Steps
    *
-   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
+   * The number of training steps.
    */
-  validation?: Array<Validation>;
+  number_of_steps?: number;
+  /**
+   * Split Input Into Scenes
+   *
+   * If true, videos above a certain duration threshold will be split into scenes.
+   */
+  split_input_into_scenes?: boolean;
+  /**
+   * Validation Aspect Ratio
+   *
+   * The aspect ratio to use for validation.
+   */
+  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Frame Rate
+   *
+   * Target frames per second for the video.
+   */
+  frame_rate?: number;
+  /**
+   * Trigger Phrase
+   *
+   * A phrase that will trigger the LoRA style. Will be prepended to captions during training.
+   */
+  trigger_phrase?: string;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.
+   */
+  learning_rate?: number;
+  /**
+   * Debug Dataset
+   *
+   * When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.
+   */
+  debug_dataset?: boolean;
   /**
    * Split Input Duration Threshold
    *
    * The duration threshold in seconds. If a video is longer than this, it will be split into scenes.
    */
   split_input_duration_threshold?: number;
+  /**
+   * Auto Scale Input
+   *
+   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Validation Resolution
+   *
+   * The resolution to use for validation.
+   */
+  validation_resolution?: "low" | "medium" | "high";
+  /**
+   * Rank
+   *
+   * The rank of the LoRA adaptation. Higher values increase capacity but use more memory.
+   */
+  rank?: 8 | 16 | 32 | 64 | 128;
+  /**
+   * Training Data Url
+   *
+   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
+   *
+   * **Supported video formats:** .mp4, .mov, .avi, .mkv
+   * **Supported image formats:** .png, .jpg, .jpeg
+   *
+   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
+   *
+   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio to use for training.
+   */
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Validation
+   *
+   * A list of validation inputs with prompts and reference videos.
+   */
+  validation?: Array<V2vValidation>;
+  /**
+   * Validation Number Of Frames
+   *
+   * The number of frames in validation videos.
+   */
+  validation_number_of_frames?: number;
+  /**
+   * Validation Frame Rate
+   *
+   * Target frames per second for validation videos.
+   */
+  validation_frame_rate?: number;
+  /**
+   * Number Of Frames
+   *
+   * Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).
+   */
+  number_of_frames?: number;
 };
 
 /**
- * LTX23Output
+ * LTX23V2VOutput
  *
- * Output from LTX-2.3 training.
+ * Output from LTX-2.3 video-to-video training.
  */
-export type Ltx23VideoTrainerOutput = {
+export type Ltx23V2vTrainerOutput = {
   lora_file: File;
   config_file: File;
   /**
-   * A downloadable archive containing the preprocessed training data, including decoded videos and audio. Only present when `debug_dataset` is enabled in the input.
-   */
-  debug_dataset?: File | unknown;
-  /**
-   * The URL to the validation videos, if any.
+   * The URL to the validation videos (with reference videos side-by-side), if any.
    */
   video?: File | unknown;
+  /**
+   * A downloadable archive containing the preprocessed training data, including decoded videos. Only present when `debug_dataset` is enabled in the input.
+   */
+  debug_dataset?: File | unknown;
 };
 
 /**
@@ -1854,53 +1236,35 @@ export type Ltx23VideoTrainerInput = {
 };
 
 /**
- * LTX23V2VOutput
+ * LTX23Output
  *
- * Output from LTX-2.3 video-to-video training.
+ * Output from LTX-2.3 training.
  */
-export type Ltx23V2vTrainerOutput = {
+export type Ltx23VideoTrainerOutput = {
   lora_file: File;
   config_file: File;
   /**
-   * The URL to the validation videos (with reference videos side-by-side), if any.
-   */
-  video?: File | unknown;
-  /**
-   * A downloadable archive containing the preprocessed training data, including decoded videos. Only present when `debug_dataset` is enabled in the input.
+   * A downloadable archive containing the preprocessed training data, including decoded videos and audio. Only present when `debug_dataset` is enabled in the input.
    */
   debug_dataset?: File | unknown;
+  /**
+   * The URL to the validation videos, if any.
+   */
+  video?: File | unknown;
 };
 
 /**
- * LTX23V2VInput
+ * LTX2Input
  *
- * Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.
+ * Input configuration for LTX-2 text-to-video training.
  */
-export type Ltx23V2vTrainerInput = {
+export type Ltx2VideoTrainerInput = {
   /**
-   * First Frame Conditioning P
+   * Audio Normalize
    *
-   * Probability of conditioning on the first frame during training. Lower values work better for video-to-video transformation.
+   * Normalize audio peak amplitude to a consistent level. Recommended for consistent audio levels across the dataset.
    */
-  first_frame_conditioning_p?: number;
-  /**
-   * Stg Scale
-   *
-   * STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.
-   */
-  stg_scale?: number;
-  /**
-   * Resolution
-   *
-   * Resolution to use for training. Higher resolutions require more memory.
-   */
-  resolution?: "low" | "medium" | "high";
-  /**
-   * Validation Negative Prompt
-   *
-   * A negative prompt to use for validation.
-   */
-  validation_negative_prompt?: string;
+  audio_normalize?: boolean;
   /**
    * Number Of Steps
    *
@@ -1908,17 +1272,17 @@ export type Ltx23V2vTrainerInput = {
    */
   number_of_steps?: number;
   /**
-   * Split Input Into Scenes
-   *
-   * If true, videos above a certain duration threshold will be split into scenes.
-   */
-  split_input_into_scenes?: boolean;
-  /**
    * Validation Aspect Ratio
    *
    * The aspect ratio to use for validation.
    */
   validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Validation Frame Rate
+   *
+   * Target frames per second for validation videos.
+   */
+  validation_frame_rate?: number;
   /**
    * Frame Rate
    *
@@ -1926,11 +1290,11 @@ export type Ltx23V2vTrainerInput = {
    */
   frame_rate?: number;
   /**
-   * Trigger Phrase
+   * Validation Resolution
    *
-   * A phrase that will trigger the LoRA style. Will be prepended to captions during training.
+   * The resolution to use for validation.
    */
-  trigger_phrase?: string;
+  validation_resolution?: "low" | "medium" | "high";
   /**
    * Learning Rate
    *
@@ -1938,35 +1302,29 @@ export type Ltx23V2vTrainerInput = {
    */
   learning_rate?: number;
   /**
-   * Debug Dataset
-   *
-   * When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.
-   */
-  debug_dataset?: boolean;
-  /**
-   * Split Input Duration Threshold
-   *
-   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes.
-   */
-  split_input_duration_threshold?: number;
-  /**
    * Auto Scale Input
    *
    * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
    */
   auto_scale_input?: boolean;
   /**
-   * Validation Resolution
+   * Trigger Phrase
    *
-   * The resolution to use for validation.
+   * A phrase that will trigger the LoRA style. Will be prepended to captions during training.
    */
-  validation_resolution?: "low" | "medium" | "high";
+  trigger_phrase?: string;
   /**
-   * Rank
+   * Validation Number Of Frames
    *
-   * The rank of the LoRA adaptation. Higher values increase capacity but use more memory.
+   * The number of frames in validation videos.
    */
-  rank?: 8 | 16 | 32 | 64 | 128;
+  validation_number_of_frames?: number;
+  /**
+   * Audio Preserve Pitch
+   *
+   * When audio duration doesn't match video duration, stretch/compress audio without changing pitch. If disabled, audio is trimmed or padded with silence.
+   */
+  audio_preserve_pitch?: boolean;
   /**
    * Training Data Url
    *
@@ -1981,311 +1339,300 @@ export type Ltx23V2vTrainerInput = {
    */
   training_data_url: string | Blob | File;
   /**
-   * Aspect Ratio
+   * Debug Dataset
    *
-   * Aspect ratio to use for training.
+   * When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.
    */
-  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  debug_dataset?: boolean;
   /**
-   * Validation
+   * First Frame Conditioning P
    *
-   * A list of validation inputs with prompts and reference videos.
+   * Probability of conditioning on the first frame during training. Higher values improve image-to-video performance.
    */
-  validation?: Array<V2vValidation>;
+  first_frame_conditioning_p?: number;
   /**
-   * Validation Number Of Frames
+   * With Audio
    *
-   * The number of frames in validation videos.
+   * Enable joint audio-video training. If None (default), automatically detects whether input videos have audio. Set to True to force audio training, or False to disable.
    */
-  validation_number_of_frames?: number;
+  with_audio?: boolean | unknown;
   /**
-   * Validation Frame Rate
+   * Generate Audio In Validation
    *
-   * Target frames per second for validation videos.
+   * Whether to generate audio in validation samples.
    */
-  validation_frame_rate?: number;
+  generate_audio_in_validation?: boolean;
+  /**
+   * Stg Scale
+   *
+   * STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.
+   */
+  stg_scale?: number;
+  /**
+   * Rank
+   *
+   * The rank of the LoRA adaptation. Higher values increase capacity but use more memory.
+   */
+  rank?: 8 | 16 | 32 | 64 | 128;
   /**
    * Number Of Frames
    *
    * Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).
    */
   number_of_frames?: number;
+  /**
+   * Split Input Into Scenes
+   *
+   * If true, videos above a certain duration threshold will be split into scenes.
+   */
+  split_input_into_scenes?: boolean;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio to use for training.
+   */
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Resolution
+   *
+   * Resolution to use for training. Higher resolutions require more memory.
+   */
+  resolution?: "low" | "medium" | "high";
+  /**
+   * Validation Negative Prompt
+   *
+   * A negative prompt to use for validation.
+   */
+  validation_negative_prompt?: string;
+  /**
+   * Validation
+   *
+   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
+   */
+  validation?: Array<Validation>;
+  /**
+   * Split Input Duration Threshold
+   *
+   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes.
+   */
+  split_input_duration_threshold?: number;
 };
 
 /**
- * Output
+ * LTX2Output
+ *
+ * Output from LTX-2 training.
  */
-export type HunyuanVideoLoraTrainingOutput = {
-  diffusers_lora_file: File;
+export type Ltx2VideoTrainerOutput = {
+  /**
+   * A downloadable archive containing the preprocessed training data, including decoded videos and audio. Only present when `debug_dataset` is enabled in the input.
+   */
+  debug_dataset?: File | unknown;
+  /**
+   * The URL to the validation videos, if any.
+   */
+  video?: File | unknown;
   config_file: File;
+  lora_file: File;
 };
 
 /**
- * PublicInput
+ * Input
  */
-export type HunyuanVideoLoraTrainingInput = {
+export type LtxVideoTrainerInput = {
   /**
-   * Steps
+   * Validation Aspect Ratio
    *
-   * Number of steps to train the LoRA on.
+   * The aspect ratio to use for validation.
    */
-  steps: number;
+  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
   /**
-   * Images Data Url
+   * Resolution
    *
-   *
-   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
+   * The resolution to use for training. This is the resolution of the video.
    */
-  images_data_url: string | Blob | File;
+  resolution?: "low" | "medium" | "high";
   /**
-   * Data Archive Format
+   * Aspect Ratio
    *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
+   * The aspect ratio to use for training. This is the aspect ratio of the video.
    */
-  data_archive_format?: string | unknown | null;
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
   /**
-   * Do Caption
+   * Validation Negative Prompt
    *
-   * Whether to generate captions for the images.
+   * A negative prompt to use for validation.
    */
-  do_caption?: boolean;
+  validation_negative_prompt?: string;
   /**
-   * Learning Rate
+   * Number Of Frames
    *
-   * Learning rate to use for training.
+   * The number of frames to use for training. This is the number of frames per second multiplied by the number of seconds.
    */
-  learning_rate?: number;
+  number_of_frames?: number;
   /**
-   * Trigger Word
+   * Validation
    *
-   * The trigger word to use.
+   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
    */
-  trigger_word?: string;
-};
-
-/**
- * Output
- */
-export type FluxLoraPortraitTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * PublicInput
- */
-export type FluxLoraPortraitTrainerInput = {
+  validation?: Array<Validation>;
+  /**
+   * Split Input Into Scenes
+   *
+   * If true, videos above a certain duration threshold will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned. This option has no effect on image datasets.
+   */
+  split_input_into_scenes?: boolean;
+  /**
+   * Validation Reverse
+   *
+   * If true, the validation videos will be reversed. This is useful for effects that are learned in reverse and then applied in reverse.
+   */
+  validation_reverse?: boolean;
+  /**
+   * Validation Resolution
+   *
+   * The resolution to use for validation.
+   */
+  validation_resolution?: "low" | "medium" | "high";
+  /**
+   * Training Data Url
+   *
+   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
+   *
+   * **Supported video formats:** .mp4, .mov, .avi, .mkv
+   * **Supported image formats:** .png, .jpg, .jpeg
+   *
+   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
+   *
+   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Rank
+   *
+   * The rank of the LoRA.
+   */
+  rank?: 8 | 16 | 32 | 64 | 128;
+  /**
+   * Frame Rate
+   *
+   * The target frames per second for the video.
+   */
+  frame_rate?: number;
   /**
    * Trigger Phrase
    *
-   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
-   *
+   * The phrase that will trigger the model to generate an image.
    */
-  trigger_phrase?: string | unknown | null;
+  trigger_phrase?: string;
+  /**
+   * Auto Scale Input
+   *
+   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Split Input Duration Threshold
+   *
+   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned.
+   */
+  split_input_duration_threshold?: number;
+  /**
+   * Validation Number Of Frames
+   *
+   * The number of frames to use for validation.
+   */
+  validation_number_of_frames?: number;
   /**
    * Learning Rate
    *
-   * Learning rate to use for training.
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
    */
   learning_rate?: number;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
-  /**
-   * Create Masks
-   *
-   * If True, masks will be created for the subject.
-   */
-  create_masks?: boolean;
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
-   * The captions can include a special string `[trigger]`. If a trigger_word is specified, it will replace `[trigger]` in the captions.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number;
-  /**
-   * Subject Crop
-   *
-   * If True, the subject will be cropped from the image.
-   */
-  subject_crop?: boolean;
-  /**
-   * Multiresolution Training
-   *
-   * If True, multiresolution training will be used.
-   */
-  multiresolution_training?: boolean;
-  /**
-   * Resume From Checkpoint
-   *
-   * URL to a checkpoint to resume training from.
-   */
-  resume_from_checkpoint?: string;
 };
 
 /**
- * Output
+ * TrainingOutput
  */
-export type FluxLoraFastTrainingOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
+export type LtxVideoTrainerOutput = {
   /**
-   * URL to the preprocessed images.
+   * The URL to the validations video.
    */
-  debug_preprocessed_output?: File | unknown;
-};
-
-/**
- * PublicInput
- */
-export type FluxLoraFastTrainingInput = {
-  /**
-   * Is Input Format Already Preprocessed
-   *
-   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
-   */
-  is_input_format_already_preprocessed?: boolean;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number | unknown;
-  /**
-   * Is Style
-   *
-   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
-   */
-  is_style?: boolean;
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Trigger Word
-   *
-   * Trigger word to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
-   *
-   */
-  trigger_word?: string | unknown | null;
-  /**
-   * Create Masks
-   *
-   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
-   */
-  create_masks?: boolean;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
-};
-
-/**
- * Output
- */
-export type FluxKreaTrainerOutput = {
-  /**
-   * URL to the preprocessed images.
-   */
-  debug_preprocessed_output?: File | unknown;
-  diffusers_lora_file: File;
+  video?: File | unknown;
+  lora_file: File;
   config_file: File;
 };
 
 /**
- * PublicInput
+ * PhotaProfileCreateInput
  */
-export type FluxKreaTrainerInput = {
+export type PhotaCreateProfileInput = {
   /**
-   * Images Data Url
+   * Image ZIP URL
    *
-   *
-   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
+   * URL to a ZIP archive containing the profile images.
    */
-  images_data_url: string | Blob | File;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number | unknown;
-  /**
-   * Is Style
-   *
-   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
-   */
-  is_style?: boolean;
-  /**
-   * Create Masks
-   *
-   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
-   */
-  create_masks?: boolean;
-  /**
-   * Trigger Word
-   *
-   * Trigger word to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
-   *
-   */
-  trigger_word?: string | unknown | null;
-  /**
-   * Is Input Format Already Preprocessed
-   *
-   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
-   */
-  is_input_format_already_preprocessed?: boolean;
+  image_data_url: string | Blob | File;
 };
 
 /**
- * Output
+ * PhotaProfileOutput
  */
-export type FluxKontextTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
+export type PhotaCreateProfileOutput = {
+  /**
+   * Profile Id
+   *
+   * The Photalabs profile ID.
+   */
+  profile_id: string;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
 };
 
 /**
- * Input
+ * InputImage
  */
-export type FluxKontextTrainerInput = {
+export type QwenImage2512TrainerInput = {
   /**
    * Steps
    *
@@ -2296,29 +1643,26 @@ export type FluxKontextTrainerInput = {
    * Image Data Url
    *
    *
-   * URL to the input data zip archive.
+   * URL to the input data zip archive for text-to-image training.
    *
-   * The zip should contain pairs of images. The images should be named:
+   * The zip should contain images with their corresponding text captions:
    *
-   * ROOT_start.EXT and ROOT_end.EXT
+   * image.EXT and image.txt
    * For example:
-   * photo_start.jpg and photo_end.jpg
+   * photo.jpg and photo.txt
    *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
+   * The text file contains the caption/prompt describing the target image.
    *
-   * This text file can be used to specify the edit instructions for the image pair.
+   * If no text file is provided for an image, the default_caption will be used.
    *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
+   * If no default_caption is provided and a text file is missing, the training will fail.
    *
    */
   image_data_url: string | Blob | File;
   /**
    * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
    */
   learning_rate?: number;
   /**
@@ -2327,524 +1671,12 @@ export type FluxKontextTrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type Flux2TrainerV2Output = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
- */
-export type Flux2TrainerV2Input = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * The zip can also contain a text file for each image. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2TrainerV2EditOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputEditV2
- */
-export type Flux2TrainerV2EditInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2TrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputT2I
- */
-export type Flux2TrainerInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * The zip can also contain a text file for each image. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2TrainerEditOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputEdit
- */
-export type Flux2TrainerEditInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2Klein9bBaseTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
- */
-export type Flux2Klein9bBaseTrainerInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * The zip can also contain a text file for each image. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2Klein9bBaseTrainerEditOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputEditV2
- */
-export type Flux2Klein9bBaseTrainerEditInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2Klein4bBaseTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
- */
-export type Flux2Klein4bBaseTrainerInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * The zip can also contain a text file for each image. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type Flux2Klein4bBaseTrainerEditOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputEditV2
- */
-export type Flux2Klein4bBaseTrainerEditInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type ErnieImageTrainerOutput = {
+export type QwenImage2512TrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
@@ -2852,25 +1684,7 @@ export type ErnieImageTrainerOutput = {
 /**
  * Input
  */
-export type ErnieImageTrainerInput = {
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Learning Rate
-   *
-   * Learning rate.
-   */
-  learning_rate?: number;
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
+export type QwenImage2512TrainerV2Input = {
   /**
    * Image Data Url
    *
@@ -2887,6 +1701,1192 @@ export type ErnieImageTrainerInput = {
    *
    */
   image_data_url: string | Blob | File;
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Learning Rate
+   *
+   * Learning rate.
+   */
+  learning_rate?: number;
+};
+
+/**
+ * Output
+ */
+export type QwenImage2512TrainerV2Output = {
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * InputPlus
+ */
+export type QwenImageEdit2509TrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The Reference Image Count field should be set to the number of reference images.
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageEdit2509TrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * Input2511
+ */
+export type QwenImageEdit2511TrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The Reference Image Count field should be set to the number of reference images.
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageEdit2511TrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputPlus
+ */
+export type QwenImageEditPlusTrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The Reference Image Count field should be set to the number of reference images.
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageEditPlusTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputEdit
+ */
+export type QwenImageEditTrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageEditTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * Input
+ */
+export type QwenImageLayeredTrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain groups of images. The images should be named:
+   *
+   * ROOT_start.EXT, ROOT_end.EXT, ROOT_end2.EXT, ..., ROOT_endN.EXT
+   * For example:
+   * photo_start.png, photo_end.png, photo_end2.png, ..., photo_endN.png
+   *
+   * The start image is the base image that will be decomposed into layers.
+   * The end images are the layers that will be added to the base image.  ROOT_end.EXT is the first layer, ROOT_end2.EXT is the second layer, and so on.
+   * You can have up to 8 layers.
+   * All image groups must have the same number of output layers.
+   *
+   * The end images can contain transparent regions. Only PNG and WebP images are supported since these are the only formats that support transparency.
+   *
+   * The zip can also contain a text file for each image group. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify a description of the base image.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageLayeredTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type QwenImageTrainerInput = {
+  /**
+   * Trigger Phrase
+   *
+   * Default caption to use for images that don't have corresponding text files. If provided, missing .txt files will be created automatically.
+   */
+  trigger_phrase?: string;
+  /**
+   * Steps
+   *
+   * Total number of training steps to perform. Default is 4000.
+   */
+  steps?: number;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for training. Default is 5e-4
+   */
+  learning_rate?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images for training. The archive should contain images and corresponding text files with captions.
+   * Each text file should have the same name as the image file it corresponds to (e.g., image1.jpg and image1.txt).
+   * If text files are missing for some images, you can provide a trigger_phrase to automatically create them.
+   * Supported image formats: PNG, JPG, JPEG, WEBP.
+   * Try to use at least 10 images, although more is better.
+   *
+   */
+  image_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type QwenImageTrainerOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * InputImage
+ */
+export type QwenImageTrainerV2Input = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive for text-to-image training.
+   *
+   * The zip should contain images with their corresponding text captions:
+   *
+   * image.EXT and image.txt
+   * For example:
+   * photo.jpg and photo.txt
+   *
+   * The text file contains the caption/prompt describing the target image.
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   * If no default_caption is provided and a text file is missing, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageTrainerV2Output = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * StyleReferenceInput
+ */
+export type RecraftV3CreateStyleInput = {
+  /**
+   * Images Data Url
+   *
+   * URL to zip archive with images, use PNG format. Maximum 5 images are allowed.
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Base Style
+   *
+   * The base style of the generated images, this topic is covered above.
+   */
+  base_style?:
+    | "any"
+    | "realistic_image"
+    | "digital_illustration"
+    | "vector_illustration"
+    | "realistic_image/b_and_w"
+    | "realistic_image/hard_flash"
+    | "realistic_image/hdr"
+    | "realistic_image/natural_light"
+    | "realistic_image/studio_portrait"
+    | "realistic_image/enterprise"
+    | "realistic_image/motion_blur"
+    | "realistic_image/evening_light"
+    | "realistic_image/faded_nostalgia"
+    | "realistic_image/forest_life"
+    | "realistic_image/mystic_naturalism"
+    | "realistic_image/natural_tones"
+    | "realistic_image/organic_calm"
+    | "realistic_image/real_life_glow"
+    | "realistic_image/retro_realism"
+    | "realistic_image/retro_snapshot"
+    | "realistic_image/urban_drama"
+    | "realistic_image/village_realism"
+    | "realistic_image/warm_folk"
+    | "digital_illustration/pixel_art"
+    | "digital_illustration/hand_drawn"
+    | "digital_illustration/grain"
+    | "digital_illustration/infantile_sketch"
+    | "digital_illustration/2d_art_poster"
+    | "digital_illustration/handmade_3d"
+    | "digital_illustration/hand_drawn_outline"
+    | "digital_illustration/engraving_color"
+    | "digital_illustration/2d_art_poster_2"
+    | "digital_illustration/antiquarian"
+    | "digital_illustration/bold_fantasy"
+    | "digital_illustration/child_book"
+    | "digital_illustration/child_books"
+    | "digital_illustration/cover"
+    | "digital_illustration/crosshatch"
+    | "digital_illustration/digital_engraving"
+    | "digital_illustration/expressionism"
+    | "digital_illustration/freehand_details"
+    | "digital_illustration/grain_20"
+    | "digital_illustration/graphic_intensity"
+    | "digital_illustration/hard_comics"
+    | "digital_illustration/long_shadow"
+    | "digital_illustration/modern_folk"
+    | "digital_illustration/multicolor"
+    | "digital_illustration/neon_calm"
+    | "digital_illustration/noir"
+    | "digital_illustration/nostalgic_pastel"
+    | "digital_illustration/outline_details"
+    | "digital_illustration/pastel_gradient"
+    | "digital_illustration/pastel_sketch"
+    | "digital_illustration/pop_art"
+    | "digital_illustration/pop_renaissance"
+    | "digital_illustration/street_art"
+    | "digital_illustration/tablet_sketch"
+    | "digital_illustration/urban_glow"
+    | "digital_illustration/urban_sketching"
+    | "digital_illustration/vanilla_dreams"
+    | "digital_illustration/young_adult_book"
+    | "digital_illustration/young_adult_book_2"
+    | "vector_illustration/bold_stroke"
+    | "vector_illustration/chemistry"
+    | "vector_illustration/colored_stencil"
+    | "vector_illustration/contour_pop_art"
+    | "vector_illustration/cosmics"
+    | "vector_illustration/cutout"
+    | "vector_illustration/depressive"
+    | "vector_illustration/editorial"
+    | "vector_illustration/emotional_flat"
+    | "vector_illustration/infographical"
+    | "vector_illustration/marker_outline"
+    | "vector_illustration/mosaic"
+    | "vector_illustration/naivector"
+    | "vector_illustration/roundish_flat"
+    | "vector_illustration/segmented_colors"
+    | "vector_illustration/sharp_contrast"
+    | "vector_illustration/thin"
+    | "vector_illustration/vector_photo"
+    | "vector_illustration/vivid_shapes"
+    | "vector_illustration/engraving"
+    | "vector_illustration/line_art"
+    | "vector_illustration/line_circuit"
+    | "vector_illustration/linocut";
+};
+
+/**
+ * StyleReferenceOutput
+ */
+export type RecraftV3CreateStyleOutput = {
+  /**
+   * Style Id
+   *
+   * The ID of the created style, this ID can be used to reference the style in the future.
+   */
+  style_id: string;
+};
+
+/**
+ * Input
+ */
+export type TurboFluxTrainerInput = {
+  /**
+   * Trigger Phrase
+   *
+   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
+   *
+   */
+  trigger_phrase?: string | unknown;
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps?: number;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for the training.
+   */
+  learning_rate?: number;
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Training Style
+   *
+   * Training style to use.
+   */
+  training_style?: "subject" | "style" | unknown;
+  /**
+   * Face Crop
+   *
+   * Whether to try to detect the face and crop the images to the face.
+   */
+  face_crop?: boolean;
+};
+
+/**
+ * Output
+ */
+export type TurboFluxTrainerOutput = {
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * V2VValidation
+ *
+ * Validation input for video-to-video training.
+ */
+export type V2vValidation = {
+  /**
+   * Reference Video Url
+   *
+   * URL to reference video for IC-LoRA validation. This is the input video that will be transformed.
+   */
+  reference_video_url: string;
+  /**
+   * Prompt
+   *
+   * The prompt to use for validation.
+   */
+  prompt: string;
+};
+
+/**
+ * Validation
+ */
+export type Validation = {
+  /**
+   * Image Url
+   *
+   * An image to use for image-to-video validation. If provided for one validation, _all_ validation inputs must have an image.
+   */
+  image_url?: string | unknown;
+  /**
+   * Prompt
+   *
+   * The prompt to use for validation.
+   */
+  prompt: string;
+};
+
+/**
+ * BasicInput
+ */
+export type Wan22ImageTrainerInput = {
+  /**
+   * Number of Steps
+   *
+   * Number of training steps.
+   */
+  steps?: number;
+  /**
+   * Use Face Detection
+   *
+   * Whether to use face detection for the training data. When enabled, images will use the center of the face as the center of the image when resizing.
+   */
+  use_face_detection?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * Trigger phrase for the model.
+   */
+  trigger_phrase: string;
+  /**
+   * Use Masks
+   *
+   * Whether to use masks for the training data.
+   */
+  use_masks?: boolean;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for training.
+   */
+  learning_rate?: number;
+  /**
+   * Training Data URL
+   *
+   * URL to the training data.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Use Face Cropping
+   *
+   * Whether to use face cropping for the training data. When enabled, images will be cropped to the face before resizing.
+   */
+  use_face_cropping?: boolean;
+  /**
+   * Include Synthetic Captions
+   *
+   * Whether to include synthetic captions.
+   */
+  include_synthetic_captions?: boolean;
+  /**
+   * Is Style
+   *
+   * Whether the training data is style data. If true, face specific options like masking and face detection will be disabled.
+   */
+  is_style?: boolean;
+};
+
+/**
+ * WanTrainerResponse
+ */
+export type Wan22ImageTrainerOutput = {
+  diffusers_lora_file: File;
+  config_file: File;
+  high_noise_lora: File;
+};
+
+/**
+ * Input
+ */
+export type Wan22TrainerI2vA14bInput = {
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type Wan22TrainerI2vA14bOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type Wan22TrainerT2vA14bInput = {
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type Wan22TrainerT2vA14bOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerFlf2V720pInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerFlf2V720pOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerI2V720pInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerI2V720pOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerT2V14bInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerT2V14bOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerT2vInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerT2vOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type ZImageBaseTrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Learning Rate
+   *
+   * Learning rate.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images and corresponding captions.
+   *
+   * The images should be named: ROOT.EXT. For example: 001.jpg
+   *
+   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   */
+  image_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type ZImageBaseTrainerOutput = {
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type ZImageTrainerInput = {
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Steps
+   *
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * The zip can also contain a text file for each image. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Training Type
+   *
+   * Type of training to perform. Use 'content' to focus on the content of the images, 'style' to focus on the style of the images, and 'balanced' to focus on a combination of both.
+   */
+  training_type?: "content" | "style" | "balanced";
+};
+
+/**
+ * Output
+ */
+export type ZImageTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * Input
+ */
+export type ZImageTurboTrainerV2Input = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Learning Rate
+   *
+   * Learning rate.
+   */
+  learning_rate?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images and corresponding captions.
+   *
+   * The images should be named: ROOT.EXT. For example: 001.jpg
+   *
+   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   */
+  image_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type ZImageTurboTrainerV2Output = {
+  diffusers_lora_file: File;
+  config_file: File;
 };
 
 export type PostFalAiErnieImageTrainerData = {

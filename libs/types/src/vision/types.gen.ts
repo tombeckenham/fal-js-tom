@@ -5,196 +5,135 @@ export type ClientOptions = {
 };
 
 /**
- * NSFWOutput
+ * ImageReferenceMeasurementInput
  */
-export type XAilabNsfwOutput = {
+export type ArbiterImageImageInput = {
   /**
-   * Has Nsfw Concepts
+   * Inputs
    *
-   * List of booleans indicating if the image has an NSFW concept
+   * The inputs to use for the measurement.
    */
-  has_nsfw_concepts: Array<boolean>;
+  inputs: Array<ReferenceImageInput>;
+  /**
+   * Measurements
+   *
+   * The measurements to use for the measurement.
+   */
+  measurements: Array<"dists" | "mse" | "lpips" | "sdi" | "ssim">;
 };
 
 /**
- * NSFWInput
+ * MultiMeasurementOutput
  */
-export type XAilabNsfwInput = {
+export type ArbiterImageImageOutput = {
   /**
-   * Image Urls
+   * Values
    *
-   * List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.
+   * The values of the measurements.
    */
-  image_urls: Array<string>;
+  values?: Array<{
+    [key: string]:
+      | number
+      | {
+          [key: string]: number;
+        };
+  }>;
 };
 
 /**
- * VideoUnderstandingOutput
+ * ImageMultiMeasurementInput
  */
-export type VideoUnderstandingOutput = {
+export type ArbiterImageInput = {
   /**
-   * Output
+   * Inputs
    *
-   * The analysis of the video content based on the prompt
+   * The inputs to use for the measurement.
    */
-  output: string;
+  inputs: Array<ImageInput>;
+  /**
+   * Measurements
+   *
+   * The measurements to use for the measurement.
+   */
+  measurements: Array<"arniqa" | "clip_iqa" | "musiq" | "nima" | "lapvar">;
 };
 
 /**
- * VideoUnderstandingInput
+ * MultiMeasurementOutput
  */
-export type VideoUnderstandingInput = {
+export type ArbiterImageOutput = {
   /**
-   * Prompt
+   * Values
    *
-   * The question or prompt about the video content.
+   * The values of the measurements.
    */
-  prompt: string;
-  /**
-   * Video Url
-   *
-   * URL of the video to analyze
-   */
-  video_url: string | Blob | File;
-  /**
-   * Detailed Analysis
-   *
-   * Whether to request a more detailed analysis of the video
-   */
-  detailed_analysis?: boolean;
+  values?: Array<{
+    [key: string]:
+      | number
+      | {
+          [key: string]: number;
+        };
+  }>;
 };
 
 /**
- * UsageInfo
+ * SemanticImageMeasurementInput
  */
-export type UsageInfoType2 = {
+export type ArbiterImageTextInput = {
   /**
-   * Total Tokens
+   * Inputs
+   *
+   * The inputs to use for the measurement.
    */
-  total_tokens?: number;
+  inputs: Array<SemanticImageInput>;
+  /**
+   * Measurements
+   *
+   * The measurements to use for the measurement.
+   */
+  measurements: Array<string>;
+};
+
+/**
+ * MultiMeasurementOutput
+ */
+export type ArbiterImageTextOutput = {
+  /**
+   * Values
+   *
+   * The values of the measurements.
+   */
+  values?: Array<{
+    [key: string]:
+      | number
+      | {
+          [key: string]: number;
+        };
+  }>;
+};
+
+/**
+ * CompletionUsage
+ */
+export type CompletionUsage = {
   /**
    * Completion Tokens
+   *
+   * Number of tokens in the completion
    */
-  completion_tokens?: number | unknown;
+  completion_tokens: number;
+  /**
+   * Total Tokens
+   *
+   * Total tokens used
+   */
+  total_tokens: number;
   /**
    * Prompt Tokens
-   */
-  prompt_tokens?: number | unknown;
-  prompt_tokens_details?: PromptTokensDetails | unknown;
-  /**
-   * Cost
-   */
-  cost: number;
-};
-
-/**
- * PromptTokensDetails
- */
-export type PromptTokensDetails = {
-  /**
-   * Cached Tokens
-   */
-  cached_tokens?: number;
-  /**
-   * Cache Write Tokens
-   */
-  cache_write_tokens?: number;
-};
-
-/**
- * UsageInfo
- */
-export type UsageInfo = {
-  /**
-   * Output Tokens
    *
-   * Number of output tokens generated
+   * Number of tokens in the prompt
    */
-  output_tokens: number;
-  /**
-   * Prefill Time Ms
-   *
-   * Time taken for prefill in milliseconds
-   */
-  prefill_time_ms: number;
-  /**
-   * Input Tokens
-   *
-   * Number of input tokens processed
-   */
-  input_tokens: number;
-  /**
-   * Ttft Ms
-   *
-   * Time to first token in milliseconds
-   */
-  ttft_ms: number;
-  /**
-   * Decode Time Ms
-   *
-   * Time taken for decoding in milliseconds
-   */
-  decode_time_ms: number;
-};
-
-/**
- * SemanticImageInput
- */
-export type SemanticImageInput = {
-  /**
-   * Hypothesis
-   *
-   * The hypothesis image to use for the measurement.
-   */
-  hypothesis: string;
-  /**
-   * Reference
-   *
-   * The text reference to use for the measurement.
-   */
-  reference: string;
-};
-
-/**
- * SAM3EmbeddingOutput
- */
-export type Sam3ImageEmbedOutput = {
-  /**
-   * Embedding B64
-   *
-   * Embedding of the image
-   */
-  embedding_b64: string;
-};
-
-/**
- * SAM3EmbeddingInput
- */
-export type Sam3ImageEmbedInput = {
-  /**
-   * Image Url
-   *
-   * URL of the image to embed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * VideoChatOutput
- */
-export type Sa2Va8bVideoOutput = {
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-  /**
-   * Masks
-   *
-   * Dictionary of label: mask video
-   */
-  masks: Array<File>;
+  prompt_tokens: number;
 };
 
 /**
@@ -228,45 +167,185 @@ export type File = {
 };
 
 /**
- * VideoInput
+ * ImageInput
  */
-export type Sa2Va8bVideoInput = {
+export type Florence2LargeCaptionInput = {
   /**
-   * Prompt
+   * Image Url
    *
-   * Prompt to be used for the chat completion
+   * The URL of the image to be processed.
    */
-  prompt: string;
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeCaptionOutput = {
   /**
-   * Video Url
+   * Results
    *
-   * The URL of the input video.
+   * Results from the model
    */
-  video_url: string | Blob | File;
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeDetailedCaptionInput = {
   /**
-   * Num Frames To Sample
+   * Image Url
    *
-   * Number of frames to sample from the video. Defaults to 32 if not provided. Maximum 100.
+   * The URL of the image to be processed.
    */
-  num_frames_to_sample?: number | unknown;
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeDetailedCaptionOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeMoreDetailedCaptionInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeMoreDetailedCaptionOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeOcrInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeOcrOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageWithUserCoordinatesInput
+ */
+export type Florence2LargeRegionToCategoryInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+  region: Region;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeRegionToCategoryOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageWithUserCoordinatesInput
+ */
+export type Florence2LargeRegionToDescriptionInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+  region: Region;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeRegionToDescriptionOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type GotOcrV2Input = {
+  /**
+   * Multi Page
+   *
+   * Use provided images to generate a single output.
+   */
+  multi_page?: boolean;
+  /**
+   * Input Image Urls
+   *
+   * URL of images.
+   */
+  input_image_urls?: Array<string>;
+  /**
+   * Do Format
+   *
+   * Generate the output in formatted mode.
+   */
+  do_format?: boolean;
 };
 
 /**
  * ImageChatOutput
  */
-export type Sa2Va8bImageOutput = {
+export type GotOcrV2Output = {
   /**
    * Output
    *
    * Generated output
    */
-  output: string;
-  /**
-   * Masks
-   *
-   * Dictionary of label: mask image
-   */
-  masks: Array<Image>;
+  outputs: Array<string>;
 };
 
 /**
@@ -314,553 +393,6 @@ export type Image = {
 };
 
 /**
- * ImageInput
- */
-export type Sa2Va8bImageInput = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the chat completion
-   */
-  prompt: string;
-  /**
-   * Image Url
-   *
-   * Url for the Input image.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * VideoChatOutput
- */
-export type Sa2Va4bVideoOutput = {
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-  /**
-   * Masks
-   *
-   * Dictionary of label: mask video
-   */
-  masks: Array<File>;
-};
-
-/**
- * VideoInput
- */
-export type Sa2Va4bVideoInput = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the chat completion
-   */
-  prompt: string;
-  /**
-   * Video Url
-   *
-   * The URL of the input video.
-   */
-  video_url: string | Blob | File;
-  /**
-   * Num Frames To Sample
-   *
-   * Number of frames to sample from the video. Defaults to 32 if not provided. Maximum 100.
-   */
-  num_frames_to_sample?: number | unknown;
-};
-
-/**
- * ImageChatOutput
- */
-export type Sa2Va4bImageOutput = {
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-  /**
-   * Masks
-   *
-   * Dictionary of label: mask image
-   */
-  masks: Array<Image>;
-};
-
-/**
- * ImageInput
- */
-export type Sa2Va4bImageInput = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the chat completion
-   */
-  prompt: string;
-  /**
-   * Image Url
-   *
-   * Url for the Input image.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * VisionOutput
- */
-export type RouterVisionOutput = {
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-  /**
-   * Token usage information
-   */
-  usage: UsageInfoType2 | unknown;
-};
-
-/**
- * VisionInput
- */
-export type RouterVisionInput = {
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
-  /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
-   * Image Urls
-   *
-   * List of image URLs to be processed
-   */
-  image_urls: Array<string>;
-  /**
-   * Temperature
-   *
-   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
-   */
-  temperature?: number;
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the image
-   */
-  prompt: string;
-  /**
-   * Max Tokens
-   *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
-   */
-  max_tokens?: number | unknown;
-  /**
-   * Reasoning
-   *
-   * Should reasoning be the part of the final answer.
-   */
-  reasoning?: boolean;
-};
-
-/**
- * Region
- */
-export type Region = {
-  /**
-   * X1
-   *
-   * X-coordinate of the top-left corner
-   */
-  x1: number;
-  /**
-   * X2
-   *
-   * X-coordinate of the bottom-right corner
-   */
-  x2: number;
-  /**
-   * Y2
-   *
-   * Y-coordinate of the bottom-right corner
-   */
-  y2: number;
-  /**
-   * Y1
-   *
-   * Y-coordinate of the top-left corner
-   */
-  y1: number;
-};
-
-/**
- * ReferenceImageInput
- */
-export type ReferenceImageInput = {
-  /**
-   * Hypothesis
-   *
-   * The hypothesis image to use for the measurement.
-   */
-  hypothesis: string;
-  /**
-   * Reference
-   *
-   * The image to use for the measurement.
-   */
-  reference: string;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-/**
- * Point
- */
-export type Point = {
-  /**
-   * Y
-   *
-   * Y coordinate of the point in normalized format (0 to 1)
-   */
-  y: number;
-  /**
-   * X
-   *
-   * X coordinate of the point in normalized format (0 to 1)
-   */
-  x: number;
-};
-
-/**
- * Object
- */
-export type Object = {
-  /**
-   * Y Min
-   *
-   * Top boundary of detection box in normalized format (0 to 1)
-   */
-  y_min: number;
-  /**
-   * X Max
-   *
-   * Right boundary of detection box in normalized format (0 to 1)
-   */
-  x_max: number;
-  /**
-   * X Min
-   *
-   * Left boundary of detection box in normalized format (0 to 1)
-   */
-  x_min: number;
-  /**
-   * Y Max
-   *
-   * Bottom boundary of detection box in normalized format (0 to 1)
-   */
-  y_max: number;
-};
-
-/**
- * MoonDreamOutput
- */
-export type MoondreamNextOutput = {
-  /**
-   * Output
-   *
-   * Response from the model
-   */
-  output: string;
-};
-
-/**
- * QueryInput
- */
-export type MoondreamNextInput = {
-  /**
-   * Task Type
-   *
-   * Type of task to perform
-   */
-  task_type?: "caption" | "query";
-  /**
-   * Image URL
-   *
-   * Image URL to be processed
-   */
-  image_url: string | Blob | File;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of tokens to generate
-   */
-  max_tokens?: number;
-  /**
-   * Prompt
-   *
-   * Prompt for query task
-   */
-  prompt: string;
-};
-
-/**
- * BatchMoonDreamOutput
- */
-export type MoondreamNextBatchOutput = {
-  captions_file: File;
-  /**
-   * Outputs
-   *
-   * List of generated captions
-   */
-  outputs: Array<string>;
-};
-
-/**
- * BatchQueryInput
- */
-export type MoondreamNextBatchInput = {
-  /**
-   * Max Tokens
-   *
-   * Maximum number of tokens to generate
-   */
-  max_tokens?: number;
-  /**
-   * Image URLs
-   *
-   * List of image URLs to be processed (maximum 32 images)
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Prompt
-   *
-   * Single prompt to apply to all images
-   */
-  prompt: string;
-};
-
-/**
- * MoondreamInputParam
- */
-export type MoondreamInputParam = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the image
-   */
-  prompt?: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string;
-};
-
-/**
- * BatchedMoondreamOutput
- */
-export type MoondreamBatchedOutput = {
-  /**
-   * Filenames
-   *
-   * Filenames of the images processed
-   */
-  filenames?: Array<string> | null;
-  /**
-   * Outputs
-   *
-   * List of generated outputs
-   */
-  outputs: Array<string>;
-  /**
-   * Partial
-   *
-   * Whether the output is partial
-   */
-  partial?: boolean;
-  /**
-   * Timings
-   *
-   * Timings for different parts of the process
-   */
-  timings: {
-    [key: string]: number;
-  };
-};
-
-/**
- * BatchedMoondreamInput
- */
-export type MoondreamBatchedInput = {
-  /**
-   * Model ID
-   *
-   * Model ID to use for inference
-   */
-  model_id?: "vikhyatk/moondream2" | "fal-ai/moondream2-docci";
-  /**
-   * Repetition Penalty
-   *
-   * Repetition penalty for sampling
-   */
-  repetition_penalty?: number;
-  /**
-   * Input prompt & image pairs
-   *
-   * List of input prompts and image URLs
-   */
-  inputs: Array<MoondreamInputParam>;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of new tokens to generate
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Temperature for sampling
-   */
-  temperature?: number;
-  /**
-   * Top P
-   *
-   * Top P for sampling
-   */
-  top_p?: number;
-};
-
-/**
- * MoondreamQueryOutput
- */
-export type Moondream3PreviewQueryOutput = {
-  /**
-   * Finish Reason
-   *
-   * Reason for finishing the output generation
-   */
-  finish_reason: string;
-  /**
-   * Output
-   *
-   * Answer to the query about the image
-   */
-  output: string;
-  /**
-   * Reasoning
-   *
-   * Detailed reasoning behind the answer, if enabled
-   */
-  reasoning?: string | unknown;
-  usage_info: UsageInfo;
-};
-
-/**
- * MoondreamQueryInput
- */
-export type Moondream3PreviewQueryInput = {
-  /**
-   * Prompt
-   *
-   * Query to be asked in the image
-   */
-  prompt: string;
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability mass to use, between 0 and 1.
-   */
-  top_p?: number | unknown;
-  /**
-   * Temperature
-   *
-   * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
-   */
-  temperature?: number | unknown;
-  /**
-   * Reasoning
-   *
-   * Whether to include detailed reasoning behind the answer
-   */
-  reasoning?: boolean;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamPointOutput
- */
-export type Moondream3PreviewPointOutput = {
-  /**
-   * Points
-   *
-   * List of points marking the detected objects
-   */
-  points: Array<Point>;
-  /**
-   * Image with points drawn on detected objects
-   */
-  image?: ImageFile | unknown;
-  /**
-   * Finish Reason
-   *
-   * Reason for finishing the output generation
-   */
-  finish_reason: string;
-  usage_info: UsageInfo;
-};
-
-/**
  * ImageFile
  */
 export type ImageFile = {
@@ -903,249 +435,98 @@ export type ImageFile = {
 };
 
 /**
- * MoondreamPointInput
+ * ImageInput
  */
-export type Moondream3PreviewPointInput = {
+export type ImageInput = {
+  /**
+   * Hypothesis
+   *
+   * The image to use for the measurement.
+   */
+  hypothesis: string;
+};
+
+/**
+ * NSFWImageDetectionInput
+ */
+export type ImageutilsNsfwInput = {
+  /**
+   * Image Url
+   *
+   * Input image url.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * NSFWImageDetectionOutput
+ */
+export type ImageutilsNsfwOutput = {
+  /**
+   * Nsfw Probability
+   *
+   * The probability of the image being NSFW.
+   */
+  nsfw_probability: number;
+};
+
+/**
+ * VisionInput
+ */
+export type Isaac01Input = {
   /**
    * Prompt
    *
-   * Object to be located in the image
+   * Prompt to be used for the image
    */
   prompt: string;
   /**
-   * Preview
+   * Response Style
    *
-   * Whether to preview the output
+   *
+   * Response style to be used for the image.
+   *
+   * - text: Model will output text. Good for descriptions and captioning.
+   * - box: Model will output a combination of text and bounding boxes. Good for
+   * localization.
+   * - point: Model will output a combination of text and points. Good for counting many
+   * objects.
+   * - polygon: Model will output a combination of text and polygons. Good for granular
+   * segmentation.
+   *
    */
-  preview?: boolean;
+  response_style?: "text" | "box" | "point" | "polygon";
   /**
-   * Image URL
+   * Image Url
    *
-   * URL of the image to be processed
+   * Image URL to be processed
    */
   image_url: string | Blob | File;
 };
 
 /**
- * MoondreamDetectOutput
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
  */
-export type Moondream3PreviewDetectOutput = {
-  /**
-   * Image with bounding boxes drawn around detected objects
-   */
-  image?: ImageFile | unknown;
-  /**
-   * Finish Reason
-   *
-   * Reason for finishing the output generation
-   */
-  finish_reason: string;
-  /**
-   * Objects
-   *
-   * List of detected objects with their bounding boxes
-   */
-  objects: Array<Object>;
-  usage_info: UsageInfo;
+export type Isaac01OpenaiV1ChatCompletionsInput = {
+  [key: string]: unknown;
 };
 
-/**
- * MoondreamDetectInput
- */
-export type Moondream3PreviewDetectInput = {
-  /**
-   * Prompt
-   *
-   * Object to be detected in the image
-   */
-  prompt: string;
-  /**
-   * Preview
-   *
-   * Whether to preview the output
-   */
-  preview?: boolean;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
+export type Isaac01OpenaiV1ChatCompletionsOutput = unknown;
 
 /**
- * MoondreamCaptionOutput
+ * ChatOutput
  */
-export type Moondream3PreviewCaptionOutput = {
+export type Isaac01Output = {
   /**
-   * Finish Reason
-   *
-   * Reason for finishing the output generation
+   * Usage information
    */
-  finish_reason: string;
+  usage?: CompletionUsage | unknown;
   /**
-   * Output
+   * Error
    *
-   * Generated caption for the image
+   * Error message if an error occurred
    */
-  output: string;
-  usage_info: UsageInfo;
-};
-
-/**
- * MoondreamCaptionInput
- */
-export type Moondream3PreviewCaptionInput = {
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability mass to use, between 0 and 1.
-   */
-  top_p?: number | unknown;
-  /**
-   * Length
-   *
-   * Length of the caption to generate
-   */
-  length?: "short" | "normal" | "long";
-  /**
-   * Temperature
-   *
-   * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
-   */
-  temperature?: number | unknown;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamOutput
- */
-export type Moondream2VisualQueryOutput = {
-  /**
-   * Output
-   *
-   * Output for the given query
-   */
-  output: string;
-};
-
-/**
- * MoondreamQueryInput
- */
-export type Moondream2VisualQueryInput = {
-  /**
-   * Query
-   *
-   * Query to be asked in the image
-   */
-  prompt: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamObjectOutput
- */
-export type Moondream2PointObjectDetectionOutput = {
-  image: Image;
-  /**
-   * Objects
-   *
-   * Objects detected in the image
-   */
-  objects: Array<{
-    [key: string]: unknown;
-  }>;
-};
-
-/**
- * MoondreamObjectInput
- */
-export type Moondream2PointObjectDetectionInput = {
-  /**
-   * Object
-   *
-   * Object to be detected in the image
-   */
-  object: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamOutput
- */
-export type Moondream2Output = {
-  /**
-   * Output
-   *
-   * Output for the given query
-   */
-  output: string;
-};
-
-/**
- * MoondreamObjectOutput
- */
-export type Moondream2ObjectDetectionOutput = {
-  image: Image;
-  /**
-   * Objects
-   *
-   * Objects detected in the image
-   */
-  objects: Array<{
-    [key: string]: unknown;
-  }>;
-};
-
-/**
- * MoondreamObjectInput
- */
-export type Moondream2ObjectDetectionInput = {
-  /**
-   * Object
-   *
-   * Object to be detected in the image
-   */
-  object: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamInput
- */
-export type Moondream2Input = {
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * LLavaOutput
- */
-export type LlavaNextOutput = {
+  error?: string | unknown;
   /**
    * Partial
    *
@@ -1197,19 +578,9 @@ export type LlavaNextInput = {
 };
 
 /**
- * ChatOutput
+ * LLavaOutput
  */
-export type Isaac01Output = {
-  /**
-   * Usage information
-   */
-  usage?: CompletionUsage | unknown;
-  /**
-   * Error
-   *
-   * Error message if an error occurred
-   */
-  error?: string | unknown;
+export type LlavaNextOutput = {
   /**
    * Partial
    *
@@ -1225,42 +596,674 @@ export type Isaac01Output = {
 };
 
 /**
- * CompletionUsage
+ * MoondreamInput
  */
-export type CompletionUsage = {
+export type Moondream2Input = {
   /**
-   * Completion Tokens
+   * Image URL
    *
-   * Number of tokens in the completion
+   * URL of the image to be processed
    */
-  completion_tokens: number;
-  /**
-   * Total Tokens
-   *
-   * Total tokens used
-   */
-  total_tokens: number;
-  /**
-   * Prompt Tokens
-   *
-   * Number of tokens in the prompt
-   */
-  prompt_tokens: number;
+  image_url: string | Blob | File;
 };
 
-export type Isaac01OpenaiV1ChatCompletionsOutput = unknown;
+/**
+ * MoondreamObjectInput
+ */
+export type Moondream2ObjectDetectionInput = {
+  /**
+   * Object
+   *
+   * Object to be detected in the image
+   */
+  object: string;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
 
 /**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ * MoondreamObjectOutput
  */
-export type Isaac01OpenaiV1ChatCompletionsInput = {
-  [key: string]: unknown;
+export type Moondream2ObjectDetectionOutput = {
+  image: Image;
+  /**
+   * Objects
+   *
+   * Objects detected in the image
+   */
+  objects: Array<{
+    [key: string]: unknown;
+  }>;
+};
+
+/**
+ * MoondreamOutput
+ */
+export type Moondream2Output = {
+  /**
+   * Output
+   *
+   * Output for the given query
+   */
+  output: string;
+};
+
+/**
+ * MoondreamObjectInput
+ */
+export type Moondream2PointObjectDetectionInput = {
+  /**
+   * Object
+   *
+   * Object to be detected in the image
+   */
+  object: string;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamObjectOutput
+ */
+export type Moondream2PointObjectDetectionOutput = {
+  image: Image;
+  /**
+   * Objects
+   *
+   * Objects detected in the image
+   */
+  objects: Array<{
+    [key: string]: unknown;
+  }>;
+};
+
+/**
+ * MoondreamQueryInput
+ */
+export type Moondream2VisualQueryInput = {
+  /**
+   * Query
+   *
+   * Query to be asked in the image
+   */
+  prompt: string;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamOutput
+ */
+export type Moondream2VisualQueryOutput = {
+  /**
+   * Output
+   *
+   * Output for the given query
+   */
+  output: string;
+};
+
+/**
+ * MoondreamCaptionInput
+ */
+export type Moondream3PreviewCaptionInput = {
+  /**
+   * Top P
+   *
+   * Nucleus sampling probability mass to use, between 0 and 1.
+   */
+  top_p?: number | unknown;
+  /**
+   * Length
+   *
+   * Length of the caption to generate
+   */
+  length?: "short" | "normal" | "long";
+  /**
+   * Temperature
+   *
+   * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
+   */
+  temperature?: number | unknown;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamCaptionOutput
+ */
+export type Moondream3PreviewCaptionOutput = {
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
+  /**
+   * Output
+   *
+   * Generated caption for the image
+   */
+  output: string;
+  usage_info: UsageInfo;
+};
+
+/**
+ * MoondreamDetectInput
+ */
+export type Moondream3PreviewDetectInput = {
+  /**
+   * Prompt
+   *
+   * Object to be detected in the image
+   */
+  prompt: string;
+  /**
+   * Preview
+   *
+   * Whether to preview the output
+   */
+  preview?: boolean;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamDetectOutput
+ */
+export type Moondream3PreviewDetectOutput = {
+  /**
+   * Image with bounding boxes drawn around detected objects
+   */
+  image?: ImageFile | unknown;
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
+  /**
+   * Objects
+   *
+   * List of detected objects with their bounding boxes
+   */
+  objects: Array<Object>;
+  usage_info: UsageInfo;
+};
+
+/**
+ * MoondreamPointInput
+ */
+export type Moondream3PreviewPointInput = {
+  /**
+   * Prompt
+   *
+   * Object to be located in the image
+   */
+  prompt: string;
+  /**
+   * Preview
+   *
+   * Whether to preview the output
+   */
+  preview?: boolean;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamPointOutput
+ */
+export type Moondream3PreviewPointOutput = {
+  /**
+   * Points
+   *
+   * List of points marking the detected objects
+   */
+  points: Array<Point>;
+  /**
+   * Image with points drawn on detected objects
+   */
+  image?: ImageFile | unknown;
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
+  usage_info: UsageInfo;
+};
+
+/**
+ * MoondreamQueryInput
+ */
+export type Moondream3PreviewQueryInput = {
+  /**
+   * Prompt
+   *
+   * Query to be asked in the image
+   */
+  prompt: string;
+  /**
+   * Top P
+   *
+   * Nucleus sampling probability mass to use, between 0 and 1.
+   */
+  top_p?: number | unknown;
+  /**
+   * Temperature
+   *
+   * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
+   */
+  temperature?: number | unknown;
+  /**
+   * Reasoning
+   *
+   * Whether to include detailed reasoning behind the answer
+   */
+  reasoning?: boolean;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamQueryOutput
+ */
+export type Moondream3PreviewQueryOutput = {
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
+  /**
+   * Output
+   *
+   * Answer to the query about the image
+   */
+  output: string;
+  /**
+   * Reasoning
+   *
+   * Detailed reasoning behind the answer, if enabled
+   */
+  reasoning?: string | unknown;
+  usage_info: UsageInfo;
+};
+
+/**
+ * BatchedMoondreamInput
+ */
+export type MoondreamBatchedInput = {
+  /**
+   * Model ID
+   *
+   * Model ID to use for inference
+   */
+  model_id?: "vikhyatk/moondream2" | "fal-ai/moondream2-docci";
+  /**
+   * Repetition Penalty
+   *
+   * Repetition penalty for sampling
+   */
+  repetition_penalty?: number;
+  /**
+   * Input prompt & image pairs
+   *
+   * List of input prompts and image URLs
+   */
+  inputs: Array<MoondreamInputParam>;
+  /**
+   * Max Tokens
+   *
+   * Maximum number of new tokens to generate
+   */
+  max_tokens?: number;
+  /**
+   * Temperature
+   *
+   * Temperature for sampling
+   */
+  temperature?: number;
+  /**
+   * Top P
+   *
+   * Top P for sampling
+   */
+  top_p?: number;
+};
+
+/**
+ * BatchedMoondreamOutput
+ */
+export type MoondreamBatchedOutput = {
+  /**
+   * Filenames
+   *
+   * Filenames of the images processed
+   */
+  filenames?: Array<string> | null;
+  /**
+   * Outputs
+   *
+   * List of generated outputs
+   */
+  outputs: Array<string>;
+  /**
+   * Partial
+   *
+   * Whether the output is partial
+   */
+  partial?: boolean;
+  /**
+   * Timings
+   *
+   * Timings for different parts of the process
+   */
+  timings: {
+    [key: string]: number;
+  };
+};
+
+/**
+ * MoondreamInputParam
+ */
+export type MoondreamInputParam = {
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the image
+   */
+  prompt?: string;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string;
+};
+
+/**
+ * BatchQueryInput
+ */
+export type MoondreamNextBatchInput = {
+  /**
+   * Max Tokens
+   *
+   * Maximum number of tokens to generate
+   */
+  max_tokens?: number;
+  /**
+   * Image URLs
+   *
+   * List of image URLs to be processed (maximum 32 images)
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Prompt
+   *
+   * Single prompt to apply to all images
+   */
+  prompt: string;
+};
+
+/**
+ * BatchMoonDreamOutput
+ */
+export type MoondreamNextBatchOutput = {
+  captions_file: File;
+  /**
+   * Outputs
+   *
+   * List of generated captions
+   */
+  outputs: Array<string>;
+};
+
+/**
+ * QueryInput
+ */
+export type MoondreamNextInput = {
+  /**
+   * Task Type
+   *
+   * Type of task to perform
+   */
+  task_type?: "caption" | "query";
+  /**
+   * Image URL
+   *
+   * Image URL to be processed
+   */
+  image_url: string | Blob | File;
+  /**
+   * Max Tokens
+   *
+   * Maximum number of tokens to generate
+   */
+  max_tokens?: number;
+  /**
+   * Prompt
+   *
+   * Prompt for query task
+   */
+  prompt: string;
+};
+
+/**
+ * MoonDreamOutput
+ */
+export type MoondreamNextOutput = {
+  /**
+   * Output
+   *
+   * Response from the model
+   */
+  output: string;
+};
+
+/**
+ * Object
+ */
+export type Object = {
+  /**
+   * Y Min
+   *
+   * Top boundary of detection box in normalized format (0 to 1)
+   */
+  y_min: number;
+  /**
+   * X Max
+   *
+   * Right boundary of detection box in normalized format (0 to 1)
+   */
+  x_max: number;
+  /**
+   * X Min
+   *
+   * Left boundary of detection box in normalized format (0 to 1)
+   */
+  x_min: number;
+  /**
+   * Y Max
+   *
+   * Bottom boundary of detection box in normalized format (0 to 1)
+   */
+  y_max: number;
+};
+
+/**
+ * Point
+ */
+export type Point = {
+  /**
+   * Y
+   *
+   * Y coordinate of the point in normalized format (0 to 1)
+   */
+  y: number;
+  /**
+   * X
+   *
+   * X coordinate of the point in normalized format (0 to 1)
+   */
+  x: number;
+};
+
+/**
+ * PromptTokensDetails
+ */
+export type PromptTokensDetails = {
+  /**
+   * Cached Tokens
+   */
+  cached_tokens?: number;
+  /**
+   * Cache Write Tokens
+   */
+  cache_write_tokens?: number;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
+};
+
+/**
+ * ReferenceImageInput
+ */
+export type ReferenceImageInput = {
+  /**
+   * Hypothesis
+   *
+   * The hypothesis image to use for the measurement.
+   */
+  hypothesis: string;
+  /**
+   * Reference
+   *
+   * The image to use for the measurement.
+   */
+  reference: string;
+};
+
+/**
+ * Region
+ */
+export type Region = {
+  /**
+   * X1
+   *
+   * X-coordinate of the top-left corner
+   */
+  x1: number;
+  /**
+   * X2
+   *
+   * X-coordinate of the bottom-right corner
+   */
+  x2: number;
+  /**
+   * Y2
+   *
+   * Y-coordinate of the bottom-right corner
+   */
+  y2: number;
+  /**
+   * Y1
+   *
+   * Y-coordinate of the top-left corner
+   */
+  y1: number;
 };
 
 /**
  * VisionInput
  */
-export type Isaac01Input = {
+export type RouterVisionInput = {
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
+   * Image Urls
+   *
+   * List of image URLs to be processed
+   */
+  image_urls: Array<string>;
+  /**
+   * Temperature
+   *
+   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+   */
+  temperature?: number;
   /**
    * Prompt
    *
@@ -1268,353 +1271,350 @@ export type Isaac01Input = {
    */
   prompt: string;
   /**
-   * Response Style
+   * Max Tokens
    *
-   *
-   * Response style to be used for the image.
-   *
-   * - text: Model will output text. Good for descriptions and captioning.
-   * - box: Model will output a combination of text and bounding boxes. Good for
-   * localization.
-   * - point: Model will output a combination of text and points. Good for counting many
-   * objects.
-   * - polygon: Model will output a combination of text and polygons. Good for granular
-   * segmentation.
-   *
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  response_style?: "text" | "box" | "point" | "polygon";
+  max_tokens?: number | unknown;
   /**
-   * Image Url
+   * Reasoning
    *
-   * Image URL to be processed
+   * Should reasoning be the part of the final answer.
    */
-  image_url: string | Blob | File;
+  reasoning?: boolean;
 };
 
 /**
- * NSFWImageDetectionOutput
+ * VisionOutput
  */
-export type ImageutilsNsfwOutput = {
-  /**
-   * Nsfw Probability
-   *
-   * The probability of the image being NSFW.
-   */
-  nsfw_probability: number;
-};
-
-/**
- * NSFWImageDetectionInput
- */
-export type ImageutilsNsfwInput = {
-  /**
-   * Image Url
-   *
-   * Input image url.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * ImageInput
- */
-export type ImageInput = {
-  /**
-   * Hypothesis
-   *
-   * The image to use for the measurement.
-   */
-  hypothesis: string;
-};
-
-/**
- * ImageChatOutput
- */
-export type GotOcrV2Output = {
+export type RouterVisionOutput = {
   /**
    * Output
    *
    * Generated output
    */
-  outputs: Array<string>;
+  output: string;
+  /**
+   * Token usage information
+   */
+  usage: UsageInfoType2 | unknown;
 };
 
 /**
  * ImageInput
  */
-export type GotOcrV2Input = {
+export type Sa2Va4bImageInput = {
   /**
-   * Multi Page
+   * Prompt
    *
-   * Use provided images to generate a single output.
+   * Prompt to be used for the chat completion
    */
-  multi_page?: boolean;
-  /**
-   * Input Image Urls
-   *
-   * URL of images.
-   */
-  input_image_urls?: Array<string>;
-  /**
-   * Do Format
-   *
-   * Generate the output in formatted mode.
-   */
-  do_format?: boolean;
-};
-
-/**
- * TextOutput
- */
-export type Florence2LargeRegionToDescriptionOutput = {
-  /**
-   * Results
-   *
-   * Results from the model
-   */
-  results: string;
-};
-
-/**
- * ImageWithUserCoordinatesInput
- */
-export type Florence2LargeRegionToDescriptionInput = {
+  prompt: string;
   /**
    * Image Url
    *
-   * The URL of the image to be processed.
+   * Url for the Input image.
    */
   image_url: string | Blob | File;
-  region: Region;
 };
 
 /**
- * TextOutput
+ * ImageChatOutput
  */
-export type Florence2LargeRegionToCategoryOutput = {
+export type Sa2Va4bImageOutput = {
   /**
-   * Results
+   * Output
    *
-   * Results from the model
+   * Generated output
    */
-  results: string;
+  output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask image
+   */
+  masks: Array<Image>;
 };
 
 /**
- * ImageWithUserCoordinatesInput
+ * VideoInput
  */
-export type Florence2LargeRegionToCategoryInput = {
+export type Sa2Va4bVideoInput = {
   /**
-   * Image Url
+   * Prompt
    *
-   * The URL of the image to be processed.
+   * Prompt to be used for the chat completion
    */
-  image_url: string | Blob | File;
-  region: Region;
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * The URL of the input video.
+   */
+  video_url: string | Blob | File;
+  /**
+   * Num Frames To Sample
+   *
+   * Number of frames to sample from the video. Defaults to 32 if not provided. Maximum 100.
+   */
+  num_frames_to_sample?: number | unknown;
 };
 
 /**
- * TextOutput
+ * VideoChatOutput
  */
-export type Florence2LargeOcrOutput = {
+export type Sa2Va4bVideoOutput = {
   /**
-   * Results
+   * Output
    *
-   * Results from the model
+   * Generated output
    */
-  results: string;
+  output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask video
+   */
+  masks: Array<File>;
 };
 
 /**
  * ImageInput
  */
-export type Florence2LargeOcrInput = {
+export type Sa2Va8bImageInput = {
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the chat completion
+   */
+  prompt: string;
   /**
    * Image Url
    *
-   * The URL of the image to be processed.
+   * Url for the Input image.
    */
   image_url: string | Blob | File;
 };
 
 /**
- * TextOutput
+ * ImageChatOutput
  */
-export type Florence2LargeMoreDetailedCaptionOutput = {
+export type Sa2Va8bImageOutput = {
   /**
-   * Results
+   * Output
    *
-   * Results from the model
+   * Generated output
    */
-  results: string;
+  output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask image
+   */
+  masks: Array<Image>;
 };
 
 /**
- * ImageInput
+ * VideoInput
  */
-export type Florence2LargeMoreDetailedCaptionInput = {
+export type Sa2Va8bVideoInput = {
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the chat completion
+   */
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * The URL of the input video.
+   */
+  video_url: string | Blob | File;
+  /**
+   * Num Frames To Sample
+   *
+   * Number of frames to sample from the video. Defaults to 32 if not provided. Maximum 100.
+   */
+  num_frames_to_sample?: number | unknown;
+};
+
+/**
+ * VideoChatOutput
+ */
+export type Sa2Va8bVideoOutput = {
+  /**
+   * Output
+   *
+   * Generated output
+   */
+  output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask video
+   */
+  masks: Array<File>;
+};
+
+/**
+ * SAM3EmbeddingInput
+ */
+export type Sam3ImageEmbedInput = {
   /**
    * Image Url
    *
-   * The URL of the image to be processed.
+   * URL of the image to embed.
    */
   image_url: string | Blob | File;
 };
 
 /**
- * TextOutput
+ * SAM3EmbeddingOutput
  */
-export type Florence2LargeDetailedCaptionOutput = {
+export type Sam3ImageEmbedOutput = {
   /**
-   * Results
+   * Embedding B64
    *
-   * Results from the model
+   * Embedding of the image
    */
-  results: string;
+  embedding_b64: string;
 };
 
 /**
- * ImageInput
+ * SemanticImageInput
  */
-export type Florence2LargeDetailedCaptionInput = {
+export type SemanticImageInput = {
   /**
-   * Image Url
+   * Hypothesis
    *
-   * The URL of the image to be processed.
+   * The hypothesis image to use for the measurement.
    */
-  image_url: string | Blob | File;
+  hypothesis: string;
+  /**
+   * Reference
+   *
+   * The text reference to use for the measurement.
+   */
+  reference: string;
 };
 
 /**
- * TextOutput
+ * UsageInfo
  */
-export type Florence2LargeCaptionOutput = {
+export type UsageInfo = {
   /**
-   * Results
+   * Output Tokens
    *
-   * Results from the model
+   * Number of output tokens generated
    */
-  results: string;
+  output_tokens: number;
+  /**
+   * Prefill Time Ms
+   *
+   * Time taken for prefill in milliseconds
+   */
+  prefill_time_ms: number;
+  /**
+   * Input Tokens
+   *
+   * Number of input tokens processed
+   */
+  input_tokens: number;
+  /**
+   * Ttft Ms
+   *
+   * Time to first token in milliseconds
+   */
+  ttft_ms: number;
+  /**
+   * Decode Time Ms
+   *
+   * Time taken for decoding in milliseconds
+   */
+  decode_time_ms: number;
 };
 
 /**
- * ImageInput
+ * UsageInfo
  */
-export type Florence2LargeCaptionInput = {
+export type UsageInfoType2 = {
   /**
-   * Image Url
-   *
-   * The URL of the image to be processed.
+   * Total Tokens
    */
-  image_url: string | Blob | File;
+  total_tokens?: number;
+  /**
+   * Completion Tokens
+   */
+  completion_tokens?: number | unknown;
+  /**
+   * Prompt Tokens
+   */
+  prompt_tokens?: number | unknown;
+  prompt_tokens_details?: PromptTokensDetails | unknown;
+  /**
+   * Cost
+   */
+  cost: number;
 };
 
 /**
- * MultiMeasurementOutput
+ * VideoUnderstandingInput
  */
-export type ArbiterImageTextOutput = {
+export type VideoUnderstandingInput = {
   /**
-   * Values
+   * Prompt
    *
-   * The values of the measurements.
+   * The question or prompt about the video content.
    */
-  values?: Array<{
-    [key: string]:
-      | number
-      | {
-          [key: string]: number;
-        };
-  }>;
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * URL of the video to analyze
+   */
+  video_url: string | Blob | File;
+  /**
+   * Detailed Analysis
+   *
+   * Whether to request a more detailed analysis of the video
+   */
+  detailed_analysis?: boolean;
 };
 
 /**
- * SemanticImageMeasurementInput
+ * VideoUnderstandingOutput
  */
-export type ArbiterImageTextInput = {
+export type VideoUnderstandingOutput = {
   /**
-   * Inputs
+   * Output
    *
-   * The inputs to use for the measurement.
+   * The analysis of the video content based on the prompt
    */
-  inputs: Array<SemanticImageInput>;
-  /**
-   * Measurements
-   *
-   * The measurements to use for the measurement.
-   */
-  measurements: Array<string>;
+  output: string;
 };
 
 /**
- * MultiMeasurementOutput
+ * NSFWInput
  */
-export type ArbiterImageOutput = {
+export type XAilabNsfwInput = {
   /**
-   * Values
+   * Image Urls
    *
-   * The values of the measurements.
+   * List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.
    */
-  values?: Array<{
-    [key: string]:
-      | number
-      | {
-          [key: string]: number;
-        };
-  }>;
+  image_urls: Array<string>;
 };
 
 /**
- * ImageMultiMeasurementInput
+ * NSFWOutput
  */
-export type ArbiterImageInput = {
+export type XAilabNsfwOutput = {
   /**
-   * Inputs
+   * Has Nsfw Concepts
    *
-   * The inputs to use for the measurement.
+   * List of booleans indicating if the image has an NSFW concept
    */
-  inputs: Array<ImageInput>;
-  /**
-   * Measurements
-   *
-   * The measurements to use for the measurement.
-   */
-  measurements: Array<"arniqa" | "clip_iqa" | "musiq" | "nima" | "lapvar">;
-};
-
-/**
- * MultiMeasurementOutput
- */
-export type ArbiterImageImageOutput = {
-  /**
-   * Values
-   *
-   * The values of the measurements.
-   */
-  values?: Array<{
-    [key: string]:
-      | number
-      | {
-          [key: string]: number;
-        };
-  }>;
-};
-
-/**
- * ImageReferenceMeasurementInput
- */
-export type ArbiterImageImageInput = {
-  /**
-   * Inputs
-   *
-   * The inputs to use for the measurement.
-   */
-  inputs: Array<ReferenceImageInput>;
-  /**
-   * Measurements
-   *
-   * The measurements to use for the measurement.
-   */
-  measurements: Array<"dists" | "mse" | "lpips" | "sdi" | "ssim">;
+  has_nsfw_concepts: Array<boolean>;
 };
 
 export type PostFalAiArbiterImageData = {

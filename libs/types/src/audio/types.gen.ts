@@ -5,94 +5,650 @@ export type ClientOptions = {
 };
 
 /**
- * ZonosOutput
+ * ACEStepAudioInpaintRequest
  */
-export type ZonosOutput = {
+export type AceStepAudioInpaintInput = {
   /**
-   * Audio
+   * Granularity Scale
    *
-   * The generated audio
+   * Granularity scale for the generation process. Higher values can reduce artifacts.
    */
-  audio: FileType2;
+  granularity_scale?: number;
+  /**
+   * Lyric Guidance Scale
+   *
+   * Lyric guidance scale for the generation.
+   */
+  lyric_guidance_scale?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to be inpainted.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Guidance Interval
+   *
+   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   */
+  guidance_interval?: number;
+  /**
+   * End Time
+   *
+   * end time in seconds for the inpainting process.
+   */
+  end_time?: number;
+  /**
+   * Guidance Interval Decay
+   *
+   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   */
+  guidance_interval_decay?: number;
+  /**
+   * Tags
+   *
+   * Comma-separated list of genre tags to control the style of the generated audio.
+   */
+  tags: string;
+  /**
+   * Guidance Type
+   *
+   * Type of CFG to use for the generation process.
+   */
+  guidance_type?: "cfg" | "apg" | "cfg_star";
+  /**
+   * Tag Guidance Scale
+   *
+   * Tag guidance scale for the generation.
+   */
+  tag_guidance_scale?: number;
+  /**
+   * Scheduler
+   *
+   * Scheduler to use for the generation process.
+   */
+  scheduler?: "euler" | "heun";
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Start Time Relative To
+   *
+   * Whether the start time is relative to the start or end of the audio.
+   */
+  start_time_relative_to?: "start" | "end";
+  /**
+   * Start Time
+   *
+   * start time in seconds for the inpainting process.
+   */
+  start_time?: number;
+  /**
+   * Number Of Steps
+   *
+   * Number of steps to generate the audio.
+   */
+  number_of_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If not provided, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Lyrics
+   *
+   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   */
+  lyrics?: string;
+  /**
+   * Minimum Guidance Scale
+   *
+   * Minimum guidance scale for the generation after the decay.
+   */
+  minimum_guidance_scale?: number;
+  /**
+   * Variance
+   *
+   * Variance for the inpainting process. Higher values can lead to more diverse results.
+   */
+  variance?: number;
+  /**
+   * End Time Relative To
+   *
+   * Whether the end time is relative to the start or end of the audio.
+   */
+  end_time_relative_to?: "start" | "end";
 };
 
 /**
- * File
+ * ACEStepAudioInpaintResponse
  */
-export type FileType2 = {
+export type AceStepAudioInpaintOutput = {
   /**
-   * File Size
+   * Lyrics
    *
-   * The size of the file in bytes.
+   * The lyrics used in the generation process.
    */
-  file_size?: number;
+  lyrics: string;
+  audio: File;
   /**
-   * File Name
+   * Seed
    *
-   * The name of the file. It will be auto-generated if not provided.
+   * The random seed used for the generation process.
    */
-  file_name?: string;
+  seed: number;
   /**
-   * Content Type
+   * Tags
    *
-   * The mime type of the file.
+   * The genre tags used in the generation process.
    */
-  content_type?: string;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Data
-   *
-   * File data
-   */
-  file_data?: Blob | File;
+  tags: string;
 };
 
 /**
- * ZonosInput
+ * ACEStepAudioOutpaintRequest
  */
-export type ZonosInput = {
+export type AceStepAudioOutpaintInput = {
+  /**
+   * Granularity Scale
+   *
+   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   */
+  granularity_scale?: number;
+  /**
+   * Lyric Guidance Scale
+   *
+   * Lyric guidance scale for the generation.
+   */
+  lyric_guidance_scale?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to be outpainted.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Guidance Interval
+   *
+   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   */
+  guidance_interval?: number;
+  /**
+   * Extend After Duration
+   *
+   * Duration in seconds to extend the audio from the end.
+   */
+  extend_after_duration?: number;
+  /**
+   * Extend Before Duration
+   *
+   * Duration in seconds to extend the audio from the start.
+   */
+  extend_before_duration?: number;
+  /**
+   * Guidance Interval Decay
+   *
+   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   */
+  guidance_interval_decay?: number;
+  /**
+   * Tags
+   *
+   * Comma-separated list of genre tags to control the style of the generated audio.
+   */
+  tags: string;
+  /**
+   * Guidance Type
+   *
+   * Type of CFG to use for the generation process.
+   */
+  guidance_type?: "cfg" | "apg" | "cfg_star";
+  /**
+   * Tag Guidance Scale
+   *
+   * Tag guidance scale for the generation.
+   */
+  tag_guidance_scale?: number;
+  /**
+   * Scheduler
+   *
+   * Scheduler to use for the generation process.
+   */
+  scheduler?: "euler" | "heun";
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Number Of Steps
+   *
+   * Number of steps to generate the audio.
+   */
+  number_of_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If not provided, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Lyrics
+   *
+   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   */
+  lyrics?: string;
+  /**
+   * Minimum Guidance Scale
+   *
+   * Minimum guidance scale for the generation after the decay.
+   */
+  minimum_guidance_scale?: number;
+};
+
+/**
+ * ACEStepResponse
+ */
+export type AceStepAudioOutpaintOutput = {
+  /**
+   * Lyrics
+   *
+   * The lyrics used in the generation process.
+   */
+  lyrics: string;
+  audio: File;
+  /**
+   * Seed
+   *
+   * The random seed used for the generation process.
+   */
+  seed: number;
+  /**
+   * Tags
+   *
+   * The genre tags used in the generation process.
+   */
+  tags: string;
+};
+
+/**
+ * ACEStepAudioToAudioRequest
+ */
+export type AceStepAudioToAudioInput = {
+  /**
+   * Granularity Scale
+   *
+   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   */
+  granularity_scale?: number;
+  /**
+   * Lyric Guidance Scale
+   *
+   * Lyric guidance scale for the generation.
+   */
+  lyric_guidance_scale?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to be outpainted.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Original Seed
+   *
+   * Original seed of the audio file.
+   */
+  original_seed?: number | unknown;
+  /**
+   * Guidance Interval
+   *
+   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   */
+  guidance_interval?: number;
+  /**
+   * Guidance Interval Decay
+   *
+   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   */
+  guidance_interval_decay?: number;
+  /**
+   * Tags
+   *
+   * Comma-separated list of genre tags to control the style of the generated audio.
+   */
+  tags: string;
+  /**
+   * Guidance Type
+   *
+   * Type of CFG to use for the generation process.
+   */
+  guidance_type?: "cfg" | "apg" | "cfg_star";
+  /**
+   * Tag Guidance Scale
+   *
+   * Tag guidance scale for the generation.
+   */
+  tag_guidance_scale?: number;
+  /**
+   * Edit Mode
+   *
+   * Whether to edit the lyrics only or remix the audio.
+   */
+  edit_mode?: "lyrics" | "remix";
+  /**
+   * Scheduler
+   *
+   * Scheduler to use for the generation process.
+   */
+  scheduler?: "euler" | "heun";
+  /**
+   * Original Lyrics
+   *
+   * Original lyrics of the audio file.
+   */
+  original_lyrics?: string;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Number Of Steps
+   *
+   * Number of steps to generate the audio.
+   */
+  number_of_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If not provided, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Lyrics
+   *
+   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   */
+  lyrics?: string;
+  /**
+   * Original Tags
+   *
+   * Original tags of the audio file.
+   */
+  original_tags: string;
+  /**
+   * Minimum Guidance Scale
+   *
+   * Minimum guidance scale for the generation after the decay.
+   */
+  minimum_guidance_scale?: number;
+};
+
+/**
+ * ACEStepAudioToAudioResponse
+ */
+export type AceStepAudioToAudioOutput = {
+  /**
+   * Lyrics
+   *
+   * The lyrics used in the generation process.
+   */
+  lyrics: string;
+  audio: File;
+  /**
+   * Seed
+   *
+   * The random seed used for the generation process.
+   */
+  seed: number;
+  /**
+   * Tags
+   *
+   * The genre tags used in the generation process.
+   */
+  tags: string;
+};
+
+/**
+ * ACEStepTextToAudioRequest
+ */
+export type AceStepInput = {
+  /**
+   * Scheduler
+   *
+   * Scheduler to use for the generation process.
+   */
+  scheduler?: "euler" | "heun";
+  /**
+   * Duration
+   *
+   * The duration of the generated audio in seconds.
+   */
+  duration?: number;
+  /**
+   * Guidance Interval
+   *
+   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   */
+  guidance_interval?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Number Of Steps
+   *
+   * Number of steps to generate the audio.
+   */
+  number_of_steps?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If not provided, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Lyric Guidance Scale
+   *
+   * Lyric guidance scale for the generation.
+   */
+  lyric_guidance_scale?: number;
+  /**
+   * Granularity Scale
+   *
+   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   */
+  granularity_scale?: number;
+  /**
+   * Minimum Guidance Scale
+   *
+   * Minimum guidance scale for the generation after the decay.
+   */
+  minimum_guidance_scale?: number;
+  /**
+   * Lyrics
+   *
+   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   */
+  lyrics?: string;
+  /**
+   * Guidance Interval Decay
+   *
+   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   */
+  guidance_interval_decay?: number;
+  /**
+   * Tags
+   *
+   * Comma-separated list of genre tags to control the style of the generated audio.
+   */
+  tags: string;
+  /**
+   * Guidance Type
+   *
+   * Type of CFG to use for the generation process.
+   */
+  guidance_type?: "cfg" | "apg" | "cfg_star";
+  /**
+   * Tag Guidance Scale
+   *
+   * Tag guidance scale for the generation.
+   */
+  tag_guidance_scale?: number;
+};
+
+/**
+ * ACEStepResponse
+ */
+export type AceStepOutput = {
+  /**
+   * Lyrics
+   *
+   * The lyrics used in the generation process.
+   */
+  lyrics: string;
+  audio: File;
+  /**
+   * Seed
+   *
+   * The random seed used for the generation process.
+   */
+  seed: number;
+  /**
+   * Tags
+   *
+   * The genre tags used in the generation process.
+   */
+  tags: string;
+};
+
+/**
+ * ACEStepPromptToAudioRequest
+ */
+export type AceStepPromptToAudioInput = {
+  /**
+   * Scheduler
+   *
+   * Scheduler to use for the generation process.
+   */
+  scheduler?: "euler" | "heun";
+  /**
+   * Duration
+   *
+   * The duration of the generated audio in seconds.
+   */
+  duration?: number;
+  /**
+   * Guidance Interval
+   *
+   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   */
+  guidance_interval?: number;
+  /**
+   * Guidance Scale
+   *
+   * Guidance scale for the generation.
+   */
+  guidance_scale?: number;
+  /**
+   * Instrumental
+   *
+   * Whether to generate an instrumental version of the audio.
+   */
+  instrumental?: boolean;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility. If not provided, a random seed will be used.
+   */
+  seed?: number | unknown;
+  /**
+   * Lyric Guidance Scale
+   *
+   * Lyric guidance scale for the generation.
+   */
+  lyric_guidance_scale?: number;
+  /**
+   * Number Of Steps
+   *
+   * Number of steps to generate the audio.
+   */
+  number_of_steps?: number;
+  /**
+   * Granularity Scale
+   *
+   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   */
+  granularity_scale?: number;
   /**
    * Prompt
    *
-   * The content generated using cloned voice.
+   * Prompt to control the style of the generated audio. This will be used to generate tags and lyrics.
    */
   prompt: string;
   /**
-   * Reference Audio Url
+   * Minimum Guidance Scale
    *
-   * The reference audio.
+   * Minimum guidance scale for the generation after the decay.
    */
-  reference_audio_url: string | Blob | File;
+  minimum_guidance_scale?: number;
+  /**
+   * Guidance Interval Decay
+   *
+   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   */
+  guidance_interval_decay?: number;
+  /**
+   * Guidance Type
+   *
+   * Type of CFG to use for the generation process.
+   */
+  guidance_type?: "cfg" | "apg" | "cfg_star";
+  /**
+   * Tag Guidance Scale
+   *
+   * Tag guidance scale for the generation.
+   */
+  tag_guidance_scale?: number;
 };
 
 /**
- * Output
+ * ACEStepResponse
  */
-export type YueOutput = {
+export type AceStepPromptToAudioOutput = {
+  /**
+   * Lyrics
+   *
+   * The lyrics used in the generation process.
+   */
+  lyrics: string;
   audio: File;
+  /**
+   * Seed
+   *
+   * The random seed used for the generation process.
+   */
+  seed: number;
+  /**
+   * Tags
+   *
+   * The genre tags used in the generation process.
+   */
+  tags: string;
 };
 
 /**
- * File
+ * Audio
  */
-export type File = {
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
+export type Audio = {
   /**
    * File Size
    *
@@ -100,530 +656,53 @@ export type File = {
    */
   file_size?: number | unknown;
   /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
    * Content Type
    *
    * The mime type of the file.
    */
   content_type?: string | unknown;
-};
-
-/**
- * TextToMusicInput
- */
-export type YueInput = {
-  /**
-   * Genres
-   *
-   * The genres (separated by a space ' ') to guide the music generation.
-   */
-  genres: string;
-  /**
-   * Lyrics
-   *
-   * The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse].
-   */
-  lyrics: string;
-};
-
-/**
- * ImpulseResponseOutput
- *
- * Output model for impulse response processed audio
- */
-export type WorkflowUtilitiesImpulseResponseOutput = {
-  audio: AudioFileType2;
-};
-
-/**
- * AudioFile
- *
- * Audio file with url field
- */
-export type AudioFileType2 = {
   /**
    * Url
    *
-   * URL of the audio file
+   * The URL where the file can be downloaded from.
    */
   url: string;
-  /**
-   * File Name
-   *
-   * Name of the audio file
-   */
-  file_name: string;
-  /**
-   * Content Type
-   *
-   * Content type of the audio file
-   */
-  content_type: string;
+};
+
+/**
+ * Audio
+ */
+export type AudioOutput = {
   /**
    * File Size
    *
-   * Size of the audio file in bytes
+   * The size of the file in bytes.
    */
-  file_size: number;
-};
-
-/**
- * ImpulseResponseInput
- *
- * Input model for applying impulse response (IR) convolution reverb to audio
- */
-export type WorkflowUtilitiesImpulseResponseInput = {
+  file_size?: number | unknown;
   /**
-   * Impulse Response Url
+   * File Name
    *
-   * URL of the impulse response WAV file (reverb/effect profile)
+   * The name of the file. It will be auto-generated if not provided.
    */
-  impulse_response_url: string | Blob | File;
+  file_name?: string | unknown;
   /**
-   * Loudness Lra
+   * Content Type
    *
-   * Loudness Range target in LU (typically 5-15)
+   * The mime type of the file.
    */
-  loudness_lra?: number;
+  content_type?: string | unknown;
   /**
-   * Output Bitrate
+   * Url
    *
-   * Output audio bitrate
+   * The URL where the file can be downloaded from.
    */
-  output_bitrate?: "128k" | "192k" | "256k" | "320k";
-  /**
-   * Loudness I
-   *
-   * Target integrated loudness in LUFS (typically -24 to -14)
-   */
-  loudness_i?: number;
-  /**
-   * Loudness Tp
-   *
-   * Maximum true peak in dBTP (typically -2 to -1)
-   */
-  loudness_tp?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the main audio file to process
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Wet Level
-   *
-   * Level of the processed (wet) signal in the mix (0.0-1.0)
-   */
-  wet_level?: number;
-  /**
-   * Dry Level
-   *
-   * Level of the original (dry) signal in the mix (0.0-1.0)
-   */
-  dry_level?: number;
-};
-
-/**
- * AudioCompressorOutput
- *
- * Output model for compressed audio
- */
-export type WorkflowUtilitiesAudioCompressorOutput = {
-  audio: AudioFileType2;
-};
-
-/**
- * AudioCompressorInput
- *
- * Input model for audio dynamic range compression
- */
-export type WorkflowUtilitiesAudioCompressorInput = {
-  /**
-   * Makeup
-   *
-   * Makeup gain in dB to compensate for volume reduction
-   */
-  makeup?: number;
-  /**
-   * Output Bitrate
-   *
-   * Output audio bitrate
-   */
-  output_bitrate?: "128k" | "192k" | "256k" | "320k";
-  /**
-   * Attack
-   *
-   * Attack time in milliseconds (how fast compression starts)
-   */
-  attack?: number;
-  /**
-   * Knee
-   *
-   * Knee width in dB for soft knee compression (0 = hard knee)
-   */
-  knee?: number;
-  /**
-   * Ratio
-   *
-   * Compression ratio (1 = no compression, higher = more compression)
-   */
-  ratio?: number;
-  /**
-   * Release
-   *
-   * Release time in milliseconds (how fast compression stops)
-   */
-  release?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to compress
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Threshold
-   *
-   * Threshold level in dB above which compression is applied (-60 to 0)
-   */
-  threshold?: number;
-};
-
-/**
- * GenerateOutput
- */
-export type V2TextToMusicOutput = {
-  /**
-   * Tags
-   *
-   * The style tags used for generation.
-   */
-  tags?: Array<string> | unknown;
-  /**
-   * Seed
-   *
-   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
-   */
-  seed: number;
-  /**
-   * Lyrics
-   *
-   * The lyrics used for generation.
-   */
-  lyrics?: string | unknown;
-  /**
-   * Audio
-   *
-   * The generated audio files.
-   */
-  audio: Array<File>;
-};
-
-/**
- * GenerateInput
- */
-export type V2TextToMusicInput = {
-  /**
-   * Prompt
-   *
-   * A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.
-   */
-  prompt?: string | unknown;
-  /**
-   * Lyrics Prompt
-   *
-   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
-   */
-  lyrics_prompt?: string | unknown;
-  /**
-   * Tags
-   *
-   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
-   */
-  tags?: Array<string> | unknown;
-  /**
-   * Prompt Strength
-   *
-   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
-   */
-  prompt_strength?: number;
-  /**
-   * Output Bit Rate
-   *
-   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
-   */
-  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
-  /**
-   * Num Songs
-   *
-   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
-   */
-  num_songs?: number;
-  /**
-   * Output Format
-   */
-  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
-  /**
-   * Bpm
-   *
-   * The beats per minute of the song. This can be set to an integer or the literal string "auto" to pick a suitable bpm based on the tags. Set bpm to null to not condition the model on bpm information.
-   */
-  bpm?: number | string | unknown;
-  /**
-   * Balance Strength
-   *
-   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
-   */
-  balance_strength?: number;
-  /**
-   * Seed
-   *
-   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
-   */
-  seed?: number | unknown;
-};
-
-/**
- * InpaintOutput
- */
-export type V2InpaintOutput = {
-  /**
-   * Seed
-   *
-   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
-   */
-  seed: number;
-  /**
-   * Audio
-   *
-   * The generated audio files.
-   */
-  audio: Array<File>;
-};
-
-/**
- * InpaintInput
- */
-export type V2InpaintInput = {
-  /**
-   * Lyrics Prompt
-   *
-   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
-   */
-  lyrics_prompt: string;
-  /**
-   * Tags
-   *
-   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
-   */
-  tags?: Array<string>;
-  /**
-   * Prompt Strength
-   *
-   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
-   */
-  prompt_strength?: number;
-  /**
-   * Output Bit Rate
-   *
-   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
-   */
-  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
-  /**
-   * Num Songs
-   *
-   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
-   */
-  num_songs?: number;
-  /**
-   * Output Format
-   */
-  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
-  /**
-   * Selection Crop
-   *
-   * Crop to the selected region
-   */
-  selection_crop?: boolean;
-  /**
-   * Sections
-   *
-   * List of sections to inpaint. Currently, only one section is supported so the list length must be 1.
-   */
-  sections: Array<InpaintSection>;
-  /**
-   * Balance Strength
-   *
-   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
-   */
-  balance_strength?: number;
-  /**
-   * Audio Url
-   *
-   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Seed
-   *
-   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
-   */
-  seed?: number | unknown;
-};
-
-/**
- * InpaintSection
- */
-export type InpaintSection = {
-  /**
-   * End
-   *
-   * End time in seconds of the section to inpaint.
-   */
-  end: number;
-  /**
-   * Start
-   *
-   * Start time in seconds of the section to inpaint.
-   */
-  start: number;
-};
-
-/**
- * ExtendOutput
- */
-export type V2ExtendOutput = {
-  /**
-   * Tags
-   *
-   * The style tags used for generation.
-   */
-  tags?: Array<string> | unknown;
-  /**
-   * Seed
-   *
-   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
-   */
-  seed: number;
-  /**
-   * Extend Duration
-   *
-   * The duration in seconds that the song was extended by.
-   */
-  extend_duration: number;
-  /**
-   * Audio
-   *
-   * The generated audio files.
-   */
-  audio: Array<File>;
-  /**
-   * Lyrics
-   *
-   * The lyrics used for generation.
-   */
-  lyrics?: string | unknown;
-};
-
-/**
- * ExtendInput
- */
-export type V2ExtendInput = {
-  /**
-   * Prompt
-   *
-   * A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.
-   */
-  prompt?: string | unknown;
-  /**
-   * Lyrics Prompt
-   *
-   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
-   */
-  lyrics_prompt?: string | unknown;
-  /**
-   * Tags
-   *
-   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
-   */
-  tags?: Array<string> | unknown;
-  /**
-   * Prompt Strength
-   *
-   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
-   */
-  prompt_strength?: number;
-  /**
-   * Output Bit Rate
-   *
-   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
-   */
-  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
-  /**
-   * Num Songs
-   *
-   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
-   */
-  num_songs?: number;
-  /**
-   * Output Format
-   */
-  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
-  /**
-   * Side
-   *
-   * Add more to the beginning (left) or end (right) of the song
-   */
-  side: "left" | "right";
-  /**
-   * Balance Strength
-   *
-   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
-   */
-  balance_strength?: number;
-  /**
-   * Crop Duration
-   *
-   * Duration in seconds to crop from the selected side before extending from that side.
-   */
-  crop_duration?: number;
-  /**
-   * Audio Url
-   *
-   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Seed
-   *
-   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
-   */
-  seed?: number | unknown;
-  /**
-   * Extend Duration
-   *
-   * Duration in seconds to extend the song. If not provided, will attempt to automatically determine.
-   */
-  extend_duration?: number | unknown;
-};
-
-/**
- * Turn
- */
-export type Turn = {
-  /**
-   * Text
-   */
-  text: string;
-  /**
-   * Speaker Id
-   */
-  speaker_id: number;
-};
-
-/**
- * Output
- */
-export type Tada3bTextToSpeechOutput = {
-  audio: AudioFile;
+  url: string;
 };
 
 /**
@@ -681,537 +760,45 @@ export type AudioFile = {
 };
 
 /**
- * Input
- */
-export type Tada3bTextToSpeechInput = {
-  /**
-   * Transcript
-   *
-   * Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.
-   */
-  transcript?: string;
-  /**
-   * Acoustic Cfg Scale
-   *
-   * Classifier-free guidance scale for acoustic feature generation.
-   */
-  acoustic_cfg_scale?: number;
-  /**
-   * Top P
-   *
-   * Top-p (nucleus) sampling parameter for text generation.
-   */
-  top_p?: number;
-  /**
-   * Output Format
-   *
-   * The format of the output audio file.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Speed Up Factor
-   *
-   * Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.
-   */
-  speed_up_factor?: number;
-  /**
-   * Num Extra Steps
-   *
-   * Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.
-   */
-  num_extra_steps?: number;
-  /**
-   * Language
-   *
-   * Language for text alignment. Use the appropriate code for non-English synthesis.
-   */
-  language?:
-    | "en"
-    | "ar"
-    | "ch"
-    | "de"
-    | "es"
-    | "fr"
-    | "it"
-    | "ja"
-    | "pl"
-    | "pt";
-  /**
-   * Noise Temperature
-   *
-   * Temperature for noise in the flow matching diffusion process.
-   */
-  noise_temperature?: number;
-  /**
-   * Prompt
-   *
-   * The text to synthesize into speech using the reference speaker's voice.
-   */
-  prompt: string;
-  /**
-   * Temperature
-   *
-   * Sampling temperature for text token generation. Higher values produce more varied output.
-   */
-  temperature?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.
-   */
-  num_inference_steps?: number;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty applied to repeated tokens during generation.
-   */
-  repetition_penalty?: number;
-};
-
-/**
- * MiniOutput
- */
-export type Tada1bTextToSpeechOutput = {
-  audio: AudioFile;
-};
-
-/**
- * Input
- */
-export type Tada1bTextToSpeechInput = {
-  /**
-   * Transcript
-   *
-   * Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.
-   */
-  transcript?: string;
-  /**
-   * Acoustic Cfg Scale
-   *
-   * Classifier-free guidance scale for acoustic feature generation.
-   */
-  acoustic_cfg_scale?: number;
-  /**
-   * Top P
-   *
-   * Top-p (nucleus) sampling parameter for text generation.
-   */
-  top_p?: number;
-  /**
-   * Output Format
-   *
-   * The format of the output audio file.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Speed Up Factor
-   *
-   * Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.
-   */
-  speed_up_factor?: number;
-  /**
-   * Num Extra Steps
-   *
-   * Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.
-   */
-  num_extra_steps?: number;
-  /**
-   * Language
-   *
-   * Language for text alignment. Use the appropriate code for non-English synthesis.
-   */
-  language?:
-    | "en"
-    | "ar"
-    | "ch"
-    | "de"
-    | "es"
-    | "fr"
-    | "it"
-    | "ja"
-    | "pl"
-    | "pt";
-  /**
-   * Noise Temperature
-   *
-   * Temperature for noise in the flow matching diffusion process.
-   */
-  noise_temperature?: number;
-  /**
-   * Prompt
-   *
-   * The text to synthesize into speech using the reference speaker's voice.
-   */
-  prompt: string;
-  /**
-   * Temperature
-   *
-   * Sampling temperature for text token generation. Higher values produce more varied output.
-   */
-  temperature?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.
-   */
-  num_inference_steps?: number;
-  /**
-   * Repetition Penalty
-   *
-   * Penalty applied to repeated tokens during generation.
-   */
-  repetition_penalty?: number;
-};
-
-/**
- * Output
- */
-export type StableAudioOutput = {
-  audio_file: File;
-};
-
-/**
- * Input
- */
-export type StableAudioInput = {
-  /**
-   * Steps
-   *
-   * The number of steps to denoise the audio for
-   */
-  steps?: number;
-  /**
-   * Seconds Start
-   *
-   * The start point of the audio clip to generate
-   */
-  seconds_start?: number;
-  /**
-   * Seconds Total
-   *
-   * The duration of the audio clip to generate
-   */
-  seconds_total?: number;
-  /**
-   * Prompt
-   *
-   * The prompt to generate audio from
-   */
-  prompt: string;
-};
-
-/**
- * TextToAudioOutput
- */
-export type StableAudio25TextToAudioOutput = {
-  audio: File;
-  /**
-   * Seed
-   *
-   * The random seed used for generation
-   */
-  seed: number;
-};
-
-/**
- * TextToAudioInput
- */
-export type StableAudio25TextToAudioInput = {
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Prompt
-   *
-   * The prompt to generate audio from
-   */
-  prompt: string;
-  /**
-   * Seconds Total
-   *
-   * The duration of the audio clip to generate
-   */
-  seconds_total?: number;
-  /**
-   * Guidance Scale
-   *
-   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
-   */
-  guidance_scale?: number;
-  /**
-   * Num Inference Steps
-   *
-   * The number of steps to denoise the audio for
-   */
-  num_inference_steps?: number;
-  /**
-   * Seed
-   */
-  seed?: number | unknown;
-};
-
-/**
- * InpaintOutput
- */
-export type StableAudio25InpaintOutput = {
-  audio: File;
-  /**
-   * Seed
-   *
-   * The random seed used for generation
-   */
-  seed: number;
-};
-
-/**
- * InpaintInput
- */
-export type StableAudio25InpaintInput = {
-  /**
-   * Mask Start
-   *
-   * The start point of the audio mask
-   */
-  mask_start?: number;
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Guidance Scale
-   *
-   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
-   */
-  guidance_scale?: number;
-  /**
-   * Seconds Total
-   *
-   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
-   */
-  seconds_total?: number | unknown;
-  /**
-   * Audio Url
-   *
-   * The audio clip to inpaint
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * The number of steps to denoise the audio for
-   */
-  num_inference_steps?: number;
-  /**
-   * Prompt
-   *
-   * The prompt to guide the audio generation
-   */
-  prompt: string;
-  /**
-   * Mask End
-   *
-   * The end point of the audio mask
-   */
-  mask_end?: number;
-  /**
-   * Seed
-   */
-  seed?: number | unknown;
-};
-
-/**
- * AudioToAudioOutput
- */
-export type StableAudio25AudioToAudioOutput = {
-  audio: File;
-  /**
-   * Seed
-   *
-   * The random seed used for generation
-   */
-  seed: number;
-};
-
-/**
- * AudioToAudioInput
- */
-export type StableAudio25AudioToAudioInput = {
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Guidance Scale
-   *
-   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
-   */
-  guidance_scale?: number;
-  /**
-   * Strength
-   *
-   * Sometimes referred to as denoising, this parameter controls how much influence the `audio_url` parameter has on the generated audio. A value of 0 would yield audio that is identical to the input. A value of 1 would be as if you passed in no audio at all.
-   */
-  strength?: number;
-  /**
-   * Total Seconds
-   *
-   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
-   */
-  total_seconds?: number | unknown;
-  /**
-   * Audio Url
-   *
-   * The audio clip to transform
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Num Inference Steps
-   *
-   * The number of steps to denoise the audio for
-   */
-  num_inference_steps?: number;
-  /**
-   * Prompt
-   *
-   * The prompt to guide the audio generation
-   */
-  prompt: string;
-  /**
-   * Seed
-   */
-  seed?: number | unknown;
-};
-
-/**
- * SpeakerConfig
+ * AudioFile
  *
- * Voice configuration for a single speaker in multi-speaker synthesis.
+ * Audio file with url field
  */
-export type SpeakerConfig = {
+export type AudioFileType2 = {
   /**
-   * Voice
+   * Url
    *
-   * Voice preset for this speaker.
+   * URL of the audio file
    */
-  voice:
-    | "Achernar"
-    | "Achird"
-    | "Algenib"
-    | "Algieba"
-    | "Alnilam"
-    | "Aoede"
-    | "Autonoe"
-    | "Callirrhoe"
-    | "Charon"
-    | "Despina"
-    | "Enceladus"
-    | "Erinome"
-    | "Fenrir"
-    | "Gacrux"
-    | "Iapetus"
-    | "Kore"
-    | "Laomedeia"
-    | "Leda"
-    | "Orus"
-    | "Pulcherrima"
-    | "Puck"
-    | "Rasalgethi"
-    | "Sadachbia"
-    | "Sadaltager"
-    | "Schedar"
-    | "Sulafat"
-    | "Umbriel"
-    | "Vindemiatrix"
-    | "Zephyr"
-    | "Zubenelgenubi";
+  url: string;
   /**
-   * Speaker Id
+   * File Name
    *
-   * Alias used to identify this speaker in the prompt. Use this alias as a prefix in the prompt field, e.g. 'Alice: Hello! Bob: Hi there!'. Must be alphanumeric with no whitespace.
+   * Name of the audio file
    */
-  speaker_id: string;
+  file_name: string;
+  /**
+   * Content Type
+   *
+   * Content type of the audio file
+   */
+  content_type: string;
+  /**
+   * File Size
+   *
+   * Size of the audio file in bytes
+   */
+  file_size: number;
 };
 
 /**
- * Speaker
+ * AudioFile
  */
-export type Speaker = {
+export type AudioFileType3 = {
   /**
-   * Audio Url
+   * Content Type
    */
-  audio_url: string;
-  /**
-   * Speaker Id
-   */
-  speaker_id: number;
-  /**
-   * Prompt
-   */
-  prompt: string;
-};
-
-/**
- * AudioOutput
- *
- * Example Pydantic model showing how to include a File in the output.
- */
-export type SoundEffectsGeneratorOutput = {
-  audio_file: File;
-};
-
-/**
- * Input
- */
-export type SoundEffectsGeneratorInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate SFX.
-   */
-  prompt: string;
-  /**
-   * Duration
-   *
-   * The duration of the generated SFX in seconds.
-   */
-  duration: number;
-};
-
-/**
- * AudioOutput
- */
-export type SfxV1VideoToAudioOutput = {
-  /**
-   * Audio
-   *
-   * The generated sound effects audio
-   */
-  audio: Array<Audio>;
-};
-
-/**
- * Audio
- */
-export type Audio = {
+  content_type?: string;
   /**
    * File Size
    *
@@ -1219,311 +806,61 @@ export type Audio = {
    */
   file_size?: number | unknown;
   /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
    * Url
-   *
-   * The URL where the file can be downloaded from.
    */
   url: string;
-};
-
-/**
- * Input
- */
-export type SfxV1VideoToAudioInput = {
-  /**
-   * Num Samples
-   *
-   * The number of samples to generate from the model
-   */
-  num_samples?: number | unknown;
-  /**
-   * Video Url
-   *
-   * A video url that can accessed from the API to process and add sound effects
-   */
-  video_url: string | Blob | File;
-  /**
-   * Duration
-   *
-   * The duration of the generated audio in seconds
-   */
-  duration?: number | unknown;
-  /**
-   * Seed
-   *
-   * The seed to use for the generation. If not provided, a random seed will be used
-   */
-  seed?: number | unknown;
-  /**
-   * Text Prompt
-   *
-   * Additional description to guide the model
-   */
-  text_prompt?: string | unknown;
-};
-
-/**
- * AudioOutput
- */
-export type SfxV15VideoToAudioOutput = {
-  /**
-   * Audio
-   *
-   * The generated sound effects audio
-   */
-  audio: Array<AudioOutput>;
-};
-
-/**
- * Audio
- */
-export type AudioOutput = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
   /**
    * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
    */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
+  file_name?: string;
 };
 
 /**
- * Input
+ * AudioSetting
  */
-export type SfxV15VideoToAudioInput = {
-  /**
-   * Num Samples
-   *
-   * The number of samples to generate from the model
-   */
-  num_samples?: number | unknown;
-  /**
-   * Duration
-   *
-   * The duration of the generated audio in seconds
-   */
-  duration?: number | unknown;
-  /**
-   * Start Offset
-   *
-   * The start offset in seconds to start the audio generation from
-   */
-  start_offset?: number | unknown;
-  /**
-   * Video Url
-   *
-   * A video url that can accessed from the API to process and add sound effects
-   */
-  video_url: string | Blob | File;
-  /**
-   * Seed
-   *
-   * The seed to use for the generation. If not provided, a random seed will be used
-   */
-  seed?: number | unknown;
-  /**
-   * Text Prompt
-   *
-   * Additional description to guide the model
-   */
-  text_prompt?: string | unknown;
-};
-
-/**
- * SAMAudioVisualSeparateOutput
- *
- * Output for visual-prompted audio separation.
- */
-export type SamAudioVisualSeparateOutput = {
-  target: File;
-  /**
-   * Duration
-   *
-   * Duration of the output audio in seconds.
-   */
-  duration: number;
+export type AudioSetting = {
   /**
    * Sample Rate
    *
-   * Sample rate of the output audio in Hz.
+   * Sample rate of generated audio
    */
-  sample_rate?: number;
-  residual: File;
+  sample_rate?: 8000 | 16000 | 22050 | 24000 | 32000 | 44100;
+  /**
+   * Format
+   *
+   * Audio format
+   */
+  format?: "mp3" | "pcm" | "flac";
+  /**
+   * Bitrate
+   *
+   * Bitrate of generated audio
+   */
+  bitrate?: 32000 | 64000 | 128000 | 256000;
 };
 
 /**
- * SAMAudioVisualInput
- *
- * Input for visual-prompted audio separation.
+ * AudioSetting25
  */
-export type SamAudioVisualSeparateInput = {
-  /**
-   * Prompt
-   *
-   * Text prompt to assist with separation. Use natural language to describe the target sound.
-   */
-  prompt?: string;
-  /**
-   * Video Url
-   *
-   * URL of the video file to process (MP4, MOV, etc.)
-   */
-  video_url: string | Blob | File;
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "fast" | "balanced" | "quality";
-  /**
-   * Chunk Overlap
-   *
-   * Overlap duration (in seconds) between chunks for crossfade blending.
-   */
-  chunk_overlap?: number;
-  /**
-   * Output Format
-   *
-   * Output audio format.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Max Chunk Duration
-   *
-   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
-   */
-  max_chunk_duration?: number;
-  /**
-   * Mask Video Url
-   *
-   * URL of the mask video (binary mask indicating target object). Black=target, White=background.
-   */
-  mask_video_url?: string | unknown;
-  /**
-   * Reranking Candidates
-   *
-   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
-   */
-  reranking_candidates?: number;
-};
-
-/**
- * SAMAudioSpanSeparateOutput
- *
- * Output for span-based audio separation.
- */
-export type SamAudioSpanSeparateOutput = {
-  target: File;
-  /**
-   * Duration
-   *
-   * Duration of the output audio in seconds.
-   */
-  duration: number;
+export type AudioSetting25 = {
   /**
    * Sample Rate
    *
-   * Sample rate of the output audio in Hz.
+   * Sample rate of generated audio
    */
-  sample_rate?: number;
-  residual: File;
-};
-
-/**
- * SAMAudioSpanInput
- *
- * Input for temporal span-based audio separation.
- */
-export type SamAudioSpanSeparateInput = {
+  sample_rate?: 16000 | 24000 | 32000 | 44100;
   /**
-   * Prompt
+   * Format
    *
-   * Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span.
+   * Audio format
    */
-  prompt?: string | unknown;
+  format?: "mp3" | "wav" | "pcm";
   /**
-   * Chunk Overlap
+   * Bitrate
    *
-   * Overlap duration (in seconds) between chunks for crossfade blending.
+   * Bitrate of generated audio
    */
-  chunk_overlap?: number;
-  /**
-   * Spans
-   *
-   * Time spans where the target sound occurs which should be isolated.
-   */
-  spans: Array<AudioTimeSpan>;
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "fast" | "balanced" | "quality";
-  /**
-   * Use Sound Activity Ranking
-   *
-   * Use sound activity detection to rank reranking candidates based on how well each candidate's non-silent regions match the provided spans. Enables effective reranking even without a text prompt (span-only separation). Requires reranking_candidates > 1.
-   */
-  use_sound_activity_ranking?: boolean;
-  /**
-   * Output Format
-   *
-   * Output audio format.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Trim To Span
-   *
-   * Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.
-   */
-  trim_to_span?: boolean;
-  /**
-   * Max Chunk Duration
-   *
-   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
-   */
-  max_chunk_duration?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to process.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Reranking Candidates
-   *
-   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.
-   */
-  reranking_candidates?: number;
+  bitrate?: 32000 | 64000 | 128000 | 256000;
 };
 
 /**
@@ -1553,442 +890,79 @@ export type AudioTimeSpan = {
 };
 
 /**
- * SAMAudioSeparateOutput
- *
- * Output for text-based audio separation.
+ * AudioUnderstandingInput
  */
-export type SamAudioSeparateOutput = {
-  target: File;
-  /**
-   * Duration
-   *
-   * Duration of the output audio in seconds.
-   */
-  duration: number;
-  /**
-   * Sample Rate
-   *
-   * Sample rate of the output audio in Hz.
-   */
-  sample_rate?: number;
-  residual: File;
-};
-
-/**
- * SAMAudioInput
- *
- * Input for text-based audio separation.
- */
-export type SamAudioSeparateInput = {
+export type AudioUnderstandingInput = {
   /**
    * Prompt
    *
-   * Text prompt describing the sound to isolate.
+   * The question or prompt about the audio content.
    */
   prompt: string;
   /**
-   * Chunk Overlap
-   *
-   * Overlap duration (in seconds) between chunks for crossfade blending.
-   */
-  chunk_overlap?: number;
-  /**
-   * Acceleration
-   *
-   * The acceleration level to use.
-   */
-  acceleration?: "fast" | "balanced" | "quality";
-  /**
-   * Output Format
-   *
-   * Output audio format.
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Max Chunk Duration
-   *
-   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
-   */
-  max_chunk_duration?: number;
-  /**
    * Audio Url
    *
-   * URL of the audio file to process (WAV, MP3, FLAC supported)
+   * URL of the audio file to analyze
    */
   audio_url: string | Blob | File;
   /**
-   * Predict Spans
+   * Detailed Analysis
    *
-   * Automatically predict temporal spans where the target sound occurs.
+   * Whether to request a more detailed analysis of the audio
    */
-  predict_spans?: boolean;
-  /**
-   * Reranking Candidates
-   *
-   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
-   */
-  reranking_candidates?: number;
+  detailed_analysis?: boolean;
 };
 
 /**
- * Qwen3CloneVoiceOutput
+ * AudioUnderstandingOutput
  */
-export type Qwen3TtsCloneVoice17bOutput = {
-  speaker_embedding: File;
+export type AudioUnderstandingOutput = {
+  /**
+   * Output
+   *
+   * The analysis of the audio content based on the prompt
+   */
+  output: string;
 };
 
 /**
- * Qwen3CloneVoiceInput
+ * Input
  */
-export type Qwen3TtsCloneVoice17bInput = {
+export type Csm1bInput = {
   /**
-   * Reference Text
+   * Scene
    *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   * The text to generate an audio from.
    */
-  reference_text?: string | unknown;
+  scene: Array<Turn>;
   /**
-   * Audio Url
+   * Context
    *
-   * URL to the reference audio file used for voice cloning.
+   * The context to generate an audio from.
    */
-  audio_url: string | Blob | File;
+  context?: Array<Speaker>;
 };
 
 /**
- * Qwen3CloneVoiceOutput
+ * Output
  */
-export type Qwen3TtsCloneVoice06bOutput = {
-  speaker_embedding: File;
-};
-
-/**
- * Qwen3CloneVoiceInput
- */
-export type Qwen3TtsCloneVoice06bInput = {
-  /**
-   * Reference Text
-   *
-   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
-   */
-  reference_text?: string | unknown;
-  /**
-   * Audio Url
-   *
-   * URL to the reference audio file used for voice cloning.
-   */
-  audio_url: string | Blob | File;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-/**
- * PronunciationDictionaryLocator
- */
-export type PronunciationDictionaryLocator = {
-  /**
-   * Version Id
-   *
-   * The ID of the version of the pronunciation dictionary. If not provided, the latest version will be used.
-   */
-  version_id?: string | unknown;
-  /**
-   * Pronunciation Dictionary Id
-   *
-   * The ID of the pronunciation dictionary.
-   */
-  pronunciation_dictionary_id?: string | unknown;
-};
-
-/**
- * RealtimeConversationOutput
- *
- * Output from @fal.realtime endpoint.
- */
-export type PersonaplexRealtimeOutput = {
+export type Csm1bOutput = {
   /**
    * Audio
    *
-   * Generated audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
+   * The generated audio.
    */
-  audio: Blob | File;
-  /**
-   * Text
-   *
-   * Generated text tokens for this chunk.
-   */
-  text?: string;
+  audio: File | Blob | File;
 };
 
 /**
- * RealtimeConversationInput
- *
- * Input for @fal.realtime endpoint. Audio is raw PCM s16le 24kHz mono.
+ * DeepFilterNet3Input
  */
-export type PersonaplexRealtimeInput = {
-  /**
-   * Temperature Audio
-   *
-   * Audio sampling temperature. Higher values produce more diverse outputs.
-   */
-  temperature_audio?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number | unknown;
-  /**
-   * Voice Audio Url
-   *
-   * URL to a voice sample audio for on-the-fly voice cloning. When provided, the AI responds in the cloned voice instead of the preset 'voice'. 10+ seconds of clear speech recommended. Billed at 2x rate.
-   */
-  voice_audio_url?: string | unknown;
-  /**
-   * Top K Audio
-   *
-   * Top-K sampling for audio tokens.
-   */
-  top_k_audio?: number;
-  /**
-   * Temperature Text
-   *
-   * Text sampling temperature. Higher values produce more diverse outputs.
-   */
-  temperature_text?: number;
-  /**
-   * Voice
-   *
-   * Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.
-   */
-  voice?:
-    | "NATF0"
-    | "NATF1"
-    | "NATF2"
-    | "NATF3"
-    | "NATM0"
-    | "NATM1"
-    | "NATM2"
-    | "NATM3"
-    | "VARF0"
-    | "VARF1"
-    | "VARF2"
-    | "VARF3"
-    | "VARF4"
-    | "VARM0"
-    | "VARM1"
-    | "VARM2"
-    | "VARM3"
-    | "VARM4";
-  /**
-   * Top K Text
-   *
-   * Top-K sampling for text tokens.
-   */
-  top_k_text?: number;
-  /**
-   * Audio
-   *
-   * Input audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
-   */
-  audio: string | Blob | File;
-  /**
-   * Prompt
-   *
-   * Text prompt describing the AI persona and conversation context.
-   */
-  prompt?: string;
-};
-
-/**
- * ConversationOutput
- */
-export type PersonaplexOutput = {
-  /**
-   * Seed
-   *
-   * The seed used for generation.
-   */
-  seed: number;
-  /**
-   * Duration
-   *
-   * Duration of the generated audio in seconds.
-   */
-  duration: number;
-  audio: File;
-  /**
-   * Text
-   *
-   * Transcribed text of the AI's response.
-   */
-  text: string;
-};
-
-/**
- * ConversationInput
- */
-export type PersonaplexInput = {
-  /**
-   * Temperature Audio
-   *
-   * Audio sampling temperature. Higher values produce more diverse outputs.
-   */
-  temperature_audio?: number;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number | unknown;
-  /**
-   * Voice Audio Url
-   *
-   * URL to a voice sample audio for on-the-fly voice cloning. When provided, the AI responds in the cloned voice instead of the preset 'voice'. 10+ seconds of clear speech recommended. Billed at 2x rate.
-   */
-  voice_audio_url?: string | unknown;
-  /**
-   * Top K Audio
-   *
-   * Top-K sampling for audio tokens.
-   */
-  top_k_audio?: number;
-  /**
-   * Temperature Text
-   *
-   * Text sampling temperature. Higher values produce more diverse outputs.
-   */
-  temperature_text?: number;
-  /**
-   * Voice
-   *
-   * Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.
-   */
-  voice?:
-    | "NATF0"
-    | "NATF1"
-    | "NATF2"
-    | "NATF3"
-    | "NATM0"
-    | "NATM1"
-    | "NATM2"
-    | "NATM3"
-    | "VARF0"
-    | "VARF1"
-    | "VARF2"
-    | "VARF3"
-    | "VARF4"
-    | "VARM0"
-    | "VARM1"
-    | "VARM2"
-    | "VARM3"
-    | "VARM4";
-  /**
-   * Audio Url
-   *
-   * URL to the input audio file (user's speech).
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Top K Text
-   *
-   * Top-K sampling for text tokens.
-   */
-  top_k_text?: number;
-  /**
-   * Prompt
-   *
-   * Text prompt describing the AI persona and conversation context.
-   */
-  prompt?: string;
-};
-
-/**
- * NovaSRTimings
- */
-export type NovaSrTimings = {
-  /**
-   * Inference
-   *
-   * Time taken to run the inference in seconds.
-   */
-  inference: number;
-  /**
-   * Postprocess
-   *
-   * Time taken to postprocess the audio in seconds.
-   */
-  postprocess: number;
-  /**
-   * Preprocess
-   *
-   * Time taken to preprocess the audio in seconds.
-   */
-  preprocess: number;
-};
-
-/**
- * NovaSROutput
- */
-export type NovaSrOutput = {
-  audio: AudioFile;
-  timings: NovaSrTimings;
-};
-
-/**
- * NovaSRInput
- */
-export type NovaSrInput = {
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Bitrate
-   *
-   * The bitrate of the output audio.
-   */
-  bitrate?: string;
+export type Deepfilternet3Input = {
   /**
    * Audio URL
    *
-   * The URL of the audio file to enhance.
+   * The URL of the audio to enhance.
    */
   audio_url: string | Blob | File;
   /**
@@ -1997,820 +971,812 @@ export type NovaSrInput = {
    * The format for the output audio.
    */
   audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
-};
-
-/**
- * MusicSection
- */
-export type MusicSection = {
-  /**
-   * Positive Local Styles
-   *
-   * The styles that should be present in this section.
-   */
-  positive_local_styles: Array<string>;
-  /**
-   * Negative Local Styles
-   *
-   * The styles that should not be present in this section.
-   */
-  negative_local_styles: Array<string>;
-  /**
-   * Lines
-   *
-   * The lyrics of the section. Each line must be at most 200 characters long.
-   */
-  lines: Array<string>;
-  /**
-   * Section Name
-   *
-   * The name of the section. Must be between 1 and 100 characters.
-   */
-  section_name: string;
-  /**
-   * Duration Ms
-   *
-   * The duration of the section in milliseconds. Must be between 3000ms and 120000ms.
-   */
-  duration_ms: number;
-};
-
-/**
- * AudioOutput
- *
- * Example Pydantic model showing how to include a File in the output.
- */
-export type MusicGeneratorOutput = {
-  audio_file: File;
-};
-
-/**
- * Input
- */
-export type MusicGeneratorInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate music from.
-   */
-  prompt: string;
-  /**
-   * Duration
-   *
-   * The duration of the generated music in seconds.
-   */
-  duration: number;
-};
-
-/**
- * MusicCompositionPlan
- */
-export type MusicCompositionPlan = {
-  /**
-   * Sections
-   *
-   * The sections of the song.
-   */
-  sections: Array<MusicSection>;
-  /**
-   * Positive Global Styles
-   *
-   * The styles that should be present in the entire song.
-   */
-  positive_global_styles: Array<string>;
-  /**
-   * Negative Global Styles
-   *
-   * The styles that should not be present in the entire song.
-   */
-  negative_global_styles: Array<string>;
-};
-
-/**
- * AudioOutput
- */
-export type MmaudioV2TextToAudioOutput = {
-  audio: File;
-};
-
-/**
- * AudioInput
- */
-export type MmaudioV2TextToAudioInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate the audio for.
-   */
-  prompt: string;
-  /**
-   * Cfg Strength
-   *
-   * The strength of Classifier Free Guidance.
-   */
-  cfg_strength?: number;
-  /**
-   * Mask Away Clip
-   *
-   * Whether to mask away the clip.
-   */
-  mask_away_clip?: boolean;
-  /**
-   * Duration
-   *
-   * The duration of the audio to generate.
-   */
-  duration?: number;
-  /**
-   * Negative Prompt
-   *
-   * The negative prompt to generate the audio for.
-   */
-  negative_prompt?: string;
-  /**
-   * Seed
-   *
-   * The seed for the random number generator
-   */
-  seed?: number | unknown;
-  /**
-   * Num Steps
-   *
-   * The number of steps to generate the audio for.
-   */
-  num_steps?: number;
-};
-
-/**
- * MusicV15Output
- */
-export type MinimaxMusicV2Output = {
-  audio: File;
-};
-
-/**
- * TextToMusic20Request
- */
-export type MinimaxMusicV2Input = {
-  /**
-   * Lyrics Prompt
-   *
-   * Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.
-   */
-  lyrics_prompt: string;
-  audio_setting?: AudioSetting;
-  /**
-   * Prompt
-   *
-   * A description of the music, specifying style, mood, and scenario. 10-300 characters.
-   */
-  prompt: string;
-};
-
-/**
- * AudioSetting
- */
-export type AudioSetting = {
-  /**
-   * Sample Rate
-   *
-   * Sample rate of generated audio
-   */
-  sample_rate?: 8000 | 16000 | 22050 | 24000 | 32000 | 44100;
-  /**
-   * Format
-   *
-   * Audio format
-   */
-  format?: "mp3" | "pcm" | "flac";
   /**
    * Bitrate
    *
-   * Bitrate of generated audio
+   * The bitrate of the output audio.
    */
-  bitrate?: 32000 | 64000 | 128000 | 256000;
+  bitrate?: string;
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
 };
 
 /**
- * MusicV26Output
+ * DeepFilterNet3Output
  */
-export type MinimaxMusicV26Output = {
-  audio: File;
+export type Deepfilternet3Output = {
+  timings: DeepFilterNetTimings;
+  audio_file: AudioFile;
 };
 
 /**
- * TextToMusic26Request
+ * DeepFilterNetTimings
  */
-export type MinimaxMusicV26Input = {
+export type DeepFilterNetTimings = {
   /**
-   * Is Instrumental
+   * Preprocess
    *
-   * When true, generates vocal-free instrumental music.
+   * Preprocessing time.
    */
-  is_instrumental?: boolean;
-  audio_setting?: AudioSetting25;
+  preprocess: number;
   /**
-   * Lyrics
+   * Postprocess
    *
-   * Lyrics of the song. Use \n to separate lines. Supports structure tags: [Intro], [Verse], [Pre Chorus], [Chorus], [Post Chorus], [Hook], [Bridge], [Interlude], [Transition], [Build Up], [Break], [Inst], [Solo], [Outro]. Max 3500 characters. Required when is_instrumental is false.
+   * Postprocessing time.
    */
-  lyrics?: string;
+  postprocess: number;
   /**
-   * Prompt
+   * Inference
    *
-   * A description of the music style, mood, genre, and scenario. 10-2000 characters.
+   * Inference time.
    */
-  prompt: string;
-  /**
-   * Lyrics Optimizer
-   *
-   * When true and lyrics is empty, auto-generates lyrics from the prompt.
-   */
-  lyrics_optimizer?: boolean;
+  inference: number;
 };
 
 /**
- * AudioSetting25
+ * DemucsInput
  */
-export type AudioSetting25 = {
+export type DemucsInput = {
   /**
-   * Sample Rate
+   * Overlap
    *
-   * Sample rate of generated audio
+   * Overlap between segments (0.0 to 1.0). Higher values may improve quality but increase processing time.
    */
-  sample_rate?: 16000 | 24000 | 32000 | 44100;
+  overlap?: number;
   /**
-   * Format
+   * Audio Url
    *
-   * Audio format
+   * URL of the audio file to separate into stems
    */
-  format?: "mp3" | "wav" | "pcm";
+  audio_url: string | Blob | File;
   /**
-   * Bitrate
+   * Stems
    *
-   * Bitrate of generated audio
+   * Specific stems to extract. If None, extracts all available stems. Available stems depend on model: vocals, drums, bass, other, guitar, piano (for 6s model)
    */
-  bitrate?: 32000 | 64000 | 128000 | 256000;
+  stems?:
+    | Array<"vocals" | "drums" | "bass" | "other" | "guitar" | "piano">
+    | unknown;
+  /**
+   * Model
+   *
+   * Demucs model to use for separation
+   */
+  model?:
+    | "htdemucs"
+    | "htdemucs_ft"
+    | "htdemucs_6s"
+    | "hdemucs_mmi"
+    | "mdx"
+    | "mdx_extra"
+    | "mdx_q"
+    | "mdx_extra_q";
+  /**
+   * Output Format
+   *
+   * Output audio format for the separated stems
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Segment Length
+   *
+   * Length in seconds of each segment for processing. Smaller values use less memory but may reduce quality. Default is model-specific.
+   */
+  segment_length?: number | unknown;
+  /**
+   * Shifts
+   *
+   * Number of random shifts for equivariant stabilization. Higher values improve quality but increase processing time.
+   */
+  shifts?: number;
 };
 
 /**
- * MusicV25Output
+ * DemucsOutput
  */
-export type MinimaxMusicV25Output = {
-  audio: File;
+export type DemucsOutput = {
+  /**
+   * Separated drums audio file
+   */
+  drums?: File | unknown;
+  /**
+   * Separated piano audio file (only available for 6s models)
+   */
+  piano?: File | unknown;
+  /**
+   * Separated other instruments audio file
+   */
+  other?: File | unknown;
+  /**
+   * Separated guitar audio file (only available for 6s models)
+   */
+  guitar?: File | unknown;
+  /**
+   * Separated bass audio file
+   */
+  bass?: File | unknown;
+  /**
+   * Separated vocals audio file
+   */
+  vocals?: File | unknown;
 };
 
 /**
- * TextToMusic25PlusRequest
+ * DialogueBlock
  */
-export type MinimaxMusicV25Input = {
+export type DialogueBlock = {
   /**
-   * Is Instrumental
+   * Voice
    *
-   * When true, generates vocal-free instrumental music.
+   * The name or the ID of the voice to be used for the generation.
    */
-  is_instrumental?: boolean;
-  audio_setting?: AudioSetting25;
+  voice: string;
   /**
-   * Lyrics
+   * Text
    *
-   * Lyrics of the song. Use \n to separate lines. Supports structure tags: [Intro], [Verse], [Pre Chorus], [Chorus], [Bridge], [Outro], [Interlude], [Hook], [Break], [Solo], [Inst]. Max 3500 characters. Required when is_instrumental is false and lyrics_optimizer is false.
+   * The dialogue text
    */
-  lyrics?: string;
-  /**
-   * Prompt
-   *
-   * A description of the music style, mood, genre, and scenario. Max 2000 characters.
-   */
-  prompt: string;
-  /**
-   * Lyrics Optimizer
-   *
-   * When true and lyrics is empty, auto-generates lyrics from the prompt.
-   */
-  lyrics_optimizer?: boolean;
+  text: string;
 };
 
 /**
- * MusicV15Output
+ * CloneRequest
  */
-export type MinimaxMusicV15Output = {
-  audio: File;
+export type DiaTtsVoiceCloneInput = {
+  /**
+   * Text
+   *
+   * The text to be converted to speech.
+   */
+  text: string;
 };
 
 /**
- * TextToMusic15Request
+ * DiaCloneOutput
  */
-export type MinimaxMusicV15Input = {
-  /**
-   * Lyrics Prompt
-   *
-   * Control music generation. 10-3000 characters.
-   */
-  lyrics_prompt: string;
-  audio_setting?: AudioSetting;
-  /**
-   * Prompt
-   *
-   * Lyrics, supports [intro][verse][chorus][bridge][outro] sections. 10-600 characters.
-   */
-  prompt: string;
-};
-
-/**
- * MusicOutput
- */
-export type MinimaxMusicOutput = {
-  audio: File;
-};
-
-/**
- * TextToMusicRequest
- */
-export type MinimaxMusicInput = {
-  /**
-   * Reference Audio Url
-   *
-   * Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.
-   */
-  reference_audio_url: string | Blob | File;
-  /**
-   * Prompt
-   *
-   * Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.
-   */
-  prompt: string;
-};
-
-/**
- * TextToMusicOutput
- */
-export type Lyria2Output = {
+export type DiaTtsVoiceCloneOutput = {
   audio: File;
 };
 
 /**
  * TextToMusicInput
  */
-export type Lyria2Input = {
+export type DiffrhythmInput = {
   /**
-   * Prompt
+   * Reference Audio URL
    *
-   * The text prompt describing the music you want to generate
+   * The URL of the reference audio to use for the music generation.
    */
-  prompt: string;
+  reference_audio_url?: string | Blob | File;
   /**
-   * Seed
+   * Lyrics
    *
-   * A seed for deterministic generation. If provided, the model will attempt to produce the same audio given the same prompt and other parameters.
+   * The prompt to generate the song from. Must have two sections. Sections start with either [chorus] or a [verse].
    */
-  seed?: number | unknown;
+  lyrics: string;
   /**
-   * Negative Prompt
+   * Style Prompt
    *
-   * A description of what to exclude from the generated audio
+   * The style prompt to use for the music generation.
    */
-  negative_prompt?: string;
+  style_prompt?: string;
+  /**
+   * Music Duration
+   *
+   * The duration of the music to generate.
+   */
+  music_duration?: "95s" | "285s";
+  /**
+   * CFG Strength
+   *
+   * The CFG strength to use for the music generation.
+   */
+  cfg_strength?: number;
+  /**
+   * Scheduler
+   *
+   * The scheduler to use for the music generation.
+   */
+  scheduler?: "euler" | "midpoint" | "rk4" | "implicit_adams";
+  /**
+   * Number of Inference Steps
+   *
+   * The number of inference steps to use for the music generation.
+   */
+  num_inference_steps?: number;
 };
 
 /**
- * LavaSRTimings
+ * Output
  */
-export type LavaSrTimings = {
-  /**
-   * Inference
-   *
-   * Time taken to run the inference in seconds.
-   */
-  inference: number;
-  /**
-   * Postprocess
-   *
-   * Time taken to postprocess the audio in seconds.
-   */
-  postprocess: number;
-  /**
-   * Preprocess
-   *
-   * Time taken to preprocess the audio in seconds.
-   */
-  preprocess: number;
-};
-
-/**
- * LavaSROutput
- */
-export type LavaSrOutput = {
-  audio: AudioFile;
-  timings: LavaSrTimings;
-};
-
-/**
- * LavaSRInput
- */
-export type LavaSrInput = {
-  /**
-   * Sync Mode
-   *
-   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
-   */
-  sync_mode?: boolean;
-  /**
-   * Audio URL
-   *
-   * The URL of the audio file to enhance.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Audio Format
-   *
-   * The format for the output audio.
-   */
-  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
-  /**
-   * Denoise
-   *
-   * If `True`, applies UL-UNAS noise filtering before bandwidth extension.
-   */
-  denoise?: boolean;
-  /**
-   * Bitrate
-   *
-   * The bitrate of the output audio.
-   */
-  bitrate?: string;
-};
-
-/**
- * SpanishOutput
- */
-export type KokoroSpanishOutput = {
+export type DiffrhythmOutput = {
   audio: File;
 };
 
 /**
- * SpanishRequest
+ * AudioIsolationRequest
  */
-export type KokoroSpanishInput = {
+export type ElevenlabsAudioIsolationInput = {
   /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
+   * Audio Url
    *
-   * Voice ID for the desired voice.
+   * URL of the audio file to isolate voice from
    */
-  voice: "ef_dora" | "em_alex" | "em_santa";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * MandarinOutput
- */
-export type KokoroMandarinChineseOutput = {
-  audio: File;
-};
-
-/**
- * MandarinRequest
- */
-export type KokoroMandarinChineseInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice:
-    | "zf_xiaobei"
-    | "zf_xiaoni"
-    | "zf_xiaoxiao"
-    | "zf_xiaoyi"
-    | "zm_yunjian"
-    | "zm_yunxi"
-    | "zm_yunxia"
-    | "zm_yunyang";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * JapaneseOutput
- */
-export type KokoroJapaneseOutput = {
-  audio: File;
-};
-
-/**
- * JapaneseRequest
- */
-export type KokoroJapaneseInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "jf_alpha" | "jf_gongitsune" | "jf_nezumi" | "jf_tebukuro" | "jm_kumo";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * ItalianOutput
- */
-export type KokoroItalianOutput = {
-  audio: File;
-};
-
-/**
- * ItalianRequest
- */
-export type KokoroItalianInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "if_sara" | "im_nicola";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * HindiOutput
- */
-export type KokoroHindiOutput = {
-  audio: File;
-};
-
-/**
- * HindiRequest
- */
-export type KokoroHindiInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "hf_alpha" | "hf_beta" | "hm_omega" | "hm_psi";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * FrenchOutput
- */
-export type KokoroFrenchOutput = {
-  audio: File;
-};
-
-/**
- * FrenchRequest
- */
-export type KokoroFrenchInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: string;
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * BrEngOutput
- */
-export type KokoroBritishEnglishOutput = {
-  audio: File;
-};
-
-/**
- * BrEnglishRequest
- */
-export type KokoroBritishEnglishInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice:
-    | "bf_alice"
-    | "bf_emma"
-    | "bf_isabella"
-    | "bf_lily"
-    | "bm_daniel"
-    | "bm_fable"
-    | "bm_george"
-    | "bm_lewis";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * BrPortugeseOutput
- */
-export type KokoroBrazilianPortugueseOutput = {
-  audio: File;
-};
-
-/**
- * BrPortugueseRequest
- */
-export type KokoroBrazilianPortugueseInput = {
-  /**
-   * Prompt
-   */
-  prompt: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice: "pf_dora" | "pm_alex" | "pm_santa";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * AmEngOutput
- */
-export type KokoroAmericanEnglishOutput = {
-  audio: File;
-};
-
-/**
- * AmEnglishRequest
- */
-export type KokoroAmericanEnglishInput = {
-  /**
-   * Prompt
-   */
-  prompt?: string;
-  /**
-   * Voice
-   *
-   * Voice ID for the desired voice.
-   */
-  voice?:
-    | "af_heart"
-    | "af_alloy"
-    | "af_aoede"
-    | "af_bella"
-    | "af_jessica"
-    | "af_kore"
-    | "af_nicole"
-    | "af_nova"
-    | "af_river"
-    | "af_sarah"
-    | "af_sky"
-    | "am_adam"
-    | "am_echo"
-    | "am_eric"
-    | "am_fenrir"
-    | "am_liam"
-    | "am_michael"
-    | "am_onyx"
-    | "am_puck"
-    | "am_santa";
-  /**
-   * Speed
-   *
-   * Speed of the generated audio. Default is 1.0.
-   */
-  speed?: number;
-};
-
-/**
- * VideoToAudioOutput
- */
-export type KlingVideoVideoToAudioOutput = {
-  audio: File;
-  video: File;
-};
-
-/**
- * VideoToAudioInput
- */
-export type KlingVideoVideoToAudioInput = {
-  /**
-   * Background Music Prompt
-   *
-   * Background music prompt. Cannot exceed 200 characters.
-   */
-  background_music_prompt?: string | unknown;
-  /**
-   * Asmr Mode
-   *
-   * Enable ASMR mode. This mode enhances detailed sound effects and is suitable for highly immersive content scenarios.
-   */
-  asmr_mode?: boolean;
+  audio_url?: string | unknown;
   /**
    * Video Url
    *
-   * The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.
+   * Video file to use for audio isolation. Either `audio_url` or `video_url` must be provided.
    */
-  video_url: string | Blob | File;
-  /**
-   * Sound Effect Prompt
-   *
-   * Sound effect prompt. Cannot exceed 200 characters.
-   */
-  sound_effect_prompt?: string | unknown;
+  video_url?: string | unknown;
 };
 
 /**
- * CreateVoiceOutput
- *
- * Response model for creating a custom voice.
+ * TTSOutput
  */
-export type KlingVideoCreateVoiceOutput = {
+export type ElevenlabsAudioIsolationOutput = {
   /**
-   * Voice Id
+   * Timestamps
    *
-   * Unique identifier for the created voice
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
    */
-  voice_id: string;
-};
-
-/**
- * CreateVoiceInput
- *
- * Request model for creating a custom voice.
- */
-export type KlingVideoCreateVoiceInput = {
-  /**
-   * Voice Url
-   *
-   * URL of the voice audio file. Supports .mp3/.wav audio or .mp4/.mov video. Duration must be 5-30 seconds with clean, single-voice audio.
-   */
-  voice_url: string | Blob | File;
-};
-
-/**
- * GeminiTTSOutput
- *
- * Output for Gemini text-to-speech generation.
- */
-export type GeminiTtsOutput = {
+  timestamps?: Array<unknown> | unknown;
   audio: File;
+};
+
+/**
+ * MusicRequest
+ *
+ * Request format for Elevenlabs Music API
+ */
+export type ElevenlabsMusicInput = {
+  /**
+   * Output Format
+   *
+   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.
+   */
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192";
+  /**
+   * The composition plan for the music
+   */
+  composition_plan?: MusicCompositionPlan | unknown;
+  /**
+   * Music Length Ms
+   *
+   * The length of the song to generate in milliseconds. Used only in conjunction with prompt. Must be between 3000ms and 600000ms. Optional - if not provided, the model will choose a length based on the prompt.
+   */
+  music_length_ms?: number | unknown;
+  /**
+   * Prompt
+   *
+   * The text prompt describing the music to generate
+   */
+  prompt?: string | unknown;
+  /**
+   * Force Instrumental
+   *
+   * If true, guarantees that the generated song will be instrumental. If false, the song may or may not be instrumental depending on the prompt. Can only be used with prompt.
+   */
+  force_instrumental?: boolean;
+  /**
+   * Respect Sections Durations
+   *
+   * Controls how strictly section durations in the composition_plan are enforced. It will only have an effect if it is used with composition_plan. When set to true, the model will precisely respect each section's duration_ms from the plan. When set to false, the model may adjust individual section durations which will generally lead to better generation quality and improved latency, while always preserving the total song duration from the plan.
+   */
+  respect_sections_durations?: boolean;
+};
+
+/**
+ * MusicOutput
+ */
+export type ElevenlabsMusicOutput = {
+  audio: File;
+};
+
+/**
+ * SoundEffectRequestV2
+ */
+export type ElevenlabsSoundEffectsV2Input = {
+  /**
+   * Output Format
+   *
+   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
+   */
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192";
+  /**
+   * Loop
+   *
+   * Whether to create a sound effect that loops smoothly.
+   */
+  loop?: boolean;
+  /**
+   * Text
+   *
+   * The text describing the sound effect to generate
+   */
+  text: string;
+  /**
+   * Prompt Influence
+   *
+   * How closely to follow the prompt (0-1). Higher values mean less variation.
+   */
+  prompt_influence?: number;
+  /**
+   * Duration Seconds
+   *
+   * Duration in seconds (0.5-22). If None, optimal duration will be determined from prompt.
+   */
+  duration_seconds?: number | unknown;
+};
+
+/**
+ * SoundEffectOutput
+ *
+ * Output format for generated sound effects
+ */
+export type ElevenlabsSoundEffectsV2Output = {
+  audio: File;
+};
+
+/**
+ * TextToDialogueRequest
+ */
+export type ElevenlabsTextToDialogueElevenV3Input = {
+  /**
+   * Pronunciation Dictionary Locators
+   *
+   * A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request
+   */
+  pronunciation_dictionary_locators?: Array<PronunciationDictionaryLocator>;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Stability
+   *
+   * Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion. Must be one of 0.0, 0.5, 1.0, else it will be rounded to the nearest value.
+   */
+  stability?: number | unknown;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Use Speaker Boost
+   *
+   * This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.
+   */
+  use_speaker_boost?: boolean | unknown;
+  /**
+   * Inputs
+   *
+   * A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.
+   */
+  inputs: Array<DialogueBlock>;
+};
+
+/**
+ * TextToDialogueOutput
+ */
+export type ElevenlabsTextToDialogueElevenV3Output = {
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * TextToSpeechRequestV3
+ *
+ * Request model for eleven_v3 which doesn't support previous_text/next_text
+ */
+export type ElevenlabsTtsElevenV3Input = {
+  /**
+   * Timestamps
+   *
+   * Whether to return timestamps for each word in the generated speech
+   */
+  timestamps?: boolean;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Stability
+   *
+   * Voice stability (0-1)
+   */
+  stability?: number;
+  /**
+   * Apply Text Normalization
+   *
+   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+   */
+  apply_text_normalization?: "auto" | "on" | "off";
+  /**
+   * Text
+   *
+   * The text to convert to speech
+   */
+  text: string;
+};
+
+/**
+ * TTSOutput
+ */
+export type ElevenlabsTtsElevenV3Output = {
+  /**
+   * Timestamps
+   *
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   */
+  timestamps?: Array<unknown> | unknown;
+  audio: File;
+};
+
+/**
+ * TextToSpeechRequest
+ */
+export type ElevenlabsTtsMultilingualV2Input = {
+  /**
+   * Timestamps
+   *
+   * Whether to return timestamps for each word in the generated speech
+   */
+  timestamps?: boolean;
+  /**
+   * Speed
+   *
+   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
+   */
+  speed?: number;
+  /**
+   * Previous Text
+   *
+   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  previous_text?: string | unknown;
+  /**
+   * Next Text
+   *
+   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
+   */
+  next_text?: string | unknown;
+  /**
+   * Style
+   *
+   * Style exaggeration (0-1)
+   */
+  style?: number;
+  /**
+   * Language Code
+   *
+   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
+   */
+  language_code?: string | unknown;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Stability
+   *
+   * Voice stability (0-1)
+   */
+  stability?: number;
+  /**
+   * Text
+   *
+   * The text to convert to speech
+   */
+  text: string;
+  /**
+   * Apply Text Normalization
+   *
+   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
+   */
+  apply_text_normalization?: "auto" | "on" | "off";
+  /**
+   * Similarity Boost
+   *
+   * Similarity boost (0-1)
+   */
+  similarity_boost?: number;
+};
+
+/**
+ * TTSOutput
+ */
+export type ElevenlabsTtsMultilingualV2Output = {
+  /**
+   * Timestamps
+   *
+   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   */
+  timestamps?: Array<unknown> | unknown;
+  audio: File;
+};
+
+/**
+ * VoiceChangerRequest
+ */
+export type ElevenlabsVoiceChangerInput = {
+  /**
+   * Output Format
+   *
+   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
+   */
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192";
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * Voice
+   *
+   * The voice to use for speech generation
+   */
+  voice?: string;
+  /**
+   * Audio Url
+   *
+   * The input audio file
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Remove Background Noise
+   *
+   * If set, will remove the background noise from your audio input using our audio isolation model.
+   */
+  remove_background_noise?: boolean;
+};
+
+/**
+ * VoiceChangerOutput
+ */
+export type ElevenlabsVoiceChangerOutput = {
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed: number;
+  audio: File;
+};
+
+/**
+ * TTSInput
+ */
+export type F5TtsInput = {
+  /**
+   * Remove Silence
+   *
+   * Whether to remove the silence from the audio file.
+   */
+  remove_silence?: boolean;
+  /**
+   * Reference Audio URL
+   *
+   * The URL of the reference audio file.
+   */
+  ref_audio_url: string | Blob | File;
+  /**
+   * Model Type
+   *
+   * The name of the model to be used for TTS.
+   */
+  model_type: "F5-TTS" | "E2-TTS";
+  /**
+   * Text to be converted to speech
+   *
+   * The text to be converted to speech. Maximum 5000 characters.
+   */
+  gen_text: string;
+  /**
+   * Reference Text for the Reference Audio
+   *
+   * The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.
+   */
+  ref_text?: string;
+};
+
+/**
+ * TTSOutput
+ */
+export type F5TtsOutput = {
+  audio_url: AudioFileType3;
+};
+
+/**
+ * MergeAudiosInput
+ */
+export type FfmpegApiMergeAudiosInput = {
+  /**
+   * Audio Urls
+   *
+   * List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.
+   */
+  audio_urls: Array<string>;
+  /**
+   * Output Format
+   *
+   * Output format of the combined audio. If not used, will be determined automatically using FFMPEG. Formatted as codec_sample_rate_bitrate.
+   */
+  output_format?:
+    | "mp3_22050_32"
+    | "mp3_44100_32"
+    | "mp3_44100_64"
+    | "mp3_44100_96"
+    | "mp3_44100_128"
+    | "mp3_44100_192"
+    | "pcm_8000"
+    | "pcm_16000"
+    | "pcm_22050"
+    | "pcm_24000"
+    | "pcm_44100"
+    | "pcm_48000"
+    | "ulaw_8000"
+    | "alaw_8000"
+    | "opus_48000_32"
+    | "opus_48000_64"
+    | "opus_48000_96"
+    | "opus_48000_128"
+    | "opus_48000_192"
+    | unknown;
+};
+
+/**
+ * MergeAudiosOutput
+ */
+export type FfmpegApiMergeAudiosOutput = {
+  audio: File;
+};
+
+/**
+ * File
+ */
+export type File = {
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+};
+
+/**
+ * File
+ */
+export type FileType2 = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Data
+   *
+   * File data
+   */
+  file_data?: Blob | File;
 };
 
 /**
@@ -2988,765 +1954,409 @@ export type GeminiTtsInput = {
 };
 
 /**
- * MergeAudiosOutput
- */
-export type FfmpegApiMergeAudiosOutput = {
-  audio: File;
-};
-
-/**
- * MergeAudiosInput
- */
-export type FfmpegApiMergeAudiosInput = {
-  /**
-   * Audio Urls
-   *
-   * List of audio URLs to merge in order. The 0th stream of the audio will be considered as the merge candidate.
-   */
-  audio_urls: Array<string>;
-  /**
-   * Output Format
-   *
-   * Output format of the combined audio. If not used, will be determined automatically using FFMPEG. Formatted as codec_sample_rate_bitrate.
-   */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192"
-    | unknown;
-};
-
-/**
- * TTSOutput
- */
-export type F5TtsOutput = {
-  audio_url: AudioFileType3;
-};
-
-/**
- * AudioFile
- */
-export type AudioFileType3 = {
-  /**
-   * Content Type
-   */
-  content_type?: string;
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * Url
-   */
-  url: string;
-  /**
-   * File Name
-   */
-  file_name?: string;
-};
-
-/**
- * TTSInput
- */
-export type F5TtsInput = {
-  /**
-   * Remove Silence
-   *
-   * Whether to remove the silence from the audio file.
-   */
-  remove_silence?: boolean;
-  /**
-   * Reference Audio URL
-   *
-   * The URL of the reference audio file.
-   */
-  ref_audio_url: string | Blob | File;
-  /**
-   * Model Type
-   *
-   * The name of the model to be used for TTS.
-   */
-  model_type: "F5-TTS" | "E2-TTS";
-  /**
-   * Text to be converted to speech
-   *
-   * The text to be converted to speech. Maximum 5000 characters.
-   */
-  gen_text: string;
-  /**
-   * Reference Text for the Reference Audio
-   *
-   * The reference text to be used for TTS. If not provided, an ASR (Automatic Speech Recognition) model will be used to generate the reference text.
-   */
-  ref_text?: string;
-};
-
-/**
- * VoiceChangerOutput
- */
-export type ElevenlabsVoiceChangerOutput = {
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed: number;
-  audio: File;
-};
-
-/**
- * VoiceChangerRequest
- */
-export type ElevenlabsVoiceChangerInput = {
-  /**
-   * Output Format
-   *
-   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
-   */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192";
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Audio Url
-   *
-   * The input audio file
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Remove Background Noise
-   *
-   * If set, will remove the background noise from your audio input using our audio isolation model.
-   */
-  remove_background_noise?: boolean;
-};
-
-/**
- * TTSOutput
- */
-export type ElevenlabsTtsMultilingualV2Output = {
-  /**
-   * Timestamps
-   *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
-   */
-  timestamps?: Array<unknown> | unknown;
-  audio: File;
-};
-
-/**
- * TextToSpeechRequest
- */
-export type ElevenlabsTtsMultilingualV2Input = {
-  /**
-   * Timestamps
-   *
-   * Whether to return timestamps for each word in the generated speech
-   */
-  timestamps?: boolean;
-  /**
-   * Speed
-   *
-   * Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.
-   */
-  speed?: number;
-  /**
-   * Previous Text
-   *
-   * The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
-   */
-  previous_text?: string | unknown;
-  /**
-   * Next Text
-   *
-   * The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.
-   */
-  next_text?: string | unknown;
-  /**
-   * Style
-   *
-   * Style exaggeration (0-1)
-   */
-  style?: number;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Stability
-   *
-   * Voice stability (0-1)
-   */
-  stability?: number;
-  /**
-   * Text
-   *
-   * The text to convert to speech
-   */
-  text: string;
-  /**
-   * Apply Text Normalization
-   *
-   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-   */
-  apply_text_normalization?: "auto" | "on" | "off";
-  /**
-   * Similarity Boost
-   *
-   * Similarity boost (0-1)
-   */
-  similarity_boost?: number;
-};
-
-/**
- * TTSOutput
- */
-export type ElevenlabsTtsElevenV3Output = {
-  /**
-   * Timestamps
-   *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
-   */
-  timestamps?: Array<unknown> | unknown;
-  audio: File;
-};
-
-/**
- * TextToSpeechRequestV3
+ * GeminiTTSOutput
  *
- * Request model for eleven_v3 which doesn't support previous_text/next_text
+ * Output for Gemini text-to-speech generation.
  */
-export type ElevenlabsTtsElevenV3Input = {
-  /**
-   * Timestamps
-   *
-   * Whether to return timestamps for each word in the generated speech
-   */
-  timestamps?: boolean;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Voice
-   *
-   * The voice to use for speech generation
-   */
-  voice?: string;
-  /**
-   * Stability
-   *
-   * Voice stability (0-1)
-   */
-  stability?: number;
-  /**
-   * Apply Text Normalization
-   *
-   * This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.
-   */
-  apply_text_normalization?: "auto" | "on" | "off";
-  /**
-   * Text
-   *
-   * The text to convert to speech
-   */
-  text: string;
-};
-
-/**
- * TextToDialogueOutput
- */
-export type ElevenlabsTextToDialogueElevenV3Output = {
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed: number;
+export type GeminiTtsOutput = {
   audio: File;
 };
 
 /**
- * TextToDialogueRequest
+ * InpaintSection
  */
-export type ElevenlabsTextToDialogueElevenV3Input = {
+export type InpaintSection = {
   /**
-   * Pronunciation Dictionary Locators
+   * End
    *
-   * A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request
+   * End time in seconds of the section to inpaint.
    */
-  pronunciation_dictionary_locators?: Array<PronunciationDictionaryLocator>;
+  end: number;
   /**
-   * Seed
+   * Start
    *
-   * Random seed for reproducibility.
+   * Start time in seconds of the section to inpaint.
    */
-  seed?: number | unknown;
-  /**
-   * Stability
-   *
-   * Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion. Must be one of 0.0, 0.5, 1.0, else it will be rounded to the nearest value.
-   */
-  stability?: number | unknown;
-  /**
-   * Language Code
-   *
-   * Language code (ISO 639-1) used to enforce a language for the model. An error will be returned if language code is not supported by the model.
-   */
-  language_code?: string | unknown;
-  /**
-   * Use Speaker Boost
-   *
-   * This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.
-   */
-  use_speaker_boost?: boolean | unknown;
-  /**
-   * Inputs
-   *
-   * A list of dialogue inputs, each containing text and a voice ID which will be converted into speech.
-   */
-  inputs: Array<DialogueBlock>;
+  start: number;
 };
 
 /**
- * DialogueBlock
- */
-export type DialogueBlock = {
-  /**
-   * Voice
-   *
-   * The name or the ID of the voice to be used for the generation.
-   */
-  voice: string;
-  /**
-   * Text
-   *
-   * The dialogue text
-   */
-  text: string;
-};
-
-/**
- * SoundEffectOutput
+ * CreateVoiceInput
  *
- * Output format for generated sound effects
+ * Request model for creating a custom voice.
  */
-export type ElevenlabsSoundEffectsV2Output = {
-  audio: File;
+export type KlingVideoCreateVoiceInput = {
+  /**
+   * Voice Url
+   *
+   * URL of the voice audio file. Supports .mp3/.wav audio or .mp4/.mov video. Duration must be 5-30 seconds with clean, single-voice audio.
+   */
+  voice_url: string | Blob | File;
 };
 
 /**
- * SoundEffectRequestV2
- */
-export type ElevenlabsSoundEffectsV2Input = {
-  /**
-   * Output Format
-   *
-   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate.
-   */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192";
-  /**
-   * Loop
-   *
-   * Whether to create a sound effect that loops smoothly.
-   */
-  loop?: boolean;
-  /**
-   * Text
-   *
-   * The text describing the sound effect to generate
-   */
-  text: string;
-  /**
-   * Prompt Influence
-   *
-   * How closely to follow the prompt (0-1). Higher values mean less variation.
-   */
-  prompt_influence?: number;
-  /**
-   * Duration Seconds
-   *
-   * Duration in seconds (0.5-22). If None, optimal duration will be determined from prompt.
-   */
-  duration_seconds?: number | unknown;
-};
-
-/**
- * MusicOutput
- */
-export type ElevenlabsMusicOutput = {
-  audio: File;
-};
-
-/**
- * MusicRequest
+ * CreateVoiceOutput
  *
- * Request format for Elevenlabs Music API
+ * Response model for creating a custom voice.
  */
-export type ElevenlabsMusicInput = {
+export type KlingVideoCreateVoiceOutput = {
   /**
-   * Output Format
+   * Voice Id
    *
-   * Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.
+   * Unique identifier for the created voice
    */
-  output_format?:
-    | "mp3_22050_32"
-    | "mp3_44100_32"
-    | "mp3_44100_64"
-    | "mp3_44100_96"
-    | "mp3_44100_128"
-    | "mp3_44100_192"
-    | "pcm_8000"
-    | "pcm_16000"
-    | "pcm_22050"
-    | "pcm_24000"
-    | "pcm_44100"
-    | "pcm_48000"
-    | "ulaw_8000"
-    | "alaw_8000"
-    | "opus_48000_32"
-    | "opus_48000_64"
-    | "opus_48000_96"
-    | "opus_48000_128"
-    | "opus_48000_192";
-  /**
-   * The composition plan for the music
-   */
-  composition_plan?: MusicCompositionPlan | unknown;
-  /**
-   * Music Length Ms
-   *
-   * The length of the song to generate in milliseconds. Used only in conjunction with prompt. Must be between 3000ms and 600000ms. Optional - if not provided, the model will choose a length based on the prompt.
-   */
-  music_length_ms?: number | unknown;
-  /**
-   * Prompt
-   *
-   * The text prompt describing the music to generate
-   */
-  prompt?: string | unknown;
-  /**
-   * Force Instrumental
-   *
-   * If true, guarantees that the generated song will be instrumental. If false, the song may or may not be instrumental depending on the prompt. Can only be used with prompt.
-   */
-  force_instrumental?: boolean;
-  /**
-   * Respect Sections Durations
-   *
-   * Controls how strictly section durations in the composition_plan are enforced. It will only have an effect if it is used with composition_plan. When set to true, the model will precisely respect each section's duration_ms from the plan. When set to false, the model may adjust individual section durations which will generally lead to better generation quality and improved latency, while always preserving the total song duration from the plan.
-   */
-  respect_sections_durations?: boolean;
+  voice_id: string;
 };
 
 /**
- * TTSOutput
+ * VideoToAudioInput
  */
-export type ElevenlabsAudioIsolationOutput = {
+export type KlingVideoVideoToAudioInput = {
   /**
-   * Timestamps
+   * Background Music Prompt
    *
-   * Timestamps for each word in the generated speech. Only returned if `timestamps` is set to True in the request.
+   * Background music prompt. Cannot exceed 200 characters.
    */
-  timestamps?: Array<unknown> | unknown;
-  audio: File;
-};
-
-/**
- * AudioIsolationRequest
- */
-export type ElevenlabsAudioIsolationInput = {
+  background_music_prompt?: string | unknown;
   /**
-   * Audio Url
+   * Asmr Mode
    *
-   * URL of the audio file to isolate voice from
+   * Enable ASMR mode. This mode enhances detailed sound effects and is suitable for highly immersive content scenarios.
    */
-  audio_url?: string | unknown;
+  asmr_mode?: boolean;
   /**
    * Video Url
    *
-   * Video file to use for audio isolation. Either `audio_url` or `video_url` must be provided.
+   * The video URL to extract audio from. Only .mp4/.mov formats are supported. File size does not exceed 100MB. Video duration between 3.0s and 20.0s.
    */
-  video_url?: string | unknown;
+  video_url: string | Blob | File;
+  /**
+   * Sound Effect Prompt
+   *
+   * Sound effect prompt. Cannot exceed 200 characters.
+   */
+  sound_effect_prompt?: string | unknown;
 };
 
 /**
- * Output
+ * VideoToAudioOutput
  */
-export type DiffrhythmOutput = {
+export type KlingVideoVideoToAudioOutput = {
+  audio: File;
+  video: File;
+};
+
+/**
+ * AmEnglishRequest
+ */
+export type KokoroAmericanEnglishInput = {
+  /**
+   * Prompt
+   */
+  prompt?: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice?:
+    | "af_heart"
+    | "af_alloy"
+    | "af_aoede"
+    | "af_bella"
+    | "af_jessica"
+    | "af_kore"
+    | "af_nicole"
+    | "af_nova"
+    | "af_river"
+    | "af_sarah"
+    | "af_sky"
+    | "am_adam"
+    | "am_echo"
+    | "am_eric"
+    | "am_fenrir"
+    | "am_liam"
+    | "am_michael"
+    | "am_onyx"
+    | "am_puck"
+    | "am_santa";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
+};
+
+/**
+ * AmEngOutput
+ */
+export type KokoroAmericanEnglishOutput = {
   audio: File;
 };
 
 /**
- * TextToMusicInput
+ * BrPortugueseRequest
  */
-export type DiffrhythmInput = {
+export type KokoroBrazilianPortugueseInput = {
   /**
-   * Reference Audio URL
-   *
-   * The URL of the reference audio to use for the music generation.
+   * Prompt
    */
-  reference_audio_url?: string | Blob | File;
+  prompt: string;
   /**
-   * Lyrics
+   * Voice
    *
-   * The prompt to generate the song from. Must have two sections. Sections start with either [chorus] or a [verse].
+   * Voice ID for the desired voice.
    */
-  lyrics: string;
+  voice: "pf_dora" | "pm_alex" | "pm_santa";
   /**
-   * Style Prompt
+   * Speed
    *
-   * The style prompt to use for the music generation.
+   * Speed of the generated audio. Default is 1.0.
    */
-  style_prompt?: string;
-  /**
-   * Music Duration
-   *
-   * The duration of the music to generate.
-   */
-  music_duration?: "95s" | "285s";
-  /**
-   * CFG Strength
-   *
-   * The CFG strength to use for the music generation.
-   */
-  cfg_strength?: number;
-  /**
-   * Scheduler
-   *
-   * The scheduler to use for the music generation.
-   */
-  scheduler?: "euler" | "midpoint" | "rk4" | "implicit_adams";
-  /**
-   * Number of Inference Steps
-   *
-   * The number of inference steps to use for the music generation.
-   */
-  num_inference_steps?: number;
+  speed?: number;
 };
 
 /**
- * DiaCloneOutput
+ * BrPortugeseOutput
  */
-export type DiaTtsVoiceCloneOutput = {
+export type KokoroBrazilianPortugueseOutput = {
   audio: File;
 };
 
 /**
- * CloneRequest
+ * BrEnglishRequest
  */
-export type DiaTtsVoiceCloneInput = {
+export type KokoroBritishEnglishInput = {
   /**
-   * Text
-   *
-   * The text to be converted to speech.
+   * Prompt
    */
-  text: string;
+  prompt: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice:
+    | "bf_alice"
+    | "bf_emma"
+    | "bf_isabella"
+    | "bf_lily"
+    | "bm_daniel"
+    | "bm_fable"
+    | "bm_george"
+    | "bm_lewis";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
 };
 
 /**
- * DemucsOutput
+ * BrEngOutput
  */
-export type DemucsOutput = {
-  /**
-   * Separated drums audio file
-   */
-  drums?: File | unknown;
-  /**
-   * Separated piano audio file (only available for 6s models)
-   */
-  piano?: File | unknown;
-  /**
-   * Separated other instruments audio file
-   */
-  other?: File | unknown;
-  /**
-   * Separated guitar audio file (only available for 6s models)
-   */
-  guitar?: File | unknown;
-  /**
-   * Separated bass audio file
-   */
-  bass?: File | unknown;
-  /**
-   * Separated vocals audio file
-   */
-  vocals?: File | unknown;
+export type KokoroBritishEnglishOutput = {
+  audio: File;
 };
 
 /**
- * DemucsInput
+ * FrenchRequest
  */
-export type DemucsInput = {
+export type KokoroFrenchInput = {
   /**
-   * Overlap
-   *
-   * Overlap between segments (0.0 to 1.0). Higher values may improve quality but increase processing time.
+   * Prompt
    */
-  overlap?: number;
+  prompt: string;
   /**
-   * Audio Url
+   * Voice
    *
-   * URL of the audio file to separate into stems
+   * Voice ID for the desired voice.
    */
-  audio_url: string | Blob | File;
+  voice: string;
   /**
-   * Stems
+   * Speed
    *
-   * Specific stems to extract. If None, extracts all available stems. Available stems depend on model: vocals, drums, bass, other, guitar, piano (for 6s model)
+   * Speed of the generated audio. Default is 1.0.
    */
-  stems?:
-    | Array<"vocals" | "drums" | "bass" | "other" | "guitar" | "piano">
-    | unknown;
-  /**
-   * Model
-   *
-   * Demucs model to use for separation
-   */
-  model?:
-    | "htdemucs"
-    | "htdemucs_ft"
-    | "htdemucs_6s"
-    | "hdemucs_mmi"
-    | "mdx"
-    | "mdx_extra"
-    | "mdx_q"
-    | "mdx_extra_q";
-  /**
-   * Output Format
-   *
-   * Output audio format for the separated stems
-   */
-  output_format?: "wav" | "mp3";
-  /**
-   * Segment Length
-   *
-   * Length in seconds of each segment for processing. Smaller values use less memory but may reduce quality. Default is model-specific.
-   */
-  segment_length?: number | unknown;
-  /**
-   * Shifts
-   *
-   * Number of random shifts for equivariant stabilization. Higher values improve quality but increase processing time.
-   */
-  shifts?: number;
+  speed?: number;
 };
 
 /**
- * DeepFilterNetTimings
+ * FrenchOutput
  */
-export type DeepFilterNetTimings = {
-  /**
-   * Preprocess
-   *
-   * Preprocessing time.
-   */
-  preprocess: number;
-  /**
-   * Postprocess
-   *
-   * Postprocessing time.
-   */
-  postprocess: number;
-  /**
-   * Inference
-   *
-   * Inference time.
-   */
-  inference: number;
+export type KokoroFrenchOutput = {
+  audio: File;
 };
 
 /**
- * DeepFilterNet3Output
+ * HindiRequest
  */
-export type Deepfilternet3Output = {
-  timings: DeepFilterNetTimings;
-  audio_file: AudioFile;
+export type KokoroHindiInput = {
+  /**
+   * Prompt
+   */
+  prompt: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "hf_alpha" | "hf_beta" | "hm_omega" | "hm_psi";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
 };
 
 /**
- * DeepFilterNet3Input
+ * HindiOutput
  */
-export type Deepfilternet3Input = {
+export type KokoroHindiOutput = {
+  audio: File;
+};
+
+/**
+ * ItalianRequest
+ */
+export type KokoroItalianInput = {
+  /**
+   * Prompt
+   */
+  prompt: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "if_sara" | "im_nicola";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
+};
+
+/**
+ * ItalianOutput
+ */
+export type KokoroItalianOutput = {
+  audio: File;
+};
+
+/**
+ * JapaneseRequest
+ */
+export type KokoroJapaneseInput = {
+  /**
+   * Prompt
+   */
+  prompt: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "jf_alpha" | "jf_gongitsune" | "jf_nezumi" | "jf_tebukuro" | "jm_kumo";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
+};
+
+/**
+ * JapaneseOutput
+ */
+export type KokoroJapaneseOutput = {
+  audio: File;
+};
+
+/**
+ * MandarinRequest
+ */
+export type KokoroMandarinChineseInput = {
+  /**
+   * Prompt
+   */
+  prompt: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice:
+    | "zf_xiaobei"
+    | "zf_xiaoni"
+    | "zf_xiaoxiao"
+    | "zf_xiaoyi"
+    | "zm_yunjian"
+    | "zm_yunxi"
+    | "zm_yunxia"
+    | "zm_yunyang";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
+};
+
+/**
+ * MandarinOutput
+ */
+export type KokoroMandarinChineseOutput = {
+  audio: File;
+};
+
+/**
+ * SpanishRequest
+ */
+export type KokoroSpanishInput = {
+  /**
+   * Prompt
+   */
+  prompt: string;
+  /**
+   * Voice
+   *
+   * Voice ID for the desired voice.
+   */
+  voice: "ef_dora" | "em_alex" | "em_santa";
+  /**
+   * Speed
+   *
+   * Speed of the generated audio. Default is 1.0.
+   */
+  speed?: number;
+};
+
+/**
+ * SpanishOutput
+ */
+export type KokoroSpanishOutput = {
+  audio: File;
+};
+
+/**
+ * LavaSRInput
+ */
+export type LavaSrInput = {
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
   /**
    * Audio URL
    *
-   * The URL of the audio to enhance.
+   * The URL of the audio file to enhance.
    */
   audio_url: string | Blob | File;
   /**
@@ -3756,724 +2366,2114 @@ export type Deepfilternet3Input = {
    */
   audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
   /**
+   * Denoise
+   *
+   * If `True`, applies UL-UNAS noise filtering before bandwidth extension.
+   */
+  denoise?: boolean;
+  /**
    * Bitrate
    *
    * The bitrate of the output audio.
    */
   bitrate?: string;
+};
+
+/**
+ * LavaSROutput
+ */
+export type LavaSrOutput = {
+  audio: AudioFile;
+  timings: LavaSrTimings;
+};
+
+/**
+ * LavaSRTimings
+ */
+export type LavaSrTimings = {
+  /**
+   * Inference
+   *
+   * Time taken to run the inference in seconds.
+   */
+  inference: number;
+  /**
+   * Postprocess
+   *
+   * Time taken to postprocess the audio in seconds.
+   */
+  postprocess: number;
+  /**
+   * Preprocess
+   *
+   * Time taken to preprocess the audio in seconds.
+   */
+  preprocess: number;
+};
+
+/**
+ * TextToMusicInput
+ */
+export type Lyria2Input = {
+  /**
+   * Prompt
+   *
+   * The text prompt describing the music you want to generate
+   */
+  prompt: string;
+  /**
+   * Seed
+   *
+   * A seed for deterministic generation. If provided, the model will attempt to produce the same audio given the same prompt and other parameters.
+   */
+  seed?: number | unknown;
+  /**
+   * Negative Prompt
+   *
+   * A description of what to exclude from the generated audio
+   */
+  negative_prompt?: string;
+};
+
+/**
+ * TextToMusicOutput
+ */
+export type Lyria2Output = {
+  audio: File;
+};
+
+/**
+ * TextToMusicRequest
+ */
+export type MinimaxMusicInput = {
+  /**
+   * Reference Audio Url
+   *
+   * Reference song, should contain music and vocals. Must be a .wav or .mp3 file longer than 15 seconds.
+   */
+  reference_audio_url: string | Blob | File;
+  /**
+   * Prompt
+   *
+   * Lyrics with optional formatting. You can use a newline to separate each line of lyrics. You can use two newlines to add a pause between lines. You can use double hash marks (##) at the beginning and end of the lyrics to add accompaniment. Maximum 600 characters.
+   */
+  prompt: string;
+};
+
+/**
+ * MusicOutput
+ */
+export type MinimaxMusicOutput = {
+  audio: File;
+};
+
+/**
+ * TextToMusic15Request
+ */
+export type MinimaxMusicV15Input = {
+  /**
+   * Lyrics Prompt
+   *
+   * Control music generation. 10-3000 characters.
+   */
+  lyrics_prompt: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Prompt
+   *
+   * Lyrics, supports [intro][verse][chorus][bridge][outro] sections. 10-600 characters.
+   */
+  prompt: string;
+};
+
+/**
+ * MusicV15Output
+ */
+export type MinimaxMusicV15Output = {
+  audio: File;
+};
+
+/**
+ * TextToMusic25PlusRequest
+ */
+export type MinimaxMusicV25Input = {
+  /**
+   * Is Instrumental
+   *
+   * When true, generates vocal-free instrumental music.
+   */
+  is_instrumental?: boolean;
+  audio_setting?: AudioSetting25;
+  /**
+   * Lyrics
+   *
+   * Lyrics of the song. Use \n to separate lines. Supports structure tags: [Intro], [Verse], [Pre Chorus], [Chorus], [Bridge], [Outro], [Interlude], [Hook], [Break], [Solo], [Inst]. Max 3500 characters. Required when is_instrumental is false and lyrics_optimizer is false.
+   */
+  lyrics?: string;
+  /**
+   * Prompt
+   *
+   * A description of the music style, mood, genre, and scenario. Max 2000 characters.
+   */
+  prompt: string;
+  /**
+   * Lyrics Optimizer
+   *
+   * When true and lyrics is empty, auto-generates lyrics from the prompt.
+   */
+  lyrics_optimizer?: boolean;
+};
+
+/**
+ * MusicV25Output
+ */
+export type MinimaxMusicV25Output = {
+  audio: File;
+};
+
+/**
+ * TextToMusic26Request
+ */
+export type MinimaxMusicV26Input = {
+  /**
+   * Is Instrumental
+   *
+   * When true, generates vocal-free instrumental music.
+   */
+  is_instrumental?: boolean;
+  audio_setting?: AudioSetting25;
+  /**
+   * Lyrics
+   *
+   * Lyrics of the song. Use \n to separate lines. Supports structure tags: [Intro], [Verse], [Pre Chorus], [Chorus], [Post Chorus], [Hook], [Bridge], [Interlude], [Transition], [Build Up], [Break], [Inst], [Solo], [Outro]. Max 3500 characters. Required when is_instrumental is false.
+   */
+  lyrics?: string;
+  /**
+   * Prompt
+   *
+   * A description of the music style, mood, genre, and scenario. 10-2000 characters.
+   */
+  prompt: string;
+  /**
+   * Lyrics Optimizer
+   *
+   * When true and lyrics is empty, auto-generates lyrics from the prompt.
+   */
+  lyrics_optimizer?: boolean;
+};
+
+/**
+ * MusicV26Output
+ */
+export type MinimaxMusicV26Output = {
+  audio: File;
+};
+
+/**
+ * TextToMusic20Request
+ */
+export type MinimaxMusicV2Input = {
+  /**
+   * Lyrics Prompt
+   *
+   * Lyrics of the song. Use n to separate lines. You may add structure tags like [Intro], [Verse], [Chorus], [Bridge], [Outro] to enhance the arrangement. 10-3000 characters.
+   */
+  lyrics_prompt: string;
+  audio_setting?: AudioSetting;
+  /**
+   * Prompt
+   *
+   * A description of the music, specifying style, mood, and scenario. 10-300 characters.
+   */
+  prompt: string;
+};
+
+/**
+ * MusicV15Output
+ */
+export type MinimaxMusicV2Output = {
+  audio: File;
+};
+
+/**
+ * AudioInput
+ */
+export type MmaudioV2TextToAudioInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate the audio for.
+   */
+  prompt: string;
+  /**
+   * Cfg Strength
+   *
+   * The strength of Classifier Free Guidance.
+   */
+  cfg_strength?: number;
+  /**
+   * Mask Away Clip
+   *
+   * Whether to mask away the clip.
+   */
+  mask_away_clip?: boolean;
+  /**
+   * Duration
+   *
+   * The duration of the audio to generate.
+   */
+  duration?: number;
+  /**
+   * Negative Prompt
+   *
+   * The negative prompt to generate the audio for.
+   */
+  negative_prompt?: string;
+  /**
+   * Seed
+   *
+   * The seed for the random number generator
+   */
+  seed?: number | unknown;
+  /**
+   * Num Steps
+   *
+   * The number of steps to generate the audio for.
+   */
+  num_steps?: number;
+};
+
+/**
+ * AudioOutput
+ */
+export type MmaudioV2TextToAudioOutput = {
+  audio: File;
+};
+
+/**
+ * MusicCompositionPlan
+ */
+export type MusicCompositionPlan = {
+  /**
+   * Sections
+   *
+   * The sections of the song.
+   */
+  sections: Array<MusicSection>;
+  /**
+   * Positive Global Styles
+   *
+   * The styles that should be present in the entire song.
+   */
+  positive_global_styles: Array<string>;
+  /**
+   * Negative Global Styles
+   *
+   * The styles that should not be present in the entire song.
+   */
+  negative_global_styles: Array<string>;
+};
+
+/**
+ * Input
+ */
+export type MusicGeneratorInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate music from.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated music in seconds.
+   */
+  duration: number;
+};
+
+/**
+ * AudioOutput
+ *
+ * Example Pydantic model showing how to include a File in the output.
+ */
+export type MusicGeneratorOutput = {
+  audio_file: File;
+};
+
+/**
+ * MusicSection
+ */
+export type MusicSection = {
+  /**
+   * Positive Local Styles
+   *
+   * The styles that should be present in this section.
+   */
+  positive_local_styles: Array<string>;
+  /**
+   * Negative Local Styles
+   *
+   * The styles that should not be present in this section.
+   */
+  negative_local_styles: Array<string>;
+  /**
+   * Lines
+   *
+   * The lyrics of the section. Each line must be at most 200 characters long.
+   */
+  lines: Array<string>;
+  /**
+   * Section Name
+   *
+   * The name of the section. Must be between 1 and 100 characters.
+   */
+  section_name: string;
+  /**
+   * Duration Ms
+   *
+   * The duration of the section in milliseconds. Must be between 3000ms and 120000ms.
+   */
+  duration_ms: number;
+};
+
+/**
+ * NovaSRInput
+ */
+export type NovaSrInput = {
   /**
    * Sync Mode
    *
    * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
   sync_mode?: boolean;
+  /**
+   * Bitrate
+   *
+   * The bitrate of the output audio.
+   */
+  bitrate?: string;
+  /**
+   * Audio URL
+   *
+   * The URL of the audio file to enhance.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Audio Format
+   *
+   * The format for the output audio.
+   */
+  audio_format?: "mp3" | "aac" | "m4a" | "ogg" | "opus" | "flac" | "wav";
 };
 
 /**
- * Output
+ * NovaSROutput
  */
-export type Csm1bOutput = {
+export type NovaSrOutput = {
+  audio: AudioFile;
+  timings: NovaSrTimings;
+};
+
+/**
+ * NovaSRTimings
+ */
+export type NovaSrTimings = {
+  /**
+   * Inference
+   *
+   * Time taken to run the inference in seconds.
+   */
+  inference: number;
+  /**
+   * Postprocess
+   *
+   * Time taken to postprocess the audio in seconds.
+   */
+  postprocess: number;
+  /**
+   * Preprocess
+   *
+   * Time taken to preprocess the audio in seconds.
+   */
+  preprocess: number;
+};
+
+/**
+ * ConversationInput
+ */
+export type PersonaplexInput = {
+  /**
+   * Temperature Audio
+   *
+   * Audio sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_audio?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Voice Audio Url
+   *
+   * URL to a voice sample audio for on-the-fly voice cloning. When provided, the AI responds in the cloned voice instead of the preset 'voice'. 10+ seconds of clear speech recommended. Billed at 2x rate.
+   */
+  voice_audio_url?: string | unknown;
+  /**
+   * Top K Audio
+   *
+   * Top-K sampling for audio tokens.
+   */
+  top_k_audio?: number;
+  /**
+   * Temperature Text
+   *
+   * Text sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_text?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.
+   */
+  voice?:
+    | "NATF0"
+    | "NATF1"
+    | "NATF2"
+    | "NATF3"
+    | "NATM0"
+    | "NATM1"
+    | "NATM2"
+    | "NATM3"
+    | "VARF0"
+    | "VARF1"
+    | "VARF2"
+    | "VARF3"
+    | "VARF4"
+    | "VARM0"
+    | "VARM1"
+    | "VARM2"
+    | "VARM3"
+    | "VARM4";
+  /**
+   * Audio Url
+   *
+   * URL to the input audio file (user's speech).
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Top K Text
+   *
+   * Top-K sampling for text tokens.
+   */
+  top_k_text?: number;
+  /**
+   * Prompt
+   *
+   * Text prompt describing the AI persona and conversation context.
+   */
+  prompt?: string;
+};
+
+/**
+ * ConversationOutput
+ */
+export type PersonaplexOutput = {
+  /**
+   * Seed
+   *
+   * The seed used for generation.
+   */
+  seed: number;
+  /**
+   * Duration
+   *
+   * Duration of the generated audio in seconds.
+   */
+  duration: number;
+  audio: File;
+  /**
+   * Text
+   *
+   * Transcribed text of the AI's response.
+   */
+  text: string;
+};
+
+/**
+ * RealtimeConversationInput
+ *
+ * Input for @fal.realtime endpoint. Audio is raw PCM s16le 24kHz mono.
+ */
+export type PersonaplexRealtimeInput = {
+  /**
+   * Temperature Audio
+   *
+   * Audio sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_audio?: number;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number | unknown;
+  /**
+   * Voice Audio Url
+   *
+   * URL to a voice sample audio for on-the-fly voice cloning. When provided, the AI responds in the cloned voice instead of the preset 'voice'. 10+ seconds of clear speech recommended. Billed at 2x rate.
+   */
+  voice_audio_url?: string | unknown;
+  /**
+   * Top K Audio
+   *
+   * Top-K sampling for audio tokens.
+   */
+  top_k_audio?: number;
+  /**
+   * Temperature Text
+   *
+   * Text sampling temperature. Higher values produce more diverse outputs.
+   */
+  temperature_text?: number;
+  /**
+   * Voice
+   *
+   * Voice ID for the AI response. NAT = natural, VAR = variety. F = female, M = male. Ignored when voice_audio_url is provided.
+   */
+  voice?:
+    | "NATF0"
+    | "NATF1"
+    | "NATF2"
+    | "NATF3"
+    | "NATM0"
+    | "NATM1"
+    | "NATM2"
+    | "NATM3"
+    | "VARF0"
+    | "VARF1"
+    | "VARF2"
+    | "VARF3"
+    | "VARF4"
+    | "VARM0"
+    | "VARM1"
+    | "VARM2"
+    | "VARM3"
+    | "VARM4";
+  /**
+   * Top K Text
+   *
+   * Top-K sampling for text tokens.
+   */
+  top_k_text?: number;
   /**
    * Audio
    *
-   * The generated audio.
+   * Input audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
    */
-  audio: File | Blob | File;
+  audio: string | Blob | File;
+  /**
+   * Prompt
+   *
+   * Text prompt describing the AI persona and conversation context.
+   */
+  prompt?: string;
+};
+
+/**
+ * RealtimeConversationOutput
+ *
+ * Output from @fal.realtime endpoint.
+ */
+export type PersonaplexRealtimeOutput = {
+  /**
+   * Audio
+   *
+   * Generated audio chunk (PCM s16le, 24kHz mono). Base64-encoded in JSON transport.
+   */
+  audio: Blob | File;
+  /**
+   * Text
+   *
+   * Generated text tokens for this chunk.
+   */
+  text?: string;
+};
+
+/**
+ * PronunciationDictionaryLocator
+ */
+export type PronunciationDictionaryLocator = {
+  /**
+   * Version Id
+   *
+   * The ID of the version of the pronunciation dictionary. If not provided, the latest version will be used.
+   */
+  version_id?: string | unknown;
+  /**
+   * Pronunciation Dictionary Id
+   *
+   * The ID of the pronunciation dictionary.
+   */
+  pronunciation_dictionary_id?: string | unknown;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
+};
+
+/**
+ * Qwen3CloneVoiceInput
+ */
+export type Qwen3TtsCloneVoice06bInput = {
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
+  /**
+   * Audio Url
+   *
+   * URL to the reference audio file used for voice cloning.
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * Qwen3CloneVoiceOutput
+ */
+export type Qwen3TtsCloneVoice06bOutput = {
+  speaker_embedding: File;
+};
+
+/**
+ * Qwen3CloneVoiceInput
+ */
+export type Qwen3TtsCloneVoice17bInput = {
+  /**
+   * Reference Text
+   *
+   * Optional reference text that was used when creating the speaker embedding. Providing this can improve synthesis quality when using a cloned voice.
+   */
+  reference_text?: string | unknown;
+  /**
+   * Audio Url
+   *
+   * URL to the reference audio file used for voice cloning.
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * Qwen3CloneVoiceOutput
+ */
+export type Qwen3TtsCloneVoice17bOutput = {
+  speaker_embedding: File;
+};
+
+/**
+ * SAMAudioInput
+ *
+ * Input for text-based audio separation.
+ */
+export type SamAudioSeparateInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the sound to isolate.
+   */
+  prompt: string;
+  /**
+   * Chunk Overlap
+   *
+   * Overlap duration (in seconds) between chunks for crossfade blending.
+   */
+  chunk_overlap?: number;
+  /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "fast" | "balanced" | "quality";
+  /**
+   * Output Format
+   *
+   * Output audio format.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Max Chunk Duration
+   *
+   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
+   */
+  max_chunk_duration?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to process (WAV, MP3, FLAC supported)
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Predict Spans
+   *
+   * Automatically predict temporal spans where the target sound occurs.
+   */
+  predict_spans?: boolean;
+  /**
+   * Reranking Candidates
+   *
+   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
+   */
+  reranking_candidates?: number;
+};
+
+/**
+ * SAMAudioSeparateOutput
+ *
+ * Output for text-based audio separation.
+ */
+export type SamAudioSeparateOutput = {
+  target: File;
+  /**
+   * Duration
+   *
+   * Duration of the output audio in seconds.
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the output audio in Hz.
+   */
+  sample_rate?: number;
+  residual: File;
+};
+
+/**
+ * SAMAudioSpanInput
+ *
+ * Input for temporal span-based audio separation.
+ */
+export type SamAudioSpanSeparateInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt describing the sound to isolate. Optional but recommended - helps the model identify what type of sound to extract from the span.
+   */
+  prompt?: string | unknown;
+  /**
+   * Chunk Overlap
+   *
+   * Overlap duration (in seconds) between chunks for crossfade blending.
+   */
+  chunk_overlap?: number;
+  /**
+   * Spans
+   *
+   * Time spans where the target sound occurs which should be isolated.
+   */
+  spans: Array<AudioTimeSpan>;
+  /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "fast" | "balanced" | "quality";
+  /**
+   * Use Sound Activity Ranking
+   *
+   * Use sound activity detection to rank reranking candidates based on how well each candidate's non-silent regions match the provided spans. Enables effective reranking even without a text prompt (span-only separation). Requires reranking_candidates > 1.
+   */
+  use_sound_activity_ranking?: boolean;
+  /**
+   * Output Format
+   *
+   * Output audio format.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Trim To Span
+   *
+   * Trim output audio to only include the specified span time range. If False, returns the full audio length with the target sound isolated throughout.
+   */
+  trim_to_span?: boolean;
+  /**
+   * Max Chunk Duration
+   *
+   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
+   */
+  max_chunk_duration?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to process.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Reranking Candidates
+   *
+   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost. Requires text prompt; ignored for span-only separation.
+   */
+  reranking_candidates?: number;
+};
+
+/**
+ * SAMAudioSpanSeparateOutput
+ *
+ * Output for span-based audio separation.
+ */
+export type SamAudioSpanSeparateOutput = {
+  target: File;
+  /**
+   * Duration
+   *
+   * Duration of the output audio in seconds.
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the output audio in Hz.
+   */
+  sample_rate?: number;
+  residual: File;
+};
+
+/**
+ * SAMAudioVisualInput
+ *
+ * Input for visual-prompted audio separation.
+ */
+export type SamAudioVisualSeparateInput = {
+  /**
+   * Prompt
+   *
+   * Text prompt to assist with separation. Use natural language to describe the target sound.
+   */
+  prompt?: string;
+  /**
+   * Video Url
+   *
+   * URL of the video file to process (MP4, MOV, etc.)
+   */
+  video_url: string | Blob | File;
+  /**
+   * Acceleration
+   *
+   * The acceleration level to use.
+   */
+  acceleration?: "fast" | "balanced" | "quality";
+  /**
+   * Chunk Overlap
+   *
+   * Overlap duration (in seconds) between chunks for crossfade blending.
+   */
+  chunk_overlap?: number;
+  /**
+   * Output Format
+   *
+   * Output audio format.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Max Chunk Duration
+   *
+   * Maximum audio duration (in seconds) to process in a single pass. Longer audio will be chunked with overlap and blended.
+   */
+  max_chunk_duration?: number;
+  /**
+   * Mask Video Url
+   *
+   * URL of the mask video (binary mask indicating target object). Black=target, White=background.
+   */
+  mask_video_url?: string | unknown;
+  /**
+   * Reranking Candidates
+   *
+   * Number of candidates to generate and rank. Higher improves quality but increases latency and cost.
+   */
+  reranking_candidates?: number;
+};
+
+/**
+ * SAMAudioVisualSeparateOutput
+ *
+ * Output for visual-prompted audio separation.
+ */
+export type SamAudioVisualSeparateOutput = {
+  target: File;
+  /**
+   * Duration
+   *
+   * Duration of the output audio in seconds.
+   */
+  duration: number;
+  /**
+   * Sample Rate
+   *
+   * Sample rate of the output audio in Hz.
+   */
+  sample_rate?: number;
+  residual: File;
 };
 
 /**
  * Input
  */
-export type Csm1bInput = {
+export type SfxV15VideoToAudioInput = {
   /**
-   * Scene
+   * Num Samples
    *
-   * The text to generate an audio from.
+   * The number of samples to generate from the model
    */
-  scene: Array<Turn>;
-  /**
-   * Context
-   *
-   * The context to generate an audio from.
-   */
-  context?: Array<Speaker>;
-};
-
-/**
- * AudioUnderstandingOutput
- */
-export type AudioUnderstandingOutput = {
-  /**
-   * Output
-   *
-   * The analysis of the audio content based on the prompt
-   */
-  output: string;
-};
-
-/**
- * AudioUnderstandingInput
- */
-export type AudioUnderstandingInput = {
-  /**
-   * Prompt
-   *
-   * The question or prompt about the audio content.
-   */
-  prompt: string;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to analyze
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Detailed Analysis
-   *
-   * Whether to request a more detailed analysis of the audio
-   */
-  detailed_analysis?: boolean;
-};
-
-/**
- * ACEStepResponse
- */
-export type AceStepPromptToAudioOutput = {
-  /**
-   * Lyrics
-   *
-   * The lyrics used in the generation process.
-   */
-  lyrics: string;
-  audio: File;
-  /**
-   * Seed
-   *
-   * The random seed used for the generation process.
-   */
-  seed: number;
-  /**
-   * Tags
-   *
-   * The genre tags used in the generation process.
-   */
-  tags: string;
-};
-
-/**
- * ACEStepPromptToAudioRequest
- */
-export type AceStepPromptToAudioInput = {
-  /**
-   * Scheduler
-   *
-   * Scheduler to use for the generation process.
-   */
-  scheduler?: "euler" | "heun";
+  num_samples?: number | unknown;
   /**
    * Duration
    *
-   * The duration of the generated audio in seconds.
+   * The duration of the generated audio in seconds
    */
-  duration?: number;
+  duration?: number | unknown;
   /**
-   * Guidance Interval
+   * Start Offset
    *
-   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   * The start offset in seconds to start the audio generation from
    */
-  guidance_interval?: number;
+  start_offset?: number | unknown;
   /**
-   * Guidance Scale
+   * Video Url
    *
-   * Guidance scale for the generation.
+   * A video url that can accessed from the API to process and add sound effects
    */
-  guidance_scale?: number;
-  /**
-   * Instrumental
-   *
-   * Whether to generate an instrumental version of the audio.
-   */
-  instrumental?: boolean;
+  video_url: string | Blob | File;
   /**
    * Seed
    *
-   * Random seed for reproducibility. If not provided, a random seed will be used.
+   * The seed to use for the generation. If not provided, a random seed will be used
    */
   seed?: number | unknown;
   /**
-   * Lyric Guidance Scale
+   * Text Prompt
    *
-   * Lyric guidance scale for the generation.
+   * Additional description to guide the model
    */
-  lyric_guidance_scale?: number;
-  /**
-   * Number Of Steps
-   *
-   * Number of steps to generate the audio.
-   */
-  number_of_steps?: number;
-  /**
-   * Granularity Scale
-   *
-   * Granularity scale for the generation process. Higher values can reduce artifacts.
-   */
-  granularity_scale?: number;
-  /**
-   * Prompt
-   *
-   * Prompt to control the style of the generated audio. This will be used to generate tags and lyrics.
-   */
-  prompt: string;
-  /**
-   * Minimum Guidance Scale
-   *
-   * Minimum guidance scale for the generation after the decay.
-   */
-  minimum_guidance_scale?: number;
-  /**
-   * Guidance Interval Decay
-   *
-   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
-   */
-  guidance_interval_decay?: number;
-  /**
-   * Guidance Type
-   *
-   * Type of CFG to use for the generation process.
-   */
-  guidance_type?: "cfg" | "apg" | "cfg_star";
-  /**
-   * Tag Guidance Scale
-   *
-   * Tag guidance scale for the generation.
-   */
-  tag_guidance_scale?: number;
+  text_prompt?: string | unknown;
 };
 
 /**
- * ACEStepResponse
+ * AudioOutput
  */
-export type AceStepOutput = {
+export type SfxV15VideoToAudioOutput = {
   /**
-   * Lyrics
+   * Audio
    *
-   * The lyrics used in the generation process.
+   * The generated sound effects audio
    */
-  lyrics: string;
-  audio: File;
-  /**
-   * Seed
-   *
-   * The random seed used for the generation process.
-   */
-  seed: number;
-  /**
-   * Tags
-   *
-   * The genre tags used in the generation process.
-   */
-  tags: string;
+  audio: Array<AudioOutput>;
 };
 
 /**
- * ACEStepTextToAudioRequest
+ * Input
  */
-export type AceStepInput = {
+export type SfxV1VideoToAudioInput = {
   /**
-   * Scheduler
+   * Num Samples
    *
-   * Scheduler to use for the generation process.
+   * The number of samples to generate from the model
    */
-  scheduler?: "euler" | "heun";
+  num_samples?: number | unknown;
+  /**
+   * Video Url
+   *
+   * A video url that can accessed from the API to process and add sound effects
+   */
+  video_url: string | Blob | File;
   /**
    * Duration
    *
-   * The duration of the generated audio in seconds.
+   * The duration of the generated audio in seconds
    */
-  duration?: number;
-  /**
-   * Guidance Interval
-   *
-   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
-   */
-  guidance_interval?: number;
-  /**
-   * Guidance Scale
-   *
-   * Guidance scale for the generation.
-   */
-  guidance_scale?: number;
-  /**
-   * Number Of Steps
-   *
-   * Number of steps to generate the audio.
-   */
-  number_of_steps?: number;
+  duration?: number | unknown;
   /**
    * Seed
    *
-   * Random seed for reproducibility. If not provided, a random seed will be used.
+   * The seed to use for the generation. If not provided, a random seed will be used
    */
   seed?: number | unknown;
   /**
-   * Lyric Guidance Scale
+   * Text Prompt
    *
-   * Lyric guidance scale for the generation.
+   * Additional description to guide the model
    */
-  lyric_guidance_scale?: number;
-  /**
-   * Granularity Scale
-   *
-   * Granularity scale for the generation process. Higher values can reduce artifacts.
-   */
-  granularity_scale?: number;
-  /**
-   * Minimum Guidance Scale
-   *
-   * Minimum guidance scale for the generation after the decay.
-   */
-  minimum_guidance_scale?: number;
-  /**
-   * Lyrics
-   *
-   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
-   */
-  lyrics?: string;
-  /**
-   * Guidance Interval Decay
-   *
-   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
-   */
-  guidance_interval_decay?: number;
-  /**
-   * Tags
-   *
-   * Comma-separated list of genre tags to control the style of the generated audio.
-   */
-  tags: string;
-  /**
-   * Guidance Type
-   *
-   * Type of CFG to use for the generation process.
-   */
-  guidance_type?: "cfg" | "apg" | "cfg_star";
-  /**
-   * Tag Guidance Scale
-   *
-   * Tag guidance scale for the generation.
-   */
-  tag_guidance_scale?: number;
+  text_prompt?: string | unknown;
 };
 
 /**
- * ACEStepAudioToAudioResponse
+ * AudioOutput
  */
-export type AceStepAudioToAudioOutput = {
+export type SfxV1VideoToAudioOutput = {
   /**
-   * Lyrics
+   * Audio
    *
-   * The lyrics used in the generation process.
+   * The generated sound effects audio
    */
-  lyrics: string;
+  audio: Array<Audio>;
+};
+
+/**
+ * Input
+ */
+export type SoundEffectsGeneratorInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate SFX.
+   */
+  prompt: string;
+  /**
+   * Duration
+   *
+   * The duration of the generated SFX in seconds.
+   */
+  duration: number;
+};
+
+/**
+ * AudioOutput
+ *
+ * Example Pydantic model showing how to include a File in the output.
+ */
+export type SoundEffectsGeneratorOutput = {
+  audio_file: File;
+};
+
+/**
+ * Speaker
+ */
+export type Speaker = {
+  /**
+   * Audio Url
+   */
+  audio_url: string;
+  /**
+   * Speaker Id
+   */
+  speaker_id: number;
+  /**
+   * Prompt
+   */
+  prompt: string;
+};
+
+/**
+ * SpeakerConfig
+ *
+ * Voice configuration for a single speaker in multi-speaker synthesis.
+ */
+export type SpeakerConfig = {
+  /**
+   * Voice
+   *
+   * Voice preset for this speaker.
+   */
+  voice:
+    | "Achernar"
+    | "Achird"
+    | "Algenib"
+    | "Algieba"
+    | "Alnilam"
+    | "Aoede"
+    | "Autonoe"
+    | "Callirrhoe"
+    | "Charon"
+    | "Despina"
+    | "Enceladus"
+    | "Erinome"
+    | "Fenrir"
+    | "Gacrux"
+    | "Iapetus"
+    | "Kore"
+    | "Laomedeia"
+    | "Leda"
+    | "Orus"
+    | "Pulcherrima"
+    | "Puck"
+    | "Rasalgethi"
+    | "Sadachbia"
+    | "Sadaltager"
+    | "Schedar"
+    | "Sulafat"
+    | "Umbriel"
+    | "Vindemiatrix"
+    | "Zephyr"
+    | "Zubenelgenubi";
+  /**
+   * Speaker Id
+   *
+   * Alias used to identify this speaker in the prompt. Use this alias as a prefix in the prompt field, e.g. 'Alice: Hello! Bob: Hi there!'. Must be alphanumeric with no whitespace.
+   */
+  speaker_id: string;
+};
+
+/**
+ * AudioToAudioInput
+ */
+export type StableAudio25AudioToAudioInput = {
+  /**
+   * Sync Mode
+   *
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
+   */
+  sync_mode?: boolean;
+  /**
+   * Guidance Scale
+   *
+   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
+   */
+  guidance_scale?: number;
+  /**
+   * Strength
+   *
+   * Sometimes referred to as denoising, this parameter controls how much influence the `audio_url` parameter has on the generated audio. A value of 0 would yield audio that is identical to the input. A value of 1 would be as if you passed in no audio at all.
+   */
+  strength?: number;
+  /**
+   * Total Seconds
+   *
+   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
+   */
+  total_seconds?: number | unknown;
+  /**
+   * Audio Url
+   *
+   * The audio clip to transform
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Num Inference Steps
+   *
+   * The number of steps to denoise the audio for
+   */
+  num_inference_steps?: number;
+  /**
+   * Prompt
+   *
+   * The prompt to guide the audio generation
+   */
+  prompt: string;
+  /**
+   * Seed
+   */
+  seed?: number | unknown;
+};
+
+/**
+ * AudioToAudioOutput
+ */
+export type StableAudio25AudioToAudioOutput = {
   audio: File;
   /**
    * Seed
    *
-   * The random seed used for the generation process.
+   * The random seed used for generation
    */
   seed: number;
-  /**
-   * Tags
-   *
-   * The genre tags used in the generation process.
-   */
-  tags: string;
 };
 
 /**
- * ACEStepAudioToAudioRequest
+ * InpaintInput
  */
-export type AceStepAudioToAudioInput = {
+export type StableAudio25InpaintInput = {
   /**
-   * Granularity Scale
+   * Mask Start
    *
-   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   * The start point of the audio mask
    */
-  granularity_scale?: number;
+  mask_start?: number;
   /**
-   * Lyric Guidance Scale
+   * Sync Mode
    *
-   * Lyric guidance scale for the generation.
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  lyric_guidance_scale?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to be outpainted.
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Original Seed
-   *
-   * Original seed of the audio file.
-   */
-  original_seed?: number | unknown;
-  /**
-   * Guidance Interval
-   *
-   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
-   */
-  guidance_interval?: number;
-  /**
-   * Guidance Interval Decay
-   *
-   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
-   */
-  guidance_interval_decay?: number;
-  /**
-   * Tags
-   *
-   * Comma-separated list of genre tags to control the style of the generated audio.
-   */
-  tags: string;
-  /**
-   * Guidance Type
-   *
-   * Type of CFG to use for the generation process.
-   */
-  guidance_type?: "cfg" | "apg" | "cfg_star";
-  /**
-   * Tag Guidance Scale
-   *
-   * Tag guidance scale for the generation.
-   */
-  tag_guidance_scale?: number;
-  /**
-   * Edit Mode
-   *
-   * Whether to edit the lyrics only or remix the audio.
-   */
-  edit_mode?: "lyrics" | "remix";
-  /**
-   * Scheduler
-   *
-   * Scheduler to use for the generation process.
-   */
-  scheduler?: "euler" | "heun";
-  /**
-   * Original Lyrics
-   *
-   * Original lyrics of the audio file.
-   */
-  original_lyrics?: string;
+  sync_mode?: boolean;
   /**
    * Guidance Scale
    *
-   * Guidance scale for the generation.
+   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
    */
   guidance_scale?: number;
   /**
-   * Number Of Steps
+   * Seconds Total
    *
-   * Number of steps to generate the audio.
+   * The duration of the audio clip to generate. If not provided, it will be set to the duration of the input audio.
    */
-  number_of_steps?: number;
+  seconds_total?: number | unknown;
+  /**
+   * Audio Url
+   *
+   * The audio clip to inpaint
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Num Inference Steps
+   *
+   * The number of steps to denoise the audio for
+   */
+  num_inference_steps?: number;
+  /**
+   * Prompt
+   *
+   * The prompt to guide the audio generation
+   */
+  prompt: string;
+  /**
+   * Mask End
+   *
+   * The end point of the audio mask
+   */
+  mask_end?: number;
   /**
    * Seed
-   *
-   * Random seed for reproducibility. If not provided, a random seed will be used.
    */
   seed?: number | unknown;
-  /**
-   * Lyrics
-   *
-   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
-   */
-  lyrics?: string;
-  /**
-   * Original Tags
-   *
-   * Original tags of the audio file.
-   */
-  original_tags: string;
-  /**
-   * Minimum Guidance Scale
-   *
-   * Minimum guidance scale for the generation after the decay.
-   */
-  minimum_guidance_scale?: number;
 };
 
 /**
- * ACEStepResponse
+ * InpaintOutput
  */
-export type AceStepAudioOutpaintOutput = {
-  /**
-   * Lyrics
-   *
-   * The lyrics used in the generation process.
-   */
-  lyrics: string;
+export type StableAudio25InpaintOutput = {
   audio: File;
   /**
    * Seed
    *
-   * The random seed used for the generation process.
+   * The random seed used for generation
    */
   seed: number;
-  /**
-   * Tags
-   *
-   * The genre tags used in the generation process.
-   */
-  tags: string;
 };
 
 /**
- * ACEStepAudioOutpaintRequest
+ * TextToAudioInput
  */
-export type AceStepAudioOutpaintInput = {
+export type StableAudio25TextToAudioInput = {
   /**
-   * Granularity Scale
+   * Sync Mode
    *
-   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   * If `True`, the media will be returned as a data URI and the output data won't be available in the request history.
    */
-  granularity_scale?: number;
+  sync_mode?: boolean;
   /**
-   * Lyric Guidance Scale
+   * Prompt
    *
-   * Lyric guidance scale for the generation.
+   * The prompt to generate audio from
    */
-  lyric_guidance_scale?: number;
+  prompt: string;
   /**
-   * Audio Url
+   * Seconds Total
    *
-   * URL of the audio file to be outpainted.
+   * The duration of the audio clip to generate
    */
-  audio_url: string | Blob | File;
-  /**
-   * Guidance Interval
-   *
-   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
-   */
-  guidance_interval?: number;
-  /**
-   * Extend After Duration
-   *
-   * Duration in seconds to extend the audio from the end.
-   */
-  extend_after_duration?: number;
-  /**
-   * Extend Before Duration
-   *
-   * Duration in seconds to extend the audio from the start.
-   */
-  extend_before_duration?: number;
-  /**
-   * Guidance Interval Decay
-   *
-   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
-   */
-  guidance_interval_decay?: number;
-  /**
-   * Tags
-   *
-   * Comma-separated list of genre tags to control the style of the generated audio.
-   */
-  tags: string;
-  /**
-   * Guidance Type
-   *
-   * Type of CFG to use for the generation process.
-   */
-  guidance_type?: "cfg" | "apg" | "cfg_star";
-  /**
-   * Tag Guidance Scale
-   *
-   * Tag guidance scale for the generation.
-   */
-  tag_guidance_scale?: number;
-  /**
-   * Scheduler
-   *
-   * Scheduler to use for the generation process.
-   */
-  scheduler?: "euler" | "heun";
+  seconds_total?: number;
   /**
    * Guidance Scale
    *
-   * Guidance scale for the generation.
+   * How strictly the diffusion process adheres to the prompt text (higher values make your audio closer to your prompt).
    */
   guidance_scale?: number;
   /**
-   * Number Of Steps
+   * Num Inference Steps
    *
-   * Number of steps to generate the audio.
+   * The number of steps to denoise the audio for
    */
-  number_of_steps?: number;
+  num_inference_steps?: number;
   /**
    * Seed
-   *
-   * Random seed for reproducibility. If not provided, a random seed will be used.
    */
   seed?: number | unknown;
-  /**
-   * Lyrics
-   *
-   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
-   */
-  lyrics?: string;
-  /**
-   * Minimum Guidance Scale
-   *
-   * Minimum guidance scale for the generation after the decay.
-   */
-  minimum_guidance_scale?: number;
 };
 
 /**
- * ACEStepAudioInpaintResponse
+ * TextToAudioOutput
  */
-export type AceStepAudioInpaintOutput = {
-  /**
-   * Lyrics
-   *
-   * The lyrics used in the generation process.
-   */
-  lyrics: string;
+export type StableAudio25TextToAudioOutput = {
   audio: File;
   /**
    * Seed
    *
-   * The random seed used for the generation process.
+   * The random seed used for generation
    */
   seed: number;
-  /**
-   * Tags
-   *
-   * The genre tags used in the generation process.
-   */
-  tags: string;
 };
 
 /**
- * ACEStepAudioInpaintRequest
+ * Input
  */
-export type AceStepAudioInpaintInput = {
+export type StableAudioInput = {
   /**
-   * Granularity Scale
+   * Steps
    *
-   * Granularity scale for the generation process. Higher values can reduce artifacts.
+   * The number of steps to denoise the audio for
    */
-  granularity_scale?: number;
+  steps?: number;
   /**
-   * Lyric Guidance Scale
+   * Seconds Start
    *
-   * Lyric guidance scale for the generation.
+   * The start point of the audio clip to generate
    */
-  lyric_guidance_scale?: number;
+  seconds_start?: number;
+  /**
+   * Seconds Total
+   *
+   * The duration of the audio clip to generate
+   */
+  seconds_total?: number;
+  /**
+   * Prompt
+   *
+   * The prompt to generate audio from
+   */
+  prompt: string;
+};
+
+/**
+ * Output
+ */
+export type StableAudioOutput = {
+  audio_file: File;
+};
+
+/**
+ * Input
+ */
+export type Tada1bTextToSpeechInput = {
+  /**
+   * Transcript
+   *
+   * Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.
+   */
+  transcript?: string;
+  /**
+   * Acoustic Cfg Scale
+   *
+   * Classifier-free guidance scale for acoustic feature generation.
+   */
+  acoustic_cfg_scale?: number;
+  /**
+   * Top P
+   *
+   * Top-p (nucleus) sampling parameter for text generation.
+   */
+  top_p?: number;
+  /**
+   * Output Format
+   *
+   * The format of the output audio file.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Speed Up Factor
+   *
+   * Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.
+   */
+  speed_up_factor?: number;
+  /**
+   * Num Extra Steps
+   *
+   * Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.
+   */
+  num_extra_steps?: number;
+  /**
+   * Language
+   *
+   * Language for text alignment. Use the appropriate code for non-English synthesis.
+   */
+  language?:
+    | "en"
+    | "ar"
+    | "ch"
+    | "de"
+    | "es"
+    | "fr"
+    | "it"
+    | "ja"
+    | "pl"
+    | "pt";
+  /**
+   * Noise Temperature
+   *
+   * Temperature for noise in the flow matching diffusion process.
+   */
+  noise_temperature?: number;
+  /**
+   * Prompt
+   *
+   * The text to synthesize into speech using the reference speaker's voice.
+   */
+  prompt: string;
+  /**
+   * Temperature
+   *
+   * Sampling temperature for text token generation. Higher values produce more varied output.
+   */
+  temperature?: number;
   /**
    * Audio Url
    *
-   * URL of the audio file to be inpainted.
+   * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
    */
   audio_url: string | Blob | File;
   /**
-   * Guidance Interval
+   * Num Inference Steps
    *
-   * Guidance interval for the generation. 0.5 means only apply guidance in the middle steps (0.25 * infer_steps to 0.75 * infer_steps)
+   * Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.
    */
-  guidance_interval?: number;
+  num_inference_steps?: number;
   /**
-   * End Time
+   * Repetition Penalty
    *
-   * end time in seconds for the inpainting process.
+   * Penalty applied to repeated tokens during generation.
    */
-  end_time?: number;
+  repetition_penalty?: number;
+};
+
+/**
+ * MiniOutput
+ */
+export type Tada1bTextToSpeechOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Input
+ */
+export type Tada3bTextToSpeechInput = {
   /**
-   * Guidance Interval Decay
+   * Transcript
    *
-   * Guidance interval decay for the generation. Guidance scale will decay from guidance_scale to min_guidance_scale in the interval. 0.0 means no decay.
+   * Transcript of the reference audio. For non-English audio, providing a transcript is required since the built-in ASR is English-only.
    */
-  guidance_interval_decay?: number;
+  transcript?: string;
+  /**
+   * Acoustic Cfg Scale
+   *
+   * Classifier-free guidance scale for acoustic feature generation.
+   */
+  acoustic_cfg_scale?: number;
+  /**
+   * Top P
+   *
+   * Top-p (nucleus) sampling parameter for text generation.
+   */
+  top_p?: number;
+  /**
+   * Output Format
+   *
+   * The format of the output audio file.
+   */
+  output_format?: "wav" | "mp3";
+  /**
+   * Speed Up Factor
+   *
+   * Factor to speed up or slow down the generated speech. Values > 1.0 speed up, < 1.0 slow down.
+   */
+  speed_up_factor?: number;
+  /**
+   * Num Extra Steps
+   *
+   * Number of extra autoregressive steps for speech continuation beyond the input text. Useful for generating trailing prosody or silence.
+   */
+  num_extra_steps?: number;
+  /**
+   * Language
+   *
+   * Language for text alignment. Use the appropriate code for non-English synthesis.
+   */
+  language?:
+    | "en"
+    | "ar"
+    | "ch"
+    | "de"
+    | "es"
+    | "fr"
+    | "it"
+    | "ja"
+    | "pl"
+    | "pt";
+  /**
+   * Noise Temperature
+   *
+   * Temperature for noise in the flow matching diffusion process.
+   */
+  noise_temperature?: number;
+  /**
+   * Prompt
+   *
+   * The text to synthesize into speech using the reference speaker's voice.
+   */
+  prompt: string;
+  /**
+   * Temperature
+   *
+   * Sampling temperature for text token generation. Higher values produce more varied output.
+   */
+  temperature?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the reference audio file for voice cloning. The model will replicate this speaker's voice characteristics.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Num Inference Steps
+   *
+   * Number of ODE solver steps for flow matching acoustic generation. More steps improve quality at the cost of speed.
+   */
+  num_inference_steps?: number;
+  /**
+   * Repetition Penalty
+   *
+   * Penalty applied to repeated tokens during generation.
+   */
+  repetition_penalty?: number;
+};
+
+/**
+ * Output
+ */
+export type Tada3bTextToSpeechOutput = {
+  audio: AudioFile;
+};
+
+/**
+ * Turn
+ */
+export type Turn = {
+  /**
+   * Text
+   */
+  text: string;
+  /**
+   * Speaker Id
+   */
+  speaker_id: number;
+};
+
+/**
+ * ExtendInput
+ */
+export type V2ExtendInput = {
+  /**
+   * Prompt
+   *
+   * A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.
+   */
+  prompt?: string | unknown;
+  /**
+   * Lyrics Prompt
+   *
+   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
+   */
+  lyrics_prompt?: string | unknown;
   /**
    * Tags
    *
-   * Comma-separated list of genre tags to control the style of the generated audio.
+   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
    */
-  tags: string;
+  tags?: Array<string> | unknown;
   /**
-   * Guidance Type
+   * Prompt Strength
    *
-   * Type of CFG to use for the generation process.
+   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
    */
-  guidance_type?: "cfg" | "apg" | "cfg_star";
+  prompt_strength?: number;
   /**
-   * Tag Guidance Scale
+   * Output Bit Rate
    *
-   * Tag guidance scale for the generation.
+   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
    */
-  tag_guidance_scale?: number;
+  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
   /**
-   * Scheduler
+   * Num Songs
    *
-   * Scheduler to use for the generation process.
+   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
    */
-  scheduler?: "euler" | "heun";
+  num_songs?: number;
   /**
-   * Guidance Scale
-   *
-   * Guidance scale for the generation.
+   * Output Format
    */
-  guidance_scale?: number;
+  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
   /**
-   * Start Time Relative To
+   * Side
    *
-   * Whether the start time is relative to the start or end of the audio.
+   * Add more to the beginning (left) or end (right) of the song
    */
-  start_time_relative_to?: "start" | "end";
+  side: "left" | "right";
   /**
-   * Start Time
+   * Balance Strength
    *
-   * start time in seconds for the inpainting process.
+   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
    */
-  start_time?: number;
+  balance_strength?: number;
   /**
-   * Number Of Steps
+   * Crop Duration
    *
-   * Number of steps to generate the audio.
+   * Duration in seconds to crop from the selected side before extending from that side.
    */
-  number_of_steps?: number;
+  crop_duration?: number;
+  /**
+   * Audio Url
+   *
+   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
+   */
+  audio_url: string | Blob | File;
   /**
    * Seed
    *
-   * Random seed for reproducibility. If not provided, a random seed will be used.
+   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
    */
   seed?: number | unknown;
   /**
+   * Extend Duration
+   *
+   * Duration in seconds to extend the song. If not provided, will attempt to automatically determine.
+   */
+  extend_duration?: number | unknown;
+};
+
+/**
+ * ExtendOutput
+ */
+export type V2ExtendOutput = {
+  /**
+   * Tags
+   *
+   * The style tags used for generation.
+   */
+  tags?: Array<string> | unknown;
+  /**
+   * Seed
+   *
+   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
+   */
+  seed: number;
+  /**
+   * Extend Duration
+   *
+   * The duration in seconds that the song was extended by.
+   */
+  extend_duration: number;
+  /**
+   * Audio
+   *
+   * The generated audio files.
+   */
+  audio: Array<File>;
+  /**
    * Lyrics
    *
-   * Lyrics to be sung in the audio. If not provided or if [inst] or [instrumental] is the content of this field, no lyrics will be sung. Use control structures like [verse], [chorus] and [bridge] to control the structure of the song.
+   * The lyrics used for generation.
    */
-  lyrics?: string;
+  lyrics?: string | unknown;
+};
+
+/**
+ * InpaintInput
+ */
+export type V2InpaintInput = {
   /**
-   * Minimum Guidance Scale
+   * Lyrics Prompt
    *
-   * Minimum guidance scale for the generation after the decay.
+   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
    */
-  minimum_guidance_scale?: number;
+  lyrics_prompt: string;
   /**
-   * Variance
+   * Tags
    *
-   * Variance for the inpainting process. Higher values can lead to more diverse results.
+   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
    */
-  variance?: number;
+  tags?: Array<string>;
   /**
-   * End Time Relative To
+   * Prompt Strength
    *
-   * Whether the end time is relative to the start or end of the audio.
+   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
    */
-  end_time_relative_to?: "start" | "end";
+  prompt_strength?: number;
+  /**
+   * Output Bit Rate
+   *
+   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
+   */
+  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
+  /**
+   * Num Songs
+   *
+   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
+   */
+  num_songs?: number;
+  /**
+   * Output Format
+   */
+  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
+  /**
+   * Selection Crop
+   *
+   * Crop to the selected region
+   */
+  selection_crop?: boolean;
+  /**
+   * Sections
+   *
+   * List of sections to inpaint. Currently, only one section is supported so the list length must be 1.
+   */
+  sections: Array<InpaintSection>;
+  /**
+   * Balance Strength
+   *
+   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
+   */
+  balance_strength?: number;
+  /**
+   * Audio Url
+   *
+   * The URL of the audio file to alter. Must be a valid publicly accessible URL.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Seed
+   *
+   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
+   */
+  seed?: number | unknown;
+};
+
+/**
+ * InpaintOutput
+ */
+export type V2InpaintOutput = {
+  /**
+   * Seed
+   *
+   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
+   */
+  seed: number;
+  /**
+   * Audio
+   *
+   * The generated audio files.
+   */
+  audio: Array<File>;
+};
+
+/**
+ * GenerateInput
+ */
+export type V2TextToMusicInput = {
+  /**
+   * Prompt
+   *
+   * A description of the track you want to generate. This prompt will be used to automatically generate the tags and lyrics unless you manually set them. For example, if you set prompt and tags, then the prompt will be used to generate only the lyrics.
+   */
+  prompt?: string | unknown;
+  /**
+   * Lyrics Prompt
+   *
+   * The lyrics sung in the generated song. An empty string will generate an instrumental track.
+   */
+  lyrics_prompt?: string | unknown;
+  /**
+   * Tags
+   *
+   * Tags/styles of the music to generate. You can view a list of all available tags at https://sonauto.ai/tag-explorer.
+   */
+  tags?: Array<string> | unknown;
+  /**
+   * Prompt Strength
+   *
+   * Controls how strongly your prompt influences the output. Greater values adhere more to the prompt but sound less natural. (This is CFG.)
+   */
+  prompt_strength?: number;
+  /**
+   * Output Bit Rate
+   *
+   * The bit rate to use for mp3 and m4a formats. Not available for other formats.
+   */
+  output_bit_rate?: 128 | 192 | 256 | 320 | unknown;
+  /**
+   * Num Songs
+   *
+   * Generating 2 songs costs 1.5x the price of generating 1 song. Also, note that using the same seed may not result in identical songs if the number of songs generated is changed.
+   */
+  num_songs?: number;
+  /**
+   * Output Format
+   */
+  output_format?: "flac" | "mp3" | "wav" | "ogg" | "m4a";
+  /**
+   * Bpm
+   *
+   * The beats per minute of the song. This can be set to an integer or the literal string "auto" to pick a suitable bpm based on the tags. Set bpm to null to not condition the model on bpm information.
+   */
+  bpm?: number | string | unknown;
+  /**
+   * Balance Strength
+   *
+   * Greater means more natural vocals. Lower means sharper instrumentals. We recommend 0.7.
+   */
+  balance_strength?: number;
+  /**
+   * Seed
+   *
+   * The seed to use for generation. Will pick a random seed if not provided. Repeating a request with identical parameters (must use lyrics and tags, not prompt) and the same seed will generate the same song.
+   */
+  seed?: number | unknown;
+};
+
+/**
+ * GenerateOutput
+ */
+export type V2TextToMusicOutput = {
+  /**
+   * Tags
+   *
+   * The style tags used for generation.
+   */
+  tags?: Array<string> | unknown;
+  /**
+   * Seed
+   *
+   * The seed used for generation. This can be used to generate an identical song by passing the same parameters with this seed in a future request.
+   */
+  seed: number;
+  /**
+   * Lyrics
+   *
+   * The lyrics used for generation.
+   */
+  lyrics?: string | unknown;
+  /**
+   * Audio
+   *
+   * The generated audio files.
+   */
+  audio: Array<File>;
+};
+
+/**
+ * AudioCompressorInput
+ *
+ * Input model for audio dynamic range compression
+ */
+export type WorkflowUtilitiesAudioCompressorInput = {
+  /**
+   * Makeup
+   *
+   * Makeup gain in dB to compensate for volume reduction
+   */
+  makeup?: number;
+  /**
+   * Output Bitrate
+   *
+   * Output audio bitrate
+   */
+  output_bitrate?: "128k" | "192k" | "256k" | "320k";
+  /**
+   * Attack
+   *
+   * Attack time in milliseconds (how fast compression starts)
+   */
+  attack?: number;
+  /**
+   * Knee
+   *
+   * Knee width in dB for soft knee compression (0 = hard knee)
+   */
+  knee?: number;
+  /**
+   * Ratio
+   *
+   * Compression ratio (1 = no compression, higher = more compression)
+   */
+  ratio?: number;
+  /**
+   * Release
+   *
+   * Release time in milliseconds (how fast compression stops)
+   */
+  release?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to compress
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Threshold
+   *
+   * Threshold level in dB above which compression is applied (-60 to 0)
+   */
+  threshold?: number;
+};
+
+/**
+ * AudioCompressorOutput
+ *
+ * Output model for compressed audio
+ */
+export type WorkflowUtilitiesAudioCompressorOutput = {
+  audio: AudioFileType2;
+};
+
+/**
+ * ImpulseResponseInput
+ *
+ * Input model for applying impulse response (IR) convolution reverb to audio
+ */
+export type WorkflowUtilitiesImpulseResponseInput = {
+  /**
+   * Impulse Response Url
+   *
+   * URL of the impulse response WAV file (reverb/effect profile)
+   */
+  impulse_response_url: string | Blob | File;
+  /**
+   * Loudness Lra
+   *
+   * Loudness Range target in LU (typically 5-15)
+   */
+  loudness_lra?: number;
+  /**
+   * Output Bitrate
+   *
+   * Output audio bitrate
+   */
+  output_bitrate?: "128k" | "192k" | "256k" | "320k";
+  /**
+   * Loudness I
+   *
+   * Target integrated loudness in LUFS (typically -24 to -14)
+   */
+  loudness_i?: number;
+  /**
+   * Loudness Tp
+   *
+   * Maximum true peak in dBTP (typically -2 to -1)
+   */
+  loudness_tp?: number;
+  /**
+   * Audio Url
+   *
+   * URL of the main audio file to process
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Wet Level
+   *
+   * Level of the processed (wet) signal in the mix (0.0-1.0)
+   */
+  wet_level?: number;
+  /**
+   * Dry Level
+   *
+   * Level of the original (dry) signal in the mix (0.0-1.0)
+   */
+  dry_level?: number;
+};
+
+/**
+ * ImpulseResponseOutput
+ *
+ * Output model for impulse response processed audio
+ */
+export type WorkflowUtilitiesImpulseResponseOutput = {
+  audio: AudioFileType2;
+};
+
+/**
+ * TextToMusicInput
+ */
+export type YueInput = {
+  /**
+   * Genres
+   *
+   * The genres (separated by a space ' ') to guide the music generation.
+   */
+  genres: string;
+  /**
+   * Lyrics
+   *
+   * The prompt to generate an image from. Must have two sections. Sections start with either [chorus] or a [verse].
+   */
+  lyrics: string;
+};
+
+/**
+ * Output
+ */
+export type YueOutput = {
+  audio: File;
+};
+
+/**
+ * ZonosInput
+ */
+export type ZonosInput = {
+  /**
+   * Prompt
+   *
+   * The content generated using cloned voice.
+   */
+  prompt: string;
+  /**
+   * Reference Audio Url
+   *
+   * The reference audio.
+   */
+  reference_audio_url: string | Blob | File;
+};
+
+/**
+ * ZonosOutput
+ */
+export type ZonosOutput = {
+  /**
+   * Audio
+   *
+   * The generated audio
+   */
+  audio: FileType2;
 };
 
 export type PostCassetteaiMusicGeneratorData = {

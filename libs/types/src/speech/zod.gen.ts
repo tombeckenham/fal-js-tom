@@ -3,424 +3,38 @@
 import * as z from "zod";
 
 /**
- * VoiceSetting
+ * Audio
  */
-export const zVoiceSetting = z.object({
-  pitch: z
+export const zAudio = z.object({
+  file_size: z
     .int()
-    .gte(-12)
-    .lte(12)
     .register(z.globalRegistry, {
-      description: "Voice pitch (-12 to 12)",
+      description: "The size of the file in bytes.",
     })
-    .optional()
-    .default(0),
-  voice_id: z
+    .optional(),
+  file_name: z
     .string()
-    .min(1)
-    .register(z.globalRegistry, {
-      description: "Predefined voice ID to use for synthesis",
-    })
-    .optional()
-    .default("Wise_Woman"),
-  english_normalization: z
-    .boolean()
     .register(z.globalRegistry, {
       description:
-        "Enables English text normalization to improve number reading performance, with a slight increase in latency",
-    })
-    .optional()
-    .default(false),
-  emotion: z
-    .union([
-      z.enum([
-        "happy",
-        "sad",
-        "angry",
-        "fearful",
-        "disgusted",
-        "surprised",
-        "neutral",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  vol: z
-    .number()
-    .gte(0.01)
-    .lte(10)
-    .register(z.globalRegistry, {
-      description: "Volume (0-10)",
-    })
-    .optional()
-    .default(1),
-  speed: z
-    .number()
-    .gte(0.5)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description: "Speech speed (0.5-2.0)",
-    })
-    .optional()
-    .default(1),
-});
-
-/**
- * VoiceModify
- *
- * Voice modification settings for Speech 2.8 models.
- */
-export const zVoiceModify = z
-  .object({
-    pitch: z
-      .int()
-      .gte(-100)
-      .lte(100)
-      .register(z.globalRegistry, {
-        description:
-          "Pitch adjustment in semitones. Range: -100 to 100. Positive values raise pitch, negative values lower it.",
-      })
-      .optional()
-      .default(0),
-    timbre: z
-      .int()
-      .gte(-100)
-      .lte(100)
-      .register(z.globalRegistry, {
-        description:
-          "Timbre adjustment. Range: -100 to 100. Affects the tonal quality of the voice.",
-      })
-      .optional()
-      .default(0),
-    intensity: z
-      .int()
-      .gte(-100)
-      .lte(100)
-      .register(z.globalRegistry, {
-        description:
-          "Intensity/energy of the voice. Range: -100 to 100. Higher values create more energetic speech.",
-      })
-      .optional()
-      .default(0),
-  })
-  .register(z.globalRegistry, {
-    description: "Voice modification settings for Speech 2.8 models.",
-  });
-
-/**
- * VibeVoiceSpeaker
- */
-export const zVibeVoiceSpeaker = z.object({
-  audio_url: z.union([z.string(), z.unknown()]).optional(),
-  preset: z
-    .enum([
-      "Alice [EN]",
-      "Carter [EN]",
-      "Frank [EN]",
-      "Mary [EN] (Background Music)",
-      "Maya [EN]",
-      "Anchen [ZH] (Background Music)",
-      "Bowen [ZH]",
-      "Xinran [ZH]",
-    ])
-    .register(z.globalRegistry, {
-      description:
-        "Default voice preset to use for the speaker. Not used if `audio_url` is provided.",
+        "The name of the file. It will be auto-generated if not provided.",
     })
     .optional(),
-});
-
-/**
- * File
- */
-export const zFile = z.object({
+  content_type: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The mime type of the file.",
+    })
+    .optional(),
   url: z.string().register(z.globalRegistry, {
     description: "The URL where the file can be downloaded from.",
   }),
-  file_size: z.union([z.int(), z.unknown()]).optional(),
-  file_name: z.union([z.string(), z.unknown()]).optional(),
-  content_type: z.union([z.string(), z.unknown()]).optional(),
+  file_data: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "File data",
+    })
+    .optional(),
 });
-
-/**
- * VibeVoiceOutput
- *
- * Output schema for VibeVoice TTS generation
- */
-export const zVibevoiceOutput = z
-  .object({
-    rtf: z.number().register(z.globalRegistry, {
-      description:
-        "Real-time factor (generation_time / audio_duration). Lower is better.",
-    }),
-    audio: zFile,
-    generation_time: z.number().register(z.globalRegistry, {
-      description: "Time taken to generate the audio in seconds",
-    }),
-    sample_rate: z.int().register(z.globalRegistry, {
-      description: "Sample rate of the generated audio",
-    }),
-    duration: z.number().register(z.globalRegistry, {
-      description: "Duration of the generated audio in seconds",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Output schema for VibeVoice TTS generation",
-  });
-
-/**
- * VibeVoiceInput
- *
- * Input schema for VibeVoice TTS generation
- */
-export const zVibevoiceInput = z
-  .object({
-    speakers: z.array(zVibeVoiceSpeaker).register(z.globalRegistry, {
-      description:
-        "List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
-    }),
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    cfg_scale: z
-      .number()
-      .gte(1)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description:
-          "CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
-      })
-      .optional()
-      .default(1.3),
-    script: z.string().max(90000).register(z.globalRegistry, {
-      description:
-        "The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Input schema for VibeVoice TTS generation",
-  });
-
-/**
- * VibeVoiceOutput
- *
- * Output schema for VibeVoice TTS generation
- */
-export const zVibevoice7bOutput = z
-  .object({
-    rtf: z.number().register(z.globalRegistry, {
-      description:
-        "Real-time factor (generation_time / audio_duration). Lower is better.",
-    }),
-    audio: zFile,
-    generation_time: z.number().register(z.globalRegistry, {
-      description: "Time taken to generate the audio in seconds",
-    }),
-    sample_rate: z.int().register(z.globalRegistry, {
-      description: "Sample rate of the generated audio",
-    }),
-    duration: z.number().register(z.globalRegistry, {
-      description: "Duration of the generated audio in seconds",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Output schema for VibeVoice TTS generation",
-  });
-
-/**
- * VibeVoice7bInput
- *
- * Input schema for VibeVoice-7b TTS generation
- */
-export const zVibevoice7bInput = z
-  .object({
-    speakers: z.array(zVibeVoiceSpeaker).register(z.globalRegistry, {
-      description:
-        "List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
-    }),
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    cfg_scale: z
-      .number()
-      .gte(1)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description:
-          "CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
-      })
-      .optional()
-      .default(1.3),
-    script: z.string().max(30000).register(z.globalRegistry, {
-      description:
-        "The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Input schema for VibeVoice-7b TTS generation",
-  });
-
-/**
- * VibeVoice_0_5BOutput
- *
- * Output schema for VibeVoice-0.5b TTS generation
- */
-export const zVibevoice05bOutput = z
-  .object({
-    rtf: z.number().register(z.globalRegistry, {
-      description:
-        "Real-time factor (generation_time / audio_duration). Lower is better.",
-    }),
-    audio: zFile,
-    generation_time: z.number().register(z.globalRegistry, {
-      description: "Time taken to generate the audio in seconds",
-    }),
-    sample_rate: z.int().register(z.globalRegistry, {
-      description: "Sample rate of the generated audio",
-    }),
-    duration: z.number().register(z.globalRegistry, {
-      description: "Duration of the generated audio in seconds",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Output schema for VibeVoice-0.5b TTS generation",
-  });
-
-/**
- * VibeVoice0_5bInput
- *
- * Input schema for VibeVoice-0.5b TTS generation
- */
-export const zVibevoice05bInput = z
-  .object({
-    seed: z.union([z.int(), z.unknown()]).optional(),
-    cfg_scale: z
-      .number()
-      .gte(1)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description:
-          "CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
-      })
-      .optional()
-      .default(1.3),
-    speaker: z
-      .enum(["Frank", "Wayne", "Carter", "Emma", "Grace", "Mike"])
-      .register(z.globalRegistry, {
-        description: "Voice to use for speaking.",
-      }),
-    script: z.string().max(90000).register(z.globalRegistry, {
-      description: "The script to convert to speech.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Input schema for VibeVoice-0.5b TTS generation",
-  });
-
-/**
- * XAITTSOutput
- *
- * Output for xAI text-to-speech generation.
- */
-export const zTtsV1Output = z
-  .object({
-    audio: zFile,
-  })
-  .register(z.globalRegistry, {
-    description: "Output for xAI text-to-speech generation.",
-  });
-
-/**
- * OutputFormat
- *
- * Output format configuration for the TTS API.
- */
-export const zOutputFormat = z
-  .object({
-    sample_rate: z
-      .union([
-        z.literal(8000),
-        z.literal(16000),
-        z.literal(22050),
-        z.literal(24000),
-        z.literal(44100),
-        z.literal(48000),
-      ])
-      .register(z.globalRegistry, {
-        description: "Sample rate in Hz.",
-      })
-      .optional(),
-    codec: z
-      .enum(["mp3", "wav", "pcm", "mulaw", "alaw"])
-      .register(z.globalRegistry, {
-        description: "Audio codec. Supported: mp3, wav, pcm, mulaw, alaw.",
-      })
-      .optional(),
-    bit_rate: z
-      .union([
-        z.union([
-          z.literal(32000),
-          z.literal(64000),
-          z.literal(96000),
-          z.literal(128000),
-          z.literal(192000),
-        ]),
-        z.unknown(),
-      ])
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Output format configuration for the TTS API.",
-  });
-
-/**
- * XAITTSInput
- *
- * Input for xAI text-to-speech generation.
- */
-export const zTtsV1Input = z
-  .object({
-    voice: z
-      .enum(["eve", "ara", "rex", "sal", "leo"])
-      .register(z.globalRegistry, {
-        description:
-          "Voice to use for synthesis. eve: energetic, upbeat. ara: warm, friendly. rex: confident, clear. sal: smooth, balanced. leo: authoritative, strong.",
-      })
-      .optional(),
-    text: z.string().min(1).max(15000).register(z.globalRegistry, {
-      description:
-        "The text to convert to speech. Maximum 15,000 characters. Supports speech tags for expressive delivery: inline tags like [laugh], [pause], [sigh] and wrapping tags like <whisper>text</whisper>, <slow>text</slow>.",
-    }),
-    language: z
-      .enum([
-        "auto",
-        "en",
-        "ar-EG",
-        "ar-SA",
-        "ar-AE",
-        "bn",
-        "zh",
-        "fr",
-        "de",
-        "hi",
-        "id",
-        "it",
-        "ja",
-        "ko",
-        "pt-BR",
-        "pt-PT",
-        "ru",
-        "es-MX",
-        "es-ES",
-        "tr",
-        "vi",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "BCP-47 language code or 'auto' for automatic detection. Supported: en, zh, fr, de, hi, id, it, ja, ko, pt-BR, pt-PT, ru, es-MX, es-ES, tr, vi, bn, ar-EG, ar-SA, ar-AE.",
-      })
-      .optional(),
-    output_format: zOutputFormat.optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Input for xAI text-to-speech generation.",
-  });
 
 /**
  * AudioFile
@@ -436,408 +50,6 @@ export const zAudioFile = z.object({
   duration: z.union([z.number(), z.unknown()]).optional(),
   content_type: z.union([z.string(), z.unknown()]).optional(),
   file_size: z.union([z.int(), z.unknown()]).optional(),
-});
-
-/**
- * Qwen3DesignVoiceOutput
- */
-export const zQwen3TtsVoiceDesign17bOutput = z.object({
-  audio: zAudioFile,
-});
-
-/**
- * Qwen3DesignVoiceInput
- */
-export const zQwen3TtsVoiceDesign17bInput = z.object({
-  language: z
-    .enum([
-      "Auto",
-      "English",
-      "Chinese",
-      "Spanish",
-      "French",
-      "German",
-      "Italian",
-      "Japanese",
-      "Korean",
-      "Portuguese",
-      "Russian",
-    ])
-    .register(z.globalRegistry, {
-      description: "The language of the voice to be designed.",
-    })
-    .optional(),
-  top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
-  subtalker_top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  repetition_penalty: z.union([z.number().gte(0), z.unknown()]).optional(),
-  text: z.string().register(z.globalRegistry, {
-    description: "The text to be converted to speech.",
-  }),
-  max_new_tokens: z.union([z.int().gte(1).lte(8192), z.unknown()]).optional(),
-  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  subtalker_top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "Optional prompt to guide the style of the generated speech.",
-  }),
-  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  subtalker_temperature: z
-    .union([z.number().gte(0).lte(1), z.unknown()])
-    .optional(),
-  subtalker_dosample: z.union([z.boolean(), z.unknown()]).optional(),
-});
-
-/**
- * Qwen3TTSOutput
- */
-export const zQwen3TtsTextToSpeech17bOutput = z.object({
-  audio: zAudioFile,
-});
-
-/**
- * Qwen3TTSInput
- */
-export const zQwen3TtsTextToSpeech17bInput = z.object({
-  top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
-  reference_text: z.union([z.string(), z.unknown()]).optional(),
-  repetition_penalty: z.union([z.number().gte(0), z.unknown()]).optional(),
-  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  max_new_tokens: z.union([z.int().gte(1).lte(8192), z.unknown()]).optional(),
-  subtalker_top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
-  subtalker_dosample: z.union([z.boolean(), z.unknown()]).optional(),
-  voice: z
-    .union([
-      z.enum([
-        "Vivian",
-        "Serena",
-        "Uncle_Fu",
-        "Dylan",
-        "Eric",
-        "Ryan",
-        "Aiden",
-        "Ono_Anna",
-        "Sohee",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  subtalker_top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  speaker_voice_embedding_file_url: z
-    .union([z.string(), z.unknown()])
-    .optional(),
-  text: z.string().register(z.globalRegistry, {
-    description: "The text to be converted to speech.",
-  }),
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  subtalker_temperature: z
-    .union([z.number().gte(0).lte(1), z.unknown()])
-    .optional(),
-  language: z
-    .enum([
-      "Auto",
-      "English",
-      "Chinese",
-      "Spanish",
-      "French",
-      "German",
-      "Italian",
-      "Japanese",
-      "Korean",
-      "Portuguese",
-      "Russian",
-    ])
-    .register(z.globalRegistry, {
-      description: "The language of the voice.",
-    })
-    .optional(),
-});
-
-/**
- * Qwen3TTSOutput06b
- */
-export const zQwen3TtsTextToSpeech06bOutput = z.object({
-  audio: zAudioFile,
-});
-
-/**
- * Qwen3TTSInput06b
- */
-export const zQwen3TtsTextToSpeech06bInput = z.object({
-  top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
-  reference_text: z.union([z.string(), z.unknown()]).optional(),
-  repetition_penalty: z.union([z.number().gte(0), z.unknown()]).optional(),
-  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  max_new_tokens: z.union([z.int().gte(1).lte(8192), z.unknown()]).optional(),
-  subtalker_top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
-  subtalker_dosample: z.union([z.boolean(), z.unknown()]).optional(),
-  voice: z
-    .union([
-      z.enum([
-        "Vivian",
-        "Serena",
-        "Uncle_Fu",
-        "Dylan",
-        "Eric",
-        "Ryan",
-        "Aiden",
-        "Ono_Anna",
-        "Sohee",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  subtalker_top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  speaker_voice_embedding_file_url: z
-    .union([z.string(), z.unknown()])
-    .optional(),
-  text: z.string().register(z.globalRegistry, {
-    description: "The text to be converted to speech.",
-  }),
-  prompt: z.union([z.string(), z.unknown()]).optional(),
-  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-  subtalker_temperature: z
-    .union([z.number().gte(0).lte(1), z.unknown()])
-    .optional(),
-  language: z
-    .enum([
-      "Auto",
-      "English",
-      "Chinese",
-      "Spanish",
-      "French",
-      "German",
-      "Italian",
-      "Japanese",
-      "Korean",
-      "Portuguese",
-      "Russian",
-    ])
-    .register(z.globalRegistry, {
-      description: "The language of the voice.",
-    })
-    .optional(),
-});
-
-export const zQueueStatus = z.object({
-  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
-  request_id: z.string().register(z.globalRegistry, {
-    description: "The request id.",
-  }),
-  response_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The response url.",
-    })
-    .optional(),
-  status_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The status url.",
-    })
-    .optional(),
-  cancel_url: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The cancel url.",
-    })
-    .optional(),
-  logs: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The logs.",
-    })
-    .optional(),
-  metrics: z
-    .record(z.string(), z.unknown())
-    .register(z.globalRegistry, {
-      description: "The metrics.",
-    })
-    .optional(),
-  queue_position: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The queue position.",
-    })
-    .optional(),
-});
-
-/**
- * PronunciationDict
- */
-export const zPronunciationDict = z.object({
-  tone_list: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "List of pronunciation replacements in format ['text/(pronunciation)', ...]. For Chinese, tones are 1-5. Example: ['燕少飞/(yan4)(shao3)(fei1)']",
-    })
-    .optional(),
-});
-
-/**
- * OrpheusOutput
- */
-export const zOrpheusTtsOutput = z.object({
-  audio: zFile,
-});
-
-/**
- * OrpheusRequest
- */
-export const zOrpheusTtsInput = z.object({
-  text: z.string().register(z.globalRegistry, {
-    description:
-      "The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>",
-  }),
-  voice: z
-    .enum(["tara", "leah", "jess", "leo", "dan", "mia", "zac", "zoe"])
-    .register(z.globalRegistry, {
-      description: "Voice ID for the desired voice.",
-    })
-    .optional(),
-  repetition_penalty: z
-    .number()
-    .gte(1.1)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "Repetition penalty (>= 1.1 required for stable generations).",
-    })
-    .optional()
-    .default(1.2),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description: "Temperature for generation (higher = more creative).",
-    })
-    .optional()
-    .default(0.7),
-});
-
-/**
- * VoiceDesignOutput
- */
-export const zMinimaxVoiceDesignOutput = z.object({
-  audio: zFile,
-  custom_voice_id: z.string().register(z.globalRegistry, {
-    description: "The voice_id of the generated voice",
-  }),
-});
-
-/**
- * VoiceDesignRequest
- */
-export const zMinimaxVoiceDesignInput = z.object({
-  preview_text: z.string().max(500).register(z.globalRegistry, {
-    description:
-      "Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.",
-  }),
-  prompt: z.string().max(2000).register(z.globalRegistry, {
-    description: "Voice description prompt for generating a personalized voice",
-  }),
-});
-
-/**
- * VoiceCloneOutput
- */
-export const zMinimaxVoiceCloneOutput = z.object({
-  audio: z.union([zFile, z.unknown()]).optional(),
-  custom_voice_id: z.string().register(z.globalRegistry, {
-    description: "The cloned voice ID for use with TTS",
-  }),
-});
-
-/**
- * VoiceCloneRequest
- */
-export const zMinimaxVoiceCloneInput = z.object({
-  text: z.union([z.string().max(1000), z.unknown()]).optional(),
-  audio_url: z.union([z.string(), z.string()]),
-  need_volume_normalization: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Enable volume normalization for the cloned voice",
-    })
-    .optional()
-    .default(false),
-  noise_reduction: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Enable noise reduction for the cloned voice",
-    })
-    .optional()
-    .default(false),
-  model: z
-    .enum([
-      "speech-02-hd",
-      "speech-02-turbo",
-      "speech-01-hd",
-      "speech-01-turbo",
-    ])
-    .register(z.globalRegistry, {
-      description:
-        "TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo",
-    })
-    .optional(),
-  accuracy: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
-});
-
-/**
- * TextToSpeechTurbo28Output
- *
- * Output model for Speech 2.8 Turbo.
- */
-export const zMinimaxSpeech28TurboOutput = z
-  .object({
-    audio: zFile,
-    duration_ms: z.int().register(z.globalRegistry, {
-      description: "Duration of the audio in milliseconds",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Output model for Speech 2.8 Turbo.",
-  });
-
-/**
- * LoudnessNormalizationSetting
- */
-export const zLoudnessNormalizationSetting = z.object({
-  target_peak: z
-    .number()
-    .gte(-3)
-    .lte(0)
-    .register(z.globalRegistry, {
-      description: "Target peak level in dBTP (default -0.5).",
-    })
-    .optional()
-    .default(-0.5),
-  target_loudness: z
-    .number()
-    .gte(-70)
-    .lte(-10)
-    .register(z.globalRegistry, {
-      description: "Target loudness in LUFS (default -18.0)",
-    })
-    .optional()
-    .default(-18),
-  target_range: z
-    .number()
-    .gte(0)
-    .lte(20)
-    .register(z.globalRegistry, {
-      description: "Target loudness range in LU (default 8.0)",
-    })
-    .optional()
-    .default(8),
-  enabled: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Enable loudness normalization for the audio",
-    })
-    .optional()
-    .default(true),
 });
 
 /**
@@ -883,1022 +95,516 @@ export const zAudioSetting = z.object({
 });
 
 /**
- * TextToSpeechTurbo28Request
+ * STSInput
  *
- * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
+ * Input parameters for the speech-to-speech request.
  */
-export const zMinimaxSpeech28TurboInput = z
+export const zChatterboxhdSpeechToSpeechInput = z
   .object({
-    language_boost: z
-      .union([
-        z.enum([
-          "Chinese",
-          "Chinese,Yue",
-          "English",
-          "Arabic",
-          "Russian",
-          "Spanish",
-          "French",
-          "Portuguese",
-          "German",
-          "Turkish",
-          "Dutch",
-          "Ukrainian",
-          "Vietnamese",
-          "Indonesian",
-          "Japanese",
-          "Italian",
-          "Korean",
-          "Thai",
-          "Polish",
-          "Romanian",
-          "Greek",
-          "Czech",
-          "Finnish",
-          "Hindi",
-          "Bulgarian",
-          "Danish",
-          "Hebrew",
-          "Malay",
-          "Slovak",
-          "Swedish",
-          "Croatian",
-          "Hungarian",
-          "Norwegian",
-          "Slovenian",
-          "Catalan",
-          "Nynorsk",
-          "Afrikaans",
-          "auto",
-        ]),
-        z.unknown(),
+    high_quality_audio: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz. ",
+      })
+      .optional()
+      .default(false),
+    target_voice_audio_url: z.union([z.string(), z.string()]).optional(),
+    source_audio_url: z.union([z.string(), z.string()]),
+    target_voice: z
+      .enum([
+        "Aurora",
+        "Blade",
+        "Britney",
+        "Carl",
+        "Cliff",
+        "Richard",
+        "Rico",
+        "Siobhan",
+        "Vicky",
       ])
-      .optional(),
-    voice_modify: z.union([zVoiceModify, z.unknown()]).optional(),
-    audio_setting: zAudioSetting.optional(),
-    normalization_setting: zLoudnessNormalizationSetting.optional(),
-    prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
-      description:
-        "Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.",
-    }),
-    output_format: z
-      .enum(["url", "hex"])
       .register(z.globalRegistry, {
-        description: "Format of the output content (non-streaming only)",
+        description:
+          "The voice to use for the speech-to-speech request. If neither target_voice nor target_voice_audio_url are provided, a random target voice will be used.",
       })
       .optional(),
-    pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-    voice_setting: zVoiceSetting.optional(),
   })
   .register(z.globalRegistry, {
-    description:
-      "Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.",
+    description: "Input parameters for the speech-to-speech request.",
   });
 
 /**
- * TextToSpeechHD28Output
+ * STSOutput
  *
- * Output model for Speech 2.8 HD.
+ * Output parameters for the speech-to-speech request.
  */
-export const zMinimaxSpeech28HdOutput = z
+export const zChatterboxhdSpeechToSpeechOutput = z
   .object({
-    audio: zFile,
-    duration_ms: z.int().register(z.globalRegistry, {
-      description: "Duration of the audio in milliseconds",
-    }),
+    audio: zAudio,
   })
   .register(z.globalRegistry, {
-    description: "Output model for Speech 2.8 HD.",
+    description: "Output parameters for the speech-to-speech request.",
   });
 
 /**
- * TextToSpeechHD28Request
+ * TTSInput
  *
- * Request model for Speech 2.8 HD - highest quality speech synthesis.
+ * Input parameters for the TTS request.
  */
-export const zMinimaxSpeech28HdInput = z
+export const zChatterboxhdTextToSpeechInput = z
   .object({
-    language_boost: z
-      .union([
-        z.enum([
-          "Chinese",
-          "Chinese,Yue",
-          "English",
-          "Arabic",
-          "Russian",
-          "Spanish",
-          "French",
-          "Portuguese",
-          "German",
-          "Turkish",
-          "Dutch",
-          "Ukrainian",
-          "Vietnamese",
-          "Indonesian",
-          "Japanese",
-          "Italian",
-          "Korean",
-          "Thai",
-          "Polish",
-          "Romanian",
-          "Greek",
-          "Czech",
-          "Finnish",
-          "Hindi",
-          "Bulgarian",
-          "Danish",
-          "Hebrew",
-          "Malay",
-          "Slovak",
-          "Swedish",
-          "Croatian",
-          "Hungarian",
-          "Norwegian",
-          "Slovenian",
-          "Catalan",
-          "Nynorsk",
-          "Afrikaans",
-          "auto",
-        ]),
-        z.unknown(),
+    text: z
+      .string()
+      .register(z.globalRegistry, {
+        description: "Text to synthesize into speech.",
+      })
+      .optional()
+      .default(
+        "My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions and loyal servant to the true emperor, Marcus Aurelius. Father to a murdered son, husband to a murdered wife. And I will have my vengeance, in this life or the next.",
+      ),
+    exaggeration: z
+      .number()
+      .gte(0.25)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Controls emotion exaggeration. Range typically 0.25 to 2.0.",
+      })
+      .optional()
+      .default(0.5),
+    high_quality_audio: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description:
+          "If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz. ",
+      })
+      .optional()
+      .default(false),
+    voice: z
+      .enum([
+        "Aurora",
+        "Blade",
+        "Britney",
+        "Carl",
+        "Cliff",
+        "Richard",
+        "Rico",
+        "Siobhan",
+        "Vicky",
       ])
-      .optional(),
-    voice_modify: z.union([zVoiceModify, z.unknown()]).optional(),
-    audio_setting: zAudioSetting.optional(),
-    normalization_setting: zLoudnessNormalizationSetting.optional(),
-    prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
-      description:
-        "Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.",
-    }),
-    output_format: z
-      .enum(["url", "hex"])
       .register(z.globalRegistry, {
-        description: "Format of the output content (non-streaming only)",
+        description:
+          "The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.",
       })
       .optional(),
-    pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-    voice_setting: zVoiceSetting.optional(),
-  })
-  .register(z.globalRegistry, {
-    description:
-      "Request model for Speech 2.8 HD - highest quality speech synthesis.",
-  });
-
-/**
- * TextToSpeechTurbo26Output
- */
-export const zMinimaxSpeech26TurboOutput = z.object({
-  audio: zFile,
-  duration_ms: z.int().register(z.globalRegistry, {
-    description: "Duration of the audio in milliseconds",
-  }),
-});
-
-/**
- * TextToSpeechTurbo26Request
- */
-export const zMinimaxSpeech26TurboInput = z.object({
-  language_boost: z
-    .union([
-      z.enum([
-        "Chinese",
-        "Chinese,Yue",
-        "English",
-        "Arabic",
-        "Russian",
-        "Spanish",
-        "French",
-        "Portuguese",
-        "German",
-        "Turkish",
-        "Dutch",
-        "Ukrainian",
-        "Vietnamese",
-        "Indonesian",
-        "Japanese",
-        "Italian",
-        "Korean",
-        "Thai",
-        "Polish",
-        "Romanian",
-        "Greek",
-        "Czech",
-        "Finnish",
-        "Hindi",
-        "Bulgarian",
-        "Danish",
-        "Hebrew",
-        "Malay",
-        "Slovak",
-        "Swedish",
-        "Croatian",
-        "Hungarian",
-        "Norwegian",
-        "Slovenian",
-        "Catalan",
-        "Nynorsk",
-        "Afrikaans",
-        "auto",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-  audio_setting: zAudioSetting.optional(),
-  output_format: z
-    .enum(["url", "hex"])
-    .register(z.globalRegistry, {
-      description: "Format of the output content (non-streaming only)",
-    })
-    .optional(),
-  normalization_setting: zLoudnessNormalizationSetting.optional(),
-  prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
-    description:
-      "Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.",
-  }),
-  voice_setting: zVoiceSetting.optional(),
-});
-
-/**
- * TextToSpeechHD26Output
- */
-export const zMinimaxSpeech26HdOutput = z.object({
-  audio: zFile,
-  duration_ms: z.int().register(z.globalRegistry, {
-    description: "Duration of the audio in milliseconds",
-  }),
-});
-
-/**
- * TextToSpeechHD26Request
- */
-export const zMinimaxSpeech26HdInput = z.object({
-  language_boost: z
-    .union([
-      z.enum([
-        "Chinese",
-        "Chinese,Yue",
-        "English",
-        "Arabic",
-        "Russian",
-        "Spanish",
-        "French",
-        "Portuguese",
-        "German",
-        "Turkish",
-        "Dutch",
-        "Ukrainian",
-        "Vietnamese",
-        "Indonesian",
-        "Japanese",
-        "Italian",
-        "Korean",
-        "Thai",
-        "Polish",
-        "Romanian",
-        "Greek",
-        "Czech",
-        "Finnish",
-        "Hindi",
-        "Bulgarian",
-        "Danish",
-        "Hebrew",
-        "Malay",
-        "Slovak",
-        "Swedish",
-        "Croatian",
-        "Hungarian",
-        "Norwegian",
-        "Slovenian",
-        "Catalan",
-        "Nynorsk",
-        "Afrikaans",
-        "auto",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-  audio_setting: zAudioSetting.optional(),
-  output_format: z
-    .enum(["url", "hex"])
-    .register(z.globalRegistry, {
-      description: "Format of the output content (non-streaming only)",
-    })
-    .optional(),
-  normalization_setting: zLoudnessNormalizationSetting.optional(),
-  prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
-    description:
-      "Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.",
-  }),
-  voice_setting: zVoiceSetting.optional(),
-});
-
-/**
- * TextToSpeechOutput
- */
-export const zMinimaxSpeech02TurboOutput = z.object({
-  audio: zFile,
-  duration_ms: z.int().register(z.globalRegistry, {
-    description: "Duration of the audio in milliseconds",
-  }),
-});
-
-/**
- * TextToSpeechTurboRequest
- */
-export const zMinimaxSpeech02TurboInput = z.object({
-  language_boost: z
-    .union([
-      z.enum([
-        "Chinese",
-        "Chinese,Yue",
-        "English",
-        "Arabic",
-        "Russian",
-        "Spanish",
-        "French",
-        "Portuguese",
-        "German",
-        "Turkish",
-        "Dutch",
-        "Ukrainian",
-        "Vietnamese",
-        "Indonesian",
-        "Japanese",
-        "Italian",
-        "Korean",
-        "Thai",
-        "Polish",
-        "Romanian",
-        "Greek",
-        "Czech",
-        "Finnish",
-        "Hindi",
-        "Bulgarian",
-        "Danish",
-        "Hebrew",
-        "Malay",
-        "Slovak",
-        "Swedish",
-        "Croatian",
-        "Hungarian",
-        "Norwegian",
-        "Slovenian",
-        "Catalan",
-        "Nynorsk",
-        "Afrikaans",
-        "auto",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  text: z.string().min(1).max(5000).register(z.globalRegistry, {
-    description:
-      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
-  }),
-  audio_setting: zAudioSetting.optional(),
-  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-  output_format: z
-    .enum(["url", "hex"])
-    .register(z.globalRegistry, {
-      description: "Format of the output content (non-streaming only)",
-    })
-    .optional(),
-  voice_setting: zVoiceSetting.optional(),
-});
-
-/**
- * TextToSpeechOutput
- */
-export const zMinimaxSpeech02HdOutput = z.object({
-  audio: zFile,
-  duration_ms: z.int().register(z.globalRegistry, {
-    description: "Duration of the audio in milliseconds",
-  }),
-});
-
-/**
- * TextToSpeechHDRequest
- */
-export const zMinimaxSpeech02HdInput = z.object({
-  language_boost: z
-    .union([
-      z.enum([
-        "Chinese",
-        "Chinese,Yue",
-        "English",
-        "Arabic",
-        "Russian",
-        "Spanish",
-        "French",
-        "Portuguese",
-        "German",
-        "Turkish",
-        "Dutch",
-        "Ukrainian",
-        "Vietnamese",
-        "Indonesian",
-        "Japanese",
-        "Italian",
-        "Korean",
-        "Thai",
-        "Polish",
-        "Romanian",
-        "Greek",
-        "Czech",
-        "Finnish",
-        "Hindi",
-        "Bulgarian",
-        "Danish",
-        "Hebrew",
-        "Malay",
-        "Slovak",
-        "Swedish",
-        "Croatian",
-        "Hungarian",
-        "Norwegian",
-        "Slovenian",
-        "Catalan",
-        "Nynorsk",
-        "Afrikaans",
-        "auto",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  text: z.string().min(1).max(5000).register(z.globalRegistry, {
-    description:
-      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
-  }),
-  audio_setting: zAudioSetting.optional(),
-  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-  output_format: z
-    .enum(["url", "hex"])
-    .register(z.globalRegistry, {
-      description: "Format of the output content (non-streaming only)",
-    })
-    .optional(),
-  voice_setting: zVoiceSetting.optional(),
-});
-
-/**
- * TextToSpeechOutput
- */
-export const zMinimaxPreviewSpeech25TurboOutput = z.object({
-  audio: zFile,
-  duration_ms: z.int().register(z.globalRegistry, {
-    description: "Duration of the audio in milliseconds",
-  }),
-});
-
-/**
- * TextToSpeechTurbov25Request
- */
-export const zMinimaxPreviewSpeech25TurboInput = z.object({
-  language_boost: z
-    .union([
-      z.enum([
-        "Persian",
-        "Filipino",
-        "Tamil",
-        "Chinese",
-        "Chinese,Yue",
-        "English",
-        "Arabic",
-        "Russian",
-        "Spanish",
-        "French",
-        "Portuguese",
-        "German",
-        "Turkish",
-        "Dutch",
-        "Ukrainian",
-        "Vietnamese",
-        "Indonesian",
-        "Japanese",
-        "Italian",
-        "Korean",
-        "Thai",
-        "Polish",
-        "Romanian",
-        "Greek",
-        "Czech",
-        "Finnish",
-        "Hindi",
-        "Bulgarian",
-        "Danish",
-        "Hebrew",
-        "Malay",
-        "Slovak",
-        "Swedish",
-        "Croatian",
-        "Hungarian",
-        "Norwegian",
-        "Slovenian",
-        "Catalan",
-        "Nynorsk",
-        "Afrikaans",
-        "auto",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  text: z.string().min(1).max(5000).register(z.globalRegistry, {
-    description:
-      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
-  }),
-  audio_setting: zAudioSetting.optional(),
-  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-  output_format: z
-    .enum(["url", "hex"])
-    .register(z.globalRegistry, {
-      description: "Format of the output content (non-streaming only)",
-    })
-    .optional(),
-  voice_setting: zVoiceSetting.optional(),
-});
-
-/**
- * TextToSpeechOutput
- */
-export const zMinimaxPreviewSpeech25HdOutput = z.object({
-  audio: zFile,
-  duration_ms: z.int().register(z.globalRegistry, {
-    description: "Duration of the audio in milliseconds",
-  }),
-});
-
-/**
- * TextToSpeechHDv25Request
- */
-export const zMinimaxPreviewSpeech25HdInput = z.object({
-  language_boost: z
-    .union([
-      z.enum([
-        "Persian",
-        "Filipino",
-        "Tamil",
-        "Chinese",
-        "Chinese,Yue",
-        "English",
-        "Arabic",
-        "Russian",
-        "Spanish",
-        "French",
-        "Portuguese",
-        "German",
-        "Turkish",
-        "Dutch",
-        "Ukrainian",
-        "Vietnamese",
-        "Indonesian",
-        "Japanese",
-        "Italian",
-        "Korean",
-        "Thai",
-        "Polish",
-        "Romanian",
-        "Greek",
-        "Czech",
-        "Finnish",
-        "Hindi",
-        "Bulgarian",
-        "Danish",
-        "Hebrew",
-        "Malay",
-        "Slovak",
-        "Swedish",
-        "Croatian",
-        "Hungarian",
-        "Norwegian",
-        "Slovenian",
-        "Catalan",
-        "Nynorsk",
-        "Afrikaans",
-        "auto",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  text: z.string().min(1).max(5000).register(z.globalRegistry, {
-    description:
-      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
-  }),
-  audio_setting: zAudioSetting.optional(),
-  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
-  output_format: z
-    .enum(["url", "hex"])
-    .register(z.globalRegistry, {
-      description: "Format of the output content (non-streaming only)",
-    })
-    .optional(),
-  voice_setting: zVoiceSetting.optional(),
-});
-
-export const zMayaStreamOutput = z.unknown();
-
-/**
- * MayaVoiceStreamingInput
- *
- * Input schema for Maya-1-Voice streaming TTS generation
- */
-export const zMayaStreamInput = z
-  .object({
+    audio_url: z.union([z.string(), z.string()]).optional(),
     temperature: z
       .number()
-      .gte(0)
-      .lte(2)
+      .gte(0.05)
+      .lte(5)
       .register(z.globalRegistry, {
         description:
-          "Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.",
+          "Controls the randomness of generation. Range typically 0.05 to 5.",
       })
       .optional()
-      .default(0.4),
-    text: z.string().max(5000).register(z.globalRegistry, {
-      description:
-        "The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'",
-    }),
-    repetition_penalty: z
-      .number()
-      .gte(1)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description:
-          "Penalty for repeating tokens. Higher values reduce repetition artifacts.",
-      })
-      .optional()
-      .default(1.1),
-    sample_rate: z
-      .enum(["48 kHz", "24 kHz"])
-      .register(z.globalRegistry, {
-        description:
-          "Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).",
-      })
-      .optional(),
-    max_tokens: z
+      .default(0.8),
+    seed: z
       .int()
-      .gte(28)
-      .lte(4000)
+      .gte(0)
       .register(z.globalRegistry, {
         description:
-          "Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.",
+          "Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed.",
       })
       .optional()
-      .default(2000),
-    top_p: z
+      .default(0),
+    cfg: z
       .number()
       .gte(0)
       .lte(1)
       .register(z.globalRegistry, {
         description:
-          "Nucleus sampling parameter. Controls diversity of token selection.",
+          "Classifier-free guidance scale (CFG) controls the conditioning factor. Range typically 0.2 to 1.0. For expressive or dramatic speech, try lower cfg values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher. If the reference speaker has a fast speaking style, lowering cfg to around 0.3 can improve pacing.",
       })
       .optional()
-      .default(0.9),
-    output_format: z
-      .enum(["mp3", "wav", "pcm"])
-      .register(z.globalRegistry, {
-        description:
-          "Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).",
-      })
-      .optional(),
-    prompt: z.string().max(500).register(z.globalRegistry, {
-      description:
-        "Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.",
-    }),
+      .default(0.5),
   })
   .register(z.globalRegistry, {
-    description: "Input schema for Maya-1-Voice streaming TTS generation",
+    description: "Input parameters for the TTS request.",
   });
 
 /**
- * MayaVoiceOutput
+ * TTSOutput
  *
- * Output schema for Maya-1-Voice TTS generation
+ * Output parameters for the TTS request.
  */
-export const zMayaOutput = z
+export const zChatterboxhdTextToSpeechOutput = z
   .object({
-    sample_rate: z.string().register(z.globalRegistry, {
-      description: "Sample rate of the generated audio",
-    }),
-    duration: z.number().register(z.globalRegistry, {
-      description: "Duration of the generated audio in seconds",
-    }),
-    audio: zFile,
-    rtf: z.number().register(z.globalRegistry, {
-      description:
-        "Real-time factor (generation_time / audio_duration). Lower is better.",
-    }),
-    generation_time: z.number().register(z.globalRegistry, {
-      description: "Time taken to generate the audio in seconds",
-    }),
+    audio: zAudio,
   })
   .register(z.globalRegistry, {
-    description: "Output schema for Maya-1-Voice TTS generation",
+    description: "Output parameters for the TTS request.",
   });
 
 /**
- * MayaVoiceInput
- *
- * Input schema for Maya-1-Voice TTS generation
+ * ChatterboxVCRequest
  */
-export const zMayaInput = z
-  .object({
-    temperature: z
-      .number()
-      .gte(0)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description:
-          "Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.",
-      })
-      .optional()
-      .default(0.4),
-    text: z.string().max(5000).register(z.globalRegistry, {
-      description:
-        "The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'",
-    }),
-    repetition_penalty: z
-      .number()
-      .gte(1)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description:
-          "Penalty for repeating tokens. Higher values reduce repetition artifacts.",
-      })
-      .optional()
-      .default(1.1),
-    sample_rate: z
-      .enum(["48 kHz", "24 kHz"])
-      .register(z.globalRegistry, {
-        description:
-          "Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.",
-      })
-      .optional(),
-    max_tokens: z
-      .int()
-      .gte(28)
-      .lte(4000)
-      .register(z.globalRegistry, {
-        description:
-          "Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.",
-      })
-      .optional()
-      .default(2000),
-    top_p: z
-      .number()
-      .gte(0)
-      .lte(1)
-      .register(z.globalRegistry, {
-        description:
-          "Nucleus sampling parameter. Controls diversity of token selection.",
-      })
-      .optional()
-      .default(0.9),
-    output_format: z
-      .enum(["wav", "mp3"])
-      .register(z.globalRegistry, {
-        description: "Output audio format for the generated speech",
-      })
-      .optional(),
-    prompt: z.string().max(500).register(z.globalRegistry, {
-      description:
-        "Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Input schema for Maya-1-Voice TTS generation",
-  });
-
-/**
- * MayaVoiceBatchOutput
- *
- * Output schema for batch Maya-1-Voice TTS generation
- */
-export const zMayaBatchOutput = z
-  .object({
-    average_rtf: z.number().register(z.globalRegistry, {
-      description: "Average real-time factor across all generations",
-    }),
-    durations: z.array(z.number()).register(z.globalRegistry, {
-      description: "Duration of each generated audio in seconds",
-    }),
-    audios: z.array(zFile).register(z.globalRegistry, {
-      description: "List of generated audio files",
-    }),
-    sample_rate: z.string().register(z.globalRegistry, {
-      description: "Sample rate of all generated audio files",
-    }),
-    total_generation_time: z.number().register(z.globalRegistry, {
-      description: "Total time taken to generate all audio files in seconds",
-    }),
-  })
-  .register(z.globalRegistry, {
-    description: "Output schema for batch Maya-1-Voice TTS generation",
-  });
-
-/**
- * MayaVoiceBatchInput
- *
- * Input schema for batch Maya-1-Voice TTS generation
- */
-export const zMayaBatchInput = z
-  .object({
-    temperature: z
-      .number()
-      .gte(0)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description: "Sampling temperature for all generations.",
-      })
-      .optional()
-      .default(0.4),
-    repetition_penalty: z
-      .number()
-      .gte(1)
-      .lte(2)
-      .register(z.globalRegistry, {
-        description: "Repetition penalty for all generations.",
-      })
-      .optional()
-      .default(1.1),
-    sample_rate: z
-      .enum(["48 kHz", "24 kHz"])
-      .register(z.globalRegistry, {
-        description:
-          "Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.",
-      })
-      .optional(),
-    max_tokens: z
-      .int()
-      .gte(28)
-      .lte(4000)
-      .register(z.globalRegistry, {
-        description: "Maximum SNAC tokens per generation.",
-      })
-      .optional()
-      .default(2000),
-    texts: z.array(z.string()).min(1).max(100).register(z.globalRegistry, {
-      description:
-        "List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.",
-    }),
-    top_p: z
-      .number()
-      .gte(0)
-      .lte(1)
-      .register(z.globalRegistry, {
-        description: "Nucleus sampling parameter for all generations.",
-      })
-      .optional()
-      .default(0.9),
-    prompts: z.array(z.string()).min(1).max(100).register(z.globalRegistry, {
-      description:
-        "List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.",
-    }),
-    output_format: z
-      .enum(["wav", "mp3"])
-      .register(z.globalRegistry, {
-        description: "Output audio format for all generated speech files",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "Input schema for batch Maya-1-Voice TTS generation",
-  });
-
-/**
- * Output
- */
-export const zLuxTtsOutput = z.object({
-  timings: z.record(z.string(), z.number()),
-  seed: z.int(),
-  audio: zFile,
+export const zChatterboxSpeechToSpeechInput = z.object({
+  target_voice_audio_url: z.union([z.string(), z.unknown()]).optional(),
+  source_audio_url: z.union([z.string(), z.string()]),
 });
 
 /**
- * Input
+ * ChatterboxRequest
  */
-export const zLuxTtsInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The text to be converted to speech.",
-  }),
-  audio_url: z.union([z.string(), z.string()]),
-  num_inference_steps: z
-    .int()
-    .gte(1)
-    .lte(16)
+export const zChatterboxTextToSpeechInput = z.object({
+  temperature: z
+    .number()
+    .gte(0.05)
+    .lte(2)
     .register(z.globalRegistry, {
-      description:
-        "Number of flow-matching inference steps. 4 is recommended for best efficiency.",
+      description: "Temperature for generation (higher = more creative).",
     })
     .optional()
-    .default(4),
-  guidance_scale: z
+    .default(0.7),
+  audio_url: z.union([z.string(), z.unknown()]).optional(),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+  exaggeration: z
     .number()
     .gte(0)
-    .lte(10)
+    .lte(1)
     .register(z.globalRegistry, {
       description:
-        "Classifier-free guidance scale. Higher values increase adherence to the reference voice at the cost of diversity.",
+        "Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).",
     })
     .optional()
-    .default(3),
-  max_ref_length: z
+    .default(0.25),
+  cfg: z.number().gte(0.1).lte(1).optional().default(0.5),
+  text: z.string().register(z.globalRegistry, {
+    description:
+      "The text to be converted to speech (maximum 5000 characters). You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>",
+  }),
+});
+
+/**
+ * ChatterboxMultilingualRequest
+ */
+export const zChatterboxTextToSpeechMultilingualInput = z.object({
+  cfg_scale: z
     .number()
-    .gte(1)
-    .lte(15)
+    .gte(0)
+    .lte(1)
     .register(z.globalRegistry, {
       description:
-        "Maximum length of the reference audio to use for voice encoding, in seconds. Longer durations capture more voice characteristics but increase processing time.",
+        "Configuration/pace weight controlling generation guidance (0.0-1.0). Use 0.0 for language transfer to mitigate accent inheritance.",
     })
     .optional()
-    .default(5),
+    .default(0.5),
+  voice: z
+    .string()
+    .register(z.globalRegistry, {
+      description:
+        "Language code for synthesis. In case using custom please provide audio url and select custom_audio_language. ",
+    })
+    .optional()
+    .default("english"),
+  temperature: z
+    .number()
+    .gte(0.05)
+    .lte(5)
+    .register(z.globalRegistry, {
+      description:
+        "Controls randomness and variation in generation (0.05-5.0). Higher values create more varied speech patterns.",
+    })
+    .optional()
+    .default(0.8),
   seed: z.union([z.int(), z.unknown()]).optional(),
+  exaggeration: z
+    .number()
+    .gte(0.25)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Controls speech expressiveness and emotional intensity (0.25-2.0). 0.5 is neutral, higher values increase expressiveness. Extreme values may be unstable.",
+    })
+    .optional()
+    .default(0.5),
+  custom_audio_language: z
+    .union([
+      z.enum([
+        "english",
+        "arabic",
+        "danish",
+        "german",
+        "greek",
+        "spanish",
+        "finnish",
+        "french",
+        "hebrew",
+        "hindi",
+        "italian",
+        "japanese",
+        "korean",
+        "malay",
+        "dutch",
+        "norwegian",
+        "polish",
+        "portuguese",
+        "russian",
+        "swedish",
+        "swahili",
+        "turkish",
+        "chinese",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  text: z.string().max(300).register(z.globalRegistry, {
+    description:
+      "The text to be converted to speech (maximum 300 characters). Supports 23 languages including English, French, German, Spanish, Italian, Portuguese, Hindi, Arabic, Chinese, Japanese, Korean, and more.",
+  }),
+});
+
+/**
+ * DiaRequest
+ */
+export const zDiaTtsInput = z.object({
+  text: z.string().register(z.globalRegistry, {
+    description: "The text to be converted to speech.",
+  }),
+});
+
+/**
+ * TextToSpeechRequest
+ */
+export const zElevenlabsTtsTurboV25Input = z.object({
+  timestamps: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Whether to return timestamps for each word in the generated speech",
+    })
+    .optional()
+    .default(false),
+  speed: z
+    .number()
+    .gte(0.7)
+    .lte(1.2)
+    .register(z.globalRegistry, {
+      description:
+        "Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
+    })
+    .optional()
+    .default(1),
+  previous_text: z.union([z.string(), z.unknown()]).optional(),
+  next_text: z.union([z.string(), z.unknown()]).optional(),
+  style: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Style exaggeration (0-1)",
+    })
+    .optional()
+    .default(0),
+  language_code: z.union([z.string(), z.unknown()]).optional(),
+  voice: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The voice to use for speech generation",
+    })
+    .optional()
+    .default("Rachel"),
+  stability: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Voice stability (0-1)",
+    })
+    .optional()
+    .default(0.5),
+  text: z.string().min(1).register(z.globalRegistry, {
+    description: "The text to convert to speech",
+  }),
+  apply_text_normalization: z
+    .enum(["auto", "on", "off"])
+    .register(z.globalRegistry, {
+      description:
+        "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
+    })
+    .optional(),
+  similarity_boost: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Similarity boost (0-1)",
+    })
+    .optional()
+    .default(0.75),
+});
+
+/**
+ * EmotionalStrengths
+ */
+export const zEmotionalStrengths = z.object({
+  disgusted: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of disgust emotion",
+    })
+    .optional()
+    .default(0),
+  happy: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of happiness emotion",
+    })
+    .optional()
+    .default(0),
+  afraid: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of fear emotion",
+    })
+    .optional()
+    .default(0),
+  sad: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of sadness emotion",
+    })
+    .optional()
+    .default(0),
+  angry: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of anger emotion",
+    })
+    .optional()
+    .default(0),
+  melancholic: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of melancholic emotion",
+    })
+    .optional()
+    .default(0),
+  calm: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of calm emotion",
+    })
+    .optional()
+    .default(0),
+  surprised: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description: "Strength of surprise emotion",
+    })
+    .optional()
+    .default(0),
+});
+
+/**
+ * File
+ */
+export const zFile = z.object({
+  url: z.string().register(z.globalRegistry, {
+    description: "The URL where the file can be downloaded from.",
+  }),
+  file_size: z.union([z.int(), z.unknown()]).optional(),
+  file_name: z.union([z.string(), z.unknown()]).optional(),
+  content_type: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * ChatterboxOutput
+ */
+export const zChatterboxSpeechToSpeechOutput = z.object({
+  audio: zFile,
+});
+
+/**
+ * ChatterboxMultilingualOutput
+ */
+export const zChatterboxTextToSpeechMultilingualOutput = z.object({
+  audio: zFile,
+});
+
+/**
+ * ChatterboxOutput
+ */
+export const zChatterboxTextToSpeechOutput = z.object({
+  audio: zFile,
+});
+
+/**
+ * DiaOutput
+ */
+export const zDiaTtsOutput = z.object({
+  audio: zFile,
 });
 
 /**
  * TTSOutput
  */
-export const zKlingVideoV1TtsOutput = z.object({
+export const zElevenlabsTtsTurboV25Output = z.object({
+  timestamps: z.union([z.array(z.unknown()), z.unknown()]).optional(),
   audio: zFile,
 });
 
 /**
- * TTSInput
+ * IndexTTS2Input
  */
-export const zKlingVideoV1TtsInput = z.object({
-  voice_id: z
-    .enum([
-      "genshin_vindi2",
-      "zhinen_xuesheng",
-      "AOT",
-      "ai_shatang",
-      "genshin_klee2",
-      "genshin_kirara",
-      "ai_kaiya",
-      "oversea_male1",
-      "ai_chenjiahao_712",
-      "girlfriend_4_speech02",
-      "chat1_female_new-3",
-      "chat_0407_5-1",
-      "cartoon-boy-07",
-      "uk_boy1",
-      "cartoon-girl-01",
-      "PeppaPig_platform",
-      "ai_huangzhong_712",
-      "ai_huangyaoshi_712",
-      "ai_laoguowang_712",
-      "chengshu_jiejie",
-      "you_pingjing",
-      "calm_story1",
-      "uk_man2",
-      "laopopo_speech02",
-      "heainainai_speech02",
-      "reader_en_m-v1",
-      "commercial_lady_en_f-v1",
-      "tiyuxi_xuedi",
-      "tiexin_nanyou",
-      "girlfriend_1_speech02",
-      "girlfriend_2_speech02",
-      "zhuxi_speech02",
-      "uk_oldman3",
-      "dongbeilaotie_speech02",
-      "chongqingxiaohuo_speech02",
-      "chuanmeizi_speech02",
-      "chaoshandashu_speech02",
-      "ai_taiwan_man2_speech02",
-      "xianzhanggui_speech02",
-      "tianjinjiejie_speech02",
-      "diyinnansang_DB_CN_M_04-v2",
-      "yizhipiannan-v1",
-      "guanxiaofang-v2",
-      "tianmeixuemei-v1",
-      "daopianyansang-v1",
-      "mengwa-v1",
-    ])
+export const zIndexTts2TextToSpeechInput = z.object({
+  emotion_prompt: z.union([z.string(), z.unknown()]).optional(),
+  audio_url: z.union([z.string(), z.string()]),
+  should_use_prompt_for_emotion: z
+    .boolean()
     .register(z.globalRegistry, {
-      description: "The voice ID to use for speech synthesis",
+      description:
+        "Whether to use the `prompt` to calculate emotional strengths, if enabled it will overwrite the `emotional_strengths` values. If `emotion_prompt` is provided, it will be used to instead of `prompt` to extract the emotional style.",
     })
-    .optional(),
-  voice_speed: z
+    .optional()
+    .default(false),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The speech prompt to generate",
+  }),
+  emotional_strengths: z.union([zEmotionalStrengths, z.unknown()]).optional(),
+  strength: z
     .number()
-    .gte(0.8)
-    .lte(2)
+    .gte(0)
+    .lte(1)
     .register(z.globalRegistry, {
-      description: "Rate of speech",
+      description:
+        "The strength of the emotional style transfer. Higher values result in stronger emotional influence.",
     })
     .optional()
     .default(1),
-  text: z.string().max(500).register(z.globalRegistry, {
-    description: "The text to be converted to speech",
-  }),
+  emotional_audio_url: z.union([z.string(), z.unknown()]).optional(),
 });
 
 /**
- * Output
+ * IndexTTS2Output
  */
-export const zInworldTtsOutput = z.object({
+export const zIndexTts2TextToSpeechOutput = z.object({
   audio: zFile,
 });
 
@@ -2045,539 +751,1833 @@ export const zInworldTtsInput = z.object({
 });
 
 /**
- * IndexTTS2Output
+ * Output
  */
-export const zIndexTts2TextToSpeechOutput = z.object({
+export const zInworldTtsOutput = z.object({
   audio: zFile,
 });
 
 /**
- * EmotionalStrengths
+ * TTSInput
  */
-export const zEmotionalStrengths = z.object({
-  disgusted: z
-    .number()
-    .gte(0)
-    .lte(1)
+export const zKlingVideoV1TtsInput = z.object({
+  voice_id: z
+    .enum([
+      "genshin_vindi2",
+      "zhinen_xuesheng",
+      "AOT",
+      "ai_shatang",
+      "genshin_klee2",
+      "genshin_kirara",
+      "ai_kaiya",
+      "oversea_male1",
+      "ai_chenjiahao_712",
+      "girlfriend_4_speech02",
+      "chat1_female_new-3",
+      "chat_0407_5-1",
+      "cartoon-boy-07",
+      "uk_boy1",
+      "cartoon-girl-01",
+      "PeppaPig_platform",
+      "ai_huangzhong_712",
+      "ai_huangyaoshi_712",
+      "ai_laoguowang_712",
+      "chengshu_jiejie",
+      "you_pingjing",
+      "calm_story1",
+      "uk_man2",
+      "laopopo_speech02",
+      "heainainai_speech02",
+      "reader_en_m-v1",
+      "commercial_lady_en_f-v1",
+      "tiyuxi_xuedi",
+      "tiexin_nanyou",
+      "girlfriend_1_speech02",
+      "girlfriend_2_speech02",
+      "zhuxi_speech02",
+      "uk_oldman3",
+      "dongbeilaotie_speech02",
+      "chongqingxiaohuo_speech02",
+      "chuanmeizi_speech02",
+      "chaoshandashu_speech02",
+      "ai_taiwan_man2_speech02",
+      "xianzhanggui_speech02",
+      "tianjinjiejie_speech02",
+      "diyinnansang_DB_CN_M_04-v2",
+      "yizhipiannan-v1",
+      "guanxiaofang-v2",
+      "tianmeixuemei-v1",
+      "daopianyansang-v1",
+      "mengwa-v1",
+    ])
     .register(z.globalRegistry, {
-      description: "Strength of disgust emotion",
+      description: "The voice ID to use for speech synthesis",
     })
-    .optional()
-    .default(0),
-  happy: z
+    .optional(),
+  voice_speed: z
     .number()
-    .gte(0)
-    .lte(1)
+    .gte(0.8)
+    .lte(2)
     .register(z.globalRegistry, {
-      description: "Strength of happiness emotion",
-    })
-    .optional()
-    .default(0),
-  afraid: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Strength of fear emotion",
-    })
-    .optional()
-    .default(0),
-  sad: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Strength of sadness emotion",
-    })
-    .optional()
-    .default(0),
-  angry: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Strength of anger emotion",
-    })
-    .optional()
-    .default(0),
-  melancholic: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Strength of melancholic emotion",
-    })
-    .optional()
-    .default(0),
-  calm: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Strength of calm emotion",
-    })
-    .optional()
-    .default(0),
-  surprised: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Strength of surprise emotion",
-    })
-    .optional()
-    .default(0),
-});
-
-/**
- * IndexTTS2Input
- */
-export const zIndexTts2TextToSpeechInput = z.object({
-  emotion_prompt: z.union([z.string(), z.unknown()]).optional(),
-  audio_url: z.union([z.string(), z.string()]),
-  should_use_prompt_for_emotion: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description:
-        "Whether to use the `prompt` to calculate emotional strengths, if enabled it will overwrite the `emotional_strengths` values. If `emotion_prompt` is provided, it will be used to instead of `prompt` to extract the emotional style.",
-    })
-    .optional()
-    .default(false),
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The speech prompt to generate",
-  }),
-  emotional_strengths: z.union([zEmotionalStrengths, z.unknown()]).optional(),
-  strength: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "The strength of the emotional style transfer. Higher values result in stronger emotional influence.",
+      description: "Rate of speech",
     })
     .optional()
     .default(1),
-  emotional_audio_url: z.union([z.string(), z.unknown()]).optional(),
+  text: z.string().max(500).register(z.globalRegistry, {
+    description: "The text to be converted to speech",
+  }),
 });
 
 /**
  * TTSOutput
  */
-export const zElevenlabsTtsTurboV25Output = z.object({
-  timestamps: z.union([z.array(z.unknown()), z.unknown()]).optional(),
+export const zKlingVideoV1TtsOutput = z.object({
   audio: zFile,
 });
 
 /**
- * TextToSpeechRequest
+ * LoudnessNormalizationSetting
  */
-export const zElevenlabsTtsTurboV25Input = z.object({
-  timestamps: z
+export const zLoudnessNormalizationSetting = z.object({
+  target_peak: z
+    .number()
+    .gte(-3)
+    .lte(0)
+    .register(z.globalRegistry, {
+      description: "Target peak level in dBTP (default -0.5).",
+    })
+    .optional()
+    .default(-0.5),
+  target_loudness: z
+    .number()
+    .gte(-70)
+    .lte(-10)
+    .register(z.globalRegistry, {
+      description: "Target loudness in LUFS (default -18.0)",
+    })
+    .optional()
+    .default(-18),
+  target_range: z
+    .number()
+    .gte(0)
+    .lte(20)
+    .register(z.globalRegistry, {
+      description: "Target loudness range in LU (default 8.0)",
+    })
+    .optional()
+    .default(8),
+  enabled: z
     .boolean()
     .register(z.globalRegistry, {
+      description: "Enable loudness normalization for the audio",
+    })
+    .optional()
+    .default(true),
+});
+
+/**
+ * Input
+ */
+export const zLuxTtsInput = z.object({
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The text to be converted to speech.",
+  }),
+  audio_url: z.union([z.string(), z.string()]),
+  num_inference_steps: z
+    .int()
+    .gte(1)
+    .lte(16)
+    .register(z.globalRegistry, {
       description:
-        "Whether to return timestamps for each word in the generated speech",
+        "Number of flow-matching inference steps. 4 is recommended for best efficiency.",
+    })
+    .optional()
+    .default(4),
+  guidance_scale: z
+    .number()
+    .gte(0)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description:
+        "Classifier-free guidance scale. Higher values increase adherence to the reference voice at the cost of diversity.",
+    })
+    .optional()
+    .default(3),
+  max_ref_length: z
+    .number()
+    .gte(1)
+    .lte(15)
+    .register(z.globalRegistry, {
+      description:
+        "Maximum length of the reference audio to use for voice encoding, in seconds. Longer durations capture more voice characteristics but increase processing time.",
+    })
+    .optional()
+    .default(5),
+  seed: z.union([z.int(), z.unknown()]).optional(),
+});
+
+/**
+ * Output
+ */
+export const zLuxTtsOutput = z.object({
+  timings: z.record(z.string(), z.number()),
+  seed: z.int(),
+  audio: zFile,
+});
+
+/**
+ * MayaVoiceBatchInput
+ *
+ * Input schema for batch Maya-1-Voice TTS generation
+ */
+export const zMayaBatchInput = z
+  .object({
+    temperature: z
+      .number()
+      .gte(0)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description: "Sampling temperature for all generations.",
+      })
+      .optional()
+      .default(0.4),
+    repetition_penalty: z
+      .number()
+      .gte(1)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description: "Repetition penalty for all generations.",
+      })
+      .optional()
+      .default(1.1),
+    sample_rate: z
+      .enum(["48 kHz", "24 kHz"])
+      .register(z.globalRegistry, {
+        description:
+          "Output audio sample rate for all generations. 48 kHz provides higher quality, 24 kHz is faster.",
+      })
+      .optional(),
+    max_tokens: z
+      .int()
+      .gte(28)
+      .lte(4000)
+      .register(z.globalRegistry, {
+        description: "Maximum SNAC tokens per generation.",
+      })
+      .optional()
+      .default(2000),
+    texts: z.array(z.string()).min(1).max(100).register(z.globalRegistry, {
+      description:
+        "List of texts to synthesize into speech. You can embed emotion tags in each text using the format <emotion_name>.",
+    }),
+    top_p: z
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description: "Nucleus sampling parameter for all generations.",
+      })
+      .optional()
+      .default(0.9),
+    prompts: z.array(z.string()).min(1).max(100).register(z.globalRegistry, {
+      description:
+        "List of voice descriptions for each text. Must match the length of texts list. Each describes the voice/character attributes.",
+    }),
+    output_format: z
+      .enum(["wav", "mp3"])
+      .register(z.globalRegistry, {
+        description: "Output audio format for all generated speech files",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input schema for batch Maya-1-Voice TTS generation",
+  });
+
+/**
+ * MayaVoiceBatchOutput
+ *
+ * Output schema for batch Maya-1-Voice TTS generation
+ */
+export const zMayaBatchOutput = z
+  .object({
+    average_rtf: z.number().register(z.globalRegistry, {
+      description: "Average real-time factor across all generations",
+    }),
+    durations: z.array(z.number()).register(z.globalRegistry, {
+      description: "Duration of each generated audio in seconds",
+    }),
+    audios: z.array(zFile).register(z.globalRegistry, {
+      description: "List of generated audio files",
+    }),
+    sample_rate: z.string().register(z.globalRegistry, {
+      description: "Sample rate of all generated audio files",
+    }),
+    total_generation_time: z.number().register(z.globalRegistry, {
+      description: "Total time taken to generate all audio files in seconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output schema for batch Maya-1-Voice TTS generation",
+  });
+
+/**
+ * MayaVoiceInput
+ *
+ * Input schema for Maya-1-Voice TTS generation
+ */
+export const zMayaInput = z
+  .object({
+    temperature: z
+      .number()
+      .gte(0)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.",
+      })
+      .optional()
+      .default(0.4),
+    text: z.string().max(5000).register(z.globalRegistry, {
+      description:
+        "The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'",
+    }),
+    repetition_penalty: z
+      .number()
+      .gte(1)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Penalty for repeating tokens. Higher values reduce repetition artifacts.",
+      })
+      .optional()
+      .default(1.1),
+    sample_rate: z
+      .enum(["48 kHz", "24 kHz"])
+      .register(z.globalRegistry, {
+        description:
+          "Output audio sample rate. 48 kHz provides higher quality audio, 24 kHz is faster.",
+      })
+      .optional(),
+    max_tokens: z
+      .int()
+      .gte(28)
+      .lte(4000)
+      .register(z.globalRegistry, {
+        description:
+          "Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.",
+      })
+      .optional()
+      .default(2000),
+    top_p: z
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description:
+          "Nucleus sampling parameter. Controls diversity of token selection.",
+      })
+      .optional()
+      .default(0.9),
+    output_format: z
+      .enum(["wav", "mp3"])
+      .register(z.globalRegistry, {
+        description: "Output audio format for the generated speech",
+      })
+      .optional(),
+    prompt: z.string().max(500).register(z.globalRegistry, {
+      description:
+        "Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Input schema for Maya-1-Voice TTS generation",
+  });
+
+/**
+ * MayaVoiceOutput
+ *
+ * Output schema for Maya-1-Voice TTS generation
+ */
+export const zMayaOutput = z
+  .object({
+    sample_rate: z.string().register(z.globalRegistry, {
+      description: "Sample rate of the generated audio",
+    }),
+    duration: z.number().register(z.globalRegistry, {
+      description: "Duration of the generated audio in seconds",
+    }),
+    audio: zFile,
+    rtf: z.number().register(z.globalRegistry, {
+      description:
+        "Real-time factor (generation_time / audio_duration). Lower is better.",
+    }),
+    generation_time: z.number().register(z.globalRegistry, {
+      description: "Time taken to generate the audio in seconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output schema for Maya-1-Voice TTS generation",
+  });
+
+/**
+ * MayaVoiceStreamingInput
+ *
+ * Input schema for Maya-1-Voice streaming TTS generation
+ */
+export const zMayaStreamInput = z
+  .object({
+    temperature: z
+      .number()
+      .gte(0)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Sampling temperature. Lower values (0.2-0.5) produce more stable/consistent audio. Higher values add variation.",
+      })
+      .optional()
+      .default(0.4),
+    text: z.string().max(5000).register(z.globalRegistry, {
+      description:
+        "The text to synthesize into speech. You can embed emotion tags anywhere in the text using the format <emotion_name>. Available emotions: laugh, laugh_harder, sigh, chuckle, gasp, angry, excited, whisper, cry, scream, sing, snort, exhale, gulp, giggle, sarcastic, curious. Example: 'Hello world! <excited> This is amazing!' or 'I can't believe this <sigh> happened again.'",
+    }),
+    repetition_penalty: z
+      .number()
+      .gte(1)
+      .lte(2)
+      .register(z.globalRegistry, {
+        description:
+          "Penalty for repeating tokens. Higher values reduce repetition artifacts.",
+      })
+      .optional()
+      .default(1.1),
+    sample_rate: z
+      .enum(["48 kHz", "24 kHz"])
+      .register(z.globalRegistry, {
+        description:
+          "Output audio sample rate. 48 kHz uses upsampling for higher quality audio, 24 kHz is native SNAC output (faster, lower latency).",
+      })
+      .optional(),
+    max_tokens: z
+      .int()
+      .gte(28)
+      .lte(4000)
+      .register(z.globalRegistry, {
+        description:
+          "Maximum number of SNAC tokens to generate (7 tokens per frame). Controls maximum audio length.",
+      })
+      .optional()
+      .default(2000),
+    top_p: z
+      .number()
+      .gte(0)
+      .lte(1)
+      .register(z.globalRegistry, {
+        description:
+          "Nucleus sampling parameter. Controls diversity of token selection.",
+      })
+      .optional()
+      .default(0.9),
+    output_format: z
+      .enum(["mp3", "wav", "pcm"])
+      .register(z.globalRegistry, {
+        description:
+          "Output audio format. 'mp3' for browser-playable audio, 'wav' for uncompressed audio, 'pcm' for raw PCM (lowest latency, requires client-side decoding).",
+      })
+      .optional(),
+    prompt: z.string().max(500).register(z.globalRegistry, {
+      description:
+        "Description of the voice/character. Includes attributes like age, accent, pitch, timbre, pacing, tone, and intensity. See examples for format.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Input schema for Maya-1-Voice streaming TTS generation",
+  });
+
+export const zMayaStreamOutput = z.unknown();
+
+/**
+ * TextToSpeechOutput
+ */
+export const zMinimaxPreviewSpeech25HdOutput = z.object({
+  audio: zFile,
+  duration_ms: z.int().register(z.globalRegistry, {
+    description: "Duration of the audio in milliseconds",
+  }),
+});
+
+/**
+ * TextToSpeechOutput
+ */
+export const zMinimaxPreviewSpeech25TurboOutput = z.object({
+  audio: zFile,
+  duration_ms: z.int().register(z.globalRegistry, {
+    description: "Duration of the audio in milliseconds",
+  }),
+});
+
+/**
+ * TextToSpeechOutput
+ */
+export const zMinimaxSpeech02HdOutput = z.object({
+  audio: zFile,
+  duration_ms: z.int().register(z.globalRegistry, {
+    description: "Duration of the audio in milliseconds",
+  }),
+});
+
+/**
+ * TextToSpeechOutput
+ */
+export const zMinimaxSpeech02TurboOutput = z.object({
+  audio: zFile,
+  duration_ms: z.int().register(z.globalRegistry, {
+    description: "Duration of the audio in milliseconds",
+  }),
+});
+
+/**
+ * TextToSpeechHD26Output
+ */
+export const zMinimaxSpeech26HdOutput = z.object({
+  audio: zFile,
+  duration_ms: z.int().register(z.globalRegistry, {
+    description: "Duration of the audio in milliseconds",
+  }),
+});
+
+/**
+ * TextToSpeechTurbo26Output
+ */
+export const zMinimaxSpeech26TurboOutput = z.object({
+  audio: zFile,
+  duration_ms: z.int().register(z.globalRegistry, {
+    description: "Duration of the audio in milliseconds",
+  }),
+});
+
+/**
+ * TextToSpeechHD28Output
+ *
+ * Output model for Speech 2.8 HD.
+ */
+export const zMinimaxSpeech28HdOutput = z
+  .object({
+    audio: zFile,
+    duration_ms: z.int().register(z.globalRegistry, {
+      description: "Duration of the audio in milliseconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output model for Speech 2.8 HD.",
+  });
+
+/**
+ * TextToSpeechTurbo28Output
+ *
+ * Output model for Speech 2.8 Turbo.
+ */
+export const zMinimaxSpeech28TurboOutput = z
+  .object({
+    audio: zFile,
+    duration_ms: z.int().register(z.globalRegistry, {
+      description: "Duration of the audio in milliseconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output model for Speech 2.8 Turbo.",
+  });
+
+/**
+ * VoiceCloneRequest
+ */
+export const zMinimaxVoiceCloneInput = z.object({
+  text: z.union([z.string().max(1000), z.unknown()]).optional(),
+  audio_url: z.union([z.string(), z.string()]),
+  need_volume_normalization: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Enable volume normalization for the cloned voice",
     })
     .optional()
     .default(false),
-  speed: z
-    .number()
-    .gte(0.7)
-    .lte(1.2)
+  noise_reduction: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Enable noise reduction for the cloned voice",
+    })
+    .optional()
+    .default(false),
+  model: z
+    .enum([
+      "speech-02-hd",
+      "speech-02-turbo",
+      "speech-01-hd",
+      "speech-01-turbo",
+    ])
     .register(z.globalRegistry, {
       description:
-        "Speech speed (0.7-1.2). Values below 1.0 slow down the speech, above 1.0 speed it up. Extreme values may affect quality.",
-    })
-    .optional()
-    .default(1),
-  previous_text: z.union([z.string(), z.unknown()]).optional(),
-  next_text: z.union([z.string(), z.unknown()]).optional(),
-  style: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Style exaggeration (0-1)",
-    })
-    .optional()
-    .default(0),
-  language_code: z.union([z.string(), z.unknown()]).optional(),
-  voice: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The voice to use for speech generation",
-    })
-    .optional()
-    .default("Rachel"),
-  stability: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Voice stability (0-1)",
-    })
-    .optional()
-    .default(0.5),
-  text: z.string().min(1).register(z.globalRegistry, {
-    description: "The text to convert to speech",
-  }),
-  apply_text_normalization: z
-    .enum(["auto", "on", "off"])
-    .register(z.globalRegistry, {
-      description:
-        "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped.",
+        "TTS model to use for preview. Options: speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo",
     })
     .optional(),
-  similarity_boost: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description: "Similarity boost (0-1)",
-    })
-    .optional()
-    .default(0.75),
+  accuracy: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
 });
 
 /**
- * DiaOutput
+ * VoiceCloneOutput
  */
-export const zDiaTtsOutput = z.object({
-  audio: zFile,
-});
-
-/**
- * DiaRequest
- */
-export const zDiaTtsInput = z.object({
-  text: z.string().register(z.globalRegistry, {
-    description: "The text to be converted to speech.",
+export const zMinimaxVoiceCloneOutput = z.object({
+  audio: z.union([zFile, z.unknown()]).optional(),
+  custom_voice_id: z.string().register(z.globalRegistry, {
+    description: "The cloned voice ID for use with TTS",
   }),
 });
 
 /**
- * ChatterboxOutput
+ * VoiceDesignRequest
  */
-export const zChatterboxTextToSpeechOutput = z.object({
-  audio: zFile,
+export const zMinimaxVoiceDesignInput = z.object({
+  preview_text: z.string().max(500).register(z.globalRegistry, {
+    description:
+      "Text for audio preview. Limited to 500 characters. A fee of $30 per 1M characters will be charged for the generation of the preview audio.",
+  }),
+  prompt: z.string().max(2000).register(z.globalRegistry, {
+    description: "Voice description prompt for generating a personalized voice",
+  }),
 });
 
 /**
- * ChatterboxMultilingualOutput
+ * VoiceDesignOutput
  */
-export const zChatterboxTextToSpeechMultilingualOutput = z.object({
+export const zMinimaxVoiceDesignOutput = z.object({
   audio: zFile,
+  custom_voice_id: z.string().register(z.globalRegistry, {
+    description: "The voice_id of the generated voice",
+  }),
 });
 
 /**
- * ChatterboxMultilingualRequest
+ * OrpheusRequest
  */
-export const zChatterboxTextToSpeechMultilingualInput = z.object({
-  cfg_scale: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "Configuration/pace weight controlling generation guidance (0.0-1.0). Use 0.0 for language transfer to mitigate accent inheritance.",
-    })
-    .optional()
-    .default(0.5),
+export const zOrpheusTtsInput = z.object({
+  text: z.string().register(z.globalRegistry, {
+    description:
+      "The text to be converted to speech. You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>",
+  }),
   voice: z
-    .string()
+    .enum(["tara", "leah", "jess", "leo", "dan", "mia", "zac", "zoe"])
     .register(z.globalRegistry, {
-      description:
-        "Language code for synthesis. In case using custom please provide audio url and select custom_audio_language. ",
+      description: "Voice ID for the desired voice.",
     })
-    .optional()
-    .default("english"),
-  temperature: z
+    .optional(),
+  repetition_penalty: z
     .number()
-    .gte(0.05)
-    .lte(5)
-    .register(z.globalRegistry, {
-      description:
-        "Controls randomness and variation in generation (0.05-5.0). Higher values create more varied speech patterns.",
-    })
-    .optional()
-    .default(0.8),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  exaggeration: z
-    .number()
-    .gte(0.25)
+    .gte(1.1)
     .lte(2)
     .register(z.globalRegistry, {
       description:
-        "Controls speech expressiveness and emotional intensity (0.25-2.0). 0.5 is neutral, higher values increase expressiveness. Extreme values may be unstable.",
+        "Repetition penalty (>= 1.1 required for stable generations).",
     })
     .optional()
-    .default(0.5),
-  custom_audio_language: z
-    .union([
-      z.enum([
-        "english",
-        "arabic",
-        "danish",
-        "german",
-        "greek",
-        "spanish",
-        "finnish",
-        "french",
-        "hebrew",
-        "hindi",
-        "italian",
-        "japanese",
-        "korean",
-        "malay",
-        "dutch",
-        "norwegian",
-        "polish",
-        "portuguese",
-        "russian",
-        "swedish",
-        "swahili",
-        "turkish",
-        "chinese",
-      ]),
-      z.unknown(),
-    ])
-    .optional(),
-  text: z.string().max(300).register(z.globalRegistry, {
-    description:
-      "The text to be converted to speech (maximum 300 characters). Supports 23 languages including English, French, German, Spanish, Italian, Portuguese, Hindi, Arabic, Chinese, Japanese, Korean, and more.",
-  }),
-});
-
-/**
- * ChatterboxRequest
- */
-export const zChatterboxTextToSpeechInput = z.object({
+    .default(1.2),
   temperature: z
     .number()
-    .gte(0.05)
+    .gte(0)
     .lte(2)
     .register(z.globalRegistry, {
       description: "Temperature for generation (higher = more creative).",
     })
     .optional()
     .default(0.7),
-  audio_url: z.union([z.string(), z.unknown()]).optional(),
-  seed: z.union([z.int(), z.unknown()]).optional(),
-  exaggeration: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "Exaggeration factor for the generated speech (0.0 = no exaggeration, 1.0 = maximum exaggeration).",
-    })
-    .optional()
-    .default(0.25),
-  cfg: z.number().gte(0.1).lte(1).optional().default(0.5),
-  text: z.string().register(z.globalRegistry, {
-    description:
-      "The text to be converted to speech (maximum 5000 characters). You can additionally add the following emotive tags: <laugh>, <chuckle>, <sigh>, <cough>, <sniffle>, <groan>, <yawn>, <gasp>",
-  }),
 });
 
 /**
- * ChatterboxOutput
+ * OrpheusOutput
  */
-export const zChatterboxSpeechToSpeechOutput = z.object({
+export const zOrpheusTtsOutput = z.object({
   audio: zFile,
 });
 
 /**
- * ChatterboxVCRequest
- */
-export const zChatterboxSpeechToSpeechInput = z.object({
-  target_voice_audio_url: z.union([z.string(), z.unknown()]).optional(),
-  source_audio_url: z.union([z.string(), z.string()]),
-});
-
-/**
- * Audio
- */
-export const zAudio = z.object({
-  file_size: z
-    .int()
-    .register(z.globalRegistry, {
-      description: "The size of the file in bytes.",
-    })
-    .optional(),
-  file_name: z
-    .string()
-    .register(z.globalRegistry, {
-      description:
-        "The name of the file. It will be auto-generated if not provided.",
-    })
-    .optional(),
-  content_type: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "The mime type of the file.",
-    })
-    .optional(),
-  url: z.string().register(z.globalRegistry, {
-    description: "The URL where the file can be downloaded from.",
-  }),
-  file_data: z
-    .string()
-    .register(z.globalRegistry, {
-      description: "File data",
-    })
-    .optional(),
-});
-
-/**
- * TTSOutput
+ * OutputFormat
  *
- * Output parameters for the TTS request.
+ * Output format configuration for the TTS API.
  */
-export const zChatterboxhdTextToSpeechOutput = z
+export const zOutputFormat = z
   .object({
-    audio: zAudio,
+    sample_rate: z
+      .union([
+        z.literal(8000),
+        z.literal(16000),
+        z.literal(22050),
+        z.literal(24000),
+        z.literal(44100),
+        z.literal(48000),
+      ])
+      .register(z.globalRegistry, {
+        description: "Sample rate in Hz.",
+      })
+      .optional(),
+    codec: z
+      .enum(["mp3", "wav", "pcm", "mulaw", "alaw"])
+      .register(z.globalRegistry, {
+        description: "Audio codec. Supported: mp3, wav, pcm, mulaw, alaw.",
+      })
+      .optional(),
+    bit_rate: z
+      .union([
+        z.union([
+          z.literal(32000),
+          z.literal(64000),
+          z.literal(96000),
+          z.literal(128000),
+          z.literal(192000),
+        ]),
+        z.unknown(),
+      ])
+      .optional(),
   })
   .register(z.globalRegistry, {
-    description: "Output parameters for the TTS request.",
+    description: "Output format configuration for the TTS API.",
   });
 
 /**
- * TTSInput
- *
- * Input parameters for the TTS request.
+ * PronunciationDict
  */
-export const zChatterboxhdTextToSpeechInput = z
+export const zPronunciationDict = z.object({
+  tone_list: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "List of pronunciation replacements in format ['text/(pronunciation)', ...]. For Chinese, tones are 1-5. Example: ['燕少飞/(yan4)(shao3)(fei1)']",
+    })
+    .optional(),
+});
+
+export const zQueueStatus = z.object({
+  status: z.enum(["IN_QUEUE", "IN_PROGRESS", "COMPLETED"]),
+  request_id: z.string().register(z.globalRegistry, {
+    description: "The request id.",
+  }),
+  response_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The response url.",
+    })
+    .optional(),
+  status_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The status url.",
+    })
+    .optional(),
+  cancel_url: z
+    .string()
+    .register(z.globalRegistry, {
+      description: "The cancel url.",
+    })
+    .optional(),
+  logs: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The logs.",
+    })
+    .optional(),
+  metrics: z
+    .record(z.string(), z.unknown())
+    .register(z.globalRegistry, {
+      description: "The metrics.",
+    })
+    .optional(),
+  queue_position: z
+    .int()
+    .register(z.globalRegistry, {
+      description: "The queue position.",
+    })
+    .optional(),
+});
+
+/**
+ * Qwen3TTSInput06b
+ */
+export const zQwen3TtsTextToSpeech06bInput = z.object({
+  top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
+  reference_text: z.union([z.string(), z.unknown()]).optional(),
+  repetition_penalty: z.union([z.number().gte(0), z.unknown()]).optional(),
+  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  max_new_tokens: z.union([z.int().gte(1).lte(8192), z.unknown()]).optional(),
+  subtalker_top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
+  subtalker_dosample: z.union([z.boolean(), z.unknown()]).optional(),
+  voice: z
+    .union([
+      z.enum([
+        "Vivian",
+        "Serena",
+        "Uncle_Fu",
+        "Dylan",
+        "Eric",
+        "Ryan",
+        "Aiden",
+        "Ono_Anna",
+        "Sohee",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  subtalker_top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  speaker_voice_embedding_file_url: z
+    .union([z.string(), z.unknown()])
+    .optional(),
+  text: z.string().register(z.globalRegistry, {
+    description: "The text to be converted to speech.",
+  }),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  subtalker_temperature: z
+    .union([z.number().gte(0).lte(1), z.unknown()])
+    .optional(),
+  language: z
+    .enum([
+      "Auto",
+      "English",
+      "Chinese",
+      "Spanish",
+      "French",
+      "German",
+      "Italian",
+      "Japanese",
+      "Korean",
+      "Portuguese",
+      "Russian",
+    ])
+    .register(z.globalRegistry, {
+      description: "The language of the voice.",
+    })
+    .optional(),
+});
+
+/**
+ * Qwen3TTSOutput06b
+ */
+export const zQwen3TtsTextToSpeech06bOutput = z.object({
+  audio: zAudioFile,
+});
+
+/**
+ * Qwen3TTSInput
+ */
+export const zQwen3TtsTextToSpeech17bInput = z.object({
+  top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
+  reference_text: z.union([z.string(), z.unknown()]).optional(),
+  repetition_penalty: z.union([z.number().gte(0), z.unknown()]).optional(),
+  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  max_new_tokens: z.union([z.int().gte(1).lte(8192), z.unknown()]).optional(),
+  subtalker_top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
+  subtalker_dosample: z.union([z.boolean(), z.unknown()]).optional(),
+  voice: z
+    .union([
+      z.enum([
+        "Vivian",
+        "Serena",
+        "Uncle_Fu",
+        "Dylan",
+        "Eric",
+        "Ryan",
+        "Aiden",
+        "Ono_Anna",
+        "Sohee",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  subtalker_top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  speaker_voice_embedding_file_url: z
+    .union([z.string(), z.unknown()])
+    .optional(),
+  text: z.string().register(z.globalRegistry, {
+    description: "The text to be converted to speech.",
+  }),
+  prompt: z.union([z.string(), z.unknown()]).optional(),
+  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  subtalker_temperature: z
+    .union([z.number().gte(0).lte(1), z.unknown()])
+    .optional(),
+  language: z
+    .enum([
+      "Auto",
+      "English",
+      "Chinese",
+      "Spanish",
+      "French",
+      "German",
+      "Italian",
+      "Japanese",
+      "Korean",
+      "Portuguese",
+      "Russian",
+    ])
+    .register(z.globalRegistry, {
+      description: "The language of the voice.",
+    })
+    .optional(),
+});
+
+/**
+ * Qwen3TTSOutput
+ */
+export const zQwen3TtsTextToSpeech17bOutput = z.object({
+  audio: zAudioFile,
+});
+
+/**
+ * Qwen3DesignVoiceInput
+ */
+export const zQwen3TtsVoiceDesign17bInput = z.object({
+  language: z
+    .enum([
+      "Auto",
+      "English",
+      "Chinese",
+      "Spanish",
+      "French",
+      "German",
+      "Italian",
+      "Japanese",
+      "Korean",
+      "Portuguese",
+      "Russian",
+    ])
+    .register(z.globalRegistry, {
+      description: "The language of the voice to be designed.",
+    })
+    .optional(),
+  top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
+  subtalker_top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  repetition_penalty: z.union([z.number().gte(0), z.unknown()]).optional(),
+  text: z.string().register(z.globalRegistry, {
+    description: "The text to be converted to speech.",
+  }),
+  max_new_tokens: z.union([z.int().gte(1).lte(8192), z.unknown()]).optional(),
+  top_p: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  subtalker_top_k: z.union([z.int().gte(0), z.unknown()]).optional(),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "Optional prompt to guide the style of the generated speech.",
+  }),
+  temperature: z.union([z.number().gte(0).lte(1), z.unknown()]).optional(),
+  subtalker_temperature: z
+    .union([z.number().gte(0).lte(1), z.unknown()])
+    .optional(),
+  subtalker_dosample: z.union([z.boolean(), z.unknown()]).optional(),
+});
+
+/**
+ * Qwen3DesignVoiceOutput
+ */
+export const zQwen3TtsVoiceDesign17bOutput = z.object({
+  audio: zAudioFile,
+});
+
+/**
+ * XAITTSInput
+ *
+ * Input for xAI text-to-speech generation.
+ */
+export const zTtsV1Input = z
   .object({
-    text: z
-      .string()
+    voice: z
+      .enum(["eve", "ara", "rex", "sal", "leo"])
       .register(z.globalRegistry, {
-        description: "Text to synthesize into speech.",
+        description:
+          "Voice to use for synthesis. eve: energetic, upbeat. ara: warm, friendly. rex: confident, clear. sal: smooth, balanced. leo: authoritative, strong.",
       })
-      .optional()
-      .default(
-        "My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions and loyal servant to the true emperor, Marcus Aurelius. Father to a murdered son, husband to a murdered wife. And I will have my vengeance, in this life or the next.",
-      ),
-    exaggeration: z
+      .optional(),
+    text: z.string().min(1).max(15000).register(z.globalRegistry, {
+      description:
+        "The text to convert to speech. Maximum 15,000 characters. Supports speech tags for expressive delivery: inline tags like [laugh], [pause], [sigh] and wrapping tags like <whisper>text</whisper>, <slow>text</slow>.",
+    }),
+    language: z
+      .enum([
+        "auto",
+        "en",
+        "ar-EG",
+        "ar-SA",
+        "ar-AE",
+        "bn",
+        "zh",
+        "fr",
+        "de",
+        "hi",
+        "id",
+        "it",
+        "ja",
+        "ko",
+        "pt-BR",
+        "pt-PT",
+        "ru",
+        "es-MX",
+        "es-ES",
+        "tr",
+        "vi",
+      ])
+      .register(z.globalRegistry, {
+        description:
+          "BCP-47 language code or 'auto' for automatic detection. Supported: en, zh, fr, de, hi, id, it, ja, ko, pt-BR, pt-PT, ru, es-MX, es-ES, tr, vi, bn, ar-EG, ar-SA, ar-AE.",
+      })
+      .optional(),
+    output_format: zOutputFormat.optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "Input for xAI text-to-speech generation.",
+  });
+
+/**
+ * XAITTSOutput
+ *
+ * Output for xAI text-to-speech generation.
+ */
+export const zTtsV1Output = z
+  .object({
+    audio: zFile,
+  })
+  .register(z.globalRegistry, {
+    description: "Output for xAI text-to-speech generation.",
+  });
+
+/**
+ * VibeVoice0_5bInput
+ *
+ * Input schema for VibeVoice-0.5b TTS generation
+ */
+export const zVibevoice05bInput = z
+  .object({
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    cfg_scale: z
       .number()
-      .gte(0.25)
+      .gte(1)
       .lte(2)
       .register(z.globalRegistry, {
         description:
-          "Controls emotion exaggeration. Range typically 0.25 to 2.0.",
+          "CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
       })
       .optional()
-      .default(0.5),
-    high_quality_audio: z
-      .boolean()
+      .default(1.3),
+    speaker: z
+      .enum(["Frank", "Wayne", "Carter", "Emma", "Grace", "Mike"])
       .register(z.globalRegistry, {
-        description:
-          "If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz. ",
-      })
-      .optional()
-      .default(false),
-    voice: z
-      .enum([
-        "Aurora",
-        "Blade",
-        "Britney",
-        "Carl",
-        "Cliff",
-        "Richard",
-        "Rico",
-        "Siobhan",
-        "Vicky",
-      ])
-      .register(z.globalRegistry, {
-        description:
-          "The voice to use for the TTS request. If neither voice nor audio are provided, a random voice will be used.",
-      })
-      .optional(),
-    audio_url: z.union([z.string(), z.string()]).optional(),
-    temperature: z
+        description: "Voice to use for speaking.",
+      }),
+    script: z.string().max(90000).register(z.globalRegistry, {
+      description: "The script to convert to speech.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Input schema for VibeVoice-0.5b TTS generation",
+  });
+
+/**
+ * VibeVoice_0_5BOutput
+ *
+ * Output schema for VibeVoice-0.5b TTS generation
+ */
+export const zVibevoice05bOutput = z
+  .object({
+    rtf: z.number().register(z.globalRegistry, {
+      description:
+        "Real-time factor (generation_time / audio_duration). Lower is better.",
+    }),
+    audio: zFile,
+    generation_time: z.number().register(z.globalRegistry, {
+      description: "Time taken to generate the audio in seconds",
+    }),
+    sample_rate: z.int().register(z.globalRegistry, {
+      description: "Sample rate of the generated audio",
+    }),
+    duration: z.number().register(z.globalRegistry, {
+      description: "Duration of the generated audio in seconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output schema for VibeVoice-0.5b TTS generation",
+  });
+
+/**
+ * VibeVoiceOutput
+ *
+ * Output schema for VibeVoice TTS generation
+ */
+export const zVibevoice7bOutput = z
+  .object({
+    rtf: z.number().register(z.globalRegistry, {
+      description:
+        "Real-time factor (generation_time / audio_duration). Lower is better.",
+    }),
+    audio: zFile,
+    generation_time: z.number().register(z.globalRegistry, {
+      description: "Time taken to generate the audio in seconds",
+    }),
+    sample_rate: z.int().register(z.globalRegistry, {
+      description: "Sample rate of the generated audio",
+    }),
+    duration: z.number().register(z.globalRegistry, {
+      description: "Duration of the generated audio in seconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output schema for VibeVoice TTS generation",
+  });
+
+/**
+ * VibeVoiceOutput
+ *
+ * Output schema for VibeVoice TTS generation
+ */
+export const zVibevoiceOutput = z
+  .object({
+    rtf: z.number().register(z.globalRegistry, {
+      description:
+        "Real-time factor (generation_time / audio_duration). Lower is better.",
+    }),
+    audio: zFile,
+    generation_time: z.number().register(z.globalRegistry, {
+      description: "Time taken to generate the audio in seconds",
+    }),
+    sample_rate: z.int().register(z.globalRegistry, {
+      description: "Sample rate of the generated audio",
+    }),
+    duration: z.number().register(z.globalRegistry, {
+      description: "Duration of the generated audio in seconds",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Output schema for VibeVoice TTS generation",
+  });
+
+/**
+ * VibeVoiceSpeaker
+ */
+export const zVibeVoiceSpeaker = z.object({
+  audio_url: z.union([z.string(), z.unknown()]).optional(),
+  preset: z
+    .enum([
+      "Alice [EN]",
+      "Carter [EN]",
+      "Frank [EN]",
+      "Mary [EN] (Background Music)",
+      "Maya [EN]",
+      "Anchen [ZH] (Background Music)",
+      "Bowen [ZH]",
+      "Xinran [ZH]",
+    ])
+    .register(z.globalRegistry, {
+      description:
+        "Default voice preset to use for the speaker. Not used if `audio_url` is provided.",
+    })
+    .optional(),
+});
+
+/**
+ * VibeVoice7bInput
+ *
+ * Input schema for VibeVoice-7b TTS generation
+ */
+export const zVibevoice7bInput = z
+  .object({
+    speakers: z.array(zVibeVoiceSpeaker).register(z.globalRegistry, {
+      description:
+        "List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
+    }),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    cfg_scale: z
       .number()
-      .gte(0.05)
-      .lte(5)
+      .gte(1)
+      .lte(2)
       .register(z.globalRegistry, {
         description:
-          "Controls the randomness of generation. Range typically 0.05 to 5.",
+          "CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
       })
       .optional()
-      .default(0.8),
-    seed: z
-      .int()
-      .gte(0)
+      .default(1.3),
+    script: z.string().max(30000).register(z.globalRegistry, {
+      description:
+        "The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Input schema for VibeVoice-7b TTS generation",
+  });
+
+/**
+ * VibeVoiceInput
+ *
+ * Input schema for VibeVoice TTS generation
+ */
+export const zVibevoiceInput = z
+  .object({
+    speakers: z.array(zVibeVoiceSpeaker).register(z.globalRegistry, {
+      description:
+        "List of speakers to use for the script. If not provided, will be inferred from the script or voice samples.",
+    }),
+    seed: z.union([z.int(), z.unknown()]).optional(),
+    cfg_scale: z
+      .number()
+      .gte(1)
+      .lte(2)
       .register(z.globalRegistry, {
         description:
-          "Useful to control the reproducibility of the generated audio. Assuming all other properties didn't change, a fixed seed should always generate the exact same audio file. Set to 0 for random seed.",
+          "CFG (Classifier-Free Guidance) scale for generation. Higher values increase adherence to text.",
+      })
+      .optional()
+      .default(1.3),
+    script: z.string().max(90000).register(z.globalRegistry, {
+      description:
+        "The script to convert to speech. Can be formatted with 'Speaker X:' prefixes for multi-speaker dialogues.",
+    }),
+  })
+  .register(z.globalRegistry, {
+    description: "Input schema for VibeVoice TTS generation",
+  });
+
+/**
+ * VoiceModify
+ *
+ * Voice modification settings for Speech 2.8 models.
+ */
+export const zVoiceModify = z
+  .object({
+    pitch: z
+      .int()
+      .gte(-100)
+      .lte(100)
+      .register(z.globalRegistry, {
+        description:
+          "Pitch adjustment in semitones. Range: -100 to 100. Positive values raise pitch, negative values lower it.",
       })
       .optional()
       .default(0),
-    cfg: z
-      .number()
-      .gte(0)
-      .lte(1)
+    timbre: z
+      .int()
+      .gte(-100)
+      .lte(100)
       .register(z.globalRegistry, {
         description:
-          "Classifier-free guidance scale (CFG) controls the conditioning factor. Range typically 0.2 to 1.0. For expressive or dramatic speech, try lower cfg values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher. If the reference speaker has a fast speaking style, lowering cfg to around 0.3 can improve pacing.",
+          "Timbre adjustment. Range: -100 to 100. Affects the tonal quality of the voice.",
       })
       .optional()
-      .default(0.5),
+      .default(0),
+    intensity: z
+      .int()
+      .gte(-100)
+      .lte(100)
+      .register(z.globalRegistry, {
+        description:
+          "Intensity/energy of the voice. Range: -100 to 100. Higher values create more energetic speech.",
+      })
+      .optional()
+      .default(0),
   })
   .register(z.globalRegistry, {
-    description: "Input parameters for the TTS request.",
+    description: "Voice modification settings for Speech 2.8 models.",
   });
 
 /**
- * STSOutput
- *
- * Output parameters for the speech-to-speech request.
+ * VoiceSetting
  */
-export const zChatterboxhdSpeechToSpeechOutput = z
-  .object({
-    audio: zAudio,
-  })
-  .register(z.globalRegistry, {
-    description: "Output parameters for the speech-to-speech request.",
-  });
+export const zVoiceSetting = z.object({
+  pitch: z
+    .int()
+    .gte(-12)
+    .lte(12)
+    .register(z.globalRegistry, {
+      description: "Voice pitch (-12 to 12)",
+    })
+    .optional()
+    .default(0),
+  voice_id: z
+    .string()
+    .min(1)
+    .register(z.globalRegistry, {
+      description: "Predefined voice ID to use for synthesis",
+    })
+    .optional()
+    .default("Wise_Woman"),
+  english_normalization: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description:
+        "Enables English text normalization to improve number reading performance, with a slight increase in latency",
+    })
+    .optional()
+    .default(false),
+  emotion: z
+    .union([
+      z.enum([
+        "happy",
+        "sad",
+        "angry",
+        "fearful",
+        "disgusted",
+        "surprised",
+        "neutral",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  vol: z
+    .number()
+    .gte(0.01)
+    .lte(10)
+    .register(z.globalRegistry, {
+      description: "Volume (0-10)",
+    })
+    .optional()
+    .default(1),
+  speed: z
+    .number()
+    .gte(0.5)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description: "Speech speed (0.5-2.0)",
+    })
+    .optional()
+    .default(1),
+});
 
 /**
- * STSInput
- *
- * Input parameters for the speech-to-speech request.
+ * TextToSpeechHDv25Request
  */
-export const zChatterboxhdSpeechToSpeechInput = z
+export const zMinimaxPreviewSpeech25HdInput = z.object({
+  language_boost: z
+    .union([
+      z.enum([
+        "Persian",
+        "Filipino",
+        "Tamil",
+        "Chinese",
+        "Chinese,Yue",
+        "English",
+        "Arabic",
+        "Russian",
+        "Spanish",
+        "French",
+        "Portuguese",
+        "German",
+        "Turkish",
+        "Dutch",
+        "Ukrainian",
+        "Vietnamese",
+        "Indonesian",
+        "Japanese",
+        "Italian",
+        "Korean",
+        "Thai",
+        "Polish",
+        "Romanian",
+        "Greek",
+        "Czech",
+        "Finnish",
+        "Hindi",
+        "Bulgarian",
+        "Danish",
+        "Hebrew",
+        "Malay",
+        "Slovak",
+        "Swedish",
+        "Croatian",
+        "Hungarian",
+        "Norwegian",
+        "Slovenian",
+        "Catalan",
+        "Nynorsk",
+        "Afrikaans",
+        "auto",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  text: z.string().min(1).max(5000).register(z.globalRegistry, {
+    description:
+      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+  }),
+  audio_setting: zAudioSetting.optional(),
+  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+  output_format: z
+    .enum(["url", "hex"])
+    .register(z.globalRegistry, {
+      description: "Format of the output content (non-streaming only)",
+    })
+    .optional(),
+  voice_setting: zVoiceSetting.optional(),
+});
+
+/**
+ * TextToSpeechTurbov25Request
+ */
+export const zMinimaxPreviewSpeech25TurboInput = z.object({
+  language_boost: z
+    .union([
+      z.enum([
+        "Persian",
+        "Filipino",
+        "Tamil",
+        "Chinese",
+        "Chinese,Yue",
+        "English",
+        "Arabic",
+        "Russian",
+        "Spanish",
+        "French",
+        "Portuguese",
+        "German",
+        "Turkish",
+        "Dutch",
+        "Ukrainian",
+        "Vietnamese",
+        "Indonesian",
+        "Japanese",
+        "Italian",
+        "Korean",
+        "Thai",
+        "Polish",
+        "Romanian",
+        "Greek",
+        "Czech",
+        "Finnish",
+        "Hindi",
+        "Bulgarian",
+        "Danish",
+        "Hebrew",
+        "Malay",
+        "Slovak",
+        "Swedish",
+        "Croatian",
+        "Hungarian",
+        "Norwegian",
+        "Slovenian",
+        "Catalan",
+        "Nynorsk",
+        "Afrikaans",
+        "auto",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  text: z.string().min(1).max(5000).register(z.globalRegistry, {
+    description:
+      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+  }),
+  audio_setting: zAudioSetting.optional(),
+  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+  output_format: z
+    .enum(["url", "hex"])
+    .register(z.globalRegistry, {
+      description: "Format of the output content (non-streaming only)",
+    })
+    .optional(),
+  voice_setting: zVoiceSetting.optional(),
+});
+
+/**
+ * TextToSpeechHDRequest
+ */
+export const zMinimaxSpeech02HdInput = z.object({
+  language_boost: z
+    .union([
+      z.enum([
+        "Chinese",
+        "Chinese,Yue",
+        "English",
+        "Arabic",
+        "Russian",
+        "Spanish",
+        "French",
+        "Portuguese",
+        "German",
+        "Turkish",
+        "Dutch",
+        "Ukrainian",
+        "Vietnamese",
+        "Indonesian",
+        "Japanese",
+        "Italian",
+        "Korean",
+        "Thai",
+        "Polish",
+        "Romanian",
+        "Greek",
+        "Czech",
+        "Finnish",
+        "Hindi",
+        "Bulgarian",
+        "Danish",
+        "Hebrew",
+        "Malay",
+        "Slovak",
+        "Swedish",
+        "Croatian",
+        "Hungarian",
+        "Norwegian",
+        "Slovenian",
+        "Catalan",
+        "Nynorsk",
+        "Afrikaans",
+        "auto",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  text: z.string().min(1).max(5000).register(z.globalRegistry, {
+    description:
+      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+  }),
+  audio_setting: zAudioSetting.optional(),
+  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+  output_format: z
+    .enum(["url", "hex"])
+    .register(z.globalRegistry, {
+      description: "Format of the output content (non-streaming only)",
+    })
+    .optional(),
+  voice_setting: zVoiceSetting.optional(),
+});
+
+/**
+ * TextToSpeechTurboRequest
+ */
+export const zMinimaxSpeech02TurboInput = z.object({
+  language_boost: z
+    .union([
+      z.enum([
+        "Chinese",
+        "Chinese,Yue",
+        "English",
+        "Arabic",
+        "Russian",
+        "Spanish",
+        "French",
+        "Portuguese",
+        "German",
+        "Turkish",
+        "Dutch",
+        "Ukrainian",
+        "Vietnamese",
+        "Indonesian",
+        "Japanese",
+        "Italian",
+        "Korean",
+        "Thai",
+        "Polish",
+        "Romanian",
+        "Greek",
+        "Czech",
+        "Finnish",
+        "Hindi",
+        "Bulgarian",
+        "Danish",
+        "Hebrew",
+        "Malay",
+        "Slovak",
+        "Swedish",
+        "Croatian",
+        "Hungarian",
+        "Norwegian",
+        "Slovenian",
+        "Catalan",
+        "Nynorsk",
+        "Afrikaans",
+        "auto",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  text: z.string().min(1).max(5000).register(z.globalRegistry, {
+    description:
+      "Text to convert to speech (max 5000 characters, minimum 1 non-whitespace character)",
+  }),
+  audio_setting: zAudioSetting.optional(),
+  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+  output_format: z
+    .enum(["url", "hex"])
+    .register(z.globalRegistry, {
+      description: "Format of the output content (non-streaming only)",
+    })
+    .optional(),
+  voice_setting: zVoiceSetting.optional(),
+});
+
+/**
+ * TextToSpeechHD26Request
+ */
+export const zMinimaxSpeech26HdInput = z.object({
+  language_boost: z
+    .union([
+      z.enum([
+        "Chinese",
+        "Chinese,Yue",
+        "English",
+        "Arabic",
+        "Russian",
+        "Spanish",
+        "French",
+        "Portuguese",
+        "German",
+        "Turkish",
+        "Dutch",
+        "Ukrainian",
+        "Vietnamese",
+        "Indonesian",
+        "Japanese",
+        "Italian",
+        "Korean",
+        "Thai",
+        "Polish",
+        "Romanian",
+        "Greek",
+        "Czech",
+        "Finnish",
+        "Hindi",
+        "Bulgarian",
+        "Danish",
+        "Hebrew",
+        "Malay",
+        "Slovak",
+        "Swedish",
+        "Croatian",
+        "Hungarian",
+        "Norwegian",
+        "Slovenian",
+        "Catalan",
+        "Nynorsk",
+        "Afrikaans",
+        "auto",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+  audio_setting: zAudioSetting.optional(),
+  output_format: z
+    .enum(["url", "hex"])
+    .register(z.globalRegistry, {
+      description: "Format of the output content (non-streaming only)",
+    })
+    .optional(),
+  normalization_setting: zLoudnessNormalizationSetting.optional(),
+  prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
+    description:
+      "Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.",
+  }),
+  voice_setting: zVoiceSetting.optional(),
+});
+
+/**
+ * TextToSpeechTurbo26Request
+ */
+export const zMinimaxSpeech26TurboInput = z.object({
+  language_boost: z
+    .union([
+      z.enum([
+        "Chinese",
+        "Chinese,Yue",
+        "English",
+        "Arabic",
+        "Russian",
+        "Spanish",
+        "French",
+        "Portuguese",
+        "German",
+        "Turkish",
+        "Dutch",
+        "Ukrainian",
+        "Vietnamese",
+        "Indonesian",
+        "Japanese",
+        "Italian",
+        "Korean",
+        "Thai",
+        "Polish",
+        "Romanian",
+        "Greek",
+        "Czech",
+        "Finnish",
+        "Hindi",
+        "Bulgarian",
+        "Danish",
+        "Hebrew",
+        "Malay",
+        "Slovak",
+        "Swedish",
+        "Croatian",
+        "Hungarian",
+        "Norwegian",
+        "Slovenian",
+        "Catalan",
+        "Nynorsk",
+        "Afrikaans",
+        "auto",
+      ]),
+      z.unknown(),
+    ])
+    .optional(),
+  pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+  audio_setting: zAudioSetting.optional(),
+  output_format: z
+    .enum(["url", "hex"])
+    .register(z.globalRegistry, {
+      description: "Format of the output content (non-streaming only)",
+    })
+    .optional(),
+  normalization_setting: zLoudnessNormalizationSetting.optional(),
+  prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
+    description:
+      "Text to convert to speech. Paragraph breaks should be marked with newline characters. **NOTE**: You can customize speech pauses by adding markers in the form `<#x#>`, where `x` is the pause duration in seconds. Valid range: `[0.01, 99.99]`, up to two decimal places. Pause markers must be placed between speakable text segments and cannot be used consecutively.",
+  }),
+  voice_setting: zVoiceSetting.optional(),
+});
+
+/**
+ * TextToSpeechHD28Request
+ *
+ * Request model for Speech 2.8 HD - highest quality speech synthesis.
+ */
+export const zMinimaxSpeech28HdInput = z
   .object({
-    high_quality_audio: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description:
-          "If True, the generated audio will be upscaled to 48kHz. The generation of the audio will take longer, but the quality will be higher. If False, the generated audio will be 24kHz. ",
-      })
-      .optional()
-      .default(false),
-    target_voice_audio_url: z.union([z.string(), z.string()]).optional(),
-    source_audio_url: z.union([z.string(), z.string()]),
-    target_voice: z
-      .enum([
-        "Aurora",
-        "Blade",
-        "Britney",
-        "Carl",
-        "Cliff",
-        "Richard",
-        "Rico",
-        "Siobhan",
-        "Vicky",
+    language_boost: z
+      .union([
+        z.enum([
+          "Chinese",
+          "Chinese,Yue",
+          "English",
+          "Arabic",
+          "Russian",
+          "Spanish",
+          "French",
+          "Portuguese",
+          "German",
+          "Turkish",
+          "Dutch",
+          "Ukrainian",
+          "Vietnamese",
+          "Indonesian",
+          "Japanese",
+          "Italian",
+          "Korean",
+          "Thai",
+          "Polish",
+          "Romanian",
+          "Greek",
+          "Czech",
+          "Finnish",
+          "Hindi",
+          "Bulgarian",
+          "Danish",
+          "Hebrew",
+          "Malay",
+          "Slovak",
+          "Swedish",
+          "Croatian",
+          "Hungarian",
+          "Norwegian",
+          "Slovenian",
+          "Catalan",
+          "Nynorsk",
+          "Afrikaans",
+          "auto",
+        ]),
+        z.unknown(),
       ])
+      .optional(),
+    voice_modify: z.union([zVoiceModify, z.unknown()]).optional(),
+    audio_setting: zAudioSetting.optional(),
+    normalization_setting: zLoudnessNormalizationSetting.optional(),
+    prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
+      description:
+        "Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.",
+    }),
+    output_format: z
+      .enum(["url", "hex"])
       .register(z.globalRegistry, {
-        description:
-          "The voice to use for the speech-to-speech request. If neither target_voice nor target_voice_audio_url are provided, a random target voice will be used.",
+        description: "Format of the output content (non-streaming only)",
       })
       .optional(),
+    pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+    voice_setting: zVoiceSetting.optional(),
   })
   .register(z.globalRegistry, {
-    description: "Input parameters for the speech-to-speech request.",
+    description:
+      "Request model for Speech 2.8 HD - highest quality speech synthesis.",
+  });
+
+/**
+ * TextToSpeechTurbo28Request
+ *
+ * Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.
+ */
+export const zMinimaxSpeech28TurboInput = z
+  .object({
+    language_boost: z
+      .union([
+        z.enum([
+          "Chinese",
+          "Chinese,Yue",
+          "English",
+          "Arabic",
+          "Russian",
+          "Spanish",
+          "French",
+          "Portuguese",
+          "German",
+          "Turkish",
+          "Dutch",
+          "Ukrainian",
+          "Vietnamese",
+          "Indonesian",
+          "Japanese",
+          "Italian",
+          "Korean",
+          "Thai",
+          "Polish",
+          "Romanian",
+          "Greek",
+          "Czech",
+          "Finnish",
+          "Hindi",
+          "Bulgarian",
+          "Danish",
+          "Hebrew",
+          "Malay",
+          "Slovak",
+          "Swedish",
+          "Croatian",
+          "Hungarian",
+          "Norwegian",
+          "Slovenian",
+          "Catalan",
+          "Nynorsk",
+          "Afrikaans",
+          "auto",
+        ]),
+        z.unknown(),
+      ])
+      .optional(),
+    voice_modify: z.union([zVoiceModify, z.unknown()]).optional(),
+    audio_setting: zAudioSetting.optional(),
+    normalization_setting: zLoudnessNormalizationSetting.optional(),
+    prompt: z.string().min(1).max(10000).register(z.globalRegistry, {
+      description:
+        "Text to convert to speech. Use `<#x#>` for pauses (x = 0.01-99.99 seconds). Supports interjection tags: `(laughs)`, `(sighs)`, `(coughs)`, `(clears throat)`, `(gasps)`, `(sniffs)`, `(groans)`, `(yawns)`.",
+    }),
+    output_format: z
+      .enum(["url", "hex"])
+      .register(z.globalRegistry, {
+        description: "Format of the output content (non-streaming only)",
+      })
+      .optional(),
+    pronunciation_dict: z.union([zPronunciationDict, z.unknown()]).optional(),
+    voice_setting: zVoiceSetting.optional(),
+  })
+  .register(z.globalRegistry, {
+    description:
+      "Request model for Speech 2.8 Turbo - faster speech synthesis with good quality.",
   });
 
 export const zPostFalAiChatterboxSpeechToSpeechData = z.object({

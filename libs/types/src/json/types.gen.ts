@@ -5,325 +5,27 @@ export type ClientOptions = {
 };
 
 /**
- * VideoFormat
+ * Aesthetics
  */
-export type VideoFormat = {
+export type Aesthetics = {
   /**
-   * Container
+   * Composition
    *
-   * Container format of the video
+   * The composition of the image to be generated.
    */
-  container: string;
+  composition?: string | unknown;
   /**
-   * Video Codec
+   * Mood Atmosphere
    *
-   * Video codec used (e.g., 'h264')
+   * The mood and atmosphere of the image to be generated.
    */
-  video_codec: string;
+  mood_atmosphere?: string | unknown;
   /**
-   * Pixel Format
+   * Color Scheme
    *
-   * Pixel format used (e.g., 'yuv420p')
+   * The color scheme of the image to be generated.
    */
-  pixel_format: string;
-  /**
-   * Profile
-   *
-   * Codec profile (e.g., 'main', 'high')
-   */
-  profile: string;
-  /**
-   * Level
-   *
-   * Codec level (e.g., 4.1)
-   */
-  level: number;
-  /**
-   * Bitrate
-   *
-   * Video bitrate in bits per second
-   */
-  bitrate: number;
-};
-
-/**
- * Video
- */
-export type Video = {
-  /**
-   * File Name
-   *
-   * Original filename of the media
-   */
-  file_name: string;
-  /**
-   * Duration
-   *
-   * Duration of the media in seconds
-   */
-  duration: number;
-  /**
-   * Media Type
-   *
-   * Type of media (always 'video')
-   */
-  media_type?: string;
-  /**
-   * Bitrate
-   *
-   * Overall bitrate of the media in bits per second
-   */
-  bitrate: number;
-  /**
-   * Codec
-   *
-   * Codec used to encode the media
-   */
-  codec: string;
-  /**
-   * Content Type
-   *
-   * MIME type of the media file
-   */
-  content_type: string;
-  /**
-   * Audio track information if video has audio
-   */
-  audio?: AudioTrack | unknown;
-  /**
-   * Fps
-   *
-   * Frames per second
-   */
-  fps: number;
-  /**
-   * File Size
-   *
-   * Size of the file in bytes
-   */
-  file_size: number;
-  /**
-   * Start Frame Url
-   *
-   * URL of the extracted first frame
-   */
-  start_frame_url?: string | unknown;
-  /**
-   * Url
-   *
-   * URL where the media file can be accessed
-   */
-  url: string;
-  /**
-   * Frame Count
-   *
-   * Total number of frames in the video
-   */
-  frame_count: number;
-  /**
-   * Timebase
-   *
-   * Time base used for frame timestamps
-   */
-  timebase: string;
-  /**
-   * Container
-   *
-   * Container format of the media file (e.g., 'mp4', 'mov')
-   */
-  container: string;
-  resolution: Resolution;
-  format: VideoFormat;
-  /**
-   * End Frame Url
-   *
-   * URL of the extracted last frame
-   */
-  end_frame_url?: string | unknown;
-};
-
-/**
- * Resolution
- */
-export type Resolution = {
-  /**
-   * Aspect Ratio
-   *
-   * Display aspect ratio (e.g., '16:9')
-   */
-  aspect_ratio: string;
-  /**
-   * Height
-   *
-   * Height of the video in pixels
-   */
-  height: number;
-  /**
-   * Width
-   *
-   * Width of the video in pixels
-   */
-  width: number;
-};
-
-/**
- * AudioTrack
- */
-export type AudioTrack = {
-  /**
-   * Channels
-   *
-   * Number of audio channels
-   */
-  channels: number;
-  /**
-   * Codec
-   *
-   * Audio codec used (e.g., 'aac', 'mp3')
-   */
-  codec: string;
-  /**
-   * Bitrate
-   *
-   * Audio bitrate in bits per second
-   */
-  bitrate: number;
-  /**
-   * Sample Rate
-   *
-   * Audio sample rate in Hz
-   */
-  sample_rate: number;
-};
-
-/**
- * TextRender
- *
- * Text rendering information in the image.
- */
-export type TextRender = {
-  /**
-   * Text
-   *
-   * The text content.
-   */
-  text: string;
-  /**
-   * Font
-   *
-   * E.g., 'realistic', 'cartoonish', 'minimalist'.
-   */
-  font: string;
-  /**
-   * Color
-   *
-   * E.g., 'red', 'blue', 'green'.
-   */
-  color: string;
-  /**
-   * Location
-   *
-   * E.g., 'center', 'top-left', 'bottom-right foreground'.
-   */
-  location: string;
-  /**
-   * Appearance Details
-   *
-   * Any other notable visual details.
-   */
-  appearance_details?: string | unknown;
-  /**
-   * Size
-   *
-   * E.g., 'small', 'medium', 'large within frame'.
-   */
-  size: string;
-};
-
-/**
- * StructuredPrompt
- */
-export type StructuredPromptType2 = {
-  /**
-   * Background Setting
-   *
-   * Describe the overall environment, setting, or background, including any notable background elements.
-   */
-  background_setting: string;
-  /**
-   * Artistic Style
-   *
-   * describe specific artistic characteristics, 3 words maximum.
-   */
-  artistic_style: string;
-  /**
-   * Style Medium
-   *
-   * Identify the artistic style or medium.
-   */
-  style_medium?: string | unknown;
-  /**
-   * Text Render
-   *
-   * List of text renders in the image.
-   */
-  text_render?: Array<TextRender> | unknown;
-  /**
-   * Subject Emotions
-   *
-   * Explicitly describe any visible emotions or expressions on subjects.
-   */
-  subject_emotions?: string | unknown;
-  /**
-   * Objects
-   *
-   * List of prominent foreground/midground objects.
-   */
-  objects: Array<ObjectDescription>;
-  /**
-   * Details about photographic characteristics.
-   */
-  photographic_characteristics?: PhotographicCharacteristicsDetails | unknown;
-  aesthetics: AestheticsDetails;
-  lighting: LightingDetails;
-  /**
-   * Context
-   *
-   * Provide any additional context that helps understand the image better.
-   */
-  context: string;
-  /**
-   * Short Description
-   *
-   * A concise summary of the image content, 200 words maximum.
-   */
-  short_description: string;
-};
-
-/**
- * LightingDetails
- *
- * Lighting information for the image.
- */
-export type LightingDetails = {
-  /**
-   * Shadows
-   *
-   * Describe the presence of shadows.
-   */
-  shadows?: string | unknown;
-  /**
-   * Conditions
-   *
-   * E.g., 'bright daylight', 'dim indoor', 'studio lighting', 'golden hour'.
-   */
-  conditions: string;
-  /**
-   * Direction
-   *
-   * E.g., 'front-lit', 'backlit', 'side-lit from left'.
-   */
-  direction: string;
+  color_scheme?: string | unknown;
 };
 
 /**
@@ -365,35 +67,710 @@ export type AestheticsDetails = {
 };
 
 /**
- * PhotographicCharacteristicsDetails
- *
- * Photographic characteristics of the image.
+ * Aesthetics
  */
-export type PhotographicCharacteristicsDetails = {
+export type AestheticsType2 = {
   /**
-   * Focus
+   * Preference Score
    *
-   * E.g., 'sharp focus on subject', 'soft focus', 'motion blur'.
+   * The preference score of the image.
    */
-  focus: string;
+  preference_score: string;
   /**
-   * Lens Focal Length
+   * Composition
    *
-   * E.g., 'wide-angle', 'telephoto', 'macro', 'fisheye'.
+   * The composition of the image to be generated.
    */
-  lens_focal_length: string;
+  composition?: string | unknown;
   /**
-   * Camera Angle
+   * Mood Atmosphere
    *
-   * E.g., 'eye-level', 'low angle', 'high angle', 'dutch angle'.
+   * The mood and atmosphere of the image to be generated.
    */
-  camera_angle: string;
+  mood_atmosphere?: string | unknown;
   /**
-   * Depth Of Field
+   * Aesthetic Score
    *
-   * E.g., 'shallow', 'deep', 'bokeh background'.
+   * The aesthetic score of the image.
    */
-  depth_of_field: string;
+  aesthetic_score: string;
+  /**
+   * Color Scheme
+   *
+   * The color scheme of the image to be generated.
+   */
+  color_scheme?: string | unknown;
+};
+
+/**
+ * Audio
+ */
+export type Audio = {
+  /**
+   * Url
+   *
+   * URL where the media file can be accessed
+   */
+  url: string;
+  /**
+   * File Size
+   *
+   * Size of the file in bytes
+   */
+  file_size: number;
+  /**
+   * File Name
+   *
+   * Original filename of the media
+   */
+  file_name: string;
+  /**
+   * Duration
+   *
+   * Duration of the media in seconds
+   */
+  duration: number;
+  /**
+   * Media Type
+   *
+   * Type of media (always 'audio')
+   */
+  media_type?: string;
+  /**
+   * Bitrate
+   *
+   * Overall bitrate of the media in bits per second
+   */
+  bitrate: number;
+  /**
+   * Codec
+   *
+   * Codec used to encode the media
+   */
+  codec: string;
+  /**
+   * Content Type
+   *
+   * MIME type of the media file
+   */
+  content_type: string;
+  /**
+   * Container
+   *
+   * Container format of the media file (e.g., 'mp4', 'mov')
+   */
+  container: string;
+  /**
+   * Channels
+   *
+   * Number of audio channels
+   */
+  channels: number;
+  /**
+   * Sample Rate
+   *
+   * Audio sample rate in Hz
+   */
+  sample_rate: number;
+};
+
+/**
+ * AudioTrack
+ */
+export type AudioTrack = {
+  /**
+   * Channels
+   *
+   * Number of audio channels
+   */
+  channels: number;
+  /**
+   * Codec
+   *
+   * Audio codec used (e.g., 'aac', 'mp3')
+   */
+  codec: string;
+  /**
+   * Bitrate
+   *
+   * Audio bitrate in bits per second
+   */
+  bitrate: number;
+  /**
+   * Sample Rate
+   *
+   * Audio sample rate in Hz
+   */
+  sample_rate: number;
+};
+
+/**
+ * ImageUnderstandingInput
+ */
+export type BagelUnderstandInput = {
+  /**
+   * Seed
+   *
+   * The seed to use for the generation.
+   */
+  seed?: number;
+  /**
+   * Prompt
+   *
+   * The prompt to query the image with.
+   */
+  prompt: string;
+  /**
+   * Image Url
+   *
+   * The image for the query.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type BagelUnderstandOutput = {
+  /**
+   * Timings
+   *
+   * The timings of the generation.
+   */
+  timings: {
+    [key: string]: unknown;
+  };
+  /**
+   * Seed
+   *
+   * The seed used for the generation.
+   */
+  seed: number;
+  /**
+   * Prompt
+   *
+   * The query used for the generation.
+   */
+  prompt: string;
+  /**
+   * Text
+   *
+   * The answer to the query.
+   */
+  text: string;
+};
+
+/**
+ * StructuredPrompt
+ */
+export type BriaFiboVlmStructuredPrompt = {
+  /**
+   * Background Setting
+   *
+   * The background setting of the image to be generated.
+   */
+  background_setting?: string | unknown;
+  /**
+   * Artistic Style
+   *
+   * The artistic style of the image to be generated.
+   */
+  artistic_style?: string | unknown;
+  /**
+   * Style Medium
+   *
+   * The style medium of the image to be generated.
+   */
+  style_medium?: string | unknown;
+  /**
+   * Text Render
+   *
+   * A list of text to be rendered in the image.
+   */
+  text_render?: Array<unknown> | unknown;
+  /**
+   * Objects
+   *
+   * A list of objects in the image to be generated, along with their attributes and relationships to other objects in the image.
+   */
+  objects?: Array<PromptObject> | unknown;
+  /**
+   * Context
+   *
+   * The context of the image to be generated.
+   */
+  context?: string | unknown;
+  /**
+   * The photographic characteristics of the image to be generated.
+   */
+  photographic_characteristics?: PhotographicCharacteristics | unknown;
+  /**
+   * The aesthetics of the image to be generated.
+   */
+  aesthetics?: AestheticsType2 | unknown;
+  /**
+   * The lighting of the image to be generated.
+   */
+  lighting?: Lighting | unknown;
+  /**
+   * Short Description
+   *
+   * A short description of the image to be generated.
+   */
+  short_description?: string | unknown;
+};
+
+/**
+ * LoudnormInput
+ */
+export type FfmpegApiLoudnormInput = {
+  /**
+   * Measured Tp
+   *
+   * Measured true peak of input file in dBTP. Required for linear mode.
+   */
+  measured_tp?: number | unknown;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to normalize
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Loudness Range
+   *
+   * Loudness range target in LU
+   */
+  loudness_range?: number;
+  /**
+   * Measured I
+   *
+   * Measured integrated loudness of input file in LUFS. Required for linear mode.
+   */
+  measured_i?: number | unknown;
+  /**
+   * Measured Thresh
+   *
+   * Measured threshold of input file in LUFS. Required for linear mode.
+   */
+  measured_thresh?: number | unknown;
+  /**
+   * Linear
+   *
+   * Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).
+   */
+  linear?: boolean;
+  /**
+   * True Peak
+   *
+   * Maximum true peak in dBTP.
+   */
+  true_peak?: number;
+  /**
+   * Offset
+   *
+   * Offset gain in dB applied before the true-peak limiter
+   */
+  offset?: number;
+  /**
+   * Print Summary
+   *
+   * Return loudness measurement summary with the normalized audio
+   */
+  print_summary?: boolean;
+  /**
+   * Measured Lra
+   *
+   * Measured loudness range of input file in LU. Required for linear mode.
+   */
+  measured_lra?: number | unknown;
+  /**
+   * Dual Mono
+   *
+   * Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems
+   */
+  dual_mono?: boolean;
+  /**
+   * Integrated Loudness
+   *
+   * Integrated loudness target in LUFS.
+   */
+  integrated_loudness?: number;
+};
+
+/**
+ * LoudnormOutput
+ */
+export type FfmpegApiLoudnormOutput = {
+  audio: File;
+  /**
+   * Structured loudness measurement summary (if requested)
+   */
+  summary?: LoudnormSummary | unknown;
+};
+
+/**
+ * MetadataInput
+ */
+export type FfmpegApiMetadataInput = {
+  /**
+   * Extract Frames
+   *
+   * Whether to extract the start and end frames for videos. Note that when true the request will be slower.
+   */
+  extract_frames?: boolean;
+  /**
+   * Media Url
+   *
+   * URL of the media file (video or audio) to analyze
+   */
+  media_url: string | Blob | File;
+};
+
+/**
+ * MetadataOutput
+ */
+export type FfmpegApiMetadataOutput = {
+  /**
+   * Media
+   *
+   * Metadata for the analyzed media file (either Video or Audio)
+   */
+  media: Video | Audio;
+};
+
+/**
+ * WaveformInput
+ */
+export type FfmpegApiWaveformInput = {
+  /**
+   * Precision
+   *
+   * Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.
+   */
+  precision?: number;
+  /**
+   * Media Url
+   *
+   * URL of the audio file to analyze
+   */
+  media_url: string | Blob | File;
+  /**
+   * Smoothing Window
+   *
+   * Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.
+   */
+  smoothing_window?: number;
+  /**
+   * Points Per Second
+   *
+   * Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.
+   */
+  points_per_second?: number;
+};
+
+/**
+ * WaveformOutput
+ */
+export type FfmpegApiWaveformOutput = {
+  /**
+   * Duration
+   *
+   * Duration of the audio in seconds
+   */
+  duration: number;
+  /**
+   * Precision
+   *
+   * Number of decimal places used in the waveform values
+   */
+  precision: number;
+  /**
+   * Points
+   *
+   * Number of points in the waveform data
+   */
+  points: number;
+  /**
+   * Waveform
+   *
+   * Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.
+   */
+  waveform: Array<number>;
+};
+
+/**
+ * StructuredInstructionInputModel
+ */
+export type FiboEditEditStructuredInstructionInput = {
+  /**
+   * Instruction
+   *
+   * Instruction for image editing.
+   */
+  instruction?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * Sync Mode
+   *
+   * If true, returns the image directly in the response (increases latency).
+   */
+  sync_mode?: boolean;
+  /**
+   * Mask Url
+   *
+   * Reference image mask (file or URL). Optional.
+   */
+  mask_url?: string | unknown;
+  /**
+   * Image Url
+   *
+   * Reference image (file or URL).
+   */
+  image_url?: string | unknown;
+};
+
+export type FiboEditEditStructuredInstructionOutput = unknown;
+
+/**
+ * StructuredPromptModel
+ */
+export type FiboGenerateStructuredPromptInput = {
+  /**
+   * Prompt
+   *
+   * Prompt for image generation.
+   */
+  prompt?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * The structured prompt to generate an image from.
+   */
+  structured_prompt?: StructuredPrompt | unknown;
+  /**
+   * Image Url
+   *
+   * Reference image (file or URL).
+   */
+  image_url?: string | unknown;
+};
+
+export type FiboGenerateStructuredPromptOutput = unknown;
+
+/**
+ * StructuredPromptInput
+ */
+export type FiboLiteGenerateStructuredPromptInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate.
+   */
+  prompt?: string | unknown;
+  /**
+   * Seed
+   *
+   * Seed for the random number generator.
+   */
+  seed?: number;
+  /**
+   * The structured prompt to generate.
+   */
+  structured_prompt?: StructuredPromptType2 | unknown;
+  /**
+   * Image Url
+   *
+   * Input image URL
+   */
+  image_url?: string | unknown;
+};
+
+/**
+ * StructuredPromptModel
+ */
+export type FiboLiteGenerateStructuredPromptLiteInput = {
+  /**
+   * Prompt
+   *
+   * Prompt for image generation.
+   */
+  prompt?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * The structured prompt to generate an image from.
+   */
+  structured_prompt?: BriaFiboVlmStructuredPrompt | unknown;
+  /**
+   * Image Url
+   *
+   * Reference image (file or URL).
+   */
+  image_url?: string | unknown;
+};
+
+export type FiboLiteGenerateStructuredPromptLiteOutput = unknown;
+
+export type FiboLiteGenerateStructuredPromptOutput = unknown;
+
+/**
+ * File
+ */
+export type File = {
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+};
+
+/**
+ * Lighting
+ */
+export type Lighting = {
+  /**
+   * Shadows
+   *
+   * The shadows in the image to be generated.
+   */
+  shadows?: string | unknown;
+  /**
+   * Conditions
+   *
+   * The conditions of the lighting in the image to be generated.
+   */
+  conditions?: string | unknown;
+  /**
+   * Direction
+   *
+   * The direction of the lighting in the image to be generated.
+   */
+  direction?: string | unknown;
+};
+
+/**
+ * LightingDetails
+ *
+ * Lighting information for the image.
+ */
+export type LightingDetails = {
+  /**
+   * Shadows
+   *
+   * Describe the presence of shadows.
+   */
+  shadows?: string | unknown;
+  /**
+   * Conditions
+   *
+   * E.g., 'bright daylight', 'dim indoor', 'studio lighting', 'golden hour'.
+   */
+  conditions: string;
+  /**
+   * Direction
+   *
+   * E.g., 'front-lit', 'backlit', 'side-lit from left'.
+   */
+  direction: string;
+};
+
+/**
+ * LoudnormSummary
+ */
+export type LoudnormSummary = {
+  /**
+   * Input True Peak
+   *
+   * Input true peak in dBTP
+   */
+  input_true_peak?: number | unknown;
+  /**
+   * Input Lra
+   *
+   * Input loudness range in LU
+   */
+  input_lra?: number | unknown;
+  /**
+   * Output Lra
+   *
+   * Output loudness range in LU
+   */
+  output_lra?: number | unknown;
+  /**
+   * Output Threshold
+   *
+   * Output threshold in LUFS
+   */
+  output_threshold?: number | unknown;
+  /**
+   * Normalization Type
+   *
+   * Type of normalization applied (Dynamic/Linear)
+   */
+  normalization_type?: string | unknown;
+  /**
+   * Output Integrated
+   *
+   * Output integrated loudness in LUFS
+   */
+  output_integrated?: number | unknown;
+  /**
+   * Target Offset
+   *
+   * Target offset in LU
+   */
+  target_offset?: number | unknown;
+  /**
+   * Input Threshold
+   *
+   * Input threshold in LUFS
+   */
+  input_threshold?: number | unknown;
+  /**
+   * Input Integrated
+   *
+   * Input integrated loudness in LUFS
+   */
+  input_integrated?: number | unknown;
+  /**
+   * Output True Peak
+   *
+   * Output true peak in dBTP
+   */
+  output_true_peak?: number | unknown;
 };
 
 /**
@@ -495,87 +872,144 @@ export type ObjectDescription = {
 };
 
 /**
- * StructuredPrompt
+ * ImageToLottieInput
  */
-export type StructuredPrompt = {
+export type OmnilottieImageToLottieInput = {
   /**
-   * Background Setting
+   * Temperature
    *
-   * The background setting of the image to be generated.
+   * Sampling temperature for generation.
    */
-  background_setting?: string | unknown;
+  temperature?: number;
   /**
-   * Artistic Style
+   * Image Url
    *
-   * The artistic style of the image to be generated.
+   * URL of the reference image to animate.
    */
-  artistic_style?: string | unknown;
+  image_url: string | Blob | File;
   /**
-   * The aesthetics of the image to be generated.
-   */
-  aesthetics?: Aesthetics | unknown;
-  /**
-   * Text Render
+   * Max Tokens
    *
-   * A list of text to be rendered in the image.
+   * Maximum number of Lottie tokens to generate.
    */
-  text_render?: Array<unknown> | unknown;
+  max_tokens?: number;
   /**
-   * Objects
+   * Top P
    *
-   * A list of objects in the image to be generated, along with their attributes and relationships to other objects in the image.
+   * Nucleus sampling probability threshold.
    */
-  objects?: Array<PromptObject> | unknown;
+  top_p?: number;
   /**
-   * Style Medium
+   * Top K
    *
-   * The style medium of the image to be generated.
+   * Top-k sampling parameter.
    */
-  style_medium?: string | unknown;
+  top_k?: number;
   /**
-   * The photographic characteristics of the image to be generated.
-   */
-  photographic_characteristics?: PhotographicCharacteristics | unknown;
-  /**
-   * Context
+   * Prompt
    *
-   * The context of the image to be generated.
+   * Text description guiding the animation of the image.
    */
-  context?: string | unknown;
-  /**
-   * The lighting of the image to be generated.
-   */
-  lighting?: Lighting | unknown;
-  /**
-   * Short Description
-   *
-   * A short description of the image to be generated.
-   */
-  short_description?: string | unknown;
+  prompt: string;
 };
 
 /**
- * Lighting
+ * LottieOutput
  */
-export type Lighting = {
+export type OmnilottieImageToLottieOutput = {
+  lottie_file: File;
+};
+
+/**
+ * TextToLottieInput
+ */
+export type OmnilottieInput = {
   /**
-   * Shadows
+   * Temperature
    *
-   * The shadows in the image to be generated.
+   * Sampling temperature for generation.
    */
-  shadows?: string | unknown;
+  temperature?: number;
   /**
-   * Conditions
+   * Top P
    *
-   * The conditions of the lighting in the image to be generated.
+   * Nucleus sampling probability threshold.
    */
-  conditions?: string | unknown;
+  top_p?: number;
   /**
-   * Direction
+   * Max Tokens
    *
-   * The direction of the lighting in the image to be generated.
+   * Maximum number of Lottie tokens to generate.
    */
-  direction?: string | unknown;
+  max_tokens?: number;
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number;
+  /**
+   * Prompt
+   *
+   * Text description of the Lottie animation to generate.
+   */
+  prompt: string;
+};
+
+/**
+ * LottieOutput
+ */
+export type OmnilottieOutput = {
+  lottie_file: File;
+};
+
+/**
+ * VideoToLottieInput
+ */
+export type OmnilottieVideoToLottieInput = {
+  /**
+   * Video Url
+   *
+   * URL of the video to convert into a Lottie animation.
+   */
+  video_url: string | Blob | File;
+  /**
+   * Temperature
+   *
+   * Sampling temperature for generation.
+   */
+  temperature?: number;
+  /**
+   * Top P
+   *
+   * Nucleus sampling probability threshold.
+   */
+  top_p?: number;
+  /**
+   * Max Tokens
+   *
+   * Maximum number of Lottie tokens to generate.
+   */
+  max_tokens?: number;
+  /**
+   * Top K
+   *
+   * Top-k sampling parameter.
+   */
+  top_k?: number;
+  /**
+   * Prompt
+   *
+   * Optional text description guiding the conversion.
+   */
+  prompt?: string | unknown;
+};
+
+/**
+ * LottieOutput
+ */
+export type OmnilottieVideoToLottieOutput = {
+  lottie_file: File;
 };
 
 /**
@@ -606,6 +1040,38 @@ export type PhotographicCharacteristics = {
    * The depth of field in the image to be generated.
    */
   depth_of_field?: string | unknown;
+};
+
+/**
+ * PhotographicCharacteristicsDetails
+ *
+ * Photographic characteristics of the image.
+ */
+export type PhotographicCharacteristicsDetails = {
+  /**
+   * Focus
+   *
+   * E.g., 'sharp focus on subject', 'soft focus', 'motion blur'.
+   */
+  focus: string;
+  /**
+   * Lens Focal Length
+   *
+   * E.g., 'wide-angle', 'telephoto', 'macro', 'fisheye'.
+   */
+  lens_focal_length: string;
+  /**
+   * Camera Angle
+   *
+   * E.g., 'eye-level', 'low angle', 'high angle', 'dutch angle'.
+   */
+  camera_angle: string;
+  /**
+   * Depth Of Field
+   *
+   * E.g., 'shallow', 'deep', 'bokeh background'.
+   */
+  depth_of_field: string;
 };
 
 /**
@@ -704,30 +1170,6 @@ export type PromptObject = {
   action?: string | unknown;
 };
 
-/**
- * Aesthetics
- */
-export type Aesthetics = {
-  /**
-   * Composition
-   *
-   * The composition of the image to be generated.
-   */
-  composition?: string | unknown;
-  /**
-   * Mood Atmosphere
-   *
-   * The mood and atmosphere of the image to be generated.
-   */
-  mood_atmosphere?: string | unknown;
-  /**
-   * Color Scheme
-   *
-   * The color scheme of the image to be generated.
-   */
-  color_scheme?: string | unknown;
-};
-
 export type QueueStatus = {
   status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
   /**
@@ -765,314 +1207,33 @@ export type QueueStatus = {
 };
 
 /**
- * LottieOutput
+ * Resolution
  */
-export type OmnilottieVideoToLottieOutput = {
-  lottie_file: File;
-};
-
-/**
- * File
- */
-export type File = {
+export type Resolution = {
   /**
-   * Url
+   * Aspect Ratio
    *
-   * The URL where the file can be downloaded from.
+   * Display aspect ratio (e.g., '16:9')
    */
-  url: string;
+  aspect_ratio: string;
   /**
-   * File Size
+   * Height
    *
-   * The size of the file in bytes.
+   * Height of the video in pixels
    */
-  file_size?: number | unknown;
+  height: number;
   /**
-   * File Name
+   * Width
    *
-   * The name of the file. It will be auto-generated if not provided.
+   * Width of the video in pixels
    */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-};
-
-/**
- * VideoToLottieInput
- */
-export type OmnilottieVideoToLottieInput = {
-  /**
-   * Video Url
-   *
-   * URL of the video to convert into a Lottie animation.
-   */
-  video_url: string | Blob | File;
-  /**
-   * Temperature
-   *
-   * Sampling temperature for generation.
-   */
-  temperature?: number;
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability threshold.
-   */
-  top_p?: number;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of Lottie tokens to generate.
-   */
-  max_tokens?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-  /**
-   * Prompt
-   *
-   * Optional text description guiding the conversion.
-   */
-  prompt?: string | unknown;
-};
-
-/**
- * LottieOutput
- */
-export type OmnilottieOutput = {
-  lottie_file: File;
-};
-
-/**
- * TextToLottieInput
- */
-export type OmnilottieInput = {
-  /**
-   * Temperature
-   *
-   * Sampling temperature for generation.
-   */
-  temperature?: number;
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability threshold.
-   */
-  top_p?: number;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of Lottie tokens to generate.
-   */
-  max_tokens?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-  /**
-   * Prompt
-   *
-   * Text description of the Lottie animation to generate.
-   */
-  prompt: string;
-};
-
-/**
- * LottieOutput
- */
-export type OmnilottieImageToLottieOutput = {
-  lottie_file: File;
-};
-
-/**
- * ImageToLottieInput
- */
-export type OmnilottieImageToLottieInput = {
-  /**
-   * Temperature
-   *
-   * Sampling temperature for generation.
-   */
-  temperature?: number;
-  /**
-   * Image Url
-   *
-   * URL of the reference image to animate.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of Lottie tokens to generate.
-   */
-  max_tokens?: number;
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability threshold.
-   */
-  top_p?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-  /**
-   * Prompt
-   *
-   * Text description guiding the animation of the image.
-   */
-  prompt: string;
-};
-
-/**
- * LoudnormSummary
- */
-export type LoudnormSummary = {
-  /**
-   * Input True Peak
-   *
-   * Input true peak in dBTP
-   */
-  input_true_peak?: number | unknown;
-  /**
-   * Input Lra
-   *
-   * Input loudness range in LU
-   */
-  input_lra?: number | unknown;
-  /**
-   * Output Lra
-   *
-   * Output loudness range in LU
-   */
-  output_lra?: number | unknown;
-  /**
-   * Output Threshold
-   *
-   * Output threshold in LUFS
-   */
-  output_threshold?: number | unknown;
-  /**
-   * Normalization Type
-   *
-   * Type of normalization applied (Dynamic/Linear)
-   */
-  normalization_type?: string | unknown;
-  /**
-   * Output Integrated
-   *
-   * Output integrated loudness in LUFS
-   */
-  output_integrated?: number | unknown;
-  /**
-   * Target Offset
-   *
-   * Target offset in LU
-   */
-  target_offset?: number | unknown;
-  /**
-   * Input Threshold
-   *
-   * Input threshold in LUFS
-   */
-  input_threshold?: number | unknown;
-  /**
-   * Input Integrated
-   *
-   * Input integrated loudness in LUFS
-   */
-  input_integrated?: number | unknown;
-  /**
-   * Output True Peak
-   *
-   * Output true peak in dBTP
-   */
-  output_true_peak?: number | unknown;
-};
-
-export type FiboLiteGenerateStructuredPromptOutput = unknown;
-
-export type FiboLiteGenerateStructuredPromptLiteOutput = unknown;
-
-/**
- * StructuredPromptModel
- */
-export type FiboLiteGenerateStructuredPromptLiteInput = {
-  /**
-   * Prompt
-   *
-   * Prompt for image generation.
-   */
-  prompt?: string | unknown;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number;
-  /**
-   * The structured prompt to generate an image from.
-   */
-  structured_prompt?: BriaFiboVlmStructuredPrompt | unknown;
-  /**
-   * Image Url
-   *
-   * Reference image (file or URL).
-   */
-  image_url?: string | unknown;
-};
-
-/**
- * Aesthetics
- */
-export type AestheticsType2 = {
-  /**
-   * Preference Score
-   *
-   * The preference score of the image.
-   */
-  preference_score: string;
-  /**
-   * Composition
-   *
-   * The composition of the image to be generated.
-   */
-  composition?: string | unknown;
-  /**
-   * Mood Atmosphere
-   *
-   * The mood and atmosphere of the image to be generated.
-   */
-  mood_atmosphere?: string | unknown;
-  /**
-   * Aesthetic Score
-   *
-   * The aesthetic score of the image.
-   */
-  aesthetic_score: string;
-  /**
-   * Color Scheme
-   *
-   * The color scheme of the image to be generated.
-   */
-  color_scheme?: string | unknown;
+  width: number;
 };
 
 /**
  * StructuredPrompt
  */
-export type BriaFiboVlmStructuredPrompt = {
+export type StructuredPrompt = {
   /**
    * Background Setting
    *
@@ -1086,11 +1247,9 @@ export type BriaFiboVlmStructuredPrompt = {
    */
   artistic_style?: string | unknown;
   /**
-   * Style Medium
-   *
-   * The style medium of the image to be generated.
+   * The aesthetics of the image to be generated.
    */
-  style_medium?: string | unknown;
+  aesthetics?: Aesthetics | unknown;
   /**
    * Text Render
    *
@@ -1104,19 +1263,21 @@ export type BriaFiboVlmStructuredPrompt = {
    */
   objects?: Array<PromptObject> | unknown;
   /**
-   * Context
+   * Style Medium
    *
-   * The context of the image to be generated.
+   * The style medium of the image to be generated.
    */
-  context?: string | unknown;
+  style_medium?: string | unknown;
   /**
    * The photographic characteristics of the image to be generated.
    */
   photographic_characteristics?: PhotographicCharacteristics | unknown;
   /**
-   * The aesthetics of the image to be generated.
+   * Context
+   *
+   * The context of the image to be generated.
    */
-  aesthetics?: AestheticsType2 | unknown;
+  context?: string | unknown;
   /**
    * The lighting of the image to be generated.
    */
@@ -1130,189 +1291,113 @@ export type BriaFiboVlmStructuredPrompt = {
 };
 
 /**
- * StructuredPromptInput
+ * StructuredPrompt
  */
-export type FiboLiteGenerateStructuredPromptInput = {
+export type StructuredPromptType2 = {
   /**
-   * Prompt
+   * Background Setting
    *
-   * The prompt to generate.
+   * Describe the overall environment, setting, or background, including any notable background elements.
    */
-  prompt?: string | unknown;
+  background_setting: string;
   /**
-   * Seed
+   * Artistic Style
    *
-   * Seed for the random number generator.
+   * describe specific artistic characteristics, 3 words maximum.
    */
-  seed?: number;
+  artistic_style: string;
   /**
-   * The structured prompt to generate.
-   */
-  structured_prompt?: StructuredPromptType2 | unknown;
-  /**
-   * Image Url
+   * Style Medium
    *
-   * Input image URL
+   * Identify the artistic style or medium.
    */
-  image_url?: string | unknown;
-};
-
-export type FiboGenerateStructuredPromptOutput = unknown;
-
-/**
- * StructuredPromptModel
- */
-export type FiboGenerateStructuredPromptInput = {
+  style_medium?: string | unknown;
   /**
-   * Prompt
+   * Text Render
    *
-   * Prompt for image generation.
+   * List of text renders in the image.
    */
-  prompt?: string | unknown;
+  text_render?: Array<TextRender> | unknown;
   /**
-   * Seed
+   * Subject Emotions
    *
-   * Random seed for reproducibility.
+   * Explicitly describe any visible emotions or expressions on subjects.
    */
-  seed?: number;
+  subject_emotions?: string | unknown;
   /**
-   * The structured prompt to generate an image from.
-   */
-  structured_prompt?: StructuredPrompt | unknown;
-  /**
-   * Image Url
+   * Objects
    *
-   * Reference image (file or URL).
+   * List of prominent foreground/midground objects.
    */
-  image_url?: string | unknown;
-};
-
-export type FiboEditEditStructuredInstructionOutput = unknown;
-
-/**
- * StructuredInstructionInputModel
- */
-export type FiboEditEditStructuredInstructionInput = {
+  objects: Array<ObjectDescription>;
   /**
-   * Instruction
-   *
-   * Instruction for image editing.
+   * Details about photographic characteristics.
    */
-  instruction?: string | unknown;
+  photographic_characteristics?: PhotographicCharacteristicsDetails | unknown;
+  aesthetics: AestheticsDetails;
+  lighting: LightingDetails;
   /**
-   * Seed
+   * Context
    *
-   * Random seed for reproducibility.
+   * Provide any additional context that helps understand the image better.
    */
-  seed?: number;
+  context: string;
   /**
-   * Sync Mode
+   * Short Description
    *
-   * If true, returns the image directly in the response (increases latency).
+   * A concise summary of the image content, 200 words maximum.
    */
-  sync_mode?: boolean;
-  /**
-   * Mask Url
-   *
-   * Reference image mask (file or URL). Optional.
-   */
-  mask_url?: string | unknown;
-  /**
-   * Image Url
-   *
-   * Reference image (file or URL).
-   */
-  image_url?: string | unknown;
+  short_description: string;
 };
 
 /**
- * WaveformOutput
+ * TextRender
+ *
+ * Text rendering information in the image.
  */
-export type FfmpegApiWaveformOutput = {
+export type TextRender = {
   /**
-   * Duration
+   * Text
    *
-   * Duration of the audio in seconds
+   * The text content.
    */
-  duration: number;
+  text: string;
   /**
-   * Precision
+   * Font
    *
-   * Number of decimal places used in the waveform values
+   * E.g., 'realistic', 'cartoonish', 'minimalist'.
    */
-  precision: number;
+  font: string;
   /**
-   * Points
+   * Color
    *
-   * Number of points in the waveform data
+   * E.g., 'red', 'blue', 'green'.
    */
-  points: number;
+  color: string;
   /**
-   * Waveform
+   * Location
    *
-   * Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.
+   * E.g., 'center', 'top-left', 'bottom-right foreground'.
    */
-  waveform: Array<number>;
+  location: string;
+  /**
+   * Appearance Details
+   *
+   * Any other notable visual details.
+   */
+  appearance_details?: string | unknown;
+  /**
+   * Size
+   *
+   * E.g., 'small', 'medium', 'large within frame'.
+   */
+  size: string;
 };
 
 /**
- * WaveformInput
+ * Video
  */
-export type FfmpegApiWaveformInput = {
-  /**
-   * Precision
-   *
-   * Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.
-   */
-  precision?: number;
-  /**
-   * Media Url
-   *
-   * URL of the audio file to analyze
-   */
-  media_url: string | Blob | File;
-  /**
-   * Smoothing Window
-   *
-   * Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.
-   */
-  smoothing_window?: number;
-  /**
-   * Points Per Second
-   *
-   * Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.
-   */
-  points_per_second?: number;
-};
-
-/**
- * MetadataOutput
- */
-export type FfmpegApiMetadataOutput = {
-  /**
-   * Media
-   *
-   * Metadata for the analyzed media file (either Video or Audio)
-   */
-  media: Video | Audio;
-};
-
-/**
- * Audio
- */
-export type Audio = {
-  /**
-   * Url
-   *
-   * URL where the media file can be accessed
-   */
-  url: string;
-  /**
-   * File Size
-   *
-   * Size of the file in bytes
-   */
-  file_size: number;
+export type Video = {
   /**
    * File Name
    *
@@ -1328,7 +1413,7 @@ export type Audio = {
   /**
    * Media Type
    *
-   * Type of media (always 'audio')
+   * Type of media (always 'video')
    */
   media_type?: string;
   /**
@@ -1350,186 +1435,101 @@ export type Audio = {
    */
   content_type: string;
   /**
+   * Audio track information if video has audio
+   */
+  audio?: AudioTrack | unknown;
+  /**
+   * Fps
+   *
+   * Frames per second
+   */
+  fps: number;
+  /**
+   * File Size
+   *
+   * Size of the file in bytes
+   */
+  file_size: number;
+  /**
+   * Start Frame Url
+   *
+   * URL of the extracted first frame
+   */
+  start_frame_url?: string | unknown;
+  /**
+   * Url
+   *
+   * URL where the media file can be accessed
+   */
+  url: string;
+  /**
+   * Frame Count
+   *
+   * Total number of frames in the video
+   */
+  frame_count: number;
+  /**
+   * Timebase
+   *
+   * Time base used for frame timestamps
+   */
+  timebase: string;
+  /**
    * Container
    *
    * Container format of the media file (e.g., 'mp4', 'mov')
    */
   container: string;
+  resolution: Resolution;
+  format: VideoFormat;
   /**
-   * Channels
+   * End Frame Url
    *
-   * Number of audio channels
+   * URL of the extracted last frame
    */
-  channels: number;
-  /**
-   * Sample Rate
-   *
-   * Audio sample rate in Hz
-   */
-  sample_rate: number;
+  end_frame_url?: string | unknown;
 };
 
 /**
- * MetadataInput
+ * VideoFormat
  */
-export type FfmpegApiMetadataInput = {
+export type VideoFormat = {
   /**
-   * Extract Frames
+   * Container
    *
-   * Whether to extract the start and end frames for videos. Note that when true the request will be slower.
+   * Container format of the video
    */
-  extract_frames?: boolean;
+  container: string;
   /**
-   * Media Url
+   * Video Codec
    *
-   * URL of the media file (video or audio) to analyze
+   * Video codec used (e.g., 'h264')
    */
-  media_url: string | Blob | File;
-};
-
-/**
- * LoudnormOutput
- */
-export type FfmpegApiLoudnormOutput = {
-  audio: File;
+  video_codec: string;
   /**
-   * Structured loudness measurement summary (if requested)
-   */
-  summary?: LoudnormSummary | unknown;
-};
-
-/**
- * LoudnormInput
- */
-export type FfmpegApiLoudnormInput = {
-  /**
-   * Measured Tp
+   * Pixel Format
    *
-   * Measured true peak of input file in dBTP. Required for linear mode.
+   * Pixel format used (e.g., 'yuv420p')
    */
-  measured_tp?: number | unknown;
+  pixel_format: string;
   /**
-   * Audio Url
+   * Profile
    *
-   * URL of the audio file to normalize
+   * Codec profile (e.g., 'main', 'high')
    */
-  audio_url: string | Blob | File;
+  profile: string;
   /**
-   * Loudness Range
+   * Level
    *
-   * Loudness range target in LU
+   * Codec level (e.g., 4.1)
    */
-  loudness_range?: number;
+  level: number;
   /**
-   * Measured I
+   * Bitrate
    *
-   * Measured integrated loudness of input file in LUFS. Required for linear mode.
+   * Video bitrate in bits per second
    */
-  measured_i?: number | unknown;
-  /**
-   * Measured Thresh
-   *
-   * Measured threshold of input file in LUFS. Required for linear mode.
-   */
-  measured_thresh?: number | unknown;
-  /**
-   * Linear
-   *
-   * Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).
-   */
-  linear?: boolean;
-  /**
-   * True Peak
-   *
-   * Maximum true peak in dBTP.
-   */
-  true_peak?: number;
-  /**
-   * Offset
-   *
-   * Offset gain in dB applied before the true-peak limiter
-   */
-  offset?: number;
-  /**
-   * Print Summary
-   *
-   * Return loudness measurement summary with the normalized audio
-   */
-  print_summary?: boolean;
-  /**
-   * Measured Lra
-   *
-   * Measured loudness range of input file in LU. Required for linear mode.
-   */
-  measured_lra?: number | unknown;
-  /**
-   * Dual Mono
-   *
-   * Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems
-   */
-  dual_mono?: boolean;
-  /**
-   * Integrated Loudness
-   *
-   * Integrated loudness target in LUFS.
-   */
-  integrated_loudness?: number;
-};
-
-/**
- * TextOutput
- */
-export type BagelUnderstandOutput = {
-  /**
-   * Timings
-   *
-   * The timings of the generation.
-   */
-  timings: {
-    [key: string]: unknown;
-  };
-  /**
-   * Seed
-   *
-   * The seed used for the generation.
-   */
-  seed: number;
-  /**
-   * Prompt
-   *
-   * The query used for the generation.
-   */
-  prompt: string;
-  /**
-   * Text
-   *
-   * The answer to the query.
-   */
-  text: string;
-};
-
-/**
- * ImageUnderstandingInput
- */
-export type BagelUnderstandInput = {
-  /**
-   * Seed
-   *
-   * The seed to use for the generation.
-   */
-  seed?: number;
-  /**
-   * Prompt
-   *
-   * The prompt to query the image with.
-   */
-  prompt: string;
-  /**
-   * Image Url
-   *
-   * The image for the query.
-   */
-  image_url: string | Blob | File;
+  bitrate: number;
 };
 
 export type PostBriaFiboEditEditStructuredInstructionData = {

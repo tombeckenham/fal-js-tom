@@ -5,432 +5,6 @@ export type ClientOptions = {
 };
 
 /**
- * WhisperOutput
- */
-export type WizperOutput = {
-  /**
-   * Text
-   *
-   * Transcription of the audio file
-   */
-  text: string;
-  /**
-   * Languages
-   *
-   * List of languages that the audio file is inferred to be. Defaults to null.
-   */
-  languages: Array<
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "zh"
-  >;
-  /**
-   * Chunks
-   *
-   * Timestamp chunks of the audio file
-   */
-  chunks: Array<WhisperChunkType2>;
-};
-
-/**
- * WhisperChunk
- */
-export type WhisperChunkType2 = {
-  /**
-   * Text
-   *
-   * Transcription of the chunk
-   */
-  text: string;
-  /**
-   * Timestamp
-   *
-   * Start and end timestamp of the chunk
-   */
-  timestamp: [];
-};
-
-/**
- * WhisperInput
- */
-export type WizperInput = {
-  /**
-   * Merge Chunks
-   *
-   * Whether to merge consecutive chunks. When enabled, chunks are merged if their combined duration does not exceed max_segment_len.
-   */
-  merge_chunks?: boolean;
-  /**
-   * Chunk Level
-   *
-   * Level of the chunks to return.
-   */
-  chunk_level?: string;
-  /**
-   * Task
-   *
-   * Task to perform on the audio file. Either transcribe or translate.
-   */
-  task?: "transcribe" | "translate";
-  /**
-   * Version
-   *
-   * Version of the model to use. All of the models are the Whisper large variant.
-   */
-  version?: string;
-  /**
-   * Max Segment Len
-   *
-   * Maximum speech segment duration in seconds before splitting.
-   */
-  max_segment_len?: number;
-  /**
-   * Language
-   *
-   *
-   * Language of the audio file.
-   * If translate is selected as the task, the audio will be translated to
-   * English, regardless of the language selected. If `None` is passed,
-   * the language will be automatically detected. This will also increase
-   * the inference time.
-   *
-   */
-  language?:
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "zh"
-    | unknown;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.
-   */
-  audio_url: string | Blob | File;
-};
-
-/**
- * WhisperOutput
- */
-export type WhisperOutput = {
-  /**
-   * Inferred Languages
-   *
-   * List of languages that the audio file is inferred to be. Defaults to null.
-   */
-  inferred_languages: Array<
-    | "af"
-    | "am"
-    | "ar"
-    | "as"
-    | "az"
-    | "ba"
-    | "be"
-    | "bg"
-    | "bn"
-    | "bo"
-    | "br"
-    | "bs"
-    | "ca"
-    | "cs"
-    | "cy"
-    | "da"
-    | "de"
-    | "el"
-    | "en"
-    | "es"
-    | "et"
-    | "eu"
-    | "fa"
-    | "fi"
-    | "fo"
-    | "fr"
-    | "gl"
-    | "gu"
-    | "ha"
-    | "haw"
-    | "he"
-    | "hi"
-    | "hr"
-    | "ht"
-    | "hu"
-    | "hy"
-    | "id"
-    | "is"
-    | "it"
-    | "ja"
-    | "jw"
-    | "ka"
-    | "kk"
-    | "km"
-    | "kn"
-    | "ko"
-    | "la"
-    | "lb"
-    | "ln"
-    | "lo"
-    | "lt"
-    | "lv"
-    | "mg"
-    | "mi"
-    | "mk"
-    | "ml"
-    | "mn"
-    | "mr"
-    | "ms"
-    | "mt"
-    | "my"
-    | "ne"
-    | "nl"
-    | "nn"
-    | "no"
-    | "oc"
-    | "pa"
-    | "pl"
-    | "ps"
-    | "pt"
-    | "ro"
-    | "ru"
-    | "sa"
-    | "sd"
-    | "si"
-    | "sk"
-    | "sl"
-    | "sn"
-    | "so"
-    | "sq"
-    | "sr"
-    | "su"
-    | "sv"
-    | "sw"
-    | "ta"
-    | "te"
-    | "tg"
-    | "th"
-    | "tk"
-    | "tl"
-    | "tr"
-    | "tt"
-    | "uk"
-    | "ur"
-    | "uz"
-    | "vi"
-    | "yi"
-    | "yo"
-    | "zh"
-  >;
-  /**
-   * Text
-   *
-   * Transcription of the audio file
-   */
-  text: string;
-  /**
-   * Chunks
-   *
-   * Timestamp chunks of the audio file
-   */
-  chunks?: Array<WhisperChunk> | unknown;
-  /**
-   * Diarization Segments
-   *
-   * Speaker diarization segments of the audio file. Only present if diarization is enabled.
-   */
-  diarization_segments: Array<DiarizationSegment>;
-};
-
-/**
  * DiarizationSegment
  */
 export type DiarizationSegment = {
@@ -446,6 +20,623 @@ export type DiarizationSegment = {
    * Speaker ID of the segment
    */
   speaker: string;
+};
+
+/**
+ * SpeechToTextRequest
+ */
+export type ElevenlabsSpeechToTextInput = {
+  /**
+   * Language Code
+   *
+   * Language code of the audio
+   */
+  language_code?: string | unknown;
+  /**
+   * Tag Audio Events
+   *
+   * Tag audio events like laughter, applause, etc.
+   */
+  tag_audio_events?: boolean;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to transcribe
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Diarize
+   *
+   * Whether to annotate who is speaking
+   */
+  diarize?: boolean;
+};
+
+/**
+ * TranscriptionOutput
+ */
+export type ElevenlabsSpeechToTextOutput = {
+  /**
+   * Language Code
+   *
+   * Detected or specified language code
+   */
+  language_code: string;
+  /**
+   * Text
+   *
+   * The full transcribed text
+   */
+  text: string;
+  /**
+   * Language Probability
+   *
+   * Confidence in language detection
+   */
+  language_probability: number;
+  /**
+   * Words
+   *
+   * Word-level transcription details
+   */
+  words: Array<TranscriptionWord>;
+};
+
+/**
+ * SpeechToTextRequestScribeV2
+ */
+export type ElevenlabsSpeechToTextScribeV2Input = {
+  /**
+   * Language Code
+   *
+   * Language code of the audio
+   */
+  language_code?: string | unknown;
+  /**
+   * Keyterms
+   *
+   * Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.
+   */
+  keyterms?: Array<string>;
+  /**
+   * Tag Audio Events
+   *
+   * Tag audio events like laughter, applause, etc.
+   */
+  tag_audio_events?: boolean;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to transcribe
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Diarize
+   *
+   * Whether to annotate who is speaking
+   */
+  diarize?: boolean;
+};
+
+/**
+ * TranscriptionOutputV2
+ */
+export type ElevenlabsSpeechToTextScribeV2Output = {
+  /**
+   * Language Code
+   *
+   * Detected or specified language code
+   */
+  language_code: string;
+  /**
+   * Text
+   *
+   * The full transcribed text
+   */
+  text: string;
+  /**
+   * Language Probability
+   *
+   * Confidence in language detection
+   */
+  language_probability: number;
+  /**
+   * Words
+   *
+   * Word-level transcription details
+   */
+  words: Array<TranscriptionWord>;
+};
+
+/**
+ * SpeechInput
+ */
+export type NemotronAsrInput = {
+  /**
+   * Acceleration
+   *
+   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
+   */
+  acceleration?: "none" | "low" | "medium" | "high";
+  /**
+   * Audio URL
+   *
+   * URL of the audio file.
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * SpeechOutput
+ */
+export type NemotronAsrOutput = {
+  /**
+   * Transcribed Text
+   *
+   * The transcribed text from the audio.
+   */
+  output: string;
+  /**
+   * Partial Result
+   *
+   * True if this is an intermediate result during streaming.
+   */
+  partial?: boolean;
+};
+
+/**
+ * SpeechInput
+ */
+export type NemotronAsrStreamInput = {
+  /**
+   * Acceleration
+   *
+   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
+   */
+  acceleration?: "none" | "low" | "medium" | "high";
+  /**
+   * Audio URL
+   *
+   * URL of the audio file.
+   */
+  audio_url: string | Blob | File;
+};
+
+export type NemotronAsrStreamOutput = unknown;
+
+/**
+ * PromptTokensDetails
+ */
+export type PromptTokensDetails = {
+  /**
+   * Cached Tokens
+   */
+  cached_tokens?: number;
+  /**
+   * Cache Write Tokens
+   */
+  cache_write_tokens?: number;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
+};
+
+/**
+ * VideoEnterpriseInput
+ */
+export type RouterVideoEnterpriseInput = {
+  /**
+   * Video Urls
+   *
+   * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
+   */
+  video_urls?: Array<string> | unknown;
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
+   * Max Tokens
+   *
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
+   */
+  max_tokens?: number | unknown;
+  /**
+   * Temperature
+   *
+   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+   */
+  temperature?: number;
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the video processing
+   */
+  prompt: string;
+  /**
+   * Reasoning
+   *
+   * Should reasoning be the part of the final answer.
+   */
+  reasoning?: boolean;
+};
+
+/**
+ * VideoOutput
+ */
+export type RouterVideoEnterpriseOutput = {
+  /**
+   * Output
+   *
+   * Generated output from video processing
+   */
+  output: string;
+  /**
+   * Token usage information
+   */
+  usage: UsageInfo | unknown;
+};
+
+/**
+ * VideoInput
+ */
+export type RouterVideoInput = {
+  /**
+   * Video Urls
+   *
+   * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
+   */
+  video_urls?: Array<string> | unknown;
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
+   * Max Tokens
+   *
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
+   */
+  max_tokens?: number | unknown;
+  /**
+   * Temperature
+   *
+   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+   */
+  temperature?: number;
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the video processing
+   */
+  prompt: string;
+  /**
+   * Reasoning
+   *
+   * Should reasoning be the part of the final answer.
+   */
+  reasoning?: boolean;
+};
+
+/**
+ * VideoOutput
+ */
+export type RouterVideoOutput = {
+  /**
+   * Output
+   *
+   * Generated output from video processing
+   */
+  output: string;
+  /**
+   * Token usage information
+   */
+  usage: UsageInfo | unknown;
+};
+
+/**
+ * SileroVADInput
+ */
+export type SileroVadInput = {
+  /**
+   * Audio URL
+   *
+   * The URL of the audio to get speech timestamps from.
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * SileroVADOutput
+ */
+export type SileroVadOutput = {
+  /**
+   * Has Speech
+   *
+   * Whether the audio has speech.
+   */
+  has_speech: boolean;
+  /**
+   * Speech Timestamps
+   *
+   * The speech timestamps.
+   */
+  timestamps: Array<SpeechTimestamp>;
+};
+
+/**
+ * SmartTurnInput
+ */
+export type SmartTurnInput = {
+  /**
+   * Audio Url
+   *
+   * The URL of the audio file to be processed.
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type SmartTurnOutput = {
+  /**
+   * Prediction
+   *
+   * The predicted turn type. 1 for Complete, 0 for Incomplete.
+   */
+  prediction: number;
+  /**
+   * Probability
+   *
+   * The probability of the predicted turn type.
+   */
+  probability: number;
+  /**
+   * Metrics
+   *
+   * The metrics of the inference.
+   */
+  metrics: {
+    [key: string]: unknown;
+  };
+};
+
+/**
+ * SpeechTimestamp
+ */
+export type SpeechTimestamp = {
+  /**
+   * Start Time
+   *
+   * The start time of the speech in seconds.
+   */
+  start: number;
+  /**
+   * End Time
+   *
+   * The end time of the speech in seconds.
+   */
+  end: number;
+};
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextInput = {
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * SpeechOutput
+ */
+export type SpeechToTextOutput = {
+  /**
+   * Transcribed Text
+   *
+   * The partial or final transcription output from Canary
+   */
+  output: string;
+  /**
+   * Partial
+   *
+   * Indicates if this is a partial (in-progress) transcript
+   */
+  partial?: boolean;
+};
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextStreamInput = {
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string | Blob | File;
+};
+
+export type SpeechToTextStreamOutput = unknown;
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextTurboInput = {
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string | Blob | File;
+};
+
+/**
+ * SpeechOutput
+ */
+export type SpeechToTextTurboOutput = {
+  /**
+   * Transcribed Text
+   *
+   * The partial or final transcription output from Canary
+   */
+  output: string;
+  /**
+   * Partial
+   *
+   * Indicates if this is a partial (in-progress) transcript
+   */
+  partial?: boolean;
+};
+
+/**
+ * SpeechInput
+ */
+export type SpeechToTextTurboStreamInput = {
+  /**
+   * Use Punctuation/Capitalization (PnC)
+   *
+   * Whether to use Canary's built-in punctuation & capitalization
+   */
+  use_pnc?: boolean;
+  /**
+   * Audio Path
+   *
+   * Local filesystem path (or remote URL) to a long audio file
+   */
+  audio_url: string | Blob | File;
+};
+
+export type SpeechToTextTurboStreamOutput = unknown;
+
+/**
+ * TranscriptionWord
+ */
+export type TranscriptionWord = {
+  /**
+   * End
+   *
+   * End time in seconds
+   */
+  end?: number | unknown;
+  /**
+   * Text
+   *
+   * The transcribed word or audio event
+   */
+  text: string;
+  /**
+   * Start
+   *
+   * Start time in seconds
+   */
+  start?: number | unknown;
+  /**
+   * Type
+   *
+   * Type of element (word, spacing, or audio_event)
+   */
+  type: string;
+  /**
+   * Speaker Id
+   *
+   * Speaker identifier if diarization was enabled
+   */
+  speaker_id?: string | unknown;
+};
+
+/**
+ * UsageInfo
+ */
+export type UsageInfo = {
+  /**
+   * Total Tokens
+   */
+  total_tokens?: number;
+  /**
+   * Completion Tokens
+   */
+  completion_tokens?: number | unknown;
+  /**
+   * Prompt Tokens
+   */
+  prompt_tokens?: number | unknown;
+  prompt_tokens_details?: PromptTokensDetails | unknown;
+  /**
+   * Cost
+   */
+  cost: number;
 };
 
 /**
@@ -470,6 +661,24 @@ export type WhisperChunk = {
    * Speaker ID of the chunk. Only present if diarization is enabled.
    */
   speaker?: string | unknown;
+};
+
+/**
+ * WhisperChunk
+ */
+export type WhisperChunkType2 = {
+  /**
+   * Text
+   *
+   * Transcription of the chunk
+   */
+  text: string;
+  /**
+   * Timestamp
+   *
+   * Start and end timestamp of the chunk
+   */
+  timestamp: [];
 };
 
 /**
@@ -636,620 +845,411 @@ export type WhisperInput = {
 };
 
 /**
- * UsageInfo
+ * WhisperOutput
  */
-export type UsageInfo = {
+export type WhisperOutput = {
   /**
-   * Total Tokens
-   */
-  total_tokens?: number;
-  /**
-   * Completion Tokens
-   */
-  completion_tokens?: number | unknown;
-  /**
-   * Prompt Tokens
-   */
-  prompt_tokens?: number | unknown;
-  prompt_tokens_details?: PromptTokensDetails | unknown;
-  /**
-   * Cost
-   */
-  cost: number;
-};
-
-/**
- * PromptTokensDetails
- */
-export type PromptTokensDetails = {
-  /**
-   * Cached Tokens
-   */
-  cached_tokens?: number;
-  /**
-   * Cache Write Tokens
-   */
-  cache_write_tokens?: number;
-};
-
-/**
- * TranscriptionWord
- */
-export type TranscriptionWord = {
-  /**
-   * End
+   * Inferred Languages
    *
-   * End time in seconds
+   * List of languages that the audio file is inferred to be. Defaults to null.
    */
-  end?: number | unknown;
+  inferred_languages: Array<
+    | "af"
+    | "am"
+    | "ar"
+    | "as"
+    | "az"
+    | "ba"
+    | "be"
+    | "bg"
+    | "bn"
+    | "bo"
+    | "br"
+    | "bs"
+    | "ca"
+    | "cs"
+    | "cy"
+    | "da"
+    | "de"
+    | "el"
+    | "en"
+    | "es"
+    | "et"
+    | "eu"
+    | "fa"
+    | "fi"
+    | "fo"
+    | "fr"
+    | "gl"
+    | "gu"
+    | "ha"
+    | "haw"
+    | "he"
+    | "hi"
+    | "hr"
+    | "ht"
+    | "hu"
+    | "hy"
+    | "id"
+    | "is"
+    | "it"
+    | "ja"
+    | "jw"
+    | "ka"
+    | "kk"
+    | "km"
+    | "kn"
+    | "ko"
+    | "la"
+    | "lb"
+    | "ln"
+    | "lo"
+    | "lt"
+    | "lv"
+    | "mg"
+    | "mi"
+    | "mk"
+    | "ml"
+    | "mn"
+    | "mr"
+    | "ms"
+    | "mt"
+    | "my"
+    | "ne"
+    | "nl"
+    | "nn"
+    | "no"
+    | "oc"
+    | "pa"
+    | "pl"
+    | "ps"
+    | "pt"
+    | "ro"
+    | "ru"
+    | "sa"
+    | "sd"
+    | "si"
+    | "sk"
+    | "sl"
+    | "sn"
+    | "so"
+    | "sq"
+    | "sr"
+    | "su"
+    | "sv"
+    | "sw"
+    | "ta"
+    | "te"
+    | "tg"
+    | "th"
+    | "tk"
+    | "tl"
+    | "tr"
+    | "tt"
+    | "uk"
+    | "ur"
+    | "uz"
+    | "vi"
+    | "yi"
+    | "yo"
+    | "zh"
+  >;
   /**
    * Text
    *
-   * The transcribed word or audio event
+   * Transcription of the audio file
    */
   text: string;
   /**
-   * Start
+   * Chunks
    *
-   * Start time in seconds
+   * Timestamp chunks of the audio file
    */
-  start?: number | unknown;
+  chunks?: Array<WhisperChunk> | unknown;
   /**
-   * Type
+   * Diarization Segments
    *
-   * Type of element (word, spacing, or audio_event)
+   * Speaker diarization segments of the audio file. Only present if diarization is enabled.
    */
-  type: string;
-  /**
-   * Speaker Id
-   *
-   * Speaker identifier if diarization was enabled
-   */
-  speaker_id?: string | unknown;
-};
-
-export type SpeechToTextTurboStreamOutput = unknown;
-
-/**
- * SpeechInput
- */
-export type SpeechToTextTurboStreamInput = {
-  /**
-   * Use Punctuation/Capitalization (PnC)
-   *
-   * Whether to use Canary's built-in punctuation & capitalization
-   */
-  use_pnc?: boolean;
-  /**
-   * Audio Path
-   *
-   * Local filesystem path (or remote URL) to a long audio file
-   */
-  audio_url: string | Blob | File;
+  diarization_segments: Array<DiarizationSegment>;
 };
 
 /**
- * SpeechOutput
+ * WhisperInput
  */
-export type SpeechToTextTurboOutput = {
+export type WizperInput = {
   /**
-   * Transcribed Text
+   * Merge Chunks
    *
-   * The partial or final transcription output from Canary
+   * Whether to merge consecutive chunks. When enabled, chunks are merged if their combined duration does not exceed max_segment_len.
    */
-  output: string;
+  merge_chunks?: boolean;
   /**
-   * Partial
+   * Chunk Level
    *
-   * Indicates if this is a partial (in-progress) transcript
+   * Level of the chunks to return.
    */
-  partial?: boolean;
-};
-
-/**
- * SpeechInput
- */
-export type SpeechToTextTurboInput = {
+  chunk_level?: string;
   /**
-   * Use Punctuation/Capitalization (PnC)
+   * Task
    *
-   * Whether to use Canary's built-in punctuation & capitalization
+   * Task to perform on the audio file. Either transcribe or translate.
    */
-  use_pnc?: boolean;
+  task?: "transcribe" | "translate";
   /**
-   * Audio Path
+   * Version
    *
-   * Local filesystem path (or remote URL) to a long audio file
+   * Version of the model to use. All of the models are the Whisper large variant.
    */
-  audio_url: string | Blob | File;
-};
-
-export type SpeechToTextStreamOutput = unknown;
-
-/**
- * SpeechInput
- */
-export type SpeechToTextStreamInput = {
+  version?: string;
   /**
-   * Use Punctuation/Capitalization (PnC)
+   * Max Segment Len
    *
-   * Whether to use Canary's built-in punctuation & capitalization
+   * Maximum speech segment duration in seconds before splitting.
    */
-  use_pnc?: boolean;
+  max_segment_len?: number;
   /**
-   * Audio Path
+   * Language
    *
-   * Local filesystem path (or remote URL) to a long audio file
-   */
-  audio_url: string | Blob | File;
-};
-
-/**
- * SpeechOutput
- */
-export type SpeechToTextOutput = {
-  /**
-   * Transcribed Text
    *
-   * The partial or final transcription output from Canary
-   */
-  output: string;
-  /**
-   * Partial
+   * Language of the audio file.
+   * If translate is selected as the task, the audio will be translated to
+   * English, regardless of the language selected. If `None` is passed,
+   * the language will be automatically detected. This will also increase
+   * the inference time.
    *
-   * Indicates if this is a partial (in-progress) transcript
    */
-  partial?: boolean;
-};
-
-/**
- * SpeechInput
- */
-export type SpeechToTextInput = {
-  /**
-   * Use Punctuation/Capitalization (PnC)
-   *
-   * Whether to use Canary's built-in punctuation & capitalization
-   */
-  use_pnc?: boolean;
-  /**
-   * Audio Path
-   *
-   * Local filesystem path (or remote URL) to a long audio file
-   */
-  audio_url: string | Blob | File;
-};
-
-/**
- * SpeechTimestamp
- */
-export type SpeechTimestamp = {
-  /**
-   * Start Time
-   *
-   * The start time of the speech in seconds.
-   */
-  start: number;
-  /**
-   * End Time
-   *
-   * The end time of the speech in seconds.
-   */
-  end: number;
-};
-
-/**
- * Output
- */
-export type SmartTurnOutput = {
-  /**
-   * Prediction
-   *
-   * The predicted turn type. 1 for Complete, 0 for Incomplete.
-   */
-  prediction: number;
-  /**
-   * Probability
-   *
-   * The probability of the predicted turn type.
-   */
-  probability: number;
-  /**
-   * Metrics
-   *
-   * The metrics of the inference.
-   */
-  metrics: {
-    [key: string]: unknown;
-  };
-};
-
-/**
- * SmartTurnInput
- */
-export type SmartTurnInput = {
+  language?:
+    | "af"
+    | "am"
+    | "ar"
+    | "as"
+    | "az"
+    | "ba"
+    | "be"
+    | "bg"
+    | "bn"
+    | "bo"
+    | "br"
+    | "bs"
+    | "ca"
+    | "cs"
+    | "cy"
+    | "da"
+    | "de"
+    | "el"
+    | "en"
+    | "es"
+    | "et"
+    | "eu"
+    | "fa"
+    | "fi"
+    | "fo"
+    | "fr"
+    | "gl"
+    | "gu"
+    | "ha"
+    | "haw"
+    | "he"
+    | "hi"
+    | "hr"
+    | "ht"
+    | "hu"
+    | "hy"
+    | "id"
+    | "is"
+    | "it"
+    | "ja"
+    | "jw"
+    | "ka"
+    | "kk"
+    | "km"
+    | "kn"
+    | "ko"
+    | "la"
+    | "lb"
+    | "ln"
+    | "lo"
+    | "lt"
+    | "lv"
+    | "mg"
+    | "mi"
+    | "mk"
+    | "ml"
+    | "mn"
+    | "mr"
+    | "ms"
+    | "mt"
+    | "my"
+    | "ne"
+    | "nl"
+    | "nn"
+    | "no"
+    | "oc"
+    | "pa"
+    | "pl"
+    | "ps"
+    | "pt"
+    | "ro"
+    | "ru"
+    | "sa"
+    | "sd"
+    | "si"
+    | "sk"
+    | "sl"
+    | "sn"
+    | "so"
+    | "sq"
+    | "sr"
+    | "su"
+    | "sv"
+    | "sw"
+    | "ta"
+    | "te"
+    | "tg"
+    | "th"
+    | "tk"
+    | "tl"
+    | "tr"
+    | "tt"
+    | "uk"
+    | "ur"
+    | "uz"
+    | "vi"
+    | "yi"
+    | "yo"
+    | "zh"
+    | unknown;
   /**
    * Audio Url
    *
-   * The URL of the audio file to be processed.
+   * URL of the audio file to transcribe. Supported formats: mp3, mp4, mpeg, mpga, m4a, wav or webm.
    */
   audio_url: string | Blob | File;
 };
 
 /**
- * SileroVADOutput
+ * WhisperOutput
  */
-export type SileroVadOutput = {
-  /**
-   * Has Speech
-   *
-   * Whether the audio has speech.
-   */
-  has_speech: boolean;
-  /**
-   * Speech Timestamps
-   *
-   * The speech timestamps.
-   */
-  timestamps: Array<SpeechTimestamp>;
-};
-
-/**
- * SileroVADInput
- */
-export type SileroVadInput = {
-  /**
-   * Audio URL
-   *
-   * The URL of the audio to get speech timestamps from.
-   */
-  audio_url: string | Blob | File;
-};
-
-/**
- * VideoOutput
- */
-export type RouterVideoOutput = {
-  /**
-   * Output
-   *
-   * Generated output from video processing
-   */
-  output: string;
-  /**
-   * Token usage information
-   */
-  usage: UsageInfo | unknown;
-};
-
-/**
- * VideoInput
- */
-export type RouterVideoInput = {
-  /**
-   * Video Urls
-   *
-   * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
-   */
-  video_urls?: Array<string> | unknown;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
-  /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
-   * Max Tokens
-   *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
-   */
-  max_tokens?: number | unknown;
-  /**
-   * Temperature
-   *
-   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
-   */
-  temperature?: number;
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the video processing
-   */
-  prompt: string;
-  /**
-   * Reasoning
-   *
-   * Should reasoning be the part of the final answer.
-   */
-  reasoning?: boolean;
-};
-
-/**
- * VideoOutput
- */
-export type RouterVideoEnterpriseOutput = {
-  /**
-   * Output
-   *
-   * Generated output from video processing
-   */
-  output: string;
-  /**
-   * Token usage information
-   */
-  usage: UsageInfo | unknown;
-};
-
-/**
- * VideoEnterpriseInput
- */
-export type RouterVideoEnterpriseInput = {
-  /**
-   * Video Urls
-   *
-   * List of URLs or data URIs of video files to process. Supported formats: mp4, mpeg, mov, webm. For Google Gemini on AI Studio, YouTube links are also supported. Mutually exclusive with video_url.
-   */
-  video_urls?: Array<string> | unknown;
-  /**
-   * System Prompt
-   *
-   * System prompt to provide context or instructions to the model
-   */
-  system_prompt?: string | unknown;
-  /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
-   * Max Tokens
-   *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
-   */
-  max_tokens?: number | unknown;
-  /**
-   * Temperature
-   *
-   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
-   */
-  temperature?: number;
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the video processing
-   */
-  prompt: string;
-  /**
-   * Reasoning
-   *
-   * Should reasoning be the part of the final answer.
-   */
-  reasoning?: boolean;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-export type NemotronAsrStreamOutput = unknown;
-
-/**
- * SpeechInput
- */
-export type NemotronAsrStreamInput = {
-  /**
-   * Acceleration
-   *
-   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
-   */
-  acceleration?: "none" | "low" | "medium" | "high";
-  /**
-   * Audio URL
-   *
-   * URL of the audio file.
-   */
-  audio_url: string | Blob | File;
-};
-
-/**
- * SpeechOutput
- */
-export type NemotronAsrOutput = {
-  /**
-   * Transcribed Text
-   *
-   * The transcribed text from the audio.
-   */
-  output: string;
-  /**
-   * Partial Result
-   *
-   * True if this is an intermediate result during streaming.
-   */
-  partial?: boolean;
-};
-
-/**
- * SpeechInput
- */
-export type NemotronAsrInput = {
-  /**
-   * Acceleration
-   *
-   * Controls the speed/accuracy trade-off. 'none' = best accuracy (1.12s chunks, ~7.16% WER), 'low' = balanced (0.56s chunks, ~7.22% WER), 'medium' = faster (0.16s chunks, ~7.84% WER), 'high' = fastest (0.08s chunks, ~8.53% WER).
-   */
-  acceleration?: "none" | "low" | "medium" | "high";
-  /**
-   * Audio URL
-   *
-   * URL of the audio file.
-   */
-  audio_url: string | Blob | File;
-};
-
-/**
- * TranscriptionOutputV2
- */
-export type ElevenlabsSpeechToTextScribeV2Output = {
-  /**
-   * Language Code
-   *
-   * Detected or specified language code
-   */
-  language_code: string;
+export type WizperOutput = {
   /**
    * Text
    *
-   * The full transcribed text
+   * Transcription of the audio file
    */
   text: string;
   /**
-   * Language Probability
+   * Languages
    *
-   * Confidence in language detection
+   * List of languages that the audio file is inferred to be. Defaults to null.
    */
-  language_probability: number;
+  languages: Array<
+    | "af"
+    | "am"
+    | "ar"
+    | "as"
+    | "az"
+    | "ba"
+    | "be"
+    | "bg"
+    | "bn"
+    | "bo"
+    | "br"
+    | "bs"
+    | "ca"
+    | "cs"
+    | "cy"
+    | "da"
+    | "de"
+    | "el"
+    | "en"
+    | "es"
+    | "et"
+    | "eu"
+    | "fa"
+    | "fi"
+    | "fo"
+    | "fr"
+    | "gl"
+    | "gu"
+    | "ha"
+    | "haw"
+    | "he"
+    | "hi"
+    | "hr"
+    | "ht"
+    | "hu"
+    | "hy"
+    | "id"
+    | "is"
+    | "it"
+    | "ja"
+    | "jw"
+    | "ka"
+    | "kk"
+    | "km"
+    | "kn"
+    | "ko"
+    | "la"
+    | "lb"
+    | "ln"
+    | "lo"
+    | "lt"
+    | "lv"
+    | "mg"
+    | "mi"
+    | "mk"
+    | "ml"
+    | "mn"
+    | "mr"
+    | "ms"
+    | "mt"
+    | "my"
+    | "ne"
+    | "nl"
+    | "nn"
+    | "no"
+    | "oc"
+    | "pa"
+    | "pl"
+    | "ps"
+    | "pt"
+    | "ro"
+    | "ru"
+    | "sa"
+    | "sd"
+    | "si"
+    | "sk"
+    | "sl"
+    | "sn"
+    | "so"
+    | "sq"
+    | "sr"
+    | "su"
+    | "sv"
+    | "sw"
+    | "ta"
+    | "te"
+    | "tg"
+    | "th"
+    | "tk"
+    | "tl"
+    | "tr"
+    | "tt"
+    | "uk"
+    | "ur"
+    | "uz"
+    | "vi"
+    | "yi"
+    | "yo"
+    | "zh"
+  >;
   /**
-   * Words
+   * Chunks
    *
-   * Word-level transcription details
+   * Timestamp chunks of the audio file
    */
-  words: Array<TranscriptionWord>;
-};
-
-/**
- * SpeechToTextRequestScribeV2
- */
-export type ElevenlabsSpeechToTextScribeV2Input = {
-  /**
-   * Language Code
-   *
-   * Language code of the audio
-   */
-  language_code?: string | unknown;
-  /**
-   * Keyterms
-   *
-   * Words or sentences to bias the model towards transcribing. Up to 100 keyterms, max 50 characters each. Adds 30% premium over base transcription price.
-   */
-  keyterms?: Array<string>;
-  /**
-   * Tag Audio Events
-   *
-   * Tag audio events like laughter, applause, etc.
-   */
-  tag_audio_events?: boolean;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to transcribe
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Diarize
-   *
-   * Whether to annotate who is speaking
-   */
-  diarize?: boolean;
-};
-
-/**
- * TranscriptionOutput
- */
-export type ElevenlabsSpeechToTextOutput = {
-  /**
-   * Language Code
-   *
-   * Detected or specified language code
-   */
-  language_code: string;
-  /**
-   * Text
-   *
-   * The full transcribed text
-   */
-  text: string;
-  /**
-   * Language Probability
-   *
-   * Confidence in language detection
-   */
-  language_probability: number;
-  /**
-   * Words
-   *
-   * Word-level transcription details
-   */
-  words: Array<TranscriptionWord>;
-};
-
-/**
- * SpeechToTextRequest
- */
-export type ElevenlabsSpeechToTextInput = {
-  /**
-   * Language Code
-   *
-   * Language code of the audio
-   */
-  language_code?: string | unknown;
-  /**
-   * Tag Audio Events
-   *
-   * Tag audio events like laughter, applause, etc.
-   */
-  tag_audio_events?: boolean;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to transcribe
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Diarize
-   *
-   * Whether to annotate who is speaking
-   */
-  diarize?: boolean;
+  chunks: Array<WhisperChunkType2>;
 };
 
 export type PostFalAiElevenlabsSpeechToTextData = {
