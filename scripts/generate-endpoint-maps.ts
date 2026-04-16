@@ -348,23 +348,33 @@ async function generateClientFile(
 
   lines.push(``);
 
-  // Generate union of all endpoint types
-  lines.push(`/** Union of all endpoint IDs */`);
-  lines.push(`export type EndpointType =`);
-  for (let i = 0; i < processedCategories.length; i++) {
-    const category = processedCategories[i]!;
+  // Generate strict union of only known endpoint types
+  lines.push(
+    `/** Union of only known endpoint IDs. Use this to reject unknown/custom endpoints at compile time. */`,
+  );
+  lines.push(`export type EndpointTypeStrict =`);
+  for (const category of processedCategories) {
     const typeName = toPascalCase(category);
-    const isFirst = i === 0;
-    lines.push(`  ${isFirst ? "" : "| "}${typeName}Model`);
+    lines.push(`  | ${typeName}Model`);
   }
 
   lines.push(``);
 
-  // Generate InputType - tests T against each category using conditional types
-  lines.push(`/** Get the input type for an endpoint */`);
-  lines.push(`export type InputType<T extends EndpointType> =`);
-  for (let i = 0; i < processedCategories.length; i++) {
-    const category = processedCategories[i]!;
+  // Generate permissive union including (string & {}) for custom endpoints
+  lines.push(
+    `/** Union of all known endpoint IDs, plus any custom string for private endpoints. */`,
+  );
+  lines.push(`// eslint-disable-next-line @typescript-eslint/ban-types`);
+  lines.push(`export type EndpointType = EndpointTypeStrict | (string & {})`);
+
+  lines.push(``);
+
+  // Generate strict InputType - constraint is EndpointTypeStrict, fallback is never
+  lines.push(
+    `/** Get the input type for a known endpoint. Returns \`never\` for unknown endpoints. */`,
+  );
+  lines.push(`export type InputTypeStrict<T extends EndpointTypeStrict> =`);
+  for (const category of processedCategories) {
     const typeName = toPascalCase(category);
     lines.push(`  T extends ${typeName}Model ? ${typeName}ModelInput<T> :`);
   }
@@ -372,15 +382,42 @@ async function generateClientFile(
 
   lines.push(``);
 
-  // Generate OutputType - tests T against each category using conditional types
-  lines.push(`/** Get the output type for an endpoint */`);
-  lines.push(`export type OutputType<T extends EndpointType> =`);
-  for (let i = 0; i < processedCategories.length; i++) {
-    const category = processedCategories[i]!;
+  // Generate strict OutputType - constraint is EndpointTypeStrict, fallback is never
+  lines.push(
+    `/** Get the output type for a known endpoint. Returns \`never\` for unknown endpoints. */`,
+  );
+  lines.push(`export type OutputTypeStrict<T extends EndpointTypeStrict> =`);
+  for (const category of processedCategories) {
     const typeName = toPascalCase(category);
     lines.push(`  T extends ${typeName}Model ? ${typeName}ModelOutput<T> :`);
   }
   lines.push(`  never`);
+
+  lines.push(``);
+
+  // Generate permissive InputType - constraint is string, falls back to Record<string, any>
+  lines.push(
+    `/** Get the input type for an endpoint. Falls back to Record<string, any> for unknown endpoints. */`,
+  );
+  lines.push(`export type InputType<T extends string> =`);
+  for (const category of processedCategories) {
+    const typeName = toPascalCase(category);
+    lines.push(`  T extends ${typeName}Model ? ${typeName}ModelInput<T> :`);
+  }
+  lines.push(`  Record<string, any>`);
+
+  lines.push(``);
+
+  // Generate permissive OutputType - constraint is string, falls back to any
+  lines.push(
+    `/** Get the output type for an endpoint. Falls back to any for unknown endpoints. */`,
+  );
+  lines.push(`export type OutputType<T extends string> =`);
+  for (const category of processedCategories) {
+    const typeName = toPascalCase(category);
+    lines.push(`  T extends ${typeName}Model ? ${typeName}ModelOutput<T> :`);
+  }
+  lines.push(`  any`);
 
   const outputPath = join(generatedDir, "index.ts");
   const formattedContent = await formatTypeScript(lines.join("\n"));
