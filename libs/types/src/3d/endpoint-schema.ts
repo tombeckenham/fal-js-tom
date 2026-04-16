@@ -4,8 +4,6 @@
 import { z } from "zod";
 
 import {
-  zHunyuan3dV21Input,
-  zHunyuan3dV21Output,
   zHunyuan3dV2Input,
   zHunyuan3dV2MiniInput,
   zHunyuan3dV2MiniOutput,
@@ -66,6 +64,8 @@ import {
   zOmnipartOutput,
   zPshumanInput,
   zPshumanOutput,
+  zReconviagen05Input,
+  zReconviagen05Output,
   zSam33dAlignInput,
   zSam33dAlignOutput,
   zSam33dBodyInput,
@@ -93,24 +93,9 @@ import {
 /** Zod schema for 3d endpoints using discriminatedUnion */
 export const Gen3dEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
-    endpoint: z.literal("fal-ai/meshy/v5/remesh"),
-    input: zMeshyV5RemeshInput,
-    output: zMeshyV5RemeshOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/meshy/v5/retexture"),
-    input: zMeshyV5RetextureInput,
-    output: zMeshyV5RetextureOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ultrashape"),
-    input: zUltrashapeInput,
-    output: zUltrashapeOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sam-3/3d-align"),
-    input: zSam33dAlignInput,
-    output: zSam33dAlignOutput,
+    endpoint: z.literal("fal-ai/hunyuan_world/image-to-world"),
+    input: zHunyuanWorldImageToWorldInput,
+    output: zHunyuanWorldImageToWorldOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/part"),
@@ -118,134 +103,14 @@ export const Gen3dEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zHunyuan3dV31PartOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/smart-topology"),
-    input: zHunyuan3dV31SmartTopologyInput,
-    output: zHunyuan3dV31SmartTopologyOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan-part"),
-    input: zHunyuanPartInput,
-    output: zHunyuanPartOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/trellis-2"),
-    input: zTrellis2Input,
-    output: zTrellis2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/meshy/v6-preview/image-to-3d"),
-    input: zMeshyV6PreviewImageTo3dInput,
-    output: zMeshyV6PreviewImageTo3dOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/trellis"),
-    input: zTrellisInput,
-    output: zTrellisOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sam-3/3d-objects"),
-    input: zSam33dObjectsInput,
-    output: zSam33dObjectsOutput,
-  }),
-  z.object({
-    endpoint: z.literal("tripo3d/tripo/v2.5/image-to-3d"),
-    input: zTripoV25ImageTo3dInput,
-    output: zTripoV25ImageTo3dOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hyper3d/rodin/v2"),
-    input: zHyper3dRodinV2Input,
-    output: zHyper3dRodinV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hyper3d/rodin"),
-    input: zHyper3dRodinInput,
-    output: zHyper3dRodinOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/trellis/multi"),
-    input: zTrellisMultiInput,
-    output: zTrellisMultiOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d-v21"),
-    input: zHunyuan3dV21Input,
-    output: zHunyuan3dV21Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/triposr"),
-    input: zTriposrInput,
-    output: zTriposrOutput,
-  }),
-  z.object({
-    endpoint: z.literal("tripo3d/tripo/v2.5/multiview-to-3d"),
-    input: zTripoV25MultiviewTo3dInput,
-    output: zTripoV25MultiviewTo3dOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d/v2"),
-    input: zHunyuan3dV2Input,
-    output: zHunyuan3dV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sam-3/3d-body"),
-    input: zSam33dBodyInput,
-    output: zSam33dBodyOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d/v2/multi-view"),
-    input: zHunyuan3dV2MultiViewInput,
-    output: zHunyuan3dV2MultiViewOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/meshy/v5/multi-image-to-3d"),
-    input: zMeshyV5MultiImageTo3dInput,
-    output: zMeshyV5MultiImageTo3dOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/trellis-2/retexture"),
-    input: zTrellis2RetextureInput,
-    output: zTrellis2RetextureOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan_world/image-to-world"),
-    input: zHunyuanWorldImageToWorldInput,
-    output: zHunyuanWorldImageToWorldOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d/v2/turbo"),
-    input: zHunyuan3dV2TurboInput,
-    output: zHunyuan3dV2TurboOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d/v2/mini/turbo"),
-    input: zHunyuan3dV2MiniTurboInput,
-    output: zHunyuan3dV2MiniTurboOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d/v2/mini"),
-    input: zHunyuan3dV2MiniInput,
-    output: zHunyuan3dV2MiniOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d/v2/multi-view/turbo"),
-    input: zHunyuan3dV2MultiViewTurboInput,
-    output: zHunyuan3dV2MultiViewTurboOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/omnipart"),
-    input: zOmnipartInput,
-    output: zOmnipartOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/pshuman"),
-    input: zPshumanInput,
-    output: zPshumanOutput,
-  }),
-  z.object({
     endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/pro/image-to-3d"),
     input: zHunyuan3dV31ProImageTo3dInput,
     output: zHunyuan3dV31ProImageTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/pro/text-to-3d"),
+    input: zHunyuan3dV31ProTextTo3dInput,
+    output: zHunyuan3dV31ProTextTo3dOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/rapid/image-to-3d"),
@@ -253,24 +118,14 @@ export const Gen3dEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zHunyuan3dV31RapidImageTo3dOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d-v3/image-to-3d"),
-    input: zHunyuan3dV3ImageTo3dInput,
-    output: zHunyuan3dV3ImageTo3dOutput,
+    endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d"),
+    input: zHunyuan3dV31RapidTextTo3dInput,
+    output: zHunyuan3dV31RapidTextTo3dOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/hunyuan3d-v3/sketch-to-3d"),
-    input: zHunyuan3dV3SketchTo3dInput,
-    output: zHunyuan3dV3SketchTo3dOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/meshy/v6/image-to-3d"),
-    input: zMeshyV6ImageTo3dInput,
-    output: zMeshyV6ImageTo3dOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/meshy/v6-preview/text-to-3d"),
-    input: zMeshyV6PreviewTextTo3dInput,
-    output: zMeshyV6PreviewTextTo3dOutput,
+    endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/smart-topology"),
+    input: zHunyuan3dV31SmartTopologyInput,
+    output: zHunyuan3dV31SmartTopologyOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/hunyuan-motion"),
@@ -283,14 +138,19 @@ export const Gen3dEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zHunyuanMotionFastOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/pro/text-to-3d"),
-    input: zHunyuan3dV31ProTextTo3dInput,
-    output: zHunyuan3dV31ProTextTo3dOutput,
+    endpoint: z.literal("fal-ai/hunyuan-part"),
+    input: zHunyuanPartInput,
+    output: zHunyuanPartOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/hunyuan-3d/v3.1/rapid/text-to-3d"),
-    input: zHunyuan3dV31RapidTextTo3dInput,
-    output: zHunyuan3dV31RapidTextTo3dOutput,
+    endpoint: z.literal("fal-ai/hunyuan3d-v3/image-to-3d"),
+    input: zHunyuan3dV3ImageTo3dInput,
+    output: zHunyuan3dV3ImageTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d-v3/sketch-to-3d"),
+    input: zHunyuan3dV3SketchTo3dInput,
+    output: zHunyuan3dV3SketchTo3dOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/hunyuan3d-v3/text-to-3d"),
@@ -298,9 +158,149 @@ export const Gen3dEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zHunyuan3dV3TextTo3dOutput,
   }),
   z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d/v2"),
+    input: zHunyuan3dV2Input,
+    output: zHunyuan3dV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d/v2/mini"),
+    input: zHunyuan3dV2MiniInput,
+    output: zHunyuan3dV2MiniOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d/v2/mini/turbo"),
+    input: zHunyuan3dV2MiniTurboInput,
+    output: zHunyuan3dV2MiniTurboOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d/v2/multi-view"),
+    input: zHunyuan3dV2MultiViewInput,
+    output: zHunyuan3dV2MultiViewOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d/v2/multi-view/turbo"),
+    input: zHunyuan3dV2MultiViewTurboInput,
+    output: zHunyuan3dV2MultiViewTurboOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hunyuan3d/v2/turbo"),
+    input: zHunyuan3dV2TurboInput,
+    output: zHunyuan3dV2TurboOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hyper3d/rodin"),
+    input: zHyper3dRodinInput,
+    output: zHyper3dRodinOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/hyper3d/rodin/v2"),
+    input: zHyper3dRodinV2Input,
+    output: zHyper3dRodinV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/meshy/v5/multi-image-to-3d"),
+    input: zMeshyV5MultiImageTo3dInput,
+    output: zMeshyV5MultiImageTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/meshy/v5/remesh"),
+    input: zMeshyV5RemeshInput,
+    output: zMeshyV5RemeshOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/meshy/v5/retexture"),
+    input: zMeshyV5RetextureInput,
+    output: zMeshyV5RetextureOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/meshy/v6-preview/image-to-3d"),
+    input: zMeshyV6PreviewImageTo3dInput,
+    output: zMeshyV6PreviewImageTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/meshy/v6-preview/text-to-3d"),
+    input: zMeshyV6PreviewTextTo3dInput,
+    output: zMeshyV6PreviewTextTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/meshy/v6/image-to-3d"),
+    input: zMeshyV6ImageTo3dInput,
+    output: zMeshyV6ImageTo3dOutput,
+  }),
+  z.object({
     endpoint: z.literal("fal-ai/meshy/v6/text-to-3d"),
     input: zMeshyV6TextTo3dInput,
     output: zMeshyV6TextTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/omnipart"),
+    input: zOmnipartInput,
+    output: zOmnipartOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/pshuman"),
+    input: zPshumanInput,
+    output: zPshumanOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/reconviagen-0.5"),
+    input: zReconviagen05Input,
+    output: zReconviagen05Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-3/3d-align"),
+    input: zSam33dAlignInput,
+    output: zSam33dAlignOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-3/3d-body"),
+    input: zSam33dBodyInput,
+    output: zSam33dBodyOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-3/3d-objects"),
+    input: zSam33dObjectsInput,
+    output: zSam33dObjectsOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/trellis"),
+    input: zTrellisInput,
+    output: zTrellisOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/trellis-2"),
+    input: zTrellis2Input,
+    output: zTrellis2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/trellis-2/retexture"),
+    input: zTrellis2RetextureInput,
+    output: zTrellis2RetextureOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/trellis/multi"),
+    input: zTrellisMultiInput,
+    output: zTrellisMultiOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/triposr"),
+    input: zTriposrInput,
+    output: zTriposrOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ultrashape"),
+    input: zUltrashapeInput,
+    output: zUltrashapeOutput,
+  }),
+  z.object({
+    endpoint: z.literal("tripo3d/tripo/v2.5/image-to-3d"),
+    input: zTripoV25ImageTo3dInput,
+    output: zTripoV25ImageTo3dOutput,
+  }),
+  z.object({
+    endpoint: z.literal("tripo3d/tripo/v2.5/multiview-to-3d"),
+    input: zTripoV25MultiviewTo3dInput,
+    output: zTripoV25MultiviewTo3dOutput,
   }),
 ]);
 

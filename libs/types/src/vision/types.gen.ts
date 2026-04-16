@@ -5,6 +5,139 @@ export type ClientOptions = {
 };
 
 /**
+ * NSFWOutput
+ */
+export type XAilabNsfwOutput = {
+  /**
+   * Has Nsfw Concepts
+   *
+   * List of booleans indicating if the image has an NSFW concept
+   */
+  has_nsfw_concepts: Array<boolean>;
+};
+
+/**
+ * NSFWInput
+ */
+export type XAilabNsfwInput = {
+  /**
+   * Image Urls
+   *
+   * List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.
+   */
+  image_urls: Array<string>;
+};
+
+/**
+ * VideoUnderstandingOutput
+ */
+export type VideoUnderstandingOutput = {
+  /**
+   * Output
+   *
+   * The analysis of the video content based on the prompt
+   */
+  output: string;
+};
+
+/**
+ * VideoUnderstandingInput
+ */
+export type VideoUnderstandingInput = {
+  /**
+   * Prompt
+   *
+   * The question or prompt about the video content.
+   */
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * URL of the video to analyze
+   */
+  video_url: string | Blob | File;
+  /**
+   * Detailed Analysis
+   *
+   * Whether to request a more detailed analysis of the video
+   */
+  detailed_analysis?: boolean;
+};
+
+/**
+ * UsageInfo
+ */
+export type UsageInfoType2 = {
+  /**
+   * Total Tokens
+   */
+  total_tokens?: number;
+  /**
+   * Completion Tokens
+   */
+  completion_tokens?: number | unknown;
+  /**
+   * Prompt Tokens
+   */
+  prompt_tokens?: number | unknown;
+  prompt_tokens_details?: PromptTokensDetails | unknown;
+  /**
+   * Cost
+   */
+  cost: number;
+};
+
+/**
+ * PromptTokensDetails
+ */
+export type PromptTokensDetails = {
+  /**
+   * Cached Tokens
+   */
+  cached_tokens?: number;
+  /**
+   * Cache Write Tokens
+   */
+  cache_write_tokens?: number;
+};
+
+/**
+ * UsageInfo
+ */
+export type UsageInfo = {
+  /**
+   * Output Tokens
+   *
+   * Number of output tokens generated
+   */
+  output_tokens: number;
+  /**
+   * Prefill Time Ms
+   *
+   * Time taken for prefill in milliseconds
+   */
+  prefill_time_ms: number;
+  /**
+   * Input Tokens
+   *
+   * Number of input tokens processed
+   */
+  input_tokens: number;
+  /**
+   * Ttft Ms
+   *
+   * Time to first token in milliseconds
+   */
+  ttft_ms: number;
+  /**
+   * Decode Time Ms
+   *
+   * Time taken for decoding in milliseconds
+   */
+  decode_time_ms: number;
+};
+
+/**
  * SemanticImageInput
  */
 export type SemanticImageInput = {
@@ -23,54 +156,117 @@ export type SemanticImageInput = {
 };
 
 /**
- * MultiMeasurementOutput
+ * SAM3EmbeddingOutput
  */
-export type ArbiterImageTextOutput = {
+export type Sam3ImageEmbedOutput = {
   /**
-   * Values
+   * Embedding B64
    *
-   * The values of the measurements.
+   * Embedding of the image
    */
-  values?: Array<{
-    [key: string]:
-      | number
-      | {
-          [key: string]: number;
-        };
-  }>;
+  embedding_b64: string;
 };
 
 /**
- * SemanticImageMeasurementInput
+ * SAM3EmbeddingInput
  */
-export type ArbiterImageTextInput = {
+export type Sam3ImageEmbedInput = {
   /**
-   * Measurements
+   * Image Url
    *
-   * The measurements to use for the measurement.
+   * URL of the image to embed.
    */
-  measurements: Array<string>;
-  /**
-   * Inputs
-   *
-   * The inputs to use for the measurement.
-   */
-  inputs: Array<SemanticImageInput>;
+  image_url: string | Blob | File;
 };
 
 /**
- * MoondreamObjectOutput
+ * VideoChatOutput
  */
-export type Moondream2PointObjectDetectionOutput = {
-  image: Image;
+export type Sa2Va8bVideoOutput = {
   /**
-   * Objects
+   * Output
    *
-   * Objects detected in the image
+   * Generated output
    */
-  objects: Array<{
-    [key: string]: unknown;
-  }>;
+  output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask video
+   */
+  masks: Array<File>;
+};
+
+/**
+ * File
+ */
+export type File = {
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+};
+
+/**
+ * VideoInput
+ */
+export type Sa2Va8bVideoInput = {
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the chat completion
+   */
+  prompt: string;
+  /**
+   * Video Url
+   *
+   * The URL of the input video.
+   */
+  video_url: string | Blob | File;
+  /**
+   * Num Frames To Sample
+   *
+   * Number of frames to sample from the video. Defaults to 32 if not provided. Maximum 100.
+   */
+  num_frames_to_sample?: number | unknown;
+};
+
+/**
+ * ImageChatOutput
+ */
+export type Sa2Va8bImageOutput = {
+  /**
+   * Output
+   *
+   * Generated output
+   */
+  output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask image
+   */
+  masks: Array<Image>;
 };
 
 /**
@@ -118,209 +314,9 @@ export type Image = {
 };
 
 /**
- * MoondreamObjectInput
+ * ImageInput
  */
-export type Moondream2PointObjectDetectionInput = {
-  /**
-   * Object
-   *
-   * Object to be detected in the image
-   */
-  object: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * TextOutput
- */
-export type Florence2LargeRegionToDescriptionOutput = {
-  /**
-   * Results
-   *
-   * Results from the model
-   */
-  results: string;
-};
-
-/**
- * ImageWithUserCoordinatesInput
- */
-export type Florence2LargeRegionToDescriptionInput = {
-  region: Region;
-  /**
-   * Image Url
-   *
-   * The URL of the image to be processed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * Region
- */
-export type Region = {
-  /**
-   * Y1
-   *
-   * Y-coordinate of the top-left corner
-   */
-  y1: number;
-  /**
-   * X2
-   *
-   * X-coordinate of the bottom-right corner
-   */
-  x2: number;
-  /**
-   * Y2
-   *
-   * Y-coordinate of the bottom-right corner
-   */
-  y2: number;
-  /**
-   * X1
-   *
-   * X-coordinate of the top-left corner
-   */
-  x1: number;
-};
-
-/**
- * TextOutput
- */
-export type Florence2LargeRegionToCategoryOutput = {
-  /**
-   * Results
-   *
-   * Results from the model
-   */
-  results: string;
-};
-
-/**
- * ImageWithUserCoordinatesInput
- */
-export type Florence2LargeRegionToCategoryInput = {
-  region: Region;
-  /**
-   * Image Url
-   *
-   * The URL of the image to be processed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * ReferenceImageInput
- */
-export type ReferenceImageInput = {
-  /**
-   * Hypothesis
-   *
-   * The hypothesis image to use for the measurement.
-   */
-  hypothesis: string;
-  /**
-   * Reference
-   *
-   * The image to use for the measurement.
-   */
-  reference: string;
-};
-
-/**
- * MultiMeasurementOutput
- */
-export type ArbiterImageImageOutput = {
-  /**
-   * Values
-   *
-   * The values of the measurements.
-   */
-  values?: Array<{
-    [key: string]:
-      | number
-      | {
-          [key: string]: number;
-        };
-  }>;
-};
-
-/**
- * ImageReferenceMeasurementInput
- */
-export type ArbiterImageImageInput = {
-  /**
-   * Measurements
-   *
-   * The measurements to use for the measurement.
-   */
-  measurements: Array<"dists" | "mse" | "lpips" | "sdi" | "ssim">;
-  /**
-   * Inputs
-   *
-   * The inputs to use for the measurement.
-   */
-  inputs: Array<ReferenceImageInput>;
-};
-
-/**
- * VideoChatOutput
- */
-export type Sa2Va8bVideoOutput = {
-  /**
-   * Masks
-   *
-   * Dictionary of label: mask video
-   */
-  masks: Array<File>;
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-};
-
-/**
- * File
- */
-export type File = {
-  /**
-   * File Size
-   *
-   * The size of the file in bytes.
-   */
-  file_size?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-};
-
-/**
- * VideoInput
- */
-export type Sa2Va8bVideoInput = {
+export type Sa2Va8bImageInput = {
   /**
    * Prompt
    *
@@ -328,17 +324,11 @@ export type Sa2Va8bVideoInput = {
    */
   prompt: string;
   /**
-   * Video Url
+   * Image Url
    *
-   * The URL of the input video.
+   * Url for the Input image.
    */
-  video_url: string | Blob | File;
-  /**
-   * Num Frames To Sample
-   *
-   * Number of frames to sample from the video. If not provided, all frames are sampled.
-   */
-  num_frames_to_sample?: number;
+  image_url: string | Blob | File;
 };
 
 /**
@@ -346,17 +336,17 @@ export type Sa2Va8bVideoInput = {
  */
 export type Sa2Va4bVideoOutput = {
   /**
-   * Masks
-   *
-   * Dictionary of label: mask video
-   */
-  masks: Array<File>;
-  /**
    * Output
    *
    * Generated output
    */
   output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask video
+   */
+  masks: Array<File>;
 };
 
 /**
@@ -378,9 +368,9 @@ export type Sa2Va4bVideoInput = {
   /**
    * Num Frames To Sample
    *
-   * Number of frames to sample from the video. If not provided, all frames are sampled.
+   * Number of frames to sample from the video. Defaults to 32 if not provided. Maximum 100.
    */
-  num_frames_to_sample?: number;
+  num_frames_to_sample?: number | unknown;
 };
 
 /**
@@ -388,17 +378,17 @@ export type Sa2Va4bVideoInput = {
  */
 export type Sa2Va4bImageOutput = {
   /**
-   * Masks
-   *
-   * Dictionary of label: mask image
-   */
-  masks: Array<Image>;
-  /**
    * Output
    *
    * Generated output
    */
   output: string;
+  /**
+   * Masks
+   *
+   * Dictionary of label: mask image
+   */
+  masks: Array<Image>;
 };
 
 /**
@@ -420,111 +410,151 @@ export type Sa2Va4bImageInput = {
 };
 
 /**
- * ImageInput
+ * VisionOutput
  */
-export type ImageInput = {
-  /**
-   * Hypothesis
-   *
-   * The image to use for the measurement.
-   */
-  hypothesis: string;
-};
-
-/**
- * MultiMeasurementOutput
- */
-export type ArbiterImageOutput = {
-  /**
-   * Values
-   *
-   * The values of the measurements.
-   */
-  values?: Array<{
-    [key: string]:
-      | number
-      | {
-          [key: string]: number;
-        };
-  }>;
-};
-
-/**
- * ImageMultiMeasurementInput
- */
-export type ArbiterImageInput = {
-  /**
-   * Measurements
-   *
-   * The measurements to use for the measurement.
-   */
-  measurements: Array<"arniqa" | "clip_iqa" | "musiq" | "nima" | "lapvar">;
-  /**
-   * Inputs
-   *
-   * The inputs to use for the measurement.
-   */
-  inputs: Array<ImageInput>;
-};
-
-/**
- * SAM3EmbeddingOutput
- */
-export type Sam3ImageEmbedOutput = {
-  /**
-   * Embedding B64
-   *
-   * Embedding of the image
-   */
-  embedding_b64: string;
-};
-
-/**
- * SAM3EmbeddingInput
- */
-export type Sam3ImageEmbedInput = {
-  /**
-   * Image Url
-   *
-   * URL of the image to embed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * ImageChatOutput
- */
-export type Sa2Va8bImageOutput = {
-  /**
-   * Masks
-   *
-   * Dictionary of label: mask image
-   */
-  masks: Array<Image>;
+export type RouterVisionOutput = {
   /**
    * Output
    *
    * Generated output
    */
   output: string;
+  /**
+   * Token usage information
+   */
+  usage: UsageInfoType2 | unknown;
 };
 
 /**
- * ImageInput
+ * VisionInput
  */
-export type Sa2Va8bImageInput = {
+export type RouterVisionInput = {
+  /**
+   * System Prompt
+   *
+   * System prompt to provide context or instructions to the model
+   */
+  system_prompt?: string | unknown;
+  /**
+   * Model
+   *
+   * Name of the model to use. Charged based on actual token usage.
+   */
+  model: string;
+  /**
+   * Image Urls
+   *
+   * List of image URLs to be processed
+   */
+  image_urls: Array<string>;
+  /**
+   * Temperature
+   *
+   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+   */
+  temperature?: number;
   /**
    * Prompt
    *
-   * Prompt to be used for the chat completion
+   * Prompt to be used for the image
    */
   prompt: string;
   /**
-   * Image Url
+   * Max Tokens
    *
-   * Url for the Input image.
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  image_url: string | Blob | File;
+  max_tokens?: number | unknown;
+  /**
+   * Reasoning
+   *
+   * Should reasoning be the part of the final answer.
+   */
+  reasoning?: boolean;
+};
+
+/**
+ * Region
+ */
+export type Region = {
+  /**
+   * X1
+   *
+   * X-coordinate of the top-left corner
+   */
+  x1: number;
+  /**
+   * X2
+   *
+   * X-coordinate of the bottom-right corner
+   */
+  x2: number;
+  /**
+   * Y2
+   *
+   * Y-coordinate of the bottom-right corner
+   */
+  y2: number;
+  /**
+   * Y1
+   *
+   * Y-coordinate of the top-left corner
+   */
+  y1: number;
+};
+
+/**
+ * ReferenceImageInput
+ */
+export type ReferenceImageInput = {
+  /**
+   * Hypothesis
+   *
+   * The hypothesis image to use for the measurement.
+   */
+  hypothesis: string;
+  /**
+   * Reference
+   *
+   * The image to use for the measurement.
+   */
+  reference: string;
+};
+
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
 };
 
 /**
@@ -546,152 +576,112 @@ export type Point = {
 };
 
 /**
- * MoondreamPointOutput
+ * Object
  */
-export type Moondream3PreviewPointOutput = {
+export type Object = {
   /**
-   * Points
+   * Y Min
    *
-   * List of points marking the detected objects
+   * Top boundary of detection box in normalized format (0 to 1)
    */
-  points: Array<Point>;
+  y_min: number;
   /**
-   * Image with points drawn on detected objects
-   */
-  image?: ImageFile | unknown;
-  /**
-   * Finish Reason
+   * X Max
    *
-   * Reason for finishing the output generation
+   * Right boundary of detection box in normalized format (0 to 1)
    */
-  finish_reason: string;
-  usage_info: UsageInfo;
+  x_max: number;
+  /**
+   * X Min
+   *
+   * Left boundary of detection box in normalized format (0 to 1)
+   */
+  x_min: number;
+  /**
+   * Y Max
+   *
+   * Bottom boundary of detection box in normalized format (0 to 1)
+   */
+  y_max: number;
 };
 
 /**
- * UsageInfo
+ * MoonDreamOutput
  */
-export type UsageInfo = {
+export type MoondreamNextOutput = {
   /**
-   * Output Tokens
+   * Output
    *
-   * Number of output tokens generated
+   * Response from the model
    */
-  output_tokens: number;
-  /**
-   * Prefill Time Ms
-   *
-   * Time taken for prefill in milliseconds
-   */
-  prefill_time_ms: number;
-  /**
-   * Input Tokens
-   *
-   * Number of input tokens processed
-   */
-  input_tokens: number;
-  /**
-   * Ttft Ms
-   *
-   * Time to first token in milliseconds
-   */
-  ttft_ms: number;
-  /**
-   * Decode Time Ms
-   *
-   * Time taken for decoding in milliseconds
-   */
-  decode_time_ms: number;
+  output: string;
 };
 
 /**
- * ImageFile
+ * QueryInput
  */
-export type ImageFile = {
+export type MoondreamNextInput = {
   /**
-   * File Size
+   * Task Type
    *
-   * The size of the file in bytes.
+   * Type of task to perform
    */
-  file_size?: number | unknown;
-  /**
-   * Height
-   *
-   * The height of the image
-   */
-  height?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
-  /**
-   * Content Type
-   *
-   * The mime type of the file.
-   */
-  content_type?: string | unknown;
-  /**
-   * Url
-   *
-   * The URL where the file can be downloaded from.
-   */
-  url: string;
-  /**
-   * Width
-   *
-   * The width of the image
-   */
-  width?: number | unknown;
-};
-
-/**
- * MoondreamPointInput
- */
-export type Moondream3PreviewPointInput = {
-  /**
-   * Prompt
-   *
-   * Object to be located in the image
-   */
-  prompt: string;
-  /**
-   * Preview
-   *
-   * Whether to preview the output
-   */
-  preview?: boolean;
+  task_type?: "caption" | "query";
   /**
    * Image URL
    *
-   * URL of the image to be processed
+   * Image URL to be processed
    */
   image_url: string | Blob | File;
+  /**
+   * Max Tokens
+   *
+   * Maximum number of tokens to generate
+   */
+  max_tokens?: number;
+  /**
+   * Prompt
+   *
+   * Prompt for query task
+   */
+  prompt: string;
 };
 
 /**
- * TextOutput
+ * BatchMoonDreamOutput
  */
-export type Florence2LargeOcrOutput = {
+export type MoondreamNextBatchOutput = {
+  captions_file: File;
   /**
-   * Results
+   * Outputs
    *
-   * Results from the model
+   * List of generated captions
    */
-  results: string;
+  outputs: Array<string>;
 };
 
 /**
- * ImageInput
+ * BatchQueryInput
  */
-export type Florence2LargeOcrInput = {
+export type MoondreamNextBatchInput = {
   /**
-   * Image Url
+   * Max Tokens
    *
-   * The URL of the image to be processed.
+   * Maximum number of tokens to generate
    */
-  image_url: string | Blob | File;
+  max_tokens?: number;
+  /**
+   * Image URLs
+   *
+   * List of image URLs to be processed (maximum 32 images)
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Prompt
+   *
+   * Single prompt to apply to all images
+   */
+  prompt: string;
 };
 
 /**
@@ -787,579 +777,6 @@ export type MoondreamBatchedInput = {
 };
 
 /**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export type Isaac01OpenaiV1ChatCompletionsInput = {
-  [key: string]: unknown;
-};
-
-export type Isaac01OpenaiV1ChatCompletionsOutput = unknown;
-
-/**
- * BatchMoonDreamOutput
- */
-export type MoondreamNextBatchOutput = {
-  /**
-   * Outputs
-   *
-   * List of generated captions
-   */
-  outputs: Array<string>;
-  captions_file: File;
-};
-
-/**
- * BatchQueryInput
- */
-export type MoondreamNextBatchInput = {
-  /**
-   * Prompt
-   *
-   * Single prompt to apply to all images
-   */
-  prompt: string;
-  /**
-   * Image URLs
-   *
-   * List of image URLs to be processed (maximum 32 images)
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of tokens to generate
-   */
-  max_tokens?: number;
-};
-
-/**
- * ImageChatOutput
- */
-export type GotOcrV2Output = {
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  outputs: Array<string>;
-};
-
-/**
- * ImageInput
- */
-export type GotOcrV2Input = {
-  /**
-   * Do Format
-   *
-   * Generate the output in formatted mode.
-   */
-  do_format?: boolean;
-  /**
-   * Multi Page
-   *
-   * Use provided images to generate a single output.
-   */
-  multi_page?: boolean;
-  /**
-   * Input Image Urls
-   *
-   * URL of images.
-   */
-  input_image_urls?: Array<string>;
-};
-
-/**
- * MoondreamOutput
- */
-export type Moondream2Output = {
-  /**
-   * Output
-   *
-   * Output for the given query
-   */
-  output: string;
-};
-
-/**
- * MoondreamInput
- */
-export type Moondream2Input = {
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * CompletionUsage
- */
-export type CompletionUsage = {
-  /**
-   * Completion Tokens
-   *
-   * Number of tokens in the completion
-   */
-  completion_tokens: number;
-  /**
-   * Total Tokens
-   *
-   * Total tokens used
-   */
-  total_tokens: number;
-  /**
-   * Prompt Tokens
-   *
-   * Number of tokens in the prompt
-   */
-  prompt_tokens: number;
-};
-
-/**
- * ChatOutput
- */
-export type Isaac01Output = {
-  /**
-   * Usage information
-   */
-  usage?: CompletionUsage | unknown;
-  /**
-   * Error
-   *
-   * Error message if an error occurred
-   */
-  error?: string | unknown;
-  /**
-   * Partial
-   *
-   * Whether the output is partial
-   */
-  partial?: boolean;
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-};
-
-/**
- * VisionInput
- */
-export type Isaac01Input = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the image
-   */
-  prompt: string;
-  /**
-   * Response Style
-   *
-   *
-   * Response style to be used for the image.
-   *
-   * - text: Model will output text. Good for descriptions and captioning.
-   * - box: Model will output a combination of text and bounding boxes. Good for
-   * localization.
-   * - point: Model will output a combination of text and points. Good for counting many
-   * objects.
-   * - polygon: Model will output a combination of text and polygons. Good for granular
-   * segmentation.
-   *
-   */
-  response_style?: "text" | "box" | "point" | "polygon";
-  /**
-   * Image Url
-   *
-   * Image URL to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamOutput
- */
-export type Moondream2VisualQueryOutput = {
-  /**
-   * Output
-   *
-   * Output for the given query
-   */
-  output: string;
-};
-
-/**
- * MoondreamQueryInput
- */
-export type Moondream2VisualQueryInput = {
-  /**
-   * Query
-   *
-   * Query to be asked in the image
-   */
-  prompt: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * Object
- */
-export type Object = {
-  /**
-   * Y Min
-   *
-   * Top boundary of detection box in normalized format (0 to 1)
-   */
-  y_min: number;
-  /**
-   * X Max
-   *
-   * Right boundary of detection box in normalized format (0 to 1)
-   */
-  x_max: number;
-  /**
-   * X Min
-   *
-   * Left boundary of detection box in normalized format (0 to 1)
-   */
-  x_min: number;
-  /**
-   * Y Max
-   *
-   * Bottom boundary of detection box in normalized format (0 to 1)
-   */
-  y_max: number;
-};
-
-/**
- * MoondreamDetectOutput
- */
-export type Moondream3PreviewDetectOutput = {
-  /**
-   * Image with bounding boxes drawn around detected objects
-   */
-  image?: ImageFile | unknown;
-  /**
-   * Finish Reason
-   *
-   * Reason for finishing the output generation
-   */
-  finish_reason: string;
-  /**
-   * Objects
-   *
-   * List of detected objects with their bounding boxes
-   */
-  objects: Array<Object>;
-  usage_info: UsageInfo;
-};
-
-/**
- * MoondreamDetectInput
- */
-export type Moondream3PreviewDetectInput = {
-  /**
-   * Prompt
-   *
-   * Object to be detected in the image
-   */
-  prompt: string;
-  /**
-   * Preview
-   *
-   * Whether to preview the output
-   */
-  preview?: boolean;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoonDreamOutput
- */
-export type MoondreamNextOutput = {
-  /**
-   * Output
-   *
-   * Response from the model
-   */
-  output: string;
-};
-
-/**
- * QueryInput
- */
-export type MoondreamNextInput = {
-  /**
-   * Prompt
-   *
-   * Prompt for query task
-   */
-  prompt: string;
-  /**
-   * Task Type
-   *
-   * Type of task to perform
-   */
-  task_type?: "caption" | "query";
-  /**
-   * Max Tokens
-   *
-   * Maximum number of tokens to generate
-   */
-  max_tokens?: number;
-  /**
-   * Image URL
-   *
-   * Image URL to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * LLavaOutput
- */
-export type LlavaNextOutput = {
-  /**
-   * Partial
-   *
-   * Whether the output is partial
-   */
-  partial?: boolean;
-  /**
-   * Output
-   *
-   * Generated output
-   */
-  output: string;
-};
-
-/**
- * LLavaInput
- */
-export type LlavaNextInput = {
-  /**
-   * Prompt
-   *
-   * Prompt to be used for the image
-   */
-  prompt: string;
-  /**
-   * Top P
-   *
-   * Top P for sampling
-   */
-  top_p?: number;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of tokens to generate
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Temperature for sampling
-   */
-  temperature?: number;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamObjectOutput
- */
-export type Moondream2ObjectDetectionOutput = {
-  image: Image;
-  /**
-   * Objects
-   *
-   * Objects detected in the image
-   */
-  objects: Array<{
-    [key: string]: unknown;
-  }>;
-};
-
-/**
- * MoondreamObjectInput
- */
-export type Moondream2ObjectDetectionInput = {
-  /**
-   * Object
-   *
-   * Object to be detected in the image
-   */
-  object: string;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * TextOutput
- */
-export type Florence2LargeDetailedCaptionOutput = {
-  /**
-   * Results
-   *
-   * Results from the model
-   */
-  results: string;
-};
-
-/**
- * ImageInput
- */
-export type Florence2LargeDetailedCaptionInput = {
-  /**
-   * Image Url
-   *
-   * The URL of the image to be processed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * TextOutput
- */
-export type Florence2LargeCaptionOutput = {
-  /**
-   * Results
-   *
-   * Results from the model
-   */
-  results: string;
-};
-
-/**
- * ImageInput
- */
-export type Florence2LargeCaptionInput = {
-  /**
-   * Image Url
-   *
-   * The URL of the image to be processed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * MoondreamCaptionOutput
- */
-export type Moondream3PreviewCaptionOutput = {
-  /**
-   * Finish Reason
-   *
-   * Reason for finishing the output generation
-   */
-  finish_reason: string;
-  /**
-   * Output
-   *
-   * Generated caption for the image
-   */
-  output: string;
-  usage_info: UsageInfo;
-};
-
-/**
- * MoondreamCaptionInput
- */
-export type Moondream3PreviewCaptionInput = {
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability mass to use, between 0 and 1.
-   */
-  top_p?: number | unknown;
-  /**
-   * Length
-   *
-   * Length of the caption to generate
-   */
-  length?: "short" | "normal" | "long";
-  /**
-   * Temperature
-   *
-   * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
-   */
-  temperature?: number | unknown;
-  /**
-   * Image URL
-   *
-   * URL of the image to be processed
-   */
-  image_url: string | Blob | File;
-};
-
-/**
- * NSFWOutput
- */
-export type XAilabNsfwOutput = {
-  /**
-   * Has Nsfw Concepts
-   *
-   * List of booleans indicating if the image has an NSFW concept
-   */
-  has_nsfw_concepts: Array<boolean>;
-};
-
-/**
- * NSFWInput
- */
-export type XAilabNsfwInput = {
-  /**
-   * Image Urls
-   *
-   * List of image URLs to check. If more than 10 images are provided, only the first 10 will be checked.
-   */
-  image_urls: Array<string>;
-};
-
-/**
- * TextOutput
- */
-export type Florence2LargeMoreDetailedCaptionOutput = {
-  /**
-   * Results
-   *
-   * Results from the model
-   */
-  results: string;
-};
-
-/**
- * ImageInput
- */
-export type Florence2LargeMoreDetailedCaptionInput = {
-  /**
-   * Image Url
-   *
-   * The URL of the image to be processed.
-   */
-  image_url: string | Blob | File;
-};
-
-/**
  * MoondreamQueryOutput
  */
 export type Moondream3PreviewQueryOutput = {
@@ -1421,39 +838,457 @@ export type Moondream3PreviewQueryInput = {
 };
 
 /**
- * VideoUnderstandingOutput
+ * MoondreamPointOutput
  */
-export type VideoUnderstandingOutput = {
+export type Moondream3PreviewPointOutput = {
+  /**
+   * Points
+   *
+   * List of points marking the detected objects
+   */
+  points: Array<Point>;
+  /**
+   * Image with points drawn on detected objects
+   */
+  image?: ImageFile | unknown;
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
+  usage_info: UsageInfo;
+};
+
+/**
+ * ImageFile
+ */
+export type ImageFile = {
+  /**
+   * File Size
+   *
+   * The size of the file in bytes.
+   */
+  file_size?: number | unknown;
+  /**
+   * Height
+   *
+   * The height of the image
+   */
+  height?: number | unknown;
+  /**
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
+   */
+  file_name?: string | unknown;
+  /**
+   * Content Type
+   *
+   * The mime type of the file.
+   */
+  content_type?: string | unknown;
+  /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
+   * Width
+   *
+   * The width of the image
+   */
+  width?: number | unknown;
+};
+
+/**
+ * MoondreamPointInput
+ */
+export type Moondream3PreviewPointInput = {
+  /**
+   * Prompt
+   *
+   * Object to be located in the image
+   */
+  prompt: string;
+  /**
+   * Preview
+   *
+   * Whether to preview the output
+   */
+  preview?: boolean;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamDetectOutput
+ */
+export type Moondream3PreviewDetectOutput = {
+  /**
+   * Image with bounding boxes drawn around detected objects
+   */
+  image?: ImageFile | unknown;
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
+  /**
+   * Objects
+   *
+   * List of detected objects with their bounding boxes
+   */
+  objects: Array<Object>;
+  usage_info: UsageInfo;
+};
+
+/**
+ * MoondreamDetectInput
+ */
+export type Moondream3PreviewDetectInput = {
+  /**
+   * Prompt
+   *
+   * Object to be detected in the image
+   */
+  prompt: string;
+  /**
+   * Preview
+   *
+   * Whether to preview the output
+   */
+  preview?: boolean;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamCaptionOutput
+ */
+export type Moondream3PreviewCaptionOutput = {
+  /**
+   * Finish Reason
+   *
+   * Reason for finishing the output generation
+   */
+  finish_reason: string;
   /**
    * Output
    *
-   * The analysis of the video content based on the prompt
+   * Generated caption for the image
+   */
+  output: string;
+  usage_info: UsageInfo;
+};
+
+/**
+ * MoondreamCaptionInput
+ */
+export type Moondream3PreviewCaptionInput = {
+  /**
+   * Top P
+   *
+   * Nucleus sampling probability mass to use, between 0 and 1.
+   */
+  top_p?: number | unknown;
+  /**
+   * Length
+   *
+   * Length of the caption to generate
+   */
+  length?: "short" | "normal" | "long";
+  /**
+   * Temperature
+   *
+   * Sampling temperature to use, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If not set, defaults to 0.
+   */
+  temperature?: number | unknown;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamOutput
+ */
+export type Moondream2VisualQueryOutput = {
+  /**
+   * Output
+   *
+   * Output for the given query
    */
   output: string;
 };
 
 /**
- * VideoUnderstandingInput
+ * MoondreamQueryInput
  */
-export type VideoUnderstandingInput = {
+export type Moondream2VisualQueryInput = {
   /**
-   * Prompt
+   * Query
    *
-   * The question or prompt about the video content.
+   * Query to be asked in the image
    */
   prompt: string;
   /**
-   * Video Url
+   * Image URL
    *
-   * URL of the video to analyze
+   * URL of the image to be processed
    */
-  video_url: string | Blob | File;
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamObjectOutput
+ */
+export type Moondream2PointObjectDetectionOutput = {
+  image: Image;
   /**
-   * Detailed Analysis
+   * Objects
    *
-   * Whether to request a more detailed analysis of the video
+   * Objects detected in the image
    */
-  detailed_analysis?: boolean;
+  objects: Array<{
+    [key: string]: unknown;
+  }>;
+};
+
+/**
+ * MoondreamObjectInput
+ */
+export type Moondream2PointObjectDetectionInput = {
+  /**
+   * Object
+   *
+   * Object to be detected in the image
+   */
+  object: string;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamOutput
+ */
+export type Moondream2Output = {
+  /**
+   * Output
+   *
+   * Output for the given query
+   */
+  output: string;
+};
+
+/**
+ * MoondreamObjectOutput
+ */
+export type Moondream2ObjectDetectionOutput = {
+  image: Image;
+  /**
+   * Objects
+   *
+   * Objects detected in the image
+   */
+  objects: Array<{
+    [key: string]: unknown;
+  }>;
+};
+
+/**
+ * MoondreamObjectInput
+ */
+export type Moondream2ObjectDetectionInput = {
+  /**
+   * Object
+   *
+   * Object to be detected in the image
+   */
+  object: string;
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MoondreamInput
+ */
+export type Moondream2Input = {
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * LLavaOutput
+ */
+export type LlavaNextOutput = {
+  /**
+   * Partial
+   *
+   * Whether the output is partial
+   */
+  partial?: boolean;
+  /**
+   * Output
+   *
+   * Generated output
+   */
+  output: string;
+};
+
+/**
+ * LLavaInput
+ */
+export type LlavaNextInput = {
+  /**
+   * Image URL
+   *
+   * URL of the image to be processed
+   */
+  image_url: string | Blob | File;
+  /**
+   * Temperature
+   *
+   * Temperature for sampling
+   */
+  temperature?: number;
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the image
+   */
+  prompt: string;
+  /**
+   * Max Tokens
+   *
+   * Maximum number of tokens to generate
+   */
+  max_tokens?: number;
+  /**
+   * Top P
+   *
+   * Top P for sampling
+   */
+  top_p?: number;
+};
+
+/**
+ * ChatOutput
+ */
+export type Isaac01Output = {
+  /**
+   * Usage information
+   */
+  usage?: CompletionUsage | unknown;
+  /**
+   * Error
+   *
+   * Error message if an error occurred
+   */
+  error?: string | unknown;
+  /**
+   * Partial
+   *
+   * Whether the output is partial
+   */
+  partial?: boolean;
+  /**
+   * Output
+   *
+   * Generated output
+   */
+  output: string;
+};
+
+/**
+ * CompletionUsage
+ */
+export type CompletionUsage = {
+  /**
+   * Completion Tokens
+   *
+   * Number of tokens in the completion
+   */
+  completion_tokens: number;
+  /**
+   * Total Tokens
+   *
+   * Total tokens used
+   */
+  total_tokens: number;
+  /**
+   * Prompt Tokens
+   *
+   * Number of tokens in the prompt
+   */
+  prompt_tokens: number;
+};
+
+export type Isaac01OpenaiV1ChatCompletionsOutput = unknown;
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export type Isaac01OpenaiV1ChatCompletionsInput = {
+  [key: string]: unknown;
+};
+
+/**
+ * VisionInput
+ */
+export type Isaac01Input = {
+  /**
+   * Prompt
+   *
+   * Prompt to be used for the image
+   */
+  prompt: string;
+  /**
+   * Response Style
+   *
+   *
+   * Response style to be used for the image.
+   *
+   * - text: Model will output text. Good for descriptions and captioning.
+   * - box: Model will output a combination of text and bounding boxes. Good for
+   * localization.
+   * - point: Model will output a combination of text and points. Good for counting many
+   * objects.
+   * - polygon: Model will output a combination of text and polygons. Good for granular
+   * segmentation.
+   *
+   */
+  response_style?: "text" | "box" | "point" | "polygon";
+  /**
+   * Image Url
+   *
+   * Image URL to be processed
+   */
+  image_url: string | Blob | File;
 };
 
 /**
@@ -1481,155 +1316,342 @@ export type ImageutilsNsfwInput = {
 };
 
 /**
- * UsageInfo
+ * ImageInput
  */
-export type UsageInfoType2 = {
+export type ImageInput = {
   /**
-   * Completion Tokens
+   * Hypothesis
+   *
+   * The image to use for the measurement.
    */
-  completion_tokens?: number | unknown;
-  /**
-   * Total Tokens
-   */
-  total_tokens?: number;
-  /**
-   * Prompt Tokens
-   */
-  prompt_tokens?: number | unknown;
-  /**
-   * Cost
-   */
-  cost: number;
+  hypothesis: string;
 };
 
 /**
- * VisionOutput
+ * ImageChatOutput
  */
-export type RouterVisionOutput = {
-  /**
-   * Token usage information
-   */
-  usage: UsageInfoType2 | unknown;
+export type GotOcrV2Output = {
   /**
    * Output
    *
    * Generated output
    */
-  output: string;
+  outputs: Array<string>;
 };
 
 /**
- * VisionInput
+ * ImageInput
  */
-export type RouterVisionInput = {
+export type GotOcrV2Input = {
   /**
-   * Prompt
+   * Multi Page
    *
-   * Prompt to be used for the image
+   * Use provided images to generate a single output.
    */
-  prompt: string;
+  multi_page?: boolean;
   /**
-   * System Prompt
+   * Input Image Urls
    *
-   * System prompt to provide context or instructions to the model
+   * URL of images.
    */
-  system_prompt?: string | unknown;
+  input_image_urls?: Array<string>;
   /**
-   * Reasoning
+   * Do Format
    *
-   * Should reasoning be the part of the final answer.
+   * Generate the output in formatted mode.
    */
-  reasoning?: boolean;
-  /**
-   * Model
-   *
-   * Name of the model to use. Charged based on actual token usage.
-   */
-  model: string;
-  /**
-   * Max Tokens
-   *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
-   */
-  max_tokens?: number | unknown;
-  /**
-   * Temperature
-   *
-   * This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
-   */
-  temperature?: number;
-  /**
-   * Image Urls
-   *
-   * List of image URLs to be processed
-   */
-  image_urls: Array<string>;
+  do_format?: boolean;
 };
 
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+/**
+ * TextOutput
+ */
+export type Florence2LargeRegionToDescriptionOutput = {
   /**
-   * The request id.
+   * Results
+   *
+   * Results from the model
    */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
+  results: string;
 };
 
-export type GetOpenrouterRouterVisionRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/openrouter/router/vision/requests/{request_id}/status";
+/**
+ * ImageWithUserCoordinatesInput
+ */
+export type Florence2LargeRegionToDescriptionInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+  region: Region;
 };
 
-export type GetOpenrouterRouterVisionRequestsByRequestIdStatusResponses = {
+/**
+ * TextOutput
+ */
+export type Florence2LargeRegionToCategoryOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageWithUserCoordinatesInput
+ */
+export type Florence2LargeRegionToCategoryInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+  region: Region;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeOcrOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeOcrInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeMoreDetailedCaptionOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeMoreDetailedCaptionInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeDetailedCaptionOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeDetailedCaptionInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * TextOutput
+ */
+export type Florence2LargeCaptionOutput = {
+  /**
+   * Results
+   *
+   * Results from the model
+   */
+  results: string;
+};
+
+/**
+ * ImageInput
+ */
+export type Florence2LargeCaptionInput = {
+  /**
+   * Image Url
+   *
+   * The URL of the image to be processed.
+   */
+  image_url: string | Blob | File;
+};
+
+/**
+ * MultiMeasurementOutput
+ */
+export type ArbiterImageTextOutput = {
+  /**
+   * Values
+   *
+   * The values of the measurements.
+   */
+  values?: Array<{
+    [key: string]:
+      | number
+      | {
+          [key: string]: number;
+        };
+  }>;
+};
+
+/**
+ * SemanticImageMeasurementInput
+ */
+export type ArbiterImageTextInput = {
+  /**
+   * Inputs
+   *
+   * The inputs to use for the measurement.
+   */
+  inputs: Array<SemanticImageInput>;
+  /**
+   * Measurements
+   *
+   * The measurements to use for the measurement.
+   */
+  measurements: Array<string>;
+};
+
+/**
+ * MultiMeasurementOutput
+ */
+export type ArbiterImageOutput = {
+  /**
+   * Values
+   *
+   * The values of the measurements.
+   */
+  values?: Array<{
+    [key: string]:
+      | number
+      | {
+          [key: string]: number;
+        };
+  }>;
+};
+
+/**
+ * ImageMultiMeasurementInput
+ */
+export type ArbiterImageInput = {
+  /**
+   * Inputs
+   *
+   * The inputs to use for the measurement.
+   */
+  inputs: Array<ImageInput>;
+  /**
+   * Measurements
+   *
+   * The measurements to use for the measurement.
+   */
+  measurements: Array<"arniqa" | "clip_iqa" | "musiq" | "nima" | "lapvar">;
+};
+
+/**
+ * MultiMeasurementOutput
+ */
+export type ArbiterImageImageOutput = {
+  /**
+   * Values
+   *
+   * The values of the measurements.
+   */
+  values?: Array<{
+    [key: string]:
+      | number
+      | {
+          [key: string]: number;
+        };
+  }>;
+};
+
+/**
+ * ImageReferenceMeasurementInput
+ */
+export type ArbiterImageImageInput = {
+  /**
+   * Inputs
+   *
+   * The inputs to use for the measurement.
+   */
+  inputs: Array<ReferenceImageInput>;
+  /**
+   * Measurements
+   *
+   * The measurements to use for the measurement.
+   */
+  measurements: Array<"dists" | "mse" | "lpips" | "sdi" | "ssim">;
+};
+
+export type PostFalAiArbiterImageData = {
+  body: ArbiterImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/arbiter/image";
+};
+
+export type PostFalAiArbiterImageResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetOpenrouterRouterVisionRequestsByRequestIdStatusResponse =
-  GetOpenrouterRouterVisionRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterVisionRequestsByRequestIdStatusResponses];
+export type PostFalAiArbiterImageResponse =
+  PostFalAiArbiterImageResponses[keyof PostFalAiArbiterImageResponses];
 
-export type PutOpenrouterRouterVisionRequestsByRequestIdCancelData = {
+export type PostFalAiArbiterImageImageData = {
+  body: ArbiterImageImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/arbiter/image/image";
+};
+
+export type PostFalAiArbiterImageImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiArbiterImageImageResponse =
+  PostFalAiArbiterImageImageResponses[keyof PostFalAiArbiterImageImageResponses];
+
+export type GetFalAiArbiterImageImageRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -1638,10 +1660,32 @@ export type PutOpenrouterRouterVisionRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/openrouter/router/vision/requests/{request_id}/cancel";
+  url: "/fal-ai/arbiter/image/image/requests/{request_id}";
 };
 
-export type PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses = {
+export type GetFalAiArbiterImageImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ArbiterImageImageOutput;
+};
+
+export type GetFalAiArbiterImageImageRequestsByRequestIdResponse =
+  GetFalAiArbiterImageImageRequestsByRequestIdResponses[keyof GetFalAiArbiterImageImageRequestsByRequestIdResponses];
+
+export type PutFalAiArbiterImageImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/arbiter/image/image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiArbiterImageImageRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1653,49 +1697,10 @@ export type PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutOpenrouterRouterVisionRequestsByRequestIdCancelResponse =
-  PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses];
+export type PutFalAiArbiterImageImageRequestsByRequestIdCancelResponse =
+  PutFalAiArbiterImageImageRequestsByRequestIdCancelResponses[keyof PutFalAiArbiterImageImageRequestsByRequestIdCancelResponses];
 
-export type PostOpenrouterRouterVisionData = {
-  body: RouterVisionInput;
-  path?: never;
-  query?: never;
-  url: "/openrouter/router/vision";
-};
-
-export type PostOpenrouterRouterVisionResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostOpenrouterRouterVisionResponse =
-  PostOpenrouterRouterVisionResponses[keyof PostOpenrouterRouterVisionResponses];
-
-export type GetOpenrouterRouterVisionRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/vision/requests/{request_id}";
-};
-
-export type GetOpenrouterRouterVisionRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: RouterVisionOutput;
-};
-
-export type GetOpenrouterRouterVisionRequestsByRequestIdResponse =
-  GetOpenrouterRouterVisionRequestsByRequestIdResponses[keyof GetOpenrouterRouterVisionRequestsByRequestIdResponses];
-
-export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusData = {
+export type GetFalAiArbiterImageImageRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1709,20 +1714,20 @@ export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/imageutils/nsfw/requests/{request_id}/status";
+  url: "/fal-ai/arbiter/image/image/requests/{request_id}/status";
 };
 
-export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponses = {
+export type GetFalAiArbiterImageImageRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponse =
-  GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponses[keyof GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponses];
+export type GetFalAiArbiterImageImageRequestsByRequestIdStatusResponse =
+  GetFalAiArbiterImageImageRequestsByRequestIdStatusResponses[keyof GetFalAiArbiterImageImageRequestsByRequestIdStatusResponses];
 
-export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelData = {
+export type GetFalAiArbiterImageRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -1731,10 +1736,32 @@ export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/imageutils/nsfw/requests/{request_id}/cancel";
+  url: "/fal-ai/arbiter/image/requests/{request_id}";
 };
 
-export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses = {
+export type GetFalAiArbiterImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ArbiterImageOutput;
+};
+
+export type GetFalAiArbiterImageRequestsByRequestIdResponse =
+  GetFalAiArbiterImageRequestsByRequestIdResponses[keyof GetFalAiArbiterImageRequestsByRequestIdResponses];
+
+export type PutFalAiArbiterImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/arbiter/image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiArbiterImageRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1746,49 +1773,10 @@ export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponse =
-  PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses[keyof PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses];
+export type PutFalAiArbiterImageRequestsByRequestIdCancelResponse =
+  PutFalAiArbiterImageRequestsByRequestIdCancelResponses[keyof PutFalAiArbiterImageRequestsByRequestIdCancelResponses];
 
-export type PostFalAiImageutilsNsfwData = {
-  body: ImageutilsNsfwInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/imageutils/nsfw";
-};
-
-export type PostFalAiImageutilsNsfwResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiImageutilsNsfwResponse =
-  PostFalAiImageutilsNsfwResponses[keyof PostFalAiImageutilsNsfwResponses];
-
-export type GetFalAiImageutilsNsfwRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/imageutils/nsfw/requests/{request_id}";
-};
-
-export type GetFalAiImageutilsNsfwRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ImageutilsNsfwOutput;
-};
-
-export type GetFalAiImageutilsNsfwRequestsByRequestIdResponse =
-  GetFalAiImageutilsNsfwRequestsByRequestIdResponses[keyof GetFalAiImageutilsNsfwRequestsByRequestIdResponses];
-
-export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusData = {
+export type GetFalAiArbiterImageRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1802,20 +1790,37 @@ export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/video-understanding/requests/{request_id}/status";
+  url: "/fal-ai/arbiter/image/requests/{request_id}/status";
 };
 
-export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponses = {
+export type GetFalAiArbiterImageRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponse =
-  GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponses[keyof GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponses];
+export type GetFalAiArbiterImageRequestsByRequestIdStatusResponse =
+  GetFalAiArbiterImageRequestsByRequestIdStatusResponses[keyof GetFalAiArbiterImageRequestsByRequestIdStatusResponses];
 
-export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelData = {
+export type PostFalAiArbiterImageTextData = {
+  body: ArbiterImageTextInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/arbiter/image/text";
+};
+
+export type PostFalAiArbiterImageTextResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiArbiterImageTextResponse =
+  PostFalAiArbiterImageTextResponses[keyof PostFalAiArbiterImageTextResponses];
+
+export type GetFalAiArbiterImageTextRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -1824,10 +1829,32 @@ export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/video-understanding/requests/{request_id}/cancel";
+  url: "/fal-ai/arbiter/image/text/requests/{request_id}";
 };
 
-export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses = {
+export type GetFalAiArbiterImageTextRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ArbiterImageTextOutput;
+};
+
+export type GetFalAiArbiterImageTextRequestsByRequestIdResponse =
+  GetFalAiArbiterImageTextRequestsByRequestIdResponses[keyof GetFalAiArbiterImageTextRequestsByRequestIdResponses];
+
+export type PutFalAiArbiterImageTextRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/arbiter/image/text/requests/{request_id}/cancel";
+};
+
+export type PutFalAiArbiterImageTextRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -1839,49 +1866,10 @@ export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponse =
-  PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses[keyof PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses];
+export type PutFalAiArbiterImageTextRequestsByRequestIdCancelResponse =
+  PutFalAiArbiterImageTextRequestsByRequestIdCancelResponses[keyof PutFalAiArbiterImageTextRequestsByRequestIdCancelResponses];
 
-export type PostFalAiVideoUnderstandingData = {
-  body: VideoUnderstandingInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/video-understanding";
-};
-
-export type PostFalAiVideoUnderstandingResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiVideoUnderstandingResponse =
-  PostFalAiVideoUnderstandingResponses[keyof PostFalAiVideoUnderstandingResponses];
-
-export type GetFalAiVideoUnderstandingRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/video-understanding/requests/{request_id}";
-};
-
-export type GetFalAiVideoUnderstandingRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: VideoUnderstandingOutput;
-};
-
-export type GetFalAiVideoUnderstandingRequestsByRequestIdResponse =
-  GetFalAiVideoUnderstandingRequestsByRequestIdResponses[keyof GetFalAiVideoUnderstandingRequestsByRequestIdResponses];
-
-export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusData = {
+export type GetFalAiArbiterImageTextRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -1895,424 +1883,18 @@ export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/moondream3-preview/query/requests/{request_id}/status";
+  url: "/fal-ai/arbiter/image/text/requests/{request_id}/status";
 };
 
-export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponses = {
+export type GetFalAiArbiterImageTextRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream3-preview/query/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondream3PreviewQueryData = {
-  body: Moondream3PreviewQueryInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream3-preview/query";
-};
-
-export type PostFalAiMoondream3PreviewQueryResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondream3PreviewQueryResponse =
-  PostFalAiMoondream3PreviewQueryResponses[keyof PostFalAiMoondream3PreviewQueryResponses];
-
-export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream3-preview/query/requests/{request_id}";
-};
-
-export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Moondream3PreviewQueryOutput;
-};
-
-export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponse =
-  GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponses];
-
-export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/fal-ai/florence-2-large/more-detailed-caption/requests/{request_id}/status";
-  };
-
-export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponse =
-  GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/florence-2-large/more-detailed-caption/requests/{request_id}/cancel";
-  };
-
-export type PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponse =
-  PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlorence2LargeMoreDetailedCaptionData = {
-  body: Florence2LargeMoreDetailedCaptionInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/florence-2-large/more-detailed-caption";
-};
-
-export type PostFalAiFlorence2LargeMoreDetailedCaptionResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlorence2LargeMoreDetailedCaptionResponse =
-  PostFalAiFlorence2LargeMoreDetailedCaptionResponses[keyof PostFalAiFlorence2LargeMoreDetailedCaptionResponses];
-
-export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/florence-2-large/more-detailed-caption/requests/{request_id}";
-};
-
-export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponses =
-  {
-    /**
-     * Result of the request.
-     */
-    200: Florence2LargeMoreDetailedCaptionOutput;
-  };
-
-export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponse =
-  GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponses];
-
-export type GetFalAiXAilabNsfwRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/x-ailab/nsfw/requests/{request_id}/status";
-};
-
-export type GetFalAiXAilabNsfwRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiXAilabNsfwRequestsByRequestIdStatusResponse =
-  GetFalAiXAilabNsfwRequestsByRequestIdStatusResponses[keyof GetFalAiXAilabNsfwRequestsByRequestIdStatusResponses];
-
-export type PutFalAiXAilabNsfwRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/x-ailab/nsfw/requests/{request_id}/cancel";
-};
-
-export type PutFalAiXAilabNsfwRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiXAilabNsfwRequestsByRequestIdCancelResponse =
-  PutFalAiXAilabNsfwRequestsByRequestIdCancelResponses[keyof PutFalAiXAilabNsfwRequestsByRequestIdCancelResponses];
-
-export type PostFalAiXAilabNsfwData = {
-  body: XAilabNsfwInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/x-ailab/nsfw";
-};
-
-export type PostFalAiXAilabNsfwResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiXAilabNsfwResponse =
-  PostFalAiXAilabNsfwResponses[keyof PostFalAiXAilabNsfwResponses];
-
-export type GetFalAiXAilabNsfwRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/x-ailab/nsfw/requests/{request_id}";
-};
-
-export type GetFalAiXAilabNsfwRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: XAilabNsfwOutput;
-};
-
-export type GetFalAiXAilabNsfwRequestsByRequestIdResponse =
-  GetFalAiXAilabNsfwRequestsByRequestIdResponses[keyof GetFalAiXAilabNsfwRequestsByRequestIdResponses];
-
-export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/moondream3-preview/caption/requests/{request_id}/status";
-};
-
-export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream3-preview/caption/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondream3PreviewCaptionData = {
-  body: Moondream3PreviewCaptionInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream3-preview/caption";
-};
-
-export type PostFalAiMoondream3PreviewCaptionResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondream3PreviewCaptionResponse =
-  PostFalAiMoondream3PreviewCaptionResponses[keyof PostFalAiMoondream3PreviewCaptionResponses];
-
-export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream3-preview/caption/requests/{request_id}";
-};
-
-export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Moondream3PreviewCaptionOutput;
-};
-
-export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponse =
-  GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponses];
-
-export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/florence-2-large/caption/requests/{request_id}/status";
-};
-
-export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponse =
-  GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/florence-2-large/caption/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponse =
-  PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponses];
+export type GetFalAiArbiterImageTextRequestsByRequestIdStatusResponse =
+  GetFalAiArbiterImageTextRequestsByRequestIdStatusResponses[keyof GetFalAiArbiterImageTextRequestsByRequestIdStatusResponses];
 
 export type PostFalAiFlorence2LargeCaptionData = {
   body: Florence2LargeCaptionInput;
@@ -2353,63 +1935,59 @@ export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdResponses = {
 export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdResponse =
   GetFalAiFlorence2LargeCaptionRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeCaptionRequestsByRequestIdResponses];
 
-export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/fal-ai/florence-2-large/detailed-caption/requests/{request_id}/status";
-  };
-
-export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponses =
-  {
+export type PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
     /**
-     * The request status.
+     * Request ID
      */
-    200: QueueStatus;
+    request_id: string;
   };
+  query?: never;
+  url: "/fal-ai/florence-2-large/caption/requests/{request_id}/cancel";
+};
 
-export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponse =
-  GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/florence-2-large/detailed-caption/requests/{request_id}/cancel";
-  };
-
-export type PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponses =
-  {
+export type PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
     /**
-     * The request was cancelled.
+     * Whether the request was cancelled successfully.
      */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
+    success?: boolean;
   };
+};
 
-export type PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponse =
-  PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponses];
+export type PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponse =
+  PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeCaptionRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/florence-2-large/caption/requests/{request_id}/status";
+};
+
+export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponse =
+  GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeCaptionRequestsByRequestIdStatusResponses];
 
 export type PostFalAiFlorence2LargeDetailedCaptionData = {
   body: Florence2LargeDetailedCaptionInput;
@@ -2451,47 +2029,20 @@ export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdResponses =
 export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdResponse =
   GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdResponses];
 
-export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/moondream2/object-detection/requests/{request_id}/status";
-};
-
-export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponses =
+export type PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelData =
   {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/florence-2-large/detailed-caption/requests/{request_id}/cancel";
   };
 
-export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream2/object-detection/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses =
+export type PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -2504,252 +2055,28 @@ export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses 
     };
   };
 
-export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses];
+export type PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponse =
+  PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMoondream2ObjectDetectionData = {
-  body: Moondream2ObjectDetectionInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream2/object-detection";
-};
-
-export type PostFalAiMoondream2ObjectDetectionResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondream2ObjectDetectionResponse =
-  PostFalAiMoondream2ObjectDetectionResponses[keyof PostFalAiMoondream2ObjectDetectionResponses];
-
-export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
+export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/florence-2-large/detailed-caption/requests/{request_id}/status";
   };
-  query?: never;
-  url: "/fal-ai/moondream2/object-detection/requests/{request_id}";
-};
 
-export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Moondream2ObjectDetectionOutput;
-};
-
-export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponse =
-  GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponses[keyof GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponses];
-
-export type GetFalAiLlavaNextRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/llava-next/requests/{request_id}/status";
-};
-
-export type GetFalAiLlavaNextRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiLlavaNextRequestsByRequestIdStatusResponse =
-  GetFalAiLlavaNextRequestsByRequestIdStatusResponses[keyof GetFalAiLlavaNextRequestsByRequestIdStatusResponses];
-
-export type PutFalAiLlavaNextRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/llava-next/requests/{request_id}/cancel";
-};
-
-export type PutFalAiLlavaNextRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiLlavaNextRequestsByRequestIdCancelResponse =
-  PutFalAiLlavaNextRequestsByRequestIdCancelResponses[keyof PutFalAiLlavaNextRequestsByRequestIdCancelResponses];
-
-export type PostFalAiLlavaNextData = {
-  body: LlavaNextInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/llava-next";
-};
-
-export type PostFalAiLlavaNextResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiLlavaNextResponse =
-  PostFalAiLlavaNextResponses[keyof PostFalAiLlavaNextResponses];
-
-export type GetFalAiLlavaNextRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/llava-next/requests/{request_id}";
-};
-
-export type GetFalAiLlavaNextRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: LlavaNextOutput;
-};
-
-export type GetFalAiLlavaNextRequestsByRequestIdResponse =
-  GetFalAiLlavaNextRequestsByRequestIdResponses[keyof GetFalAiLlavaNextRequestsByRequestIdResponses];
-
-export type GetFalAiMoondreamNextRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/moondream-next/requests/{request_id}/status";
-};
-
-export type GetFalAiMoondreamNextRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMoondreamNextRequestsByRequestIdStatusResponse =
-  GetFalAiMoondreamNextRequestsByRequestIdStatusResponses[keyof GetFalAiMoondreamNextRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondreamNextRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream-next/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondreamNextRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMoondreamNextRequestsByRequestIdCancelResponse =
-  PutFalAiMoondreamNextRequestsByRequestIdCancelResponses[keyof PutFalAiMoondreamNextRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondreamNextData = {
-  body: MoondreamNextInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream-next";
-};
-
-export type PostFalAiMoondreamNextResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondreamNextResponse =
-  PostFalAiMoondreamNextResponses[keyof PostFalAiMoondreamNextResponses];
-
-export type GetFalAiMoondreamNextRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream-next/requests/{request_id}";
-};
-
-export type GetFalAiMoondreamNextRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MoondreamNextOutput;
-};
-
-export type GetFalAiMoondreamNextRequestsByRequestIdResponse =
-  GetFalAiMoondreamNextRequestsByRequestIdResponses[keyof GetFalAiMoondreamNextRequestsByRequestIdResponses];
-
-export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/moondream3-preview/detect/requests/{request_id}/status";
-};
-
-export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses =
+export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -2757,10 +2084,27 @@ export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses];
+export type GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponse =
+  GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeDetailedCaptionRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelData = {
+export type PostFalAiFlorence2LargeMoreDetailedCaptionData = {
+  body: Florence2LargeMoreDetailedCaptionInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/florence-2-large/more-detailed-caption";
+};
+
+export type PostFalAiFlorence2LargeMoreDetailedCaptionResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFlorence2LargeMoreDetailedCaptionResponse =
+  PostFalAiFlorence2LargeMoreDetailedCaptionResponses[keyof PostFalAiFlorence2LargeMoreDetailedCaptionResponses];
+
+export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -2769,10 +2113,34 @@ export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/moondream3-preview/detect/requests/{request_id}/cancel";
+  url: "/fal-ai/florence-2-large/more-detailed-caption/requests/{request_id}";
 };
 
-export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses =
+export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: Florence2LargeMoreDetailedCaptionOutput;
+  };
+
+export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponse =
+  GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdResponses];
+
+export type PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/florence-2-large/more-detailed-caption/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -2785,27 +2153,56 @@ export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses];
+export type PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponse =
+  PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdCancelResponses];
 
-export type PostFalAiMoondream3PreviewDetectData = {
-  body: Moondream3PreviewDetectInput;
+export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/florence-2-large/more-detailed-caption/requests/{request_id}/status";
+  };
+
+export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponse =
+  GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeMoreDetailedCaptionRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFlorence2LargeOcrData = {
+  body: Florence2LargeOcrInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/moondream3-preview/detect";
+  url: "/fal-ai/florence-2-large/ocr";
 };
 
-export type PostFalAiMoondream3PreviewDetectResponses = {
+export type PostFalAiFlorence2LargeOcrResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMoondream3PreviewDetectResponse =
-  PostFalAiMoondream3PreviewDetectResponses[keyof PostFalAiMoondream3PreviewDetectResponses];
+export type PostFalAiFlorence2LargeOcrResponse =
+  PostFalAiFlorence2LargeOcrResponses[keyof PostFalAiFlorence2LargeOcrResponses];
 
-export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdData = {
+export type GetFalAiFlorence2LargeOcrRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -2814,20 +2211,47 @@ export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/moondream3-preview/detect/requests/{request_id}";
+  url: "/fal-ai/florence-2-large/ocr/requests/{request_id}";
 };
 
-export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponses = {
+export type GetFalAiFlorence2LargeOcrRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: Moondream3PreviewDetectOutput;
+  200: Florence2LargeOcrOutput;
 };
 
-export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponse =
-  GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponses];
+export type GetFalAiFlorence2LargeOcrRequestsByRequestIdResponse =
+  GetFalAiFlorence2LargeOcrRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeOcrRequestsByRequestIdResponses];
 
-export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusData = {
+export type PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/florence-2-large/ocr/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponse =
+  PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -2841,64 +2265,37 @@ export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/moondream2/visual-query/requests/{request_id}/status";
+  url: "/fal-ai/florence-2-large/ocr/requests/{request_id}/status";
 };
 
-export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponses = {
+export type GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponses];
+export type GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponse =
+  GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponses];
 
-export type PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream2/visual-query/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondream2VisualQueryData = {
-  body: Moondream2VisualQueryInput;
+export type PostFalAiFlorence2LargeRegionToCategoryData = {
+  body: Florence2LargeRegionToCategoryInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/moondream2/visual-query";
+  url: "/fal-ai/florence-2-large/region-to-category";
 };
 
-export type PostFalAiMoondream2VisualQueryResponses = {
+export type PostFalAiFlorence2LargeRegionToCategoryResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiMoondream2VisualQueryResponse =
-  PostFalAiMoondream2VisualQueryResponses[keyof PostFalAiMoondream2VisualQueryResponses];
+export type PostFalAiFlorence2LargeRegionToCategoryResponse =
+  PostFalAiFlorence2LargeRegionToCategoryResponses[keyof PostFalAiFlorence2LargeRegionToCategoryResponses];
 
-export type GetFalAiMoondream2VisualQueryRequestsByRequestIdData = {
+export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -2907,91 +2304,96 @@ export type GetFalAiMoondream2VisualQueryRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/moondream2/visual-query/requests/{request_id}";
+  url: "/fal-ai/florence-2-large/region-to-category/requests/{request_id}";
 };
 
-export type GetFalAiMoondream2VisualQueryRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Moondream2VisualQueryOutput;
-};
-
-export type GetFalAiMoondream2VisualQueryRequestsByRequestIdResponse =
-  GetFalAiMoondream2VisualQueryRequestsByRequestIdResponses[keyof GetFalAiMoondream2VisualQueryRequestsByRequestIdResponses];
-
-export type GetPerceptronIsaac01RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
+export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponses =
+  {
     /**
-     * Request ID
+     * Result of the request.
      */
-    request_id: string;
+    200: Florence2LargeRegionToCategoryOutput;
   };
-  query?: {
+
+export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponse =
+  GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponses];
+
+export type PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/florence-2-large/region-to-category/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether to include logs (`1`) in the response or not (`0`).
+     * The request was cancelled.
      */
-    logs?: number;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-  url: "/perceptron/isaac-01/requests/{request_id}/status";
-};
 
-export type GetPerceptronIsaac01RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponse =
+  PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponses];
 
-export type GetPerceptronIsaac01RequestsByRequestIdStatusResponse =
-  GetPerceptronIsaac01RequestsByRequestIdStatusResponses[keyof GetPerceptronIsaac01RequestsByRequestIdStatusResponses];
+export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/florence-2-large/region-to-category/requests/{request_id}/status";
+  };
 
-export type PutPerceptronIsaac01RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
+export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponses =
+  {
     /**
-     * Request ID
+     * The request status.
      */
-    request_id: string;
+    200: QueueStatus;
   };
-  query?: never;
-  url: "/perceptron/isaac-01/requests/{request_id}/cancel";
-};
 
-export type PutPerceptronIsaac01RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
+export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponse =
+  GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponses];
 
-export type PutPerceptronIsaac01RequestsByRequestIdCancelResponse =
-  PutPerceptronIsaac01RequestsByRequestIdCancelResponses[keyof PutPerceptronIsaac01RequestsByRequestIdCancelResponses];
-
-export type PostPerceptronIsaac01Data = {
-  body: Isaac01Input;
+export type PostFalAiFlorence2LargeRegionToDescriptionData = {
+  body: Florence2LargeRegionToDescriptionInput;
   path?: never;
   query?: never;
-  url: "/perceptron/isaac-01";
+  url: "/fal-ai/florence-2-large/region-to-description";
 };
 
-export type PostPerceptronIsaac01Responses = {
+export type PostFalAiFlorence2LargeRegionToDescriptionResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostPerceptronIsaac01Response =
-  PostPerceptronIsaac01Responses[keyof PostPerceptronIsaac01Responses];
+export type PostFalAiFlorence2LargeRegionToDescriptionResponse =
+  PostFalAiFlorence2LargeRegionToDescriptionResponses[keyof PostFalAiFlorence2LargeRegionToDescriptionResponses];
 
-export type GetPerceptronIsaac01RequestsByRequestIdData = {
+export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -3000,165 +2402,77 @@ export type GetPerceptronIsaac01RequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/perceptron/isaac-01/requests/{request_id}";
+  url: "/fal-ai/florence-2-large/region-to-description/requests/{request_id}";
 };
 
-export type GetPerceptronIsaac01RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Isaac01Output;
-};
-
-export type GetPerceptronIsaac01RequestsByRequestIdResponse =
-  GetPerceptronIsaac01RequestsByRequestIdResponses[keyof GetPerceptronIsaac01RequestsByRequestIdResponses];
-
-export type GetFalAiMoondream2RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
+export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponses =
+  {
     /**
-     * Request ID
+     * Result of the request.
      */
-    request_id: string;
+    200: Florence2LargeRegionToDescriptionOutput;
   };
-  query?: {
+
+export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponse =
+  GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponses];
+
+export type PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/florence-2-large/region-to-description/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether to include logs (`1`) in the response or not (`0`).
+     * The request was cancelled.
      */
-    logs?: number;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-  url: "/fal-ai/moondream2/requests/{request_id}/status";
-};
 
-export type GetFalAiMoondream2RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponse =
+  PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponses];
 
-export type GetFalAiMoondream2RequestsByRequestIdStatusResponse =
-  GetFalAiMoondream2RequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2RequestsByRequestIdStatusResponses];
+export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/florence-2-large/region-to-description/requests/{request_id}/status";
+  };
 
-export type PutFalAiMoondream2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
+export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponses =
+  {
     /**
-     * Request ID
+     * The request status.
      */
-    request_id: string;
+    200: QueueStatus;
   };
-  query?: never;
-  url: "/fal-ai/moondream2/requests/{request_id}/cancel";
-};
 
-export type PutFalAiMoondream2RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMoondream2RequestsByRequestIdCancelResponse =
-  PutFalAiMoondream2RequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondream2Data = {
-  body: Moondream2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream2";
-};
-
-export type PostFalAiMoondream2Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondream2Response =
-  PostFalAiMoondream2Responses[keyof PostFalAiMoondream2Responses];
-
-export type GetFalAiMoondream2RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream2/requests/{request_id}";
-};
-
-export type GetFalAiMoondream2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Moondream2Output;
-};
-
-export type GetFalAiMoondream2RequestsByRequestIdResponse =
-  GetFalAiMoondream2RequestsByRequestIdResponses[keyof GetFalAiMoondream2RequestsByRequestIdResponses];
-
-export type GetFalAiGotOcrV2RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/got-ocr/v2/requests/{request_id}/status";
-};
-
-export type GetFalAiGotOcrV2RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiGotOcrV2RequestsByRequestIdStatusResponse =
-  GetFalAiGotOcrV2RequestsByRequestIdStatusResponses[keyof GetFalAiGotOcrV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiGotOcrV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/got-ocr/v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiGotOcrV2RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiGotOcrV2RequestsByRequestIdCancelResponse =
-  PutFalAiGotOcrV2RequestsByRequestIdCancelResponses[keyof PutFalAiGotOcrV2RequestsByRequestIdCancelResponses];
+export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponse =
+  GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponses];
 
 export type PostFalAiGotOcrV2Data = {
   body: GotOcrV2Input;
@@ -3199,7 +2513,34 @@ export type GetFalAiGotOcrV2RequestsByRequestIdResponses = {
 export type GetFalAiGotOcrV2RequestsByRequestIdResponse =
   GetFalAiGotOcrV2RequestsByRequestIdResponses[keyof GetFalAiGotOcrV2RequestsByRequestIdResponses];
 
-export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusData = {
+export type PutFalAiGotOcrV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/got-ocr/v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiGotOcrV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiGotOcrV2RequestsByRequestIdCancelResponse =
+  PutFalAiGotOcrV2RequestsByRequestIdCancelResponses[keyof PutFalAiGotOcrV2RequestsByRequestIdCancelResponses];
+
+export type GetFalAiGotOcrV2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -3213,20 +2554,37 @@ export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/moondream-next/batch/requests/{request_id}/status";
+  url: "/fal-ai/got-ocr/v2/requests/{request_id}/status";
 };
 
-export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponses = {
+export type GetFalAiGotOcrV2RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponse =
-  GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponses[keyof GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponses];
+export type GetFalAiGotOcrV2RequestsByRequestIdStatusResponse =
+  GetFalAiGotOcrV2RequestsByRequestIdStatusResponses[keyof GetFalAiGotOcrV2RequestsByRequestIdStatusResponses];
 
-export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelData = {
+export type PostFalAiImageutilsNsfwData = {
+  body: ImageutilsNsfwInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/imageutils/nsfw";
+};
+
+export type PostFalAiImageutilsNsfwResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiImageutilsNsfwResponse =
+  PostFalAiImageutilsNsfwResponses[keyof PostFalAiImageutilsNsfwResponses];
+
+export type GetFalAiImageutilsNsfwRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -3235,10 +2593,32 @@ export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/moondream-next/batch/requests/{request_id}/cancel";
+  url: "/fal-ai/imageutils/nsfw/requests/{request_id}";
 };
 
-export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses = {
+export type GetFalAiImageutilsNsfwRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ImageutilsNsfwOutput;
+};
+
+export type GetFalAiImageutilsNsfwRequestsByRequestIdResponse =
+  GetFalAiImageutilsNsfwRequestsByRequestIdResponses[keyof GetFalAiImageutilsNsfwRequestsByRequestIdResponses];
+
+export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/imageutils/nsfw/requests/{request_id}/cancel";
+};
+
+export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -3250,8 +2630,145 @@ export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponse =
-  PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses[keyof PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses];
+export type PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponse =
+  PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses[keyof PutFalAiImageutilsNsfwRequestsByRequestIdCancelResponses];
+
+export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/imageutils/nsfw/requests/{request_id}/status";
+};
+
+export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponse =
+  GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponses[keyof GetFalAiImageutilsNsfwRequestsByRequestIdStatusResponses];
+
+export type PostFalAiLlavaNextData = {
+  body: LlavaNextInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/llava-next";
+};
+
+export type PostFalAiLlavaNextResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiLlavaNextResponse =
+  PostFalAiLlavaNextResponses[keyof PostFalAiLlavaNextResponses];
+
+export type GetFalAiLlavaNextRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/llava-next/requests/{request_id}";
+};
+
+export type GetFalAiLlavaNextRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: LlavaNextOutput;
+};
+
+export type GetFalAiLlavaNextRequestsByRequestIdResponse =
+  GetFalAiLlavaNextRequestsByRequestIdResponses[keyof GetFalAiLlavaNextRequestsByRequestIdResponses];
+
+export type PutFalAiLlavaNextRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/llava-next/requests/{request_id}/cancel";
+};
+
+export type PutFalAiLlavaNextRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiLlavaNextRequestsByRequestIdCancelResponse =
+  PutFalAiLlavaNextRequestsByRequestIdCancelResponses[keyof PutFalAiLlavaNextRequestsByRequestIdCancelResponses];
+
+export type GetFalAiLlavaNextRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/llava-next/requests/{request_id}/status";
+};
+
+export type GetFalAiLlavaNextRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiLlavaNextRequestsByRequestIdStatusResponse =
+  GetFalAiLlavaNextRequestsByRequestIdStatusResponses[keyof GetFalAiLlavaNextRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondreamNextData = {
+  body: MoondreamNextInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream-next";
+};
+
+export type PostFalAiMoondreamNextResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondreamNextResponse =
+  PostFalAiMoondreamNextResponses[keyof PostFalAiMoondreamNextResponses];
 
 export type PostFalAiMoondreamNextBatchData = {
   body: MoondreamNextBatchInput;
@@ -3292,7 +2809,411 @@ export type GetFalAiMoondreamNextBatchRequestsByRequestIdResponses = {
 export type GetFalAiMoondreamNextBatchRequestsByRequestIdResponse =
   GetFalAiMoondreamNextBatchRequestsByRequestIdResponses[keyof GetFalAiMoondreamNextBatchRequestsByRequestIdResponses];
 
-export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusData =
+export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream-next/batch/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponse =
+  PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses[keyof PutFalAiMoondreamNextBatchRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream-next/batch/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponse =
+  GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponses[keyof GetFalAiMoondreamNextBatchRequestsByRequestIdStatusResponses];
+
+export type GetFalAiMoondreamNextRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream-next/requests/{request_id}";
+};
+
+export type GetFalAiMoondreamNextRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MoondreamNextOutput;
+};
+
+export type GetFalAiMoondreamNextRequestsByRequestIdResponse =
+  GetFalAiMoondreamNextRequestsByRequestIdResponses[keyof GetFalAiMoondreamNextRequestsByRequestIdResponses];
+
+export type PutFalAiMoondreamNextRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream-next/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondreamNextRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondreamNextRequestsByRequestIdCancelResponse =
+  PutFalAiMoondreamNextRequestsByRequestIdCancelResponses[keyof PutFalAiMoondreamNextRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondreamNextRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream-next/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondreamNextRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondreamNextRequestsByRequestIdStatusResponse =
+  GetFalAiMoondreamNextRequestsByRequestIdStatusResponses[keyof GetFalAiMoondreamNextRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondreamBatchedData = {
+  body: MoondreamBatchedInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream/batched";
+};
+
+export type PostFalAiMoondreamBatchedResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondreamBatchedResponse =
+  PostFalAiMoondreamBatchedResponses[keyof PostFalAiMoondreamBatchedResponses];
+
+export type GetFalAiMoondreamBatchedRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream/batched/requests/{request_id}";
+};
+
+export type GetFalAiMoondreamBatchedRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: MoondreamBatchedOutput;
+};
+
+export type GetFalAiMoondreamBatchedRequestsByRequestIdResponse =
+  GetFalAiMoondreamBatchedRequestsByRequestIdResponses[keyof GetFalAiMoondreamBatchedRequestsByRequestIdResponses];
+
+export type PutFalAiMoondreamBatchedRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream/batched/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponse =
+  PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponses[keyof PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondreamBatchedRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream/batched/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponse =
+  GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponses[keyof GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream2Data = {
+  body: Moondream2Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream2";
+};
+
+export type PostFalAiMoondream2Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream2Response =
+  PostFalAiMoondream2Responses[keyof PostFalAiMoondream2Responses];
+
+export type PostFalAiMoondream2ObjectDetectionData = {
+  body: Moondream2ObjectDetectionInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream2/object-detection";
+};
+
+export type PostFalAiMoondream2ObjectDetectionResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream2ObjectDetectionResponse =
+  PostFalAiMoondream2ObjectDetectionResponses[keyof PostFalAiMoondream2ObjectDetectionResponses];
+
+export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream2/object-detection/requests/{request_id}";
+};
+
+export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream2ObjectDetectionOutput;
+};
+
+export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponse =
+  GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponses[keyof GetFalAiMoondream2ObjectDetectionRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream2/object-detection/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2ObjectDetectionRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream2/object-detection/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2ObjectDetectionRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream2PointObjectDetectionData = {
+  body: Moondream2PointObjectDetectionInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream2/point-object-detection";
+};
+
+export type PostFalAiMoondream2PointObjectDetectionResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream2PointObjectDetectionResponse =
+  PostFalAiMoondream2PointObjectDetectionResponses[keyof PostFalAiMoondream2PointObjectDetectionResponses];
+
+export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream2/point-object-detection/requests/{request_id}";
+};
+
+export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: Moondream2PointObjectDetectionOutput;
+  };
+
+export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponse =
+  GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponses[keyof GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/moondream2/point-object-detection/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusData =
   {
     body?: never;
     path: {
@@ -3307,10 +3228,10 @@ export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatus
        */
       logs?: number;
     };
-    url: "/perceptron/isaac-01/openai/v1/chat/completions/requests/{request_id}/status";
+    url: "/fal-ai/moondream2/point-object-detection/requests/{request_id}/status";
   };
 
-export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses =
+export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -3318,23 +3239,230 @@ export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatus
     200: QueueStatus;
   };
 
-export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponse =
-  GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses[keyof GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses];
+export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponses];
 
-export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/perceptron/isaac-01/openai/v1/chat/completions/requests/{request_id}/cancel";
+export type GetFalAiMoondream2RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
   };
+  query?: never;
+  url: "/fal-ai/moondream2/requests/{request_id}";
+};
 
-export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses =
+export type GetFalAiMoondream2RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream2Output;
+};
+
+export type GetFalAiMoondream2RequestsByRequestIdResponse =
+  GetFalAiMoondream2RequestsByRequestIdResponses[keyof GetFalAiMoondream2RequestsByRequestIdResponses];
+
+export type PutFalAiMoondream2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondream2RequestsByRequestIdCancelResponse =
+  PutFalAiMoondream2RequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2RequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream2RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream2/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream2RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondream2RequestsByRequestIdStatusResponse =
+  GetFalAiMoondream2RequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2RequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream2VisualQueryData = {
+  body: Moondream2VisualQueryInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream2/visual-query";
+};
+
+export type PostFalAiMoondream2VisualQueryResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream2VisualQueryResponse =
+  PostFalAiMoondream2VisualQueryResponses[keyof PostFalAiMoondream2VisualQueryResponses];
+
+export type GetFalAiMoondream2VisualQueryRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream2/visual-query/requests/{request_id}";
+};
+
+export type GetFalAiMoondream2VisualQueryRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream2VisualQueryOutput;
+};
+
+export type GetFalAiMoondream2VisualQueryRequestsByRequestIdResponse =
+  GetFalAiMoondream2VisualQueryRequestsByRequestIdResponses[keyof GetFalAiMoondream2VisualQueryRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream2/visual-query/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2VisualQueryRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream2/visual-query/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2VisualQueryRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream3PreviewCaptionData = {
+  body: Moondream3PreviewCaptionInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream3-preview/caption";
+};
+
+export type PostFalAiMoondream3PreviewCaptionResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream3PreviewCaptionResponse =
+  PostFalAiMoondream3PreviewCaptionResponses[keyof PostFalAiMoondream3PreviewCaptionResponses];
+
+export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/caption/requests/{request_id}";
+};
+
+export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream3PreviewCaptionOutput;
+};
+
+export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponse =
+  GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewCaptionRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/caption/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -3347,8 +3475,1078 @@ export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancel
     };
   };
 
-export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponse =
-  PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses[keyof PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses];
+export type PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewCaptionRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream3-preview/caption/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewCaptionRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream3PreviewDetectData = {
+  body: Moondream3PreviewDetectInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream3-preview/detect";
+};
+
+export type PostFalAiMoondream3PreviewDetectResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream3PreviewDetectResponse =
+  PostFalAiMoondream3PreviewDetectResponses[keyof PostFalAiMoondream3PreviewDetectResponses];
+
+export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/detect/requests/{request_id}";
+};
+
+export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream3PreviewDetectOutput;
+};
+
+export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponse =
+  GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewDetectRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/detect/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewDetectRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream3-preview/detect/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewDetectRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream3PreviewPointData = {
+  body: Moondream3PreviewPointInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream3-preview/point";
+};
+
+export type PostFalAiMoondream3PreviewPointResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream3PreviewPointResponse =
+  PostFalAiMoondream3PreviewPointResponses[keyof PostFalAiMoondream3PreviewPointResponses];
+
+export type GetFalAiMoondream3PreviewPointRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/point/requests/{request_id}";
+};
+
+export type GetFalAiMoondream3PreviewPointRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream3PreviewPointOutput;
+};
+
+export type GetFalAiMoondream3PreviewPointRequestsByRequestIdResponse =
+  GetFalAiMoondream3PreviewPointRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewPointRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/point/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream3-preview/point/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponses];
+
+export type PostFalAiMoondream3PreviewQueryData = {
+  body: Moondream3PreviewQueryInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/moondream3-preview/query";
+};
+
+export type PostFalAiMoondream3PreviewQueryResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiMoondream3PreviewQueryResponse =
+  PostFalAiMoondream3PreviewQueryResponses[keyof PostFalAiMoondream3PreviewQueryResponses];
+
+export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/query/requests/{request_id}";
+};
+
+export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Moondream3PreviewQueryOutput;
+};
+
+export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponse =
+  GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewQueryRequestsByRequestIdResponses];
+
+export type PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/moondream3-preview/query/requests/{request_id}/cancel";
+};
+
+export type PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponse =
+  PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewQueryRequestsByRequestIdCancelResponses];
+
+export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/moondream3-preview/query/requests/{request_id}/status";
+};
+
+export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponse =
+  GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewQueryRequestsByRequestIdStatusResponses];
+
+export type PostFalAiSa2Va4bImageData = {
+  body: Sa2Va4bImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sa2va/4b/image";
+};
+
+export type PostFalAiSa2Va4bImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSa2Va4bImageResponse =
+  PostFalAiSa2Va4bImageResponses[keyof PostFalAiSa2Va4bImageResponses];
+
+export type GetFalAiSa2Va4bImageRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/4b/image/requests/{request_id}";
+};
+
+export type GetFalAiSa2Va4bImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Sa2Va4bImageOutput;
+};
+
+export type GetFalAiSa2Va4bImageRequestsByRequestIdResponse =
+  GetFalAiSa2Va4bImageRequestsByRequestIdResponses[keyof GetFalAiSa2Va4bImageRequestsByRequestIdResponses];
+
+export type PutFalAiSa2Va4bImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/4b/image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponse =
+  PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponses];
+
+export type GetFalAiSa2Va4bImageRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sa2va/4b/image/requests/{request_id}/status";
+};
+
+export type GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponse =
+  GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponses];
+
+export type PostFalAiSa2Va4bVideoData = {
+  body: Sa2Va4bVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sa2va/4b/video";
+};
+
+export type PostFalAiSa2Va4bVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSa2Va4bVideoResponse =
+  PostFalAiSa2Va4bVideoResponses[keyof PostFalAiSa2Va4bVideoResponses];
+
+export type GetFalAiSa2Va4bVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/4b/video/requests/{request_id}";
+};
+
+export type GetFalAiSa2Va4bVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Sa2Va4bVideoOutput;
+};
+
+export type GetFalAiSa2Va4bVideoRequestsByRequestIdResponse =
+  GetFalAiSa2Va4bVideoRequestsByRequestIdResponses[keyof GetFalAiSa2Va4bVideoRequestsByRequestIdResponses];
+
+export type PutFalAiSa2Va4bVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/4b/video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponse =
+  PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponses];
+
+export type GetFalAiSa2Va4bVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sa2va/4b/video/requests/{request_id}/status";
+};
+
+export type GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponse =
+  GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponses];
+
+export type PostFalAiSa2Va8bImageData = {
+  body: Sa2Va8bImageInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sa2va/8b/image";
+};
+
+export type PostFalAiSa2Va8bImageResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSa2Va8bImageResponse =
+  PostFalAiSa2Va8bImageResponses[keyof PostFalAiSa2Va8bImageResponses];
+
+export type GetFalAiSa2Va8bImageRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/8b/image/requests/{request_id}";
+};
+
+export type GetFalAiSa2Va8bImageRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Sa2Va8bImageOutput;
+};
+
+export type GetFalAiSa2Va8bImageRequestsByRequestIdResponse =
+  GetFalAiSa2Va8bImageRequestsByRequestIdResponses[keyof GetFalAiSa2Va8bImageRequestsByRequestIdResponses];
+
+export type PutFalAiSa2Va8bImageRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/8b/image/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponse =
+  PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponses];
+
+export type GetFalAiSa2Va8bImageRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sa2va/8b/image/requests/{request_id}/status";
+};
+
+export type GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponse =
+  GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponses];
+
+export type PostFalAiSa2Va8bVideoData = {
+  body: Sa2Va8bVideoInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sa2va/8b/video";
+};
+
+export type PostFalAiSa2Va8bVideoResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSa2Va8bVideoResponse =
+  PostFalAiSa2Va8bVideoResponses[keyof PostFalAiSa2Va8bVideoResponses];
+
+export type GetFalAiSa2Va8bVideoRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/8b/video/requests/{request_id}";
+};
+
+export type GetFalAiSa2Va8bVideoRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Sa2Va8bVideoOutput;
+};
+
+export type GetFalAiSa2Va8bVideoRequestsByRequestIdResponse =
+  GetFalAiSa2Va8bVideoRequestsByRequestIdResponses[keyof GetFalAiSa2Va8bVideoRequestsByRequestIdResponses];
+
+export type PutFalAiSa2Va8bVideoRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sa2va/8b/video/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponse =
+  PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponses];
+
+export type GetFalAiSa2Va8bVideoRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sa2va/8b/video/requests/{request_id}/status";
+};
+
+export type GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponse =
+  GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponses];
+
+export type PostFalAiSam3ImageEmbedData = {
+  body: Sam3ImageEmbedInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/sam-3/image/embed";
+};
+
+export type PostFalAiSam3ImageEmbedResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiSam3ImageEmbedResponse =
+  PostFalAiSam3ImageEmbedResponses[keyof PostFalAiSam3ImageEmbedResponses];
+
+export type GetFalAiSam3ImageEmbedRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-3/image/embed/requests/{request_id}";
+};
+
+export type GetFalAiSam3ImageEmbedRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Sam3ImageEmbedOutput;
+};
+
+export type GetFalAiSam3ImageEmbedRequestsByRequestIdResponse =
+  GetFalAiSam3ImageEmbedRequestsByRequestIdResponses[keyof GetFalAiSam3ImageEmbedRequestsByRequestIdResponses];
+
+export type PutFalAiSam3ImageEmbedRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/sam-3/image/embed/requests/{request_id}/cancel";
+};
+
+export type PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponse =
+  PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponses[keyof PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponses];
+
+export type GetFalAiSam3ImageEmbedRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/sam-3/image/embed/requests/{request_id}/status";
+};
+
+export type GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponse =
+  GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponses[keyof GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponses];
+
+export type PostFalAiVideoUnderstandingData = {
+  body: VideoUnderstandingInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/video-understanding";
+};
+
+export type PostFalAiVideoUnderstandingResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiVideoUnderstandingResponse =
+  PostFalAiVideoUnderstandingResponses[keyof PostFalAiVideoUnderstandingResponses];
+
+export type GetFalAiVideoUnderstandingRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/video-understanding/requests/{request_id}";
+};
+
+export type GetFalAiVideoUnderstandingRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: VideoUnderstandingOutput;
+};
+
+export type GetFalAiVideoUnderstandingRequestsByRequestIdResponse =
+  GetFalAiVideoUnderstandingRequestsByRequestIdResponses[keyof GetFalAiVideoUnderstandingRequestsByRequestIdResponses];
+
+export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/video-understanding/requests/{request_id}/cancel";
+};
+
+export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponse =
+  PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses[keyof PutFalAiVideoUnderstandingRequestsByRequestIdCancelResponses];
+
+export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/video-understanding/requests/{request_id}/status";
+};
+
+export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponse =
+  GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponses[keyof GetFalAiVideoUnderstandingRequestsByRequestIdStatusResponses];
+
+export type PostFalAiXAilabNsfwData = {
+  body: XAilabNsfwInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/x-ailab/nsfw";
+};
+
+export type PostFalAiXAilabNsfwResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiXAilabNsfwResponse =
+  PostFalAiXAilabNsfwResponses[keyof PostFalAiXAilabNsfwResponses];
+
+export type GetFalAiXAilabNsfwRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/x-ailab/nsfw/requests/{request_id}";
+};
+
+export type GetFalAiXAilabNsfwRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: XAilabNsfwOutput;
+};
+
+export type GetFalAiXAilabNsfwRequestsByRequestIdResponse =
+  GetFalAiXAilabNsfwRequestsByRequestIdResponses[keyof GetFalAiXAilabNsfwRequestsByRequestIdResponses];
+
+export type PutFalAiXAilabNsfwRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/x-ailab/nsfw/requests/{request_id}/cancel";
+};
+
+export type PutFalAiXAilabNsfwRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiXAilabNsfwRequestsByRequestIdCancelResponse =
+  PutFalAiXAilabNsfwRequestsByRequestIdCancelResponses[keyof PutFalAiXAilabNsfwRequestsByRequestIdCancelResponses];
+
+export type GetFalAiXAilabNsfwRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/x-ailab/nsfw/requests/{request_id}/status";
+};
+
+export type GetFalAiXAilabNsfwRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiXAilabNsfwRequestsByRequestIdStatusResponse =
+  GetFalAiXAilabNsfwRequestsByRequestIdStatusResponses[keyof GetFalAiXAilabNsfwRequestsByRequestIdStatusResponses];
+
+export type PostOpenrouterRouterVisionData = {
+  body: RouterVisionInput;
+  path?: never;
+  query?: never;
+  url: "/openrouter/router/vision";
+};
+
+export type PostOpenrouterRouterVisionResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostOpenrouterRouterVisionResponse =
+  PostOpenrouterRouterVisionResponses[keyof PostOpenrouterRouterVisionResponses];
+
+export type GetOpenrouterRouterVisionRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/vision/requests/{request_id}";
+};
+
+export type GetOpenrouterRouterVisionRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: RouterVisionOutput;
+};
+
+export type GetOpenrouterRouterVisionRequestsByRequestIdResponse =
+  GetOpenrouterRouterVisionRequestsByRequestIdResponses[keyof GetOpenrouterRouterVisionRequestsByRequestIdResponses];
+
+export type PutOpenrouterRouterVisionRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/vision/requests/{request_id}/cancel";
+};
+
+export type PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutOpenrouterRouterVisionRequestsByRequestIdCancelResponse =
+  PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterVisionRequestsByRequestIdCancelResponses];
+
+export type GetOpenrouterRouterVisionRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/openrouter/router/vision/requests/{request_id}/status";
+};
+
+export type GetOpenrouterRouterVisionRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetOpenrouterRouterVisionRequestsByRequestIdStatusResponse =
+  GetOpenrouterRouterVisionRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterVisionRequestsByRequestIdStatusResponses];
+
+export type PostPerceptronIsaac01Data = {
+  body: Isaac01Input;
+  path?: never;
+  query?: never;
+  url: "/perceptron/isaac-01";
+};
+
+export type PostPerceptronIsaac01Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostPerceptronIsaac01Response =
+  PostPerceptronIsaac01Responses[keyof PostPerceptronIsaac01Responses];
 
 export type PostPerceptronIsaac01OpenaiV1ChatCompletionsData = {
   body: Isaac01OpenaiV1ChatCompletionsInput;
@@ -3391,937 +4589,36 @@ export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdRespon
 export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdResponse =
   GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdResponses[keyof GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdResponses];
 
-export type GetFalAiMoondreamBatchedRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
+export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/perceptron/isaac-01/openai/v1/chat/completions/requests/{request_id}/cancel";
   };
-  query?: {
+
+export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses =
+  {
     /**
-     * Whether to include logs (`1`) in the response or not (`0`).
+     * The request was cancelled.
      */
-    logs?: number;
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
   };
-  url: "/fal-ai/moondream/batched/requests/{request_id}/status";
-};
 
-export type GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
+export type PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponse =
+  PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses[keyof PutPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdCancelResponses];
 
-export type GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponse =
-  GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponses[keyof GetFalAiMoondreamBatchedRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondreamBatchedRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream/batched/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponse =
-  PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponses[keyof PutFalAiMoondreamBatchedRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondreamBatchedData = {
-  body: MoondreamBatchedInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream/batched";
-};
-
-export type PostFalAiMoondreamBatchedResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondreamBatchedResponse =
-  PostFalAiMoondreamBatchedResponses[keyof PostFalAiMoondreamBatchedResponses];
-
-export type GetFalAiMoondreamBatchedRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream/batched/requests/{request_id}";
-};
-
-export type GetFalAiMoondreamBatchedRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: MoondreamBatchedOutput;
-};
-
-export type GetFalAiMoondreamBatchedRequestsByRequestIdResponse =
-  GetFalAiMoondreamBatchedRequestsByRequestIdResponses[keyof GetFalAiMoondreamBatchedRequestsByRequestIdResponses];
-
-export type GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/florence-2-large/ocr/requests/{request_id}/status";
-};
-
-export type GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponse =
-  GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeOcrRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/florence-2-large/ocr/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponse =
-  PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeOcrRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlorence2LargeOcrData = {
-  body: Florence2LargeOcrInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/florence-2-large/ocr";
-};
-
-export type PostFalAiFlorence2LargeOcrResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlorence2LargeOcrResponse =
-  PostFalAiFlorence2LargeOcrResponses[keyof PostFalAiFlorence2LargeOcrResponses];
-
-export type GetFalAiFlorence2LargeOcrRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/florence-2-large/ocr/requests/{request_id}";
-};
-
-export type GetFalAiFlorence2LargeOcrRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Florence2LargeOcrOutput;
-};
-
-export type GetFalAiFlorence2LargeOcrRequestsByRequestIdResponse =
-  GetFalAiFlorence2LargeOcrRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeOcrRequestsByRequestIdResponses];
-
-export type GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/moondream3-preview/point/requests/{request_id}/status";
-};
-
-export type GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream3PreviewPointRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream3-preview/point/requests/{request_id}/cancel";
-};
-
-export type PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream3PreviewPointRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondream3PreviewPointData = {
-  body: Moondream3PreviewPointInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream3-preview/point";
-};
-
-export type PostFalAiMoondream3PreviewPointResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiMoondream3PreviewPointResponse =
-  PostFalAiMoondream3PreviewPointResponses[keyof PostFalAiMoondream3PreviewPointResponses];
-
-export type GetFalAiMoondream3PreviewPointRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream3-preview/point/requests/{request_id}";
-};
-
-export type GetFalAiMoondream3PreviewPointRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Moondream3PreviewPointOutput;
-};
-
-export type GetFalAiMoondream3PreviewPointRequestsByRequestIdResponse =
-  GetFalAiMoondream3PreviewPointRequestsByRequestIdResponses[keyof GetFalAiMoondream3PreviewPointRequestsByRequestIdResponses];
-
-export type GetFalAiSa2Va8bImageRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sa2va/8b/image/requests/{request_id}/status";
-};
-
-export type GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponse =
-  GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va8bImageRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSa2Va8bImageRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/8b/image/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponse =
-  PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va8bImageRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSa2Va8bImageData = {
-  body: Sa2Va8bImageInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sa2va/8b/image";
-};
-
-export type PostFalAiSa2Va8bImageResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSa2Va8bImageResponse =
-  PostFalAiSa2Va8bImageResponses[keyof PostFalAiSa2Va8bImageResponses];
-
-export type GetFalAiSa2Va8bImageRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/8b/image/requests/{request_id}";
-};
-
-export type GetFalAiSa2Va8bImageRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sa2Va8bImageOutput;
-};
-
-export type GetFalAiSa2Va8bImageRequestsByRequestIdResponse =
-  GetFalAiSa2Va8bImageRequestsByRequestIdResponses[keyof GetFalAiSa2Va8bImageRequestsByRequestIdResponses];
-
-export type GetFalAiSam3ImageEmbedRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sam-3/image/embed/requests/{request_id}/status";
-};
-
-export type GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponse =
-  GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponses[keyof GetFalAiSam3ImageEmbedRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSam3ImageEmbedRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-3/image/embed/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponse =
-  PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponses[keyof PutFalAiSam3ImageEmbedRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSam3ImageEmbedData = {
-  body: Sam3ImageEmbedInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sam-3/image/embed";
-};
-
-export type PostFalAiSam3ImageEmbedResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSam3ImageEmbedResponse =
-  PostFalAiSam3ImageEmbedResponses[keyof PostFalAiSam3ImageEmbedResponses];
-
-export type GetFalAiSam3ImageEmbedRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sam-3/image/embed/requests/{request_id}";
-};
-
-export type GetFalAiSam3ImageEmbedRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sam3ImageEmbedOutput;
-};
-
-export type GetFalAiSam3ImageEmbedRequestsByRequestIdResponse =
-  GetFalAiSam3ImageEmbedRequestsByRequestIdResponses[keyof GetFalAiSam3ImageEmbedRequestsByRequestIdResponses];
-
-export type GetFalAiArbiterImageRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/arbiter/image/requests/{request_id}/status";
-};
-
-export type GetFalAiArbiterImageRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiArbiterImageRequestsByRequestIdStatusResponse =
-  GetFalAiArbiterImageRequestsByRequestIdStatusResponses[keyof GetFalAiArbiterImageRequestsByRequestIdStatusResponses];
-
-export type PutFalAiArbiterImageRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/arbiter/image/requests/{request_id}/cancel";
-};
-
-export type PutFalAiArbiterImageRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiArbiterImageRequestsByRequestIdCancelResponse =
-  PutFalAiArbiterImageRequestsByRequestIdCancelResponses[keyof PutFalAiArbiterImageRequestsByRequestIdCancelResponses];
-
-export type PostFalAiArbiterImageData = {
-  body: ArbiterImageInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/arbiter/image";
-};
-
-export type PostFalAiArbiterImageResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiArbiterImageResponse =
-  PostFalAiArbiterImageResponses[keyof PostFalAiArbiterImageResponses];
-
-export type GetFalAiArbiterImageRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/arbiter/image/requests/{request_id}";
-};
-
-export type GetFalAiArbiterImageRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ArbiterImageOutput;
-};
-
-export type GetFalAiArbiterImageRequestsByRequestIdResponse =
-  GetFalAiArbiterImageRequestsByRequestIdResponses[keyof GetFalAiArbiterImageRequestsByRequestIdResponses];
-
-export type GetFalAiSa2Va4bImageRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sa2va/4b/image/requests/{request_id}/status";
-};
-
-export type GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponse =
-  GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va4bImageRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSa2Va4bImageRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/4b/image/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponse =
-  PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va4bImageRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSa2Va4bImageData = {
-  body: Sa2Va4bImageInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sa2va/4b/image";
-};
-
-export type PostFalAiSa2Va4bImageResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSa2Va4bImageResponse =
-  PostFalAiSa2Va4bImageResponses[keyof PostFalAiSa2Va4bImageResponses];
-
-export type GetFalAiSa2Va4bImageRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/4b/image/requests/{request_id}";
-};
-
-export type GetFalAiSa2Va4bImageRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sa2Va4bImageOutput;
-};
-
-export type GetFalAiSa2Va4bImageRequestsByRequestIdResponse =
-  GetFalAiSa2Va4bImageRequestsByRequestIdResponses[keyof GetFalAiSa2Va4bImageRequestsByRequestIdResponses];
-
-export type GetFalAiSa2Va4bVideoRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sa2va/4b/video/requests/{request_id}/status";
-};
-
-export type GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponse =
-  GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va4bVideoRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSa2Va4bVideoRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/4b/video/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponse =
-  PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va4bVideoRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSa2Va4bVideoData = {
-  body: Sa2Va4bVideoInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sa2va/4b/video";
-};
-
-export type PostFalAiSa2Va4bVideoResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSa2Va4bVideoResponse =
-  PostFalAiSa2Va4bVideoResponses[keyof PostFalAiSa2Va4bVideoResponses];
-
-export type GetFalAiSa2Va4bVideoRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/4b/video/requests/{request_id}";
-};
-
-export type GetFalAiSa2Va4bVideoRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sa2Va4bVideoOutput;
-};
-
-export type GetFalAiSa2Va4bVideoRequestsByRequestIdResponse =
-  GetFalAiSa2Va4bVideoRequestsByRequestIdResponses[keyof GetFalAiSa2Va4bVideoRequestsByRequestIdResponses];
-
-export type GetFalAiSa2Va8bVideoRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/sa2va/8b/video/requests/{request_id}/status";
-};
-
-export type GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponse =
-  GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponses[keyof GetFalAiSa2Va8bVideoRequestsByRequestIdStatusResponses];
-
-export type PutFalAiSa2Va8bVideoRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/8b/video/requests/{request_id}/cancel";
-};
-
-export type PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponse =
-  PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponses[keyof PutFalAiSa2Va8bVideoRequestsByRequestIdCancelResponses];
-
-export type PostFalAiSa2Va8bVideoData = {
-  body: Sa2Va8bVideoInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/sa2va/8b/video";
-};
-
-export type PostFalAiSa2Va8bVideoResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiSa2Va8bVideoResponse =
-  PostFalAiSa2Va8bVideoResponses[keyof PostFalAiSa2Va8bVideoResponses];
-
-export type GetFalAiSa2Va8bVideoRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/sa2va/8b/video/requests/{request_id}";
-};
-
-export type GetFalAiSa2Va8bVideoRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Sa2Va8bVideoOutput;
-};
-
-export type GetFalAiSa2Va8bVideoRequestsByRequestIdResponse =
-  GetFalAiSa2Va8bVideoRequestsByRequestIdResponses[keyof GetFalAiSa2Va8bVideoRequestsByRequestIdResponses];
-
-export type GetFalAiArbiterImageImageRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/arbiter/image/image/requests/{request_id}/status";
-};
-
-export type GetFalAiArbiterImageImageRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiArbiterImageImageRequestsByRequestIdStatusResponse =
-  GetFalAiArbiterImageImageRequestsByRequestIdStatusResponses[keyof GetFalAiArbiterImageImageRequestsByRequestIdStatusResponses];
-
-export type PutFalAiArbiterImageImageRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/arbiter/image/image/requests/{request_id}/cancel";
-};
-
-export type PutFalAiArbiterImageImageRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiArbiterImageImageRequestsByRequestIdCancelResponse =
-  PutFalAiArbiterImageImageRequestsByRequestIdCancelResponses[keyof PutFalAiArbiterImageImageRequestsByRequestIdCancelResponses];
-
-export type PostFalAiArbiterImageImageData = {
-  body: ArbiterImageImageInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/arbiter/image/image";
-};
-
-export type PostFalAiArbiterImageImageResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiArbiterImageImageResponse =
-  PostFalAiArbiterImageImageResponses[keyof PostFalAiArbiterImageImageResponses];
-
-export type GetFalAiArbiterImageImageRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/arbiter/image/image/requests/{request_id}";
-};
-
-export type GetFalAiArbiterImageImageRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ArbiterImageImageOutput;
-};
-
-export type GetFalAiArbiterImageImageRequestsByRequestIdResponse =
-  GetFalAiArbiterImageImageRequestsByRequestIdResponses[keyof GetFalAiArbiterImageImageRequestsByRequestIdResponses];
-
-export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusData =
+export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusData =
   {
     body?: never;
     path: {
@@ -4336,10 +4633,10 @@ export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusData 
        */
       logs?: number;
     };
-    url: "/fal-ai/florence-2-large/region-to-category/requests/{request_id}/status";
+    url: "/perceptron/isaac-01/openai/v1/chat/completions/requests/{request_id}/status";
   };
 
-export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponses =
+export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -4347,56 +4644,10 @@ export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusRespo
     200: QueueStatus;
   };
 
-export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponse =
-  GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdStatusResponses];
+export type GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponse =
+  GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses[keyof GetPerceptronIsaac01OpenaiV1ChatCompletionsRequestsByRequestIdStatusResponses];
 
-export type PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/florence-2-large/region-to-category/requests/{request_id}/cancel";
-  };
-
-export type PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponse =
-  PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlorence2LargeRegionToCategoryData = {
-  body: Florence2LargeRegionToCategoryInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/florence-2-large/region-to-category";
-};
-
-export type PostFalAiFlorence2LargeRegionToCategoryResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlorence2LargeRegionToCategoryResponse =
-  PostFalAiFlorence2LargeRegionToCategoryResponses[keyof PostFalAiFlorence2LargeRegionToCategoryResponses];
-
-export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdData = {
+export type GetPerceptronIsaac01RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -4405,96 +4656,20 @@ export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/florence-2-large/region-to-category/requests/{request_id}";
+  url: "/perceptron/isaac-01/requests/{request_id}";
 };
 
-export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponses =
-  {
-    /**
-     * Result of the request.
-     */
-    200: Florence2LargeRegionToCategoryOutput;
-  };
-
-export type GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponse =
-  GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeRegionToCategoryRequestsByRequestIdResponses];
-
-export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/fal-ai/florence-2-large/region-to-description/requests/{request_id}/status";
-  };
-
-export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponse =
-  GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponses[keyof GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/florence-2-large/region-to-description/requests/{request_id}/cancel";
-  };
-
-export type PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponse =
-  PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponses[keyof PutFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlorence2LargeRegionToDescriptionData = {
-  body: Florence2LargeRegionToDescriptionInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/florence-2-large/region-to-description";
-};
-
-export type PostFalAiFlorence2LargeRegionToDescriptionResponses = {
+export type GetPerceptronIsaac01RequestsByRequestIdResponses = {
   /**
-   * The request status.
+   * Result of the request.
    */
-  200: QueueStatus;
+  200: Isaac01Output;
 };
 
-export type PostFalAiFlorence2LargeRegionToDescriptionResponse =
-  PostFalAiFlorence2LargeRegionToDescriptionResponses[keyof PostFalAiFlorence2LargeRegionToDescriptionResponses];
+export type GetPerceptronIsaac01RequestsByRequestIdResponse =
+  GetPerceptronIsaac01RequestsByRequestIdResponses[keyof GetPerceptronIsaac01RequestsByRequestIdResponses];
 
-export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdData = {
+export type PutPerceptronIsaac01RequestsByRequestIdCancelData = {
   body?: never;
   path: {
     /**
@@ -4503,119 +4678,25 @@ export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/florence-2-large/region-to-description/requests/{request_id}";
+  url: "/perceptron/isaac-01/requests/{request_id}/cancel";
 };
 
-export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponses =
-  {
-    /**
-     * Result of the request.
-     */
-    200: Florence2LargeRegionToDescriptionOutput;
-  };
-
-export type GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponse =
-  GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponses[keyof GetFalAiFlorence2LargeRegionToDescriptionRequestsByRequestIdResponses];
-
-export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/fal-ai/moondream2/point-object-detection/requests/{request_id}/status";
-  };
-
-export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponse =
-  GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponses[keyof GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdStatusResponses];
-
-export type PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/moondream2/point-object-detection/requests/{request_id}/cancel";
-  };
-
-export type PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponse =
-  PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponses[keyof PutFalAiMoondream2PointObjectDetectionRequestsByRequestIdCancelResponses];
-
-export type PostFalAiMoondream2PointObjectDetectionData = {
-  body: Moondream2PointObjectDetectionInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/moondream2/point-object-detection";
-};
-
-export type PostFalAiMoondream2PointObjectDetectionResponses = {
+export type PutPerceptronIsaac01RequestsByRequestIdCancelResponses = {
   /**
-   * The request status.
+   * The request was cancelled.
    */
-  200: QueueStatus;
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
 };
 
-export type PostFalAiMoondream2PointObjectDetectionResponse =
-  PostFalAiMoondream2PointObjectDetectionResponses[keyof PostFalAiMoondream2PointObjectDetectionResponses];
+export type PutPerceptronIsaac01RequestsByRequestIdCancelResponse =
+  PutPerceptronIsaac01RequestsByRequestIdCancelResponses[keyof PutPerceptronIsaac01RequestsByRequestIdCancelResponses];
 
-export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/moondream2/point-object-detection/requests/{request_id}";
-};
-
-export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponses =
-  {
-    /**
-     * Result of the request.
-     */
-    200: Moondream2PointObjectDetectionOutput;
-  };
-
-export type GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponse =
-  GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponses[keyof GetFalAiMoondream2PointObjectDetectionRequestsByRequestIdResponses];
-
-export type GetFalAiArbiterImageTextRequestsByRequestIdStatusData = {
+export type GetPerceptronIsaac01RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4629,81 +4710,15 @@ export type GetFalAiArbiterImageTextRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/arbiter/image/text/requests/{request_id}/status";
+  url: "/perceptron/isaac-01/requests/{request_id}/status";
 };
 
-export type GetFalAiArbiterImageTextRequestsByRequestIdStatusResponses = {
+export type GetPerceptronIsaac01RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiArbiterImageTextRequestsByRequestIdStatusResponse =
-  GetFalAiArbiterImageTextRequestsByRequestIdStatusResponses[keyof GetFalAiArbiterImageTextRequestsByRequestIdStatusResponses];
-
-export type PutFalAiArbiterImageTextRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/arbiter/image/text/requests/{request_id}/cancel";
-};
-
-export type PutFalAiArbiterImageTextRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiArbiterImageTextRequestsByRequestIdCancelResponse =
-  PutFalAiArbiterImageTextRequestsByRequestIdCancelResponses[keyof PutFalAiArbiterImageTextRequestsByRequestIdCancelResponses];
-
-export type PostFalAiArbiterImageTextData = {
-  body: ArbiterImageTextInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/arbiter/image/text";
-};
-
-export type PostFalAiArbiterImageTextResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiArbiterImageTextResponse =
-  PostFalAiArbiterImageTextResponses[keyof PostFalAiArbiterImageTextResponses];
-
-export type GetFalAiArbiterImageTextRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/arbiter/image/text/requests/{request_id}";
-};
-
-export type GetFalAiArbiterImageTextRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ArbiterImageTextOutput;
-};
-
-export type GetFalAiArbiterImageTextRequestsByRequestIdResponse =
-  GetFalAiArbiterImageTextRequestsByRequestIdResponses[keyof GetFalAiArbiterImageTextRequestsByRequestIdResponses];
+export type GetPerceptronIsaac01RequestsByRequestIdStatusResponse =
+  GetPerceptronIsaac01RequestsByRequestIdStatusResponses[keyof GetPerceptronIsaac01RequestsByRequestIdStatusResponses];

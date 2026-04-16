@@ -3,68 +3,6 @@
 import * as z from "zod";
 
 /**
- * Qwen3GuardOutput
- */
-export const zQwen3GuardOutput = z.object({
-  categories: z
-    .array(
-      z.enum([
-        "Violent",
-        "Non-violent Illegal Acts",
-        "Sexual Content or Sexual Acts",
-        "PII",
-        "Suicide & Self-Harm",
-        "Unethical Acts",
-        "Politically Sensitive Topics",
-        "Copyright Violation",
-        "Jailbreak",
-        "None",
-      ]),
-    )
-    .register(z.globalRegistry, {
-      description: "The confidence score of the classification",
-    }),
-  label: z
-    .enum(["Safe", "Unsafe", "Controversial"])
-    .register(z.globalRegistry, {
-      description: "The classification label",
-    }),
-});
-
-/**
- * Qwen3GuardInput
- */
-export const zQwen3GuardInput = z.object({
-  prompt: z.string().max(131072).register(z.globalRegistry, {
-    description: "The input text to be classified",
-  }),
-});
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export const zRouterOpenaiV1EmbeddingsInput = z
-  .record(z.string(), z.unknown())
-  .register(z.globalRegistry, {
-    description:
-      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
-  });
-
-export const zRouterOpenaiV1EmbeddingsOutput = z.unknown();
-
-/**
- * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
- */
-export const zRouterOpenaiV1ResponsesInput = z
-  .record(z.string(), z.unknown())
-  .register(z.globalRegistry, {
-    description:
-      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
-  });
-
-export const zRouterOpenaiV1ResponsesOutput = z.unknown();
-
-/**
  * OutputModel
  */
 export const zVideoPromptGeneratorOutput = z.object({
@@ -84,48 +22,6 @@ export const zVideoPromptGeneratorInput = z.object({
     })
     .optional()
     .default(""),
-  style: z
-    .enum([
-      "Minimalist",
-      "Simple",
-      "Detailed",
-      "Descriptive",
-      "Dynamic",
-      "Cinematic",
-      "Documentary",
-      "Animation",
-      "Action",
-      "Experimental",
-    ])
-    .register(z.globalRegistry, {
-      description: "Style of the video prompt",
-    })
-    .optional(),
-  camera_direction: z
-    .enum([
-      "None",
-      "Zoom in",
-      "Zoom out",
-      "Pan left",
-      "Pan right",
-      "Tilt up",
-      "Tilt down",
-      "Orbital rotation",
-      "Push in",
-      "Pull out",
-      "Track forward",
-      "Track backward",
-      "Spiral in",
-      "Spiral out",
-      "Arc movement",
-      "Diagonal traverse",
-      "Vertical rise",
-      "Vertical descent",
-    ])
-    .register(z.globalRegistry, {
-      description: "Camera direction",
-    })
-    .optional(),
   pacing: z
     .enum([
       "None",
@@ -181,35 +77,6 @@ export const zVideoPromptGeneratorInput = z.object({
       description: "Special effects approach",
     })
     .optional(),
-  image_url: z.union([z.string(), z.string()]).optional(),
-  model: z
-    .enum([
-      "anthropic/claude-3.5-sonnet",
-      "anthropic/claude-3-5-haiku",
-      "anthropic/claude-3-haiku",
-      "google/gemini-2.5-flash-lite",
-      "google/gemini-2.0-flash-001",
-      "meta-llama/llama-3.2-1b-instruct",
-      "meta-llama/llama-3.2-3b-instruct",
-      "meta-llama/llama-3.1-8b-instruct",
-      "meta-llama/llama-3.1-70b-instruct",
-      "openai/gpt-4o-mini",
-      "openai/gpt-4o",
-      "deepseek/deepseek-r1",
-    ])
-    .register(z.globalRegistry, {
-      description: "Model to use",
-    })
-    .optional(),
-  prompt_length: z
-    .enum(["Short", "Medium", "Long"])
-    .register(z.globalRegistry, {
-      description: "Length of the prompt",
-    })
-    .optional(),
-  input_concept: z.string().register(z.globalRegistry, {
-    description: "Core concept or thematic input for the video prompt",
-  }),
   camera_style: z
     .enum([
       "None",
@@ -238,96 +105,154 @@ export const zVideoPromptGeneratorInput = z.object({
       description: "Camera movement style",
     })
     .optional(),
+  style: z
+    .enum([
+      "Minimalist",
+      "Simple",
+      "Detailed",
+      "Descriptive",
+      "Dynamic",
+      "Cinematic",
+      "Documentary",
+      "Animation",
+      "Action",
+      "Experimental",
+    ])
+    .register(z.globalRegistry, {
+      description: "Style of the video prompt",
+    })
+    .optional(),
+  image_url: z.union([z.string(), z.string()]).optional(),
+  input_concept: z.string().register(z.globalRegistry, {
+    description: "Core concept or thematic input for the video prompt",
+  }),
+  camera_direction: z
+    .enum([
+      "None",
+      "Zoom in",
+      "Zoom out",
+      "Pan left",
+      "Pan right",
+      "Tilt up",
+      "Tilt down",
+      "Orbital rotation",
+      "Push in",
+      "Pull out",
+      "Track forward",
+      "Track backward",
+      "Spiral in",
+      "Spiral out",
+      "Arc movement",
+      "Diagonal traverse",
+      "Vertical rise",
+      "Vertical descent",
+    ])
+    .register(z.globalRegistry, {
+      description: "Camera direction",
+    })
+    .optional(),
+  prompt_length: z
+    .enum(["Short", "Medium", "Long"])
+    .register(z.globalRegistry, {
+      description: "Length of the prompt",
+    })
+    .optional(),
+  model: z
+    .enum([
+      "anthropic/claude-3.5-sonnet",
+      "anthropic/claude-3-5-haiku",
+      "anthropic/claude-3-haiku",
+      "google/gemini-2.5-flash-lite",
+      "google/gemini-2.0-flash-001",
+      "meta-llama/llama-3.2-1b-instruct",
+      "meta-llama/llama-3.2-3b-instruct",
+      "meta-llama/llama-3.1-8b-instruct",
+      "meta-llama/llama-3.1-70b-instruct",
+      "openai/gpt-4o-mini",
+      "openai/gpt-4o",
+      "deepseek/deepseek-r1",
+    ])
+    .register(z.globalRegistry, {
+      description: "Model to use",
+    })
+    .optional(),
+});
+
+/**
+ * PromptTokensDetails
+ */
+export const zPromptTokensDetails = z.object({
+  cached_tokens: z.int().optional().default(0),
+  cache_write_tokens: z.int().optional().default(0),
+});
+
+/**
+ * UsageInfo
+ */
+export const zUsageInfo = z.object({
+  total_tokens: z.int().optional().default(0),
+  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
+  prompt_tokens_details: z
+    .union([zPromptTokensDetails, z.unknown()])
+    .optional(),
+  cost: z.number(),
 });
 
 /**
  * Seed2MiniMessage
  */
 export const zSeed2MiniMessage = z.object({
-  content: z.union([z.string(), z.array(z.record(z.string(), z.unknown()))]),
   role: z.enum(["system", "user", "assistant"]).register(z.globalRegistry, {
     description: "The role of the message author.",
   }),
+  content: z.union([z.string(), z.array(z.record(z.string(), z.unknown()))]),
 });
 
 /**
- * Seed2MiniOutput
+ * ChatOutput
  */
-export const zBytedanceSeedV2MiniOutput = z.object({
-  reasoning_content: z.union([z.string(), z.unknown()]).optional(),
+export const zRouterOutput = z.object({
   output: z.string().register(z.globalRegistry, {
-    description: "The model's text response.",
+    description: "Generated output",
   }),
-  messages: z.array(zSeed2MiniMessage).register(z.globalRegistry, {
-    description:
-      "The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.",
-  }),
+  partial: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Whether the output is partial",
+    })
+    .optional()
+    .default(false),
+  reasoning: z.union([z.string(), z.unknown()]).optional(),
+  error: z.union([z.string(), z.unknown()]).optional(),
+  usage: z.union([zUsageInfo, z.unknown()]).optional(),
 });
 
+export const zRouterOpenaiV1ResponsesOutput = z.unknown();
+
 /**
- * Seed2MiniInput
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
  */
-export const zBytedanceSeedV2MiniInput = z.object({
-  prompt: z.string().register(z.globalRegistry, {
-    description: "The text prompt or question for the model.",
-  }),
-  video_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.",
-    })
-    .optional(),
-  top_p: z
-    .number()
-    .gte(0)
-    .lte(1)
-    .register(z.globalRegistry, {
-      description:
-        "Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.",
-    })
-    .optional()
-    .default(0.7),
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  thinking: z
-    .enum(["enabled", "disabled", "auto"])
-    .register(z.globalRegistry, {
-      description:
-        "Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.",
-    })
-    .optional(),
-  reasoning_effort: z
-    .union([z.enum(["minimal", "low", "medium", "high"]), z.unknown()])
-    .optional(),
-  temperature: z
-    .number()
-    .gte(0)
-    .lte(2)
-    .register(z.globalRegistry, {
-      description:
-        "Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.",
-    })
-    .optional()
-    .default(1),
-  image_urls: z
-    .array(z.string())
-    .register(z.globalRegistry, {
-      description:
-        "URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.",
-    })
-    .optional(),
-  messages: z.union([z.array(zSeed2MiniMessage), z.unknown()]).optional(),
-  max_completion_tokens: z
-    .int()
-    .gte(1)
-    .lte(65536)
-    .register(z.globalRegistry, {
-      description:
-        "Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.",
-    })
-    .optional()
-    .default(4096),
-});
+export const zRouterOpenaiV1ResponsesInput = z
+  .record(z.string(), z.unknown())
+  .register(z.globalRegistry, {
+    description:
+      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
+  });
+
+export const zRouterOpenaiV1EmbeddingsOutput = z.unknown();
+
+/**
+ * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
+ */
+export const zRouterOpenaiV1EmbeddingsInput = z
+  .record(z.string(), z.unknown())
+  .register(z.globalRegistry, {
+    description:
+      "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
+  });
+
+export const zRouterOpenaiV1ChatCompletionsOutput = z.unknown();
 
 /**
  * Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)
@@ -339,49 +264,26 @@ export const zRouterOpenaiV1ChatCompletionsInput = z
       "Schema referenced but not defined by fal.ai (missing from source OpenAPI spec)",
   });
 
-export const zRouterOpenaiV1ChatCompletionsOutput = z.unknown();
-
-/**
- * UsageInfo
- */
-export const zUsageInfo = z.object({
-  completion_tokens: z.union([z.int(), z.unknown()]).optional(),
-  total_tokens: z.int().optional().default(0),
-  prompt_tokens: z.union([z.int(), z.unknown()]).optional(),
-  cost: z.number(),
-});
-
-/**
- * ChatOutput
- */
-export const zRouterOutput = z.object({
-  usage: z.union([zUsageInfo, z.unknown()]).optional(),
-  error: z.union([z.string(), z.unknown()]).optional(),
-  partial: z
-    .boolean()
-    .register(z.globalRegistry, {
-      description: "Whether the output is partial",
-    })
-    .optional()
-    .default(false),
-  reasoning: z.union([z.string(), z.unknown()]).optional(),
-  output: z.string().register(z.globalRegistry, {
-    description: "Generated output",
-  }),
-});
-
 /**
  * ChatInput
  */
 export const zRouterInput = z.object({
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
   model: z.string().register(z.globalRegistry, {
     description:
       "Name of the model to use. Charged based on actual token usage.",
   }),
+  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
+  reasoning: z
+    .boolean()
+    .register(z.globalRegistry, {
+      description: "Should reasoning be the part of the final answer.",
+    })
+    .optional()
+    .default(false),
   prompt: z.string().register(z.globalRegistry, {
     description: "Prompt to be used for the chat completion",
   }),
-  max_tokens: z.union([z.int().gte(1), z.unknown()]).optional(),
   temperature: z
     .number()
     .gte(0)
@@ -392,14 +294,44 @@ export const zRouterInput = z.object({
     })
     .optional()
     .default(1),
-  system_prompt: z.union([z.string(), z.unknown()]).optional(),
-  reasoning: z
-    .boolean()
+});
+
+/**
+ * Qwen3GuardOutput
+ */
+export const zQwen3GuardOutput = z.object({
+  label: z
+    .enum(["Safe", "Unsafe", "Controversial"])
     .register(z.globalRegistry, {
-      description: "Should reasoning be the part of the final answer.",
-    })
-    .optional()
-    .default(false),
+      description: "The classification label",
+    }),
+  categories: z
+    .array(
+      z.enum([
+        "Violent",
+        "Non-violent Illegal Acts",
+        "Sexual Content or Sexual Acts",
+        "PII",
+        "Suicide & Self-Harm",
+        "Unethical Acts",
+        "Politically Sensitive Topics",
+        "Copyright Violation",
+        "Jailbreak",
+        "None",
+      ]),
+    )
+    .register(z.globalRegistry, {
+      description: "The confidence score of the classification",
+    }),
+});
+
+/**
+ * Qwen3GuardInput
+ */
+export const zQwen3GuardInput = z.object({
+  prompt: z.string().max(131072).register(z.globalRegistry, {
+    description: "The input text to be classified",
+  }),
 });
 
 export const zQueueStatus = z.object({
@@ -445,60 +377,87 @@ export const zQueueStatus = z.object({
     .optional(),
 });
 
-export const zGetOpenrouterRouterRequestsByRequestIdStatusData = z.object({
-  body: z.never().optional(),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
+/**
+ * Seed2MiniOutput
+ */
+export const zBytedanceSeedV2MiniOutput = z.object({
+  output: z.string().register(z.globalRegistry, {
+    description: "The model's text response.",
   }),
-  query: z
-    .object({
-      logs: z
-        .number()
-        .register(z.globalRegistry, {
-          description:
-            "Whether to include logs (`1`) in the response or not (`0`).",
-        })
-        .optional(),
+  messages: z.array(zSeed2MiniMessage).register(z.globalRegistry, {
+    description:
+      "The full conversation history including the model's response. Pass this back as the `messages` input field to continue the conversation.",
+  }),
+  reasoning_content: z.union([z.string(), z.unknown()]).optional(),
+});
+
+/**
+ * Seed2MiniInput
+ */
+export const zBytedanceSeedV2MiniInput = z.object({
+  reasoning_effort: z
+    .union([z.enum(["minimal", "low", "medium", "high"]), z.unknown()])
+    .optional(),
+  thinking: z
+    .enum(["enabled", "disabled", "auto"])
+    .register(z.globalRegistry, {
+      description:
+        "Controls the model's chain-of-thought reasoning. `enabled` always includes reasoning, `disabled` never includes reasoning, `auto` lets the model decide based on the query.",
     })
     .optional(),
-});
-
-/**
- * The request status.
- */
-export const zGetOpenrouterRouterRequestsByRequestIdStatusResponse =
-  zQueueStatus;
-
-export const zPutOpenrouterRouterRequestsByRequestIdCancelData = z.object({
-  body: z.never().optional(),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
+  system_prompt: z.union([z.string(), z.unknown()]).optional(),
+  image_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "URLs of images for visual understanding. Supported formats: JPEG, PNG, WebP. A maximum of 6 images is supported. Any additional images will be ignored.",
+    })
+    .optional(),
+  temperature: z
+    .number()
+    .gte(0)
+    .lte(2)
+    .register(z.globalRegistry, {
+      description:
+        "Controls randomness in the response. Lower values make output more focused and deterministic, higher values make it more creative.",
+    })
+    .optional()
+    .default(1),
+  max_completion_tokens: z
+    .int()
+    .gte(1)
+    .lte(65536)
+    .register(z.globalRegistry, {
+      description:
+        "Controls the maximum length of the model's output, including both the model's response and its chain-of-thought content, measured in tokens.",
+    })
+    .optional()
+    .default(4096),
+  video_urls: z
+    .array(z.string())
+    .register(z.globalRegistry, {
+      description:
+        "URLs of videos for video understanding. Supported formats: MP4, MOV. Audio comprehension is not supported. A maximum of 3 videos is supported. Any additional videos will be ignored.",
+    })
+    .optional(),
+  messages: z.union([z.array(zSeed2MiniMessage), z.unknown()]).optional(),
+  top_p: z
+    .number()
+    .gte(0)
+    .lte(1)
+    .register(z.globalRegistry, {
+      description:
+        "Nucleus sampling parameter. The model considers tokens with top_p cumulative probability mass. Lower values narrow the token selection.",
+    })
+    .optional()
+    .default(0.7),
+  prompt: z.string().register(z.globalRegistry, {
+    description: "The text prompt or question for the model.",
   }),
-  query: z.never().optional(),
 });
 
-/**
- * The request was cancelled.
- */
-export const zPutOpenrouterRouterRequestsByRequestIdCancelResponse = z
-  .object({
-    success: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether the request was cancelled successfully.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "The request was cancelled.",
-  });
-
-export const zPostOpenrouterRouterData = z.object({
-  body: zRouterInput,
+export const zPostFalAiBytedanceSeedV2MiniData = z.object({
+  body: zBytedanceSeedV2MiniInput,
   path: z.never().optional(),
   query: z.never().optional(),
 });
@@ -506,9 +465,9 @@ export const zPostOpenrouterRouterData = z.object({
 /**
  * The request status.
  */
-export const zPostOpenrouterRouterResponse = zQueueStatus;
+export const zPostFalAiBytedanceSeedV2MiniResponse = zQueueStatus;
 
-export const zGetOpenrouterRouterRequestsByRequestIdData = z.object({
+export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdData = z.object({
   body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
@@ -521,9 +480,37 @@ export const zGetOpenrouterRouterRequestsByRequestIdData = z.object({
 /**
  * Result of the request.
  */
-export const zGetOpenrouterRouterRequestsByRequestIdResponse = zRouterOutput;
+export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdResponse =
+  zBytedanceSeedV2MiniOutput;
 
-export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusData =
+export const zPutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.never().optional(),
+  });
+
+/**
+ * The request was cancelled.
+ */
+export const zPutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelResponse = z
+  .object({
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether the request was cancelled successfully.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "The request was cancelled.",
+  });
+
+export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusData =
   z.object({
     body: z.never().optional(),
     path: z.object({
@@ -547,10 +534,115 @@ export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatu
 /**
  * The request status.
  */
-export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponse =
+export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusResponse =
   zQueueStatus;
 
-export const zPutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelData =
+export const zPostFalAiQwen3GuardData = z.object({
+  body: zQwen3GuardInput,
+  path: z.never().optional(),
+  query: z.never().optional(),
+});
+
+/**
+ * The request status.
+ */
+export const zPostFalAiQwen3GuardResponse = zQueueStatus;
+
+export const zGetFalAiQwen3GuardRequestsByRequestIdData = z.object({
+  body: z.never().optional(),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.never().optional(),
+});
+
+/**
+ * Result of the request.
+ */
+export const zGetFalAiQwen3GuardRequestsByRequestIdResponse = zQwen3GuardOutput;
+
+export const zPutFalAiQwen3GuardRequestsByRequestIdCancelData = z.object({
+  body: z.never().optional(),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.never().optional(),
+});
+
+/**
+ * The request was cancelled.
+ */
+export const zPutFalAiQwen3GuardRequestsByRequestIdCancelResponse = z
+  .object({
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether the request was cancelled successfully.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "The request was cancelled.",
+  });
+
+export const zGetFalAiQwen3GuardRequestsByRequestIdStatusData = z.object({
+  body: z.never().optional(),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z
+    .object({
+      logs: z
+        .number()
+        .register(z.globalRegistry, {
+          description:
+            "Whether to include logs (`1`) in the response or not (`0`).",
+        })
+        .optional(),
+    })
+    .optional(),
+});
+
+/**
+ * The request status.
+ */
+export const zGetFalAiQwen3GuardRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPostFalAiVideoPromptGeneratorData = z.object({
+  body: zVideoPromptGeneratorInput,
+  path: z.never().optional(),
+  query: z.never().optional(),
+});
+
+/**
+ * The request status.
+ */
+export const zPostFalAiVideoPromptGeneratorResponse = zQueueStatus;
+
+export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdData = z.object({
+  body: z.never().optional(),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.never().optional(),
+});
+
+/**
+ * Result of the request.
+ */
+export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdResponse =
+  zVideoPromptGeneratorOutput;
+
+export const zPutFalAiVideoPromptGeneratorRequestsByRequestIdCancelData =
   z.object({
     body: z.never().optional(),
     path: z.object({
@@ -564,19 +656,56 @@ export const zPutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCance
 /**
  * The request was cancelled.
  */
-export const zPutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponse =
-  z
-    .object({
-      success: z
-        .boolean()
-        .register(z.globalRegistry, {
-          description: "Whether the request was cancelled successfully.",
-        })
-        .optional(),
-    })
-    .register(z.globalRegistry, {
-      description: "The request was cancelled.",
-    });
+export const zPutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponse = z
+  .object({
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether the request was cancelled successfully.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "The request was cancelled.",
+  });
+
+export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdStatusData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          })
+          .optional(),
+      })
+      .optional(),
+  });
+
+/**
+ * The request status.
+ */
+export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPostOpenrouterRouterData = z.object({
+  body: zRouterInput,
+  path: z.never().optional(),
+  query: z.never().optional(),
+});
+
+/**
+ * The request status.
+ */
+export const zPostOpenrouterRouterResponse = zQueueStatus;
 
 export const zPostOpenrouterRouterOpenaiV1ChatCompletionsData = z.object({
   body: zRouterOpenaiV1ChatCompletionsInput,
@@ -607,34 +736,7 @@ export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdData 
 export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdResponse =
   zRouterOpenaiV1ChatCompletionsOutput;
 
-export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z
-      .object({
-        logs: z
-          .number()
-          .register(z.globalRegistry, {
-            description:
-              "Whether to include logs (`1`) in the response or not (`0`).",
-          })
-          .optional(),
-      })
-      .optional(),
-  });
-
-/**
- * The request status.
- */
-export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdStatusResponse =
-  zQueueStatus;
-
-export const zPutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelData =
+export const zPutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelData =
   z.object({
     body: z.never().optional(),
     path: z.object({
@@ -648,169 +750,7 @@ export const zPutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelData =
 /**
  * The request was cancelled.
  */
-export const zPutFalAiBytedanceSeedV2MiniRequestsByRequestIdCancelResponse = z
-  .object({
-    success: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether the request was cancelled successfully.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "The request was cancelled.",
-  });
-
-export const zPostFalAiBytedanceSeedV2MiniData = z.object({
-  body: zBytedanceSeedV2MiniInput,
-  path: z.never().optional(),
-  query: z.never().optional(),
-});
-
-/**
- * The request status.
- */
-export const zPostFalAiBytedanceSeedV2MiniResponse = zQueueStatus;
-
-export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdData = z.object({
-  body: z.never().optional(),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
-  }),
-  query: z.never().optional(),
-});
-
-/**
- * Result of the request.
- */
-export const zGetFalAiBytedanceSeedV2MiniRequestsByRequestIdResponse =
-  zBytedanceSeedV2MiniOutput;
-
-export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdStatusData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z
-      .object({
-        logs: z
-          .number()
-          .register(z.globalRegistry, {
-            description:
-              "Whether to include logs (`1`) in the response or not (`0`).",
-          })
-          .optional(),
-      })
-      .optional(),
-  });
-
-/**
- * The request status.
- */
-export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdStatusResponse =
-  zQueueStatus;
-
-export const zPutFalAiVideoPromptGeneratorRequestsByRequestIdCancelData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.never().optional(),
-  });
-
-/**
- * The request was cancelled.
- */
-export const zPutFalAiVideoPromptGeneratorRequestsByRequestIdCancelResponse = z
-  .object({
-    success: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether the request was cancelled successfully.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "The request was cancelled.",
-  });
-
-export const zPostFalAiVideoPromptGeneratorData = z.object({
-  body: zVideoPromptGeneratorInput,
-  path: z.never().optional(),
-  query: z.never().optional(),
-});
-
-/**
- * The request status.
- */
-export const zPostFalAiVideoPromptGeneratorResponse = zQueueStatus;
-
-export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdData = z.object({
-  body: z.never().optional(),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
-  }),
-  query: z.never().optional(),
-});
-
-/**
- * Result of the request.
- */
-export const zGetFalAiVideoPromptGeneratorRequestsByRequestIdResponse =
-  zVideoPromptGeneratorOutput;
-
-export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdStatusData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z
-      .object({
-        logs: z
-          .number()
-          .register(z.globalRegistry, {
-            description:
-              "Whether to include logs (`1`) in the response or not (`0`).",
-          })
-          .optional(),
-      })
-      .optional(),
-  });
-
-/**
- * The request status.
- */
-export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdStatusResponse =
-  zQueueStatus;
-
-export const zPutOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdCancelData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.never().optional(),
-  });
-
-/**
- * The request was cancelled.
- */
-export const zPutOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdCancelResponse =
+export const zPutOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdCancelResponse =
   z
     .object({
       success: z
@@ -824,35 +764,7 @@ export const zPutOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdCancelRespo
       description: "The request was cancelled.",
     });
 
-export const zPostOpenrouterRouterOpenaiV1ResponsesData = z.object({
-  body: zRouterOpenaiV1ResponsesInput,
-  path: z.never().optional(),
-  query: z.never().optional(),
-});
-
-/**
- * The request status.
- */
-export const zPostOpenrouterRouterOpenaiV1ResponsesResponse = zQueueStatus;
-
-export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.never().optional(),
-  });
-
-/**
- * Result of the request.
- */
-export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdResponse =
-  zRouterOpenaiV1ResponsesOutput;
-
-export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdStatusData =
+export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusData =
   z.object({
     body: z.never().optional(),
     path: z.object({
@@ -876,36 +788,8 @@ export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdStatusData
 /**
  * The request status.
  */
-export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdStatusResponse =
+export const zGetOpenrouterRouterOpenaiV1ChatCompletionsRequestsByRequestIdStatusResponse =
   zQueueStatus;
-
-export const zPutOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdCancelData =
-  z.object({
-    body: z.never().optional(),
-    path: z.object({
-      request_id: z.string().register(z.globalRegistry, {
-        description: "Request ID",
-      }),
-    }),
-    query: z.never().optional(),
-  });
-
-/**
- * The request was cancelled.
- */
-export const zPutOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdCancelResponse =
-  z
-    .object({
-      success: z
-        .boolean()
-        .register(z.globalRegistry, {
-          description: "Whether the request was cancelled successfully.",
-        })
-        .optional(),
-    })
-    .register(z.globalRegistry, {
-      description: "The request was cancelled.",
-    });
 
 export const zPostOpenrouterRouterOpenaiV1EmbeddingsData = z.object({
   body: zRouterOpenaiV1EmbeddingsInput,
@@ -935,7 +819,186 @@ export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdData =
 export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdResponse =
   zRouterOpenaiV1EmbeddingsOutput;
 
-export const zGetFalAiQwen3GuardRequestsByRequestIdStatusData = z.object({
+export const zPutOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdCancelData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.never().optional(),
+  });
+
+/**
+ * The request was cancelled.
+ */
+export const zPutOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdCancelResponse =
+  z
+    .object({
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
+          description: "Whether the request was cancelled successfully.",
+        })
+        .optional(),
+    })
+    .register(z.globalRegistry, {
+      description: "The request was cancelled.",
+    });
+
+export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdStatusData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          })
+          .optional(),
+      })
+      .optional(),
+  });
+
+/**
+ * The request status.
+ */
+export const zGetOpenrouterRouterOpenaiV1EmbeddingsRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zPostOpenrouterRouterOpenaiV1ResponsesData = z.object({
+  body: zRouterOpenaiV1ResponsesInput,
+  path: z.never().optional(),
+  query: z.never().optional(),
+});
+
+/**
+ * The request status.
+ */
+export const zPostOpenrouterRouterOpenaiV1ResponsesResponse = zQueueStatus;
+
+export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.never().optional(),
+  });
+
+/**
+ * Result of the request.
+ */
+export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdResponse =
+  zRouterOpenaiV1ResponsesOutput;
+
+export const zPutOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdCancelData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z.never().optional(),
+  });
+
+/**
+ * The request was cancelled.
+ */
+export const zPutOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdCancelResponse =
+  z
+    .object({
+      success: z
+        .boolean()
+        .register(z.globalRegistry, {
+          description: "Whether the request was cancelled successfully.",
+        })
+        .optional(),
+    })
+    .register(z.globalRegistry, {
+      description: "The request was cancelled.",
+    });
+
+export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdStatusData =
+  z.object({
+    body: z.never().optional(),
+    path: z.object({
+      request_id: z.string().register(z.globalRegistry, {
+        description: "Request ID",
+      }),
+    }),
+    query: z
+      .object({
+        logs: z
+          .number()
+          .register(z.globalRegistry, {
+            description:
+              "Whether to include logs (`1`) in the response or not (`0`).",
+          })
+          .optional(),
+      })
+      .optional(),
+  });
+
+/**
+ * The request status.
+ */
+export const zGetOpenrouterRouterOpenaiV1ResponsesRequestsByRequestIdStatusResponse =
+  zQueueStatus;
+
+export const zGetOpenrouterRouterRequestsByRequestIdData = z.object({
+  body: z.never().optional(),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.never().optional(),
+});
+
+/**
+ * Result of the request.
+ */
+export const zGetOpenrouterRouterRequestsByRequestIdResponse = zRouterOutput;
+
+export const zPutOpenrouterRouterRequestsByRequestIdCancelData = z.object({
+  body: z.never().optional(),
+  path: z.object({
+    request_id: z.string().register(z.globalRegistry, {
+      description: "Request ID",
+    }),
+  }),
+  query: z.never().optional(),
+});
+
+/**
+ * The request was cancelled.
+ */
+export const zPutOpenrouterRouterRequestsByRequestIdCancelResponse = z
+  .object({
+    success: z
+      .boolean()
+      .register(z.globalRegistry, {
+        description: "Whether the request was cancelled successfully.",
+      })
+      .optional(),
+  })
+  .register(z.globalRegistry, {
+    description: "The request was cancelled.",
+  });
+
+export const zGetOpenrouterRouterRequestsByRequestIdStatusData = z.object({
   body: z.never().optional(),
   path: z.object({
     request_id: z.string().register(z.globalRegistry, {
@@ -958,57 +1021,5 @@ export const zGetFalAiQwen3GuardRequestsByRequestIdStatusData = z.object({
 /**
  * The request status.
  */
-export const zGetFalAiQwen3GuardRequestsByRequestIdStatusResponse =
+export const zGetOpenrouterRouterRequestsByRequestIdStatusResponse =
   zQueueStatus;
-
-export const zPutFalAiQwen3GuardRequestsByRequestIdCancelData = z.object({
-  body: z.never().optional(),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
-  }),
-  query: z.never().optional(),
-});
-
-/**
- * The request was cancelled.
- */
-export const zPutFalAiQwen3GuardRequestsByRequestIdCancelResponse = z
-  .object({
-    success: z
-      .boolean()
-      .register(z.globalRegistry, {
-        description: "Whether the request was cancelled successfully.",
-      })
-      .optional(),
-  })
-  .register(z.globalRegistry, {
-    description: "The request was cancelled.",
-  });
-
-export const zPostFalAiQwen3GuardData = z.object({
-  body: zQwen3GuardInput,
-  path: z.never().optional(),
-  query: z.never().optional(),
-});
-
-/**
- * The request status.
- */
-export const zPostFalAiQwen3GuardResponse = zQueueStatus;
-
-export const zGetFalAiQwen3GuardRequestsByRequestIdData = z.object({
-  body: z.never().optional(),
-  path: z.object({
-    request_id: z.string().register(z.globalRegistry, {
-      description: "Request ID",
-    }),
-  }),
-  query: z.never().optional(),
-});
-
-/**
- * Result of the request.
- */
-export const zGetFalAiQwen3GuardRequestsByRequestIdResponse = zQwen3GuardOutput;

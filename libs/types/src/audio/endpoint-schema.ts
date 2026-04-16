@@ -76,12 +76,14 @@ import {
   zMinimaxMusicOutput,
   zMinimaxMusicV15Input,
   zMinimaxMusicV15Output,
+  zMinimaxMusicV25Input,
+  zMinimaxMusicV25Output,
+  zMinimaxMusicV26Input,
+  zMinimaxMusicV26Output,
   zMinimaxMusicV2Input,
   zMinimaxMusicV2Output,
   zMmaudioV2TextToAudioInput,
   zMmaudioV2TextToAudioOutput,
-  zMusicGenerationInput,
-  zMusicGenerationOutput,
   zMusicGeneratorInput,
   zMusicGeneratorOutput,
   zNovaSrInput,
@@ -104,8 +106,6 @@ import {
   zSfxV15VideoToAudioOutput,
   zSfxV1VideoToAudioInput,
   zSfxV1VideoToAudioOutput,
-  zSoundEffectGenerationInput,
-  zSoundEffectGenerationOutput,
   zSoundEffectsGeneratorInput,
   zSoundEffectsGeneratorOutput,
   zStableAudio25AudioToAudioInput,
@@ -139,209 +139,9 @@ import {
 /** Zod schema for audio endpoints using discriminatedUnion */
 export const AudioEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
-    endpoint: z.literal("fal-ai/kling-video/create-voice"),
-    input: zKlingVideoCreateVoiceInput,
-    output: zKlingVideoCreateVoiceOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/audio-isolation"),
-    input: zElevenlabsAudioIsolationInput,
-    output: zElevenlabsAudioIsolationOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/demucs"),
-    input: zDemucsInput,
-    output: zDemucsOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-3-tts/clone-voice/1.7b"),
-    input: zQwen3TtsCloneVoice17bInput,
-    output: zQwen3TtsCloneVoice17bOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/voice-changer"),
-    input: zElevenlabsVoiceChangerInput,
-    output: zElevenlabsVoiceChangerOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ffmpeg-api/merge-audios"),
-    input: zFfmpegApiMergeAudiosInput,
-    output: zFfmpegApiMergeAudiosOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sam-audio/separate"),
-    input: zSamAudioSeparateInput,
-    output: zSamAudioSeparateOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/deepfilternet3"),
-    input: zDeepfilternet3Input,
-    output: zDeepfilternet3Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ace-step/audio-to-audio"),
-    input: zAceStepAudioToAudioInput,
-    output: zAceStepAudioToAudioOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/tada/3b/text-to-speech"),
-    input: zTada3bTextToSpeechInput,
-    output: zTada3bTextToSpeechOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/stable-audio-25/audio-to-audio"),
-    input: zStableAudio25AudioToAudioInput,
-    output: zStableAudio25AudioToAudioOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ace-step/audio-inpaint"),
-    input: zAceStepAudioInpaintInput,
-    output: zAceStepAudioInpaintOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/qwen-3-tts/clone-voice/0.6b"),
-    input: zQwen3TtsCloneVoice06bInput,
-    output: zQwen3TtsCloneVoice06bOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/nova-sr"),
-    input: zNovaSrInput,
-    output: zNovaSrOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/audio-understanding"),
-    input: zAudioUnderstandingInput,
-    output: zAudioUnderstandingOutput,
-  }),
-  z.object({
-    endpoint: z.literal("sonauto/v2/extend"),
-    input: zV2ExtendInput,
-    output: zV2ExtendOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/dia-tts/voice-clone"),
-    input: zDiaTtsVoiceCloneInput,
-    output: zDiaTtsVoiceCloneOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sam-audio/span-separate"),
-    input: zSamAudioSpanSeparateInput,
-    output: zSamAudioSpanSeparateOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/personaplex"),
-    input: zPersonaplexInput,
-    output: zPersonaplexOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/workflow-utilities/audio-compressor"),
-    input: zWorkflowUtilitiesAudioCompressorInput,
-    output: zWorkflowUtilitiesAudioCompressorOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/tada/1b/text-to-speech"),
-    input: zTada1bTextToSpeechInput,
-    output: zTada1bTextToSpeechOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/lava-sr"),
-    input: zLavaSrInput,
-    output: zLavaSrOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/ace-step/audio-outpaint"),
-    input: zAceStepAudioOutpaintInput,
-    output: zAceStepAudioOutpaintOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/personaplex/realtime"),
-    input: zPersonaplexRealtimeInput,
-    output: zPersonaplexRealtimeOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/stable-audio-25/inpaint"),
-    input: zStableAudio25InpaintInput,
-    output: zStableAudio25InpaintOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/workflow-utilities/impulse-response"),
-    input: zWorkflowUtilitiesImpulseResponseInput,
-    output: zWorkflowUtilitiesImpulseResponseOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/tts/eleven-v3"),
-    input: zElevenlabsTtsElevenV3Input,
-    output: zElevenlabsTtsElevenV3Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/minimax-music/v2"),
-    input: zMinimaxMusicV2Input,
-    output: zMinimaxMusicV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/tts/multilingual-v2"),
-    input: zElevenlabsTtsMultilingualV2Input,
-    output: zElevenlabsTtsMultilingualV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/sound-effects/v2"),
-    input: zElevenlabsSoundEffectsV2Input,
-    output: zElevenlabsSoundEffectsV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/music"),
-    input: zElevenlabsMusicInput,
-    output: zElevenlabsMusicOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/stable-audio"),
-    input: zStableAudioInput,
-    output: zStableAudioOutput,
-  }),
-  z.object({
     endpoint: z.literal("cassetteai/music-generator"),
     input: zMusicGeneratorInput,
     output: zMusicGeneratorOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/elevenlabs/text-to-dialogue/eleven-v3"),
-    input: zElevenlabsTextToDialogueElevenV3Input,
-    output: zElevenlabsTextToDialogueElevenV3Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/kokoro/american-english"),
-    input: zKokoroAmericanEnglishInput,
-    output: zKokoroAmericanEnglishOutput,
-  }),
-  z.object({
-    endpoint: z.literal("sonauto/v2/text-to-music"),
-    input: zV2TextToMusicInput,
-    output: zV2TextToMusicOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/lyria2"),
-    input: zLyria2Input,
-    output: zLyria2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/stable-audio-25/text-to-audio"),
-    input: zStableAudio25TextToAudioInput,
-    output: zStableAudio25TextToAudioOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/gemini-tts"),
-    input: zGeminiTtsInput,
-    output: zGeminiTtsOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/f5-tts"),
-    input: zF5TtsInput,
-    output: zF5TtsOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/mmaudio-v2/text-to-audio"),
-    input: zMmaudioV2TextToAudioInput,
-    output: zMmaudioV2TextToAudioOutput,
   }),
   z.object({
     endpoint: z.literal("cassetteai/sound-effects-generator"),
@@ -354,19 +154,124 @@ export const AudioEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zAceStepOutput,
   }),
   z.object({
+    endpoint: z.literal("fal-ai/ace-step/audio-inpaint"),
+    input: zAceStepAudioInpaintInput,
+    output: zAceStepAudioInpaintOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ace-step/audio-outpaint"),
+    input: zAceStepAudioOutpaintInput,
+    output: zAceStepAudioOutpaintOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ace-step/audio-to-audio"),
+    input: zAceStepAudioToAudioInput,
+    output: zAceStepAudioToAudioOutput,
+  }),
+  z.object({
     endpoint: z.literal("fal-ai/ace-step/prompt-to-audio"),
     input: zAceStepPromptToAudioInput,
     output: zAceStepPromptToAudioOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/minimax-music"),
-    input: zMinimaxMusicInput,
-    output: zMinimaxMusicOutput,
+    endpoint: z.literal("fal-ai/audio-understanding"),
+    input: zAudioUnderstandingInput,
+    output: zAudioUnderstandingOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/minimax-music/v1.5"),
-    input: zMinimaxMusicV15Input,
-    output: zMinimaxMusicV15Output,
+    endpoint: z.literal("fal-ai/csm-1b"),
+    input: zCsm1bInput,
+    output: zCsm1bOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/deepfilternet3"),
+    input: zDeepfilternet3Input,
+    output: zDeepfilternet3Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/demucs"),
+    input: zDemucsInput,
+    output: zDemucsOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/dia-tts/voice-clone"),
+    input: zDiaTtsVoiceCloneInput,
+    output: zDiaTtsVoiceCloneOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/diffrhythm"),
+    input: zDiffrhythmInput,
+    output: zDiffrhythmOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/audio-isolation"),
+    input: zElevenlabsAudioIsolationInput,
+    output: zElevenlabsAudioIsolationOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/music"),
+    input: zElevenlabsMusicInput,
+    output: zElevenlabsMusicOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/sound-effects/v2"),
+    input: zElevenlabsSoundEffectsV2Input,
+    output: zElevenlabsSoundEffectsV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/text-to-dialogue/eleven-v3"),
+    input: zElevenlabsTextToDialogueElevenV3Input,
+    output: zElevenlabsTextToDialogueElevenV3Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/tts/eleven-v3"),
+    input: zElevenlabsTtsElevenV3Input,
+    output: zElevenlabsTtsElevenV3Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/tts/multilingual-v2"),
+    input: zElevenlabsTtsMultilingualV2Input,
+    output: zElevenlabsTtsMultilingualV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/elevenlabs/voice-changer"),
+    input: zElevenlabsVoiceChangerInput,
+    output: zElevenlabsVoiceChangerOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/f5-tts"),
+    input: zF5TtsInput,
+    output: zF5TtsOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/ffmpeg-api/merge-audios"),
+    input: zFfmpegApiMergeAudiosInput,
+    output: zFfmpegApiMergeAudiosOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/gemini-tts"),
+    input: zGeminiTtsInput,
+    output: zGeminiTtsOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/kling-video/create-voice"),
+    input: zKlingVideoCreateVoiceInput,
+    output: zKlingVideoCreateVoiceOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/kling-video/video-to-audio"),
+    input: zKlingVideoVideoToAudioInput,
+    output: zKlingVideoVideoToAudioOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/kokoro/american-english"),
+    input: zKokoroAmericanEnglishInput,
+    output: zKokoroAmericanEnglishOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/kokoro/brazilian-portuguese"),
+    input: zKokoroBrazilianPortugueseInput,
+    output: zKokoroBrazilianPortugueseOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/kokoro/british-english"),
@@ -379,54 +284,9 @@ export const AudioEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zKokoroFrenchOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/kokoro/spanish"),
-    input: zKokoroSpanishInput,
-    output: zKokoroSpanishOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/yue"),
-    input: zYueInput,
-    output: zYueOutput,
-  }),
-  z.object({
     endpoint: z.literal("fal-ai/kokoro/hindi"),
     input: zKokoroHindiInput,
     output: zKokoroHindiOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/kokoro/japanese"),
-    input: zKokoroJapaneseInput,
-    output: zKokoroJapaneseOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/zonos"),
-    input: zZonosInput,
-    output: zZonosOutput,
-  }),
-  z.object({
-    endpoint: z.literal("sonauto/v2/inpaint"),
-    input: zV2InpaintInput,
-    output: zV2InpaintOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/kokoro/brazilian-portuguese"),
-    input: zKokoroBrazilianPortugueseInput,
-    output: zKokoroBrazilianPortugueseOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/csm-1b"),
-    input: zCsm1bInput,
-    output: zCsm1bOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/diffrhythm"),
-    input: zDiffrhythmInput,
-    output: zDiffrhythmOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/kokoro/mandarin-chinese"),
-    input: zKokoroMandarinChineseInput,
-    output: zKokoroMandarinChineseOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/kokoro/italian"),
@@ -434,14 +294,149 @@ export const AudioEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zKokoroItalianOutput,
   }),
   z.object({
-    endpoint: z.literal("beatoven/music-generation"),
-    input: zMusicGenerationInput,
-    output: zMusicGenerationOutput,
+    endpoint: z.literal("fal-ai/kokoro/japanese"),
+    input: zKokoroJapaneseInput,
+    output: zKokoroJapaneseOutput,
   }),
   z.object({
-    endpoint: z.literal("beatoven/sound-effect-generation"),
-    input: zSoundEffectGenerationInput,
-    output: zSoundEffectGenerationOutput,
+    endpoint: z.literal("fal-ai/kokoro/mandarin-chinese"),
+    input: zKokoroMandarinChineseInput,
+    output: zKokoroMandarinChineseOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/kokoro/spanish"),
+    input: zKokoroSpanishInput,
+    output: zKokoroSpanishOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/lava-sr"),
+    input: zLavaSrInput,
+    output: zLavaSrOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/lyria2"),
+    input: zLyria2Input,
+    output: zLyria2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax-music"),
+    input: zMinimaxMusicInput,
+    output: zMinimaxMusicOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax-music/v1.5"),
+    input: zMinimaxMusicV15Input,
+    output: zMinimaxMusicV15Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax-music/v2"),
+    input: zMinimaxMusicV2Input,
+    output: zMinimaxMusicV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax-music/v2.5"),
+    input: zMinimaxMusicV25Input,
+    output: zMinimaxMusicV25Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/minimax-music/v2.6"),
+    input: zMinimaxMusicV26Input,
+    output: zMinimaxMusicV26Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/mmaudio-v2/text-to-audio"),
+    input: zMmaudioV2TextToAudioInput,
+    output: zMmaudioV2TextToAudioOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/nova-sr"),
+    input: zNovaSrInput,
+    output: zNovaSrOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/personaplex"),
+    input: zPersonaplexInput,
+    output: zPersonaplexOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/personaplex/realtime"),
+    input: zPersonaplexRealtimeInput,
+    output: zPersonaplexRealtimeOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-3-tts/clone-voice/0.6b"),
+    input: zQwen3TtsCloneVoice06bInput,
+    output: zQwen3TtsCloneVoice06bOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-3-tts/clone-voice/1.7b"),
+    input: zQwen3TtsCloneVoice17bInput,
+    output: zQwen3TtsCloneVoice17bOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-audio/separate"),
+    input: zSamAudioSeparateInput,
+    output: zSamAudioSeparateOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-audio/span-separate"),
+    input: zSamAudioSpanSeparateInput,
+    output: zSamAudioSpanSeparateOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-audio/visual-separate"),
+    input: zSamAudioVisualSeparateInput,
+    output: zSamAudioVisualSeparateOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/stable-audio"),
+    input: zStableAudioInput,
+    output: zStableAudioOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/stable-audio-25/audio-to-audio"),
+    input: zStableAudio25AudioToAudioInput,
+    output: zStableAudio25AudioToAudioOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/stable-audio-25/inpaint"),
+    input: zStableAudio25InpaintInput,
+    output: zStableAudio25InpaintOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/stable-audio-25/text-to-audio"),
+    input: zStableAudio25TextToAudioInput,
+    output: zStableAudio25TextToAudioOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/tada/1b/text-to-speech"),
+    input: zTada1bTextToSpeechInput,
+    output: zTada1bTextToSpeechOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/tada/3b/text-to-speech"),
+    input: zTada3bTextToSpeechInput,
+    output: zTada3bTextToSpeechOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/workflow-utilities/audio-compressor"),
+    input: zWorkflowUtilitiesAudioCompressorInput,
+    output: zWorkflowUtilitiesAudioCompressorOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/workflow-utilities/impulse-response"),
+    input: zWorkflowUtilitiesImpulseResponseInput,
+    output: zWorkflowUtilitiesImpulseResponseOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/yue"),
+    input: zYueInput,
+    output: zYueOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/zonos"),
+    input: zZonosInput,
+    output: zZonosOutput,
   }),
   z.object({
     endpoint: z.literal("mirelo-ai/sfx-v1.5/video-to-audio"),
@@ -449,19 +444,24 @@ export const AudioEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zSfxV15VideoToAudioOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/kling-video/video-to-audio"),
-    input: zKlingVideoVideoToAudioInput,
-    output: zKlingVideoVideoToAudioOutput,
-  }),
-  z.object({
     endpoint: z.literal("mirelo-ai/sfx-v1/video-to-audio"),
     input: zSfxV1VideoToAudioInput,
     output: zSfxV1VideoToAudioOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/sam-audio/visual-separate"),
-    input: zSamAudioVisualSeparateInput,
-    output: zSamAudioVisualSeparateOutput,
+    endpoint: z.literal("sonauto/v2/extend"),
+    input: zV2ExtendInput,
+    output: zV2ExtendOutput,
+  }),
+  z.object({
+    endpoint: z.literal("sonauto/v2/inpaint"),
+    input: zV2InpaintInput,
+    output: zV2InpaintOutput,
+  }),
+  z.object({
+    endpoint: z.literal("sonauto/v2/text-to-music"),
+    input: zV2TextToMusicInput,
+    output: zV2TextToMusicOutput,
   }),
 ]);
 

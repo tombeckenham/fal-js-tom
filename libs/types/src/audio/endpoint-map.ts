@@ -74,12 +74,14 @@ import type {
   MinimaxMusicOutput,
   MinimaxMusicV15Input,
   MinimaxMusicV15Output,
+  MinimaxMusicV25Input,
+  MinimaxMusicV25Output,
+  MinimaxMusicV26Input,
+  MinimaxMusicV26Output,
   MinimaxMusicV2Input,
   MinimaxMusicV2Output,
   MmaudioV2TextToAudioInput,
   MmaudioV2TextToAudioOutput,
-  MusicGenerationInput,
-  MusicGenerationOutput,
   MusicGeneratorInput,
   MusicGeneratorOutput,
   NovaSrInput,
@@ -102,8 +104,6 @@ import type {
   SfxV15VideoToAudioOutput,
   SfxV1VideoToAudioInput,
   SfxV1VideoToAudioOutput,
-  SoundEffectGenerationInput,
-  SoundEffectGenerationOutput,
   SoundEffectsGeneratorInput,
   SoundEffectsGeneratorOutput,
   StableAudio25AudioToAudioInput,
@@ -135,169 +135,9 @@ import type {
 } from "./types.gen";
 
 export type AudioEndpointMap = {
-  "fal-ai/kling-video/create-voice": {
-    input: KlingVideoCreateVoiceInput;
-    output: KlingVideoCreateVoiceOutput;
-  };
-  "fal-ai/elevenlabs/audio-isolation": {
-    input: ElevenlabsAudioIsolationInput;
-    output: ElevenlabsAudioIsolationOutput;
-  };
-  "fal-ai/demucs": {
-    input: DemucsInput;
-    output: DemucsOutput;
-  };
-  "fal-ai/qwen-3-tts/clone-voice/1.7b": {
-    input: Qwen3TtsCloneVoice17bInput;
-    output: Qwen3TtsCloneVoice17bOutput;
-  };
-  "fal-ai/elevenlabs/voice-changer": {
-    input: ElevenlabsVoiceChangerInput;
-    output: ElevenlabsVoiceChangerOutput;
-  };
-  "fal-ai/ffmpeg-api/merge-audios": {
-    input: FfmpegApiMergeAudiosInput;
-    output: FfmpegApiMergeAudiosOutput;
-  };
-  "fal-ai/sam-audio/separate": {
-    input: SamAudioSeparateInput;
-    output: SamAudioSeparateOutput;
-  };
-  "fal-ai/deepfilternet3": {
-    input: Deepfilternet3Input;
-    output: Deepfilternet3Output;
-  };
-  "fal-ai/ace-step/audio-to-audio": {
-    input: AceStepAudioToAudioInput;
-    output: AceStepAudioToAudioOutput;
-  };
-  "fal-ai/tada/3b/text-to-speech": {
-    input: Tada3bTextToSpeechInput;
-    output: Tada3bTextToSpeechOutput;
-  };
-  "fal-ai/stable-audio-25/audio-to-audio": {
-    input: StableAudio25AudioToAudioInput;
-    output: StableAudio25AudioToAudioOutput;
-  };
-  "fal-ai/ace-step/audio-inpaint": {
-    input: AceStepAudioInpaintInput;
-    output: AceStepAudioInpaintOutput;
-  };
-  "fal-ai/qwen-3-tts/clone-voice/0.6b": {
-    input: Qwen3TtsCloneVoice06bInput;
-    output: Qwen3TtsCloneVoice06bOutput;
-  };
-  "fal-ai/nova-sr": {
-    input: NovaSrInput;
-    output: NovaSrOutput;
-  };
-  "fal-ai/audio-understanding": {
-    input: AudioUnderstandingInput;
-    output: AudioUnderstandingOutput;
-  };
-  "sonauto/v2/extend": {
-    input: V2ExtendInput;
-    output: V2ExtendOutput;
-  };
-  "fal-ai/dia-tts/voice-clone": {
-    input: DiaTtsVoiceCloneInput;
-    output: DiaTtsVoiceCloneOutput;
-  };
-  "fal-ai/sam-audio/span-separate": {
-    input: SamAudioSpanSeparateInput;
-    output: SamAudioSpanSeparateOutput;
-  };
-  "fal-ai/personaplex": {
-    input: PersonaplexInput;
-    output: PersonaplexOutput;
-  };
-  "fal-ai/workflow-utilities/audio-compressor": {
-    input: WorkflowUtilitiesAudioCompressorInput;
-    output: WorkflowUtilitiesAudioCompressorOutput;
-  };
-  "fal-ai/tada/1b/text-to-speech": {
-    input: Tada1bTextToSpeechInput;
-    output: Tada1bTextToSpeechOutput;
-  };
-  "fal-ai/lava-sr": {
-    input: LavaSrInput;
-    output: LavaSrOutput;
-  };
-  "fal-ai/ace-step/audio-outpaint": {
-    input: AceStepAudioOutpaintInput;
-    output: AceStepAudioOutpaintOutput;
-  };
-  "fal-ai/personaplex/realtime": {
-    input: PersonaplexRealtimeInput;
-    output: PersonaplexRealtimeOutput;
-  };
-  "fal-ai/stable-audio-25/inpaint": {
-    input: StableAudio25InpaintInput;
-    output: StableAudio25InpaintOutput;
-  };
-  "fal-ai/workflow-utilities/impulse-response": {
-    input: WorkflowUtilitiesImpulseResponseInput;
-    output: WorkflowUtilitiesImpulseResponseOutput;
-  };
-  "fal-ai/elevenlabs/tts/eleven-v3": {
-    input: ElevenlabsTtsElevenV3Input;
-    output: ElevenlabsTtsElevenV3Output;
-  };
-  "fal-ai/minimax-music/v2": {
-    input: MinimaxMusicV2Input;
-    output: MinimaxMusicV2Output;
-  };
-  "fal-ai/elevenlabs/tts/multilingual-v2": {
-    input: ElevenlabsTtsMultilingualV2Input;
-    output: ElevenlabsTtsMultilingualV2Output;
-  };
-  "fal-ai/elevenlabs/sound-effects/v2": {
-    input: ElevenlabsSoundEffectsV2Input;
-    output: ElevenlabsSoundEffectsV2Output;
-  };
-  "fal-ai/elevenlabs/music": {
-    input: ElevenlabsMusicInput;
-    output: ElevenlabsMusicOutput;
-  };
-  "fal-ai/stable-audio": {
-    input: StableAudioInput;
-    output: StableAudioOutput;
-  };
   "cassetteai/music-generator": {
     input: MusicGeneratorInput;
     output: MusicGeneratorOutput;
-  };
-  "fal-ai/elevenlabs/text-to-dialogue/eleven-v3": {
-    input: ElevenlabsTextToDialogueElevenV3Input;
-    output: ElevenlabsTextToDialogueElevenV3Output;
-  };
-  "fal-ai/kokoro/american-english": {
-    input: KokoroAmericanEnglishInput;
-    output: KokoroAmericanEnglishOutput;
-  };
-  "sonauto/v2/text-to-music": {
-    input: V2TextToMusicInput;
-    output: V2TextToMusicOutput;
-  };
-  "fal-ai/lyria2": {
-    input: Lyria2Input;
-    output: Lyria2Output;
-  };
-  "fal-ai/stable-audio-25/text-to-audio": {
-    input: StableAudio25TextToAudioInput;
-    output: StableAudio25TextToAudioOutput;
-  };
-  "fal-ai/gemini-tts": {
-    input: GeminiTtsInput;
-    output: GeminiTtsOutput;
-  };
-  "fal-ai/f5-tts": {
-    input: F5TtsInput;
-    output: F5TtsOutput;
-  };
-  "fal-ai/mmaudio-v2/text-to-audio": {
-    input: MmaudioV2TextToAudioInput;
-    output: MmaudioV2TextToAudioOutput;
   };
   "cassetteai/sound-effects-generator": {
     input: SoundEffectsGeneratorInput;
@@ -307,17 +147,101 @@ export type AudioEndpointMap = {
     input: AceStepInput;
     output: AceStepOutput;
   };
+  "fal-ai/ace-step/audio-inpaint": {
+    input: AceStepAudioInpaintInput;
+    output: AceStepAudioInpaintOutput;
+  };
+  "fal-ai/ace-step/audio-outpaint": {
+    input: AceStepAudioOutpaintInput;
+    output: AceStepAudioOutpaintOutput;
+  };
+  "fal-ai/ace-step/audio-to-audio": {
+    input: AceStepAudioToAudioInput;
+    output: AceStepAudioToAudioOutput;
+  };
   "fal-ai/ace-step/prompt-to-audio": {
     input: AceStepPromptToAudioInput;
     output: AceStepPromptToAudioOutput;
   };
-  "fal-ai/minimax-music": {
-    input: MinimaxMusicInput;
-    output: MinimaxMusicOutput;
+  "fal-ai/audio-understanding": {
+    input: AudioUnderstandingInput;
+    output: AudioUnderstandingOutput;
   };
-  "fal-ai/minimax-music/v1.5": {
-    input: MinimaxMusicV15Input;
-    output: MinimaxMusicV15Output;
+  "fal-ai/csm-1b": {
+    input: Csm1bInput;
+    output: Csm1bOutput;
+  };
+  "fal-ai/deepfilternet3": {
+    input: Deepfilternet3Input;
+    output: Deepfilternet3Output;
+  };
+  "fal-ai/demucs": {
+    input: DemucsInput;
+    output: DemucsOutput;
+  };
+  "fal-ai/dia-tts/voice-clone": {
+    input: DiaTtsVoiceCloneInput;
+    output: DiaTtsVoiceCloneOutput;
+  };
+  "fal-ai/diffrhythm": {
+    input: DiffrhythmInput;
+    output: DiffrhythmOutput;
+  };
+  "fal-ai/elevenlabs/audio-isolation": {
+    input: ElevenlabsAudioIsolationInput;
+    output: ElevenlabsAudioIsolationOutput;
+  };
+  "fal-ai/elevenlabs/music": {
+    input: ElevenlabsMusicInput;
+    output: ElevenlabsMusicOutput;
+  };
+  "fal-ai/elevenlabs/sound-effects/v2": {
+    input: ElevenlabsSoundEffectsV2Input;
+    output: ElevenlabsSoundEffectsV2Output;
+  };
+  "fal-ai/elevenlabs/text-to-dialogue/eleven-v3": {
+    input: ElevenlabsTextToDialogueElevenV3Input;
+    output: ElevenlabsTextToDialogueElevenV3Output;
+  };
+  "fal-ai/elevenlabs/tts/eleven-v3": {
+    input: ElevenlabsTtsElevenV3Input;
+    output: ElevenlabsTtsElevenV3Output;
+  };
+  "fal-ai/elevenlabs/tts/multilingual-v2": {
+    input: ElevenlabsTtsMultilingualV2Input;
+    output: ElevenlabsTtsMultilingualV2Output;
+  };
+  "fal-ai/elevenlabs/voice-changer": {
+    input: ElevenlabsVoiceChangerInput;
+    output: ElevenlabsVoiceChangerOutput;
+  };
+  "fal-ai/f5-tts": {
+    input: F5TtsInput;
+    output: F5TtsOutput;
+  };
+  "fal-ai/ffmpeg-api/merge-audios": {
+    input: FfmpegApiMergeAudiosInput;
+    output: FfmpegApiMergeAudiosOutput;
+  };
+  "fal-ai/gemini-tts": {
+    input: GeminiTtsInput;
+    output: GeminiTtsOutput;
+  };
+  "fal-ai/kling-video/create-voice": {
+    input: KlingVideoCreateVoiceInput;
+    output: KlingVideoCreateVoiceOutput;
+  };
+  "fal-ai/kling-video/video-to-audio": {
+    input: KlingVideoVideoToAudioInput;
+    output: KlingVideoVideoToAudioOutput;
+  };
+  "fal-ai/kokoro/american-english": {
+    input: KokoroAmericanEnglishInput;
+    output: KokoroAmericanEnglishOutput;
+  };
+  "fal-ai/kokoro/brazilian-portuguese": {
+    input: KokoroBrazilianPortugueseInput;
+    output: KokoroBrazilianPortugueseOutput;
   };
   "fal-ai/kokoro/british-english": {
     input: KokoroBritishEnglishInput;
@@ -327,73 +251,149 @@ export type AudioEndpointMap = {
     input: KokoroFrenchInput;
     output: KokoroFrenchOutput;
   };
-  "fal-ai/kokoro/spanish": {
-    input: KokoroSpanishInput;
-    output: KokoroSpanishOutput;
-  };
-  "fal-ai/yue": {
-    input: YueInput;
-    output: YueOutput;
-  };
   "fal-ai/kokoro/hindi": {
     input: KokoroHindiInput;
     output: KokoroHindiOutput;
-  };
-  "fal-ai/kokoro/japanese": {
-    input: KokoroJapaneseInput;
-    output: KokoroJapaneseOutput;
-  };
-  "fal-ai/zonos": {
-    input: ZonosInput;
-    output: ZonosOutput;
-  };
-  "sonauto/v2/inpaint": {
-    input: V2InpaintInput;
-    output: V2InpaintOutput;
-  };
-  "fal-ai/kokoro/brazilian-portuguese": {
-    input: KokoroBrazilianPortugueseInput;
-    output: KokoroBrazilianPortugueseOutput;
-  };
-  "fal-ai/csm-1b": {
-    input: Csm1bInput;
-    output: Csm1bOutput;
-  };
-  "fal-ai/diffrhythm": {
-    input: DiffrhythmInput;
-    output: DiffrhythmOutput;
-  };
-  "fal-ai/kokoro/mandarin-chinese": {
-    input: KokoroMandarinChineseInput;
-    output: KokoroMandarinChineseOutput;
   };
   "fal-ai/kokoro/italian": {
     input: KokoroItalianInput;
     output: KokoroItalianOutput;
   };
-  "beatoven/music-generation": {
-    input: MusicGenerationInput;
-    output: MusicGenerationOutput;
+  "fal-ai/kokoro/japanese": {
+    input: KokoroJapaneseInput;
+    output: KokoroJapaneseOutput;
   };
-  "beatoven/sound-effect-generation": {
-    input: SoundEffectGenerationInput;
-    output: SoundEffectGenerationOutput;
+  "fal-ai/kokoro/mandarin-chinese": {
+    input: KokoroMandarinChineseInput;
+    output: KokoroMandarinChineseOutput;
+  };
+  "fal-ai/kokoro/spanish": {
+    input: KokoroSpanishInput;
+    output: KokoroSpanishOutput;
+  };
+  "fal-ai/lava-sr": {
+    input: LavaSrInput;
+    output: LavaSrOutput;
+  };
+  "fal-ai/lyria2": {
+    input: Lyria2Input;
+    output: Lyria2Output;
+  };
+  "fal-ai/minimax-music": {
+    input: MinimaxMusicInput;
+    output: MinimaxMusicOutput;
+  };
+  "fal-ai/minimax-music/v1.5": {
+    input: MinimaxMusicV15Input;
+    output: MinimaxMusicV15Output;
+  };
+  "fal-ai/minimax-music/v2": {
+    input: MinimaxMusicV2Input;
+    output: MinimaxMusicV2Output;
+  };
+  "fal-ai/minimax-music/v2.5": {
+    input: MinimaxMusicV25Input;
+    output: MinimaxMusicV25Output;
+  };
+  "fal-ai/minimax-music/v2.6": {
+    input: MinimaxMusicV26Input;
+    output: MinimaxMusicV26Output;
+  };
+  "fal-ai/mmaudio-v2/text-to-audio": {
+    input: MmaudioV2TextToAudioInput;
+    output: MmaudioV2TextToAudioOutput;
+  };
+  "fal-ai/nova-sr": {
+    input: NovaSrInput;
+    output: NovaSrOutput;
+  };
+  "fal-ai/personaplex": {
+    input: PersonaplexInput;
+    output: PersonaplexOutput;
+  };
+  "fal-ai/personaplex/realtime": {
+    input: PersonaplexRealtimeInput;
+    output: PersonaplexRealtimeOutput;
+  };
+  "fal-ai/qwen-3-tts/clone-voice/0.6b": {
+    input: Qwen3TtsCloneVoice06bInput;
+    output: Qwen3TtsCloneVoice06bOutput;
+  };
+  "fal-ai/qwen-3-tts/clone-voice/1.7b": {
+    input: Qwen3TtsCloneVoice17bInput;
+    output: Qwen3TtsCloneVoice17bOutput;
+  };
+  "fal-ai/sam-audio/separate": {
+    input: SamAudioSeparateInput;
+    output: SamAudioSeparateOutput;
+  };
+  "fal-ai/sam-audio/span-separate": {
+    input: SamAudioSpanSeparateInput;
+    output: SamAudioSpanSeparateOutput;
+  };
+  "fal-ai/sam-audio/visual-separate": {
+    input: SamAudioVisualSeparateInput;
+    output: SamAudioVisualSeparateOutput;
+  };
+  "fal-ai/stable-audio": {
+    input: StableAudioInput;
+    output: StableAudioOutput;
+  };
+  "fal-ai/stable-audio-25/audio-to-audio": {
+    input: StableAudio25AudioToAudioInput;
+    output: StableAudio25AudioToAudioOutput;
+  };
+  "fal-ai/stable-audio-25/inpaint": {
+    input: StableAudio25InpaintInput;
+    output: StableAudio25InpaintOutput;
+  };
+  "fal-ai/stable-audio-25/text-to-audio": {
+    input: StableAudio25TextToAudioInput;
+    output: StableAudio25TextToAudioOutput;
+  };
+  "fal-ai/tada/1b/text-to-speech": {
+    input: Tada1bTextToSpeechInput;
+    output: Tada1bTextToSpeechOutput;
+  };
+  "fal-ai/tada/3b/text-to-speech": {
+    input: Tada3bTextToSpeechInput;
+    output: Tada3bTextToSpeechOutput;
+  };
+  "fal-ai/workflow-utilities/audio-compressor": {
+    input: WorkflowUtilitiesAudioCompressorInput;
+    output: WorkflowUtilitiesAudioCompressorOutput;
+  };
+  "fal-ai/workflow-utilities/impulse-response": {
+    input: WorkflowUtilitiesImpulseResponseInput;
+    output: WorkflowUtilitiesImpulseResponseOutput;
+  };
+  "fal-ai/yue": {
+    input: YueInput;
+    output: YueOutput;
+  };
+  "fal-ai/zonos": {
+    input: ZonosInput;
+    output: ZonosOutput;
   };
   "mirelo-ai/sfx-v1.5/video-to-audio": {
     input: SfxV15VideoToAudioInput;
     output: SfxV15VideoToAudioOutput;
   };
-  "fal-ai/kling-video/video-to-audio": {
-    input: KlingVideoVideoToAudioInput;
-    output: KlingVideoVideoToAudioOutput;
-  };
   "mirelo-ai/sfx-v1/video-to-audio": {
     input: SfxV1VideoToAudioInput;
     output: SfxV1VideoToAudioOutput;
   };
-  "fal-ai/sam-audio/visual-separate": {
-    input: SamAudioVisualSeparateInput;
-    output: SamAudioVisualSeparateOutput;
+  "sonauto/v2/extend": {
+    input: V2ExtendInput;
+    output: V2ExtendOutput;
+  };
+  "sonauto/v2/inpaint": {
+    input: V2InpaintInput;
+    output: V2InpaintOutput;
+  };
+  "sonauto/v2/text-to-music": {
+    input: V2TextToMusicInput;
+    output: V2TextToMusicOutput;
   };
 };
 

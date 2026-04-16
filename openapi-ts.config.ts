@@ -494,6 +494,16 @@ function mergeOpenAPISpecs(specs: Array<object>, categoryName: string): object {
   if (first?.servers) merged.servers = structuredClone(first.servers);
   if (first?.security) merged.security = structuredClone(first.security);
 
+  // Sort paths and schemas alphabetically for stable, deterministic output
+  merged.paths = Object.fromEntries(
+    Object.entries(merged.paths!).sort(([a], [b]) => a.localeCompare(b)),
+  );
+  merged.components!.schemas = Object.fromEntries(
+    Object.entries(merged.components!.schemas!).sort(([a], [b]) =>
+      a.localeCompare(b),
+    ),
+  );
+
   return merged;
 }
 

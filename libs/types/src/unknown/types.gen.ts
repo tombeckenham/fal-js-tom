@@ -5,15 +5,24 @@ export type ClientOptions = {
 };
 
 /**
+ * InterleaveVideoOutput
+ *
+ * Output model for interleaved video
+ */
+export type WorkflowUtilitiesInterleaveVideoOutput = {
+  video: File;
+};
+
+/**
  * File
  */
 export type File = {
   /**
-   * File Size
+   * Url
    *
-   * The size of the file in bytes.
+   * The URL where the file can be downloaded from.
    */
-  file_size?: number | unknown;
+  url: string;
   /**
    * File Name
    *
@@ -27,20 +36,11 @@ export type File = {
    */
   content_type?: string | unknown;
   /**
-   * Url
+   * File Size
    *
-   * The URL where the file can be downloaded from.
+   * The size of the file in bytes.
    */
-  url: string;
-};
-
-/**
- * InterleaveVideoOutput
- *
- * Output model for interleaved video
- */
-export type WorkflowUtilitiesInterleaveVideoOutput = {
-  video: File;
+  file_size?: number | unknown;
 };
 
 /**
@@ -62,17 +62,18 @@ export type WorkflowUtilitiesInterleaveVideoInput = {
  */
 export type UsageInfo = {
   /**
-   * Completion Tokens
-   */
-  completion_tokens?: number | unknown;
-  /**
    * Total Tokens
    */
   total_tokens?: number;
   /**
+   * Completion Tokens
+   */
+  completion_tokens?: number | unknown;
+  /**
    * Prompt Tokens
    */
   prompt_tokens?: number | unknown;
+  prompt_tokens_details?: PromptTokensDetails | unknown;
   /**
    * Cost
    */
@@ -80,19 +81,33 @@ export type UsageInfo = {
 };
 
 /**
+ * PromptTokensDetails
+ */
+export type PromptTokensDetails = {
+  /**
+   * Cached Tokens
+   */
+  cached_tokens?: number;
+  /**
+   * Cache Write Tokens
+   */
+  cache_write_tokens?: number;
+};
+
+/**
  * AudioOutput
  */
 export type RouterAudioOutput = {
-  /**
-   * Token usage information
-   */
-  usage: UsageInfo | unknown;
   /**
    * Output
    *
    * Generated output from audio processing
    */
   output: string;
+  /**
+   * Token usage information
+   */
+  usage: UsageInfo | unknown;
 };
 
 /**
@@ -100,23 +115,11 @@ export type RouterAudioOutput = {
  */
 export type RouterAudioInput = {
   /**
-   * Prompt
-   *
-   * Prompt to be used for the audio processing
-   */
-  prompt: string;
-  /**
    * System Prompt
    *
    * System prompt to provide context or instructions to the model
    */
   system_prompt?: string | unknown;
-  /**
-   * Reasoning
-   *
-   * Should reasoning be the part of the final answer.
-   */
-  reasoning?: boolean;
   /**
    * Model
    *
@@ -124,11 +127,11 @@ export type RouterAudioInput = {
    */
   model: string;
   /**
-   * Audio Url
+   * Max Tokens
    *
-   * URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.
+   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
    */
-  audio_url: string | Blob | File;
+  max_tokens?: number | unknown;
   /**
    * Temperature
    *
@@ -136,11 +139,23 @@ export type RouterAudioInput = {
    */
   temperature?: number;
   /**
-   * Max Tokens
+   * Prompt
    *
-   * This sets the upper limit for the number of tokens the model can generate in response. It won't produce more than this limit. The maximum value is the context length minus the prompt length.
+   * Prompt to be used for the audio processing
    */
-  max_tokens?: number | unknown;
+  prompt: string;
+  /**
+   * Audio Url
+   *
+   * URL or data URI of the audio file to process. Supported formats: wav, mp3, aiff, aac, ogg, flac, m4a.
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Reasoning
+   *
+   * Should reasoning be the part of the final answer.
+   */
+  reasoning?: boolean;
 };
 
 export type QueueStatus = {
@@ -178,157 +193,6 @@ export type QueueStatus = {
    */
   queue_position?: number;
 };
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/openrouter/router/audio/requests/{request_id}/status";
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponse =
-  GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses];
-
-export type PutOpenrouterRouterAudioRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/audio/requests/{request_id}/cancel";
-};
-
-export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponse =
-  PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses];
-
-export type PostOpenrouterRouterAudioData = {
-  body: RouterAudioInput;
-  path?: never;
-  query?: never;
-  url: "/openrouter/router/audio";
-};
-
-export type PostOpenrouterRouterAudioResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostOpenrouterRouterAudioResponse =
-  PostOpenrouterRouterAudioResponses[keyof PostOpenrouterRouterAudioResponses];
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/openrouter/router/audio/requests/{request_id}";
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: RouterAudioOutput;
-};
-
-export type GetOpenrouterRouterAudioRequestsByRequestIdResponse =
-  GetOpenrouterRouterAudioRequestsByRequestIdResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdResponses];
-
-export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/fal-ai/workflow-utilities/interleave-video/requests/{request_id}/status";
-  };
-
-export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponse =
-  GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/fal-ai/workflow-utilities/interleave-video/requests/{request_id}/cancel";
-  };
-
-export type PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponse =
-  PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponses];
 
 export type PostFalAiWorkflowUtilitiesInterleaveVideoData = {
   body: WorkflowUtilitiesInterleaveVideoInput;
@@ -369,3 +233,154 @@ export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponses
 
 export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponse =
   GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponses[keyof GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdResponses];
+
+export type PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/fal-ai/workflow-utilities/interleave-video/requests/{request_id}/cancel";
+  };
+
+export type PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponse =
+  PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponses[keyof PutFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/fal-ai/workflow-utilities/interleave-video/requests/{request_id}/status";
+  };
+
+export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponse =
+  GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponses[keyof GetFalAiWorkflowUtilitiesInterleaveVideoRequestsByRequestIdStatusResponses];
+
+export type PostOpenrouterRouterAudioData = {
+  body: RouterAudioInput;
+  path?: never;
+  query?: never;
+  url: "/openrouter/router/audio";
+};
+
+export type PostOpenrouterRouterAudioResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostOpenrouterRouterAudioResponse =
+  PostOpenrouterRouterAudioResponses[keyof PostOpenrouterRouterAudioResponses];
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/audio/requests/{request_id}";
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: RouterAudioOutput;
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdResponse =
+  GetOpenrouterRouterAudioRequestsByRequestIdResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdResponses];
+
+export type PutOpenrouterRouterAudioRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/openrouter/router/audio/requests/{request_id}/cancel";
+};
+
+export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutOpenrouterRouterAudioRequestsByRequestIdCancelResponse =
+  PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses[keyof PutOpenrouterRouterAudioRequestsByRequestIdCancelResponses];
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/openrouter/router/audio/requests/{request_id}/status";
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetOpenrouterRouterAudioRequestsByRequestIdStatusResponse =
+  GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses[keyof GetOpenrouterRouterAudioRequestsByRequestIdStatusResponses];

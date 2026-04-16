@@ -13,14 +13,14 @@ import {
 /** Zod schema for unknown endpoints using discriminatedUnion */
 export const UnknownEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
-    endpoint: z.literal("openrouter/router/audio"),
-    input: zRouterAudioInput,
-    output: zRouterAudioOutput,
-  }),
-  z.object({
     endpoint: z.literal("fal-ai/workflow-utilities/interleave-video"),
     input: zWorkflowUtilitiesInterleaveVideoInput,
     output: zWorkflowUtilitiesInterleaveVideoOutput,
+  }),
+  z.object({
+    endpoint: z.literal("openrouter/router/audio"),
+    input: zRouterAudioInput,
+    output: zRouterAudioOutput,
   }),
 ]);
 

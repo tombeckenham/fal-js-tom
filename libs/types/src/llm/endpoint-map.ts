@@ -19,6 +19,18 @@ import type {
 } from "./types.gen";
 
 export type LlmEndpointMap = {
+  "fal-ai/bytedance/seed/v2/mini": {
+    input: BytedanceSeedV2MiniInput;
+    output: BytedanceSeedV2MiniOutput;
+  };
+  "fal-ai/qwen-3-guard": {
+    input: Qwen3GuardInput;
+    output: Qwen3GuardOutput;
+  };
+  "fal-ai/video-prompt-generator": {
+    input: VideoPromptGeneratorInput;
+    output: VideoPromptGeneratorOutput;
+  };
   "openrouter/router": {
     input: RouterInput;
     output: RouterOutput;
@@ -27,25 +39,13 @@ export type LlmEndpointMap = {
     input: RouterOpenaiV1ChatCompletionsInput;
     output: RouterOpenaiV1ChatCompletionsOutput;
   };
-  "fal-ai/bytedance/seed/v2/mini": {
-    input: BytedanceSeedV2MiniInput;
-    output: BytedanceSeedV2MiniOutput;
-  };
-  "fal-ai/video-prompt-generator": {
-    input: VideoPromptGeneratorInput;
-    output: VideoPromptGeneratorOutput;
-  };
-  "openrouter/router/openai/v1/responses": {
-    input: RouterOpenaiV1ResponsesInput;
-    output: RouterOpenaiV1ResponsesOutput;
-  };
   "openrouter/router/openai/v1/embeddings": {
     input: RouterOpenaiV1EmbeddingsInput;
     output: RouterOpenaiV1EmbeddingsOutput;
   };
-  "fal-ai/qwen-3-guard": {
-    input: Qwen3GuardInput;
-    output: Qwen3GuardOutput;
+  "openrouter/router/openai/v1/responses": {
+    input: RouterOpenaiV1ResponsesInput;
+    output: RouterOpenaiV1ResponsesOutput;
   };
 };
 

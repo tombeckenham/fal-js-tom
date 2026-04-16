@@ -9,13 +9,13 @@ import type {
 } from "./types.gen";
 
 export type UnknownEndpointMap = {
-  "openrouter/router/audio": {
-    input: RouterAudioInput;
-    output: RouterAudioOutput;
-  };
   "fal-ai/workflow-utilities/interleave-video": {
     input: WorkflowUtilitiesInterleaveVideoInput;
     output: WorkflowUtilitiesInterleaveVideoOutput;
+  };
+  "openrouter/router/audio": {
+    input: RouterAudioInput;
+    output: RouterAudioOutput;
   };
 };
 

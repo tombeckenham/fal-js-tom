@@ -23,6 +23,21 @@ import {
 /** Zod schema for llm endpoints using discriminatedUnion */
 export const LlmEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
+    endpoint: z.literal("fal-ai/bytedance/seed/v2/mini"),
+    input: zBytedanceSeedV2MiniInput,
+    output: zBytedanceSeedV2MiniOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/qwen-3-guard"),
+    input: zQwen3GuardInput,
+    output: zQwen3GuardOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/video-prompt-generator"),
+    input: zVideoPromptGeneratorInput,
+    output: zVideoPromptGeneratorOutput,
+  }),
+  z.object({
     endpoint: z.literal("openrouter/router"),
     input: zRouterInput,
     output: zRouterOutput,
@@ -33,29 +48,14 @@ export const LlmEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zRouterOpenaiV1ChatCompletionsOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/bytedance/seed/v2/mini"),
-    input: zBytedanceSeedV2MiniInput,
-    output: zBytedanceSeedV2MiniOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/video-prompt-generator"),
-    input: zVideoPromptGeneratorInput,
-    output: zVideoPromptGeneratorOutput,
-  }),
-  z.object({
-    endpoint: z.literal("openrouter/router/openai/v1/responses"),
-    input: zRouterOpenaiV1ResponsesInput,
-    output: zRouterOpenaiV1ResponsesOutput,
-  }),
-  z.object({
     endpoint: z.literal("openrouter/router/openai/v1/embeddings"),
     input: zRouterOpenaiV1EmbeddingsInput,
     output: zRouterOpenaiV1EmbeddingsOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/qwen-3-guard"),
-    input: zQwen3GuardInput,
-    output: zQwen3GuardOutput,
+    endpoint: z.literal("openrouter/router/openai/v1/responses"),
+    input: zRouterOpenaiV1ResponsesInput,
+    output: zRouterOpenaiV1ResponsesOutput,
   }),
 ]);
 

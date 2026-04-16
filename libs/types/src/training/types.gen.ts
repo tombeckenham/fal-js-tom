@@ -7,8 +7,8 @@ export type ClientOptions = {
 /**
  * Output
  */
-export type WanTrainerI2V720pOutput = {
-  lora_file: File;
+export type ZImageTurboTrainerV2Output = {
+  diffusers_lora_file: File;
   config_file: File;
 };
 
@@ -17,17 +17,17 @@ export type WanTrainerI2V720pOutput = {
  */
 export type File = {
   /**
+   * Url
+   *
+   * The URL where the file can be downloaded from.
+   */
+  url: string;
+  /**
    * File Size
    *
    * The size of the file in bytes.
    */
   file_size?: number | unknown;
-  /**
-   * File Name
-   *
-   * The name of the file. It will be auto-generated if not provided.
-   */
-  file_name?: string | unknown;
   /**
    * Content Type
    *
@@ -35,109 +35,17 @@ export type File = {
    */
   content_type?: string | unknown;
   /**
-   * Url
+   * File Name
    *
-   * The URL where the file can be downloaded from.
+   * The name of the file. It will be auto-generated if not provided.
    */
-  url: string;
+  file_name?: string | unknown;
 };
 
 /**
  * Input
  */
-export type WanTrainerI2V720pInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Output
- */
-export type WanTrainerFlf2V720pOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type WanTrainerFlf2V720pInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Output
- */
-export type QwenImageEditPlusTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputPlus
- */
-export type QwenImageEditPlusTrainerInput = {
+export type ZImageTurboTrainerV2Input = {
   /**
    * Steps
    *
@@ -145,290 +53,47 @@ export type QwenImageEditPlusTrainerInput = {
    */
   steps?: number;
   /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The Reference Image Count field should be set to the number of reference images.
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
    * Default Caption
    *
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Learning Rate
+   *
+   * Learning rate.
+   */
+  learning_rate?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images and corresponding captions.
+   *
+   * The images should be named: ROOT.EXT. For example: 001.jpg
+   *
+   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   */
+  image_data_url: string | Blob | File;
 };
 
 /**
  * Output
  */
-export type QwenImageEdit2509TrainerOutput = {
+export type ZImageTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
-};
-
-/**
- * InputPlus
- */
-export type QwenImageEdit2509TrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The Reference Image Count field should be set to the number of reference images.
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-};
-
-/**
- * PhotaProfileOutput
- */
-export type PhotaCreateProfileOutput = {
-  /**
-   * Profile Id
-   *
-   * The Photalabs profile ID.
-   */
-  profile_id: string;
-};
-
-/**
- * PhotaProfileCreateInput
- */
-export type PhotaCreateProfileInput = {
-  /**
-   * Image ZIP URL
-   *
-   * URL to a ZIP archive containing the profile images.
-   */
-  image_data_url: string | Blob | File;
-};
-
-/**
- * Output
- */
-export type WanTrainerT2V14bOutput = {
-  lora_file: File;
-  config_file: File;
 };
 
 /**
  * Input
  */
-export type WanTrainerT2V14bInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Output
- */
-export type QwenImageEditTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputEdit
- */
-export type QwenImageEditTrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-};
-
-/**
- * Output
- */
-export type Flux2TrainerV2EditOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputEditV2
- */
-export type Flux2TrainerV2EditInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
+export type ZImageTrainerInput = {
   /**
    * Learning Rate
    *
@@ -442,65 +107,84 @@ export type Flux2TrainerV2EditInput = {
    */
   default_caption?: string | unknown;
   /**
-   * Output Lora Format
+   * Steps
    *
-   * Dictates the naming scheme for the output weights
+   * Total number of training steps.
    */
-  output_lora_format?: "fal" | "comfy";
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * The zip can also contain a text file for each image. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Training Type
+   *
+   * Type of training to perform. Use 'content' to focus on the content of the images, 'style' to focus on the style of the images, and 'balanced' to focus on a combination of both.
+   */
+  training_type?: "content" | "style" | "balanced";
 };
 
 /**
  * Output
  */
-export type HunyuanVideoLoraTrainingOutput = {
-  config_file: File;
+export type ZImageBaseTrainerOutput = {
   diffusers_lora_file: File;
+  config_file: File;
 };
 
 /**
- * PublicInput
+ * Input
  */
-export type HunyuanVideoLoraTrainingInput = {
-  /**
-   * Trigger Word
-   *
-   * The trigger word to use.
-   */
-  trigger_word?: string;
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
-   */
-  images_data_url: string | Blob | File;
+export type ZImageBaseTrainerInput = {
   /**
    * Steps
    *
-   * Number of steps to train the LoRA on.
+   * Number of steps to train for
    */
-  steps: number;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
+  steps?: number;
   /**
    * Learning Rate
    *
-   * Learning rate to use for training.
+   * Learning rate.
    */
   learning_rate?: number;
   /**
-   * Do Caption
+   * Default Caption
    *
-   * Whether to generate captions for the images.
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
-  do_caption?: boolean;
+  default_caption?: string | unknown;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images and corresponding captions.
+   *
+   * The images should be named: ROOT.EXT. For example: 001.jpg
+   *
+   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   */
+  image_data_url: string | Blob | File;
 };
 
 /**
@@ -516,11 +200,29 @@ export type WanTrainerT2vOutput = {
  */
 export type WanTrainerT2vInput = {
   /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
    * Number Of Steps
    *
    * The number of steps to train for.
    */
   number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
   /**
    * Training Data URL
    *
@@ -529,106 +231,26 @@ export type WanTrainerT2vInput = {
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
   training_data_url: string | Blob | File;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerT2V14bOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerT2V14bInput = {
   /**
    * Learning Rate
    *
    * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
    */
   learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Output
- */
-export type QwenImageLayeredTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * Input
- */
-export type QwenImageLayeredTrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain groups of images. The images should be named:
-   *
-   * ROOT_start.EXT, ROOT_end.EXT, ROOT_end2.EXT, ..., ROOT_endN.EXT
-   * For example:
-   * photo_start.png, photo_end.png, photo_end2.png, ..., photo_endN.png
-   *
-   * The start image is the base image that will be decomposed into layers.
-   * The end images are the layers that will be added to the base image.  ROOT_end.EXT is the first layer, ROOT_end2.EXT is the second layer, and so on.
-   * You can have up to 8 layers.
-   * All image groups must have the same number of output layers.
-   *
-   * The end images can contain transparent regions. Only PNG and WebP images are supported since these are the only formats that support transparency.
-   *
-   * The zip can also contain a text file for each image group. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify a description of the base image.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-};
-
-/**
- * TrainingOutput
- */
-export type LtxVideoTrainerOutput = {
-  lora_file: File;
-  config_file: File;
-  /**
-   * The URL to the validations video.
-   */
-  video?: File | unknown;
-};
-
-/**
- * Input
- */
-export type LtxVideoTrainerInput = {
   /**
    * Number Of Steps
    *
@@ -636,78 +258,11 @@ export type LtxVideoTrainerInput = {
    */
   number_of_steps?: number;
   /**
-   * Frame Rate
+   * Auto-Scale Input
    *
-   * The target frames per second for the video.
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
    */
-  frame_rate?: number;
-  /**
-   * Validation
-   *
-   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
-   */
-  validation?: Array<Validation>;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Validation Reverse
-   *
-   * If true, the validation videos will be reversed. This is useful for effects that are learned in reverse and then applied in reverse.
-   */
-  validation_reverse?: boolean;
-  /**
-   * Number Of Frames
-   *
-   * The number of frames to use for training. This is the number of frames per second multiplied by the number of seconds.
-   */
-  number_of_frames?: number;
-  /**
-   * Training Data Url
-   *
-   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
-   *
-   * **Supported video formats:** .mp4, .mov, .avi, .mkv
-   * **Supported image formats:** .png, .jpg, .jpeg
-   *
-   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
-   *
-   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Split Input Duration Threshold
-   *
-   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned.
-   */
-  split_input_duration_threshold?: number;
-  /**
-   * Rank
-   *
-   * The rank of the LoRA.
-   */
-  rank?: 8 | 16 | 32 | 64 | 128;
-  /**
-   * Resolution
-   *
-   * The resolution to use for training. This is the resolution of the video.
-   */
-  resolution?: "low" | "medium" | "high";
-  /**
-   * Split Input Into Scenes
-   *
-   * If true, videos above a certain duration threshold will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned. This option has no effect on image datasets.
-   */
-  split_input_into_scenes?: boolean;
-  /**
-   * Aspect Ratio
-   *
-   * The aspect ratio to use for training. This is the aspect ratio of the video.
-   */
-  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  auto_scale_input?: boolean;
   /**
    * Trigger Phrase
    *
@@ -715,171 +270,13 @@ export type LtxVideoTrainerInput = {
    */
   trigger_phrase?: string;
   /**
-   * Validation Resolution
+   * Training Data URL
    *
-   * The resolution to use for validation.
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
-  validation_resolution?: "low" | "medium" | "high";
-  /**
-   * Validation Number Of Frames
-   *
-   * The number of frames to use for validation.
-   */
-  validation_number_of_frames?: number;
-  /**
-   * Validation Aspect Ratio
-   *
-   * The aspect ratio to use for validation.
-   */
-  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
-  /**
-   * Validation Negative Prompt
-   *
-   * A negative prompt to use for validation.
-   */
-  validation_negative_prompt?: string;
-  /**
-   * Auto Scale Input
-   *
-   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Validation
- */
-export type Validation = {
-  /**
-   * Prompt
-   *
-   * The prompt to use for validation.
-   */
-  prompt: string;
-  /**
-   * Image Url
-   *
-   * An image to use for image-to-video validation. If provided for one validation, _all_ validation inputs must have an image.
-   */
-  image_url?: string | unknown;
-};
-
-/**
- * Output
- */
-export type FluxKreaTrainerOutput = {
-  config_file: File;
-  /**
-   * URL to the preprocessed images.
-   */
-  debug_preprocessed_output?: File | unknown;
-  diffusers_lora_file: File;
-};
-
-/**
- * PublicInput
- */
-export type FluxKreaTrainerInput = {
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Is Input Format Already Preprocessed
-   *
-   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
-   */
-  is_input_format_already_preprocessed?: boolean;
-  /**
-   * Trigger Word
-   *
-   * Trigger word to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
-   *
-   */
-  trigger_word?: string | unknown | null;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number | unknown;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
-  /**
-   * Is Style
-   *
-   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
-   */
-  is_style?: boolean;
-  /**
-   * Create Masks
-   *
-   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
-   */
-  create_masks?: boolean;
-};
-
-/**
- * Output
- */
-export type QwenImage2512TrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * InputImage
- */
-export type QwenImage2512TrainerInput = {
-  /**
-   * Steps
-   *
-   * Number of steps to train for
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive for text-to-image training.
-   *
-   * The zip should contain images with their corresponding text captions:
-   *
-   * image.EXT and image.txt
-   * For example:
-   * photo.jpg and photo.txt
-   *
-   * The text file contains the caption/prompt describing the target image.
-   *
-   * If no text file is provided for an image, the default_caption will be used.
-   *
-   * If no default_caption is provided and a text file is missing, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for LoRA parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
+  training_data_url: string | Blob | File;
 };
 
 /**
@@ -895,11 +292,29 @@ export type WanTrainerOutput = {
  */
 export type WanTrainerInput = {
   /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
    * Number Of Steps
    *
    * The number of steps to train for.
    */
   number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
   /**
    * Training Data URL
    *
@@ -908,6 +323,118 @@ export type WanTrainerInput = {
    * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
    */
   training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerI2V720pOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerI2V720pInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type WanTrainerFlf2V720pOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type WanTrainerFlf2V720pInput = {
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Auto-Scale Input
+   *
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type Wan22TrainerT2vA14bOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type Wan22TrainerT2vA14bInput = {
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
   /**
    * Trigger Phrase
    *
@@ -926,126 +453,221 @@ export type WanTrainerInput = {
    * If true, the input will be automatically scale the video to 81 frames at 16fps.
    */
   auto_scale_input?: boolean;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
 };
 
 /**
  * Output
  */
-export type QwenImageTrainerV2Output = {
+export type Wan22TrainerI2vA14bOutput = {
+  lora_file: File;
   config_file: File;
-  diffusers_lora_file: File;
 };
 
 /**
- * InputImage
+ * Input
  */
-export type QwenImageTrainerV2Input = {
+export type Wan22TrainerI2vA14bInput = {
   /**
-   * Steps
+   * Number Of Steps
    *
-   * Number of steps to train for
+   * The number of steps to train for.
    */
-  steps?: number;
+  number_of_steps?: number;
   /**
-   * Image Data Url
+   * Trigger Phrase
    *
-   *
-   * URL to the input data zip archive for text-to-image training.
-   *
-   * The zip should contain images with their corresponding text captions:
-   *
-   * image.EXT and image.txt
-   * For example:
-   * photo.jpg and photo.txt
-   *
-   * The text file contains the caption/prompt describing the target image.
-   *
-   * If no text file is provided for an image, the default_caption will be used.
-   *
-   * If no default_caption is provided and a text file is missing, the training will fail.
-   *
+   * The phrase that will trigger the model to generate an image.
    */
-  image_data_url: string | Blob | File;
+  trigger_phrase?: string;
   /**
    * Learning Rate
    *
-   * Learning rate for LoRA parameters.
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
    */
   learning_rate?: number;
   /**
-   * Default Caption
+   * Auto-Scale Input
    *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   * If true, the input will be automatically scale the video to 81 frames at 16fps.
    */
-  default_caption?: string | unknown;
+  auto_scale_input?: boolean;
+  /**
+   * Training Data URL
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+};
+
+/**
+ * WanTrainerResponse
+ */
+export type Wan22ImageTrainerOutput = {
+  diffusers_lora_file: File;
+  config_file: File;
+  high_noise_lora: File;
+};
+
+/**
+ * BasicInput
+ */
+export type Wan22ImageTrainerInput = {
+  /**
+   * Number of Steps
+   *
+   * Number of training steps.
+   */
+  steps?: number;
+  /**
+   * Use Face Detection
+   *
+   * Whether to use face detection for the training data. When enabled, images will use the center of the face as the center of the image when resizing.
+   */
+  use_face_detection?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * Trigger phrase for the model.
+   */
+  trigger_phrase: string;
+  /**
+   * Use Masks
+   *
+   * Whether to use masks for the training data.
+   */
+  use_masks?: boolean;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for training.
+   */
+  learning_rate?: number;
+  /**
+   * Training Data URL
+   *
+   * URL to the training data.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Use Face Cropping
+   *
+   * Whether to use face cropping for the training data. When enabled, images will be cropped to the face before resizing.
+   */
+  use_face_cropping?: boolean;
+  /**
+   * Include Synthetic Captions
+   *
+   * Whether to include synthetic captions.
+   */
+  include_synthetic_captions?: boolean;
+  /**
+   * Is Style
+   *
+   * Whether the training data is style data. If true, face specific options like masking and face detection will be disabled.
+   */
+  is_style?: boolean;
+};
+
+/**
+ * Validation
+ */
+export type Validation = {
+  /**
+   * Image Url
+   *
+   * An image to use for image-to-video validation. If provided for one validation, _all_ validation inputs must have an image.
+   */
+  image_url?: string | unknown;
+  /**
+   * Prompt
+   *
+   * The prompt to use for validation.
+   */
+  prompt: string;
+};
+
+/**
+ * V2VValidation
+ *
+ * Validation input for video-to-video training.
+ */
+export type V2vValidation = {
+  /**
+   * Reference Video Url
+   *
+   * URL to reference video for IC-LoRA validation. This is the input video that will be transformed.
+   */
+  reference_video_url: string;
+  /**
+   * Prompt
+   *
+   * The prompt to use for validation.
+   */
+  prompt: string;
 };
 
 /**
  * Output
  */
-export type Flux2TrainerEditOutput = {
-  config_file: File;
+export type TurboFluxTrainerOutput = {
   diffusers_lora_file: File;
+  config_file: File;
 };
 
 /**
- * InputEdit
+ * Input
  */
-export type Flux2TrainerEditInput = {
+export type TurboFluxTrainerInput = {
+  /**
+   * Trigger Phrase
+   *
+   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
+   *
+   */
+  trigger_phrase?: string | unknown;
   /**
    * Steps
    *
-   * Total number of training steps.
+   * Number of steps to train the LoRA on.
    */
   steps?: number;
   /**
-   * Image Data Url
-   *
-   *
-   * URL to the input data zip archive.
-   *
-   * The zip should contain pairs of images. The images should be named:
-   *
-   * ROOT_start.EXT and ROOT_end.EXT
-   * For example:
-   * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
-   *
-   * The zip can also contain a text file for each image pair. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
    * Learning Rate
    *
-   * Learning rate applied to trainable parameters.
+   * Learning rate for the training.
    */
   learning_rate?: number;
   /**
-   * Default Caption
+   * Images Data Url
    *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
    */
-  default_caption?: string | unknown;
+  images_data_url: string | Blob | File;
   /**
-   * Output Lora Format
+   * Training Style
    *
-   * Dictates the naming scheme for the output weights
+   * Training style to use.
    */
-  output_lora_format?: "fal" | "comfy";
+  training_style?: "subject" | "style" | unknown;
+  /**
+   * Face Crop
+   *
+   * Whether to try to detect the face and crop the images to the face.
+   */
+  face_crop?: boolean;
 };
 
 /**
@@ -1166,138 +788,45 @@ export type RecraftV3CreateStyleInput = {
 /**
  * Output
  */
-export type Wan22TrainerT2vA14bOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type Wan22TrainerT2vA14bInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Output
- */
-export type Wan22TrainerI2vA14bOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * Input
- */
-export type Wan22TrainerI2vA14bInput = {
-  /**
-   * Number Of Steps
-   *
-   * The number of steps to train for.
-   */
-  number_of_steps?: number;
-  /**
-   * Training Data URL
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images and/or videos, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image/video file it corresponds to.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Trigger Phrase
-   *
-   * The phrase that will trigger the model to generate an image.
-   */
-  trigger_phrase?: string;
-  /**
-   * Learning Rate
-   *
-   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
-   */
-  learning_rate?: number;
-  /**
-   * Auto-Scale Input
-   *
-   * If true, the input will be automatically scale the video to 81 frames at 16fps.
-   */
-  auto_scale_input?: boolean;
-};
-
-/**
- * Output
- */
-export type Flux2Klein4bBaseTrainerOutput = {
+export type QwenImageTrainerV2Output = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * InputT2IV2
- *
- * V2 input with multi-resolution bucketing.
+ * InputImage
  */
-export type Flux2Klein4bBaseTrainerInput = {
+export type QwenImageTrainerV2Input = {
   /**
    * Steps
    *
-   * Total number of training steps.
+   * Number of steps to train for
    */
   steps?: number;
   /**
    * Image Data Url
    *
    *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   * URL to the input data zip archive for text-to-image training.
    *
-   * The zip can also contain a text file for each image. The text file should be named:
-   * ROOT.txt
+   * The zip should contain images with their corresponding text captions:
+   *
+   * image.EXT and image.txt
    * For example:
-   * photo.txt
+   * photo.jpg and photo.txt
    *
-   * This text file can be used to specify the edit instructions for the image pair.
+   * The text file contains the caption/prompt describing the target image.
    *
-   * If no text file is provided, the default_caption will be used.
+   * If no text file is provided for an image, the default_caption will be used.
    *
-   * If no default_caption is provided, the training will fail.
+   * If no default_caption is provided and a text file is missing, the training will fail.
    *
    */
   image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
-   * Learning rate applied to trainable parameters.
+   * Learning rate for LoRA parameters.
    */
   learning_rate?: number;
   /**
@@ -1306,18 +835,56 @@ export type Flux2Klein4bBaseTrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type QwenImage2512TrainerV2Output = {
+export type QwenImageTrainerOutput = {
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type QwenImageTrainerInput = {
+  /**
+   * Trigger Phrase
+   *
+   * Default caption to use for images that don't have corresponding text files. If provided, missing .txt files will be created automatically.
+   */
+  trigger_phrase?: string;
+  /**
+   * Steps
+   *
+   * Total number of training steps to perform. Default is 4000.
+   */
+  steps?: number;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for training. Default is 5e-4
+   */
+  learning_rate?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images for training. The archive should contain images and corresponding text files with captions.
+   * Each text file should have the same name as the image file it corresponds to (e.g., image1.jpg and image1.txt).
+   * If text files are missing for some images, you can provide a trigger_phrase to automatically create them.
+   * Supported image formats: PNG, JPG, JPEG, WEBP.
+   * Try to use at least 10 images, although more is better.
+   *
+   */
+  image_data_url: string | Blob | File;
+};
+
+/**
+ * Output
+ */
+export type QwenImageLayeredTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
@@ -1325,7 +892,7 @@ export type QwenImage2512TrainerV2Output = {
 /**
  * Input
  */
-export type QwenImage2512TrainerV2Input = {
+export type QwenImageLayeredTrainerInput = {
   /**
    * Steps
    *
@@ -1338,20 +905,36 @@ export type QwenImage2512TrainerV2Input = {
    *
    * URL to the input data zip archive.
    *
-   * The zip should contain pairs of images and corresponding captions.
+   * The zip should contain groups of images. The images should be named:
    *
-   * The images should be named: ROOT.EXT. For example: 001.jpg
+   * ROOT_start.EXT, ROOT_end.EXT, ROOT_end2.EXT, ..., ROOT_endN.EXT
+   * For example:
+   * photo_start.png, photo_end.png, photo_end2.png, ..., photo_endN.png
    *
-   * The corresponding captions should be named: ROOT.txt. For example: 001.txt
+   * The start image is the base image that will be decomposed into layers.
+   * The end images are the layers that will be added to the base image.  ROOT_end.EXT is the first layer, ROOT_end2.EXT is the second layer, and so on.
+   * You can have up to 8 layers.
+   * All image groups must have the same number of output layers.
    *
-   * If no text file is provided for an image, the default_caption will be used.
+   * The end images can contain transparent regions. Only PNG and WebP images are supported since these are the only formats that support transparency.
+   *
+   * The zip can also contain a text file for each image group. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify a description of the base image.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
    *
    */
   image_data_url: string | Blob | File;
   /**
    * Learning Rate
    *
-   * Learning rate.
+   * Learning rate for LoRA parameters.
    */
   learning_rate?: number;
   /**
@@ -1365,19 +948,19 @@ export type QwenImage2512TrainerV2Input = {
 /**
  * Output
  */
-export type Flux2Klein4bBaseTrainerEditOutput = {
+export type QwenImageEditTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * InputEditV2
+ * InputEdit
  */
-export type Flux2Klein4bBaseTrainerEditInput = {
+export type QwenImageEditTrainerInput = {
   /**
    * Steps
    *
-   * Total number of training steps.
+   * Number of steps to train for
    */
   steps?: number;
   /**
@@ -1391,11 +974,6 @@ export type Flux2Klein4bBaseTrainerEditInput = {
    * ROOT_start.EXT and ROOT_end.EXT
    * For example:
    * photo_start.jpg and photo_end.jpg
-   *
-   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
-   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
-   * For example:
-   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
    *
    * The zip can also contain a text file for each image pair. The text file should be named:
    * ROOT.txt
@@ -1413,7 +991,7 @@ export type Flux2Klein4bBaseTrainerEditInput = {
   /**
    * Learning Rate
    *
-   * Learning rate applied to trainable parameters.
+   * Learning rate for LoRA parameters.
    */
   learning_rate?: number;
   /**
@@ -1422,12 +1000,70 @@ export type Flux2Klein4bBaseTrainerEditInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImageEditPlusTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputPlus
+ */
+export type QwenImageEditPlusTrainerInput = {
   /**
-   * Output Lora Format
+   * Steps
    *
-   * Dictates the naming scheme for the output weights
+   * Number of steps to train for
    */
-  output_lora_format?: "fal" | "comfy";
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The Reference Image Count field should be set to the number of reference images.
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
 };
 
 /**
@@ -1497,65 +1133,79 @@ export type QwenImageEdit2511TrainerInput = {
 /**
  * Output
  */
-export type QwenImageTrainerOutput = {
-  lora_file: File;
-  config_file: File;
-};
-
-/**
- * PublicInput
- */
-export type QwenImageTrainerInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps to perform. Default is 4000.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images for training. The archive should contain images and corresponding text files with captions.
-   * Each text file should have the same name as the image file it corresponds to (e.g., image1.jpg and image1.txt).
-   * If text files are missing for some images, you can provide a trigger_phrase to automatically create them.
-   * Supported image formats: PNG, JPG, JPEG, WEBP.
-   * Try to use at least 10 images, although more is better.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for training. Default is 5e-4
-   */
-  learning_rate?: number;
-  /**
-   * Trigger Phrase
-   *
-   * Default caption to use for images that don't have corresponding text files. If provided, missing .txt files will be created automatically.
-   */
-  trigger_phrase?: string;
-};
-
-/**
- * Output
- */
-export type ZImageBaseTrainerOutput = {
+export type QwenImageEdit2509TrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * Input
+ * InputPlus
  */
-export type ZImageBaseTrainerInput = {
+export type QwenImageEdit2509TrainerInput = {
   /**
    * Steps
    *
    * Number of steps to train for
    */
   steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain more than one reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ..., ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The Reference Image Count field should be set to the number of reference images.
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+};
+
+/**
+ * Output
+ */
+export type QwenImage2512TrainerV2Output = {
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type QwenImage2512TrainerV2Input = {
   /**
    * Image Data Url
    *
@@ -1573,9 +1223,67 @@ export type ZImageBaseTrainerInput = {
    */
   image_data_url: string | Blob | File;
   /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
    * Learning Rate
    *
    * Learning rate.
+   */
+  learning_rate?: number;
+};
+
+/**
+ * Output
+ */
+export type QwenImage2512TrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputImage
+ */
+export type QwenImage2512TrainerInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train for
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive for text-to-image training.
+   *
+   * The zip should contain images with their corresponding text captions:
+   *
+   * image.EXT and image.txt
+   * For example:
+   * photo.jpg and photo.txt
+   *
+   * The text file contains the caption/prompt describing the target image.
+   *
+   * If no text file is provided for an image, the default_caption will be used.
+   *
+   * If no default_caption is provided and a text file is missing, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for LoRA parameters.
    */
   learning_rate?: number;
   /**
@@ -1586,12 +1294,388 @@ export type ZImageBaseTrainerInput = {
   default_caption?: string | unknown;
 };
 
+export type QueueStatus = {
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
+  /**
+   * The request id.
+   */
+  request_id: string;
+  /**
+   * The response url.
+   */
+  response_url?: string;
+  /**
+   * The status url.
+   */
+  status_url?: string;
+  /**
+   * The cancel url.
+   */
+  cancel_url?: string;
+  /**
+   * The logs.
+   */
+  logs?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The metrics.
+   */
+  metrics?: {
+    [key: string]: unknown;
+  };
+  /**
+   * The queue position.
+   */
+  queue_position?: number;
+};
+
+/**
+ * PhotaProfileOutput
+ */
+export type PhotaCreateProfileOutput = {
+  /**
+   * Profile Id
+   *
+   * The Photalabs profile ID.
+   */
+  profile_id: string;
+};
+
+/**
+ * PhotaProfileCreateInput
+ */
+export type PhotaCreateProfileInput = {
+  /**
+   * Image ZIP URL
+   *
+   * URL to a ZIP archive containing the profile images.
+   */
+  image_data_url: string | Blob | File;
+};
+
+/**
+ * TrainingOutput
+ */
+export type LtxVideoTrainerOutput = {
+  /**
+   * The URL to the validations video.
+   */
+  video?: File | unknown;
+  lora_file: File;
+  config_file: File;
+};
+
+/**
+ * Input
+ */
+export type LtxVideoTrainerInput = {
+  /**
+   * Validation Aspect Ratio
+   *
+   * The aspect ratio to use for validation.
+   */
+  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Resolution
+   *
+   * The resolution to use for training. This is the resolution of the video.
+   */
+  resolution?: "low" | "medium" | "high";
+  /**
+   * Aspect Ratio
+   *
+   * The aspect ratio to use for training. This is the aspect ratio of the video.
+   */
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Validation Negative Prompt
+   *
+   * A negative prompt to use for validation.
+   */
+  validation_negative_prompt?: string;
+  /**
+   * Number Of Frames
+   *
+   * The number of frames to use for training. This is the number of frames per second multiplied by the number of seconds.
+   */
+  number_of_frames?: number;
+  /**
+   * Validation
+   *
+   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
+   */
+  validation?: Array<Validation>;
+  /**
+   * Split Input Into Scenes
+   *
+   * If true, videos above a certain duration threshold will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned. This option has no effect on image datasets.
+   */
+  split_input_into_scenes?: boolean;
+  /**
+   * Validation Reverse
+   *
+   * If true, the validation videos will be reversed. This is useful for effects that are learned in reverse and then applied in reverse.
+   */
+  validation_reverse?: boolean;
+  /**
+   * Validation Resolution
+   *
+   * The resolution to use for validation.
+   */
+  validation_resolution?: "low" | "medium" | "high";
+  /**
+   * Training Data Url
+   *
+   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
+   *
+   * **Supported video formats:** .mp4, .mov, .avi, .mkv
+   * **Supported image formats:** .png, .jpg, .jpeg
+   *
+   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
+   *
+   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Rank
+   *
+   * The rank of the LoRA.
+   */
+  rank?: 8 | 16 | 32 | 64 | 128;
+  /**
+   * Frame Rate
+   *
+   * The target frames per second for the video.
+   */
+  frame_rate?: number;
+  /**
+   * Trigger Phrase
+   *
+   * The phrase that will trigger the model to generate an image.
+   */
+  trigger_phrase?: string;
+  /**
+   * Auto Scale Input
+   *
+   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Number Of Steps
+   *
+   * The number of steps to train for.
+   */
+  number_of_steps?: number;
+  /**
+   * Split Input Duration Threshold
+   *
+   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes. If you provide captions for a split video, the caption will be applied to each scene. If you do not provide captions, scenes will be auto-captioned.
+   */
+  split_input_duration_threshold?: number;
+  /**
+   * Validation Number Of Frames
+   *
+   * The number of frames to use for validation.
+   */
+  validation_number_of_frames?: number;
+  /**
+   * Learning Rate
+   *
+   * The rate at which the model learns. Higher values can lead to faster training, but over-fitting.
+   */
+  learning_rate?: number;
+};
+
 /**
  * LTX2Output
  *
  * Output from LTX-2 training.
  */
 export type Ltx2VideoTrainerOutput = {
+  /**
+   * A downloadable archive containing the preprocessed training data, including decoded videos and audio. Only present when `debug_dataset` is enabled in the input.
+   */
+  debug_dataset?: File | unknown;
+  /**
+   * The URL to the validation videos, if any.
+   */
+  video?: File | unknown;
+  config_file: File;
+  lora_file: File;
+};
+
+/**
+ * LTX2Input
+ *
+ * Input configuration for LTX-2 text-to-video training.
+ */
+export type Ltx2VideoTrainerInput = {
+  /**
+   * Audio Normalize
+   *
+   * Normalize audio peak amplitude to a consistent level. Recommended for consistent audio levels across the dataset.
+   */
+  audio_normalize?: boolean;
+  /**
+   * Number Of Steps
+   *
+   * The number of training steps.
+   */
+  number_of_steps?: number;
+  /**
+   * Validation Aspect Ratio
+   *
+   * The aspect ratio to use for validation.
+   */
+  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Validation Frame Rate
+   *
+   * Target frames per second for validation videos.
+   */
+  validation_frame_rate?: number;
+  /**
+   * Frame Rate
+   *
+   * Target frames per second for the video.
+   */
+  frame_rate?: number;
+  /**
+   * Validation Resolution
+   *
+   * The resolution to use for validation.
+   */
+  validation_resolution?: "low" | "medium" | "high";
+  /**
+   * Learning Rate
+   *
+   * Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.
+   */
+  learning_rate?: number;
+  /**
+   * Auto Scale Input
+   *
+   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Trigger Phrase
+   *
+   * A phrase that will trigger the LoRA style. Will be prepended to captions during training.
+   */
+  trigger_phrase?: string;
+  /**
+   * Validation Number Of Frames
+   *
+   * The number of frames in validation videos.
+   */
+  validation_number_of_frames?: number;
+  /**
+   * Audio Preserve Pitch
+   *
+   * When audio duration doesn't match video duration, stretch/compress audio without changing pitch. If disabled, audio is trimmed or padded with silence.
+   */
+  audio_preserve_pitch?: boolean;
+  /**
+   * Training Data Url
+   *
+   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
+   *
+   * **Supported video formats:** .mp4, .mov, .avi, .mkv
+   * **Supported image formats:** .png, .jpg, .jpeg
+   *
+   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
+   *
+   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Debug Dataset
+   *
+   * When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.
+   */
+  debug_dataset?: boolean;
+  /**
+   * First Frame Conditioning P
+   *
+   * Probability of conditioning on the first frame during training. Higher values improve image-to-video performance.
+   */
+  first_frame_conditioning_p?: number;
+  /**
+   * With Audio
+   *
+   * Enable joint audio-video training. If None (default), automatically detects whether input videos have audio. Set to True to force audio training, or False to disable.
+   */
+  with_audio?: boolean | unknown;
+  /**
+   * Generate Audio In Validation
+   *
+   * Whether to generate audio in validation samples.
+   */
+  generate_audio_in_validation?: boolean;
+  /**
+   * Stg Scale
+   *
+   * STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.
+   */
+  stg_scale?: number;
+  /**
+   * Rank
+   *
+   * The rank of the LoRA adaptation. Higher values increase capacity but use more memory.
+   */
+  rank?: 8 | 16 | 32 | 64 | 128;
+  /**
+   * Number Of Frames
+   *
+   * Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).
+   */
+  number_of_frames?: number;
+  /**
+   * Split Input Into Scenes
+   *
+   * If true, videos above a certain duration threshold will be split into scenes.
+   */
+  split_input_into_scenes?: boolean;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio to use for training.
+   */
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Resolution
+   *
+   * Resolution to use for training. Higher resolutions require more memory.
+   */
+  resolution?: "low" | "medium" | "high";
+  /**
+   * Validation Negative Prompt
+   *
+   * A negative prompt to use for validation.
+   */
+  validation_negative_prompt?: string;
+  /**
+   * Validation
+   *
+   * A list of validation prompts to use during training. When providing an image, _all_ validation inputs must have an image.
+   */
+  validation?: Array<Validation>;
+  /**
+   * Split Input Duration Threshold
+   *
+   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes.
+   */
+  split_input_duration_threshold?: number;
+};
+
+/**
+ * LTX23Output
+ *
+ * Output from LTX-2.3 training.
+ */
+export type Ltx23VideoTrainerOutput = {
   lora_file: File;
   config_file: File;
   /**
@@ -1605,11 +1689,11 @@ export type Ltx2VideoTrainerOutput = {
 };
 
 /**
- * LTX2Input
+ * LTX23Input
  *
- * Input configuration for LTX-2 text-to-video training.
+ * Input configuration for LTX-2.3 text-to-video training.
  */
-export type Ltx2VideoTrainerInput = {
+export type Ltx23VideoTrainerInput = {
   /**
    * Number Of Steps
    *
@@ -1708,11 +1792,11 @@ export type Ltx2VideoTrainerInput = {
    */
   with_audio?: boolean | unknown;
   /**
-   * Split Input Into Scenes
+   * Aspect Ratio
    *
-   * If true, videos above a certain duration threshold will be split into scenes.
+   * Aspect ratio to use for training.
    */
-  split_input_into_scenes?: boolean;
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
   /**
    * Validation Frame Rate
    *
@@ -1726,11 +1810,11 @@ export type Ltx2VideoTrainerInput = {
    */
   trigger_phrase?: string;
   /**
-   * Aspect Ratio
+   * Split Input Into Scenes
    *
-   * Aspect ratio to use for training.
+   * If true, videos above a certain duration threshold will be split into scenes.
    */
-  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  split_input_into_scenes?: boolean;
   /**
    * Generate Audio In Validation
    *
@@ -1767,6 +1851,427 @@ export type Ltx2VideoTrainerInput = {
    * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
    */
   auto_scale_input?: boolean;
+};
+
+/**
+ * LTX23V2VOutput
+ *
+ * Output from LTX-2.3 video-to-video training.
+ */
+export type Ltx23V2vTrainerOutput = {
+  lora_file: File;
+  config_file: File;
+  /**
+   * The URL to the validation videos (with reference videos side-by-side), if any.
+   */
+  video?: File | unknown;
+  /**
+   * A downloadable archive containing the preprocessed training data, including decoded videos. Only present when `debug_dataset` is enabled in the input.
+   */
+  debug_dataset?: File | unknown;
+};
+
+/**
+ * LTX23V2VInput
+ *
+ * Input configuration for LTX-2.3 video-to-video (IC-LoRA) training.
+ */
+export type Ltx23V2vTrainerInput = {
+  /**
+   * First Frame Conditioning P
+   *
+   * Probability of conditioning on the first frame during training. Lower values work better for video-to-video transformation.
+   */
+  first_frame_conditioning_p?: number;
+  /**
+   * Stg Scale
+   *
+   * STG (Spatio-Temporal Guidance) scale. 0.0 disables STG. Recommended value is 1.0.
+   */
+  stg_scale?: number;
+  /**
+   * Resolution
+   *
+   * Resolution to use for training. Higher resolutions require more memory.
+   */
+  resolution?: "low" | "medium" | "high";
+  /**
+   * Validation Negative Prompt
+   *
+   * A negative prompt to use for validation.
+   */
+  validation_negative_prompt?: string;
+  /**
+   * Number Of Steps
+   *
+   * The number of training steps.
+   */
+  number_of_steps?: number;
+  /**
+   * Split Input Into Scenes
+   *
+   * If true, videos above a certain duration threshold will be split into scenes.
+   */
+  split_input_into_scenes?: boolean;
+  /**
+   * Validation Aspect Ratio
+   *
+   * The aspect ratio to use for validation.
+   */
+  validation_aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Frame Rate
+   *
+   * Target frames per second for the video.
+   */
+  frame_rate?: number;
+  /**
+   * Trigger Phrase
+   *
+   * A phrase that will trigger the LoRA style. Will be prepended to captions during training.
+   */
+  trigger_phrase?: string;
+  /**
+   * Learning Rate
+   *
+   * Learning rate for optimization. Higher values can lead to faster training but may cause overfitting.
+   */
+  learning_rate?: number;
+  /**
+   * Debug Dataset
+   *
+   * When enabled, the trainer returns a downloadable archive of your preprocessed training data for manual inspection. Use this to verify that your videos, images, and captions were processed correctly before committing to a full training run.
+   */
+  debug_dataset?: boolean;
+  /**
+   * Split Input Duration Threshold
+   *
+   * The duration threshold in seconds. If a video is longer than this, it will be split into scenes.
+   */
+  split_input_duration_threshold?: number;
+  /**
+   * Auto Scale Input
+   *
+   * If true, videos will be automatically scaled to the target frame count and fps. This option has no effect on image datasets.
+   */
+  auto_scale_input?: boolean;
+  /**
+   * Validation Resolution
+   *
+   * The resolution to use for validation.
+   */
+  validation_resolution?: "low" | "medium" | "high";
+  /**
+   * Rank
+   *
+   * The rank of the LoRA adaptation. Higher values increase capacity but use more memory.
+   */
+  rank?: 8 | 16 | 32 | 64 | 128;
+  /**
+   * Training Data Url
+   *
+   * URL to zip archive with videos or images. Try to use at least 10 files, although more is better.
+   *
+   * **Supported video formats:** .mp4, .mov, .avi, .mkv
+   * **Supported image formats:** .png, .jpg, .jpeg
+   *
+   * Note: The dataset must contain ONLY videos OR ONLY images - mixed datasets are not supported.
+   *
+   * The archive can also contain text files with captions. Each text file should have the same name as the media file it corresponds to.
+   */
+  training_data_url: string | Blob | File;
+  /**
+   * Aspect Ratio
+   *
+   * Aspect ratio to use for training.
+   */
+  aspect_ratio?: "16:9" | "1:1" | "9:16";
+  /**
+   * Validation
+   *
+   * A list of validation inputs with prompts and reference videos.
+   */
+  validation?: Array<V2vValidation>;
+  /**
+   * Validation Number Of Frames
+   *
+   * The number of frames in validation videos.
+   */
+  validation_number_of_frames?: number;
+  /**
+   * Validation Frame Rate
+   *
+   * Target frames per second for validation videos.
+   */
+  validation_frame_rate?: number;
+  /**
+   * Number Of Frames
+   *
+   * Number of frames per training sample. Must satisfy frames % 8 == 1 (e.g., 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97).
+   */
+  number_of_frames?: number;
+};
+
+/**
+ * Output
+ */
+export type HunyuanVideoLoraTrainingOutput = {
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type HunyuanVideoLoraTrainingInput = {
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps: number;
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+  /**
+   * Do Caption
+   *
+   * Whether to generate captions for the images.
+   */
+  do_caption?: boolean;
+  /**
+   * Learning Rate
+   *
+   * Learning rate to use for training.
+   */
+  learning_rate?: number;
+  /**
+   * Trigger Word
+   *
+   * The trigger word to use.
+   */
+  trigger_word?: string;
+};
+
+/**
+ * Output
+ */
+export type FluxLoraPortraitTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type FluxLoraPortraitTrainerInput = {
+  /**
+   * Trigger Phrase
+   *
+   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
+   *
+   */
+  trigger_phrase?: string | unknown | null;
+  /**
+   * Learning Rate
+   *
+   * Learning rate to use for training.
+   */
+  learning_rate?: number;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+  /**
+   * Create Masks
+   *
+   * If True, masks will be created for the subject.
+   */
+  create_masks?: boolean;
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   * The captions can include a special string `[trigger]`. If a trigger_word is specified, it will replace `[trigger]` in the captions.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps?: number;
+  /**
+   * Subject Crop
+   *
+   * If True, the subject will be cropped from the image.
+   */
+  subject_crop?: boolean;
+  /**
+   * Multiresolution Training
+   *
+   * If True, multiresolution training will be used.
+   */
+  multiresolution_training?: boolean;
+  /**
+   * Resume From Checkpoint
+   *
+   * URL to a checkpoint to resume training from.
+   */
+  resume_from_checkpoint?: string;
+};
+
+/**
+ * Output
+ */
+export type FluxLoraFastTrainingOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+  /**
+   * URL to the preprocessed images.
+   */
+  debug_preprocessed_output?: File | unknown;
+};
+
+/**
+ * PublicInput
+ */
+export type FluxLoraFastTrainingInput = {
+  /**
+   * Is Input Format Already Preprocessed
+   *
+   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
+   */
+  is_input_format_already_preprocessed?: boolean;
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps?: number | unknown;
+  /**
+   * Is Style
+   *
+   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
+   */
+  is_style?: boolean;
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Trigger Word
+   *
+   * Trigger word to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
+   *
+   */
+  trigger_word?: string | unknown | null;
+  /**
+   * Create Masks
+   *
+   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
+   */
+  create_masks?: boolean;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+};
+
+/**
+ * Output
+ */
+export type FluxKreaTrainerOutput = {
+  /**
+   * URL to the preprocessed images.
+   */
+  debug_preprocessed_output?: File | unknown;
+  diffusers_lora_file: File;
+  config_file: File;
+};
+
+/**
+ * PublicInput
+ */
+export type FluxKreaTrainerInput = {
+  /**
+   * Images Data Url
+   *
+   *
+   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
+   *
+   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
+   *
+   */
+  images_data_url: string | Blob | File;
+  /**
+   * Data Archive Format
+   *
+   * The format of the archive. If not specified, the format will be inferred from the URL.
+   */
+  data_archive_format?: string | unknown | null;
+  /**
+   * Steps
+   *
+   * Number of steps to train the LoRA on.
+   */
+  steps?: number | unknown;
+  /**
+   * Is Style
+   *
+   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
+   */
+  is_style?: boolean;
+  /**
+   * Create Masks
+   *
+   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
+   */
+  create_masks?: boolean;
+  /**
+   * Trigger Word
+   *
+   * Trigger word to be used in the captions. If None, a trigger word will not be used.
+   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
+   *
+   */
+  trigger_word?: string | unknown | null;
+  /**
+   * Is Input Format Already Preprocessed
+   *
+   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
+   */
+  is_input_format_already_preprocessed?: boolean;
 };
 
 /**
@@ -1892,6 +2397,258 @@ export type Flux2TrainerV2Input = {
 /**
  * Output
  */
+export type Flux2TrainerV2EditOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputEditV2
+ */
+export type Flux2TrainerV2EditInput = {
+  /**
+   * Steps
+   *
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
+export type Flux2TrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputT2I
+ */
+export type Flux2TrainerInput = {
+  /**
+   * Steps
+   *
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * The zip can also contain a text file for each image. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
+export type Flux2TrainerEditOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputEdit
+ */
+export type Flux2TrainerEditInput = {
+  /**
+   * Steps
+   *
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to the input data zip archive.
+   *
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
+export type Flux2Klein9bBaseTrainerOutput = {
+  config_file: File;
+  diffusers_lora_file: File;
+};
+
+/**
+ * InputT2IV2
+ *
+ * V2 input with multi-resolution bucketing.
+ */
+export type Flux2Klein9bBaseTrainerInput = {
+  /**
+   * Steps
+   *
+   * Total number of training steps.
+   */
+  steps?: number;
+  /**
+   * Image Data Url
+   *
+   *
+   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   *
+   * The zip can also contain a text file for each image. The text file should be named:
+   * ROOT.txt
+   * For example:
+   * photo.txt
+   *
+   * This text file can be used to specify the edit instructions for the image pair.
+   *
+   * If no text file is provided, the default_caption will be used.
+   *
+   * If no default_caption is provided, the training will fail.
+   *
+   */
+  image_data_url: string | Blob | File;
+  /**
+   * Learning Rate
+   *
+   * Learning rate applied to trainable parameters.
+   */
+  learning_rate?: number;
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
+};
+
+/**
+ * Output
+ */
 export type Flux2Klein9bBaseTrainerEditOutput = {
   config_file: File;
   diffusers_lora_file: File;
@@ -1958,78 +2715,9 @@ export type Flux2Klein9bBaseTrainerEditInput = {
 };
 
 /**
- * WanTrainerResponse
- */
-export type Wan22ImageTrainerOutput = {
-  high_noise_lora: File;
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * BasicInput
- */
-export type Wan22ImageTrainerInput = {
-  /**
-   * Trigger Phrase
-   *
-   * Trigger phrase for the model.
-   */
-  trigger_phrase: string;
-  /**
-   * Use Masks
-   *
-   * Whether to use masks for the training data.
-   */
-  use_masks?: boolean;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for training.
-   */
-  learning_rate?: number;
-  /**
-   * Use Face Cropping
-   *
-   * Whether to use face cropping for the training data. When enabled, images will be cropped to the face before resizing.
-   */
-  use_face_cropping?: boolean;
-  /**
-   * Training Data URL
-   *
-   * URL to the training data.
-   */
-  training_data_url: string | Blob | File;
-  /**
-   * Number of Steps
-   *
-   * Number of training steps.
-   */
-  steps?: number;
-  /**
-   * Include Synthetic Captions
-   *
-   * Whether to include synthetic captions.
-   */
-  include_synthetic_captions?: boolean;
-  /**
-   * Is Style
-   *
-   * Whether the training data is style data. If true, face specific options like masking and face detection will be disabled.
-   */
-  is_style?: boolean;
-  /**
-   * Use Face Detection
-   *
-   * Whether to use face detection for the training data. When enabled, images will use the center of the face as the center of the image when resizing.
-   */
-  use_face_detection?: boolean;
-};
-
-/**
  * Output
  */
-export type Flux2Klein9bBaseTrainerOutput = {
+export type Flux2Klein4bBaseTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
@@ -2039,7 +2727,7 @@ export type Flux2Klein9bBaseTrainerOutput = {
  *
  * V2 input with multi-resolution bucketing.
  */
-export type Flux2Klein9bBaseTrainerInput = {
+export type Flux2Klein4bBaseTrainerInput = {
   /**
    * Steps
    *
@@ -2088,69 +2776,15 @@ export type Flux2Klein9bBaseTrainerInput = {
 /**
  * Output
  */
-export type TurboFluxTrainerOutput = {
+export type Flux2Klein4bBaseTrainerEditOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
 
 /**
- * Input
+ * InputEditV2
  */
-export type TurboFluxTrainerInput = {
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number;
-  /**
-   * Face Crop
-   *
-   * Whether to try to detect the face and crop the images to the face.
-   */
-  face_crop?: boolean;
-  /**
-   * Learning Rate
-   *
-   * Learning rate for the training.
-   */
-  learning_rate?: number;
-  /**
-   * Trigger Phrase
-   *
-   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
-   *
-   */
-  trigger_phrase?: string | unknown;
-  /**
-   * Training Style
-   *
-   * Training style to use.
-   */
-  training_style?: "subject" | "style" | unknown;
-};
-
-/**
- * Output
- */
-export type ZImageTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * Input
- */
-export type ZImageTrainerInput = {
+export type Flux2Klein4bBaseTrainerEditInput = {
   /**
    * Steps
    *
@@ -2161,9 +2795,20 @@ export type ZImageTrainerInput = {
    * Image Data Url
    *
    *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
+   * URL to the input data zip archive.
    *
-   * The zip can also contain a text file for each image. The text file should be named:
+   * The zip should contain pairs of images. The images should be named:
+   *
+   * ROOT_start.EXT and ROOT_end.EXT
+   * For example:
+   * photo_start.jpg and photo_end.jpg
+   *
+   * The zip can also contain up to four reference image for each image pair. The reference images should be named:
+   * ROOT_start.EXT, ROOT_start2.EXT, ROOT_start3.EXT, ROOT_start4.EXT, ROOT_end.EXT
+   * For example:
+   * photo_start.jpg, photo_start2.jpg, photo_end.jpg
+   *
+   * The zip can also contain a text file for each image pair. The text file should be named:
    * ROOT.txt
    * For example:
    * photo.txt
@@ -2177,12 +2822,6 @@ export type ZImageTrainerInput = {
    */
   image_data_url: string | Blob | File;
   /**
-   * Training Type
-   *
-   * Type of training to perform. Use 'content' to focus on the content of the images, 'style' to focus on the style of the images, and 'balanced' to focus on a combination of both.
-   */
-  training_type?: "content" | "style" | "balanced";
-  /**
    * Learning Rate
    *
    * Learning rate applied to trainable parameters.
@@ -2194,12 +2833,18 @@ export type ZImageTrainerInput = {
    * Default caption to use when caption files are missing. If None, missing captions will cause an error.
    */
   default_caption?: string | unknown;
+  /**
+   * Output Lora Format
+   *
+   * Dictates the naming scheme for the output weights
+   */
+  output_lora_format?: "fal" | "comfy";
 };
 
 /**
  * Output
  */
-export type ZImageTurboTrainerV2Output = {
+export type ErnieImageTrainerOutput = {
   config_file: File;
   diffusers_lora_file: File;
 };
@@ -2207,7 +2852,19 @@ export type ZImageTurboTrainerV2Output = {
 /**
  * Input
  */
-export type ZImageTurboTrainerV2Input = {
+export type ErnieImageTrainerInput = {
+  /**
+   * Default Caption
+   *
+   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
+   */
+  default_caption?: string | unknown;
+  /**
+   * Learning Rate
+   *
+   * Learning rate.
+   */
+  learning_rate?: number;
   /**
    * Steps
    *
@@ -2230,283 +2887,26 @@ export type ZImageTurboTrainerV2Input = {
    *
    */
   image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
 };
 
-/**
- * Output
- */
-export type Flux2TrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
+export type PostFalAiErnieImageTrainerData = {
+  body: ErnieImageTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ernie-image-trainer";
 };
 
-/**
- * InputT2I
- */
-export type Flux2TrainerInput = {
-  /**
-   * Steps
-   *
-   * Total number of training steps.
-   */
-  steps?: number;
-  /**
-   * Image Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * The zip can also contain a text file for each image. The text file should be named:
-   * ROOT.txt
-   * For example:
-   * photo.txt
-   *
-   * This text file can be used to specify the edit instructions for the image pair.
-   *
-   * If no text file is provided, the default_caption will be used.
-   *
-   * If no default_caption is provided, the training will fail.
-   *
-   */
-  image_data_url: string | Blob | File;
-  /**
-   * Learning Rate
-   *
-   * Learning rate applied to trainable parameters.
-   */
-  learning_rate?: number;
-  /**
-   * Default Caption
-   *
-   * Default caption to use when caption files are missing. If None, missing captions will cause an error.
-   */
-  default_caption?: string | unknown;
-  /**
-   * Output Lora Format
-   *
-   * Dictates the naming scheme for the output weights
-   */
-  output_lora_format?: "fal" | "comfy";
-};
-
-/**
- * Output
- */
-export type FluxLoraPortraitTrainerOutput = {
-  config_file: File;
-  diffusers_lora_file: File;
-};
-
-/**
- * PublicInput
- */
-export type FluxLoraPortraitTrainerInput = {
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images of a consistent style. Try to use at least 10 images, although more is better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
-   * The captions can include a special string `[trigger]`. If a trigger_word is specified, it will replace `[trigger]` in the captions.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Multiresolution Training
-   *
-   * If True, multiresolution training will be used.
-   */
-  multiresolution_training?: boolean;
-  /**
-   * Resume From Checkpoint
-   *
-   * URL to a checkpoint to resume training from.
-   */
-  resume_from_checkpoint?: string;
-  /**
-   * Learning Rate
-   *
-   * Learning rate to use for training.
-   */
-  learning_rate?: number;
-  /**
-   * Subject Crop
-   *
-   * If True, the subject will be cropped from the image.
-   */
-  subject_crop?: boolean;
-  /**
-   * Trigger Phrase
-   *
-   * Trigger phrase to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_work will be used instead of captions. If captions are provided, the trigger word will replace the `[trigger]` string in the captions.
-   *
-   */
-  trigger_phrase?: string | unknown | null;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
-  /**
-   * Create Masks
-   *
-   * If True, masks will be created for the subject.
-   */
-  create_masks?: boolean;
-};
-
-/**
- * Output
- */
-export type FluxLoraFastTrainingOutput = {
-  config_file: File;
-  /**
-   * URL to the preprocessed images.
-   */
-  debug_preprocessed_output?: File | unknown;
-  diffusers_lora_file: File;
-};
-
-/**
- * PublicInput
- */
-export type FluxLoraFastTrainingInput = {
-  /**
-   * Images Data Url
-   *
-   *
-   * URL to zip archive with images. Try to use at least 4 images in general the more the better.
-   *
-   * In addition to images the archive can contain text files with captions. Each text file should have the same name as the image file it corresponds to.
-   *
-   */
-  images_data_url: string | Blob | File;
-  /**
-   * Is Input Format Already Preprocessed
-   *
-   * Specifies whether the input data is already in a processed format. When set to False (default), the system expects raw input where image files and their corresponding caption files share the same name (e.g., 'photo.jpg' and 'photo.txt'). Set to True if your data is already in a preprocessed format.
-   */
-  is_input_format_already_preprocessed?: boolean;
-  /**
-   * Trigger Word
-   *
-   * Trigger word to be used in the captions. If None, a trigger word will not be used.
-   * If no captions are provide the trigger_word will be used instead of captions. If captions are the trigger word will not be used.
-   *
-   */
-  trigger_word?: string | unknown | null;
-  /**
-   * Steps
-   *
-   * Number of steps to train the LoRA on.
-   */
-  steps?: number | unknown;
-  /**
-   * Data Archive Format
-   *
-   * The format of the archive. If not specified, the format will be inferred from the URL.
-   */
-  data_archive_format?: string | unknown | null;
-  /**
-   * Is Style
-   *
-   * If True, the training will be for a style. This will deactivate segmentation, captioning and will use trigger word instead. Use the trigger word to specify the style.
-   */
-  is_style?: boolean;
-  /**
-   * Create Masks
-   *
-   * If True segmentation masks will be used in the weight the training loss. For people a face mask is used if possible.
-   */
-  create_masks?: boolean;
-};
-
-export type QueueStatus = {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED";
-  /**
-   * The request id.
-   */
-  request_id: string;
-  /**
-   * The response url.
-   */
-  response_url?: string;
-  /**
-   * The status url.
-   */
-  status_url?: string;
-  /**
-   * The cancel url.
-   */
-  cancel_url?: string;
-  /**
-   * The logs.
-   */
-  logs?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The metrics.
-   */
-  metrics?: {
-    [key: string]: unknown;
-  };
-  /**
-   * The queue position.
-   */
-  queue_position?: number;
-};
-
-export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-lora-fast-training/requests/{request_id}/status";
-};
-
-export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponses = {
+export type PostFalAiErnieImageTrainerResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponse =
-  GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponses[keyof GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponses];
+export type PostFalAiErnieImageTrainerResponse =
+  PostFalAiErnieImageTrainerResponses[keyof PostFalAiErnieImageTrainerResponses];
 
-export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelData = {
+export type GetFalAiErnieImageTrainerRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -2515,10 +2915,32 @@ export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/flux-lora-fast-training/requests/{request_id}/cancel";
+  url: "/fal-ai/ernie-image-trainer/requests/{request_id}";
 };
 
-export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses = {
+export type GetFalAiErnieImageTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ErnieImageTrainerOutput;
+};
+
+export type GetFalAiErnieImageTrainerRequestsByRequestIdResponse =
+  GetFalAiErnieImageTrainerRequestsByRequestIdResponses[keyof GetFalAiErnieImageTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiErnieImageTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ernie-image-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiErnieImageTrainerRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -2530,49 +2952,10 @@ export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponse =
-  PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses[keyof PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses];
+export type PutFalAiErnieImageTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiErnieImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiErnieImageTrainerRequestsByRequestIdCancelResponses];
 
-export type PostFalAiFluxLoraFastTrainingData = {
-  body: FluxLoraFastTrainingInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-lora-fast-training";
-};
-
-export type PostFalAiFluxLoraFastTrainingResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFluxLoraFastTrainingResponse =
-  PostFalAiFluxLoraFastTrainingResponses[keyof PostFalAiFluxLoraFastTrainingResponses];
-
-export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-lora-fast-training/requests/{request_id}";
-};
-
-export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: FluxLoraFastTrainingOutput;
-};
-
-export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponse =
-  GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponses[keyof GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponses];
-
-export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusData = {
+export type GetFalAiErnieImageTrainerRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -2586,1357 +2969,35 @@ export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/flux-lora-portrait-trainer/requests/{request_id}/status";
+  url: "/fal-ai/ernie-image-trainer/requests/{request_id}/status";
 };
 
-export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-lora-portrait-trainer/requests/{request_id}/cancel";
+export type GetFalAiErnieImageTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
 };
 
-export type PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
+export type GetFalAiErnieImageTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiErnieImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiErnieImageTrainerRequestsByRequestIdStatusResponses];
 
-export type PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFluxLoraPortraitTrainerData = {
-  body: FluxLoraPortraitTrainerInput;
+export type PostFalAiFlux2Klein4bBaseTrainerData = {
+  body: Flux2Klein4bBaseTrainerInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/flux-lora-portrait-trainer";
+  url: "/fal-ai/flux-2-klein-4b-base-trainer";
 };
 
-export type PostFalAiFluxLoraPortraitTrainerResponses = {
+export type PostFalAiFlux2Klein4bBaseTrainerResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiFluxLoraPortraitTrainerResponse =
-  PostFalAiFluxLoraPortraitTrainerResponses[keyof PostFalAiFluxLoraPortraitTrainerResponses];
-
-export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-lora-portrait-trainer/requests/{request_id}";
-};
-
-export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: FluxLoraPortraitTrainerOutput;
-};
-
-export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponse =
-  GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2TrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2TrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFlux2TrainerRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlux2TrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlux2TrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFlux2TrainerRequestsByRequestIdCancelResponse =
-  PutFalAiFlux2TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlux2TrainerData = {
-  body: Flux2TrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-2-trainer";
-};
-
-export type PostFalAiFlux2TrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlux2TrainerResponse =
-  PostFalAiFlux2TrainerResponses[keyof PostFalAiFlux2TrainerResponses];
-
-export type GetFalAiFlux2TrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-trainer/requests/{request_id}";
-};
-
-export type GetFalAiFlux2TrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Flux2TrainerOutput;
-};
-
-export type GetFalAiFlux2TrainerRequestsByRequestIdResponse =
-  GetFalAiFlux2TrainerRequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerRequestsByRequestIdResponses];
-
-export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/z-image-turbo-trainer-v2/requests/{request_id}/status";
-};
-
-export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponse =
-  GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/z-image-turbo-trainer-v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponse =
-  PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiZImageTurboTrainerV2Data = {
-  body: ZImageTurboTrainerV2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/z-image-turbo-trainer-v2";
-};
-
-export type PostFalAiZImageTurboTrainerV2Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiZImageTurboTrainerV2Response =
-  PostFalAiZImageTurboTrainerV2Responses[keyof PostFalAiZImageTurboTrainerV2Responses];
-
-export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/z-image-turbo-trainer-v2/requests/{request_id}";
-};
-
-export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ZImageTurboTrainerV2Output;
-};
-
-export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponse =
-  GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponses[keyof GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponses];
-
-export type GetFalAiZImageTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/z-image-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiZImageTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiZImageTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiZImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiZImageTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiZImageTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/z-image-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiZImageTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiZImageTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiZImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiZImageTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiZImageTrainerData = {
-  body: ZImageTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/z-image-trainer";
-};
-
-export type PostFalAiZImageTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiZImageTrainerResponse =
-  PostFalAiZImageTrainerResponses[keyof PostFalAiZImageTrainerResponses];
-
-export type GetFalAiZImageTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/z-image-trainer/requests/{request_id}";
-};
-
-export type GetFalAiZImageTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ZImageTrainerOutput;
-};
-
-export type GetFalAiZImageTrainerRequestsByRequestIdResponse =
-  GetFalAiZImageTrainerRequestsByRequestIdResponses[keyof GetFalAiZImageTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiTurboFluxTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/turbo-flux-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiTurboFluxTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/turbo-flux-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiTurboFluxTrainerData = {
-  body: TurboFluxTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/turbo-flux-trainer";
-};
-
-export type PostFalAiTurboFluxTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiTurboFluxTrainerResponse =
-  PostFalAiTurboFluxTrainerResponses[keyof PostFalAiTurboFluxTrainerResponses];
-
-export type GetFalAiTurboFluxTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/turbo-flux-trainer/requests/{request_id}";
-};
-
-export type GetFalAiTurboFluxTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: TurboFluxTrainerOutput;
-};
-
-export type GetFalAiTurboFluxTrainerRequestsByRequestIdResponse =
-  GetFalAiTurboFluxTrainerRequestsByRequestIdResponses[keyof GetFalAiTurboFluxTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlux2Klein9bBaseTrainerData = {
-  body: Flux2Klein9bBaseTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-2-klein-9b-base-trainer";
-};
-
-export type PostFalAiFlux2Klein9bBaseTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlux2Klein9bBaseTrainerResponse =
-  PostFalAiFlux2Klein9bBaseTrainerResponses[keyof PostFalAiFlux2Klein9bBaseTrainerResponses];
-
-export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/requests/{request_id}";
-};
-
-export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Flux2Klein9bBaseTrainerOutput;
-};
-
-export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponse =
-  GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiWan22ImageTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/wan-22-image-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWan22ImageTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-22-image-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWan22ImageTrainerData = {
-  body: Wan22ImageTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/wan-22-image-trainer";
-};
-
-export type PostFalAiWan22ImageTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWan22ImageTrainerResponse =
-  PostFalAiWan22ImageTrainerResponses[keyof PostFalAiWan22ImageTrainerResponses];
-
-export type GetFalAiWan22ImageTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-22-image-trainer/requests/{request_id}";
-};
-
-export type GetFalAiWan22ImageTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Wan22ImageTrainerOutput;
-};
-
-export type GetFalAiWan22ImageTrainerRequestsByRequestIdResponse =
-  GetFalAiWan22ImageTrainerRequestsByRequestIdResponses[keyof GetFalAiWan22ImageTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponse =
-  PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlux2Klein9bBaseTrainerEditData = {
-  body: Flux2Klein9bBaseTrainerEditInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit";
-};
-
-export type PostFalAiFlux2Klein9bBaseTrainerEditResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlux2Klein9bBaseTrainerEditResponse =
-  PostFalAiFlux2Klein9bBaseTrainerEditResponses[keyof PostFalAiFlux2Klein9bBaseTrainerEditResponses];
-
-export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit/requests/{request_id}";
-};
-
-export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Flux2Klein9bBaseTrainerEditOutput;
-};
-
-export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponse =
-  GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2TrainerV2RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-trainer-v2/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponse =
-  GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlux2TrainerV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-trainer-v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponse =
-  PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlux2TrainerV2Data = {
-  body: Flux2TrainerV2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-2-trainer-v2";
-};
-
-export type PostFalAiFlux2TrainerV2Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlux2TrainerV2Response =
-  PostFalAiFlux2TrainerV2Responses[keyof PostFalAiFlux2TrainerV2Responses];
-
-export type GetFalAiFlux2TrainerV2RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-trainer-v2/requests/{request_id}";
-};
-
-export type GetFalAiFlux2TrainerV2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Flux2TrainerV2Output;
-};
-
-export type GetFalAiFlux2TrainerV2RequestsByRequestIdResponse =
-  GetFalAiFlux2TrainerV2RequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerV2RequestsByRequestIdResponses];
-
-export type GetFalAiFluxKontextTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-kontext-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFluxKontextTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-kontext-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFluxKontextTrainerData = {
-  body: FluxKontextTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-kontext-trainer";
-};
-
-export type PostFalAiFluxKontextTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFluxKontextTrainerResponse =
-  PostFalAiFluxKontextTrainerResponses[keyof PostFalAiFluxKontextTrainerResponses];
-
-export type GetFalAiFluxKontextTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-kontext-trainer/requests/{request_id}";
-};
-
-export type GetFalAiFluxKontextTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: FluxKontextTrainerOutput;
-};
-
-export type GetFalAiFluxKontextTrainerRequestsByRequestIdResponse =
-  GetFalAiFluxKontextTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxKontextTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/ltx2-video-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ltx2-video-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiLtx2VideoTrainerData = {
-  body: Ltx2VideoTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/ltx2-video-trainer";
-};
-
-export type PostFalAiLtx2VideoTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiLtx2VideoTrainerResponse =
-  PostFalAiLtx2VideoTrainerResponses[keyof PostFalAiLtx2VideoTrainerResponses];
-
-export type GetFalAiLtx2VideoTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ltx2-video-trainer/requests/{request_id}";
-};
-
-export type GetFalAiLtx2VideoTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Ltx2VideoTrainerOutput;
-};
-
-export type GetFalAiLtx2VideoTrainerRequestsByRequestIdResponse =
-  GetFalAiLtx2VideoTrainerRequestsByRequestIdResponses[keyof GetFalAiLtx2VideoTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/z-image-base-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiZImageBaseTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/z-image-base-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiZImageBaseTrainerData = {
-  body: ZImageBaseTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/z-image-base-trainer";
-};
-
-export type PostFalAiZImageBaseTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiZImageBaseTrainerResponse =
-  PostFalAiZImageBaseTrainerResponses[keyof PostFalAiZImageBaseTrainerResponses];
-
-export type GetFalAiZImageBaseTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/z-image-base-trainer/requests/{request_id}";
-};
-
-export type GetFalAiZImageBaseTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: ZImageBaseTrainerOutput;
-};
-
-export type GetFalAiZImageBaseTrainerRequestsByRequestIdResponse =
-  GetFalAiZImageBaseTrainerRequestsByRequestIdResponses[keyof GetFalAiZImageBaseTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiQwenImageTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-image-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwenImageTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwenImageTrainerData = {
-  body: QwenImageTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-trainer";
-};
-
-export type PostFalAiQwenImageTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImageTrainerResponse =
-  PostFalAiQwenImageTrainerResponses[keyof PostFalAiQwenImageTrainerResponses];
-
-export type GetFalAiQwenImageTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-trainer/requests/{request_id}";
-};
-
-export type GetFalAiQwenImageTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: QwenImageTrainerOutput;
-};
-
-export type GetFalAiQwenImageTrainerRequestsByRequestIdResponse =
-  GetFalAiQwenImageTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-image-edit-2511-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-edit-2511-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwenImageEdit2511TrainerData = {
-  body: QwenImageEdit2511TrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-edit-2511-trainer";
-};
-
-export type PostFalAiQwenImageEdit2511TrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImageEdit2511TrainerResponse =
-  PostFalAiQwenImageEdit2511TrainerResponses[keyof PostFalAiQwenImageEdit2511TrainerResponses];
-
-export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-edit-2511-trainer/requests/{request_id}";
-};
-
-export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: QwenImageEdit2511TrainerOutput;
-};
-
-export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponse =
-  GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-klein-4b-base-trainer/edit/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-klein-4b-base-trainer/edit/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponse =
-  PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponses];
+export type PostFalAiFlux2Klein4bBaseTrainerResponse =
+  PostFalAiFlux2Klein4bBaseTrainerResponses[keyof PostFalAiFlux2Klein4bBaseTrainerResponses];
 
 export type PostFalAiFlux2Klein4bBaseTrainerEditData = {
   body: Flux2Klein4bBaseTrainerEditInput;
@@ -3977,7 +3038,35 @@ export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdResponses = {
 export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdResponse =
   GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdResponses];
 
-export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusData = {
+export type PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-klein-4b-base-trainer/edit/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -3991,103 +3080,10 @@ export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/qwen-image-2512-trainer-v2/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-klein-4b-base-trainer/edit/requests/{request_id}/status";
 };
 
-export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponse =
-  GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-2512-trainer-v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponse =
-  PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwenImage2512TrainerV2Data = {
-  body: QwenImage2512TrainerV2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-2512-trainer-v2";
-};
-
-export type PostFalAiQwenImage2512TrainerV2Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImage2512TrainerV2Response =
-  PostFalAiQwenImage2512TrainerV2Responses[keyof PostFalAiQwenImage2512TrainerV2Responses];
-
-export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-2512-trainer-v2/requests/{request_id}";
-};
-
-export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: QwenImage2512TrainerV2Output;
-};
-
-export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponse =
-  GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponses[keyof GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponses];
-
-export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-klein-4b-base-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses =
+export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -4095,8 +3091,30 @@ export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses];
+export type GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein4bBaseTrainerEditRequestsByRequestIdStatusResponses];
+
+export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-klein-4b-base-trainer/requests/{request_id}";
+};
+
+export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Flux2Klein4bBaseTrainerOutput;
+};
+
+export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponse =
+  GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponses];
 
 export type PutFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdCancelData = {
   body?: never;
@@ -4126,46 +3144,7 @@ export type PutFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdCancelResponses =
 export type PutFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdCancelResponse =
   PutFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdCancelResponses];
 
-export type PostFalAiFlux2Klein4bBaseTrainerData = {
-  body: Flux2Klein4bBaseTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-2-klein-4b-base-trainer";
-};
-
-export type PostFalAiFlux2Klein4bBaseTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlux2Klein4bBaseTrainerResponse =
-  PostFalAiFlux2Klein4bBaseTrainerResponses[keyof PostFalAiFlux2Klein4bBaseTrainerResponses];
-
-export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-klein-4b-base-trainer/requests/{request_id}";
-};
-
-export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Flux2Klein4bBaseTrainerOutput;
-};
-
-export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponse =
-  GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusData = {
+export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -4179,847 +3158,10 @@ export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/wan-22-trainer/i2v-a14b/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-klein-4b-base-trainer/requests/{request_id}/status";
 };
 
-export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponse =
-  GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponses[keyof GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-22-trainer/i2v-a14b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponse =
-  PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponses[keyof PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWan22TrainerI2vA14bData = {
-  body: Wan22TrainerI2vA14bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/wan-22-trainer/i2v-a14b";
-};
-
-export type PostFalAiWan22TrainerI2vA14bResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWan22TrainerI2vA14bResponse =
-  PostFalAiWan22TrainerI2vA14bResponses[keyof PostFalAiWan22TrainerI2vA14bResponses];
-
-export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-22-trainer/i2v-a14b/requests/{request_id}";
-};
-
-export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Wan22TrainerI2vA14bOutput;
-};
-
-export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponse =
-  GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponses[keyof GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponses];
-
-export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/wan-22-trainer/t2v-a14b/requests/{request_id}/status";
-};
-
-export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponse =
-  GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponses[keyof GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-22-trainer/t2v-a14b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponse =
-  PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponses[keyof PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWan22TrainerT2vA14bData = {
-  body: Wan22TrainerT2vA14bInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/wan-22-trainer/t2v-a14b";
-};
-
-export type PostFalAiWan22TrainerT2vA14bResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWan22TrainerT2vA14bResponse =
-  PostFalAiWan22TrainerT2vA14bResponses[keyof PostFalAiWan22TrainerT2vA14bResponses];
-
-export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-22-trainer/t2v-a14b/requests/{request_id}";
-};
-
-export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Wan22TrainerT2vA14bOutput;
-};
-
-export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponse =
-  GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponses[keyof GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponses];
-
-export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/recraft/v3/create-style/requests/{request_id}/status";
-};
-
-export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponse =
-  GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponses[keyof GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponses];
-
-export type PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/recraft/v3/create-style/requests/{request_id}/cancel";
-};
-
-export type PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponse =
-  PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponses[keyof PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponses];
-
-export type PostFalAiRecraftV3CreateStyleData = {
-  body: RecraftV3CreateStyleInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/recraft/v3/create-style";
-};
-
-export type PostFalAiRecraftV3CreateStyleResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiRecraftV3CreateStyleResponse =
-  PostFalAiRecraftV3CreateStyleResponses[keyof PostFalAiRecraftV3CreateStyleResponses];
-
-export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/recraft/v3/create-style/requests/{request_id}";
-};
-
-export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: RecraftV3CreateStyleOutput;
-};
-
-export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponse =
-  GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponses[keyof GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2TrainerEditRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-2-trainer/edit/requests/{request_id}/status";
-};
-
-export type GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFlux2TrainerEditRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-trainer/edit/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponse =
-  PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFlux2TrainerEditData = {
-  body: Flux2TrainerEditInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-2-trainer/edit";
-};
-
-export type PostFalAiFlux2TrainerEditResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFlux2TrainerEditResponse =
-  PostFalAiFlux2TrainerEditResponses[keyof PostFalAiFlux2TrainerEditResponses];
-
-export type GetFalAiFlux2TrainerEditRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-2-trainer/edit/requests/{request_id}";
-};
-
-export type GetFalAiFlux2TrainerEditRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: Flux2TrainerEditOutput;
-};
-
-export type GetFalAiFlux2TrainerEditRequestsByRequestIdResponse =
-  GetFalAiFlux2TrainerEditRequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerEditRequestsByRequestIdResponses];
-
-export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}/status";
-};
-
-export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwenImageTrainerV2Data = {
-  body: QwenImageTrainerV2Input;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-trainer-v2";
-};
-
-export type PostFalAiQwenImageTrainerV2Responses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImageTrainerV2Response =
-  PostFalAiQwenImageTrainerV2Responses[keyof PostFalAiQwenImageTrainerV2Responses];
-
-export type GetFalAiQwenImageTrainerV2RequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}";
-};
-
-export type GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: QwenImageTrainerV2Output;
-};
-
-export type GetFalAiQwenImageTrainerV2RequestsByRequestIdResponse =
-  GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses[keyof GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses];
-
-export type GetFalAiWanTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/wan-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiWanTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWanTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiWanTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWanTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWanTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWanTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiWanTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWanTrainerData = {
-  body: WanTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/wan-trainer";
-};
-
-export type PostFalAiWanTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWanTrainerResponse =
-  PostFalAiWanTrainerResponses[keyof PostFalAiWanTrainerResponses];
-
-export type GetFalAiWanTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-trainer/requests/{request_id}";
-};
-
-export type GetFalAiWanTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: WanTrainerOutput;
-};
-
-export type GetFalAiWanTrainerRequestsByRequestIdResponse =
-  GetFalAiWanTrainerRequestsByRequestIdResponses[keyof GetFalAiWanTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-image-2512-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-2512-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwenImage2512TrainerData = {
-  body: QwenImage2512TrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-2512-trainer";
-};
-
-export type PostFalAiQwenImage2512TrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImage2512TrainerResponse =
-  PostFalAiQwenImage2512TrainerResponses[keyof PostFalAiQwenImage2512TrainerResponses];
-
-export type GetFalAiQwenImage2512TrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-2512-trainer/requests/{request_id}";
-};
-
-export type GetFalAiQwenImage2512TrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: QwenImage2512TrainerOutput;
-};
-
-export type GetFalAiQwenImage2512TrainerRequestsByRequestIdResponse =
-  GetFalAiQwenImage2512TrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImage2512TrainerRequestsByRequestIdResponses];
-
-export type GetFalAiFluxKreaTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/flux-krea-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFluxKreaTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-krea-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFluxKreaTrainerData = {
-  body: FluxKreaTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/flux-krea-trainer";
-};
-
-export type PostFalAiFluxKreaTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiFluxKreaTrainerResponse =
-  PostFalAiFluxKreaTrainerResponses[keyof PostFalAiFluxKreaTrainerResponses];
-
-export type GetFalAiFluxKreaTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/flux-krea-trainer/requests/{request_id}";
-};
-
-export type GetFalAiFluxKreaTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: FluxKreaTrainerOutput;
-};
-
-export type GetFalAiFluxKreaTrainerRequestsByRequestIdResponse =
-  GetFalAiFluxKreaTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxKreaTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiLtxVideoTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/ltx-video-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponses];
-
-export type PutFalAiLtxVideoTrainerRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ltx-video-trainer/requests/{request_id}/cancel";
-};
-
-export type PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiLtxVideoTrainerData = {
-  body: LtxVideoTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/ltx-video-trainer";
-};
-
-export type PostFalAiLtxVideoTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiLtxVideoTrainerResponse =
-  PostFalAiLtxVideoTrainerResponses[keyof PostFalAiLtxVideoTrainerResponses];
-
-export type GetFalAiLtxVideoTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ltx-video-trainer/requests/{request_id}";
-};
-
-export type GetFalAiLtxVideoTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: LtxVideoTrainerOutput;
-};
-
-export type GetFalAiLtxVideoTrainerRequestsByRequestIdResponse =
-  GetFalAiLtxVideoTrainerRequestsByRequestIdResponses[keyof GetFalAiLtxVideoTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/qwen-image-layered-trainer/requests/{request_id}/status";
-};
-
-export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses =
+export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -5027,10 +3169,44 @@ export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses];
+export type GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein4bBaseTrainerRequestsByRequestIdStatusResponses];
 
-export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelData = {
+export type PostFalAiFlux2Klein9bBaseTrainerData = {
+  body: Flux2Klein9bBaseTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-2-klein-9b-base-trainer";
+};
+
+export type PostFalAiFlux2Klein9bBaseTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFlux2Klein9bBaseTrainerResponse =
+  PostFalAiFlux2Klein9bBaseTrainerResponses[keyof PostFalAiFlux2Klein9bBaseTrainerResponses];
+
+export type PostFalAiFlux2Klein9bBaseTrainerEditData = {
+  body: Flux2Klein9bBaseTrainerEditInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit";
+};
+
+export type PostFalAiFlux2Klein9bBaseTrainerEditResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFlux2Klein9bBaseTrainerEditResponse =
+  PostFalAiFlux2Klein9bBaseTrainerEditResponses[keyof PostFalAiFlux2Klein9bBaseTrainerEditResponses];
+
+export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5039,10 +3215,32 @@ export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/qwen-image-layered-trainer/requests/{request_id}/cancel";
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit/requests/{request_id}";
 };
 
-export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses =
+export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Flux2Klein9bBaseTrainerEditOutput;
+};
+
+export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponse =
+  GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdResponses];
+
+export type PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -5055,49 +3253,10 @@ export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses];
+export type PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdCancelResponses];
 
-export type PostFalAiQwenImageLayeredTrainerData = {
-  body: QwenImageLayeredTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-layered-trainer";
-};
-
-export type PostFalAiQwenImageLayeredTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImageLayeredTrainerResponse =
-  PostFalAiQwenImageLayeredTrainerResponses[keyof PostFalAiQwenImageLayeredTrainerResponses];
-
-export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-layered-trainer/requests/{request_id}";
-};
-
-export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: QwenImageLayeredTrainerOutput;
-};
-
-export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponse =
-  GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponses];
-
-export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusData = {
+export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5111,103 +3270,10 @@ export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/wan-trainer/t2v/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/edit/requests/{request_id}/status";
 };
 
-export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponse =
-  GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWanTrainerT2vRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-trainer/t2v/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponse =
-  PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWanTrainerT2vData = {
-  body: WanTrainerT2vInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/wan-trainer/t2v";
-};
-
-export type PostFalAiWanTrainerT2vResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiWanTrainerT2vResponse =
-  PostFalAiWanTrainerT2vResponses[keyof PostFalAiWanTrainerT2vResponses];
-
-export type GetFalAiWanTrainerT2vRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-trainer/t2v/requests/{request_id}";
-};
-
-export type GetFalAiWanTrainerT2vRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: WanTrainerT2vOutput;
-};
-
-export type GetFalAiWanTrainerT2vRequestsByRequestIdResponse =
-  GetFalAiWanTrainerT2vRequestsByRequestIdResponses[keyof GetFalAiWanTrainerT2vRequestsByRequestIdResponses];
-
-export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/hunyuan-video-lora-training/requests/{request_id}/status";
-};
-
-export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses =
+export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -5215,10 +3281,10 @@ export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponse =
-  GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses];
+export type GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein9bBaseTrainerEditRequestsByRequestIdStatusResponses];
 
-export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelData = {
+export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5227,10 +3293,32 @@ export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/hunyuan-video-lora-training/requests/{request_id}/cancel";
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/requests/{request_id}";
 };
 
-export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses =
+export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Flux2Klein9bBaseTrainerOutput;
+};
+
+export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponse =
+  GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponses[keyof GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -5243,49 +3331,10 @@ export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponse =
-  PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses];
+export type PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdCancelResponses];
 
-export type PostFalAiHunyuanVideoLoraTrainingData = {
-  body: HunyuanVideoLoraTrainingInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/hunyuan-video-lora-training";
-};
-
-export type PostFalAiHunyuanVideoLoraTrainingResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiHunyuanVideoLoraTrainingResponse =
-  PostFalAiHunyuanVideoLoraTrainingResponses[keyof PostFalAiHunyuanVideoLoraTrainingResponses];
-
-export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/hunyuan-video-lora-training/requests/{request_id}";
-};
-
-export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponses = {
-  /**
-   * Result of the request.
-   */
-  200: HunyuanVideoLoraTrainingOutput;
-};
-
-export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponse =
-  GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponses[keyof GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponses];
-
-export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusData = {
+export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5299,45 +3348,53 @@ export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/flux-2-trainer-v2/edit/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-klein-9b-base-trainer/requests/{request_id}/status";
 };
 
-export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponses = {
+export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2Klein9bBaseTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFlux2TrainerData = {
+  body: Flux2TrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-2-trainer";
+};
+
+export type PostFalAiFlux2TrainerResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponse =
-  GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponses];
+export type PostFalAiFlux2TrainerResponse =
+  PostFalAiFlux2TrainerResponses[keyof PostFalAiFlux2TrainerResponses];
 
-export type PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
+export type PostFalAiFlux2TrainerV2Data = {
+  body: Flux2TrainerV2Input;
+  path?: never;
   query?: never;
-  url: "/fal-ai/flux-2-trainer-v2/edit/requests/{request_id}/cancel";
+  url: "/fal-ai/flux-2-trainer-v2";
 };
 
-export type PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponses = {
+export type PostFalAiFlux2TrainerV2Responses = {
   /**
-   * The request was cancelled.
+   * The request status.
    */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
+  200: QueueStatus;
 };
 
-export type PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponse =
-  PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponses];
+export type PostFalAiFlux2TrainerV2Response =
+  PostFalAiFlux2TrainerV2Responses[keyof PostFalAiFlux2TrainerV2Responses];
 
 export type PostFalAiFlux2TrainerV2EditData = {
   body: Flux2TrainerV2EditInput;
@@ -5378,7 +3435,34 @@ export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdResponses = {
 export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdResponse =
   GetFalAiFlux2TrainerV2EditRequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerV2EditRequestsByRequestIdResponses];
 
-export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusData = {
+export type PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-trainer-v2/edit/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerV2EditRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5392,20 +3476,20 @@ export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/qwen-image-edit-trainer/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-trainer-v2/edit/requests/{request_id}/status";
 };
 
-export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponses = {
+export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponses];
+export type GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerV2EditRequestsByRequestIdStatusResponses];
 
-export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelData = {
+export type GetFalAiFlux2TrainerV2RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5414,64 +3498,47 @@ export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/qwen-image-edit-trainer/requests/{request_id}/cancel";
+  url: "/fal-ai/flux-2-trainer-v2/requests/{request_id}";
 };
 
-export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponses];
-
-export type PostFalAiQwenImageEditTrainerData = {
-  body: QwenImageEditTrainerInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/qwen-image-edit-trainer";
-};
-
-export type PostFalAiQwenImageEditTrainerResponses = {
-  /**
-   * The request status.
-   */
-  200: QueueStatus;
-};
-
-export type PostFalAiQwenImageEditTrainerResponse =
-  PostFalAiQwenImageEditTrainerResponses[keyof PostFalAiQwenImageEditTrainerResponses];
-
-export type GetFalAiQwenImageEditTrainerRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/qwen-image-edit-trainer/requests/{request_id}";
-};
-
-export type GetFalAiQwenImageEditTrainerRequestsByRequestIdResponses = {
+export type GetFalAiFlux2TrainerV2RequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: QwenImageEditTrainerOutput;
+  200: Flux2TrainerV2Output;
 };
 
-export type GetFalAiQwenImageEditTrainerRequestsByRequestIdResponse =
-  GetFalAiQwenImageEditTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageEditTrainerRequestsByRequestIdResponses];
+export type GetFalAiFlux2TrainerV2RequestsByRequestIdResponse =
+  GetFalAiFlux2TrainerV2RequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerV2RequestsByRequestIdResponses];
 
-export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusData = {
+export type PutFalAiFlux2TrainerV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-trainer-v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponse =
+  PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerV2RequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlux2TrainerV2RequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5485,64 +3552,37 @@ export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/wan-trainer/t2v-14b/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-trainer-v2/requests/{request_id}/status";
 };
 
-export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponses = {
+export type GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponse =
-  GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponses];
+export type GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponse =
+  GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerV2RequestsByRequestIdStatusResponses];
 
-export type PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-trainer/t2v-14b/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponse =
-  PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponses];
-
-export type PostFalAiWanTrainerT2V14bData = {
-  body: WanTrainerT2V14bInput;
+export type PostFalAiFlux2TrainerEditData = {
+  body: Flux2TrainerEditInput;
   path?: never;
   query?: never;
-  url: "/fal-ai/wan-trainer/t2v-14b";
+  url: "/fal-ai/flux-2-trainer/edit";
 };
 
-export type PostFalAiWanTrainerT2V14bResponses = {
+export type PostFalAiFlux2TrainerEditResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type PostFalAiWanTrainerT2V14bResponse =
-  PostFalAiWanTrainerT2V14bResponses[keyof PostFalAiWanTrainerT2V14bResponses];
+export type PostFalAiFlux2TrainerEditResponse =
+  PostFalAiFlux2TrainerEditResponses[keyof PostFalAiFlux2TrainerEditResponses];
 
-export type GetFalAiWanTrainerT2V14bRequestsByRequestIdData = {
+export type GetFalAiFlux2TrainerEditRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5551,20 +3591,47 @@ export type GetFalAiWanTrainerT2V14bRequestsByRequestIdData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/wan-trainer/t2v-14b/requests/{request_id}";
+  url: "/fal-ai/flux-2-trainer/edit/requests/{request_id}";
 };
 
-export type GetFalAiWanTrainerT2V14bRequestsByRequestIdResponses = {
+export type GetFalAiFlux2TrainerEditRequestsByRequestIdResponses = {
   /**
    * Result of the request.
    */
-  200: WanTrainerT2V14bOutput;
+  200: Flux2TrainerEditOutput;
 };
 
-export type GetFalAiWanTrainerT2V14bRequestsByRequestIdResponse =
-  GetFalAiWanTrainerT2V14bRequestsByRequestIdResponses[keyof GetFalAiWanTrainerT2V14bRequestsByRequestIdResponses];
+export type GetFalAiFlux2TrainerEditRequestsByRequestIdResponse =
+  GetFalAiFlux2TrainerEditRequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerEditRequestsByRequestIdResponses];
 
-export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusData = {
+export type PutFalAiFlux2TrainerEditRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-trainer/edit/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerEditRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlux2TrainerEditRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5578,20 +3645,20 @@ export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/phota/create-profile/requests/{request_id}/status";
+  url: "/fal-ai/flux-2-trainer/edit/requests/{request_id}/status";
 };
 
-export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponses = {
+export type GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponse =
-  GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponses[keyof GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponses];
+export type GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerEditRequestsByRequestIdStatusResponses];
 
-export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelData = {
+export type GetFalAiFlux2TrainerRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5600,10 +3667,32 @@ export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/phota/create-profile/requests/{request_id}/cancel";
+  url: "/fal-ai/flux-2-trainer/requests/{request_id}";
 };
 
-export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses = {
+export type GetFalAiFlux2TrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Flux2TrainerOutput;
+};
+
+export type GetFalAiFlux2TrainerRequestsByRequestIdResponse =
+  GetFalAiFlux2TrainerRequestsByRequestIdResponses[keyof GetFalAiFlux2TrainerRequestsByRequestIdResponses];
+
+export type PutFalAiFlux2TrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-2-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFlux2TrainerRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5615,8 +3704,876 @@ export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponse =
-  PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses[keyof PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses];
+export type PutFalAiFlux2TrainerRequestsByRequestIdCancelResponse =
+  PutFalAiFlux2TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFlux2TrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFlux2TrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/flux-2-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiFlux2TrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFlux2TrainerRequestsByRequestIdStatusResponse =
+  GetFalAiFlux2TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFlux2TrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFluxKontextTrainerData = {
+  body: FluxKontextTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-kontext-trainer";
+};
+
+export type PostFalAiFluxKontextTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFluxKontextTrainerResponse =
+  PostFalAiFluxKontextTrainerResponses[keyof PostFalAiFluxKontextTrainerResponses];
+
+export type GetFalAiFluxKontextTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-kontext-trainer/requests/{request_id}";
+};
+
+export type GetFalAiFluxKontextTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FluxKontextTrainerOutput;
+};
+
+export type GetFalAiFluxKontextTrainerRequestsByRequestIdResponse =
+  GetFalAiFluxKontextTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxKontextTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiFluxKontextTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-kontext-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFluxKontextTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFluxKontextTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/flux-kontext-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFluxKontextTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFluxKreaTrainerData = {
+  body: FluxKreaTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-krea-trainer";
+};
+
+export type PostFalAiFluxKreaTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFluxKreaTrainerResponse =
+  PostFalAiFluxKreaTrainerResponses[keyof PostFalAiFluxKreaTrainerResponses];
+
+export type GetFalAiFluxKreaTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-krea-trainer/requests/{request_id}";
+};
+
+export type GetFalAiFluxKreaTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FluxKreaTrainerOutput;
+};
+
+export type GetFalAiFluxKreaTrainerRequestsByRequestIdResponse =
+  GetFalAiFluxKreaTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxKreaTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiFluxKreaTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-krea-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFluxKreaTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFluxKreaTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/flux-krea-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFluxKreaTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFluxLoraFastTrainingData = {
+  body: FluxLoraFastTrainingInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-lora-fast-training";
+};
+
+export type PostFalAiFluxLoraFastTrainingResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFluxLoraFastTrainingResponse =
+  PostFalAiFluxLoraFastTrainingResponses[keyof PostFalAiFluxLoraFastTrainingResponses];
+
+export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-lora-fast-training/requests/{request_id}";
+};
+
+export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FluxLoraFastTrainingOutput;
+};
+
+export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponse =
+  GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponses[keyof GetFalAiFluxLoraFastTrainingRequestsByRequestIdResponses];
+
+export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-lora-fast-training/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponse =
+  PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses[keyof PutFalAiFluxLoraFastTrainingRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/flux-lora-fast-training/requests/{request_id}/status";
+};
+
+export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponse =
+  GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponses[keyof GetFalAiFluxLoraFastTrainingRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFluxLoraPortraitTrainerData = {
+  body: FluxLoraPortraitTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/flux-lora-portrait-trainer";
+};
+
+export type PostFalAiFluxLoraPortraitTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFluxLoraPortraitTrainerResponse =
+  PostFalAiFluxLoraPortraitTrainerResponses[keyof PostFalAiFluxLoraPortraitTrainerResponses];
+
+export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-lora-portrait-trainer/requests/{request_id}";
+};
+
+export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FluxLoraPortraitTrainerOutput;
+};
+
+export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponse =
+  GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses[keyof GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/flux-lora-portrait-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiFluxLoraPortraitTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/flux-lora-portrait-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiFluxLoraPortraitTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiHunyuanVideoLoraTrainingData = {
+  body: HunyuanVideoLoraTrainingInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/hunyuan-video-lora-training";
+};
+
+export type PostFalAiHunyuanVideoLoraTrainingResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiHunyuanVideoLoraTrainingResponse =
+  PostFalAiHunyuanVideoLoraTrainingResponses[keyof PostFalAiHunyuanVideoLoraTrainingResponses];
+
+export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-video-lora-training/requests/{request_id}";
+};
+
+export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: HunyuanVideoLoraTrainingOutput;
+};
+
+export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponse =
+  GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponses[keyof GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdResponses];
+
+export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/hunyuan-video-lora-training/requests/{request_id}/cancel";
+};
+
+export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponse =
+  PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses[keyof PutFalAiHunyuanVideoLoraTrainingRequestsByRequestIdCancelResponses];
+
+export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/hunyuan-video-lora-training/requests/{request_id}/status";
+};
+
+export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponse =
+  GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses[keyof GetFalAiHunyuanVideoLoraTrainingRequestsByRequestIdStatusResponses];
+
+export type PostFalAiLtxVideoTrainerData = {
+  body: LtxVideoTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ltx-video-trainer";
+};
+
+export type PostFalAiLtxVideoTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiLtxVideoTrainerResponse =
+  PostFalAiLtxVideoTrainerResponses[keyof PostFalAiLtxVideoTrainerResponses];
+
+export type GetFalAiLtxVideoTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx-video-trainer/requests/{request_id}";
+};
+
+export type GetFalAiLtxVideoTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: LtxVideoTrainerOutput;
+};
+
+export type GetFalAiLtxVideoTrainerRequestsByRequestIdResponse =
+  GetFalAiLtxVideoTrainerRequestsByRequestIdResponses[keyof GetFalAiLtxVideoTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiLtxVideoTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx-video-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiLtxVideoTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiLtxVideoTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ltx-video-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiLtxVideoTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiLtx2VideoTrainerData = {
+  body: Ltx2VideoTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ltx2-video-trainer";
+};
+
+export type PostFalAiLtx2VideoTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiLtx2VideoTrainerResponse =
+  PostFalAiLtx2VideoTrainerResponses[keyof PostFalAiLtx2VideoTrainerResponses];
+
+export type GetFalAiLtx2VideoTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx2-video-trainer/requests/{request_id}";
+};
+
+export type GetFalAiLtx2VideoTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Ltx2VideoTrainerOutput;
+};
+
+export type GetFalAiLtx2VideoTrainerRequestsByRequestIdResponse =
+  GetFalAiLtx2VideoTrainerRequestsByRequestIdResponses[keyof GetFalAiLtx2VideoTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx2-video-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiLtx2VideoTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ltx2-video-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiLtx2VideoTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiLtx23V2vTrainerData = {
+  body: Ltx23V2vTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ltx23-v2v-trainer";
+};
+
+export type PostFalAiLtx23V2vTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiLtx23V2vTrainerResponse =
+  PostFalAiLtx23V2vTrainerResponses[keyof PostFalAiLtx23V2vTrainerResponses];
+
+export type GetFalAiLtx23V2vTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx23-v2v-trainer/requests/{request_id}";
+};
+
+export type GetFalAiLtx23V2vTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Ltx23V2vTrainerOutput;
+};
+
+export type GetFalAiLtx23V2vTrainerRequestsByRequestIdResponse =
+  GetFalAiLtx23V2vTrainerRequestsByRequestIdResponses[keyof GetFalAiLtx23V2vTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiLtx23V2vTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx23-v2v-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiLtx23V2vTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiLtx23V2vTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiLtx23V2vTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiLtx23V2vTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiLtx23V2vTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ltx23-v2v-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiLtx23V2vTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiLtx23V2vTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiLtx23V2vTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiLtx23V2vTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiLtx23VideoTrainerData = {
+  body: Ltx23VideoTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ltx23-video-trainer";
+};
+
+export type PostFalAiLtx23VideoTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiLtx23VideoTrainerResponse =
+  PostFalAiLtx23VideoTrainerResponses[keyof PostFalAiLtx23VideoTrainerResponses];
+
+export type GetFalAiLtx23VideoTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx23-video-trainer/requests/{request_id}";
+};
+
+export type GetFalAiLtx23VideoTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Ltx23VideoTrainerOutput;
+};
+
+export type GetFalAiLtx23VideoTrainerRequestsByRequestIdResponse =
+  GetFalAiLtx23VideoTrainerRequestsByRequestIdResponses[keyof GetFalAiLtx23VideoTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiLtx23VideoTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ltx23-video-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiLtx23VideoTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiLtx23VideoTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiLtx23VideoTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiLtx23VideoTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiLtx23VideoTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ltx23-video-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiLtx23VideoTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiLtx23VideoTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiLtx23VideoTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiLtx23VideoTrainerRequestsByRequestIdStatusResponses];
 
 export type PostFalAiPhotaCreateProfileData = {
   body: PhotaCreateProfileInput;
@@ -5657,7 +4614,34 @@ export type GetFalAiPhotaCreateProfileRequestsByRequestIdResponses = {
 export type GetFalAiPhotaCreateProfileRequestsByRequestIdResponse =
   GetFalAiPhotaCreateProfileRequestsByRequestIdResponses[keyof GetFalAiPhotaCreateProfileRequestsByRequestIdResponses];
 
-export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusData = {
+export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/phota/create-profile/requests/{request_id}/cancel";
+};
+
+export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponse =
+  PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses[keyof PutFalAiPhotaCreateProfileRequestsByRequestIdCancelResponses];
+
+export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5671,21 +4655,54 @@ export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/qwen-image-edit-2509-trainer/requests/{request_id}/status";
+  url: "/fal-ai/phota/create-profile/requests/{request_id}/status";
 };
 
-export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
+export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
 
-export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponses];
+export type GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponse =
+  GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponses[keyof GetFalAiPhotaCreateProfileRequestsByRequestIdStatusResponses];
 
-export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelData = {
+export type PostFalAiQwenImage2512TrainerData = {
+  body: QwenImage2512TrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-2512-trainer";
+};
+
+export type PostFalAiQwenImage2512TrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImage2512TrainerResponse =
+  PostFalAiQwenImage2512TrainerResponses[keyof PostFalAiQwenImage2512TrainerResponses];
+
+export type PostFalAiQwenImage2512TrainerV2Data = {
+  body: QwenImage2512TrainerV2Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-2512-trainer-v2";
+};
+
+export type PostFalAiQwenImage2512TrainerV2Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImage2512TrainerV2Response =
+  PostFalAiQwenImage2512TrainerV2Responses[keyof PostFalAiQwenImage2512TrainerV2Responses];
+
+export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5694,24 +4711,148 @@ export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/qwen-image-edit-2509-trainer/requests/{request_id}/cancel";
+  url: "/fal-ai/qwen-image-2512-trainer-v2/requests/{request_id}";
 };
 
-export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
+export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImage2512TrainerV2Output;
+};
 
-export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponses];
+export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponse =
+  GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponses[keyof GetFalAiQwenImage2512TrainerV2RequestsByRequestIdResponses];
+
+export type PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-2512-trainer-v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponse =
+  PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiQwenImage2512TrainerV2RequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-2512-trainer-v2/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponse =
+  GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiQwenImage2512TrainerV2RequestsByRequestIdStatusResponses];
+
+export type GetFalAiQwenImage2512TrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-2512-trainer/requests/{request_id}";
+};
+
+export type GetFalAiQwenImage2512TrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImage2512TrainerOutput;
+};
+
+export type GetFalAiQwenImage2512TrainerRequestsByRequestIdResponse =
+  GetFalAiQwenImage2512TrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImage2512TrainerRequestsByRequestIdResponses];
+
+export type PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-2512-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImage2512TrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-2512-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImage2512TrainerRequestsByRequestIdStatusResponses];
 
 export type PostFalAiQwenImageEdit2509TrainerData = {
   body: QwenImageEdit2509TrainerInput;
@@ -5752,7 +4893,35 @@ export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdResponses = {
 export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdResponse =
   GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdResponses];
 
-export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusData = {
+export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-edit-2509-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEdit2509TrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5766,10 +4935,10 @@ export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/qwen-image-edit-plus-trainer/requests/{request_id}/status";
+  url: "/fal-ai/qwen-image-edit-2509-trainer/requests/{request_id}/status";
 };
 
-export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses =
+export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -5777,10 +4946,27 @@ export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses =
     200: QueueStatus;
   };
 
-export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponse =
-  GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses];
+export type GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEdit2509TrainerRequestsByRequestIdStatusResponses];
 
-export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelData = {
+export type PostFalAiQwenImageEdit2511TrainerData = {
+  body: QwenImageEdit2511TrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-edit-2511-trainer";
+};
+
+export type PostFalAiQwenImageEdit2511TrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImageEdit2511TrainerResponse =
+  PostFalAiQwenImageEdit2511TrainerResponses[keyof PostFalAiQwenImageEdit2511TrainerResponses];
+
+export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5789,10 +4975,32 @@ export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/qwen-image-edit-plus-trainer/requests/{request_id}/cancel";
+  url: "/fal-ai/qwen-image-edit-2511-trainer/requests/{request_id}";
 };
 
-export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses =
+export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImageEdit2511TrainerOutput;
+};
+
+export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponse =
+  GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdResponses];
+
+export type PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-edit-2511-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponses =
   {
     /**
      * The request was cancelled.
@@ -5805,8 +5013,36 @@ export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses =
     };
   };
 
-export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponse =
-  PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses];
+export type PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEdit2511TrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-edit-2511-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEdit2511TrainerRequestsByRequestIdStatusResponses];
 
 export type PostFalAiQwenImageEditPlusTrainerData = {
   body: QwenImageEditPlusTrainerInput;
@@ -5847,7 +5083,35 @@ export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdResponses = {
 export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdResponse =
   GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdResponses];
 
-export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusData = {
+export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-edit-plus-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEditPlusTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5861,20 +5125,38 @@ export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/wan-trainer/flf2v-720p/requests/{request_id}/status";
+  url: "/fal-ai/qwen-image-edit-plus-trainer/requests/{request_id}/status";
 };
 
-export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponses = {
+export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEditPlusTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiQwenImageEditTrainerData = {
+  body: QwenImageEditTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-edit-trainer";
+};
+
+export type PostFalAiQwenImageEditTrainerResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponse =
-  GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponses];
+export type PostFalAiQwenImageEditTrainerResponse =
+  PostFalAiQwenImageEditTrainerResponses[keyof PostFalAiQwenImageEditTrainerResponses];
 
-export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelData = {
+export type GetFalAiQwenImageEditTrainerRequestsByRequestIdData = {
   body?: never;
   path: {
     /**
@@ -5883,10 +5165,32 @@ export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelData = {
     request_id: string;
   };
   query?: never;
-  url: "/fal-ai/wan-trainer/flf2v-720p/requests/{request_id}/cancel";
+  url: "/fal-ai/qwen-image-edit-trainer/requests/{request_id}";
 };
 
-export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses = {
+export type GetFalAiQwenImageEditTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImageEditTrainerOutput;
+};
+
+export type GetFalAiQwenImageEditTrainerRequestsByRequestIdResponse =
+  GetFalAiQwenImageEditTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageEditTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-edit-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponses = {
   /**
    * The request was cancelled.
    */
@@ -5898,8 +5202,798 @@ export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses = {
   };
 };
 
-export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponse =
-  PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses];
+export type PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageEditTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-edit-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageEditTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiQwenImageLayeredTrainerData = {
+  body: QwenImageLayeredTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-layered-trainer";
+};
+
+export type PostFalAiQwenImageLayeredTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImageLayeredTrainerResponse =
+  PostFalAiQwenImageLayeredTrainerResponses[keyof PostFalAiQwenImageLayeredTrainerResponses];
+
+export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-layered-trainer/requests/{request_id}";
+};
+
+export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImageLayeredTrainerOutput;
+};
+
+export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponse =
+  GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageLayeredTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-layered-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageLayeredTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-layered-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageLayeredTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiQwenImageTrainerData = {
+  body: QwenImageTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer";
+};
+
+export type PostFalAiQwenImageTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImageTrainerResponse =
+  PostFalAiQwenImageTrainerResponses[keyof PostFalAiQwenImageTrainerResponses];
+
+export type PostFalAiQwenImageTrainerV2Data = {
+  body: QwenImageTrainerV2Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer-v2";
+};
+
+export type PostFalAiQwenImageTrainerV2Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiQwenImageTrainerV2Response =
+  PostFalAiQwenImageTrainerV2Responses[keyof PostFalAiQwenImageTrainerV2Responses];
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}";
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImageTrainerV2Output;
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdResponse =
+  GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses[keyof GetFalAiQwenImageTrainerV2RequestsByRequestIdResponses];
+
+export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageTrainerV2RequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-trainer-v2/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageTrainerV2RequestsByRequestIdStatusResponses];
+
+export type GetFalAiQwenImageTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer/requests/{request_id}";
+};
+
+export type GetFalAiQwenImageTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: QwenImageTrainerOutput;
+};
+
+export type GetFalAiQwenImageTrainerRequestsByRequestIdResponse =
+  GetFalAiQwenImageTrainerRequestsByRequestIdResponses[keyof GetFalAiQwenImageTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiQwenImageTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/qwen-image-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiQwenImageTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiQwenImageTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/qwen-image-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiQwenImageTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiRecraftV3CreateStyleData = {
+  body: RecraftV3CreateStyleInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/recraft/v3/create-style";
+};
+
+export type PostFalAiRecraftV3CreateStyleResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiRecraftV3CreateStyleResponse =
+  PostFalAiRecraftV3CreateStyleResponses[keyof PostFalAiRecraftV3CreateStyleResponses];
+
+export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/recraft/v3/create-style/requests/{request_id}";
+};
+
+export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: RecraftV3CreateStyleOutput;
+};
+
+export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponse =
+  GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponses[keyof GetFalAiRecraftV3CreateStyleRequestsByRequestIdResponses];
+
+export type PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/recraft/v3/create-style/requests/{request_id}/cancel";
+};
+
+export type PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponse =
+  PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponses[keyof PutFalAiRecraftV3CreateStyleRequestsByRequestIdCancelResponses];
+
+export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/recraft/v3/create-style/requests/{request_id}/status";
+};
+
+export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponse =
+  GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponses[keyof GetFalAiRecraftV3CreateStyleRequestsByRequestIdStatusResponses];
+
+export type PostFalAiTurboFluxTrainerData = {
+  body: TurboFluxTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/turbo-flux-trainer";
+};
+
+export type PostFalAiTurboFluxTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiTurboFluxTrainerResponse =
+  PostFalAiTurboFluxTrainerResponses[keyof PostFalAiTurboFluxTrainerResponses];
+
+export type GetFalAiTurboFluxTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/turbo-flux-trainer/requests/{request_id}";
+};
+
+export type GetFalAiTurboFluxTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: TurboFluxTrainerOutput;
+};
+
+export type GetFalAiTurboFluxTrainerRequestsByRequestIdResponse =
+  GetFalAiTurboFluxTrainerRequestsByRequestIdResponses[keyof GetFalAiTurboFluxTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiTurboFluxTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/turbo-flux-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiTurboFluxTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiTurboFluxTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/turbo-flux-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiTurboFluxTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiWan22ImageTrainerData = {
+  body: Wan22ImageTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wan-22-image-trainer";
+};
+
+export type PostFalAiWan22ImageTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWan22ImageTrainerResponse =
+  PostFalAiWan22ImageTrainerResponses[keyof PostFalAiWan22ImageTrainerResponses];
+
+export type GetFalAiWan22ImageTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-22-image-trainer/requests/{request_id}";
+};
+
+export type GetFalAiWan22ImageTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Wan22ImageTrainerOutput;
+};
+
+export type GetFalAiWan22ImageTrainerRequestsByRequestIdResponse =
+  GetFalAiWan22ImageTrainerRequestsByRequestIdResponses[keyof GetFalAiWan22ImageTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiWan22ImageTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-22-image-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiWan22ImageTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWan22ImageTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-22-image-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiWan22ImageTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiWan22TrainerI2vA14bData = {
+  body: Wan22TrainerI2vA14bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wan-22-trainer/i2v-a14b";
+};
+
+export type PostFalAiWan22TrainerI2vA14bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWan22TrainerI2vA14bResponse =
+  PostFalAiWan22TrainerI2vA14bResponses[keyof PostFalAiWan22TrainerI2vA14bResponses];
+
+export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-22-trainer/i2v-a14b/requests/{request_id}";
+};
+
+export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Wan22TrainerI2vA14bOutput;
+};
+
+export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponse =
+  GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponses[keyof GetFalAiWan22TrainerI2vA14bRequestsByRequestIdResponses];
+
+export type PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-22-trainer/i2v-a14b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponse =
+  PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponses[keyof PutFalAiWan22TrainerI2vA14bRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-22-trainer/i2v-a14b/requests/{request_id}/status";
+};
+
+export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponse =
+  GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponses[keyof GetFalAiWan22TrainerI2vA14bRequestsByRequestIdStatusResponses];
+
+export type PostFalAiWan22TrainerT2vA14bData = {
+  body: Wan22TrainerT2vA14bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wan-22-trainer/t2v-a14b";
+};
+
+export type PostFalAiWan22TrainerT2vA14bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWan22TrainerT2vA14bResponse =
+  PostFalAiWan22TrainerT2vA14bResponses[keyof PostFalAiWan22TrainerT2vA14bResponses];
+
+export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-22-trainer/t2v-a14b/requests/{request_id}";
+};
+
+export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: Wan22TrainerT2vA14bOutput;
+};
+
+export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponse =
+  GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponses[keyof GetFalAiWan22TrainerT2vA14bRequestsByRequestIdResponses];
+
+export type PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-22-trainer/t2v-a14b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponse =
+  PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponses[keyof PutFalAiWan22TrainerT2vA14bRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-22-trainer/t2v-a14b/requests/{request_id}/status";
+};
+
+export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponse =
+  GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponses[keyof GetFalAiWan22TrainerT2vA14bRequestsByRequestIdStatusResponses];
+
+export type PostFalAiWanTrainerData = {
+  body: WanTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wan-trainer";
+};
+
+export type PostFalAiWanTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWanTrainerResponse =
+  PostFalAiWanTrainerResponses[keyof PostFalAiWanTrainerResponses];
 
 export type PostFalAiWanTrainerFlf2V720pData = {
   body: WanTrainerFlf2V720pInput;
@@ -5940,7 +6034,34 @@ export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdResponses = {
 export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdResponse =
   GetFalAiWanTrainerFlf2V720pRequestsByRequestIdResponses[keyof GetFalAiWanTrainerFlf2V720pRequestsByRequestIdResponses];
 
-export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusData = {
+export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/flf2v-720p/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponse =
+  PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerFlf2V720pRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusData = {
   body?: never;
   path: {
     /**
@@ -5954,45 +6075,18 @@ export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusData = {
      */
     logs?: number;
   };
-  url: "/fal-ai/wan-trainer/i2v-720p/requests/{request_id}/status";
+  url: "/fal-ai/wan-trainer/flf2v-720p/requests/{request_id}/status";
 };
 
-export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponses = {
+export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponses = {
   /**
    * The request status.
    */
   200: QueueStatus;
 };
 
-export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponse =
-  GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponses];
-
-export type PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/wan-trainer/i2v-720p/requests/{request_id}/cancel";
-};
-
-export type PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponses = {
-  /**
-   * The request was cancelled.
-   */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponse =
-  PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponses];
+export type GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponse =
+  GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerFlf2V720pRequestsByRequestIdStatusResponses];
 
 export type PostFalAiWanTrainerI2V720pData = {
   body: WanTrainerI2V720pInput;
@@ -6032,3 +6126,598 @@ export type GetFalAiWanTrainerI2V720pRequestsByRequestIdResponses = {
 
 export type GetFalAiWanTrainerI2V720pRequestsByRequestIdResponse =
   GetFalAiWanTrainerI2V720pRequestsByRequestIdResponses[keyof GetFalAiWanTrainerI2V720pRequestsByRequestIdResponses];
+
+export type PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/i2v-720p/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponse =
+  PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerI2V720pRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-trainer/i2v-720p/requests/{request_id}/status";
+};
+
+export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponse =
+  GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerI2V720pRequestsByRequestIdStatusResponses];
+
+export type GetFalAiWanTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/requests/{request_id}";
+};
+
+export type GetFalAiWanTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WanTrainerOutput;
+};
+
+export type GetFalAiWanTrainerRequestsByRequestIdResponse =
+  GetFalAiWanTrainerRequestsByRequestIdResponses[keyof GetFalAiWanTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiWanTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWanTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWanTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiWanTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWanTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiWanTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWanTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiWanTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiWanTrainerT2vData = {
+  body: WanTrainerT2vInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wan-trainer/t2v";
+};
+
+export type PostFalAiWanTrainerT2vResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWanTrainerT2vResponse =
+  PostFalAiWanTrainerT2vResponses[keyof PostFalAiWanTrainerT2vResponses];
+
+export type PostFalAiWanTrainerT2V14bData = {
+  body: WanTrainerT2V14bInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/wan-trainer/t2v-14b";
+};
+
+export type PostFalAiWanTrainerT2V14bResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiWanTrainerT2V14bResponse =
+  PostFalAiWanTrainerT2V14bResponses[keyof PostFalAiWanTrainerT2V14bResponses];
+
+export type GetFalAiWanTrainerT2V14bRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/t2v-14b/requests/{request_id}";
+};
+
+export type GetFalAiWanTrainerT2V14bRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WanTrainerT2V14bOutput;
+};
+
+export type GetFalAiWanTrainerT2V14bRequestsByRequestIdResponse =
+  GetFalAiWanTrainerT2V14bRequestsByRequestIdResponses[keyof GetFalAiWanTrainerT2V14bRequestsByRequestIdResponses];
+
+export type PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/t2v-14b/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponse =
+  PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerT2V14bRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-trainer/t2v-14b/requests/{request_id}/status";
+};
+
+export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponse =
+  GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerT2V14bRequestsByRequestIdStatusResponses];
+
+export type GetFalAiWanTrainerT2vRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/t2v/requests/{request_id}";
+};
+
+export type GetFalAiWanTrainerT2vRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: WanTrainerT2vOutput;
+};
+
+export type GetFalAiWanTrainerT2vRequestsByRequestIdResponse =
+  GetFalAiWanTrainerT2vRequestsByRequestIdResponses[keyof GetFalAiWanTrainerT2vRequestsByRequestIdResponses];
+
+export type PutFalAiWanTrainerT2vRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/wan-trainer/t2v/requests/{request_id}/cancel";
+};
+
+export type PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponse =
+  PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponses[keyof PutFalAiWanTrainerT2vRequestsByRequestIdCancelResponses];
+
+export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/wan-trainer/t2v/requests/{request_id}/status";
+};
+
+export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponse =
+  GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponses[keyof GetFalAiWanTrainerT2vRequestsByRequestIdStatusResponses];
+
+export type PostFalAiZImageBaseTrainerData = {
+  body: ZImageBaseTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/z-image-base-trainer";
+};
+
+export type PostFalAiZImageBaseTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiZImageBaseTrainerResponse =
+  PostFalAiZImageBaseTrainerResponses[keyof PostFalAiZImageBaseTrainerResponses];
+
+export type GetFalAiZImageBaseTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/z-image-base-trainer/requests/{request_id}";
+};
+
+export type GetFalAiZImageBaseTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ZImageBaseTrainerOutput;
+};
+
+export type GetFalAiZImageBaseTrainerRequestsByRequestIdResponse =
+  GetFalAiZImageBaseTrainerRequestsByRequestIdResponses[keyof GetFalAiZImageBaseTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiZImageBaseTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/z-image-base-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiZImageBaseTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/z-image-base-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiZImageBaseTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiZImageTrainerData = {
+  body: ZImageTrainerInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/z-image-trainer";
+};
+
+export type PostFalAiZImageTrainerResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiZImageTrainerResponse =
+  PostFalAiZImageTrainerResponses[keyof PostFalAiZImageTrainerResponses];
+
+export type GetFalAiZImageTrainerRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/z-image-trainer/requests/{request_id}";
+};
+
+export type GetFalAiZImageTrainerRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ZImageTrainerOutput;
+};
+
+export type GetFalAiZImageTrainerRequestsByRequestIdResponse =
+  GetFalAiZImageTrainerRequestsByRequestIdResponses[keyof GetFalAiZImageTrainerRequestsByRequestIdResponses];
+
+export type PutFalAiZImageTrainerRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/z-image-trainer/requests/{request_id}/cancel";
+};
+
+export type PutFalAiZImageTrainerRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiZImageTrainerRequestsByRequestIdCancelResponse =
+  PutFalAiZImageTrainerRequestsByRequestIdCancelResponses[keyof PutFalAiZImageTrainerRequestsByRequestIdCancelResponses];
+
+export type GetFalAiZImageTrainerRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/z-image-trainer/requests/{request_id}/status";
+};
+
+export type GetFalAiZImageTrainerRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiZImageTrainerRequestsByRequestIdStatusResponse =
+  GetFalAiZImageTrainerRequestsByRequestIdStatusResponses[keyof GetFalAiZImageTrainerRequestsByRequestIdStatusResponses];
+
+export type PostFalAiZImageTurboTrainerV2Data = {
+  body: ZImageTurboTrainerV2Input;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/z-image-turbo-trainer-v2";
+};
+
+export type PostFalAiZImageTurboTrainerV2Responses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiZImageTurboTrainerV2Response =
+  PostFalAiZImageTurboTrainerV2Responses[keyof PostFalAiZImageTurboTrainerV2Responses];
+
+export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/z-image-turbo-trainer-v2/requests/{request_id}";
+};
+
+export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: ZImageTurboTrainerV2Output;
+};
+
+export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponse =
+  GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponses[keyof GetFalAiZImageTurboTrainerV2RequestsByRequestIdResponses];
+
+export type PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/z-image-turbo-trainer-v2/requests/{request_id}/cancel";
+};
+
+export type PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponse =
+  PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponses[keyof PutFalAiZImageTurboTrainerV2RequestsByRequestIdCancelResponses];
+
+export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/z-image-turbo-trainer-v2/requests/{request_id}/status";
+};
+
+export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponse =
+  GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponses[keyof GetFalAiZImageTurboTrainerV2RequestsByRequestIdStatusResponses];

@@ -75,39 +75,19 @@ import {
 /** Zod schema for vision endpoints using discriminatedUnion */
 export const VisionEndpointSchema = z.discriminatedUnion("endpoint", [
   z.object({
-    endpoint: z.literal("openrouter/router/vision"),
-    input: zRouterVisionInput,
-    output: zRouterVisionOutput,
+    endpoint: z.literal("fal-ai/arbiter/image"),
+    input: zArbiterImageInput,
+    output: zArbiterImageOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/imageutils/nsfw"),
-    input: zImageutilsNsfwInput,
-    output: zImageutilsNsfwOutput,
+    endpoint: z.literal("fal-ai/arbiter/image/image"),
+    input: zArbiterImageImageInput,
+    output: zArbiterImageImageOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/video-understanding"),
-    input: zVideoUnderstandingInput,
-    output: zVideoUnderstandingOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream3-preview/query"),
-    input: zMoondream3PreviewQueryInput,
-    output: zMoondream3PreviewQueryOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/florence-2-large/more-detailed-caption"),
-    input: zFlorence2LargeMoreDetailedCaptionInput,
-    output: zFlorence2LargeMoreDetailedCaptionOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/x-ailab/nsfw"),
-    input: zXAilabNsfwInput,
-    output: zXAilabNsfwOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream3-preview/caption"),
-    input: zMoondream3PreviewCaptionInput,
-    output: zMoondream3PreviewCaptionOutput,
+    endpoint: z.literal("fal-ai/arbiter/image/text"),
+    input: zArbiterImageTextInput,
+    output: zArbiterImageTextOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/florence-2-large/caption"),
@@ -120,104 +100,14 @@ export const VisionEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zFlorence2LargeDetailedCaptionOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/moondream2/object-detection"),
-    input: zMoondream2ObjectDetectionInput,
-    output: zMoondream2ObjectDetectionOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/llava-next"),
-    input: zLlavaNextInput,
-    output: zLlavaNextOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream-next"),
-    input: zMoondreamNextInput,
-    output: zMoondreamNextOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream3-preview/detect"),
-    input: zMoondream3PreviewDetectInput,
-    output: zMoondream3PreviewDetectOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream2/visual-query"),
-    input: zMoondream2VisualQueryInput,
-    output: zMoondream2VisualQueryOutput,
-  }),
-  z.object({
-    endpoint: z.literal("perceptron/isaac-01"),
-    input: zIsaac01Input,
-    output: zIsaac01Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream2"),
-    input: zMoondream2Input,
-    output: zMoondream2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/got-ocr/v2"),
-    input: zGotOcrV2Input,
-    output: zGotOcrV2Output,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream-next/batch"),
-    input: zMoondreamNextBatchInput,
-    output: zMoondreamNextBatchOutput,
-  }),
-  z.object({
-    endpoint: z.literal("perceptron/isaac-01/openai/v1/chat/completions"),
-    input: zIsaac01OpenaiV1ChatCompletionsInput,
-    output: zIsaac01OpenaiV1ChatCompletionsOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream/batched"),
-    input: zMoondreamBatchedInput,
-    output: zMoondreamBatchedOutput,
+    endpoint: z.literal("fal-ai/florence-2-large/more-detailed-caption"),
+    input: zFlorence2LargeMoreDetailedCaptionInput,
+    output: zFlorence2LargeMoreDetailedCaptionOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/florence-2-large/ocr"),
     input: zFlorence2LargeOcrInput,
     output: zFlorence2LargeOcrOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/moondream3-preview/point"),
-    input: zMoondream3PreviewPointInput,
-    output: zMoondream3PreviewPointOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sa2va/8b/image"),
-    input: zSa2Va8bImageInput,
-    output: zSa2Va8bImageOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sam-3/image/embed"),
-    input: zSam3ImageEmbedInput,
-    output: zSam3ImageEmbedOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/arbiter/image"),
-    input: zArbiterImageInput,
-    output: zArbiterImageOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sa2va/4b/image"),
-    input: zSa2Va4bImageInput,
-    output: zSa2Va4bImageOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sa2va/4b/video"),
-    input: zSa2Va4bVideoInput,
-    output: zSa2Va4bVideoOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/sa2va/8b/video"),
-    input: zSa2Va8bVideoInput,
-    output: zSa2Va8bVideoOutput,
-  }),
-  z.object({
-    endpoint: z.literal("fal-ai/arbiter/image/image"),
-    input: zArbiterImageImageInput,
-    output: zArbiterImageImageOutput,
   }),
   z.object({
     endpoint: z.literal("fal-ai/florence-2-large/region-to-category"),
@@ -230,14 +120,124 @@ export const VisionEndpointSchema = z.discriminatedUnion("endpoint", [
     output: zFlorence2LargeRegionToDescriptionOutput,
   }),
   z.object({
+    endpoint: z.literal("fal-ai/got-ocr/v2"),
+    input: zGotOcrV2Input,
+    output: zGotOcrV2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/imageutils/nsfw"),
+    input: zImageutilsNsfwInput,
+    output: zImageutilsNsfwOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/llava-next"),
+    input: zLlavaNextInput,
+    output: zLlavaNextOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream-next"),
+    input: zMoondreamNextInput,
+    output: zMoondreamNextOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream-next/batch"),
+    input: zMoondreamNextBatchInput,
+    output: zMoondreamNextBatchOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream/batched"),
+    input: zMoondreamBatchedInput,
+    output: zMoondreamBatchedOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream2"),
+    input: zMoondream2Input,
+    output: zMoondream2Output,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream2/object-detection"),
+    input: zMoondream2ObjectDetectionInput,
+    output: zMoondream2ObjectDetectionOutput,
+  }),
+  z.object({
     endpoint: z.literal("fal-ai/moondream2/point-object-detection"),
     input: zMoondream2PointObjectDetectionInput,
     output: zMoondream2PointObjectDetectionOutput,
   }),
   z.object({
-    endpoint: z.literal("fal-ai/arbiter/image/text"),
-    input: zArbiterImageTextInput,
-    output: zArbiterImageTextOutput,
+    endpoint: z.literal("fal-ai/moondream2/visual-query"),
+    input: zMoondream2VisualQueryInput,
+    output: zMoondream2VisualQueryOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream3-preview/caption"),
+    input: zMoondream3PreviewCaptionInput,
+    output: zMoondream3PreviewCaptionOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream3-preview/detect"),
+    input: zMoondream3PreviewDetectInput,
+    output: zMoondream3PreviewDetectOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream3-preview/point"),
+    input: zMoondream3PreviewPointInput,
+    output: zMoondream3PreviewPointOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/moondream3-preview/query"),
+    input: zMoondream3PreviewQueryInput,
+    output: zMoondream3PreviewQueryOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sa2va/4b/image"),
+    input: zSa2Va4bImageInput,
+    output: zSa2Va4bImageOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sa2va/4b/video"),
+    input: zSa2Va4bVideoInput,
+    output: zSa2Va4bVideoOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sa2va/8b/image"),
+    input: zSa2Va8bImageInput,
+    output: zSa2Va8bImageOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sa2va/8b/video"),
+    input: zSa2Va8bVideoInput,
+    output: zSa2Va8bVideoOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/sam-3/image/embed"),
+    input: zSam3ImageEmbedInput,
+    output: zSam3ImageEmbedOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/video-understanding"),
+    input: zVideoUnderstandingInput,
+    output: zVideoUnderstandingOutput,
+  }),
+  z.object({
+    endpoint: z.literal("fal-ai/x-ailab/nsfw"),
+    input: zXAilabNsfwInput,
+    output: zXAilabNsfwOutput,
+  }),
+  z.object({
+    endpoint: z.literal("openrouter/router/vision"),
+    input: zRouterVisionInput,
+    output: zRouterVisionOutput,
+  }),
+  z.object({
+    endpoint: z.literal("perceptron/isaac-01"),
+    input: zIsaac01Input,
+    output: zIsaac01Output,
+  }),
+  z.object({
+    endpoint: z.literal("perceptron/isaac-01/openai/v1/chat/completions"),
+    input: zIsaac01OpenaiV1ChatCompletionsInput,
+    output: zIsaac01OpenaiV1ChatCompletionsOutput,
   }),
 ]);
 

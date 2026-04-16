@@ -71,33 +71,17 @@ import type {
 } from "./types.gen";
 
 export type VisionEndpointMap = {
-  "openrouter/router/vision": {
-    input: RouterVisionInput;
-    output: RouterVisionOutput;
+  "fal-ai/arbiter/image": {
+    input: ArbiterImageInput;
+    output: ArbiterImageOutput;
   };
-  "fal-ai/imageutils/nsfw": {
-    input: ImageutilsNsfwInput;
-    output: ImageutilsNsfwOutput;
+  "fal-ai/arbiter/image/image": {
+    input: ArbiterImageImageInput;
+    output: ArbiterImageImageOutput;
   };
-  "fal-ai/video-understanding": {
-    input: VideoUnderstandingInput;
-    output: VideoUnderstandingOutput;
-  };
-  "fal-ai/moondream3-preview/query": {
-    input: Moondream3PreviewQueryInput;
-    output: Moondream3PreviewQueryOutput;
-  };
-  "fal-ai/florence-2-large/more-detailed-caption": {
-    input: Florence2LargeMoreDetailedCaptionInput;
-    output: Florence2LargeMoreDetailedCaptionOutput;
-  };
-  "fal-ai/x-ailab/nsfw": {
-    input: XAilabNsfwInput;
-    output: XAilabNsfwOutput;
-  };
-  "fal-ai/moondream3-preview/caption": {
-    input: Moondream3PreviewCaptionInput;
-    output: Moondream3PreviewCaptionOutput;
+  "fal-ai/arbiter/image/text": {
+    input: ArbiterImageTextInput;
+    output: ArbiterImageTextOutput;
   };
   "fal-ai/florence-2-large/caption": {
     input: Florence2LargeCaptionInput;
@@ -107,85 +91,13 @@ export type VisionEndpointMap = {
     input: Florence2LargeDetailedCaptionInput;
     output: Florence2LargeDetailedCaptionOutput;
   };
-  "fal-ai/moondream2/object-detection": {
-    input: Moondream2ObjectDetectionInput;
-    output: Moondream2ObjectDetectionOutput;
-  };
-  "fal-ai/llava-next": {
-    input: LlavaNextInput;
-    output: LlavaNextOutput;
-  };
-  "fal-ai/moondream-next": {
-    input: MoondreamNextInput;
-    output: MoondreamNextOutput;
-  };
-  "fal-ai/moondream3-preview/detect": {
-    input: Moondream3PreviewDetectInput;
-    output: Moondream3PreviewDetectOutput;
-  };
-  "fal-ai/moondream2/visual-query": {
-    input: Moondream2VisualQueryInput;
-    output: Moondream2VisualQueryOutput;
-  };
-  "perceptron/isaac-01": {
-    input: Isaac01Input;
-    output: Isaac01Output;
-  };
-  "fal-ai/moondream2": {
-    input: Moondream2Input;
-    output: Moondream2Output;
-  };
-  "fal-ai/got-ocr/v2": {
-    input: GotOcrV2Input;
-    output: GotOcrV2Output;
-  };
-  "fal-ai/moondream-next/batch": {
-    input: MoondreamNextBatchInput;
-    output: MoondreamNextBatchOutput;
-  };
-  "perceptron/isaac-01/openai/v1/chat/completions": {
-    input: Isaac01OpenaiV1ChatCompletionsInput;
-    output: Isaac01OpenaiV1ChatCompletionsOutput;
-  };
-  "fal-ai/moondream/batched": {
-    input: MoondreamBatchedInput;
-    output: MoondreamBatchedOutput;
+  "fal-ai/florence-2-large/more-detailed-caption": {
+    input: Florence2LargeMoreDetailedCaptionInput;
+    output: Florence2LargeMoreDetailedCaptionOutput;
   };
   "fal-ai/florence-2-large/ocr": {
     input: Florence2LargeOcrInput;
     output: Florence2LargeOcrOutput;
-  };
-  "fal-ai/moondream3-preview/point": {
-    input: Moondream3PreviewPointInput;
-    output: Moondream3PreviewPointOutput;
-  };
-  "fal-ai/sa2va/8b/image": {
-    input: Sa2Va8bImageInput;
-    output: Sa2Va8bImageOutput;
-  };
-  "fal-ai/sam-3/image/embed": {
-    input: Sam3ImageEmbedInput;
-    output: Sam3ImageEmbedOutput;
-  };
-  "fal-ai/arbiter/image": {
-    input: ArbiterImageInput;
-    output: ArbiterImageOutput;
-  };
-  "fal-ai/sa2va/4b/image": {
-    input: Sa2Va4bImageInput;
-    output: Sa2Va4bImageOutput;
-  };
-  "fal-ai/sa2va/4b/video": {
-    input: Sa2Va4bVideoInput;
-    output: Sa2Va4bVideoOutput;
-  };
-  "fal-ai/sa2va/8b/video": {
-    input: Sa2Va8bVideoInput;
-    output: Sa2Va8bVideoOutput;
-  };
-  "fal-ai/arbiter/image/image": {
-    input: ArbiterImageImageInput;
-    output: ArbiterImageImageOutput;
   };
   "fal-ai/florence-2-large/region-to-category": {
     input: Florence2LargeRegionToCategoryInput;
@@ -195,13 +107,101 @@ export type VisionEndpointMap = {
     input: Florence2LargeRegionToDescriptionInput;
     output: Florence2LargeRegionToDescriptionOutput;
   };
+  "fal-ai/got-ocr/v2": {
+    input: GotOcrV2Input;
+    output: GotOcrV2Output;
+  };
+  "fal-ai/imageutils/nsfw": {
+    input: ImageutilsNsfwInput;
+    output: ImageutilsNsfwOutput;
+  };
+  "fal-ai/llava-next": {
+    input: LlavaNextInput;
+    output: LlavaNextOutput;
+  };
+  "fal-ai/moondream-next": {
+    input: MoondreamNextInput;
+    output: MoondreamNextOutput;
+  };
+  "fal-ai/moondream-next/batch": {
+    input: MoondreamNextBatchInput;
+    output: MoondreamNextBatchOutput;
+  };
+  "fal-ai/moondream/batched": {
+    input: MoondreamBatchedInput;
+    output: MoondreamBatchedOutput;
+  };
+  "fal-ai/moondream2": {
+    input: Moondream2Input;
+    output: Moondream2Output;
+  };
+  "fal-ai/moondream2/object-detection": {
+    input: Moondream2ObjectDetectionInput;
+    output: Moondream2ObjectDetectionOutput;
+  };
   "fal-ai/moondream2/point-object-detection": {
     input: Moondream2PointObjectDetectionInput;
     output: Moondream2PointObjectDetectionOutput;
   };
-  "fal-ai/arbiter/image/text": {
-    input: ArbiterImageTextInput;
-    output: ArbiterImageTextOutput;
+  "fal-ai/moondream2/visual-query": {
+    input: Moondream2VisualQueryInput;
+    output: Moondream2VisualQueryOutput;
+  };
+  "fal-ai/moondream3-preview/caption": {
+    input: Moondream3PreviewCaptionInput;
+    output: Moondream3PreviewCaptionOutput;
+  };
+  "fal-ai/moondream3-preview/detect": {
+    input: Moondream3PreviewDetectInput;
+    output: Moondream3PreviewDetectOutput;
+  };
+  "fal-ai/moondream3-preview/point": {
+    input: Moondream3PreviewPointInput;
+    output: Moondream3PreviewPointOutput;
+  };
+  "fal-ai/moondream3-preview/query": {
+    input: Moondream3PreviewQueryInput;
+    output: Moondream3PreviewQueryOutput;
+  };
+  "fal-ai/sa2va/4b/image": {
+    input: Sa2Va4bImageInput;
+    output: Sa2Va4bImageOutput;
+  };
+  "fal-ai/sa2va/4b/video": {
+    input: Sa2Va4bVideoInput;
+    output: Sa2Va4bVideoOutput;
+  };
+  "fal-ai/sa2va/8b/image": {
+    input: Sa2Va8bImageInput;
+    output: Sa2Va8bImageOutput;
+  };
+  "fal-ai/sa2va/8b/video": {
+    input: Sa2Va8bVideoInput;
+    output: Sa2Va8bVideoOutput;
+  };
+  "fal-ai/sam-3/image/embed": {
+    input: Sam3ImageEmbedInput;
+    output: Sam3ImageEmbedOutput;
+  };
+  "fal-ai/video-understanding": {
+    input: VideoUnderstandingInput;
+    output: VideoUnderstandingOutput;
+  };
+  "fal-ai/x-ailab/nsfw": {
+    input: XAilabNsfwInput;
+    output: XAilabNsfwOutput;
+  };
+  "openrouter/router/vision": {
+    input: RouterVisionInput;
+    output: RouterVisionOutput;
+  };
+  "perceptron/isaac-01": {
+    input: Isaac01Input;
+    output: Isaac01Output;
+  };
+  "perceptron/isaac-01/openai/v1/chat/completions": {
+    input: Isaac01OpenaiV1ChatCompletionsInput;
+    output: Isaac01OpenaiV1ChatCompletionsOutput;
   };
 };
 

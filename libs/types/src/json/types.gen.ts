@@ -5,371 +5,239 @@ export type ClientOptions = {
 };
 
 /**
- * StructuredPrompt
+ * VideoFormat
  */
-export type BriaFiboVlmStructuredPrompt = {
+export type VideoFormat = {
   /**
-   * Background Setting
+   * Container
    *
-   * The background setting of the image to be generated.
+   * Container format of the video
    */
-  background_setting?: string | unknown;
+  container: string;
   /**
-   * Artistic Style
+   * Video Codec
    *
-   * The artistic style of the image to be generated.
+   * Video codec used (e.g., 'h264')
    */
-  artistic_style?: string | unknown;
+  video_codec: string;
   /**
-   * Style Medium
+   * Pixel Format
    *
-   * The style medium of the image to be generated.
+   * Pixel format used (e.g., 'yuv420p')
    */
-  style_medium?: string | unknown;
+  pixel_format: string;
   /**
-   * Text Render
+   * Profile
    *
-   * A list of text to be rendered in the image.
+   * Codec profile (e.g., 'main', 'high')
    */
-  text_render?: Array<unknown> | unknown;
+  profile: string;
   /**
-   * Objects
+   * Level
    *
-   * A list of objects in the image to be generated, along with their attributes and relationships to other objects in the image.
+   * Codec level (e.g., 4.1)
    */
-  objects?: Array<PromptObject> | unknown;
+  level: number;
   /**
-   * Context
+   * Bitrate
    *
-   * The context of the image to be generated.
+   * Video bitrate in bits per second
    */
-  context?: string | unknown;
-  /**
-   * The photographic characteristics of the image to be generated.
-   */
-  photographic_characteristics?: PhotographicCharacteristics | unknown;
-  /**
-   * The aesthetics of the image to be generated.
-   */
-  aesthetics?: AestheticsType2 | unknown;
-  /**
-   * The lighting of the image to be generated.
-   */
-  lighting?: Lighting | unknown;
-  /**
-   * Short Description
-   *
-   * A short description of the image to be generated.
-   */
-  short_description?: string | unknown;
+  bitrate: number;
 };
 
 /**
- * Lighting
+ * Video
  */
-export type Lighting = {
+export type Video = {
   /**
-   * Shadows
+   * File Name
    *
-   * The shadows in the image to be generated.
+   * Original filename of the media
    */
-  shadows?: string | unknown;
+  file_name: string;
   /**
-   * Conditions
+   * Duration
    *
-   * The conditions of the lighting in the image to be generated.
+   * Duration of the media in seconds
    */
-  conditions?: string | unknown;
+  duration: number;
   /**
-   * Direction
+   * Media Type
    *
-   * The direction of the lighting in the image to be generated.
+   * Type of media (always 'video')
    */
-  direction?: string | unknown;
+  media_type?: string;
+  /**
+   * Bitrate
+   *
+   * Overall bitrate of the media in bits per second
+   */
+  bitrate: number;
+  /**
+   * Codec
+   *
+   * Codec used to encode the media
+   */
+  codec: string;
+  /**
+   * Content Type
+   *
+   * MIME type of the media file
+   */
+  content_type: string;
+  /**
+   * Audio track information if video has audio
+   */
+  audio?: AudioTrack | unknown;
+  /**
+   * Fps
+   *
+   * Frames per second
+   */
+  fps: number;
+  /**
+   * File Size
+   *
+   * Size of the file in bytes
+   */
+  file_size: number;
+  /**
+   * Start Frame Url
+   *
+   * URL of the extracted first frame
+   */
+  start_frame_url?: string | unknown;
+  /**
+   * Url
+   *
+   * URL where the media file can be accessed
+   */
+  url: string;
+  /**
+   * Frame Count
+   *
+   * Total number of frames in the video
+   */
+  frame_count: number;
+  /**
+   * Timebase
+   *
+   * Time base used for frame timestamps
+   */
+  timebase: string;
+  /**
+   * Container
+   *
+   * Container format of the media file (e.g., 'mp4', 'mov')
+   */
+  container: string;
+  resolution: Resolution;
+  format: VideoFormat;
+  /**
+   * End Frame Url
+   *
+   * URL of the extracted last frame
+   */
+  end_frame_url?: string | unknown;
 };
 
 /**
- * Aesthetics
+ * Resolution
  */
-export type AestheticsType2 = {
+export type Resolution = {
   /**
-   * Preference Score
+   * Aspect Ratio
    *
-   * The preference score of the image.
+   * Display aspect ratio (e.g., '16:9')
    */
-  preference_score: string;
+  aspect_ratio: string;
   /**
-   * Composition
+   * Height
    *
-   * The composition of the image to be generated.
+   * Height of the video in pixels
    */
-  composition?: string | unknown;
+  height: number;
   /**
-   * Mood Atmosphere
+   * Width
    *
-   * The mood and atmosphere of the image to be generated.
+   * Width of the video in pixels
    */
-  mood_atmosphere?: string | unknown;
-  /**
-   * Aesthetic Score
-   *
-   * The aesthetic score of the image.
-   */
-  aesthetic_score: string;
-  /**
-   * Color Scheme
-   *
-   * The color scheme of the image to be generated.
-   */
-  color_scheme?: string | unknown;
+  width: number;
 };
 
 /**
- * PhotographicCharacteristics
+ * AudioTrack
  */
-export type PhotographicCharacteristics = {
+export type AudioTrack = {
   /**
-   * Focus
+   * Channels
    *
-   * The focus in the image to be generated.
+   * Number of audio channels
    */
-  focus?: string | unknown;
+  channels: number;
   /**
-   * Lens Focal Length
+   * Codec
    *
-   * The focal length of the lens in the image to be generated.
+   * Audio codec used (e.g., 'aac', 'mp3')
    */
-  lens_focal_length?: string | unknown;
+  codec: string;
   /**
-   * Camera Angle
+   * Bitrate
    *
-   * The angle of the camera in the image to be generated.
+   * Audio bitrate in bits per second
    */
-  camera_angle?: string | unknown;
+  bitrate: number;
   /**
-   * Depth Of Field
+   * Sample Rate
    *
-   * The depth of field in the image to be generated.
+   * Audio sample rate in Hz
    */
-  depth_of_field?: string | unknown;
+  sample_rate: number;
 };
 
 /**
- * PromptObject
+ * TextRender
+ *
+ * Text rendering information in the image.
  */
-export type PromptObject = {
+export type TextRender = {
   /**
-   * Relative Size
+   * Text
    *
-   * The relative size of the object in the image.
+   * The text content.
    */
-  relative_size?: string | unknown;
+  text: string;
   /**
-   * Description
+   * Font
    *
-   * A description of the object to be generated.
+   * E.g., 'realistic', 'cartoonish', 'minimalist'.
    */
-  description?: string | unknown;
+  font: string;
   /**
-   * Skin Tone And Texture
+   * Color
    *
-   * The skin tone and texture of the object in the image.
+   * E.g., 'red', 'blue', 'green'.
    */
-  skin_tone_and_texture?: string | unknown;
-  /**
-   * Appearance Details
-   *
-   * The appearance details of the object.
-   */
-  appearance_details?: string | unknown;
-  /**
-   * Number Of Objects
-   *
-   * The number of objects in the image.
-   */
-  number_of_objects?: number | unknown;
-  /**
-   * Pose
-   *
-   * The pose of the object in the image.
-   */
-  pose?: string | unknown;
-  /**
-   * Expression
-   *
-   * The expression of the object in the image.
-   */
-  expression?: string | unknown;
-  /**
-   * Shape And Color
-   *
-   * The shape and color of the object.
-   */
-  shape_and_color?: string | unknown;
-  /**
-   * Relationship
-   *
-   * The relationship of the object to other objects in the image.
-   */
-  relationship: string;
-  /**
-   * Texture
-   *
-   * The texture of the object.
-   */
-  texture?: string | unknown;
-  /**
-   * Gender
-   *
-   * The gender of the object in the image.
-   */
-  gender?: string | unknown;
-  /**
-   * Clothing
-   *
-   * The clothing of the object in the image.
-   */
-  clothing?: string | unknown;
+  color: string;
   /**
    * Location
    *
-   * The location of the object in the image.
+   * E.g., 'center', 'top-left', 'bottom-right foreground'.
    */
-  location?: string | unknown;
+  location: string;
   /**
-   * Orientation
+   * Appearance Details
    *
-   * The orientation of the object in the image.
+   * Any other notable visual details.
    */
-  orientation?: string | unknown;
+  appearance_details?: string | unknown;
   /**
-   * Action
+   * Size
    *
-   * The action of the object in the image.
+   * E.g., 'small', 'medium', 'large within frame'.
    */
-  action?: string | unknown;
-};
-
-export type FiboLiteGenerateStructuredPromptLiteOutput = unknown;
-
-/**
- * StructuredPromptModel
- */
-export type FiboLiteGenerateStructuredPromptLiteInput = {
-  /**
-   * Prompt
-   *
-   * Prompt for image generation.
-   */
-  prompt?: string | unknown;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number;
-  /**
-   * The structured prompt to generate an image from.
-   */
-  structured_prompt?: BriaFiboVlmStructuredPrompt | unknown;
-  /**
-   * Image Url
-   *
-   * Reference image (file or URL).
-   */
-  image_url?: string | unknown;
-};
-
-export type FiboEditEditStructuredInstructionOutput = unknown;
-
-/**
- * StructuredInstructionInputModel
- */
-export type FiboEditEditStructuredInstructionInput = {
-  /**
-   * Sync Mode
-   *
-   * If true, returns the image directly in the response (increases latency).
-   */
-  sync_mode?: boolean;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number;
-  /**
-   * Instruction
-   *
-   * Instruction for image editing.
-   */
-  instruction?: string | unknown;
-  /**
-   * Mask Url
-   *
-   * Reference image mask (file or URL). Optional.
-   */
-  mask_url?: string | unknown;
-  /**
-   * Image Url
-   *
-   * Reference image (file or URL).
-   */
-  image_url?: string | unknown;
-};
-
-/**
- * Aesthetics
- */
-export type Aesthetics = {
-  /**
-   * Composition
-   *
-   * The composition of the image to be generated.
-   */
-  composition?: string | unknown;
-  /**
-   * Mood Atmosphere
-   *
-   * The mood and atmosphere of the image to be generated.
-   */
-  mood_atmosphere?: string | unknown;
-  /**
-   * Color Scheme
-   *
-   * The color scheme of the image to be generated.
-   */
-  color_scheme?: string | unknown;
-};
-
-export type FiboGenerateStructuredPromptOutput = unknown;
-
-/**
- * StructuredPromptModel
- */
-export type FiboGenerateStructuredPromptInput = {
-  /**
-   * Prompt
-   *
-   * Prompt for image generation.
-   */
-  prompt?: string | unknown;
-  /**
-   * Seed
-   *
-   * Random seed for reproducibility.
-   */
-  seed?: number;
-  /**
-   * The structured prompt to generate an image from.
-   */
-  structured_prompt?: StructuredPromptType2 | unknown;
-  /**
-   * Image Url
-   *
-   * Reference image (file or URL).
-   */
-  image_url?: string | unknown;
+  size: string;
 };
 
 /**
@@ -379,57 +247,57 @@ export type StructuredPromptType2 = {
   /**
    * Background Setting
    *
-   * The background setting of the image to be generated.
+   * Describe the overall environment, setting, or background, including any notable background elements.
    */
-  background_setting?: string | unknown;
+  background_setting: string;
   /**
    * Artistic Style
    *
-   * The artistic style of the image to be generated.
+   * describe specific artistic characteristics, 3 words maximum.
    */
-  artistic_style?: string | unknown;
-  /**
-   * The aesthetics of the image to be generated.
-   */
-  aesthetics?: Aesthetics | unknown;
-  /**
-   * Text Render
-   *
-   * A list of text to be rendered in the image.
-   */
-  text_render?: Array<unknown> | unknown;
-  /**
-   * Objects
-   *
-   * A list of objects in the image to be generated, along with their attributes and relationships to other objects in the image.
-   */
-  objects?: Array<PromptObject> | unknown;
+  artistic_style: string;
   /**
    * Style Medium
    *
-   * The style medium of the image to be generated.
+   * Identify the artistic style or medium.
    */
   style_medium?: string | unknown;
   /**
-   * The photographic characteristics of the image to be generated.
+   * Text Render
+   *
+   * List of text renders in the image.
    */
-  photographic_characteristics?: PhotographicCharacteristics | unknown;
+  text_render?: Array<TextRender> | unknown;
+  /**
+   * Subject Emotions
+   *
+   * Explicitly describe any visible emotions or expressions on subjects.
+   */
+  subject_emotions?: string | unknown;
+  /**
+   * Objects
+   *
+   * List of prominent foreground/midground objects.
+   */
+  objects: Array<ObjectDescription>;
+  /**
+   * Details about photographic characteristics.
+   */
+  photographic_characteristics?: PhotographicCharacteristicsDetails | unknown;
+  aesthetics: AestheticsDetails;
+  lighting: LightingDetails;
   /**
    * Context
    *
-   * The context of the image to be generated.
+   * Provide any additional context that helps understand the image better.
    */
-  context?: string | unknown;
-  /**
-   * The lighting of the image to be generated.
-   */
-  lighting?: Lighting | unknown;
+  context: string;
   /**
    * Short Description
    *
-   * A short description of the image to be generated.
+   * A concise summary of the image content, 200 words maximum.
    */
-  short_description?: string | unknown;
+  short_description: string;
 };
 
 /**
@@ -627,873 +495,237 @@ export type ObjectDescription = {
 };
 
 /**
- * TextRender
- *
- * Text rendering information in the image.
- */
-export type TextRender = {
-  /**
-   * Text
-   *
-   * The text content.
-   */
-  text: string;
-  /**
-   * Font
-   *
-   * E.g., 'realistic', 'cartoonish', 'minimalist'.
-   */
-  font: string;
-  /**
-   * Color
-   *
-   * E.g., 'red', 'blue', 'green'.
-   */
-  color: string;
-  /**
-   * Location
-   *
-   * E.g., 'center', 'top-left', 'bottom-right foreground'.
-   */
-  location: string;
-  /**
-   * Appearance Details
-   *
-   * Any other notable visual details.
-   */
-  appearance_details?: string | unknown;
-  /**
-   * Size
-   *
-   * E.g., 'small', 'medium', 'large within frame'.
-   */
-  size: string;
-};
-
-/**
  * StructuredPrompt
  */
 export type StructuredPrompt = {
   /**
    * Background Setting
    *
-   * Describe the overall environment, setting, or background, including any notable background elements.
+   * The background setting of the image to be generated.
    */
-  background_setting: string;
+  background_setting?: string | unknown;
   /**
    * Artistic Style
    *
-   * describe specific artistic characteristics, 3 words maximum.
+   * The artistic style of the image to be generated.
    */
-  artistic_style: string;
+  artistic_style?: string | unknown;
   /**
-   * Style Medium
-   *
-   * Identify the artistic style or medium.
+   * The aesthetics of the image to be generated.
    */
-  style_medium?: string | unknown;
+  aesthetics?: Aesthetics | unknown;
   /**
    * Text Render
    *
-   * List of text renders in the image.
+   * A list of text to be rendered in the image.
    */
-  text_render?: Array<TextRender> | unknown;
-  /**
-   * Subject Emotions
-   *
-   * Explicitly describe any visible emotions or expressions on subjects.
-   */
-  subject_emotions?: string | unknown;
+  text_render?: Array<unknown> | unknown;
   /**
    * Objects
    *
-   * List of prominent foreground/midground objects.
+   * A list of objects in the image to be generated, along with their attributes and relationships to other objects in the image.
    */
-  objects: Array<ObjectDescription>;
+  objects?: Array<PromptObject> | unknown;
   /**
-   * Details about photographic characteristics.
+   * Style Medium
+   *
+   * The style medium of the image to be generated.
    */
-  photographic_characteristics?: PhotographicCharacteristicsDetails | unknown;
-  aesthetics: AestheticsDetails;
-  lighting: LightingDetails;
+  style_medium?: string | unknown;
+  /**
+   * The photographic characteristics of the image to be generated.
+   */
+  photographic_characteristics?: PhotographicCharacteristics | unknown;
   /**
    * Context
    *
-   * Provide any additional context that helps understand the image better.
+   * The context of the image to be generated.
    */
-  context: string;
+  context?: string | unknown;
+  /**
+   * The lighting of the image to be generated.
+   */
+  lighting?: Lighting | unknown;
   /**
    * Short Description
    *
-   * A concise summary of the image content, 200 words maximum.
+   * A short description of the image to be generated.
    */
-  short_description: string;
-};
-
-export type FiboLiteGenerateStructuredPromptOutput = unknown;
-
-/**
- * StructuredPromptInput
- */
-export type FiboLiteGenerateStructuredPromptInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to generate.
-   */
-  prompt?: string | unknown;
-  /**
-   * Seed
-   *
-   * Seed for the random number generator.
-   */
-  seed?: number;
-  /**
-   * The structured prompt to generate.
-   */
-  structured_prompt?: StructuredPrompt | unknown;
-  /**
-   * Image Url
-   *
-   * Input image URL
-   */
-  image_url?: string | unknown;
+  short_description?: string | unknown;
 };
 
 /**
- * LottieOutput
+ * Lighting
  */
-export type OmnilottieVideoToLottieOutput = {
-  lottie_file: File;
+export type Lighting = {
+  /**
+   * Shadows
+   *
+   * The shadows in the image to be generated.
+   */
+  shadows?: string | unknown;
+  /**
+   * Conditions
+   *
+   * The conditions of the lighting in the image to be generated.
+   */
+  conditions?: string | unknown;
+  /**
+   * Direction
+   *
+   * The direction of the lighting in the image to be generated.
+   */
+  direction?: string | unknown;
 };
 
 /**
- * File
+ * PhotographicCharacteristics
  */
-export type File = {
+export type PhotographicCharacteristics = {
   /**
-   * File Size
+   * Focus
    *
-   * The size of the file in bytes.
+   * The focus in the image to be generated.
    */
-  file_size?: number | unknown;
+  focus?: string | unknown;
   /**
-   * File Name
+   * Lens Focal Length
    *
-   * The name of the file. It will be auto-generated if not provided.
+   * The focal length of the lens in the image to be generated.
    */
-  file_name?: string | unknown;
+  lens_focal_length?: string | unknown;
   /**
-   * Content Type
+   * Camera Angle
    *
-   * The mime type of the file.
+   * The angle of the camera in the image to be generated.
    */
-  content_type?: string | unknown;
+  camera_angle?: string | unknown;
   /**
-   * Url
+   * Depth Of Field
    *
-   * The URL where the file can be downloaded from.
+   * The depth of field in the image to be generated.
    */
-  url: string;
+  depth_of_field?: string | unknown;
 };
 
 /**
- * VideoToLottieInput
+ * PromptObject
  */
-export type OmnilottieVideoToLottieInput = {
+export type PromptObject = {
   /**
-   * Prompt
+   * Relative Size
    *
-   * Optional text description guiding the conversion.
+   * The relative size of the object in the image.
    */
-  prompt?: string | unknown;
+  relative_size?: string | unknown;
   /**
-   * Video Url
+   * Description
    *
-   * URL of the video to convert into a Lottie animation.
+   * A description of the object to be generated.
    */
-  video_url: string | Blob | File;
+  description?: string | unknown;
   /**
-   * Top P
+   * Skin Tone And Texture
    *
-   * Nucleus sampling probability threshold.
+   * The skin tone and texture of the object in the image.
    */
-  top_p?: number;
+  skin_tone_and_texture?: string | unknown;
   /**
-   * Max Tokens
+   * Appearance Details
    *
-   * Maximum number of Lottie tokens to generate.
+   * The appearance details of the object.
    */
-  max_tokens?: number;
+  appearance_details?: string | unknown;
   /**
-   * Temperature
+   * Number Of Objects
    *
-   * Sampling temperature for generation.
+   * The number of objects in the image.
    */
-  temperature?: number;
+  number_of_objects?: number | unknown;
   /**
-   * Top K
+   * Pose
    *
-   * Top-k sampling parameter.
+   * The pose of the object in the image.
    */
-  top_k?: number;
+  pose?: string | unknown;
+  /**
+   * Expression
+   *
+   * The expression of the object in the image.
+   */
+  expression?: string | unknown;
+  /**
+   * Shape And Color
+   *
+   * The shape and color of the object.
+   */
+  shape_and_color?: string | unknown;
+  /**
+   * Relationship
+   *
+   * The relationship of the object to other objects in the image.
+   */
+  relationship: string;
+  /**
+   * Texture
+   *
+   * The texture of the object.
+   */
+  texture?: string | unknown;
+  /**
+   * Gender
+   *
+   * The gender of the object in the image.
+   */
+  gender?: string | unknown;
+  /**
+   * Clothing
+   *
+   * The clothing of the object in the image.
+   */
+  clothing?: string | unknown;
+  /**
+   * Location
+   *
+   * The location of the object in the image.
+   */
+  location?: string | unknown;
+  /**
+   * Orientation
+   *
+   * The orientation of the object in the image.
+   */
+  orientation?: string | unknown;
+  /**
+   * Action
+   *
+   * The action of the object in the image.
+   */
+  action?: string | unknown;
 };
 
 /**
- * WaveformOutput
+ * Aesthetics
  */
-export type FfmpegApiWaveformOutput = {
+export type Aesthetics = {
   /**
-   * Waveform
+   * Composition
    *
-   * Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.
+   * The composition of the image to be generated.
    */
-  waveform: Array<number>;
+  composition?: string | unknown;
   /**
-   * Duration
+   * Mood Atmosphere
    *
-   * Duration of the audio in seconds
+   * The mood and atmosphere of the image to be generated.
    */
-  duration: number;
+  mood_atmosphere?: string | unknown;
   /**
-   * Points
+   * Color Scheme
    *
-   * Number of points in the waveform data
+   * The color scheme of the image to be generated.
    */
-  points: number;
-  /**
-   * Precision
-   *
-   * Number of decimal places used in the waveform values
-   */
-  precision: number;
-};
-
-/**
- * WaveformInput
- */
-export type FfmpegApiWaveformInput = {
-  /**
-   * Points Per Second
-   *
-   * Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.
-   */
-  points_per_second?: number;
-  /**
-   * Smoothing Window
-   *
-   * Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.
-   */
-  smoothing_window?: number;
-  /**
-   * Media Url
-   *
-   * URL of the audio file to analyze
-   */
-  media_url: string | Blob | File;
-  /**
-   * Precision
-   *
-   * Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.
-   */
-  precision?: number;
-};
-
-/**
- * LoudnormSummary
- */
-export type LoudnormSummary = {
-  /**
-   * Output Integrated
-   *
-   * Output integrated loudness in LUFS
-   */
-  output_integrated?: number | unknown;
-  /**
-   * Output Lra
-   *
-   * Output loudness range in LU
-   */
-  output_lra?: number | unknown;
-  /**
-   * Input Lra
-   *
-   * Input loudness range in LU
-   */
-  input_lra?: number | unknown;
-  /**
-   * Normalization Type
-   *
-   * Type of normalization applied (Dynamic/Linear)
-   */
-  normalization_type?: string | unknown;
-  /**
-   * Output True Peak
-   *
-   * Output true peak in dBTP
-   */
-  output_true_peak?: number | unknown;
-  /**
-   * Target Offset
-   *
-   * Target offset in LU
-   */
-  target_offset?: number | unknown;
-  /**
-   * Input Integrated
-   *
-   * Input integrated loudness in LUFS
-   */
-  input_integrated?: number | unknown;
-  /**
-   * Input True Peak
-   *
-   * Input true peak in dBTP
-   */
-  input_true_peak?: number | unknown;
-  /**
-   * Output Threshold
-   *
-   * Output threshold in LUFS
-   */
-  output_threshold?: number | unknown;
-  /**
-   * Input Threshold
-   *
-   * Input threshold in LUFS
-   */
-  input_threshold?: number | unknown;
-};
-
-/**
- * LoudnormOutput
- */
-export type FfmpegApiLoudnormOutput = {
-  /**
-   * Structured loudness measurement summary (if requested)
-   */
-  summary?: LoudnormSummary | unknown;
-  audio: File;
-};
-
-/**
- * LoudnormInput
- */
-export type FfmpegApiLoudnormInput = {
-  /**
-   * Measured Lra
-   *
-   * Measured loudness range of input file in LU. Required for linear mode.
-   */
-  measured_lra?: number | unknown;
-  /**
-   * Print Summary
-   *
-   * Return loudness measurement summary with the normalized audio
-   */
-  print_summary?: boolean;
-  /**
-   * Offset
-   *
-   * Offset gain in dB applied before the true-peak limiter
-   */
-  offset?: number;
-  /**
-   * Measured I
-   *
-   * Measured integrated loudness of input file in LUFS. Required for linear mode.
-   */
-  measured_i?: number | unknown;
-  /**
-   * Measured Tp
-   *
-   * Measured true peak of input file in dBTP. Required for linear mode.
-   */
-  measured_tp?: number | unknown;
-  /**
-   * Linear
-   *
-   * Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).
-   */
-  linear?: boolean;
-  /**
-   * Dual Mono
-   *
-   * Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems
-   */
-  dual_mono?: boolean;
-  /**
-   * Measured Thresh
-   *
-   * Measured threshold of input file in LUFS. Required for linear mode.
-   */
-  measured_thresh?: number | unknown;
-  /**
-   * True Peak
-   *
-   * Maximum true peak in dBTP.
-   */
-  true_peak?: number;
-  /**
-   * Audio Url
-   *
-   * URL of the audio file to normalize
-   */
-  audio_url: string | Blob | File;
-  /**
-   * Integrated Loudness
-   *
-   * Integrated loudness target in LUFS.
-   */
-  integrated_loudness?: number;
-  /**
-   * Loudness Range
-   *
-   * Loudness range target in LU
-   */
-  loudness_range?: number;
-};
-
-/**
- * LottieOutput
- */
-export type OmnilottieOutput = {
-  lottie_file: File;
-};
-
-/**
- * TextToLottieInput
- */
-export type OmnilottieInput = {
-  /**
-   * Prompt
-   *
-   * Text description of the Lottie animation to generate.
-   */
-  prompt: string;
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability threshold.
-   */
-  top_p?: number;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of Lottie tokens to generate.
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Sampling temperature for generation.
-   */
-  temperature?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-};
-
-/**
- * LottieOutput
- */
-export type OmnilottieImageToLottieOutput = {
-  lottie_file: File;
-};
-
-/**
- * ImageToLottieInput
- */
-export type OmnilottieImageToLottieInput = {
-  /**
-   * Prompt
-   *
-   * Text description guiding the animation of the image.
-   */
-  prompt: string;
-  /**
-   * Image Url
-   *
-   * URL of the reference image to animate.
-   */
-  image_url: string | Blob | File;
-  /**
-   * Top P
-   *
-   * Nucleus sampling probability threshold.
-   */
-  top_p?: number;
-  /**
-   * Max Tokens
-   *
-   * Maximum number of Lottie tokens to generate.
-   */
-  max_tokens?: number;
-  /**
-   * Temperature
-   *
-   * Sampling temperature for generation.
-   */
-  temperature?: number;
-  /**
-   * Top K
-   *
-   * Top-k sampling parameter.
-   */
-  top_k?: number;
-};
-
-/**
- * AudioTrack
- */
-export type AudioTrack = {
-  /**
-   * Codec
-   *
-   * Audio codec used (e.g., 'aac', 'mp3')
-   */
-  codec: string;
-  /**
-   * Bitrate
-   *
-   * Audio bitrate in bits per second
-   */
-  bitrate: number;
-  /**
-   * Sample Rate
-   *
-   * Audio sample rate in Hz
-   */
-  sample_rate: number;
-  /**
-   * Channels
-   *
-   * Number of audio channels
-   */
-  channels: number;
-};
-
-/**
- * Resolution
- */
-export type Resolution = {
-  /**
-   * Height
-   *
-   * Height of the video in pixels
-   */
-  height: number;
-  /**
-   * Aspect Ratio
-   *
-   * Display aspect ratio (e.g., '16:9')
-   */
-  aspect_ratio: string;
-  /**
-   * Width
-   *
-   * Width of the video in pixels
-   */
-  width: number;
-};
-
-/**
- * VideoFormat
- */
-export type VideoFormat = {
-  /**
-   * Profile
-   *
-   * Codec profile (e.g., 'main', 'high')
-   */
-  profile: string;
-  /**
-   * Level
-   *
-   * Codec level (e.g., 4.1)
-   */
-  level: number;
-  /**
-   * Pixel Format
-   *
-   * Pixel format used (e.g., 'yuv420p')
-   */
-  pixel_format: string;
-  /**
-   * Video Codec
-   *
-   * Video codec used (e.g., 'h264')
-   */
-  video_codec: string;
-  /**
-   * Container
-   *
-   * Container format of the video
-   */
-  container: string;
-  /**
-   * Bitrate
-   *
-   * Video bitrate in bits per second
-   */
-  bitrate: number;
-};
-
-/**
- * Audio
- */
-export type Audio = {
-  /**
-   * File Size
-   *
-   * Size of the file in bytes
-   */
-  file_size: number;
-  /**
-   * Duration
-   *
-   * Duration of the media in seconds
-   */
-  duration: number;
-  /**
-   * Channels
-   *
-   * Number of audio channels
-   */
-  channels: number;
-  /**
-   * Url
-   *
-   * URL where the media file can be accessed
-   */
-  url: string;
-  /**
-   * Media Type
-   *
-   * Type of media (always 'audio')
-   */
-  media_type?: string;
-  /**
-   * Codec
-   *
-   * Codec used to encode the media
-   */
-  codec: string;
-  /**
-   * File Name
-   *
-   * Original filename of the media
-   */
-  file_name: string;
-  /**
-   * Sample Rate
-   *
-   * Audio sample rate in Hz
-   */
-  sample_rate: number;
-  /**
-   * Content Type
-   *
-   * MIME type of the media file
-   */
-  content_type: string;
-  /**
-   * Container
-   *
-   * Container format of the media file (e.g., 'mp4', 'mov')
-   */
-  container: string;
-  /**
-   * Bitrate
-   *
-   * Overall bitrate of the media in bits per second
-   */
-  bitrate: number;
-};
-
-/**
- * Video
- */
-export type Video = {
-  /**
-   * File Size
-   *
-   * Size of the file in bytes
-   */
-  file_size: number;
-  /**
-   * Timebase
-   *
-   * Time base used for frame timestamps
-   */
-  timebase: string;
-  /**
-   * Start Frame Url
-   *
-   * URL of the extracted first frame
-   */
-  start_frame_url?: string | unknown;
-  /**
-   * Duration
-   *
-   * Duration of the media in seconds
-   */
-  duration: number;
-  /**
-   * Url
-   *
-   * URL where the media file can be accessed
-   */
-  url: string;
-  /**
-   * Media Type
-   *
-   * Type of media (always 'video')
-   */
-  media_type?: string;
-  /**
-   * Codec
-   *
-   * Codec used to encode the media
-   */
-  codec: string;
-  /**
-   * Fps
-   *
-   * Frames per second
-   */
-  fps: number;
-  /**
-   * End Frame Url
-   *
-   * URL of the extracted last frame
-   */
-  end_frame_url?: string | unknown;
-  /**
-   * Content Type
-   *
-   * MIME type of the media file
-   */
-  content_type: string;
-  /**
-   * Container
-   *
-   * Container format of the media file (e.g., 'mp4', 'mov')
-   */
-  container: string;
-  /**
-   * Bitrate
-   *
-   * Overall bitrate of the media in bits per second
-   */
-  bitrate: number;
-  format: VideoFormat;
-  resolution: Resolution;
-  /**
-   * Frame Count
-   *
-   * Total number of frames in the video
-   */
-  frame_count: number;
-  /**
-   * File Name
-   *
-   * Original filename of the media
-   */
-  file_name: string;
-  /**
-   * Audio track information if video has audio
-   */
-  audio?: AudioTrack | unknown;
-};
-
-/**
- * MetadataOutput
- */
-export type FfmpegApiMetadataOutput = {
-  /**
-   * Media
-   *
-   * Metadata for the analyzed media file (either Video or Audio)
-   */
-  media: Video | Audio;
-};
-
-/**
- * MetadataInput
- */
-export type FfmpegApiMetadataInput = {
-  /**
-   * Extract Frames
-   *
-   * Whether to extract the start and end frames for videos. Note that when true the request will be slower.
-   */
-  extract_frames?: boolean;
-  /**
-   * Media Url
-   *
-   * URL of the media file (video or audio) to analyze
-   */
-  media_url: string | Blob | File;
-};
-
-/**
- * TextOutput
- */
-export type BagelUnderstandOutput = {
-  /**
-   * Prompt
-   *
-   * The query used for the generation.
-   */
-  prompt: string;
-  /**
-   * Text
-   *
-   * The answer to the query.
-   */
-  text: string;
-  /**
-   * Timings
-   *
-   * The timings of the generation.
-   */
-  timings: {
-    [key: string]: unknown;
-  };
-  /**
-   * Seed
-   *
-   * The seed used for the generation.
-   */
-  seed: number;
-};
-
-/**
- * ImageUnderstandingInput
- */
-export type BagelUnderstandInput = {
-  /**
-   * Prompt
-   *
-   * The prompt to query the image with.
-   */
-  prompt: string;
-  /**
-   * Seed
-   *
-   * The seed to use for the generation.
-   */
-  seed?: number;
-  /**
-   * Image Url
-   *
-   * The image for the query.
-   */
-  image_url: string | Blob | File;
+  color_scheme?: string | unknown;
 };
 
 export type QueueStatus = {
@@ -1532,911 +764,773 @@ export type QueueStatus = {
   queue_position?: number;
 };
 
-export type GetFalAiBagelUnderstandRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/bagel/understand/requests/{request_id}/status";
+/**
+ * LottieOutput
+ */
+export type OmnilottieVideoToLottieOutput = {
+  lottie_file: File;
 };
 
-export type GetFalAiBagelUnderstandRequestsByRequestIdStatusResponses = {
+/**
+ * File
+ */
+export type File = {
   /**
-   * The request status.
+   * Url
+   *
+   * The URL where the file can be downloaded from.
    */
-  200: QueueStatus;
-};
-
-export type GetFalAiBagelUnderstandRequestsByRequestIdStatusResponse =
-  GetFalAiBagelUnderstandRequestsByRequestIdStatusResponses[keyof GetFalAiBagelUnderstandRequestsByRequestIdStatusResponses];
-
-export type PutFalAiBagelUnderstandRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/bagel/understand/requests/{request_id}/cancel";
-};
-
-export type PutFalAiBagelUnderstandRequestsByRequestIdCancelResponses = {
+  url: string;
   /**
-   * The request was cancelled.
+   * File Size
+   *
+   * The size of the file in bytes.
    */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiBagelUnderstandRequestsByRequestIdCancelResponse =
-  PutFalAiBagelUnderstandRequestsByRequestIdCancelResponses[keyof PutFalAiBagelUnderstandRequestsByRequestIdCancelResponses];
-
-export type PostFalAiBagelUnderstandData = {
-  body: BagelUnderstandInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/bagel/understand";
-};
-
-export type PostFalAiBagelUnderstandResponses = {
+  file_size?: number | unknown;
   /**
-   * The request status.
+   * File Name
+   *
+   * The name of the file. It will be auto-generated if not provided.
    */
-  200: QueueStatus;
-};
-
-export type PostFalAiBagelUnderstandResponse =
-  PostFalAiBagelUnderstandResponses[keyof PostFalAiBagelUnderstandResponses];
-
-export type GetFalAiBagelUnderstandRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/bagel/understand/requests/{request_id}";
-};
-
-export type GetFalAiBagelUnderstandRequestsByRequestIdResponses = {
+  file_name?: string | unknown;
   /**
-   * Result of the request.
+   * Content Type
+   *
+   * The mime type of the file.
    */
-  200: BagelUnderstandOutput;
+  content_type?: string | unknown;
 };
 
-export type GetFalAiBagelUnderstandRequestsByRequestIdResponse =
-  GetFalAiBagelUnderstandRequestsByRequestIdResponses[keyof GetFalAiBagelUnderstandRequestsByRequestIdResponses];
-
-export type GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/ffmpeg-api/metadata/requests/{request_id}/status";
-};
-
-export type GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponses = {
+/**
+ * VideoToLottieInput
+ */
+export type OmnilottieVideoToLottieInput = {
   /**
-   * The request status.
+   * Video Url
+   *
+   * URL of the video to convert into a Lottie animation.
    */
-  200: QueueStatus;
-};
-
-export type GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponse =
-  GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/metadata/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponses = {
+  video_url: string | Blob | File;
   /**
-   * The request was cancelled.
+   * Temperature
+   *
+   * Sampling temperature for generation.
    */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponse =
-  PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFfmpegApiMetadataData = {
-  body: FfmpegApiMetadataInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/metadata";
-};
-
-export type PostFalAiFfmpegApiMetadataResponses = {
+  temperature?: number;
   /**
-   * The request status.
+   * Top P
+   *
+   * Nucleus sampling probability threshold.
    */
-  200: QueueStatus;
-};
-
-export type PostFalAiFfmpegApiMetadataResponse =
-  PostFalAiFfmpegApiMetadataResponses[keyof PostFalAiFfmpegApiMetadataResponses];
-
-export type GetFalAiFfmpegApiMetadataRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/metadata/requests/{request_id}";
-};
-
-export type GetFalAiFfmpegApiMetadataRequestsByRequestIdResponses = {
+  top_p?: number;
   /**
-   * Result of the request.
+   * Max Tokens
+   *
+   * Maximum number of Lottie tokens to generate.
    */
-  200: FfmpegApiMetadataOutput;
-};
-
-export type GetFalAiFfmpegApiMetadataRequestsByRequestIdResponse =
-  GetFalAiFfmpegApiMetadataRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiMetadataRequestsByRequestIdResponses];
-
-export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/omnilottie/image-to-lottie/requests/{request_id}/status";
-};
-
-export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponse =
-  GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponses[keyof GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponses];
-
-export type PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnilottie/image-to-lottie/requests/{request_id}/cancel";
-};
-
-export type PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponse =
-  PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponses[keyof PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponses];
-
-export type PostFalAiOmnilottieImageToLottieData = {
-  body: OmnilottieImageToLottieInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/omnilottie/image-to-lottie";
-};
-
-export type PostFalAiOmnilottieImageToLottieResponses = {
+  max_tokens?: number;
   /**
-   * The request status.
+   * Top K
+   *
+   * Top-k sampling parameter.
    */
-  200: QueueStatus;
-};
-
-export type PostFalAiOmnilottieImageToLottieResponse =
-  PostFalAiOmnilottieImageToLottieResponses[keyof PostFalAiOmnilottieImageToLottieResponses];
-
-export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnilottie/image-to-lottie/requests/{request_id}";
-};
-
-export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponses = {
+  top_k?: number;
   /**
-   * Result of the request.
+   * Prompt
+   *
+   * Optional text description guiding the conversion.
    */
-  200: OmnilottieImageToLottieOutput;
+  prompt?: string | unknown;
 };
 
-export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponse =
-  GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponses[keyof GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponses];
-
-export type GetFalAiOmnilottieRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/omnilottie/requests/{request_id}/status";
+/**
+ * LottieOutput
+ */
+export type OmnilottieOutput = {
+  lottie_file: File;
 };
 
-export type GetFalAiOmnilottieRequestsByRequestIdStatusResponses = {
+/**
+ * TextToLottieInput
+ */
+export type OmnilottieInput = {
   /**
-   * The request status.
+   * Temperature
+   *
+   * Sampling temperature for generation.
    */
-  200: QueueStatus;
-};
-
-export type GetFalAiOmnilottieRequestsByRequestIdStatusResponse =
-  GetFalAiOmnilottieRequestsByRequestIdStatusResponses[keyof GetFalAiOmnilottieRequestsByRequestIdStatusResponses];
-
-export type PutFalAiOmnilottieRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnilottie/requests/{request_id}/cancel";
-};
-
-export type PutFalAiOmnilottieRequestsByRequestIdCancelResponses = {
+  temperature?: number;
   /**
-   * The request was cancelled.
+   * Top P
+   *
+   * Nucleus sampling probability threshold.
    */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiOmnilottieRequestsByRequestIdCancelResponse =
-  PutFalAiOmnilottieRequestsByRequestIdCancelResponses[keyof PutFalAiOmnilottieRequestsByRequestIdCancelResponses];
-
-export type PostFalAiOmnilottieData = {
-  body: OmnilottieInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/omnilottie";
-};
-
-export type PostFalAiOmnilottieResponses = {
+  top_p?: number;
   /**
-   * The request status.
+   * Max Tokens
+   *
+   * Maximum number of Lottie tokens to generate.
    */
-  200: QueueStatus;
-};
-
-export type PostFalAiOmnilottieResponse =
-  PostFalAiOmnilottieResponses[keyof PostFalAiOmnilottieResponses];
-
-export type GetFalAiOmnilottieRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnilottie/requests/{request_id}";
-};
-
-export type GetFalAiOmnilottieRequestsByRequestIdResponses = {
+  max_tokens?: number;
   /**
-   * Result of the request.
+   * Top K
+   *
+   * Top-k sampling parameter.
    */
-  200: OmnilottieOutput;
-};
-
-export type GetFalAiOmnilottieRequestsByRequestIdResponse =
-  GetFalAiOmnilottieRequestsByRequestIdResponses[keyof GetFalAiOmnilottieRequestsByRequestIdResponses];
-
-export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/ffmpeg-api/loudnorm/requests/{request_id}/status";
-};
-
-export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponses = {
+  top_k?: number;
   /**
-   * The request status.
+   * Prompt
+   *
+   * Text description of the Lottie animation to generate.
    */
-  200: QueueStatus;
+  prompt: string;
 };
 
-export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponse =
-  GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/loudnorm/requests/{request_id}/cancel";
+/**
+ * LottieOutput
+ */
+export type OmnilottieImageToLottieOutput = {
+  lottie_file: File;
 };
 
-export type PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponses = {
+/**
+ * ImageToLottieInput
+ */
+export type OmnilottieImageToLottieInput = {
   /**
-   * The request was cancelled.
+   * Temperature
+   *
+   * Sampling temperature for generation.
    */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponse =
-  PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFfmpegApiLoudnormData = {
-  body: FfmpegApiLoudnormInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/loudnorm";
-};
-
-export type PostFalAiFfmpegApiLoudnormResponses = {
+  temperature?: number;
   /**
-   * The request status.
+   * Image Url
+   *
+   * URL of the reference image to animate.
    */
-  200: QueueStatus;
-};
-
-export type PostFalAiFfmpegApiLoudnormResponse =
-  PostFalAiFfmpegApiLoudnormResponses[keyof PostFalAiFfmpegApiLoudnormResponses];
-
-export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/loudnorm/requests/{request_id}";
-};
-
-export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponses = {
+  image_url: string | Blob | File;
   /**
-   * Result of the request.
+   * Max Tokens
+   *
+   * Maximum number of Lottie tokens to generate.
    */
-  200: FfmpegApiLoudnormOutput;
-};
-
-export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponse =
-  GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponses];
-
-export type GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/ffmpeg-api/waveform/requests/{request_id}/status";
-};
-
-export type GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponses = {
+  max_tokens?: number;
   /**
-   * The request status.
+   * Top P
+   *
+   * Nucleus sampling probability threshold.
    */
-  200: QueueStatus;
-};
-
-export type GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponse =
-  GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponses];
-
-export type PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/waveform/requests/{request_id}/cancel";
-};
-
-export type PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponses = {
+  top_p?: number;
   /**
-   * The request was cancelled.
+   * Top K
+   *
+   * Top-k sampling parameter.
    */
-  200: {
-    /**
-     * Whether the request was cancelled successfully.
-     */
-    success?: boolean;
-  };
-};
-
-export type PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponse =
-  PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponses];
-
-export type PostFalAiFfmpegApiWaveformData = {
-  body: FfmpegApiWaveformInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/waveform";
-};
-
-export type PostFalAiFfmpegApiWaveformResponses = {
+  top_k?: number;
   /**
-   * The request status.
+   * Prompt
+   *
+   * Text description guiding the animation of the image.
    */
-  200: QueueStatus;
+  prompt: string;
 };
 
-export type PostFalAiFfmpegApiWaveformResponse =
-  PostFalAiFfmpegApiWaveformResponses[keyof PostFalAiFfmpegApiWaveformResponses];
-
-export type GetFalAiFfmpegApiWaveformRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/ffmpeg-api/waveform/requests/{request_id}";
-};
-
-export type GetFalAiFfmpegApiWaveformRequestsByRequestIdResponses = {
+/**
+ * LoudnormSummary
+ */
+export type LoudnormSummary = {
   /**
-   * Result of the request.
+   * Input True Peak
+   *
+   * Input true peak in dBTP
    */
-  200: FfmpegApiWaveformOutput;
-};
-
-export type GetFalAiFfmpegApiWaveformRequestsByRequestIdResponse =
-  GetFalAiFfmpegApiWaveformRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiWaveformRequestsByRequestIdResponses];
-
-export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/fal-ai/omnilottie/video-to-lottie/requests/{request_id}/status";
-};
-
-export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponse =
-  GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponses[keyof GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponses];
-
-export type PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnilottie/video-to-lottie/requests/{request_id}/cancel";
-};
-
-export type PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponse =
-  PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponses[keyof PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponses];
-
-export type PostFalAiOmnilottieVideoToLottieData = {
-  body: OmnilottieVideoToLottieInput;
-  path?: never;
-  query?: never;
-  url: "/fal-ai/omnilottie/video-to-lottie";
-};
-
-export type PostFalAiOmnilottieVideoToLottieResponses = {
+  input_true_peak?: number | unknown;
   /**
-   * The request status.
+   * Input Lra
+   *
+   * Input loudness range in LU
    */
-  200: QueueStatus;
-};
-
-export type PostFalAiOmnilottieVideoToLottieResponse =
-  PostFalAiOmnilottieVideoToLottieResponses[keyof PostFalAiOmnilottieVideoToLottieResponses];
-
-export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/fal-ai/omnilottie/video-to-lottie/requests/{request_id}";
-};
-
-export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponses = {
+  input_lra?: number | unknown;
   /**
-   * Result of the request.
+   * Output Lra
+   *
+   * Output loudness range in LU
    */
-  200: OmnilottieVideoToLottieOutput;
-};
-
-export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponse =
-  GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponses[keyof GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponses];
-
-export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/bria/fibo-lite/generate/structured_prompt/requests/{request_id}/status";
-  };
-
-export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponse =
-  GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponses[keyof GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponses];
-
-export type PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/bria/fibo-lite/generate/structured_prompt/requests/{request_id}/cancel";
-  };
-
-export type PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponse =
-  PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponses[keyof PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponses];
-
-export type PostBriaFiboLiteGenerateStructuredPromptData = {
-  body: FiboLiteGenerateStructuredPromptInput;
-  path?: never;
-  query?: never;
-  url: "/bria/fibo-lite/generate/structured_prompt";
-};
-
-export type PostBriaFiboLiteGenerateStructuredPromptResponses = {
+  output_lra?: number | unknown;
   /**
-   * The request status.
+   * Output Threshold
+   *
+   * Output threshold in LUFS
    */
-  200: QueueStatus;
-};
-
-export type PostBriaFiboLiteGenerateStructuredPromptResponse =
-  PostBriaFiboLiteGenerateStructuredPromptResponses[keyof PostBriaFiboLiteGenerateStructuredPromptResponses];
-
-export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/bria/fibo-lite/generate/structured_prompt/requests/{request_id}";
-};
-
-export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponses =
-  {
-    /**
-     * Result of the request.
-     */
-    200: FiboLiteGenerateStructuredPromptOutput;
-  };
-
-export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponse =
-  GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponses[keyof GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponses];
-
-export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: {
-    /**
-     * Whether to include logs (`1`) in the response or not (`0`).
-     */
-    logs?: number;
-  };
-  url: "/bria/fibo/generate/structured_prompt/requests/{request_id}/status";
-};
-
-export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponse =
-  GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponses[keyof GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponses];
-
-export type PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/bria/fibo/generate/structured_prompt/requests/{request_id}/cancel";
-};
-
-export type PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponse =
-  PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponses[keyof PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponses];
-
-export type PostBriaFiboGenerateStructuredPromptData = {
-  body: FiboGenerateStructuredPromptInput;
-  path?: never;
-  query?: never;
-  url: "/bria/fibo/generate/structured_prompt";
-};
-
-export type PostBriaFiboGenerateStructuredPromptResponses = {
+  output_threshold?: number | unknown;
   /**
-   * The request status.
+   * Normalization Type
+   *
+   * Type of normalization applied (Dynamic/Linear)
    */
-  200: QueueStatus;
-};
-
-export type PostBriaFiboGenerateStructuredPromptResponse =
-  PostBriaFiboGenerateStructuredPromptResponses[keyof PostBriaFiboGenerateStructuredPromptResponses];
-
-export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdData = {
-  body?: never;
-  path: {
-    /**
-     * Request ID
-     */
-    request_id: string;
-  };
-  query?: never;
-  url: "/bria/fibo/generate/structured_prompt/requests/{request_id}";
-};
-
-export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponses = {
+  normalization_type?: string | unknown;
   /**
-   * Result of the request.
+   * Output Integrated
+   *
+   * Output integrated loudness in LUFS
    */
-  200: FiboGenerateStructuredPromptOutput;
+  output_integrated?: number | unknown;
+  /**
+   * Target Offset
+   *
+   * Target offset in LU
+   */
+  target_offset?: number | unknown;
+  /**
+   * Input Threshold
+   *
+   * Input threshold in LUFS
+   */
+  input_threshold?: number | unknown;
+  /**
+   * Input Integrated
+   *
+   * Input integrated loudness in LUFS
+   */
+  input_integrated?: number | unknown;
+  /**
+   * Output True Peak
+   *
+   * Output true peak in dBTP
+   */
+  output_true_peak?: number | unknown;
 };
 
-export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponse =
-  GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponses[keyof GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponses];
+export type FiboLiteGenerateStructuredPromptOutput = unknown;
 
-export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: {
-      /**
-       * Whether to include logs (`1`) in the response or not (`0`).
-       */
-      logs?: number;
-    };
-    url: "/bria/fibo-edit/edit/structured_instruction/requests/{request_id}/status";
+export type FiboLiteGenerateStructuredPromptLiteOutput = unknown;
+
+/**
+ * StructuredPromptModel
+ */
+export type FiboLiteGenerateStructuredPromptLiteInput = {
+  /**
+   * Prompt
+   *
+   * Prompt for image generation.
+   */
+  prompt?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * The structured prompt to generate an image from.
+   */
+  structured_prompt?: BriaFiboVlmStructuredPrompt | unknown;
+  /**
+   * Image Url
+   *
+   * Reference image (file or URL).
+   */
+  image_url?: string | unknown;
+};
+
+/**
+ * Aesthetics
+ */
+export type AestheticsType2 = {
+  /**
+   * Preference Score
+   *
+   * The preference score of the image.
+   */
+  preference_score: string;
+  /**
+   * Composition
+   *
+   * The composition of the image to be generated.
+   */
+  composition?: string | unknown;
+  /**
+   * Mood Atmosphere
+   *
+   * The mood and atmosphere of the image to be generated.
+   */
+  mood_atmosphere?: string | unknown;
+  /**
+   * Aesthetic Score
+   *
+   * The aesthetic score of the image.
+   */
+  aesthetic_score: string;
+  /**
+   * Color Scheme
+   *
+   * The color scheme of the image to be generated.
+   */
+  color_scheme?: string | unknown;
+};
+
+/**
+ * StructuredPrompt
+ */
+export type BriaFiboVlmStructuredPrompt = {
+  /**
+   * Background Setting
+   *
+   * The background setting of the image to be generated.
+   */
+  background_setting?: string | unknown;
+  /**
+   * Artistic Style
+   *
+   * The artistic style of the image to be generated.
+   */
+  artistic_style?: string | unknown;
+  /**
+   * Style Medium
+   *
+   * The style medium of the image to be generated.
+   */
+  style_medium?: string | unknown;
+  /**
+   * Text Render
+   *
+   * A list of text to be rendered in the image.
+   */
+  text_render?: Array<unknown> | unknown;
+  /**
+   * Objects
+   *
+   * A list of objects in the image to be generated, along with their attributes and relationships to other objects in the image.
+   */
+  objects?: Array<PromptObject> | unknown;
+  /**
+   * Context
+   *
+   * The context of the image to be generated.
+   */
+  context?: string | unknown;
+  /**
+   * The photographic characteristics of the image to be generated.
+   */
+  photographic_characteristics?: PhotographicCharacteristics | unknown;
+  /**
+   * The aesthetics of the image to be generated.
+   */
+  aesthetics?: AestheticsType2 | unknown;
+  /**
+   * The lighting of the image to be generated.
+   */
+  lighting?: Lighting | unknown;
+  /**
+   * Short Description
+   *
+   * A short description of the image to be generated.
+   */
+  short_description?: string | unknown;
+};
+
+/**
+ * StructuredPromptInput
+ */
+export type FiboLiteGenerateStructuredPromptInput = {
+  /**
+   * Prompt
+   *
+   * The prompt to generate.
+   */
+  prompt?: string | unknown;
+  /**
+   * Seed
+   *
+   * Seed for the random number generator.
+   */
+  seed?: number;
+  /**
+   * The structured prompt to generate.
+   */
+  structured_prompt?: StructuredPromptType2 | unknown;
+  /**
+   * Image Url
+   *
+   * Input image URL
+   */
+  image_url?: string | unknown;
+};
+
+export type FiboGenerateStructuredPromptOutput = unknown;
+
+/**
+ * StructuredPromptModel
+ */
+export type FiboGenerateStructuredPromptInput = {
+  /**
+   * Prompt
+   *
+   * Prompt for image generation.
+   */
+  prompt?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * The structured prompt to generate an image from.
+   */
+  structured_prompt?: StructuredPrompt | unknown;
+  /**
+   * Image Url
+   *
+   * Reference image (file or URL).
+   */
+  image_url?: string | unknown;
+};
+
+export type FiboEditEditStructuredInstructionOutput = unknown;
+
+/**
+ * StructuredInstructionInputModel
+ */
+export type FiboEditEditStructuredInstructionInput = {
+  /**
+   * Instruction
+   *
+   * Instruction for image editing.
+   */
+  instruction?: string | unknown;
+  /**
+   * Seed
+   *
+   * Random seed for reproducibility.
+   */
+  seed?: number;
+  /**
+   * Sync Mode
+   *
+   * If true, returns the image directly in the response (increases latency).
+   */
+  sync_mode?: boolean;
+  /**
+   * Mask Url
+   *
+   * Reference image mask (file or URL). Optional.
+   */
+  mask_url?: string | unknown;
+  /**
+   * Image Url
+   *
+   * Reference image (file or URL).
+   */
+  image_url?: string | unknown;
+};
+
+/**
+ * WaveformOutput
+ */
+export type FfmpegApiWaveformOutput = {
+  /**
+   * Duration
+   *
+   * Duration of the audio in seconds
+   */
+  duration: number;
+  /**
+   * Precision
+   *
+   * Number of decimal places used in the waveform values
+   */
+  precision: number;
+  /**
+   * Points
+   *
+   * Number of points in the waveform data
+   */
+  points: number;
+  /**
+   * Waveform
+   *
+   * Normalized waveform data as an array of values between -1 and 1. The number of points is determined by audio duration × points_per_second.
+   */
+  waveform: Array<number>;
+};
+
+/**
+ * WaveformInput
+ */
+export type FfmpegApiWaveformInput = {
+  /**
+   * Precision
+   *
+   * Number of decimal places for the waveform values. Higher values provide more precision but increase payload size.
+   */
+  precision?: number;
+  /**
+   * Media Url
+   *
+   * URL of the audio file to analyze
+   */
+  media_url: string | Blob | File;
+  /**
+   * Smoothing Window
+   *
+   * Size of the smoothing window. Higher values create a smoother waveform. Must be an odd number.
+   */
+  smoothing_window?: number;
+  /**
+   * Points Per Second
+   *
+   * Controls how many points are sampled per second of audio. Lower values (e.g. 1-2) create a coarser waveform, higher values (e.g. 4-10) create a more detailed one.
+   */
+  points_per_second?: number;
+};
+
+/**
+ * MetadataOutput
+ */
+export type FfmpegApiMetadataOutput = {
+  /**
+   * Media
+   *
+   * Metadata for the analyzed media file (either Video or Audio)
+   */
+  media: Video | Audio;
+};
+
+/**
+ * Audio
+ */
+export type Audio = {
+  /**
+   * Url
+   *
+   * URL where the media file can be accessed
+   */
+  url: string;
+  /**
+   * File Size
+   *
+   * Size of the file in bytes
+   */
+  file_size: number;
+  /**
+   * File Name
+   *
+   * Original filename of the media
+   */
+  file_name: string;
+  /**
+   * Duration
+   *
+   * Duration of the media in seconds
+   */
+  duration: number;
+  /**
+   * Media Type
+   *
+   * Type of media (always 'audio')
+   */
+  media_type?: string;
+  /**
+   * Bitrate
+   *
+   * Overall bitrate of the media in bits per second
+   */
+  bitrate: number;
+  /**
+   * Codec
+   *
+   * Codec used to encode the media
+   */
+  codec: string;
+  /**
+   * Content Type
+   *
+   * MIME type of the media file
+   */
+  content_type: string;
+  /**
+   * Container
+   *
+   * Container format of the media file (e.g., 'mp4', 'mov')
+   */
+  container: string;
+  /**
+   * Channels
+   *
+   * Number of audio channels
+   */
+  channels: number;
+  /**
+   * Sample Rate
+   *
+   * Audio sample rate in Hz
+   */
+  sample_rate: number;
+};
+
+/**
+ * MetadataInput
+ */
+export type FfmpegApiMetadataInput = {
+  /**
+   * Extract Frames
+   *
+   * Whether to extract the start and end frames for videos. Note that when true the request will be slower.
+   */
+  extract_frames?: boolean;
+  /**
+   * Media Url
+   *
+   * URL of the media file (video or audio) to analyze
+   */
+  media_url: string | Blob | File;
+};
+
+/**
+ * LoudnormOutput
+ */
+export type FfmpegApiLoudnormOutput = {
+  audio: File;
+  /**
+   * Structured loudness measurement summary (if requested)
+   */
+  summary?: LoudnormSummary | unknown;
+};
+
+/**
+ * LoudnormInput
+ */
+export type FfmpegApiLoudnormInput = {
+  /**
+   * Measured Tp
+   *
+   * Measured true peak of input file in dBTP. Required for linear mode.
+   */
+  measured_tp?: number | unknown;
+  /**
+   * Audio Url
+   *
+   * URL of the audio file to normalize
+   */
+  audio_url: string | Blob | File;
+  /**
+   * Loudness Range
+   *
+   * Loudness range target in LU
+   */
+  loudness_range?: number;
+  /**
+   * Measured I
+   *
+   * Measured integrated loudness of input file in LUFS. Required for linear mode.
+   */
+  measured_i?: number | unknown;
+  /**
+   * Measured Thresh
+   *
+   * Measured threshold of input file in LUFS. Required for linear mode.
+   */
+  measured_thresh?: number | unknown;
+  /**
+   * Linear
+   *
+   * Use linear normalization mode (single-pass). If false, uses dynamic mode (two-pass for better quality).
+   */
+  linear?: boolean;
+  /**
+   * True Peak
+   *
+   * Maximum true peak in dBTP.
+   */
+  true_peak?: number;
+  /**
+   * Offset
+   *
+   * Offset gain in dB applied before the true-peak limiter
+   */
+  offset?: number;
+  /**
+   * Print Summary
+   *
+   * Return loudness measurement summary with the normalized audio
+   */
+  print_summary?: boolean;
+  /**
+   * Measured Lra
+   *
+   * Measured loudness range of input file in LU. Required for linear mode.
+   */
+  measured_lra?: number | unknown;
+  /**
+   * Dual Mono
+   *
+   * Treat mono input files as dual-mono for correct EBU R128 measurement on stereo systems
+   */
+  dual_mono?: boolean;
+  /**
+   * Integrated Loudness
+   *
+   * Integrated loudness target in LUFS.
+   */
+  integrated_loudness?: number;
+};
+
+/**
+ * TextOutput
+ */
+export type BagelUnderstandOutput = {
+  /**
+   * Timings
+   *
+   * The timings of the generation.
+   */
+  timings: {
+    [key: string]: unknown;
   };
+  /**
+   * Seed
+   *
+   * The seed used for the generation.
+   */
+  seed: number;
+  /**
+   * Prompt
+   *
+   * The query used for the generation.
+   */
+  prompt: string;
+  /**
+   * Text
+   *
+   * The answer to the query.
+   */
+  text: string;
+};
 
-export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponses =
-  {
-    /**
-     * The request status.
-     */
-    200: QueueStatus;
-  };
-
-export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponse =
-  GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponses[keyof GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponses];
-
-export type PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/bria/fibo-edit/edit/structured_instruction/requests/{request_id}/cancel";
-  };
-
-export type PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
-
-export type PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponse =
-  PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponses[keyof PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponses];
+/**
+ * ImageUnderstandingInput
+ */
+export type BagelUnderstandInput = {
+  /**
+   * Seed
+   *
+   * The seed to use for the generation.
+   */
+  seed?: number;
+  /**
+   * Prompt
+   *
+   * The prompt to query the image with.
+   */
+  prompt: string;
+  /**
+   * Image Url
+   *
+   * The image for the query.
+   */
+  image_url: string | Blob | File;
+};
 
 export type PostBriaFiboEditEditStructuredInstructionData = {
   body: FiboEditEditStructuredInstructionInput;
@@ -2478,7 +1572,36 @@ export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdResponses
 export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdResponse =
   GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdResponses[keyof GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdResponses];
 
-export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusData =
+export type PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/bria/fibo-edit/edit/structured_instruction/requests/{request_id}/cancel";
+  };
+
+export type PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponse =
+  PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponses[keyof PutBriaFiboEditEditStructuredInstructionRequestsByRequestIdCancelResponses];
+
+export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusData =
   {
     body?: never;
     path: {
@@ -2493,10 +1616,10 @@ export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatus
        */
       logs?: number;
     };
-    url: "/bria/fibo-lite/generate/structured_prompt/lite/requests/{request_id}/status";
+    url: "/bria/fibo-edit/edit/structured_instruction/requests/{request_id}/status";
   };
 
-export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponses =
+export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponses =
   {
     /**
      * The request status.
@@ -2504,37 +1627,25 @@ export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatus
     200: QueueStatus;
   };
 
-export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponse =
-  GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponses[keyof GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponses];
+export type GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponse =
+  GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponses[keyof GetBriaFiboEditEditStructuredInstructionRequestsByRequestIdStatusResponses];
 
-export type PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelData =
-  {
-    body?: never;
-    path: {
-      /**
-       * Request ID
-       */
-      request_id: string;
-    };
-    query?: never;
-    url: "/bria/fibo-lite/generate/structured_prompt/lite/requests/{request_id}/cancel";
-  };
+export type PostBriaFiboLiteGenerateStructuredPromptData = {
+  body: FiboLiteGenerateStructuredPromptInput;
+  path?: never;
+  query?: never;
+  url: "/bria/fibo-lite/generate/structured_prompt";
+};
 
-export type PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponses =
-  {
-    /**
-     * The request was cancelled.
-     */
-    200: {
-      /**
-       * Whether the request was cancelled successfully.
-       */
-      success?: boolean;
-    };
-  };
+export type PostBriaFiboLiteGenerateStructuredPromptResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
 
-export type PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponse =
-  PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponses[keyof PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponses];
+export type PostBriaFiboLiteGenerateStructuredPromptResponse =
+  PostBriaFiboLiteGenerateStructuredPromptResponses[keyof PostBriaFiboLiteGenerateStructuredPromptResponses];
 
 export type PostBriaFiboLiteGenerateStructuredPromptLiteData = {
   body: FiboLiteGenerateStructuredPromptLiteInput;
@@ -2576,3 +1687,892 @@ export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdRespon
 
 export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdResponse =
   GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdResponses[keyof GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdResponses];
+
+export type PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/bria/fibo-lite/generate/structured_prompt/lite/requests/{request_id}/cancel";
+  };
+
+export type PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponse =
+  PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponses[keyof PutBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdCancelResponses];
+
+export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/bria/fibo-lite/generate/structured_prompt/lite/requests/{request_id}/status";
+  };
+
+export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponse =
+  GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponses[keyof GetBriaFiboLiteGenerateStructuredPromptLiteRequestsByRequestIdStatusResponses];
+
+export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/bria/fibo-lite/generate/structured_prompt/requests/{request_id}";
+};
+
+export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponses =
+  {
+    /**
+     * Result of the request.
+     */
+    200: FiboLiteGenerateStructuredPromptOutput;
+  };
+
+export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponse =
+  GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponses[keyof GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdResponses];
+
+export type PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: never;
+    url: "/bria/fibo-lite/generate/structured_prompt/requests/{request_id}/cancel";
+  };
+
+export type PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponse =
+  PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponses[keyof PutBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdCancelResponses];
+
+export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusData =
+  {
+    body?: never;
+    path: {
+      /**
+       * Request ID
+       */
+      request_id: string;
+    };
+    query?: {
+      /**
+       * Whether to include logs (`1`) in the response or not (`0`).
+       */
+      logs?: number;
+    };
+    url: "/bria/fibo-lite/generate/structured_prompt/requests/{request_id}/status";
+  };
+
+export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponse =
+  GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponses[keyof GetBriaFiboLiteGenerateStructuredPromptRequestsByRequestIdStatusResponses];
+
+export type PostBriaFiboGenerateStructuredPromptData = {
+  body: FiboGenerateStructuredPromptInput;
+  path?: never;
+  query?: never;
+  url: "/bria/fibo/generate/structured_prompt";
+};
+
+export type PostBriaFiboGenerateStructuredPromptResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostBriaFiboGenerateStructuredPromptResponse =
+  PostBriaFiboGenerateStructuredPromptResponses[keyof PostBriaFiboGenerateStructuredPromptResponses];
+
+export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/bria/fibo/generate/structured_prompt/requests/{request_id}";
+};
+
+export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FiboGenerateStructuredPromptOutput;
+};
+
+export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponse =
+  GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponses[keyof GetBriaFiboGenerateStructuredPromptRequestsByRequestIdResponses];
+
+export type PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/bria/fibo/generate/structured_prompt/requests/{request_id}/cancel";
+};
+
+export type PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponse =
+  PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponses[keyof PutBriaFiboGenerateStructuredPromptRequestsByRequestIdCancelResponses];
+
+export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/bria/fibo/generate/structured_prompt/requests/{request_id}/status";
+};
+
+export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponse =
+  GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponses[keyof GetBriaFiboGenerateStructuredPromptRequestsByRequestIdStatusResponses];
+
+export type PostFalAiBagelUnderstandData = {
+  body: BagelUnderstandInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/bagel/understand";
+};
+
+export type PostFalAiBagelUnderstandResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiBagelUnderstandResponse =
+  PostFalAiBagelUnderstandResponses[keyof PostFalAiBagelUnderstandResponses];
+
+export type GetFalAiBagelUnderstandRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/bagel/understand/requests/{request_id}";
+};
+
+export type GetFalAiBagelUnderstandRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: BagelUnderstandOutput;
+};
+
+export type GetFalAiBagelUnderstandRequestsByRequestIdResponse =
+  GetFalAiBagelUnderstandRequestsByRequestIdResponses[keyof GetFalAiBagelUnderstandRequestsByRequestIdResponses];
+
+export type PutFalAiBagelUnderstandRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/bagel/understand/requests/{request_id}/cancel";
+};
+
+export type PutFalAiBagelUnderstandRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiBagelUnderstandRequestsByRequestIdCancelResponse =
+  PutFalAiBagelUnderstandRequestsByRequestIdCancelResponses[keyof PutFalAiBagelUnderstandRequestsByRequestIdCancelResponses];
+
+export type GetFalAiBagelUnderstandRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/bagel/understand/requests/{request_id}/status";
+};
+
+export type GetFalAiBagelUnderstandRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiBagelUnderstandRequestsByRequestIdStatusResponse =
+  GetFalAiBagelUnderstandRequestsByRequestIdStatusResponses[keyof GetFalAiBagelUnderstandRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFfmpegApiLoudnormData = {
+  body: FfmpegApiLoudnormInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/loudnorm";
+};
+
+export type PostFalAiFfmpegApiLoudnormResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFfmpegApiLoudnormResponse =
+  PostFalAiFfmpegApiLoudnormResponses[keyof PostFalAiFfmpegApiLoudnormResponses];
+
+export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/loudnorm/requests/{request_id}";
+};
+
+export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FfmpegApiLoudnormOutput;
+};
+
+export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponse =
+  GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiLoudnormRequestsByRequestIdResponses];
+
+export type PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/loudnorm/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponse =
+  PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiLoudnormRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ffmpeg-api/loudnorm/requests/{request_id}/status";
+};
+
+export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponse =
+  GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiLoudnormRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFfmpegApiMetadataData = {
+  body: FfmpegApiMetadataInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/metadata";
+};
+
+export type PostFalAiFfmpegApiMetadataResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFfmpegApiMetadataResponse =
+  PostFalAiFfmpegApiMetadataResponses[keyof PostFalAiFfmpegApiMetadataResponses];
+
+export type GetFalAiFfmpegApiMetadataRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/metadata/requests/{request_id}";
+};
+
+export type GetFalAiFfmpegApiMetadataRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FfmpegApiMetadataOutput;
+};
+
+export type GetFalAiFfmpegApiMetadataRequestsByRequestIdResponse =
+  GetFalAiFfmpegApiMetadataRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiMetadataRequestsByRequestIdResponses];
+
+export type PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/metadata/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponse =
+  PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiMetadataRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ffmpeg-api/metadata/requests/{request_id}/status";
+};
+
+export type GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponse =
+  GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiMetadataRequestsByRequestIdStatusResponses];
+
+export type PostFalAiFfmpegApiWaveformData = {
+  body: FfmpegApiWaveformInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/waveform";
+};
+
+export type PostFalAiFfmpegApiWaveformResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiFfmpegApiWaveformResponse =
+  PostFalAiFfmpegApiWaveformResponses[keyof PostFalAiFfmpegApiWaveformResponses];
+
+export type GetFalAiFfmpegApiWaveformRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/waveform/requests/{request_id}";
+};
+
+export type GetFalAiFfmpegApiWaveformRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: FfmpegApiWaveformOutput;
+};
+
+export type GetFalAiFfmpegApiWaveformRequestsByRequestIdResponse =
+  GetFalAiFfmpegApiWaveformRequestsByRequestIdResponses[keyof GetFalAiFfmpegApiWaveformRequestsByRequestIdResponses];
+
+export type PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/ffmpeg-api/waveform/requests/{request_id}/cancel";
+};
+
+export type PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponse =
+  PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponses[keyof PutFalAiFfmpegApiWaveformRequestsByRequestIdCancelResponses];
+
+export type GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/ffmpeg-api/waveform/requests/{request_id}/status";
+};
+
+export type GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponse =
+  GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponses[keyof GetFalAiFfmpegApiWaveformRequestsByRequestIdStatusResponses];
+
+export type PostFalAiOmnilottieData = {
+  body: OmnilottieInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/omnilottie";
+};
+
+export type PostFalAiOmnilottieResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiOmnilottieResponse =
+  PostFalAiOmnilottieResponses[keyof PostFalAiOmnilottieResponses];
+
+export type PostFalAiOmnilottieImageToLottieData = {
+  body: OmnilottieImageToLottieInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/omnilottie/image-to-lottie";
+};
+
+export type PostFalAiOmnilottieImageToLottieResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiOmnilottieImageToLottieResponse =
+  PostFalAiOmnilottieImageToLottieResponses[keyof PostFalAiOmnilottieImageToLottieResponses];
+
+export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/omnilottie/image-to-lottie/requests/{request_id}";
+};
+
+export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: OmnilottieImageToLottieOutput;
+};
+
+export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponse =
+  GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponses[keyof GetFalAiOmnilottieImageToLottieRequestsByRequestIdResponses];
+
+export type PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/omnilottie/image-to-lottie/requests/{request_id}/cancel";
+};
+
+export type PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponse =
+  PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponses[keyof PutFalAiOmnilottieImageToLottieRequestsByRequestIdCancelResponses];
+
+export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/omnilottie/image-to-lottie/requests/{request_id}/status";
+};
+
+export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponse =
+  GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponses[keyof GetFalAiOmnilottieImageToLottieRequestsByRequestIdStatusResponses];
+
+export type GetFalAiOmnilottieRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/omnilottie/requests/{request_id}";
+};
+
+export type GetFalAiOmnilottieRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: OmnilottieOutput;
+};
+
+export type GetFalAiOmnilottieRequestsByRequestIdResponse =
+  GetFalAiOmnilottieRequestsByRequestIdResponses[keyof GetFalAiOmnilottieRequestsByRequestIdResponses];
+
+export type PutFalAiOmnilottieRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/omnilottie/requests/{request_id}/cancel";
+};
+
+export type PutFalAiOmnilottieRequestsByRequestIdCancelResponses = {
+  /**
+   * The request was cancelled.
+   */
+  200: {
+    /**
+     * Whether the request was cancelled successfully.
+     */
+    success?: boolean;
+  };
+};
+
+export type PutFalAiOmnilottieRequestsByRequestIdCancelResponse =
+  PutFalAiOmnilottieRequestsByRequestIdCancelResponses[keyof PutFalAiOmnilottieRequestsByRequestIdCancelResponses];
+
+export type GetFalAiOmnilottieRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/omnilottie/requests/{request_id}/status";
+};
+
+export type GetFalAiOmnilottieRequestsByRequestIdStatusResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type GetFalAiOmnilottieRequestsByRequestIdStatusResponse =
+  GetFalAiOmnilottieRequestsByRequestIdStatusResponses[keyof GetFalAiOmnilottieRequestsByRequestIdStatusResponses];
+
+export type PostFalAiOmnilottieVideoToLottieData = {
+  body: OmnilottieVideoToLottieInput;
+  path?: never;
+  query?: never;
+  url: "/fal-ai/omnilottie/video-to-lottie";
+};
+
+export type PostFalAiOmnilottieVideoToLottieResponses = {
+  /**
+   * The request status.
+   */
+  200: QueueStatus;
+};
+
+export type PostFalAiOmnilottieVideoToLottieResponse =
+  PostFalAiOmnilottieVideoToLottieResponses[keyof PostFalAiOmnilottieVideoToLottieResponses];
+
+export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/omnilottie/video-to-lottie/requests/{request_id}";
+};
+
+export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponses = {
+  /**
+   * Result of the request.
+   */
+  200: OmnilottieVideoToLottieOutput;
+};
+
+export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponse =
+  GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponses[keyof GetFalAiOmnilottieVideoToLottieRequestsByRequestIdResponses];
+
+export type PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: never;
+  url: "/fal-ai/omnilottie/video-to-lottie/requests/{request_id}/cancel";
+};
+
+export type PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponses =
+  {
+    /**
+     * The request was cancelled.
+     */
+    200: {
+      /**
+       * Whether the request was cancelled successfully.
+       */
+      success?: boolean;
+    };
+  };
+
+export type PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponse =
+  PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponses[keyof PutFalAiOmnilottieVideoToLottieRequestsByRequestIdCancelResponses];
+
+export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusData = {
+  body?: never;
+  path: {
+    /**
+     * Request ID
+     */
+    request_id: string;
+  };
+  query?: {
+    /**
+     * Whether to include logs (`1`) in the response or not (`0`).
+     */
+    logs?: number;
+  };
+  url: "/fal-ai/omnilottie/video-to-lottie/requests/{request_id}/status";
+};
+
+export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponses =
+  {
+    /**
+     * The request status.
+     */
+    200: QueueStatus;
+  };
+
+export type GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponse =
+  GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponses[keyof GetFalAiOmnilottieVideoToLottieRequestsByRequestIdStatusResponses];

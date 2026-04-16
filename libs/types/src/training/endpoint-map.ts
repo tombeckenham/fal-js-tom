@@ -2,6 +2,8 @@
 // Generated from types.gen.ts via scripts/generate-endpoint-maps.ts
 
 import type {
+  ErnieImageTrainerInput,
+  ErnieImageTrainerOutput,
   Flux2Klein4bBaseTrainerEditInput,
   Flux2Klein4bBaseTrainerEditOutput,
   Flux2Klein4bBaseTrainerInput,
@@ -28,6 +30,10 @@ import type {
   FluxLoraPortraitTrainerOutput,
   HunyuanVideoLoraTrainingInput,
   HunyuanVideoLoraTrainingOutput,
+  Ltx23V2vTrainerInput,
+  Ltx23V2vTrainerOutput,
+  Ltx23VideoTrainerInput,
+  Ltx23VideoTrainerOutput,
   Ltx2VideoTrainerInput,
   Ltx2VideoTrainerOutput,
   LtxVideoTrainerInput,
@@ -81,6 +87,50 @@ import type {
 } from "./types.gen";
 
 export type TrainingEndpointMap = {
+  "fal-ai/ernie-image-trainer": {
+    input: ErnieImageTrainerInput;
+    output: ErnieImageTrainerOutput;
+  };
+  "fal-ai/flux-2-klein-4b-base-trainer": {
+    input: Flux2Klein4bBaseTrainerInput;
+    output: Flux2Klein4bBaseTrainerOutput;
+  };
+  "fal-ai/flux-2-klein-4b-base-trainer/edit": {
+    input: Flux2Klein4bBaseTrainerEditInput;
+    output: Flux2Klein4bBaseTrainerEditOutput;
+  };
+  "fal-ai/flux-2-klein-9b-base-trainer": {
+    input: Flux2Klein9bBaseTrainerInput;
+    output: Flux2Klein9bBaseTrainerOutput;
+  };
+  "fal-ai/flux-2-klein-9b-base-trainer/edit": {
+    input: Flux2Klein9bBaseTrainerEditInput;
+    output: Flux2Klein9bBaseTrainerEditOutput;
+  };
+  "fal-ai/flux-2-trainer": {
+    input: Flux2TrainerInput;
+    output: Flux2TrainerOutput;
+  };
+  "fal-ai/flux-2-trainer-v2": {
+    input: Flux2TrainerV2Input;
+    output: Flux2TrainerV2Output;
+  };
+  "fal-ai/flux-2-trainer-v2/edit": {
+    input: Flux2TrainerV2EditInput;
+    output: Flux2TrainerV2EditOutput;
+  };
+  "fal-ai/flux-2-trainer/edit": {
+    input: Flux2TrainerEditInput;
+    output: Flux2TrainerEditOutput;
+  };
+  "fal-ai/flux-kontext-trainer": {
+    input: FluxKontextTrainerInput;
+    output: FluxKontextTrainerOutput;
+  };
+  "fal-ai/flux-krea-trainer": {
+    input: FluxKreaTrainerInput;
+    output: FluxKreaTrainerOutput;
+  };
   "fal-ai/flux-lora-fast-training": {
     input: FluxLoraFastTrainingInput;
     output: FluxLoraFastTrainingOutput;
@@ -89,69 +139,77 @@ export type TrainingEndpointMap = {
     input: FluxLoraPortraitTrainerInput;
     output: FluxLoraPortraitTrainerOutput;
   };
-  "fal-ai/flux-2-trainer": {
-    input: Flux2TrainerInput;
-    output: Flux2TrainerOutput;
+  "fal-ai/hunyuan-video-lora-training": {
+    input: HunyuanVideoLoraTrainingInput;
+    output: HunyuanVideoLoraTrainingOutput;
   };
-  "fal-ai/z-image-turbo-trainer-v2": {
-    input: ZImageTurboTrainerV2Input;
-    output: ZImageTurboTrainerV2Output;
-  };
-  "fal-ai/z-image-trainer": {
-    input: ZImageTrainerInput;
-    output: ZImageTrainerOutput;
-  };
-  "fal-ai/turbo-flux-trainer": {
-    input: TurboFluxTrainerInput;
-    output: TurboFluxTrainerOutput;
-  };
-  "fal-ai/flux-2-klein-9b-base-trainer": {
-    input: Flux2Klein9bBaseTrainerInput;
-    output: Flux2Klein9bBaseTrainerOutput;
-  };
-  "fal-ai/wan-22-image-trainer": {
-    input: Wan22ImageTrainerInput;
-    output: Wan22ImageTrainerOutput;
-  };
-  "fal-ai/flux-2-klein-9b-base-trainer/edit": {
-    input: Flux2Klein9bBaseTrainerEditInput;
-    output: Flux2Klein9bBaseTrainerEditOutput;
-  };
-  "fal-ai/flux-2-trainer-v2": {
-    input: Flux2TrainerV2Input;
-    output: Flux2TrainerV2Output;
-  };
-  "fal-ai/flux-kontext-trainer": {
-    input: FluxKontextTrainerInput;
-    output: FluxKontextTrainerOutput;
+  "fal-ai/ltx-video-trainer": {
+    input: LtxVideoTrainerInput;
+    output: LtxVideoTrainerOutput;
   };
   "fal-ai/ltx2-video-trainer": {
     input: Ltx2VideoTrainerInput;
     output: Ltx2VideoTrainerOutput;
   };
-  "fal-ai/z-image-base-trainer": {
-    input: ZImageBaseTrainerInput;
-    output: ZImageBaseTrainerOutput;
+  "fal-ai/ltx23-v2v-trainer": {
+    input: Ltx23V2vTrainerInput;
+    output: Ltx23V2vTrainerOutput;
   };
-  "fal-ai/qwen-image-trainer": {
-    input: QwenImageTrainerInput;
-    output: QwenImageTrainerOutput;
+  "fal-ai/ltx23-video-trainer": {
+    input: Ltx23VideoTrainerInput;
+    output: Ltx23VideoTrainerOutput;
   };
-  "fal-ai/qwen-image-edit-2511-trainer": {
-    input: QwenImageEdit2511TrainerInput;
-    output: QwenImageEdit2511TrainerOutput;
+  "fal-ai/phota/create-profile": {
+    input: PhotaCreateProfileInput;
+    output: PhotaCreateProfileOutput;
   };
-  "fal-ai/flux-2-klein-4b-base-trainer/edit": {
-    input: Flux2Klein4bBaseTrainerEditInput;
-    output: Flux2Klein4bBaseTrainerEditOutput;
+  "fal-ai/qwen-image-2512-trainer": {
+    input: QwenImage2512TrainerInput;
+    output: QwenImage2512TrainerOutput;
   };
   "fal-ai/qwen-image-2512-trainer-v2": {
     input: QwenImage2512TrainerV2Input;
     output: QwenImage2512TrainerV2Output;
   };
-  "fal-ai/flux-2-klein-4b-base-trainer": {
-    input: Flux2Klein4bBaseTrainerInput;
-    output: Flux2Klein4bBaseTrainerOutput;
+  "fal-ai/qwen-image-edit-2509-trainer": {
+    input: QwenImageEdit2509TrainerInput;
+    output: QwenImageEdit2509TrainerOutput;
+  };
+  "fal-ai/qwen-image-edit-2511-trainer": {
+    input: QwenImageEdit2511TrainerInput;
+    output: QwenImageEdit2511TrainerOutput;
+  };
+  "fal-ai/qwen-image-edit-plus-trainer": {
+    input: QwenImageEditPlusTrainerInput;
+    output: QwenImageEditPlusTrainerOutput;
+  };
+  "fal-ai/qwen-image-edit-trainer": {
+    input: QwenImageEditTrainerInput;
+    output: QwenImageEditTrainerOutput;
+  };
+  "fal-ai/qwen-image-layered-trainer": {
+    input: QwenImageLayeredTrainerInput;
+    output: QwenImageLayeredTrainerOutput;
+  };
+  "fal-ai/qwen-image-trainer": {
+    input: QwenImageTrainerInput;
+    output: QwenImageTrainerOutput;
+  };
+  "fal-ai/qwen-image-trainer-v2": {
+    input: QwenImageTrainerV2Input;
+    output: QwenImageTrainerV2Output;
+  };
+  "fal-ai/recraft/v3/create-style": {
+    input: RecraftV3CreateStyleInput;
+    output: RecraftV3CreateStyleOutput;
+  };
+  "fal-ai/turbo-flux-trainer": {
+    input: TurboFluxTrainerInput;
+    output: TurboFluxTrainerOutput;
+  };
+  "fal-ai/wan-22-image-trainer": {
+    input: Wan22ImageTrainerInput;
+    output: Wan22ImageTrainerOutput;
   };
   "fal-ai/wan-22-trainer/i2v-a14b": {
     input: Wan22TrainerI2vA14bInput;
@@ -161,69 +219,9 @@ export type TrainingEndpointMap = {
     input: Wan22TrainerT2vA14bInput;
     output: Wan22TrainerT2vA14bOutput;
   };
-  "fal-ai/recraft/v3/create-style": {
-    input: RecraftV3CreateStyleInput;
-    output: RecraftV3CreateStyleOutput;
-  };
-  "fal-ai/flux-2-trainer/edit": {
-    input: Flux2TrainerEditInput;
-    output: Flux2TrainerEditOutput;
-  };
-  "fal-ai/qwen-image-trainer-v2": {
-    input: QwenImageTrainerV2Input;
-    output: QwenImageTrainerV2Output;
-  };
   "fal-ai/wan-trainer": {
     input: WanTrainerInput;
     output: WanTrainerOutput;
-  };
-  "fal-ai/qwen-image-2512-trainer": {
-    input: QwenImage2512TrainerInput;
-    output: QwenImage2512TrainerOutput;
-  };
-  "fal-ai/flux-krea-trainer": {
-    input: FluxKreaTrainerInput;
-    output: FluxKreaTrainerOutput;
-  };
-  "fal-ai/ltx-video-trainer": {
-    input: LtxVideoTrainerInput;
-    output: LtxVideoTrainerOutput;
-  };
-  "fal-ai/qwen-image-layered-trainer": {
-    input: QwenImageLayeredTrainerInput;
-    output: QwenImageLayeredTrainerOutput;
-  };
-  "fal-ai/wan-trainer/t2v": {
-    input: WanTrainerT2vInput;
-    output: WanTrainerT2vOutput;
-  };
-  "fal-ai/hunyuan-video-lora-training": {
-    input: HunyuanVideoLoraTrainingInput;
-    output: HunyuanVideoLoraTrainingOutput;
-  };
-  "fal-ai/flux-2-trainer-v2/edit": {
-    input: Flux2TrainerV2EditInput;
-    output: Flux2TrainerV2EditOutput;
-  };
-  "fal-ai/qwen-image-edit-trainer": {
-    input: QwenImageEditTrainerInput;
-    output: QwenImageEditTrainerOutput;
-  };
-  "fal-ai/wan-trainer/t2v-14b": {
-    input: WanTrainerT2V14bInput;
-    output: WanTrainerT2V14bOutput;
-  };
-  "fal-ai/phota/create-profile": {
-    input: PhotaCreateProfileInput;
-    output: PhotaCreateProfileOutput;
-  };
-  "fal-ai/qwen-image-edit-2509-trainer": {
-    input: QwenImageEdit2509TrainerInput;
-    output: QwenImageEdit2509TrainerOutput;
-  };
-  "fal-ai/qwen-image-edit-plus-trainer": {
-    input: QwenImageEditPlusTrainerInput;
-    output: QwenImageEditPlusTrainerOutput;
   };
   "fal-ai/wan-trainer/flf2v-720p": {
     input: WanTrainerFlf2V720pInput;
@@ -232,6 +230,26 @@ export type TrainingEndpointMap = {
   "fal-ai/wan-trainer/i2v-720p": {
     input: WanTrainerI2V720pInput;
     output: WanTrainerI2V720pOutput;
+  };
+  "fal-ai/wan-trainer/t2v": {
+    input: WanTrainerT2vInput;
+    output: WanTrainerT2vOutput;
+  };
+  "fal-ai/wan-trainer/t2v-14b": {
+    input: WanTrainerT2V14bInput;
+    output: WanTrainerT2V14bOutput;
+  };
+  "fal-ai/z-image-base-trainer": {
+    input: ZImageBaseTrainerInput;
+    output: ZImageBaseTrainerOutput;
+  };
+  "fal-ai/z-image-trainer": {
+    input: ZImageTrainerInput;
+    output: ZImageTrainerOutput;
+  };
+  "fal-ai/z-image-turbo-trainer-v2": {
+    input: ZImageTurboTrainerV2Input;
+    output: ZImageTurboTrainerV2Output;
   };
 };
 

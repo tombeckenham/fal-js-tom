@@ -33,9 +33,13 @@ import type {
 } from "./types.gen";
 
 export type TextEndpointMap = {
-  "fal-ai/silero-vad": {
-    input: SileroVadInput;
-    output: SileroVadOutput;
+  "fal-ai/elevenlabs/speech-to-text": {
+    input: ElevenlabsSpeechToTextInput;
+    output: ElevenlabsSpeechToTextOutput;
+  };
+  "fal-ai/elevenlabs/speech-to-text/scribe-v2": {
+    input: ElevenlabsSpeechToTextScribeV2Input;
+    output: ElevenlabsSpeechToTextScribeV2Output;
   };
   "fal-ai/nemotron/asr": {
     input: NemotronAsrInput;
@@ -45,6 +49,30 @@ export type TextEndpointMap = {
     input: NemotronAsrStreamInput;
     output: NemotronAsrStreamOutput;
   };
+  "fal-ai/silero-vad": {
+    input: SileroVadInput;
+    output: SileroVadOutput;
+  };
+  "fal-ai/smart-turn": {
+    input: SmartTurnInput;
+    output: SmartTurnOutput;
+  };
+  "fal-ai/speech-to-text": {
+    input: SpeechToTextInput;
+    output: SpeechToTextOutput;
+  };
+  "fal-ai/speech-to-text/stream": {
+    input: SpeechToTextStreamInput;
+    output: SpeechToTextStreamOutput;
+  };
+  "fal-ai/speech-to-text/turbo": {
+    input: SpeechToTextTurboInput;
+    output: SpeechToTextTurboOutput;
+  };
+  "fal-ai/speech-to-text/turbo/stream": {
+    input: SpeechToTextTurboStreamInput;
+    output: SpeechToTextTurboStreamOutput;
+  };
   "fal-ai/whisper": {
     input: WhisperInput;
     output: WhisperOutput;
@@ -52,34 +80,6 @@ export type TextEndpointMap = {
   "fal-ai/wizper": {
     input: WizperInput;
     output: WizperOutput;
-  };
-  "fal-ai/elevenlabs/speech-to-text/scribe-v2": {
-    input: ElevenlabsSpeechToTextScribeV2Input;
-    output: ElevenlabsSpeechToTextScribeV2Output;
-  };
-  "fal-ai/elevenlabs/speech-to-text": {
-    input: ElevenlabsSpeechToTextInput;
-    output: ElevenlabsSpeechToTextOutput;
-  };
-  "fal-ai/speech-to-text/turbo": {
-    input: SpeechToTextTurboInput;
-    output: SpeechToTextTurboOutput;
-  };
-  "fal-ai/speech-to-text": {
-    input: SpeechToTextInput;
-    output: SpeechToTextOutput;
-  };
-  "fal-ai/smart-turn": {
-    input: SmartTurnInput;
-    output: SmartTurnOutput;
-  };
-  "fal-ai/speech-to-text/stream": {
-    input: SpeechToTextStreamInput;
-    output: SpeechToTextStreamOutput;
-  };
-  "fal-ai/speech-to-text/turbo/stream": {
-    input: SpeechToTextTurboStreamInput;
-    output: SpeechToTextTurboStreamOutput;
   };
   "openrouter/router/video": {
     input: RouterVideoInput;
